@@ -1,0 +1,306 @@
+2025-07-25 12:21:57,833 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250725_122157.log
+2025-07-25 12:21:57,833 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250725_122157.log
+2025-07-25 12:21:57,834 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-25 12:21:57,834 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-07-25 12:21:57,838 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-07-25 12:21:58,404 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-25 12:21:58,499 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-07-25 12:21:58,500 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-25 12:21:58,500 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:21:58,500 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 12:21:58,501 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-25 12:21:58,501 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-25 12:21:58,501 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-25 12:22:03,255 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-25 12:22:03,314 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-25 12:22:03,314 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-25 12:22:03,315 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS'
+2025-07-25 12:22:03,315 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products'
+2025-07-25 12:22:03,315 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products
+2025-07-25 12:22:03,316 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-07-25 12:22:03,316 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-07-25 12:22:03,317 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-25 12:22:03,317 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\amazon_data
+2025-07-25 12:22:03,317 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-25 12:22:03,318 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\system_config.json
+2025-07-25 12:22:03,318 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-25 12:22:03,319 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-25 12:22:03,319 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-25 12:22:03,319 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-25 12:22:03,320 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-25 12:22:03,320 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-25 12:22:03,320 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-25 12:22:03,320 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-25 12:22:03,321 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS
+2025-07-25 12:22:03,321 - PassiveExtractionWorkflow - INFO - 📚 No reference supplier cache found - starting fresh
+2025-07-25 12:22:03,335 - PassiveExtractionWorkflow - INFO - 📚 Loaded 0 mappings from reference linking map
+2025-07-25 12:22:03,336 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-25 12:22:03,336 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-25 12:22:03,337 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250725_122203
+2025-07-25 12:22:03,337 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-25 12:22:03,337 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-25 12:22:03,338 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-07-25 12:22:03,338 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-25 12:22:03,338 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 20
+2025-07-25 12:22:03,339 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-25 12:22:03,339 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-25 12:22:03,339 - utils.enhanced_state_manager - INFO - No existing state file found for poundwholesale.co.uk, starting fresh
+2025-07-25 12:22:03,340 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-25 12:22:03,340 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-07-25 12:22:03,340 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-25 12:22:03,350 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 2115 entries
+2025-07-25 12:22:03,351 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 2115
+2025-07-25 12:22:03,379 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 12:22:03,413 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: Found 2115 entries in ARRAY format
+2025-07-25 12:22:03,415 - PassiveExtractionWorkflow - INFO - 🔍 MAIN WORKFLOW LINKING MAP COUNTS: in-memory=2115, file=2115, using=2115
+2025-07-25 12:22:03,416 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: AMAZON_ANALYSIS (incomplete - supplier: 2387, linking map: 2115)
+2025-07-25 12:22:03,420 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-25 12:22:03,452 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 2115 entries
+2025-07-25 12:22:03,454 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-25 12:22:03,454 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-25 12:22:03,456 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 185 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\poundwholesale_categories.json
+2025-07-25 12:22:03,456 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-07-25 12:22:03,457 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 185 predefined categories (infinite mode)
+2025-07-25 12:22:03,458 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-25 12:22:03,458 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-25 12:22:03,459 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-25 12:22:03,459 - PassiveExtractionWorkflow - INFO -    process_existing_gap_first: True
+2025-07-25 12:22:03,460 - PassiveExtractionWorkflow - INFO - 🔍 HYBRID PROCESSING: Processing existing product gap first...
+2025-07-25 12:22:03,488 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 12:22:03,508 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: Found 2115 entries in ARRAY format
+2025-07-25 12:22:03,509 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP COUNTS: in-memory=2115, file=2115, using=2115
+2025-07-25 12:22:03,509 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING: Found 272 products to process (supplier: 2387, linking map: 2115)
+2025-07-25 12:22:03,521 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING: Identified 276 unprocessed products for Amazon analysis
+2025-07-25 12:22:03,535 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: Found 2115 entries in ARRAY format
+2025-07-25 12:22:03,547 - PassiveExtractionWorkflow - INFO - 🔄 CONVERTING: Array format linking map to dict for category matching
+2025-07-25 12:22:03,548 - PassiveExtractionWorkflow - ERROR - ❌ Error calculating category completion status: dictionary update sequence element #0 has length 10; 2 is required
+2025-07-25 12:22:03,548 - PassiveExtractionWorkflow - INFO - 🆕 STARTING GAP PROCESSING: Processing 276 products from beginning
+2025-07-25 12:22:03,552 - PassiveExtractionWorkflow - INFO - 🔧 GAP STATE: Set total_categories to 0 from config file
+2025-07-25 12:22:03,553 - PassiveExtractionWorkflow - INFO - 🚨 GAP STATE: Initialized gap processing state for 276 products
+2025-07-25 12:22:03,553 - PassiveExtractionWorkflow - INFO - 🚀 GAP PROCESSING: Starting Amazon analysis for 276 remaining unprocessed products
+2025-07-25 12:22:03,555 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 1/14: Processing 20 products
+2025-07-25 12:22:03,555 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 1/276: '151 Products Essentials Bundle (34 Products)' ---
+2025-07-25 12:22:03,556 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:22:03,557 - tools.passive_extraction_workflow_latest - INFO - Connecting to Chrome browser on debug port 9222 (FixedAmazonExtractor)
+2025-07-25 12:22:04,248 - tools.passive_extraction_workflow_latest - INFO - Successfully connected to Chrome on port 9222 (FixedAmazonExtractor)
+2025-07-25 12:22:04,248 - tools.passive_extraction_workflow_latest - INFO - Found 1 existing pages (FixedAmazonExtractor)
+2025-07-25 12:22:04,248 - tools.passive_extraction_workflow_latest - INFO - Using existing page: https://www.poundwholesale.co.uk/ (FixedAmazonExtractor)
+2025-07-25 12:22:04,253 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:22:04,253 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:22:04,254 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:04,254 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 12:22:04,254 - utils.browser_manager - INFO - 📄 Navigating to https://www.amazon.co.uk
+2025-07-25 12:22:05,773 - utils.browser_manager - INFO - ✅ Page ready for https://www.amazon.co.uk
+2025-07-25 12:22:05,773 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: 151 Products Essentials Bundle (34 Products)
+2025-07-25 12:22:10,396 - tools.passive_extraction_workflow_latest - INFO - Title search found 2 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:22:11,206 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DS8GYCF7 title extracted using selector 'h2': SUPERFINDINGS 12PCS Metal Pen Storage Box Tinplate...
+2025-07-25 12:22:11,207 - tools.passive_extraction_workflow_latest - INFO - Title search found 1 results for '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:22:11,207 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 1 Amazon results for '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:22:11,207 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '151 Products Essentials Bundle (34 Products)' vs 'SUPERFINDINGS 12PCS Metal Pen Storage Box Tinplate Boxes with Sponge 17.8x3.7cm Metal Pencil Boxes Pen Gift Boxes Empty Collection Case Set for Pen Pencil Gift' = 0.00 (very_low, 10.0%)
+2025-07-25 12:22:11,207 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B0DS8GYCF7 - Confidence: 0.100 (very_low) - Overlap: 0.000 - 'SUPERFINDINGS 12PCS Metal Pen Storage Box Tinplate Boxes wit...'
+2025-07-25 12:22:11,208 - PassiveExtractionWorkflow - WARNING - 🚨 NO CONFIDENT MATCH: All Amazon results below 50.0% confidence threshold for '151 Products Essentials Bundle (34 Products)'. Skipping to prevent irrational matches.
+2025-07-25 12:22:11,208 - PassiveExtractionWorkflow - INFO - 🗒️ Recorded no-match sentinel for low-confidence matches on '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:22:11,208 - PassiveExtractionWorkflow - WARNING - GAP: Could not retrieve Amazon data for '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:22:11,209 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 2/276: '4 Layer Filtration Face Mask' ---
+2025-07-25 12:22:11,211 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:22:11,211 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: '4 Layer Filtration Face Mask'
+2025-07-25 12:22:11,211 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:22:11,212 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:11,212 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:22:11,212 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: 4 Layer Filtration Face Mask
+2025-07-25 12:22:14,387 - tools.passive_extraction_workflow_latest - INFO - Title search found 2 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:22:14,403 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title '4 Layer Filtration Face Mask'
+2025-07-25 12:22:14,403 - PassiveExtractionWorkflow - WARNING - No Amazon results for title '4 Layer Filtration Face Mask'. Skipping.
+2025-07-25 12:22:14,403 - PassiveExtractionWorkflow - INFO - 🗒️ Recorded no-match sentinel for EAN NO_EAN to prevent endless skip loop
+2025-07-25 12:22:14,403 - PassiveExtractionWorkflow - WARNING - GAP: Could not retrieve Amazon data for '4 Layer Filtration Face Mask'
+2025-07-25 12:22:14,405 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 3/276: 'Anti-Bacterial Hand Wash Orange 5l' ---
+2025-07-25 12:22:14,406 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:22:14,407 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Anti-Bacterial Hand Wash Orange 5l'
+2025-07-25 12:22:14,407 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:22:14,407 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:14,407 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:22:14,407 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Anti-Bacterial Hand Wash Orange 5l
+2025-07-25 12:22:17,370 - tools.passive_extraction_workflow_latest - INFO - Title search found 2 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:22:17,386 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'Anti-Bacterial Hand Wash Orange 5l'
+2025-07-25 12:22:17,386 - PassiveExtractionWorkflow - WARNING - No Amazon results for title 'Anti-Bacterial Hand Wash Orange 5l'. Skipping.
+2025-07-25 12:22:17,387 - PassiveExtractionWorkflow - INFO - 🗒️ Recorded no-match sentinel for EAN NO_EAN to prevent endless skip loop
+2025-07-25 12:22:17,387 - PassiveExtractionWorkflow - WARNING - GAP: Could not retrieve Amazon data for 'Anti-Bacterial Hand Wash Orange 5l'
+2025-07-25 12:22:17,388 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 4/276: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' ---
+2025-07-25 12:22:17,389 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:22:17,390 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml'
+2025-07-25 12:22:17,390 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:22:17,390 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:17,390 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:22:17,390 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml
+2025-07-25 12:22:21,560 - tools.passive_extraction_workflow_latest - INFO - Title search found 73 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:22:21,684 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08MY7ZXYF title extracted using selector 'h2': 6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:22:22,412 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B086XM7B2P title extracted using selector 'h2': 10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bac...
+2025-07-25 12:22:22,526 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08DV3SKKY title extracted using selector 'h2': 3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:22:22,601 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B089CR5K87 title extracted using selector 'h2': Hand Sanitiser 5L PURATISE Antibacterial Hand Gel ...
+2025-07-25 12:22:22,683 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08FL5SYX9 title extracted using selector 'h2': 6 x 480ml Hand Sanitiser Gel by PeppyPure - Made W...
+2025-07-25 12:22:22,739 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DHD4B9TB title extracted using selector 'h2 span.a-size-base-plus': Lettuce Eat...
+2025-07-25 12:22:22,791 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08DJTYDHB title extracted using selector 'h2 span.a-size-base-plus': Ineos...
+2025-07-25 12:22:22,850 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08BCSFWGB title extracted using selector 'h2': 500ml Hand Sanitiser Gel from Handsafe, Kills 99.9...
+2025-07-25 12:22:22,850 - tools.passive_extraction_workflow_latest - INFO - Title search found 8 results for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml'
+2025-07-25 12:22:22,851 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 8 Amazon results for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml'
+2025-07-25 12:22:22,851 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' vs '6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 6' = 0.62 (medium, 60.0%)
+2025-07-25 12:22:22,851 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B08MY7ZXYF - Confidence: 0.600 (medium) - Overlap: 0.625 - '6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral...'
+2025-07-25 12:22:22,851 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' vs '10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 10' = 0.62 (medium, 60.0%)
+2025-07-25 12:22:22,851 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B086XM7B2P - Confidence: 0.600 (medium) - Overlap: 0.625 - '10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Vira...'
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' vs '3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 3' = 0.62 (medium, 60.0%)
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B08DV3SKKY - Confidence: 0.600 (medium) - Overlap: 0.625 - '3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral...'
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' vs 'Hand Sanitiser 5L PURATISE Antibacterial Hand Gel - 70% Alcohol Gel Hand Sanitiser Kills 99.99% of Germs & Bacteria - MADE IN THE UK Melbec Microbiology Approved BSEN 1276:2019 & BSEN1500:2013' = 0.75 (high, 90.0%)
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B089CR5K87 - Confidence: 0.900 (high) - Overlap: 0.750 - 'Hand Sanitiser 5L PURATISE Antibacterial Hand Gel - 70% Alco...'
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' vs '6 x 480ml Hand Sanitiser Gel by PeppyPure - Made With 75% Plant-Based Alcohol - Kills 99.9% of Bacteria - EU Compliant' = 0.50 (medium, 60.0%)
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B08FL5SYX9 - Confidence: 0.600 (medium) - Overlap: 0.500 - '6 x 480ml Hand Sanitiser Gel by PeppyPure - Made With 75% Pl...'
+2025-07-25 12:22:22,852 - PassiveExtractionWorkflow - INFO - ✅ BEST MATCH: ASIN B089CR5K87 with 90.0% confidence
+2025-07-25 12:22:22,863 - PassiveExtractionWorkflow - INFO - 📋 Found ASIN match in cache: amazon_B089CR5K87_Aquathree_70%_Alcohol_Antibacterial_Hand_Sanitiser.json
+2025-07-25 12:22:22,864 - PassiveExtractionWorkflow - INFO - 📋 Using cached Amazon data for ASIN B089CR5K87
+2025-07-25 12:22:22,865 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B089CR5K87_Aquathree_70%_Alcohol_Antibacterial_Hand_Sanitiser.json
+2025-07-25 12:22:22,867 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:22:22,871 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 5/276: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' ---
+2025-07-25 12:22:22,874 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:22:22,875 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml'
+2025-07-25 12:22:22,875 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:22:22,876 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:22,876 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:22:22,876 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml
+2025-07-25 12:22:27,003 - tools.passive_extraction_workflow_latest - INFO - Title search found 73 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:22:27,107 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08MY7ZXYF title extracted using selector 'h2': 6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:22:27,176 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08DV3SKKY title extracted using selector 'h2': 3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:22:27,901 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B086XM7B2P title extracted using selector 'h2': 10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bac...
+2025-07-25 12:22:28,088 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B089CR5K87 title extracted using selector 'h2': Hand Sanitiser 5L PURATISE Antibacterial Hand Gel ...
+2025-07-25 12:22:28,155 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08WHM6VR6 title extracted using selector 'h2': 36 Bottles 500ml Alcohol Hand Sanitiser Vira Safe ...
+2025-07-25 12:22:28,239 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08MY7ZXYF title extracted using selector 'h2': 6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:22:28,309 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08DJTYDHB title extracted using selector 'h2 span.a-size-base-plus': Ineos...
+2025-07-25 12:22:28,389 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08BCSFWGB title extracted using selector 'h2': 500ml Hand Sanitiser Gel from Handsafe, Kills 99.9...
+2025-07-25 12:22:28,390 - tools.passive_extraction_workflow_latest - INFO - Title search found 8 results for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml'
+2025-07-25 12:22:28,390 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 8 Amazon results for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml'
+2025-07-25 12:22:28,390 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 6' = 0.75 (high, 90.0%)
+2025-07-25 12:22:28,390 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B08MY7ZXYF - Confidence: 0.900 (high) - Overlap: 0.750 - '6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral...'
+2025-07-25 12:22:28,390 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 3' = 0.75 (high, 90.0%)
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B08DV3SKKY - Confidence: 0.900 (high) - Overlap: 0.750 - '3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral...'
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 10' = 0.75 (high, 90.0%)
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B086XM7B2P - Confidence: 0.900 (high) - Overlap: 0.750 - '10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Vira...'
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs 'Hand Sanitiser 5L PURATISE Antibacterial Hand Gel - 70% Alcohol Gel Hand Sanitiser Kills 99.99% of Germs & Bacteria - MADE IN THE UK Melbec Microbiology Approved BSEN 1276:2019 & BSEN1500:2013' = 0.75 (high, 90.0%)
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B089CR5K87 - Confidence: 0.900 (high) - Overlap: 0.750 - 'Hand Sanitiser 5L PURATISE Antibacterial Hand Gel - 70% Alco...'
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '36 Bottles 500ml Alcohol Hand Sanitiser Vira Safe Gel 70% Antibacterial Aloe 500ml Germ Fighting Formula Kills 99% of Harmful Germs' = 0.88 (high, 90.0%)
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B08WHM6VR6 - Confidence: 0.900 (high) - Overlap: 0.875 - '36 Bottles 500ml Alcohol Hand Sanitiser Vira Safe Gel 70% An...'
+2025-07-25 12:22:28,391 - PassiveExtractionWorkflow - INFO - ✅ BEST MATCH: ASIN B08MY7ZXYF with 90.0% confidence
+2025-07-25 12:22:28,405 - PassiveExtractionWorkflow - INFO - 📋 Found ASIN match in cache: amazon_B08MY7ZXYF_Aquathree_70%_Alcohol_Antibacterial_Hand_Sanitiser.json
+2025-07-25 12:22:28,405 - PassiveExtractionWorkflow - INFO - 📋 Using cached Amazon data for ASIN B08MY7ZXYF
+2025-07-25 12:22:28,406 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08MY7ZXYF_Aquathree_70%_Alcohol_Antibacterial_Hand_Sanitiser.json
+2025-07-25 12:22:28,406 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:22:28,409 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 6/276: 'Beauties Skincare Coconut Hydrating Foot Pack' ---
+2025-07-25 12:22:28,411 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:22:28,411 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Beauties Skincare Coconut Hydrating Foot Pack'
+2025-07-25 12:22:28,412 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:22:28,412 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:28,413 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:22:28,413 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Beauties Skincare Coconut Hydrating Foot Pack
+2025-07-25 12:22:32,982 - tools.passive_extraction_workflow_latest - INFO - Title search found 54 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:22:33,119 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DTB638JZ title extracted using selector 'h2': Cureskin Foot Care Cream for Cracked Heels | Repai...
+2025-07-25 12:22:33,772 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BDG62MQ1 title extracted using selector 'h2': Plantifique Hydrating Foot Mask Socks – 4 Pairs wi...
+2025-07-25 12:22:33,910 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0C6KH337V title extracted using selector 'h2': Foot Peel Mask, 3 Pack JVR Feet Exfoliating Mask, ...
+2025-07-25 12:22:33,969 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0C9J1MPGC title extracted using selector 'h2': Peppermint Foot Cream - Soothing Shea Butter Foot ...
+2025-07-25 12:22:34,049 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B071CGTP7B title extracted using selector 'h2': SVR Xerial Peel Exfoliating Foot Sock Mask. Intens...
+2025-07-25 12:22:34,162 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BDG62MQ1 title extracted using selector 'h2': Plantifique Hydrating Foot Mask Socks – 4 Pairs wi...
+2025-07-25 12:22:34,250 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B9BH5DK6 title extracted using selector 'h2': 7th Heaven Coconut Foot Mask Socks - Softening Moi...
+2025-07-25 12:22:34,340 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B01ENC09XS title extracted using selector 'h2': 1 Treatment Deep Moisturising Revitalising Coconut...
+2025-07-25 12:22:34,341 - tools.passive_extraction_workflow_latest - INFO - Title search found 8 results for 'Beauties Skincare Coconut Hydrating Foot Pack'
+2025-07-25 12:22:34,341 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 8 Amazon results for 'Beauties Skincare Coconut Hydrating Foot Pack'
+2025-07-25 12:22:34,341 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Beauties Skincare Coconut Hydrating Foot Pack' vs 'Cureskin Foot Care Cream for Cracked Heels | Repairs, Softens, and Exfoliates | Foot Cream for Women and Men, 50 g (Pack of 1)' = 0.33 (low, 30.0%)
+2025-07-25 12:22:34,341 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B0DTB638JZ - Confidence: 0.300 (low) - Overlap: 0.333 - 'Cureskin Foot Care Cream for Cracked Heels | Repairs, Soften...'
+2025-07-25 12:22:34,341 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Beauties Skincare Coconut Hydrating Foot Pack' vs 'Plantifique Hydrating Foot Mask Socks – 4 Pairs with Shea Butter for Soft Heels, Deep Moisturizing & Repairing Dry, Rough Skin – Korean Skincare & Foot Care Gift' = 0.50 (medium, 60.0%)
+2025-07-25 12:22:34,342 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B0BDG62MQ1 - Confidence: 0.600 (medium) - Overlap: 0.500 - 'Plantifique Hydrating Foot Mask Socks – 4 Pairs with Shea Bu...'
+2025-07-25 12:22:34,342 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Beauties Skincare Coconut Hydrating Foot Pack' vs 'Foot Peel Mask, 3 Pack JVR Feet Exfoliating Mask, Moisturizing Socks, Footskin Care for Callus, Restoring Cracked Heel Dead, Dry, Hard Skin, Baby Soft Smooth Touch (Lavender)' = 0.33 (low, 30.0%)
+2025-07-25 12:22:34,342 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B0C6KH337V - Confidence: 0.300 (low) - Overlap: 0.333 - 'Foot Peel Mask, 3 Pack JVR Feet Exfoliating Mask, Moisturizi...'
+2025-07-25 12:22:34,342 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Beauties Skincare Coconut Hydrating Foot Pack' vs 'Peppermint Foot Cream - Soothing Shea Butter Foot Rescue' = 0.17 (very_low, 10.0%)
+2025-07-25 12:22:34,343 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B0C9J1MPGC - Confidence: 0.100 (very_low) - Overlap: 0.167 - 'Peppermint Foot Cream - Soothing Shea Butter Foot Rescue...'
+2025-07-25 12:22:34,343 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Beauties Skincare Coconut Hydrating Foot Pack' vs 'SVR Xerial Peel Exfoliating Foot Sock Mask. Intensive Treatment for Dry, Hard, Thickened, Callused Feet. Professional Pedicure Results at Home. Size 35–44 (1 Pair)' = 0.17 (very_low, 10.0%)
+2025-07-25 12:22:34,343 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B071CGTP7B - Confidence: 0.100 (very_low) - Overlap: 0.167 - 'SVR Xerial Peel Exfoliating Foot Sock Mask. Intensive Treatm...'
+2025-07-25 12:22:34,344 - PassiveExtractionWorkflow - INFO - ✅ BEST MATCH: ASIN B0BDG62MQ1 with 60.0% confidence
+2025-07-25 12:22:34,355 - PassiveExtractionWorkflow - INFO - 📋 Found ASIN match in cache: amazon_B0BDG62MQ1_Beauties_Skincare_Coconut_Hydrating_Foot_Pack.json
+2025-07-25 12:22:34,355 - PassiveExtractionWorkflow - INFO - 📋 Using cached Amazon data for ASIN B0BDG62MQ1
+2025-07-25 12:22:34,357 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BDG62MQ1_Beauties_Skincare_Coconut_Hydrating_Foot_Pack.json
+2025-07-25 12:22:34,357 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:22:34,360 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 7/276: 'Bello Elegant Swirl Pitcher With Lid 2l' ---
+2025-07-25 12:22:34,364 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302420444
+2025-07-25 12:22:34,397 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5015302420444 in file: amazon_B0CX5Q8DF8_5015302420444.json (fast search)
+2025-07-25 12:22:34,397 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5015302420444
+2025-07-25 12:22:34,398 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5015302420444. Using EAN result without title fallback.
+2025-07-25 12:22:34,400 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CX5Q8DF8_5015302420444.json
+2025-07-25 12:22:34,401 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (2119 total entries)
+2025-07-25 12:22:34,402 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:22:34,405 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 8/276: 'Bello Lidded PP Pitcher 2.25l Assorted Colours' ---
+2025-07-25 12:22:34,408 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302423148
+2025-07-25 12:22:34,443 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5015302423148 for supplier product: 'Bello Lidded PP Pitcher 2.25l Assorted Colours' (FixedAmazonExtractor)
+2025-07-25 12:22:34,444 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-25 12:22:34,444 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:22:34,445 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:22:34,445 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5015302423148
+2025-07-25 12:22:37,527 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5015302423148...
+2025-07-25 12:22:37,704 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-25 12:22:39,893 - tools.passive_extraction_workflow_latest - INFO - Found 5 search result elements using selector: div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored-product'])
+2025-07-25 12:22:39,894 - tools.passive_extraction_workflow_latest - INFO - Processing 5 search result elements for EAN 5015302423148
+2025-07-25 12:22:39,905 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN B09VP5WZQX
+2025-07-25 12:22:39,914 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09VP5WZQX HTML structure sample: <div data-asin="B09VP5WZQX" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:0" data-cel-widget="search_result_17"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-25 12:22:39,914 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B09VP5WZQX: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:39,914 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B09VP5WZQX: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:39,929 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B09VP5WZQX: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,008 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09VP5WZQX title extracted using selector 'h2': Ecoseao Acrylic Display Case with Mirror, Clear Ac...
+2025-07-25 12:22:40,009 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B09VP5WZQX - Ecoseao Acrylic Display Case with Mirror, Clear Acrylic Orga...
+2025-07-25 12:22:40,016 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 2: ASIN B09B54S3ZM
+2025-07-25 12:22:40,021 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09B54S3ZM HTML structure sample: <div data-asin="B09B54S3ZM" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:1" data-cel-widget="search_result_18"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-25 12:22:40,022 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B09B54S3ZM: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,022 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B09B54S3ZM: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,035 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B09B54S3ZM: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,097 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09B54S3ZM title extracted using selector 'h2': Dezzer Acrylic Display Case Box with Black Base, A...
+2025-07-25 12:22:40,098 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B09B54S3ZM - Dezzer Acrylic Display Case Box with Black Base, Assemble Co...
+2025-07-25 12:22:40,106 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 3: ASIN B0B6B89GL1
+2025-07-25 12:22:40,113 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B6B89GL1 HTML structure sample: <div data-asin="B0B6B89GL1" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:2" data-cel-widget="search_result_19"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-25 12:22:40,114 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0B6B89GL1: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,114 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0B6B89GL1: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,129 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0B6B89GL1: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,200 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B6B89GL1 title extracted using selector 'h2': Cliselda Acrylic Display Case with Black Base, Ass...
+2025-07-25 12:22:40,200 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0B6B89GL1 - Cliselda Acrylic Display Case with Black Base, Assemble Acry...
+2025-07-25 12:22:40,210 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 4: ASIN B098SKTTVZ
+2025-07-25 12:22:40,211 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B098SKTTVZ: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,211 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B098SKTTVZ: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,230 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B098SKTTVZ: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,321 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B098SKTTVZ title extracted using selector 'h2': Acrylic Display Case for Minifigures & Collectible...
+2025-07-25 12:22:40,321 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B098SKTTVZ - Acrylic Display Case for Minifigures & Collectibles - 12-Blo...
+2025-07-25 12:22:40,330 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 5: ASIN B0CPPJRGJ6
+2025-07-25 12:22:40,331 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0CPPJRGJ6: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,331 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0CPPJRGJ6: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,347 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0CPPJRGJ6: 'ElementHandle' object has no attribute 'locator'
+2025-07-25 12:22:40,460 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CPPJRGJ6 title extracted using selector 'h2': UoYeet Football Display Case with Ball Holder, Cle...
+2025-07-25 12:22:40,460 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0CPPJRGJ6 - UoYeet Football Display Case with Ball Holder, Clear Display...
+2025-07-25 12:22:40,461 - tools.passive_extraction_workflow_latest - INFO - Found 5 organic results, stopping search to improve performance.
+2025-07-25 12:22:40,461 - tools.passive_extraction_workflow_latest - INFO - Multiple organic results (5) found for EAN 5015302423148. Using first organic result (most relevant): ASIN B09VP5WZQX
+2025-07-25 12:22:40,462 - tools.passive_extraction_workflow_latest - INFO - FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking
+2025-07-25 12:22:40,462 - tools.passive_extraction_workflow_latest - INFO - EAN search selected ASIN B09VP5WZQX for 5015302423148
+2025-07-25 12:22:40,462 - tools.passive_extraction_workflow_latest - INFO - Single ASIN B09VP5WZQX found for EAN 5015302423148.
+2025-07-25 12:22:40,462 - tools.passive_extraction_workflow_latest - INFO - Proceeding with ASIN: B09VP5WZQX for EAN: 5015302423148
+2025-07-25 12:22:40,463 - amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B09VP5WZQX. Getting a new one from BrowserManager.
+2025-07-25 12:22:40,463 - amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5015302423148&ref=nb_sb_noss
+2025-07-25 12:22:41,611 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-25 12:22:41,613 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

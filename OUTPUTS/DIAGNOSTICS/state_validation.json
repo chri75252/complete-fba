@@ -1,0 +1,61 @@
+{
+  "validation_timestamp": "2025-07-28T04:27:02.609558",
+  "validation_type": "comprehensive_state_validation",
+  "file_based_metrics": {
+    "linking_map_total": 3097,
+    "product_cache_total": 2369,
+    "calculated_gap": 728,
+    "match_method_distribution": {
+      "EAN": 1375,
+      "title": 1310,
+      "EAN_cached": 176,
+      "none": 234,
+      "title_cached": 2
+    },
+    "no_match_products": 234
+  },
+  "global_state_metrics": {
+    "last_processed_index": 3097,
+    "total_products": 2337,
+    "processing_status": "in_progress",
+    "gap_processing_phase": "gap_processing",
+    "gap_products_total": 0,
+    "products_extracted_total": 2337
+  },
+  "session_state_metrics": {
+    "last_processed_index": 2318,
+    "total_products": 51,
+    "processing_status": "in_progress",
+    "successful_products": 0,
+    "profitable_products": 0
+  },
+  "category_metrics": {
+    "total_categories": 28,
+    "completed_categories": 17,
+    "in_progress_categories": 10,
+    "pending_categories": 1,
+    "completion_percentage": 60.71428571428571
+  },
+  "validation_results": {
+    "consistency_checks": {
+      "global_vs_linking_map": true,
+      "global_vs_cache_match": false,
+      "gap_calculation_match": false
+    },
+    "inconsistencies_found": [
+      "Global state total_products (2337) != cache length (2369)",
+      "Global gap reported (0) != calculated gap (728)"
+    ],
+    "resume_capability": {
+      "can_resume_from_global": true,
+      "can_resume_from_session": true
+    }
+  },
+  "recommendations": [
+    "Fix state inconsistencies before resuming processing",
+    "Verify gap processing calculations",
+    "Update global state to match actual file counts",
+    "Initialize gap processing with correct gap count",
+    "Complete processing for 1 pending categories"
+  ]
+}

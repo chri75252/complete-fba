@@ -1,0 +1,331 @@
+{
+  "generated_at": "2025-01-28T15:30:00Z",
+  "project_root": "/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (3)",
+  "analysis_scope": "Gap processing logic and state management",
+  "critical_components": {
+    "gap_processing_filter": {
+      "primary_location": {
+        "file": "/tools/passive_extraction_workflow_latest.py",
+        "line_range": "3400-3430",
+        "function": "extract_products_from_supplier_categories",
+        "description": "Critical O(1) gap processing filter that prevents reprocessing already linked products"
+      },
+      "key_operations": [
+        {
+          "line": 3403,
+          "operation": "linking_map_check",
+          "code": "if self.linking_map and len(self.linking_map) > 0:",
+          "purpose": "Validates linking map exists before filtering"
+        },
+        {
+          "line_range": "3404-3407",
+          "operation": "hash_set_construction",
+          "code": "processed_urls = {entry.get(\"supplier_url\") for entry in self.linking_map if entry.get(\"supplier_url\")}\nprocessed_eans = {entry.get(\"supplier_ean\") for entry in self.linking_map if entry.get(\"supplier_ean\")}",
+          "purpose": "O(1) hash set construction for fast lookups"
+        },
+        {
+          "line_range": "3410-3422",
+          "operation": "product_filtering",
+          "code": "Filter loop checking product_url in processed_urls and product_ean in processed_eans",
+          "purpose": "Filters out already processed products using O(1) lookups"
+        }
+      ],
+      "performance_impact": {
+        "complexity": "O(1) lookups vs O(n) linear search",
+        "improvement": "3650x faster for large linking maps",
+        "memory_overhead": "Minimal - hash sets use standard Python dict implementation"
+      }
+    },
+    "linking_map_management": {
+      "core_operations": [
+        {
+          "operation": "initialization",
+          "locations": [
+            {
+              "file": "/tools/passive_extraction_workflow_latest.py",
+              "line": 969,
+              "context": "self.linking_map = []"
+            }
+          ]
+        },
+        {
+          "operation": "loading",
+          "primary_function": {
+            "file": "/tools/passive_extraction_workflow_latest.py",
+            "function": "_load_linking_map",
+            "line_range": "2009-2070",
+            "description": "Loads linking map with fallback patterns for filename mismatches"
+          },
+          "fallback_patterns": [
+            {
+              "pattern": "underscore_to_dot",
+              "example": "poundwholesale_co_uk -> poundwholesale.co.uk"
+            },
+            {
+              "pattern": "dot_to_underscore", 
+              "example": "poundwholesale.co.uk -> poundwholesale_co_uk"
+            }
+          ]
+        },
+        {
+          "operation": "saving",
+          "primary_function": {
+            "file": "/tools/passive_extraction_workflow_latest.py",
+            "function": "_save_linking_map",
+            "line_range": "2078-2130",
+            "description": "WSL-compatible save with hash index rebuilding"
+          },
+          "features": [
+            "WSL-compatible multi-strategy save",
+            "File existence verification",
+            "Hash index rebuilding after save",
+            "Comprehensive error handling"
+          ]
+        }
+      ],
+      "usage_locations": {
+        "total_references": 350,
+        "primary_files": [
+          {
+            "file": "/tools/passive_extraction_workflow_latest.py",
+            "references": 47,
+            "key_operations": ["loading", "saving", "filtering", "appending"]
+          },
+          {
+            "file": "/tools/cache_manager.py", 
+            "references": 3,
+            "key_operations": ["loading for cache validation"]
+          },
+          {
+            "file": "/tools/FBA_Financial_calculator.py",
+            "references": 8,
+            "key_operations": ["loading for financial calculations"]
+          }
+        ]
+      }
+    },
+    "hash_lookup_optimization": {
+      "primary_implementation": {
+        "file": "/utils/hash_lookup_optimizer.py",
+        "class": "HashLookupOptimizer",
+        "description": "Comprehensive O(1) hash-based lookup system replacing O(n) linear searches"
+      },
+      "key_methods": [
+        {
+          "method": "build_indexes",
+          "line_range": "78-105",
+          "purpose": "Builds hash indexes for EAN, URL, and ASIN lookups",
+          "complexity": "O(n) build time, O(1) lookup time"
+        },
+        {
+          "method": "check_product_in_linking_map",
+          "line_range": "134-165",
+          "purpose": "Fast O(1) product existence check",
+          "performance": "3650x improvement over linear search"
+        },
+        {
+          "method": "get_processed_urls_set",
+          "line_range": "251-258",
+          "purpose": "Returns set of all processed URLs for gap processing",
+          "usage": "Critical for gap processing filter logic"
+        },
+        {
+          "method": "get_processed_eans_set", 
+          "line_range": "260-267",
+          "purpose": "Returns set of all processed EANs for filtering",
+          "usage": "Critical for gap processing filter logic"
+        }
+      ],
+      "performance_metrics": {
+        "hash_lookups": "O(1) constant time",
+        "linear_lookups": "O(n) where n=3651 entries",
+        "improvement_factor": "3650x faster",
+        "thread_safety": "Full thread safety with threading.Lock"
+      }
+    },
+    "state_management": {
+      "session_state": {
+        "primary_manager": {
+          "file": "/utils/enhanced_state_manager.py",
+          "class": "EnhancedStateManager",
+          "description": "Comprehensive state tracking for processing sessions"
+        },
+        "key_data_structures": [
+          {
+            "field": "supplier_extraction_progress",
+            "purpose": "Tracks category and product extraction progress",
+            "sub_fields": ["current_category_index", "total_categories", "extraction_phase"]
+          },
+          {
+            "field": "gap_processing",
+            "purpose": "Tracks gap processing phase and progress", 
+            "sub_fields": ["phase", "gap_products_total", "gap_products_processed"]
+          },
+          {
+            "field": "processed_products",
+            "purpose": "URL to status mapping for product-level tracking",
+            "structure": "Dictionary mapping URLs to processing status"
+          }
+        ]
+      },
+      "global_state": {
+        "linking_map_persistence": {
+          "location": "OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier}/linking_map.json",
+          "format": "Array of linking entries with detailed metadata",
+          "backup_strategy": "WSL-compatible save with verification"
+        },
+        "processing_state_files": {
+          "location": "OUTPUTS/CACHE/processing_states/{supplier}_state.json",
+          "purpose": "Session recovery and progress tracking",
+          "schema_version": "1.0"
+        }
+      }
+    },
+    "product_cache_operations": {
+      "cache_file_detection": {
+        "function": "_find_actual_supplier_cache_file",
+        "purpose": "Locates actual cache files with fallback patterns",
+        "location": "tools/passive_extraction_workflow_latest.py"
+      },
+      "cache_metadata_handling": {
+        "metadata_marker": "_cache_metadata",
+        "purpose": "Identifies cache metadata entries vs actual products",
+        "usage_locations": [
+          {
+            "file": "/tools/passive_extraction_workflow_latest.py",
+            "line": 3413,
+            "context": "if isinstance(product, dict) and not product.get('_cache_metadata')"
+          }
+        ]
+      },
+      "cache_loading_patterns": [
+        {
+          "pattern": "existing_cache_resumption",
+          "line_range": "3394-3430",
+          "description": "Loads existing cached products and filters against linking map"
+        }
+      ]
+    },
+    "path_normalization": {
+      "primary_manager": {
+        "file": "/utils/path_manager.py",
+        "class": "PathManager",
+        "description": "Centralized path management following CLAUDE_STANDARDS.md"
+      },
+      "normalization_patterns": [
+        {
+          "pattern": "underscore_to_dot_conversion",
+          "example": "_co_uk -> .co.uk",
+          "usage": "Supplier name normalization for file paths",
+          "location": "passive_extraction_workflow_latest.py:2019-2027"
+        },
+        {
+          "pattern": "dot_to_underscore_conversion",
+          "example": ".co.uk -> _co_uk", 
+          "usage": "Fallback pattern for filename mismatches",
+          "location": "passive_extraction_workflow_latest.py:2028-2032"
+        }
+      ],
+      "path_functions": [
+        {
+          "function": "get_linking_map_path",
+          "purpose": "Standardized linking map file path generation",
+          "pattern": "OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier}/linking_map.json"
+        },
+        {
+          "function": "get_processing_state_path",
+          "purpose": "State file path generation",
+          "pattern": "OUTPUTS/CACHE/processing_states/{supplier}_state.json"
+        }
+      ]
+    }
+  },
+  "processed_urls_eans_construction": {
+    "primary_locations": [
+      {
+        "file": "/tools/passive_extraction_workflow_latest.py",
+        "line_range": "3404-3407", 
+        "context": "Gap processing filter - O(1) hash set construction",
+        "code": "processed_urls = {entry.get('supplier_url') for entry in self.linking_map if entry.get('supplier_url')}"
+      },
+      {
+        "file": "/tools/passive_extraction_workflow_latest.py",
+        "line_range": "1966-1974",
+        "context": "Match validation - checking product uniqueness",
+        "purpose": "Validates no duplicate URL processing"
+      },
+      {
+        "file": "/tools/passive_extraction_workflow_latest.py", 
+        "line_range": "6989-7037",
+        "context": "EAN validation in financial reporting",
+        "purpose": "EAN-based duplicate detection"
+      }
+    ],
+    "construction_patterns": [
+      {
+        "pattern": "set_comprehension",
+        "code": "{entry.get('field') for entry in self.linking_map if entry.get('field')}",
+        "purpose": "O(1) lookup performance",
+        "memory_complexity": "O(k) where k is unique items"
+      }
+    ]
+  },
+  "state_file_writers": {
+    "session_writers": [
+      {
+        "file": "/utils/enhanced_state_manager.py",
+        "method": "save_state",
+        "purpose": "Saves current session progress and statistics",
+        "frequency": "Periodic during processing"
+      }
+    ],
+    "global_writers": [
+      {
+        "file": "/tools/passive_extraction_workflow_latest.py", 
+        "method": "_save_linking_map",
+        "purpose": "Persists linking map for cross-session use",
+        "frequency": "After every N products (configurable batch size)"
+      }
+    ]
+  },
+  "call_graphs": {
+    "gap_processing_flow": [
+      "extract_products_from_supplier_categories",
+      "_find_actual_supplier_cache_file", 
+      "gap_processing_filter_logic (L3400-3430)",
+      "hash_set_construction (processed_urls/eans)",
+      "product_filtering_loop"
+    ],
+    "linking_map_lifecycle": [
+      "_load_linking_map",
+      "path_normalization_fallbacks",
+      "hash_optimizer.build_indexes",
+      "product_processing_loop",
+      "_save_linking_map", 
+      "wsl_compatible_save",
+      "hash_optimizer.rebuild_indexes"
+    ],
+    "state_persistence_flow": [
+      "EnhancedStateManager.load_state",
+      "processing_operations",
+      "periodic_state_updates",
+      "EnhancedStateManager.save_state"
+    ]
+  },
+  "performance_analysis": {
+    "critical_optimizations": [
+      {
+        "component": "Gap Processing Filter",
+        "optimization": "O(1) hash lookups vs O(n) linear search",
+        "impact": "3650x performance improvement",
+        "memory_cost": "Minimal - Python dict overhead"
+      },
+      {
+        "component": "Linking Map Operations", 
+        "optimization": "Hash index rebuilding after saves",
+        "impact": "Maintains O(1) lookup performance",
+        "cost": "O(n) rebuild time on saves"
+      }
+    ]
+  }
+}

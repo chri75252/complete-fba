@@ -1,0 +1,1151 @@
+2025-07-25 12:16:54,109 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250725_121654.log
+2025-07-25 12:16:54,110 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250725_121654.log
+2025-07-25 12:16:54,110 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-25 12:16:54,111 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-07-25 12:16:54,115 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-07-25 12:16:54,676 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-25 12:16:54,824 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-07-25 12:16:54,824 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-25 12:16:54,824 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:16:54,824 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 12:16:54,824 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-25 12:16:54,825 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-25 12:16:54,825 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-25 12:17:00,958 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-25 12:17:01,040 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-25 12:17:01,040 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-25 12:17:01,041 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS'
+2025-07-25 12:17:01,041 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products'
+2025-07-25 12:17:01,042 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products
+2025-07-25 12:17:01,043 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-07-25 12:17:01,043 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-07-25 12:17:01,044 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-25 12:17:01,044 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\amazon_data
+2025-07-25 12:17:01,045 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-25 12:17:01,045 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\system_config.json
+2025-07-25 12:17:01,046 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-25 12:17:01,046 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-25 12:17:01,046 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-25 12:17:01,046 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-25 12:17:01,046 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-25 12:17:01,046 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-25 12:17:01,047 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-25 12:17:01,047 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-25 12:17:01,047 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS
+2025-07-25 12:17:01,047 - PassiveExtractionWorkflow - INFO - 📚 No reference supplier cache found - starting fresh
+2025-07-25 12:17:01,047 - PassiveExtractionWorkflow - INFO - 📚 No reference linking map found - starting fresh
+2025-07-25 12:17:01,048 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-25 12:17:01,048 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-25 12:17:01,048 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250725_121701
+2025-07-25 12:17:01,048 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-25 12:17:01,048 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-25 12:17:01,049 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-07-25 12:17:01,049 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-25 12:17:01,049 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 20
+2025-07-25 12:17:01,049 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-25 12:17:01,049 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-25 12:17:01,049 - utils.enhanced_state_manager - INFO - No existing state file found for poundwholesale.co.uk, starting fresh
+2025-07-25 12:17:01,050 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-25 12:17:01,050 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-07-25 12:17:01,051 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-25 12:17:01,051 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at any path (tried 2 patterns) - Creating new map
+2025-07-25 12:17:01,051 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 0
+2025-07-25 12:17:01,064 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 12:17:01,065 - PassiveExtractionWorkflow - INFO - 🔍 MAIN WORKFLOW LINKING MAP COUNTS: in-memory=0, file=0, using=0
+2025-07-25 12:17:01,066 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: AMAZON_ANALYSIS (supplier cache: 2387 products, no linking map)
+2025-07-25 12:17:01,068 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-25 12:17:01,068 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at any path (tried 2 patterns) - Creating new map
+2025-07-25 12:17:01,068 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-25 12:17:01,068 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-25 12:17:01,069 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 185 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\poundwholesale_categories.json
+2025-07-25 12:17:01,069 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-07-25 12:17:01,070 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 185 predefined categories (infinite mode)
+2025-07-25 12:17:01,070 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-25 12:17:01,070 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-25 12:17:01,071 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-25 12:17:01,071 - PassiveExtractionWorkflow - INFO -    process_existing_gap_first: True
+2025-07-25 12:17:01,071 - PassiveExtractionWorkflow - INFO - 🔍 HYBRID PROCESSING: Processing existing product gap first...
+2025-07-25 12:17:01,088 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 12:17:01,090 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP COUNTS: in-memory=0, file=0, using=0
+2025-07-25 12:17:01,090 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING: Found 2387 products to process (supplier: 2387, linking map: 0)
+2025-07-25 12:17:01,101 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING: Identified 2387 unprocessed products for Amazon analysis
+2025-07-25 12:17:01,102 - PassiveExtractionWorkflow - INFO - 🆕 STARTING GAP PROCESSING: Processing 2387 products from beginning
+2025-07-25 12:17:01,106 - PassiveExtractionWorkflow - INFO - 🔧 GAP STATE: Set total_categories to 0 from config file
+2025-07-25 12:17:01,109 - PassiveExtractionWorkflow - INFO - 🚨 GAP STATE: Initialized gap processing state for 2387 products
+2025-07-25 12:17:01,109 - PassiveExtractionWorkflow - INFO - 🚀 GAP PROCESSING: Starting Amazon analysis for 2387 remaining unprocessed products
+2025-07-25 12:17:01,111 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 1/120: Processing 20 products
+2025-07-25 12:17:01,111 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 1/2387: '12 Cup Muffin Flower Tray' ---
+2025-07-25 12:17:01,115 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302452575
+2025-07-25 12:17:01,131 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5015302452575 in file: amazon_B08GGC2HSJ_5015302452575.json (fast search)
+2025-07-25 12:17:01,132 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5015302452575
+2025-07-25 12:17:01,132 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5015302452575. Using EAN result without title fallback.
+2025-07-25 12:17:01,134 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08GGC2HSJ_5015302452575.json
+2025-07-25 12:17:01,135 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (1 total entries)
+2025-07-25 12:17:01,139 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,142 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 2/2387: '151 87 Piece Picture Hanging Kit' ---
+2025-07-25 12:17:01,146 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375042001
+2025-07-25 12:17:01,179 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375042001 in file: amazon_B01H2SSDZ6_5050375042001.json (fast search)
+2025-07-25 12:17:01,180 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375042001
+2025-07-25 12:17:01,181 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375042001. Using EAN result without title fallback.
+2025-07-25 12:17:01,183 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B01H2SSDZ6_5050375042001.json
+2025-07-25 12:17:01,183 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (2 total entries)
+2025-07-25 12:17:01,184 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,188 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 3/2387: '151 Assorted Plastic Protectors' ---
+2025-07-25 12:17:01,192 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249004907
+2025-07-25 12:17:01,226 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249004907 in file: amazon_B0C5M4NBTM_5053249004907.json (fast search)
+2025-07-25 12:17:01,226 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249004907
+2025-07-25 12:17:01,227 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249004907. Using EAN result without title fallback.
+2025-07-25 12:17:01,228 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0C5M4NBTM_5053249004907.json
+2025-07-25 12:17:01,228 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (3 total entries)
+2025-07-25 12:17:01,228 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,232 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 4/2387: '151 Assorted Sandpaper Sheets 10 Pack' ---
+2025-07-25 12:17:01,233 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249256658
+2025-07-25 12:17:01,265 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249256658 in file: amazon_B0BYMM9W4C_5053249256658.json (fast search)
+2025-07-25 12:17:01,266 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249256658
+2025-07-25 12:17:01,266 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249256658. Using EAN result without title fallback.
+2025-07-25 12:17:01,268 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BYMM9W4C_5053249256658.json
+2025-07-25 12:17:01,268 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (4 total entries)
+2025-07-25 12:17:01,269 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,271 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 5/2387: '151 Decorators Safety Scraper' ---
+2025-07-25 12:17:01,275 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375026995
+2025-07-25 12:17:01,310 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375026995 in file: amazon_B00641N41Q_5050375026995.json (fast search)
+2025-07-25 12:17:01,311 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375026995
+2025-07-25 12:17:01,312 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375026995. Using EAN result without title fallback.
+2025-07-25 12:17:01,314 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00641N41Q_5050375026995.json
+2025-07-25 12:17:01,314 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (5 total entries)
+2025-07-25 12:17:01,314 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,318 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 6/2387: '151 General Purpose Polythene Dust Sheets 3.6m X 2.7m 2pc' ---
+2025-07-25 12:17:01,321 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375037175
+2025-07-25 12:17:01,355 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375037175 in file: amazon_B0036GM69I_5050375037175.json (fast search)
+2025-07-25 12:17:01,356 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375037175
+2025-07-25 12:17:01,356 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375037175. Using EAN result without title fallback.
+2025-07-25 12:17:01,358 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0036GM69I_5050375037175.json
+2025-07-25 12:17:01,359 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (6 total entries)
+2025-07-25 12:17:01,359 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,364 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 7/2387: '151 Gorilla Filler Plasterboard & Drywall Mesh Tape 50m' ---
+2025-07-25 12:17:01,369 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249247304
+2025-07-25 12:17:01,404 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249247304 in file: amazon_B09M3Q98MK_5053249247304.json (fast search)
+2025-07-25 12:17:01,405 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249247304
+2025-07-25 12:17:01,405 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249247304. Using EAN result without title fallback.
+2025-07-25 12:17:01,408 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B09M3Q98MK_5053249247304.json
+2025-07-25 12:17:01,408 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (7 total entries)
+2025-07-25 12:17:01,409 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,412 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 8/2387: '151 Gorilla Filler Plasterboard Wall Patch 10cm 2 Pack' ---
+2025-07-25 12:17:01,417 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249249155
+2025-07-25 12:17:01,454 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249249155 in file: amazon_B0CZRXW1QL_5053249249155.json (fast search)
+2025-07-25 12:17:01,455 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249249155
+2025-07-25 12:17:01,455 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249249155. Using EAN result without title fallback.
+2025-07-25 12:17:01,457 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CZRXW1QL_5053249249155.json
+2025-07-25 12:17:01,457 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (8 total entries)
+2025-07-25 12:17:01,458 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,462 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 9/2387: '151 Masking Tape 24mm X 40m' ---
+2025-07-25 12:17:01,466 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249246772
+2025-07-25 12:17:01,499 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249246772 in file: amazon_B0BPYXS2SZ_5053249246772.json (fast search)
+2025-07-25 12:17:01,500 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249246772
+2025-07-25 12:17:01,501 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249246772. Using EAN result without title fallback.
+2025-07-25 12:17:01,504 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BPYXS2SZ_5053249246772.json
+2025-07-25 12:17:01,505 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (9 total entries)
+2025-07-25 12:17:01,505 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,507 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 10/2387: '151 Masking Tape 48mm X 20m' ---
+2025-07-25 12:17:01,511 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249246710
+2025-07-25 12:17:01,532 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249246710 in file: amazon_B0CTHPJ1Z3_5053249246710.json (fast search)
+2025-07-25 12:17:01,532 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249246710
+2025-07-25 12:17:01,532 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249246710. Using EAN result without title fallback.
+2025-07-25 12:17:01,534 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CTHPJ1Z3_5053249246710.json
+2025-07-25 12:17:01,534 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (10 total entries)
+2025-07-25 12:17:01,535 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,541 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 10/2387
+2025-07-25 12:17:01,541 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 11/2387: '151 Masonry Brush 13cm X 4cm' ---
+2025-07-25 12:17:01,543 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375058668
+2025-07-25 12:17:01,559 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375058668 in file: amazon_B0DX8BHN2B_5050375058668.json (fast search)
+2025-07-25 12:17:01,559 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375058668
+2025-07-25 12:17:01,559 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375058668. Using EAN result without title fallback.
+2025-07-25 12:17:01,560 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DX8BHN2B_5050375058668.json
+2025-07-25 12:17:01,560 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (11 total entries)
+2025-07-25 12:17:01,561 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,564 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 12/2387: '151 Mini Roller & Tray Set 5pc' ---
+2025-07-25 12:17:01,567 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375050693
+2025-07-25 12:17:01,591 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375050693 in file: amazon_B07B8VRWFS_5050375050693.json (fast search)
+2025-07-25 12:17:01,592 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375050693
+2025-07-25 12:17:01,592 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375050693. Using EAN result without title fallback.
+2025-07-25 12:17:01,594 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07B8VRWFS_5050375050693.json
+2025-07-25 12:17:01,595 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (12 total entries)
+2025-07-25 12:17:01,595 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,599 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 13/2387: '151 Multipurpose Storage Hooks 2 Pack' ---
+2025-07-25 12:17:01,602 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249265124
+2025-07-25 12:17:01,632 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249265124 in file: amazon_B0D8397T9D_5053249265124.json (fast search)
+2025-07-25 12:17:01,632 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249265124
+2025-07-25 12:17:01,633 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249265124. Using EAN result without title fallback.
+2025-07-25 12:17:01,635 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0D8397T9D_5053249265124.json
+2025-07-25 12:17:01,636 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (13 total entries)
+2025-07-25 12:17:01,636 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,641 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 14/2387: '151 Paint Brush Set 5pc' ---
+2025-07-25 12:17:01,644 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375114418
+2025-07-25 12:17:01,675 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375114418 in file: amazon_B00T7YSJ3K_5050375114418.json (fast search)
+2025-07-25 12:17:01,676 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375114418
+2025-07-25 12:17:01,676 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375114418. Using EAN result without title fallback.
+2025-07-25 12:17:01,679 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00T7YSJ3K_5050375114418.json
+2025-07-25 12:17:01,679 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (14 total entries)
+2025-07-25 12:17:01,679 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,683 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 15/2387: '151 Plasterboard & Drywall Tape 48mm X 20m' ---
+2025-07-25 12:17:01,686 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375038226
+2025-07-25 12:17:01,715 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375038226 in file: amazon_B004KKUKK6_5050375038226.json (fast search)
+2025-07-25 12:17:01,715 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375038226
+2025-07-25 12:17:01,716 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375038226. Using EAN result without title fallback.
+2025-07-25 12:17:01,717 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B004KKUKK6_5050375038226.json
+2025-07-25 12:17:01,718 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (15 total entries)
+2025-07-25 12:17:01,718 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:01,720 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 16/2387: '151 Products Essentials Bundle (34 Products)' ---
+2025-07-25 12:17:01,723 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:17:01,723 - tools.passive_extraction_workflow_latest - INFO - Connecting to Chrome browser on debug port 9222 (FixedAmazonExtractor)
+2025-07-25 12:17:02,448 - tools.passive_extraction_workflow_latest - INFO - Successfully connected to Chrome on port 9222 (FixedAmazonExtractor)
+2025-07-25 12:17:02,448 - tools.passive_extraction_workflow_latest - INFO - Found 1 existing pages (FixedAmazonExtractor)
+2025-07-25 12:17:02,448 - tools.passive_extraction_workflow_latest - INFO - Using existing page: https://www.poundwholesale.co.uk/ (FixedAmazonExtractor)
+2025-07-25 12:17:02,453 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:17:02,453 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:17:02,453 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:02,454 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 12:17:02,454 - utils.browser_manager - INFO - 📄 Navigating to https://www.amazon.co.uk
+2025-07-25 12:17:04,346 - utils.browser_manager - INFO - ✅ Page ready for https://www.amazon.co.uk
+2025-07-25 12:17:04,347 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: 151 Products Essentials Bundle (34 Products)
+2025-07-25 12:17:08,277 - tools.passive_extraction_workflow_latest - INFO - Title search found 1 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:08,300 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:17:08,300 - PassiveExtractionWorkflow - WARNING - No Amazon results for title '151 Products Essentials Bundle (34 Products)'. Skipping.
+2025-07-25 12:17:08,301 - PassiveExtractionWorkflow - INFO - 🗒️ Recorded no-match sentinel for EAN NO_EAN to prevent endless skip loop
+2025-07-25 12:17:08,301 - PassiveExtractionWorkflow - WARNING - GAP: Could not retrieve Amazon data for '151 Products Essentials Bundle (34 Products)'
+2025-07-25 12:17:08,303 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 17/2387: '151 Pva Glue 150ml' ---
+2025-07-25 12:17:08,305 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249003757
+2025-07-25 12:17:08,318 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249003757 in file: amazon_B08K8CN42P_5053249003757.json (fast search)
+2025-07-25 12:17:08,318 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249003757
+2025-07-25 12:17:08,318 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249003757. Using EAN result without title fallback.
+2025-07-25 12:17:08,319 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08K8CN42P_5053249003757.json
+2025-07-25 12:17:08,320 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (17 total entries)
+2025-07-25 12:17:08,320 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,322 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 18/2387: '151 Self-Adhesive White Plastic Hooks 12 Pack' ---
+2025-07-25 12:17:08,324 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375044395
+2025-07-25 12:17:08,347 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375044395 in file: amazon_B0BYS8RVXC_5050375044395.json (fast search)
+2025-07-25 12:17:08,347 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375044395
+2025-07-25 12:17:08,348 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375044395. Using EAN result without title fallback.
+2025-07-25 12:17:08,349 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BYS8RVXC_5050375044395.json
+2025-07-25 12:17:08,350 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (18 total entries)
+2025-07-25 12:17:08,350 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,353 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 19/2387: '151 Shed & Fence Brush 10cm X 4cm' ---
+2025-07-25 12:17:08,356 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375058705
+2025-07-25 12:17:08,384 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375058705 in file: amazon_B004U561TK_5050375058705.json (fast search)
+2025-07-25 12:17:08,384 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375058705
+2025-07-25 12:17:08,384 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375058705. Using EAN result without title fallback.
+2025-07-25 12:17:08,386 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B004U561TK_5050375058705.json
+2025-07-25 12:17:08,386 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (19 total entries)
+2025-07-25 12:17:08,386 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,389 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 20/2387: '151 Tile & Grout Revival Pen White' ---
+2025-07-25 12:17:08,392 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249220918
+2025-07-25 12:17:08,425 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249220918 in file: amazon_B079J2HQS8_5053249220918.json (fast search)
+2025-07-25 12:17:08,426 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249220918
+2025-07-25 12:17:08,426 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249220918. Using EAN result without title fallback.
+2025-07-25 12:17:08,428 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B079J2HQS8_5053249220918.json
+2025-07-25 12:17:08,428 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (20 total entries)
+2025-07-25 12:17:08,429 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,436 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 20/2387
+2025-07-25 12:17:08,440 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 2/120: Processing 20 products
+2025-07-25 12:17:08,440 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 21/2387: '151 Trigger Spray Sugar Soap 750ml' ---
+2025-07-25 12:17:08,443 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013748060132
+2025-07-25 12:17:08,475 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013748060132 in file: amazon_B0DJR8FHFN_5013748060132.json (fast search)
+2025-07-25 12:17:08,475 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013748060132
+2025-07-25 12:17:08,476 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013748060132. Using EAN result without title fallback.
+2025-07-25 12:17:08,477 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DJR8FHFN_5013748060132.json
+2025-07-25 12:17:08,477 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (21 total entries)
+2025-07-25 12:17:08,477 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,481 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 22/2387: '151 Turpentine Substitute 750ml' ---
+2025-07-25 12:17:08,485 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013748000398
+2025-07-25 12:17:08,508 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013748000398 in file: amazon_B0D4TMY745_5013748000398.json (fast search)
+2025-07-25 12:17:08,509 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013748000398
+2025-07-25 12:17:08,509 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013748000398. Using EAN result without title fallback.
+2025-07-25 12:17:08,511 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0D4TMY745_5013748000398.json
+2025-07-25 12:17:08,512 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (22 total entries)
+2025-07-25 12:17:08,512 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,516 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 23/2387: '151 Wallpaper Paste Brush 13cm X 4cm' ---
+2025-07-25 12:17:08,518 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050375058682
+2025-07-25 12:17:08,541 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050375058682 in file: amazon_B004V9JA98_5050375058682.json (fast search)
+2025-07-25 12:17:08,541 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050375058682
+2025-07-25 12:17:08,542 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050375058682. Using EAN result without title fallback.
+2025-07-25 12:17:08,544 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B004V9JA98_5050375058682.json
+2025-07-25 12:17:08,545 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (23 total entries)
+2025-07-25 12:17:08,545 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,548 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 24/2387: '151 Wet Or Dry Sandpaper 8 Pack' ---
+2025-07-25 12:17:08,551 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249014203
+2025-07-25 12:17:08,572 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249014203 in file: amazon_B08LKBRLGY_5053249014203.json (fast search)
+2025-07-25 12:17:08,573 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249014203
+2025-07-25 12:17:08,573 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249014203. Using EAN result without title fallback.
+2025-07-25 12:17:08,575 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08LKBRLGY_5053249014203.json
+2025-07-25 12:17:08,575 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (24 total entries)
+2025-07-25 12:17:08,575 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,577 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 25/2387: '151 White Furniture Touch Up Pen 7ml CDU' ---
+2025-07-25 12:17:08,581 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5053249220949
+2025-07-25 12:17:08,600 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5053249220949 in file: amazon_B0D4N6R7YG_5053249220949.json (fast search)
+2025-07-25 12:17:08,600 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5053249220949
+2025-07-25 12:17:08,601 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5053249220949. Using EAN result without title fallback.
+2025-07-25 12:17:08,602 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0D4N6R7YG_5053249220949.json
+2025-07-25 12:17:08,603 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (25 total entries)
+2025-07-25 12:17:08,604 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,607 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 26/2387: '151 White Spirit 750ml' ---
+2025-07-25 12:17:08,611 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013748000381
+2025-07-25 12:17:08,628 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013748000381 in file: amazon_B07DSQQ8GG_5013748000381.json (fast search)
+2025-07-25 12:17:08,628 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013748000381
+2025-07-25 12:17:08,629 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013748000381. Using EAN result without title fallback.
+2025-07-25 12:17:08,630 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07DSQQ8GG_5013748000381.json
+2025-07-25 12:17:08,630 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (26 total entries)
+2025-07-25 12:17:08,630 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,633 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 27/2387: '3-Play Comfort Pocket Napkin Tissues 10 Pack' ---
+2025-07-25 12:17:08,636 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 50304811990235
+2025-07-25 12:17:08,654 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 50304811990235 in file: amazon_B0FDBBL6K3_50304811990235.json (fast search)
+2025-07-25 12:17:08,654 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 50304811990235
+2025-07-25 12:17:08,654 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 50304811990235. Using EAN result without title fallback.
+2025-07-25 12:17:08,656 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0FDBBL6K3_50304811990235.json
+2025-07-25 12:17:08,656 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (27 total entries)
+2025-07-25 12:17:08,656 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,660 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 28/2387: '3m 9001 Particulate Respirator Noseclip Mouth Masks' ---
+2025-07-25 12:17:08,662 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 6912504939127
+2025-07-25 12:17:08,682 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 6912504939127 in file: amazon_B0BZ43WZGS_6912504939127.json (fast search)
+2025-07-25 12:17:08,683 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 6912504939127
+2025-07-25 12:17:08,683 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 6912504939127. Using EAN result without title fallback.
+2025-07-25 12:17:08,684 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BZ43WZGS_6912504939127.json
+2025-07-25 12:17:08,684 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (28 total entries)
+2025-07-25 12:17:08,685 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:08,687 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 29/2387: '4 Layer Filtration Face Mask' ---
+2025-07-25 12:17:08,688 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:17:08,689 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: '4 Layer Filtration Face Mask'
+2025-07-25 12:17:08,689 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:17:08,689 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:08,689 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:08,689 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: 4 Layer Filtration Face Mask
+2025-07-25 12:17:13,621 - tools.passive_extraction_workflow_latest - INFO - Title search found 75 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:13,809 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09J92GRXR title extracted using selector 'h2': FFP3 Masks Pack of 10 With >99% Filtration Efficie...
+2025-07-25 12:17:13,892 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B4NSQ1NP title extracted using selector 'h2': FFP2 Mask Pack of 25 - Hand Checked For Quality - ...
+2025-07-25 12:17:14,667 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B098TG2WNY title extracted using selector 'h2': VEVOX® FFP3 Dust Mask - Set of 10 - Valved Face Ma...
+2025-07-25 12:17:14,787 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0D9LSYFW2 title extracted using selector 'h2': sykua Full Face Mask - Reusable Full Face Respirat...
+2025-07-25 12:17:14,927 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B098CZTSX9 title extracted using selector 'h2': Ezy-Aid 10pk FFP3 Face Mask - Individually Wrapped...
+2025-07-25 12:17:15,020 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09BF79W58 title extracted using selector 'h2': 20pcs FFP2 Face Mask Black CE Certified KN95 Mask ...
+2025-07-25 12:17:15,133 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09NSZ87BQ title extracted using selector 'h2': 20 PCS INDIVIDUALLY WRAPPED FFP2 Face Masks Uk cer...
+2025-07-25 12:17:15,281 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09J92GRXR title extracted using selector 'h2': FFP3 Masks Pack of 10 With >99% Filtration Efficie...
+2025-07-25 12:17:15,281 - tools.passive_extraction_workflow_latest - INFO - Title search found 8 results for '4 Layer Filtration Face Mask'
+2025-07-25 12:17:15,282 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 8 Amazon results for '4 Layer Filtration Face Mask'
+2025-07-25 12:17:15,283 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '4 Layer Filtration Face Mask' vs 'FFP3 Masks Pack of 10 With >99% Filtration Efficiency - Disposable Face Mask UK - Soft And Secure Fit (Packaging may vary)' = 0.60 (medium, 60.0%)
+2025-07-25 12:17:15,283 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B09J92GRXR - Confidence: 0.600 (medium) - Overlap: 0.600 - 'FFP3 Masks Pack of 10 With >99% Filtration Efficiency - Disp...'
+2025-07-25 12:17:15,283 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '4 Layer Filtration Face Mask' vs 'FFP2 Mask Pack of 25 - Hand Checked For Quality - Disposable FFP2 / KN95 Mask With 5 Layered Webbing Fibers - A Must Have High Filtration Mask For Outdoor (Packaging may Vary)' = 0.40 (low, 30.0%)
+2025-07-25 12:17:15,284 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B0B4NSQ1NP - Confidence: 0.300 (low) - Overlap: 0.400 - 'FFP2 Mask Pack of 25 - Hand Checked For Quality - Disposable...'
+2025-07-25 12:17:15,285 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '4 Layer Filtration Face Mask' vs 'VEVOX® FFP3 Dust Mask - Set of 10 - Valved Face Masks - Respirator - Protection e.g. for Construction, Sanding, Spray Painting, Cleaning, Mould, Fine Dusts or Asbestos Particles' = 0.40 (low, 30.0%)
+2025-07-25 12:17:15,285 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B098TG2WNY - Confidence: 0.300 (low) - Overlap: 0.400 - 'VEVOX® FFP3 Dust Mask - Set of 10 - Valved Face Masks - Resp...'
+2025-07-25 12:17:15,286 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '4 Layer Filtration Face Mask' vs 'sykua Full Face Mask - Reusable Full Face Respirator Mask with Filters for Spray Painting, Chemical, Sanding, Building Work, and Fine Gas Dust' = 0.40 (low, 30.0%)
+2025-07-25 12:17:15,286 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B0D9LSYFW2 - Confidence: 0.300 (low) - Overlap: 0.400 - 'sykua Full Face Mask - Reusable Full Face Respirator Mask wi...'
+2025-07-25 12:17:15,286 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '4 Layer Filtration Face Mask' vs 'Ezy-Aid 10pk FFP3 Face Mask - Individually Wrapped | 99.43% High Filtration - 5 Layers | EN149 CE Certified | Hypoallergenic | Fluid Resistant | Ear Loops & Adaptable Nose Bridge | Box of 10' = 0.60 (medium, 60.0%)
+2025-07-25 12:17:15,286 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B098CZTSX9 - Confidence: 0.600 (medium) - Overlap: 0.600 - 'Ezy-Aid 10pk FFP3 Face Mask - Individually Wrapped | 99.43% ...'
+2025-07-25 12:17:15,286 - PassiveExtractionWorkflow - INFO - ✅ BEST MATCH: ASIN B09J92GRXR with 60.0% confidence
+2025-07-25 12:17:15,297 - PassiveExtractionWorkflow - INFO - 📋 Found ASIN match in cache: amazon_B09J92GRXR_4_Layer_Filtration_Face_Mask.json
+2025-07-25 12:17:15,297 - PassiveExtractionWorkflow - INFO - 📋 Using cached Amazon data for ASIN B09J92GRXR
+2025-07-25 12:17:15,298 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B09J92GRXR_4_Layer_Filtration_Face_Mask.json
+2025-07-25 12:17:15,298 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,300 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 30/2387: '5 Star Office Whiteboard Wipes 100 Pack' ---
+2025-07-25 12:17:15,302 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5018206739049
+2025-07-25 12:17:15,322 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5018206739049 in file: amazon_B000I5W2CQ_5018206739049.json (fast search)
+2025-07-25 12:17:15,323 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5018206739049
+2025-07-25 12:17:15,323 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5018206739049. Using EAN result without title fallback.
+2025-07-25 12:17:15,325 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B000I5W2CQ_5018206739049.json
+2025-07-25 12:17:15,325 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (29 total entries)
+2025-07-25 12:17:15,325 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,334 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 30/2387
+2025-07-25 12:17:15,334 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 31/2387: '70 Puzzle 80GSM Word Search Book Assorted' ---
+2025-07-25 12:17:15,337 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922068435
+2025-07-25 12:17:15,358 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922068435 in file: amazon_B012N3DR8I_5013922068435.json (fast search)
+2025-07-25 12:17:15,359 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922068435
+2025-07-25 12:17:15,359 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922068435. Using EAN result without title fallback.
+2025-07-25 12:17:15,362 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B012N3DR8I_5013922068435.json
+2025-07-25 12:17:15,362 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (30 total entries)
+2025-07-25 12:17:15,362 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,366 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 32/2387: 'A3 80GSM White Paper Sketch Pad 30 Sheets Assorted' ---
+2025-07-25 12:17:15,372 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922056852
+2025-07-25 12:17:15,387 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922056852 in file: amazon_B00F8DGZ6W_5013922056852.json (fast search)
+2025-07-25 12:17:15,387 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922056852
+2025-07-25 12:17:15,387 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922056852. Using EAN result without title fallback.
+2025-07-25 12:17:15,388 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00F8DGZ6W_5013922056852.json
+2025-07-25 12:17:15,388 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (31 total entries)
+2025-07-25 12:17:15,389 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,390 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 33/2387: 'Adult Colouring (No Vat) World Of Art 2 Designs' ---
+2025-07-25 12:17:15,393 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5060082938955
+2025-07-25 12:17:15,417 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5060082938955 in file: amazon_1985377845_5060082938955.json (fast search)
+2025-07-25 12:17:15,418 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5060082938955
+2025-07-25 12:17:15,418 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5060082938955. Using EAN result without title fallback.
+2025-07-25 12:17:15,419 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_1985377845_5060082938955.json
+2025-07-25 12:17:15,419 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (32 total entries)
+2025-07-25 12:17:15,419 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 34/2387: 'Air Wick Jasmine Bloom & Freesia Reed Diffuser 42ml' ---
+2025-07-25 12:17:15,423 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5059001010759
+2025-07-25 12:17:15,437 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5059001010759 in file: amazon_B0CCJV3WJ4_5059001010759.json (fast search)
+2025-07-25 12:17:15,438 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5059001010759
+2025-07-25 12:17:15,438 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5059001010759. Using EAN result without title fallback.
+2025-07-25 12:17:15,439 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CCJV3WJ4_5059001010759.json
+2025-07-25 12:17:15,439 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (33 total entries)
+2025-07-25 12:17:15,439 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,441 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 35/2387: 'Aira Air Freshener Beads 150g Assorted' ---
+2025-07-25 12:17:15,442 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5056170319188
+2025-07-25 12:17:15,473 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5056170319188 in file: amazon_B08BPDFPQ6_5056170319188.json (fast search)
+2025-07-25 12:17:15,473 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5056170319188
+2025-07-25 12:17:15,474 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5056170319188. Using EAN result without title fallback.
+2025-07-25 12:17:15,475 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08BPDFPQ6_5056170319188.json
+2025-07-25 12:17:15,476 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (34 total entries)
+2025-07-25 12:17:15,476 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,479 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 36/2387: 'Aira Assorted Fragrance Mini Gel Air Freshener 3 Pack' ---
+2025-07-25 12:17:15,481 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5056170353526
+2025-07-25 12:17:15,508 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5056170353526 in file: amazon_B0D8L6D4QQ_5056170353526.json (fast search)
+2025-07-25 12:17:15,508 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5056170353526
+2025-07-25 12:17:15,509 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5056170353526. Using EAN result without title fallback.
+2025-07-25 12:17:15,509 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0D8L6D4QQ_5056170353526.json
+2025-07-25 12:17:15,510 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (35 total entries)
+2025-07-25 12:17:15,510 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,513 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 37/2387: 'Aira Incense Sticks & Holder 40 Pack Assorted Fragrances' ---
+2025-07-25 12:17:15,515 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5056170360012
+2025-07-25 12:17:15,527 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5056170360012 in file: amazon_B0DBRS31JS_5056170360012.json (fast search)
+2025-07-25 12:17:15,527 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5056170360012
+2025-07-25 12:17:15,528 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5056170360012. Using EAN result without title fallback.
+2025-07-25 12:17:15,528 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DBRS31JS_5056170360012.json
+2025-07-25 12:17:15,529 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (36 total entries)
+2025-07-25 12:17:15,529 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,531 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 38/2387: 'ALEX Rub A Dub Magnetic Boats Bath Toy 3 Pack' ---
+2025-07-25 12:17:15,534 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 7313460823120
+2025-07-25 12:17:15,547 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 7313460823120 in file: amazon_B0BZZDQXSX_7313460823120.json (fast search)
+2025-07-25 12:17:15,547 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 7313460823120
+2025-07-25 12:17:15,548 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 7313460823120. Using EAN result without title fallback.
+2025-07-25 12:17:15,549 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BZZDQXSX_7313460823120.json
+2025-07-25 12:17:15,549 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (37 total entries)
+2025-07-25 12:17:15,551 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,556 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 39/2387: 'Alien Invasion Alien Birth Egg CDU Assorted' ---
+2025-07-25 12:17:15,561 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050837392613
+2025-07-25 12:17:15,579 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050837392613 in file: amazon_B004ROK8PM_5050837392613.json (fast search)
+2025-07-25 12:17:15,579 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050837392613
+2025-07-25 12:17:15,580 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050837392613. Using EAN result without title fallback.
+2025-07-25 12:17:15,581 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B004ROK8PM_5050837392613.json
+2025-07-25 12:17:15,582 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (38 total entries)
+2025-07-25 12:17:15,582 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,586 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 40/2387: 'Alien Invasion Alien Ufo Ooze Pods CDU Assorted Colours' ---
+2025-07-25 12:17:15,590 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5050837674542
+2025-07-25 12:17:15,610 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5050837674542 in file: amazon_B0DPQ6Y841_5050837674542.json (fast search)
+2025-07-25 12:17:15,610 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5050837674542
+2025-07-25 12:17:15,610 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5050837674542. Using EAN result without title fallback.
+2025-07-25 12:17:15,612 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DPQ6Y841_5050837674542.json
+2025-07-25 12:17:15,612 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (39 total entries)
+2025-07-25 12:17:15,612 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,617 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 40/2387
+2025-07-25 12:17:15,621 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 3/120: Processing 20 products
+2025-07-25 12:17:15,622 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 41/2387: 'Alya Bubble Gum Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,624 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064354
+2025-07-25 12:17:15,639 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064354 in file: amazon_B0BSFN7BK9_8696601064354.json (fast search)
+2025-07-25 12:17:15,640 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064354
+2025-07-25 12:17:15,640 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064354. Using EAN result without title fallback.
+2025-07-25 12:17:15,642 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BSFN7BK9_8696601064354.json
+2025-07-25 12:17:15,642 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (40 total entries)
+2025-07-25 12:17:15,643 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,647 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 42/2387: 'Alya Bubble Gum Home Fragrance Air Freshener 300ml' ---
+2025-07-25 12:17:15,650 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601070645
+2025-07-25 12:17:15,667 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601070645 in file: amazon_B081HDTW6S_8696601070645.json (fast search)
+2025-07-25 12:17:15,668 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601070645
+2025-07-25 12:17:15,668 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601070645. Using EAN result without title fallback.
+2025-07-25 12:17:15,669 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B081HDTW6S_8696601070645.json
+2025-07-25 12:17:15,669 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (41 total entries)
+2025-07-25 12:17:15,669 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,672 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 43/2387: 'Alya Coffee Latte Home Fragrance Air Freshener 300ml' ---
+2025-07-25 12:17:15,674 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601070638
+2025-07-25 12:17:15,696 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601070638 in file: amazon_B0CSN7M3PQ_8696601070638.json (fast search)
+2025-07-25 12:17:15,697 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601070638
+2025-07-25 12:17:15,697 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601070638. Using EAN result without title fallback.
+2025-07-25 12:17:15,701 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CSN7M3PQ_8696601070638.json
+2025-07-25 12:17:15,701 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (42 total entries)
+2025-07-25 12:17:15,702 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,704 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 44/2387: 'Alya Coffee Latte Reed Diffuser 100ml' ---
+2025-07-25 12:17:15,706 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601070188
+2025-07-25 12:17:15,723 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601070188 in file: amazon_B0B3GHY7Y1_8696601070188.json (fast search)
+2025-07-25 12:17:15,724 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601070188
+2025-07-25 12:17:15,724 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601070188. Using EAN result without title fallback.
+2025-07-25 12:17:15,726 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0B3GHY7Y1_8696601070188.json
+2025-07-25 12:17:15,726 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (43 total entries)
+2025-07-25 12:17:15,726 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,728 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 45/2387: 'Alya Cool Linen Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,730 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064286
+2025-07-25 12:17:15,747 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064286 in file: amazon_B096S7YCTH_8696601064286.json (fast search)
+2025-07-25 12:17:15,748 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064286
+2025-07-25 12:17:15,748 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064286. Using EAN result without title fallback.
+2025-07-25 12:17:15,749 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B096S7YCTH_8696601064286.json
+2025-07-25 12:17:15,749 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (44 total entries)
+2025-07-25 12:17:15,749 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,752 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 46/2387: 'Alya Exotic Leaves Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,757 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040815
+2025-07-25 12:17:15,778 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040815 in file: amazon_B0DZ29F3KL_8696601040815.json (fast search)
+2025-07-25 12:17:15,778 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040815
+2025-07-25 12:17:15,779 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040815. Using EAN result without title fallback.
+2025-07-25 12:17:15,781 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DZ29F3KL_8696601040815.json
+2025-07-25 12:17:15,783 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (45 total entries)
+2025-07-25 12:17:15,787 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,791 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 47/2387: 'Alya Exotic Leaves Home Fragrance Air Freshener 300ml' ---
+2025-07-25 12:17:15,795 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064187
+2025-07-25 12:17:15,812 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064187 in file: amazon_B0C6FM877Z_8696601064187.json (fast search)
+2025-07-25 12:17:15,812 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064187
+2025-07-25 12:17:15,812 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064187. Using EAN result without title fallback.
+2025-07-25 12:17:15,813 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0C6FM877Z_8696601064187.json
+2025-07-25 12:17:15,814 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (46 total entries)
+2025-07-25 12:17:15,814 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,817 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 48/2387: 'Alya Fresh Vibes Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,819 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040884
+2025-07-25 12:17:15,838 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040884 in file: amazon_B0DFW3PP68_8696601040884.json (fast search)
+2025-07-25 12:17:15,838 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040884
+2025-07-25 12:17:15,839 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040884. Using EAN result without title fallback.
+2025-07-25 12:17:15,840 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DFW3PP68_8696601040884.json
+2025-07-25 12:17:15,841 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (47 total entries)
+2025-07-25 12:17:15,841 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,845 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 49/2387: 'Alya Lavender Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,848 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064323
+2025-07-25 12:17:15,871 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064323 in file: amazon_B01MRMR9ER_8696601064323.json (fast search)
+2025-07-25 12:17:15,871 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064323
+2025-07-25 12:17:15,871 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064323. Using EAN result without title fallback.
+2025-07-25 12:17:15,873 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B01MRMR9ER_8696601064323.json
+2025-07-25 12:17:15,873 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (48 total entries)
+2025-07-25 12:17:15,873 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,876 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 50/2387: 'Alya Lavender Garden Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,879 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040907
+2025-07-25 12:17:15,895 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040907 in file: amazon_B01MRMR9ER_8696601040907.json (fast search)
+2025-07-25 12:17:15,896 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040907
+2025-07-25 12:17:15,896 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040907. Using EAN result without title fallback.
+2025-07-25 12:17:15,897 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B01MRMR9ER_8696601040907.json
+2025-07-25 12:17:15,897 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (49 total entries)
+2025-07-25 12:17:15,897 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,903 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 50/2387
+2025-07-25 12:17:15,903 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 51/2387: 'Alya Lilly Of The Valley Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,906 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064293
+2025-07-25 12:17:15,927 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064293 in file: amazon_B00XJA830W_8696601064293.json (fast search)
+2025-07-25 12:17:15,928 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064293
+2025-07-25 12:17:15,928 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064293. Using EAN result without title fallback.
+2025-07-25 12:17:15,930 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00XJA830W_8696601064293.json
+2025-07-25 12:17:15,930 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (50 total entries)
+2025-07-25 12:17:15,930 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,936 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 52/2387: 'Alya Magnolia & Cherry Blossom Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,941 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040891
+2025-07-25 12:17:15,959 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040891 in file: amazon_B01MRMR9ER_8696601040891.json (fast search)
+2025-07-25 12:17:15,959 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040891
+2025-07-25 12:17:15,959 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040891. Using EAN result without title fallback.
+2025-07-25 12:17:15,961 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B01MRMR9ER_8696601040891.json
+2025-07-25 12:17:15,961 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (51 total entries)
+2025-07-25 12:17:15,961 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,967 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 53/2387: 'Alya Marine Waves Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,969 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040839
+2025-07-25 12:17:15,990 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040839 in file: amazon_B0BSFN7BK9_8696601040839.json (fast search)
+2025-07-25 12:17:15,990 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040839
+2025-07-25 12:17:15,991 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040839. Using EAN result without title fallback.
+2025-07-25 12:17:15,992 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BSFN7BK9_8696601040839.json
+2025-07-25 12:17:15,992 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (52 total entries)
+2025-07-25 12:17:15,992 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:15,994 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 54/2387: 'Alya Rose Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:15,997 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064309
+2025-07-25 12:17:16,015 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064309 in file: amazon_B0DFPT6ZND_8696601064309.json (fast search)
+2025-07-25 12:17:16,015 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064309
+2025-07-25 12:17:16,015 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064309. Using EAN result without title fallback.
+2025-07-25 12:17:16,016 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DFPT6ZND_8696601064309.json
+2025-07-25 12:17:16,017 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (53 total entries)
+2025-07-25 12:17:16,017 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,021 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 55/2387: 'Alya Soft Wave Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,025 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040860
+2025-07-25 12:17:16,048 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040860 in file: amazon_B0DFW3PP68_8696601040860.json (fast search)
+2025-07-25 12:17:16,048 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040860
+2025-07-25 12:17:16,048 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040860. Using EAN result without title fallback.
+2025-07-25 12:17:16,050 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DFW3PP68_8696601040860.json
+2025-07-25 12:17:16,050 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (54 total entries)
+2025-07-25 12:17:16,050 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,053 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 56/2387: 'Alya Spring Blossom Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,057 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040853
+2025-07-25 12:17:16,088 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040853 in file: amazon_B0BM7XN5F4_8696601040853.json (fast search)
+2025-07-25 12:17:16,089 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040853
+2025-07-25 12:17:16,089 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040853. Using EAN result without title fallback.
+2025-07-25 12:17:16,091 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BM7XN5F4_8696601040853.json
+2025-07-25 12:17:16,091 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (55 total entries)
+2025-07-25 12:17:16,091 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,097 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 57/2387: 'Alya Summer Flowers Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,102 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040877
+2025-07-25 12:17:16,138 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040877 in file: amazon_B01MRMR9ER_8696601040877.json (fast search)
+2025-07-25 12:17:16,138 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040877
+2025-07-25 12:17:16,139 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040877. Using EAN result without title fallback.
+2025-07-25 12:17:16,141 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B01MRMR9ER_8696601040877.json
+2025-07-25 12:17:16,142 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (56 total entries)
+2025-07-25 12:17:16,142 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,149 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 58/2387: 'Alya Sweet Splash Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,154 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040792
+2025-07-25 12:17:16,172 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040792 in file: amazon_B0DFW3PP68_8696601040792.json (fast search)
+2025-07-25 12:17:16,173 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040792
+2025-07-25 12:17:16,173 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040792. Using EAN result without title fallback.
+2025-07-25 12:17:16,175 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DFW3PP68_8696601040792.json
+2025-07-25 12:17:16,175 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (57 total entries)
+2025-07-25 12:17:16,176 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,178 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 59/2387: 'Alya Tropic Breeze Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,182 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040822
+2025-07-25 12:17:16,213 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040822 in file: amazon_B09WY8XT3P_8696601040822.json (fast search)
+2025-07-25 12:17:16,214 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040822
+2025-07-25 12:17:16,214 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040822. Using EAN result without title fallback.
+2025-07-25 12:17:16,216 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B09WY8XT3P_8696601040822.json
+2025-07-25 12:17:16,216 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (58 total entries)
+2025-07-25 12:17:16,216 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,218 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 60/2387: 'Alya Vanilla Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,220 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064316
+2025-07-25 12:17:16,235 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064316 in file: amazon_B01MRMR9ER_8696601064316.json (fast search)
+2025-07-25 12:17:16,235 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064316
+2025-07-25 12:17:16,235 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064316. Using EAN result without title fallback.
+2025-07-25 12:17:16,236 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B01MRMR9ER_8696601064316.json
+2025-07-25 12:17:16,236 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (59 total entries)
+2025-07-25 12:17:16,237 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,240 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 60/2387
+2025-07-25 12:17:16,246 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 4/120: Processing 20 products
+2025-07-25 12:17:16,247 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 61/2387: 'Alya Vanilla Home Fragrance Air Freshener 300ml' ---
+2025-07-25 12:17:16,253 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601070591
+2025-07-25 12:17:16,275 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601070591 in file: amazon_B0DFW3PP68_8696601070591.json (fast search)
+2025-07-25 12:17:16,276 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601070591
+2025-07-25 12:17:16,276 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601070591. Using EAN result without title fallback.
+2025-07-25 12:17:16,277 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DFW3PP68_8696601070591.json
+2025-07-25 12:17:16,277 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (60 total entries)
+2025-07-25 12:17:16,277 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,279 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 62/2387: 'Alya Violet Bomb Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,281 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040846
+2025-07-25 12:17:16,292 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040846 in file: amazon_B0DFW3PP68_8696601040846.json (fast search)
+2025-07-25 12:17:16,293 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040846
+2025-07-25 12:17:16,293 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040846. Using EAN result without title fallback.
+2025-07-25 12:17:16,294 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DFW3PP68_8696601040846.json
+2025-07-25 12:17:16,294 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (61 total entries)
+2025-07-25 12:17:16,295 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,297 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 63/2387: 'Alya Violet Bomb Home Fragrance Air Freshener 300ml' ---
+2025-07-25 12:17:16,300 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601064217
+2025-07-25 12:17:16,330 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601064217 in file: amazon_B0DR69D675_8696601064217.json (fast search)
+2025-07-25 12:17:16,331 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601064217
+2025-07-25 12:17:16,331 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601064217. Using EAN result without title fallback.
+2025-07-25 12:17:16,332 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DR69D675_8696601064217.json
+2025-07-25 12:17:16,333 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (62 total entries)
+2025-07-25 12:17:16,333 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,335 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 64/2387: 'Alya Woody Oriental Air Freshener Automatic Spray 250ml' ---
+2025-07-25 12:17:16,338 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8696601040808
+2025-07-25 12:17:16,351 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8696601040808 in file: amazon_B081HDTW6S_8696601040808.json (fast search)
+2025-07-25 12:17:16,351 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8696601040808
+2025-07-25 12:17:16,352 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8696601040808. Using EAN result without title fallback.
+2025-07-25 12:17:16,354 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B081HDTW6S_8696601040808.json
+2025-07-25 12:17:16,354 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (63 total entries)
+2025-07-25 12:17:16,355 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,360 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 65/2387: 'Amazing 4-in-1 Bouncing Putty 50g CDU' ---
+2025-07-25 12:17:16,365 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5033849558925
+2025-07-25 12:17:16,393 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5033849558925 in file: amazon_B09TBD8J6S_5033849558925.json (fast search)
+2025-07-25 12:17:16,394 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5033849558925
+2025-07-25 12:17:16,394 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5033849558925. Using EAN result without title fallback.
+2025-07-25 12:17:16,396 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B09TBD8J6S_5033849558925.json
+2025-07-25 12:17:16,397 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (64 total entries)
+2025-07-25 12:17:16,398 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,403 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 66/2387: 'Ant Glue Traps 3 Pack' ---
+2025-07-25 12:17:16,409 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5038673210100
+2025-07-25 12:17:16,441 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5038673210100 in file: amazon_B08ZGJT9J4_5038673210100.json (fast search)
+2025-07-25 12:17:16,441 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5038673210100
+2025-07-25 12:17:16,442 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5038673210100. Using EAN result without title fallback.
+2025-07-25 12:17:16,443 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08ZGJT9J4_5038673210100.json
+2025-07-25 12:17:16,444 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (65 total entries)
+2025-07-25 12:17:16,444 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:16,450 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 67/2387: 'Anti-Bacterial Hand Wash Orange 5l' ---
+2025-07-25 12:17:16,455 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:17:16,455 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Anti-Bacterial Hand Wash Orange 5l'
+2025-07-25 12:17:16,456 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:17:16,456 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:16,457 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:16,457 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Anti-Bacterial Hand Wash Orange 5l
+2025-07-25 12:17:20,425 - tools.passive_extraction_workflow_latest - INFO - Title search found 19 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:20,522 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B1YZK8K3 title extracted using selector 'h2': Miniml Antibacterial Hand Wash Soap 5L Refill - Na...
+2025-07-25 12:17:20,590 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DWG2MBT9 title extracted using selector 'h2': Miniml Hand Soap Wash Liquid 5L Refill - Pink Grap...
+2025-07-25 12:17:20,658 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B4DXGXZX title extracted using selector 'h2': Safe Hands | Luxury Hand Wash | Orange & Bergamot ...
+2025-07-25 12:17:21,001 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09HQVBQ3X title extracted using selector 'h2': Marcel's Green Soap - Hand Soap Refill Orange & Ja...
+2025-07-25 12:17:23,744 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DMWL3KKX title extracted using selector 'h2': Neat Hand Wash Refills - Mango & Fig, 6x 30ml - Re...
+2025-07-25 12:17:23,876 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B4DXGXZX title extracted using selector 'h2': Safe Hands | Luxury Hand Wash | Orange & Bergamot ...
+2025-07-25 12:17:23,993 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B1YZK8K3 title extracted using selector 'h2': Miniml Antibacterial Hand Wash Soap 5L Refill - Na...
+2025-07-25 12:17:24,066 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DK3MKPZS title extracted using selector 'h2': Bower Collective 5 Litre Orange Blossom & Mimosa P...
+2025-07-25 12:17:24,067 - tools.passive_extraction_workflow_latest - INFO - Title search found 8 results for 'Anti-Bacterial Hand Wash Orange 5l'
+2025-07-25 12:17:24,067 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 8 Amazon results for 'Anti-Bacterial Hand Wash Orange 5l'
+2025-07-25 12:17:24,067 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Anti-Bacterial Hand Wash Orange 5l' vs 'Miniml Antibacterial Hand Wash Soap 5L Refill - Natural Clementine Scented Eco Hand and Body Washing Liquid Gel for Soft and Sensitive Friendly Skin Care - 100% Vegan & Cruelty Free' = 0.50 (medium, 60.0%)
+2025-07-25 12:17:24,068 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B0B1YZK8K3 - Confidence: 0.600 (medium) - Overlap: 0.500 - 'Miniml Antibacterial Hand Wash Soap 5L Refill - Natural Clem...'
+2025-07-25 12:17:24,068 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Anti-Bacterial Hand Wash Orange 5l' vs 'Miniml Hand Soap Wash Liquid 5L Refill - Pink Grapefruit & Aloe Vera Scented Eco Friendly Hand Washing Liquid for Soft and Sensitive Skin Care - 100% Vegan & Cruelty Free' = 0.50 (medium, 60.0%)
+2025-07-25 12:17:24,068 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B0DWG2MBT9 - Confidence: 0.600 (medium) - Overlap: 0.500 - 'Miniml Hand Soap Wash Liquid 5L Refill - Pink Grapefruit & A...'
+2025-07-25 12:17:24,068 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Anti-Bacterial Hand Wash Orange 5l' vs 'Safe Hands | Luxury Hand Wash | Orange & Bergamot | 5 Litre | Moisturising hand soap liquid | Antibacterial | Anti Bac Hand Soap | Removes 99% of Bacteria | Kind to Skin' = 0.67 (medium, 60.0%)
+2025-07-25 12:17:24,069 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B0B4DXGXZX - Confidence: 0.600 (medium) - Overlap: 0.667 - 'Safe Hands | Luxury Hand Wash | Orange & Bergamot | 5 Litre ...'
+2025-07-25 12:17:24,069 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Anti-Bacterial Hand Wash Orange 5l' vs 'Marcel's Green Soap - Hand Soap Refill Orange & Jasmine - Handwash Dispenser Refill - Eco friendly - Vegan - 97% Biodegradable - 500 ML' = 0.33 (low, 30.0%)
+2025-07-25 12:17:24,069 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B09HQVBQ3X - Confidence: 0.300 (low) - Overlap: 0.333 - 'Marcel's Green Soap - Hand Soap Refill Orange & Jasmine - Ha...'
+2025-07-25 12:17:24,070 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Anti-Bacterial Hand Wash Orange 5l' vs 'Neat Hand Wash Refills - Mango & Fig, 6x 30ml - Refillable Hand Soap, Powerfully Plant-Based Foaming Handwash, Eco-Friendly Soap Refill' = 0.33 (low, 30.0%)
+2025-07-25 12:17:24,070 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B0DMWL3KKX - Confidence: 0.300 (low) - Overlap: 0.333 - 'Neat Hand Wash Refills - Mango & Fig, 6x 30ml - Refillable H...'
+2025-07-25 12:17:24,070 - PassiveExtractionWorkflow - INFO - ✅ BEST MATCH: ASIN B0B1YZK8K3 with 60.0% confidence
+2025-07-25 12:17:24,090 - PassiveExtractionWorkflow - INFO - 📋 Found ASIN match in cache: amazon_B0B1YZK8K3_Anti-Bacterial_Hand_Wash_Orange_5l.json
+2025-07-25 12:17:24,090 - PassiveExtractionWorkflow - INFO - 📋 Using cached Amazon data for ASIN B0B1YZK8K3
+2025-07-25 12:17:24,093 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0B1YZK8K3_Anti-Bacterial_Hand_Wash_Orange_5l.json
+2025-07-25 12:17:24,094 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,099 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 68/2387: 'Antibacterial Cleaning Wipes 60 Pack' ---
+2025-07-25 12:17:24,103 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5020133216142
+2025-07-25 12:17:24,133 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5020133216142 in file: amazon_B089T6LNWZ_5020133216142.json (fast search)
+2025-07-25 12:17:24,134 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5020133216142
+2025-07-25 12:17:24,135 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5020133216142. Using EAN result without title fallback.
+2025-07-25 12:17:24,137 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B089T6LNWZ_5020133216142.json
+2025-07-25 12:17:24,137 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (66 total entries)
+2025-07-25 12:17:24,137 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,142 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 69/2387: 'Apollo Cerbera Bread Knife 20cm' ---
+2025-07-25 12:17:24,146 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5026180153935
+2025-07-25 12:17:24,176 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5026180153935 in file: amazon_B0043RSXR8_5026180153935.json (fast search)
+2025-07-25 12:17:24,176 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5026180153935
+2025-07-25 12:17:24,177 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5026180153935. Using EAN result without title fallback.
+2025-07-25 12:17:24,178 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0043RSXR8_5026180153935.json
+2025-07-25 12:17:24,179 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (67 total entries)
+2025-07-25 12:17:24,180 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,185 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 70/2387: 'Aqua Cellulose Facial Cleansing Sponge 2pc' ---
+2025-07-25 12:17:24,189 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990007520
+2025-07-25 12:17:24,225 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990007520 in file: amazon_B081NJ6CVZ_8008990007520.json (fast search)
+2025-07-25 12:17:24,226 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990007520
+2025-07-25 12:17:24,227 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990007520. Using EAN result without title fallback.
+2025-07-25 12:17:24,229 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B081NJ6CVZ_8008990007520.json
+2025-07-25 12:17:24,229 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (68 total entries)
+2025-07-25 12:17:24,230 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,240 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 70/2387
+2025-07-25 12:17:24,240 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 71/2387: 'Aqua Cellulose Massage Sponge Assorted Colours' ---
+2025-07-25 12:17:24,246 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990017512
+2025-07-25 12:17:24,286 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990017512 in file: amazon_B0BM7XN5F4_8008990017512.json (fast search)
+2025-07-25 12:17:24,287 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990017512
+2025-07-25 12:17:24,288 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990017512. Using EAN result without title fallback.
+2025-07-25 12:17:24,289 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BM7XN5F4_8008990017512.json
+2025-07-25 12:17:24,289 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (69 total entries)
+2025-07-25 12:17:24,290 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,294 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 72/2387: 'Aqua Extra Sensitive Hypoallergenic Massage Sponge' ---
+2025-07-25 12:17:24,300 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990006240
+2025-07-25 12:17:24,326 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990006240 in file: amazon_B00XI16CEG_8008990006240.json (fast search)
+2025-07-25 12:17:24,327 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990006240
+2025-07-25 12:17:24,327 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990006240. Using EAN result without title fallback.
+2025-07-25 12:17:24,330 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00XI16CEG_8008990006240.json
+2025-07-25 12:17:24,330 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (70 total entries)
+2025-07-25 12:17:24,331 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,337 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 73/2387: 'Aqua Foam Soap Holder Massage Sponge Mitt' ---
+2025-07-25 12:17:24,342 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990009548
+2025-07-25 12:17:24,378 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990009548 in file: amazon_B0BYJV3RM2_8008990009548.json (fast search)
+2025-07-25 12:17:24,379 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990009548
+2025-07-25 12:17:24,379 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990009548. Using EAN result without title fallback.
+2025-07-25 12:17:24,381 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BYJV3RM2_8008990009548.json
+2025-07-25 12:17:24,382 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (71 total entries)
+2025-07-25 12:17:24,382 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:24,388 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 74/2387: 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt' ---
+2025-07-25 12:17:24,393 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990009562
+2025-07-25 12:17:24,421 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 8008990009562 for supplier product: 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt' (FixedAmazonExtractor)
+2025-07-25 12:17:24,422 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-25 12:17:24,422 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:24,422 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:24,423 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 8008990009562
+2025-07-25 12:17:26,960 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 8008990009562...
+2025-07-25 12:17:27,293 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-25 12:17:29,361 - tools.passive_extraction_workflow_latest - INFO - Found 4 search result elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:29,362 - tools.passive_extraction_workflow_latest - INFO - Processing 4 search result elements for EAN 8008990009562
+2025-07-25 12:17:29,371 - tools.passive_extraction_workflow_latest - DEBUG - Element 1: Invalid or missing ASIN: 
+2025-07-25 12:17:29,381 - tools.passive_extraction_workflow_latest - DEBUG - Element 2: Invalid or missing ASIN: 
+2025-07-25 12:17:29,391 - tools.passive_extraction_workflow_latest - DEBUG - Element 3: Invalid or missing ASIN: 
+2025-07-25 12:17:29,399 - tools.passive_extraction_workflow_latest - DEBUG - Element 4: Invalid or missing ASIN: 
+2025-07-25 12:17:29,400 - tools.passive_extraction_workflow_latest - WARNING - EAN 8008990009562 returned no organic results - skipping
+2025-07-25 12:17:29,400 - tools.passive_extraction_workflow_latest - WARNING - No Amazon results or error for EAN '8008990009562'. Details: no_organic_results
+2025-07-25 12:17:29,400 - tools.passive_extraction_workflow_latest - INFO - Falling back to title search for supplier product: 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'
+2025-07-25 12:17:29,401 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'
+2025-07-25 12:17:29,401 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Aqua Hypoallergenic Sensitive Gentle Massage Mitt
+2025-07-25 12:17:32,697 - tools.passive_extraction_workflow_latest - INFO - Title search found 1 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:32,705 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'
+2025-07-25 12:17:32,705 - tools.passive_extraction_workflow_latest - WARNING - Both EAN '8008990009562' and title 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt' searches failed
+2025-07-25 12:17:32,706 - PassiveExtractionWorkflow - INFO - ❌ EAN search failed for 8008990009562. Will fall back to title search.
+2025-07-25 12:17:32,706 - PassiveExtractionWorkflow - INFO - EAN search failed. Falling back to title search.
+2025-07-25 12:17:32,706 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'
+2025-07-25 12:17:32,706 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:17:32,706 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:32,707 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:32,707 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Aqua Hypoallergenic Sensitive Gentle Massage Mitt
+2025-07-25 12:17:36,030 - tools.passive_extraction_workflow_latest - INFO - Title search found 1 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:36,038 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'
+2025-07-25 12:17:36,038 - PassiveExtractionWorkflow - WARNING - No Amazon results for title 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'. Skipping.
+2025-07-25 12:17:36,038 - PassiveExtractionWorkflow - INFO - 🗒️ Recorded no-match sentinel for EAN 8008990009562 to prevent endless skip loop
+2025-07-25 12:17:36,039 - PassiveExtractionWorkflow - WARNING - GAP: Could not retrieve Amazon data for 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt'
+2025-07-25 12:17:36,041 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 75/2387: 'Aqua Kids Hypoallergenic Gentle Massage Bath Mitt' ---
+2025-07-25 12:17:36,044 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990009531
+2025-07-25 12:17:36,057 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990009531 in file: amazon_B09STXSDFX_8008990009531.json (fast search)
+2025-07-25 12:17:36,058 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990009531
+2025-07-25 12:17:36,058 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990009531. Using EAN result without title fallback.
+2025-07-25 12:17:36,059 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B09STXSDFX_8008990009531.json
+2025-07-25 12:17:36,059 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (73 total entries)
+2025-07-25 12:17:36,060 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:36,062 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 76/2387: 'Aqua Kids Printed Gentle Bath Massage Sponge Assorted' ---
+2025-07-25 12:17:36,064 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5907625372589
+2025-07-25 12:17:36,091 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5907625372589 in file: amazon_B0DQD293JL_5907625372589.json (fast search)
+2025-07-25 12:17:36,092 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5907625372589
+2025-07-25 12:17:36,092 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5907625372589. Using EAN result without title fallback.
+2025-07-25 12:17:36,094 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0DQD293JL_5907625372589.json
+2025-07-25 12:17:36,094 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (74 total entries)
+2025-07-25 12:17:36,095 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:36,097 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 77/2387: 'Aqua Natural Bristle Wooden Massage Brush' ---
+2025-07-25 12:17:36,100 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990009753
+2025-07-25 12:17:36,126 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990009753 in file: amazon_B08K8CN42P_8008990009753.json (fast search)
+2025-07-25 12:17:36,126 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990009753
+2025-07-25 12:17:36,126 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990009753. Using EAN result without title fallback.
+2025-07-25 12:17:36,127 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08K8CN42P_8008990009753.json
+2025-07-25 12:17:36,128 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (75 total entries)
+2025-07-25 12:17:36,128 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:36,135 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 78/2387: 'Aqua Natural Cellulose Sisal Massage Mitt' ---
+2025-07-25 12:17:36,139 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8008990009524
+2025-07-25 12:17:36,169 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 8008990009524 in file: amazon_B09SLMJKJ9_8008990009524.json (fast search)
+2025-07-25 12:17:36,169 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 8008990009524
+2025-07-25 12:17:36,170 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8008990009524. Using EAN result without title fallback.
+2025-07-25 12:17:36,171 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B09SLMJKJ9_8008990009524.json
+2025-07-25 12:17:36,172 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (76 total entries)
+2025-07-25 12:17:36,172 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:36,177 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 79/2387: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' ---
+2025-07-25 12:17:36,184 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:17:36,184 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml'
+2025-07-25 12:17:36,185 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:17:36,185 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:36,186 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:36,186 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml
+2025-07-25 12:17:40,949 - tools.passive_extraction_workflow_latest - INFO - Title search found 73 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:43,294 - tools.passive_extraction_workflow_latest - ERROR - Error during title search for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml': ElementHandle.get_attribute: Execution context was destroyed, most likely because of a navigation
+Call log:
+  - waiting for locator(":scope")
+
+2025-07-25 12:17:43,295 - PassiveExtractionWorkflow - WARNING - No Amazon results for title 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml'. Skipping.
+2025-07-25 12:17:43,295 - PassiveExtractionWorkflow - INFO - 🗒️ Recorded no-match sentinel for EAN NO_EAN to prevent endless skip loop
+2025-07-25 12:17:43,296 - PassiveExtractionWorkflow - WARNING - GAP: Could not retrieve Amazon data for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml'
+2025-07-25 12:17:43,300 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 80/2387: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 1l' ---
+2025-07-25 12:17:43,302 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5056094399723
+2025-07-25 12:17:43,318 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5056094399723 in file: amazon_B08DV3SKKY_5056094399723.json (fast search)
+2025-07-25 12:17:43,319 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5056094399723
+2025-07-25 12:17:43,319 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5056094399723. Using EAN result without title fallback.
+2025-07-25 12:17:43,321 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08DV3SKKY_5056094399723.json
+2025-07-25 12:17:43,321 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (78 total entries)
+2025-07-25 12:17:43,322 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:43,332 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 80/2387
+2025-07-25 12:17:43,341 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 5/120: Processing 20 products
+2025-07-25 12:17:43,343 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 81/2387: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' ---
+2025-07-25 12:17:43,352 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-25 12:17:43,354 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml'
+2025-07-25 12:17:43,355 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-25 12:17:43,356 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:43,357 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:43,358 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml
+2025-07-25 12:17:48,190 - tools.passive_extraction_workflow_latest - INFO - Title search found 73 elements using selector: div.s-search-results > div[data-asin]
+2025-07-25 12:17:48,408 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08MY7ZXYF title extracted using selector 'h2': 6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:17:49,301 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08DV3SKKY title extracted using selector 'h2': 3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:17:49,504 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B086XM7B2P title extracted using selector 'h2': 10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bac...
+2025-07-25 12:17:49,659 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B089CR5K87 title extracted using selector 'h2': Hand Sanitiser 5L PURATISE Antibacterial Hand Gel ...
+2025-07-25 12:17:49,742 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08WHM6VR6 title extracted using selector 'h2': 36 Bottles 500ml Alcohol Hand Sanitiser Vira Safe ...
+2025-07-25 12:17:49,804 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08MY7ZXYF title extracted using selector 'h2': 6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bact...
+2025-07-25 12:17:49,873 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08DJTYDHB title extracted using selector 'h2 span.a-size-base-plus': Ineos...
+2025-07-25 12:17:49,937 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08BCSFWGB title extracted using selector 'h2': 500ml Hand Sanitiser Gel from Handsafe, Kills 99.9...
+2025-07-25 12:17:49,937 - tools.passive_extraction_workflow_latest - INFO - Title search found 8 results for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml'
+2025-07-25 12:17:49,938 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 8 Amazon results for 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml'
+2025-07-25 12:17:49,938 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 6' = 0.75 (high, 90.0%)
+2025-07-25 12:17:49,938 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B08MY7ZXYF - Confidence: 0.900 (high) - Overlap: 0.750 - '6 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral...'
+2025-07-25 12:17:49,938 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 3' = 0.75 (high, 90.0%)
+2025-07-25 12:17:49,938 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B08DV3SKKY - Confidence: 0.900 (high) - Overlap: 0.750 - '3 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral...'
+2025-07-25 12:17:49,938 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Viral Eliminating Formula Gel Alcohol Anti Bacterial Formula Pack Of 10' = 0.75 (high, 90.0%)
+2025-07-25 12:17:49,939 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B086XM7B2P - Confidence: 0.900 (high) - Overlap: 0.750 - '10 x 500ml Hand Sanitiser 70% Alcohol Gel Anti Bacteria Vira...'
+2025-07-25 12:17:49,939 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs 'Hand Sanitiser 5L PURATISE Antibacterial Hand Gel - 70% Alcohol Gel Hand Sanitiser Kills 99.99% of Germs & Bacteria - MADE IN THE UK Melbec Microbiology Approved BSEN 1276:2019 & BSEN1500:2013' = 0.75 (high, 90.0%)
+2025-07-25 12:17:49,939 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B089CR5K87 - Confidence: 0.900 (high) - Overlap: 0.750 - 'Hand Sanitiser 5L PURATISE Antibacterial Hand Gel - 70% Alco...'
+2025-07-25 12:17:49,939 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' vs '36 Bottles 500ml Alcohol Hand Sanitiser Vira Safe Gel 70% Antibacterial Aloe 500ml Germ Fighting Formula Kills 99% of Harmful Germs' = 0.88 (high, 90.0%)
+2025-07-25 12:17:49,939 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B08WHM6VR6 - Confidence: 0.900 (high) - Overlap: 0.875 - '36 Bottles 500ml Alcohol Hand Sanitiser Vira Safe Gel 70% An...'
+2025-07-25 12:17:49,939 - PassiveExtractionWorkflow - INFO - ✅ BEST MATCH: ASIN B08MY7ZXYF with 90.0% confidence
+2025-07-25 12:17:49,951 - PassiveExtractionWorkflow - INFO - 📋 Found ASIN match in cache: amazon_B08MY7ZXYF_Aquathree_70%_Alcohol_Antibacterial_Hand_Sanitiser.json
+2025-07-25 12:17:49,951 - PassiveExtractionWorkflow - INFO - 📋 Using cached Amazon data for ASIN B08MY7ZXYF
+2025-07-25 12:17:49,952 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08MY7ZXYF_Aquathree_70%_Alcohol_Antibacterial_Hand_Sanitiser.json
+2025-07-25 12:17:49,952 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:49,954 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 82/2387: 'Artbox 12 Jumbo Paints With Palette' ---
+2025-07-25 12:17:49,957 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922051055
+2025-07-25 12:17:49,981 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922051055 in file: amazon_B00D2W8FRS_5013922051055.json (fast search)
+2025-07-25 12:17:49,982 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922051055
+2025-07-25 12:17:49,982 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922051055. Using EAN result without title fallback.
+2025-07-25 12:17:49,984 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00D2W8FRS_5013922051055.json
+2025-07-25 12:17:49,984 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (79 total entries)
+2025-07-25 12:17:49,985 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:49,990 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 83/2387: 'Artbox 15 Poster Paints & Brushes' ---
+2025-07-25 12:17:49,995 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922054568
+2025-07-25 12:17:50,022 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922054568 in file: amazon_B007ZQ5DZ4_5013922054568.json (fast search)
+2025-07-25 12:17:50,023 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922054568
+2025-07-25 12:17:50,023 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922054568. Using EAN result without title fallback.
+2025-07-25 12:17:50,024 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B007ZQ5DZ4_5013922054568.json
+2025-07-25 12:17:50,024 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (80 total entries)
+2025-07-25 12:17:50,025 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,029 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 84/2387: 'Artbox 80GSM Dot-To-Dot Colouring Book Assorted' ---
+2025-07-25 12:17:50,035 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922068428
+2025-07-25 12:17:50,059 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922068428 in file: amazon_B012N3DTRM_5013922068428.json (fast search)
+2025-07-25 12:17:50,059 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922068428
+2025-07-25 12:17:50,060 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922068428. Using EAN result without title fallback.
+2025-07-25 12:17:50,060 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B012N3DTRM_5013922068428.json
+2025-07-25 12:17:50,061 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (81 total entries)
+2025-07-25 12:17:50,061 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,064 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 85/2387: 'Artbox A4 Assorted Colour Glitter Card 8 Sheets' ---
+2025-07-25 12:17:50,066 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922052946
+2025-07-25 12:17:50,098 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922052946 in file: amazon_B011RI9H66_5013922052946.json (fast search)
+2025-07-25 12:17:50,099 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922052946
+2025-07-25 12:17:50,099 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922052946. Using EAN result without title fallback.
+2025-07-25 12:17:50,101 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B011RI9H66_5013922052946.json
+2025-07-25 12:17:50,102 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (82 total entries)
+2025-07-25 12:17:50,102 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,106 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 86/2387: 'Artbox A4 Metallic Boards 8 Pack' ---
+2025-07-25 12:17:50,113 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922052908
+2025-07-25 12:17:50,146 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922052908 in file: amazon_B007ZPOKUE_5013922052908.json (fast search)
+2025-07-25 12:17:50,147 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922052908
+2025-07-25 12:17:50,147 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922052908. Using EAN result without title fallback.
+2025-07-25 12:17:50,150 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B007ZPOKUE_5013922052908.json
+2025-07-25 12:17:50,151 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (83 total entries)
+2025-07-25 12:17:50,151 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,158 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 87/2387: 'Artbox A5 Assorted Colour Craft Card 30 Sheets' ---
+2025-07-25 12:17:50,165 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922068824
+2025-07-25 12:17:50,195 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922068824 in file: amazon_B07KBCHS1L_5013922068824.json (fast search)
+2025-07-25 12:17:50,196 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922068824
+2025-07-25 12:17:50,196 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922068824. Using EAN result without title fallback.
+2025-07-25 12:17:50,199 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07KBCHS1L_5013922068824.json
+2025-07-25 12:17:50,199 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (84 total entries)
+2025-07-25 12:17:50,199 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,203 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 88/2387: 'Artbox Activity Fun Play Book Assorted' ---
+2025-07-25 12:17:50,208 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922069173
+2025-07-25 12:17:50,225 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922069173 in file: amazon_B0CCXKMXZK_5013922069173.json (fast search)
+2025-07-25 12:17:50,226 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922069173
+2025-07-25 12:17:50,226 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922069173. Using EAN result without title fallback.
+2025-07-25 12:17:50,227 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CCXKMXZK_5013922069173.json
+2025-07-25 12:17:50,227 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (85 total entries)
+2025-07-25 12:17:50,228 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,231 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 89/2387: 'Artbox Assorted Colour Craft Tissue Paper 12 Sheets' ---
+2025-07-25 12:17:50,234 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922052922
+2025-07-25 12:17:50,259 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922052922 in file: amazon_B00F0WF30K_5013922052922.json (fast search)
+2025-07-25 12:17:50,260 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922052922
+2025-07-25 12:17:50,260 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922052922. Using EAN result without title fallback.
+2025-07-25 12:17:50,262 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00F0WF30K_5013922052922.json
+2025-07-25 12:17:50,263 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (86 total entries)
+2025-07-25 12:17:50,263 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,268 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 90/2387: 'Artbox Assorted Colour Fine Tip Fibre Colouring Pens 8 Pack' ---
+2025-07-25 12:17:50,274 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922010892
+2025-07-25 12:17:50,297 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922010892 in file: amazon_B071F3PGL7_5013922010892.json (fast search)
+2025-07-25 12:17:50,298 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922010892
+2025-07-25 12:17:50,298 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922010892. Using EAN result without title fallback.
+2025-07-25 12:17:50,300 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B071F3PGL7_5013922010892.json
+2025-07-25 12:17:50,300 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (87 total entries)
+2025-07-25 12:17:50,301 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,308 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 90/2387
+2025-07-25 12:17:50,309 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 91/2387: 'Artbox Assorted Colour Play Dough 12pc' ---
+2025-07-25 12:17:50,314 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922031125
+2025-07-25 12:17:50,345 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922031125 in file: amazon_B092QNJ42K_5013922031125.json (fast search)
+2025-07-25 12:17:50,346 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922031125
+2025-07-25 12:17:50,346 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922031125. Using EAN result without title fallback.
+2025-07-25 12:17:50,348 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B092QNJ42K_5013922031125.json
+2025-07-25 12:17:50,349 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (88 total entries)
+2025-07-25 12:17:50,350 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,355 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 92/2387: 'Artbox Assorted Colours Fibre Tip Colouring Pens 16 Pack' ---
+2025-07-25 12:17:50,358 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922010908
+2025-07-25 12:17:50,388 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922010908 in file: amazon_B06XHV4YWP_5013922010908.json (fast search)
+2025-07-25 12:17:50,389 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922010908
+2025-07-25 12:17:50,389 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922010908. Using EAN result without title fallback.
+2025-07-25 12:17:50,391 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B06XHV4YWP_5013922010908.json
+2025-07-25 12:17:50,392 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (89 total entries)
+2025-07-25 12:17:50,393 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,400 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 93/2387: 'Artbox Assorted Fun Stampers 26 Pack' ---
+2025-07-25 12:17:50,406 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922010731
+2025-07-25 12:17:50,437 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922010731 in file: amazon_B07HSB8FH5_5013922010731.json (fast search)
+2025-07-25 12:17:50,437 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922010731
+2025-07-25 12:17:50,438 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922010731. Using EAN result without title fallback.
+2025-07-25 12:17:50,440 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07HSB8FH5_5013922010731.json
+2025-07-25 12:17:50,441 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (90 total entries)
+2025-07-25 12:17:50,441 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,448 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 94/2387: 'Artbox Assorted Premium Paint Brushes 5 Pack' ---
+2025-07-25 12:17:50,455 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922054537
+2025-07-25 12:17:50,488 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922054537 in file: amazon_B07KGP7BQ5_5013922054537.json (fast search)
+2025-07-25 12:17:50,489 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922054537
+2025-07-25 12:17:50,489 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922054537. Using EAN result without title fallback.
+2025-07-25 12:17:50,491 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07KGP7BQ5_5013922054537.json
+2025-07-25 12:17:50,492 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (91 total entries)
+2025-07-25 12:17:50,492 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,498 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 95/2387: 'Artbox Carry Activity Pad Assorted' ---
+2025-07-25 12:17:50,503 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922069203
+2025-07-25 12:17:50,524 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922069203 in file: amazon_B0F21TBHP8_5013922069203.json (fast search)
+2025-07-25 12:17:50,525 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922069203
+2025-07-25 12:17:50,525 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922069203. Using EAN result without title fallback.
+2025-07-25 12:17:50,526 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0F21TBHP8_5013922069203.json
+2025-07-25 12:17:50,527 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (92 total entries)
+2025-07-25 12:17:50,527 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,531 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 96/2387: 'Artbox Colour Your Own Magnets 10 Pack Assorted' ---
+2025-07-25 12:17:50,534 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922067131
+2025-07-25 12:17:50,546 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922067131 in file: amazon_B00PKFWGS4_5013922067131.json (fast search)
+2025-07-25 12:17:50,547 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922067131
+2025-07-25 12:17:50,547 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922067131. Using EAN result without title fallback.
+2025-07-25 12:17:50,548 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00PKFWGS4_5013922067131.json
+2025-07-25 12:17:50,549 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (93 total entries)
+2025-07-25 12:17:50,549 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,553 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 97/2387: 'Artbox Craft Paint Pots Assorted Colours 6 Pack' ---
+2025-07-25 12:17:50,557 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922054575
+2025-07-25 12:17:50,579 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922054575 in file: amazon_B00BFTF39S_5013922054575.json (fast search)
+2025-07-25 12:17:50,580 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922054575
+2025-07-25 12:17:50,580 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922054575. Using EAN result without title fallback.
+2025-07-25 12:17:50,585 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00BFTF39S_5013922054575.json
+2025-07-25 12:17:50,585 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (94 total entries)
+2025-07-25 12:17:50,586 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,589 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 98/2387: 'Artbox Glue Sticks 8g 6 Pack' ---
+2025-07-25 12:17:50,594 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922060194
+2025-07-25 12:17:50,628 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922060194 in file: amazon_B007QSAJ78_5013922060194.json (fast search)
+2025-07-25 12:17:50,628 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922060194
+2025-07-25 12:17:50,628 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922060194. Using EAN result without title fallback.
+2025-07-25 12:17:50,629 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B007QSAJ78_5013922060194.json
+2025-07-25 12:17:50,630 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (95 total entries)
+2025-07-25 12:17:50,630 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,633 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 99/2387: 'Artbox Junior Paint By Numbers Set Assorted' ---
+2025-07-25 12:17:50,638 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922051130
+2025-07-25 12:17:50,669 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922051130 in file: amazon_B085VNKKV8_5013922051130.json (fast search)
+2025-07-25 12:17:50,670 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922051130
+2025-07-25 12:17:50,670 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922051130. Using EAN result without title fallback.
+2025-07-25 12:17:50,672 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B085VNKKV8_5013922051130.json
+2025-07-25 12:17:50,673 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (96 total entries)
+2025-07-25 12:17:50,673 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,680 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 100/2387: 'Artbox Magic Sand Set 1kg' ---
+2025-07-25 12:17:50,685 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922031118
+2025-07-25 12:17:50,721 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922031118 in file: amazon_B076QP2V9K_5013922031118.json (fast search)
+2025-07-25 12:17:50,722 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922031118
+2025-07-25 12:17:50,723 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922031118. Using EAN result without title fallback.
+2025-07-25 12:17:50,725 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B076QP2V9K_5013922031118.json
+2025-07-25 12:17:50,726 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (97 total entries)
+2025-07-25 12:17:50,726 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,736 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 100/2387
+2025-07-25 12:17:50,742 - PassiveExtractionWorkflow - INFO - 🔄 GAP BATCH 6/120: Processing 20 products
+2025-07-25 12:17:50,743 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 101/2387: 'Artbox Metallic Colour Glitter Pots 16G 9 Pack' ---
+2025-07-25 12:17:50,749 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922060903
+2025-07-25 12:17:50,780 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922060903 in file: amazon_B072ZSPP54_5013922060903.json (fast search)
+2025-07-25 12:17:50,780 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922060903
+2025-07-25 12:17:50,780 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922060903. Using EAN result without title fallback.
+2025-07-25 12:17:50,782 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B072ZSPP54_5013922060903.json
+2025-07-25 12:17:50,783 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (98 total entries)
+2025-07-25 12:17:50,783 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,788 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 102/2387: 'Artbox Mixed Craft Essentials Pack' ---
+2025-07-25 12:17:50,794 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922011905
+2025-07-25 12:17:50,812 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922011905 in file: amazon_B08ZHJ9KGV_5013922011905.json (fast search)
+2025-07-25 12:17:50,813 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922011905
+2025-07-25 12:17:50,813 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922011905. Using EAN result without title fallback.
+2025-07-25 12:17:50,814 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08ZHJ9KGV_5013922011905.json
+2025-07-25 12:17:50,814 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (99 total entries)
+2025-07-25 12:17:50,814 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,816 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 103/2387: 'Artbox Modelling Clay Assorted Colours 6 Strips' ---
+2025-07-25 12:17:50,819 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922031088
+2025-07-25 12:17:50,836 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922031088 in file: amazon_B00FEDG5X4_5013922031088.json (fast search)
+2025-07-25 12:17:50,836 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922031088
+2025-07-25 12:17:50,837 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922031088. Using EAN result without title fallback.
+2025-07-25 12:17:50,838 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00FEDG5X4_5013922031088.json
+2025-07-25 12:17:50,838 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (100 total entries)
+2025-07-25 12:17:50,839 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,843 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 104/2387: 'Artbox Neon Finger Paint Pots 6 Pack' ---
+2025-07-25 12:17:50,845 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922054582
+2025-07-25 12:17:50,872 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922054582 in file: amazon_B0B2Z8DJYP_5013922054582.json (fast search)
+2025-07-25 12:17:50,872 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922054582
+2025-07-25 12:17:50,873 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922054582. Using EAN result without title fallback.
+2025-07-25 12:17:50,874 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0B2Z8DJYP_5013922054582.json
+2025-07-25 12:17:50,874 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (101 total entries)
+2025-07-25 12:17:50,875 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,878 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 105/2387: 'Artbox Safe-Tip Scissors 2 Pack' ---
+2025-07-25 12:17:50,881 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922061719
+2025-07-25 12:17:50,893 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922061719 in file: amazon_B07HSB6XWD_5013922061719.json (fast search)
+2025-07-25 12:17:50,894 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922061719
+2025-07-25 12:17:50,894 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922061719. Using EAN result without title fallback.
+2025-07-25 12:17:50,895 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07HSB6XWD_5013922061719.json
+2025-07-25 12:17:50,895 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (102 total entries)
+2025-07-25 12:17:50,895 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,898 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 106/2387: 'Artbox Twist Action Glue Sticks 36g 2 Pack' ---
+2025-07-25 12:17:50,900 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922060200
+2025-07-25 12:17:50,912 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922060200 in file: amazon_B007QS80TC_5013922060200.json (fast search)
+2025-07-25 12:17:50,912 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922060200
+2025-07-25 12:17:50,912 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922060200. Using EAN result without title fallback.
+2025-07-25 12:17:50,913 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B007QS80TC_5013922060200.json
+2025-07-25 12:17:50,914 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (103 total entries)
+2025-07-25 12:17:50,914 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,916 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 107/2387: 'Artbox Unicorns & Mermaids Travel Colouring Set Assorted' ---
+2025-07-25 12:17:50,923 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5013922068886
+2025-07-25 12:17:50,935 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5013922068886 in file: amazon_B0CFHFC9LM_5013922068886.json (fast search)
+2025-07-25 12:17:50,935 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5013922068886
+2025-07-25 12:17:50,936 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5013922068886. Using EAN result without title fallback.
+2025-07-25 12:17:50,937 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CFHFC9LM_5013922068886.json
+2025-07-25 12:17:50,937 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (104 total entries)
+2025-07-25 12:17:50,938 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,940 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 108/2387: 'Assorted Metallic Temporary Gold Tattoos' ---
+2025-07-25 12:17:50,943 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302790349
+2025-07-25 12:17:50,956 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5015302790349 in file: amazon_B0F33S6861_5015302790349.json (fast search)
+2025-07-25 12:17:50,957 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5015302790349
+2025-07-25 12:17:50,957 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5015302790349. Using EAN result without title fallback.
+2025-07-25 12:17:50,959 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0F33S6861_5015302790349.json
+2025-07-25 12:17:50,959 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (105 total entries)
+2025-07-25 12:17:50,959 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,964 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 109/2387: 'Assorted Round Paper Doyley Table Covers 24 Pack' ---
+2025-07-25 12:17:50,966 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5030481940095
+2025-07-25 12:17:50,985 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5030481940095 in file: amazon_B07255DNFJ_5030481940095.json (fast search)
+2025-07-25 12:17:50,985 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 5030481940095
+2025-07-25 12:17:50,985 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5030481940095. Using EAN result without title fallback.
+2025-07-25 12:17:50,987 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07255DNFJ_5030481940095.json
+2025-07-25 12:17:50,987 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (106 total entries)
+2025-07-25 12:17:50,987 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:50,990 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 110/2387: 'Astonish 4-In-1 Germ Clear Disinfectant Spray 750ml' ---
+2025-07-25 12:17:50,992 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256214161
+2025-07-25 12:17:51,010 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256214161 in file: amazon_B0BTTCMBYB_48256214161.json (fast search)
+2025-07-25 12:17:51,010 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256214161
+2025-07-25 12:17:51,011 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256214161. Using EAN result without title fallback.
+2025-07-25 12:17:51,012 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BTTCMBYB_48256214161.json
+2025-07-25 12:17:51,013 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (107 total entries)
+2025-07-25 12:17:51,014 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,025 - PassiveExtractionWorkflow - INFO - 💾 GAP STATE SAVED: Progress 110/2387
+2025-07-25 12:17:51,025 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 111/2387: 'Astonish Antibacterial Surface Cleanser Spray 750ml' ---
+2025-07-25 12:17:51,029 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256291063
+2025-07-25 12:17:51,058 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256291063 in file: amazon_B0CZJRPXD5_48256291063.json (fast search)
+2025-07-25 12:17:51,058 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256291063
+2025-07-25 12:17:51,059 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256291063. Using EAN result without title fallback.
+2025-07-25 12:17:51,060 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CZJRPXD5_48256291063.json
+2025-07-25 12:17:51,061 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (108 total entries)
+2025-07-25 12:17:51,061 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,065 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 112/2387: 'Astonish Bathroom Cleaner Spray 750ml' ---
+2025-07-25 12:17:51,072 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256297164
+2025-07-25 12:17:51,092 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256297164 in file: amazon_B07CVCF31P_48256297164.json (fast search)
+2025-07-25 12:17:51,092 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256297164
+2025-07-25 12:17:51,093 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256297164. Using EAN result without title fallback.
+2025-07-25 12:17:51,095 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07CVCF31P_48256297164.json
+2025-07-25 12:17:51,096 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (109 total entries)
+2025-07-25 12:17:51,096 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,101 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 113/2387: 'Astonish Daily Shower Shine Spray 750ml' ---
+2025-07-25 12:17:51,105 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256210316
+2025-07-25 12:17:51,123 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256210316 in file: amazon_B00MNW441E_48256210316.json (fast search)
+2025-07-25 12:17:51,123 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256210316
+2025-07-25 12:17:51,124 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256210316. Using EAN result without title fallback.
+2025-07-25 12:17:51,128 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B00MNW441E_48256210316.json
+2025-07-25 12:17:51,128 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (110 total entries)
+2025-07-25 12:17:51,129 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,133 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 114/2387: 'Astonish Fabric Refresher Spray 750ml' ---
+2025-07-25 12:17:51,138 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256219265
+2025-07-25 12:17:51,155 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256219265 in file: amazon_B0CZJRPXD5_48256219265.json (fast search)
+2025-07-25 12:17:51,155 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256219265
+2025-07-25 12:17:51,156 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256219265. Using EAN result without title fallback.
+2025-07-25 12:17:51,158 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CZJRPXD5_48256219265.json
+2025-07-25 12:17:51,159 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (111 total entries)
+2025-07-25 12:17:51,159 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,164 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 115/2387: 'Astonish Mould & Mildew Blaster Spray 750ml' ---
+2025-07-25 12:17:51,168 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256299557
+2025-07-25 12:17:51,200 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256299557 in file: amazon_B07CVCF31P_48256299557.json (fast search)
+2025-07-25 12:17:51,202 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256299557
+2025-07-25 12:17:51,202 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256299557. Using EAN result without title fallback.
+2025-07-25 12:17:51,204 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07CVCF31P_48256299557.json
+2025-07-25 12:17:51,205 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (112 total entries)
+2025-07-25 12:17:51,205 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,216 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 116/2387: 'Astonish Multi-Purpose Cleaner With Bleach Spray 750ml' ---
+2025-07-25 12:17:51,220 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 48256219456
+2025-07-25 12:17:51,245 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 48256219456 in file: amazon_B0BJK9GFG1_48256219456.json (fast search)
+2025-07-25 12:17:51,245 - PassiveExtractionWorkflow - INFO - ✅ Using complete cached Amazon data for EAN 48256219456
+2025-07-25 12:17:51,246 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 48256219456. Using EAN result without title fallback.
+2025-07-25 12:17:51,247 - PassiveExtractionWorkflow - INFO - 💾 GAP: Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BJK9GFG1_48256219456.json
+2025-07-25 12:17:51,248 - PassiveExtractionWorkflow - INFO - 🔗 GAP: Added linking map entry (113 total entries)
+2025-07-25 12:17:51,248 - PassiveExtractionWorkflow - ERROR - GAP FINANCIAL ERROR: financials() got an unexpected keyword argument 'supplier_price'
+2025-07-25 12:17:51,251 - PassiveExtractionWorkflow - INFO - --- GAP PROCESSING product 117/2387: 'Auto Extreme Professional Black Alloy Wheel Spray Paint 400ml' ---
+2025-07-25 12:17:51,256 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5055319531733
+2025-07-25 12:17:51,273 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5055319531733 in file: amazon_B004SMKX7Q_5055319531733.json (fast search)
+2025-07-25 12:17:51,273 - PassiveExtractionWorkflow - WARNING - ⚠️ Cached data for EAN 5055319531733 missing price fields. Triggering fresh scraping.
+2025-07-25 12:17:51,273 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5055319531733 for supplier product: 'Auto Extreme Professional Black Alloy Wheel Spray Paint 400ml' (FixedAmazonExtractor)
+2025-07-25 12:17:51,274 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-25 12:17:51,274 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 12:17:51,274 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-25 12:17:51,274 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5055319531733
+2025-07-25 12:17:55,935 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5055319531733...
+2025-07-25 12:17:57,561 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-25 12:17:58,371 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-25 12:17:58,373 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

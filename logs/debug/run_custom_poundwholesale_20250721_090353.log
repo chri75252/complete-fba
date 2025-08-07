@@ -1,0 +1,611 @@
+2025-07-21 09:03:53,625 - utils.logger - INFO - 🔧 Logging initialised – log file: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/run_custom_poundwholesale_20250721_090353.log
+2025-07-21 09:03:53,626 - __main__ - INFO - 📋 Debug log file: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/run_custom_poundwholesale_20250721_090353.log
+2025-07-21 09:03:53,627 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-21 09:03:53,633 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized
+2025-07-21 09:03:54,218 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-21 09:03:54,682 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-21 09:03:54,683 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-21 09:03:54,683 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:03:54,684 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-21 09:03:54,691 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-21 09:03:54,691 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-21 09:03:59,753 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-21 09:03:59,823 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-21 09:03:59,824 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-21 09:03:59,827 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = '/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS'
+2025-07-21 09:03:59,828 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = '/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products'
+2025-07-21 09:03:59,832 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:03:59,838 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/amazon_cache
+2025-07-21 09:03:59,843 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-21 09:03:59,851 - amazon_playwright_extractor - INFO - Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/CACHE/amazon_data
+2025-07-21 09:03:59,852 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-21 09:03:59,854 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/system_config.json
+2025-07-21 09:03:59,854 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-21 09:03:59,854 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-21 09:03:59,855 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-21 09:03:59,855 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-21 09:03:59,855 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-21 09:03:59,856 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-21 09:03:59,856 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-21 09:03:59,856 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-21 09:03:59,857 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS
+2025-07-21 09:03:59,859 - PassiveExtractionWorkflow - INFO - 📚 No reference supplier cache found - starting fresh
+2025-07-21 09:03:59,863 - PassiveExtractionWorkflow - INFO - 📚 No reference linking map found - starting fresh
+2025-07-21 09:03:59,864 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-21 09:03:59,864 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-21 09:03:59,864 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250721_090359
+2025-07-21 09:03:59,865 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-21 09:03:59,865 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-21 09:03:59,865 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 250
+2025-07-21 09:03:59,866 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-21 09:03:59,866 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 20
+2025-07-21 09:03:59,867 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-21 09:03:59,867 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-21 09:03:59,869 - utils.enhanced_state_manager - INFO - No existing state file found for poundwholesale.co.uk, starting fresh
+2025-07-21 09:03:59,869 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-21 09:03:59,869 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-07-21 09:03:59,870 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-21 09:03:59,876 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at any path (tried 2 patterns) - Creating new map
+2025-07-21 09:03:59,876 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 0
+2025-07-21 09:03:59,884 - PassiveExtractionWorkflow - INFO - 📝 NO CACHE FOUND: No supplier cache file found for poundwholesale.co.uk
+2025-07-21 09:03:59,885 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: SUPPLIER_EXTRACTION (no supplier cache found)
+2025-07-21 09:03:59,901 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-21 09:03:59,908 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at any path (tried 2 patterns) - Creating new map
+2025-07-21 09:03:59,908 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-21 09:03:59,909 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-21 09:03:59,914 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 276 predefined category URLs from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/poundwholesale_categories.json
+2025-07-21 09:03:59,916 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=250
+2025-07-21 09:03:59,916 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 276 predefined categories (infinite mode)
+2025-07-21 09:03:59,917 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-21 09:03:59,917 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-21 09:03:59,918 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-21 09:03:59,918 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-07-21 09:03:59,918 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-07-21 09:03:59,926 - PassiveExtractionWorkflow - INFO - 📝 NO CACHE FOUND: No supplier cache file found for poundwholesale.co.uk
+2025-07-21 09:03:59,927 - PassiveExtractionWorkflow - INFO - 📝 SUPPLIER PHASE: No existing cache found - starting fresh extraction
+2025-07-21 09:03:59,934 - PassiveExtractionWorkflow - INFO - 📝 NO CACHE FOUND: No supplier cache file found for poundwholesale.co.uk
+2025-07-21 09:03:59,934 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-07-21 09:03:59,935 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-07-21 09:03:59,942 - PassiveExtractionWorkflow - INFO - 📝 NO CACHE FOUND: No supplier cache file found for poundwholesale.co.uk
+2025-07-21 09:03:59,942 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-07-21 09:03:59,942 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-07-21 09:03:59,943 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-07-21 09:03:59,948 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:03:59,948 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-07-21 09:04:01,512 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-07-21 09:04:06,307 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-21 09:04:06,372 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-21 09:04:06,373 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-21 09:04:06,373 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-07-21 09:04:06,398 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-07-21 09:04:06,398 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:06,399 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:06,399 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:06,400 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:06,419 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/suppliers/poundwholesale-co-uk/config/product_selectors.json
+2025-07-21 09:04:06,419 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-07-21 09:04:06,419 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:06,420 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:06,420 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware (attempt 1/3)
+2025-07-21 09:04:06,421 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:06,421 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:08,592 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware in 2.19s...
+2025-07-21 09:04:10,180 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware (attempt 2/3)
+2025-07-21 09:04:10,181 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:10,182 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:13,025 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:13,026 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-21 09:04:13,167 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware (Size: 639969 bytes)
+2025-07-21 09:04:13,401 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-07-21 09:04:13,402 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-21 09:04:13,403 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 (attempt 1/3)
+2025-07-21 09:04:13,404 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:13,405 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-21 09:04:15,484 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 in 1.76s...
+2025-07-21 09:04:17,249 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 (attempt 2/3)
+2025-07-21 09:04:17,251 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:17,252 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-21 09:04:18,990 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-21 09:04:18,992 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-21 09:04:19,514 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 (Size: 643886 bytes)
+2025-07-21 09:04:19,806 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-07-21 09:04:19,807 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-21 09:04:19,808 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 (attempt 1/3)
+2025-07-21 09:04:19,809 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:19,810 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-21 09:04:21,920 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 in 1.67s...
+2025-07-21 09:04:23,597 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 (attempt 2/3)
+2025-07-21 09:04:23,599 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:23,601 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-21 09:04:26,333 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-21 09:04:26,334 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-21 09:04:26,462 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 (Size: 659771 bytes)
+2025-07-21 09:04:26,700 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-07-21 09:04:26,701 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-21 09:04:26,701 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 (attempt 1/3)
+2025-07-21 09:04:26,702 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:26,703 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-21 09:04:28,856 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 in 1.62s...
+2025-07-21 09:04:30,478 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 (attempt 2/3)
+2025-07-21 09:04:30,479 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:30,480 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-21 09:04:31,996 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-21 09:04:31,997 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-21 09:04:32,566 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 (Size: 643636 bytes)
+2025-07-21 09:04:32,804 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-07-21 09:04:32,805 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-21 09:04:32,805 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 (attempt 1/3)
+2025-07-21 09:04:32,806 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:32,806 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-21 09:04:34,854 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 in 1.51s...
+2025-07-21 09:04:36,364 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 (attempt 2/3)
+2025-07-21 09:04:36,365 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:36,365 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-21 09:04:37,961 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-21 09:04:37,962 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-21 09:04:38,118 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 (Size: 645624 bytes)
+2025-07-21 09:04:38,436 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-07-21 09:04:38,437 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-21 09:04:38,438 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 (attempt 1/3)
+2025-07-21 09:04:38,439 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:38,439 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-21 09:04:40,186 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 in 1.70s...
+2025-07-21 09:04:41,891 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 (attempt 2/3)
+2025-07-21 09:04:41,892 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:41,893 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-21 09:04:44,460 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-21 09:04:44,461 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-21 09:04:44,611 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 (Size: 651157 bytes)
+2025-07-21 09:04:44,851 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 6
+2025-07-21 09:04:44,852 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-21 09:04:44,852 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 (attempt 1/3)
+2025-07-21 09:04:44,853 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:44,854 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-21 09:04:47,155 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 in 1.53s...
+2025-07-21 09:04:48,689 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 (attempt 2/3)
+2025-07-21 09:04:48,690 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:48,691 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-21 09:04:51,566 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-21 09:04:51,568 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-21 09:04:51,776 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 (Size: 653801 bytes)
+2025-07-21 09:04:52,033 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 7
+2025-07-21 09:04:52,034 - configurable_supplier_scraper - INFO - Processing page 8: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-21 09:04:52,035 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 (attempt 1/3)
+2025-07-21 09:04:52,036 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:52,036 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-21 09:04:54,281 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 in 1.64s...
+2025-07-21 09:04:55,919 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 (attempt 2/3)
+2025-07-21 09:04:55,920 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:55,921 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-21 09:04:58,596 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-21 09:04:58,598 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-21 09:04:58,813 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 (Size: 649533 bytes)
+2025-07-21 09:04:59,155 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 8
+2025-07-21 09:04:59,156 - configurable_supplier_scraper - INFO - Processing page 9: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-21 09:04:59,158 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 (attempt 1/3)
+2025-07-21 09:04:59,160 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:04:59,161 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-21 09:05:01,457 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 in 1.83s...
+2025-07-21 09:05:03,287 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 (attempt 2/3)
+2025-07-21 09:05:03,289 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:03,290 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-21 09:05:05,574 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-21 09:05:05,575 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-21 09:05:05,733 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 (Size: 649082 bytes)
+2025-07-21 09:05:05,971 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 9
+2025-07-21 09:05:05,972 - configurable_supplier_scraper - INFO - Processing page 10: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-21 09:05:05,973 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 (attempt 1/3)
+2025-07-21 09:05:05,973 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:05,974 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-21 09:05:08,163 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 in 1.82s...
+2025-07-21 09:05:09,987 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 (attempt 2/3)
+2025-07-21 09:05:09,988 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:09,989 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-21 09:05:12,236 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-21 09:05:12,237 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-21 09:05:12,379 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 (Size: 634750 bytes)
+2025-07-21 09:05:12,617 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 10
+2025-07-21 09:05:12,618 - configurable_supplier_scraper - INFO - Processing page 11: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-21 09:05:12,619 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 (attempt 1/3)
+2025-07-21 09:05:12,620 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:12,621 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-21 09:05:14,886 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 in 1.60s...
+2025-07-21 09:05:16,487 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 (attempt 2/3)
+2025-07-21 09:05:16,488 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:16,489 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-21 09:05:18,231 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-21 09:05:18,232 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-21 09:05:18,968 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 (Size: 633259 bytes)
+2025-07-21 09:05:19,288 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 11
+2025-07-21 09:05:19,289 - configurable_supplier_scraper - INFO - Processing page 12: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-21 09:05:19,290 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 (attempt 1/3)
+2025-07-21 09:05:19,291 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:19,291 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-21 09:05:21,552 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 in 2.33s...
+2025-07-21 09:05:23,894 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 (attempt 2/3)
+2025-07-21 09:05:23,895 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:23,896 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-21 09:05:25,356 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-21 09:05:25,357 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-21 09:05:25,524 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 (Size: 649352 bytes)
+2025-07-21 09:05:25,760 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 12
+2025-07-21 09:05:25,760 - configurable_supplier_scraper - INFO - Processing page 13: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-21 09:05:25,761 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 (attempt 1/3)
+2025-07-21 09:05:25,761 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:25,762 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-21 09:05:27,944 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 in 1.88s...
+2025-07-21 09:05:29,829 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 (attempt 2/3)
+2025-07-21 09:05:29,830 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:29,830 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-21 09:05:32,254 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-21 09:05:32,256 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-21 09:05:32,769 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 (Size: 644571 bytes)
+2025-07-21 09:05:32,995 - configurable_supplier_scraper - INFO - Found 10 new product URLs on page 13
+2025-07-21 09:05:32,996 - configurable_supplier_scraper - INFO - Collected 250 total product URLs across 13 pages
+2025-07-21 09:05:32,996 - configurable_supplier_scraper - INFO - Found 250 total product URLs across all pages
+2025-07-21 09:05:32,997 - configurable_supplier_scraper - INFO - Visiting product page 1/250: https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours
+2025-07-21 09:05:32,998 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours (attempt 1/3)
+2025-07-21 09:05:32,998 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:32,998 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours
+2025-07-21 09:05:35,925 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours in 1.71s...
+2025-07-21 09:05:37,639 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours (attempt 2/3)
+2025-07-21 09:05:37,640 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:37,640 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours
+2025-07-21 09:05:39,461 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours
+2025-07-21 09:05:39,462 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours
+2025-07-21 09:05:39,598 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours (Size: 690142 bytes)
+2025-07-21 09:05:39,966 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 1 to shared accumulator (total: 1)
+2025-07-21 09:05:39,967 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Bello Plastic Printed Gin Glass 600ml Assorted Colours - £0.81 (EAN: 5015302422424)
+2025-07-21 09:05:39,992 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1/250
+2025-07-21 09:05:39,993 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1 processed (total in cache: 1)
+2025-07-21 09:05:39,994 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1
+2025-07-21 09:05:39,994 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1, frequency=2, enabled=True
+2025-07-21 09:05:39,995 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1, modulo=1
+2025-07-21 09:05:40,012 - configurable_supplier_scraper - INFO - Visiting product page 2/250: https://www.poundwholesale.co.uk/bunting-5-colour-flags
+2025-07-21 09:05:40,013 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bunting-5-colour-flags (attempt 1/3)
+2025-07-21 09:05:40,013 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:40,013 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bunting-5-colour-flags
+2025-07-21 09:05:42,557 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/bunting-5-colour-flags in 1.50s...
+2025-07-21 09:05:44,061 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bunting-5-colour-flags (attempt 2/3)
+2025-07-21 09:05:44,061 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:44,062 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bunting-5-colour-flags
+2025-07-21 09:05:46,082 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/bunting-5-colour-flags
+2025-07-21 09:05:46,083 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/bunting-5-colour-flags
+2025-07-21 09:05:46,224 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/bunting-5-colour-flags (Size: 619810 bytes)
+2025-07-21 09:05:46,485 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 2 to shared accumulator (total: 2)
+2025-07-21 09:05:46,485 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Triangular 5-Colour 20 Flag Bunting 10m - £0.63 (EAN: 5033849411435)
+2025-07-21 09:05:46,502 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 2/250
+2025-07-21 09:05:46,502 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 2 processed (total in cache: 2)
+2025-07-21 09:05:46,504 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 2
+2025-07-21 09:05:46,505 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 2, frequency=2, enabled=True
+2025-07-21 09:05:46,506 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=2, modulo=0
+2025-07-21 09:05:46,507 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:46,507 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:05:46,508 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:46,508 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:05:46,509 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:05:46,513 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:05:46,514 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 2 products to cache...
+2025-07-21 09:05:46,514 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:46,517 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:46,526 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 2 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 1156 bytes)
+2025-07-21 09:05:46,526 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 2 products to cache (every 2 products)
+2025-07-21 09:05:46,541 - configurable_supplier_scraper - INFO - Visiting product page 3/250: https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours
+2025-07-21 09:05:46,541 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours (attempt 1/3)
+2025-07-21 09:05:46,542 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:46,543 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours
+2025-07-21 09:05:49,110 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours in 1.58s...
+2025-07-21 09:05:50,690 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours (attempt 2/3)
+2025-07-21 09:05:50,691 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:50,692 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours
+2025-07-21 09:05:51,734 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours
+2025-07-21 09:05:51,735 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours
+2025-07-21 09:05:52,384 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/jaunty-metallic-latex-balloons-10-pack-assorted-colours (Size: 639224 bytes)
+2025-07-21 09:05:52,645 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 3 to shared accumulator (total: 3)
+2025-07-21 09:05:52,646 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Jaunty Metallic Latex Balloons 10 Pack Assorted Colours - £0.61 (EAN: 5056683920376)
+2025-07-21 09:05:52,664 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 3/250
+2025-07-21 09:05:52,665 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 3 processed (total in cache: 3)
+2025-07-21 09:05:52,665 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 3
+2025-07-21 09:05:52,666 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 3, frequency=2, enabled=True
+2025-07-21 09:05:52,666 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=3, modulo=1
+2025-07-21 09:05:52,687 - configurable_supplier_scraper - INFO - Visiting product page 4/250: https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc
+2025-07-21 09:05:52,688 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc (attempt 1/3)
+2025-07-21 09:05:52,689 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:52,692 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc
+2025-07-21 09:05:54,825 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc in 1.98s...
+2025-07-21 09:05:56,808 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc (attempt 2/3)
+2025-07-21 09:05:56,809 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:56,810 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc
+2025-07-21 09:05:58,622 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc
+2025-07-21 09:05:58,623 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc
+2025-07-21 09:05:58,742 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/jaunty-assorted-colour-birthday-candle-bases-set-152pc (Size: 454791 bytes)
+2025-07-21 09:05:59,021 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 4 to shared accumulator (total: 4)
+2025-07-21 09:05:59,022 - configurable_supplier_scraper - INFO - ✅ Extracted product 4: Jaunty Assorted Colour Birthday Candle & Bases Set 152pc - £0.64 (EAN: 5056683920000)
+2025-07-21 09:05:59,045 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 4/250
+2025-07-21 09:05:59,046 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 4 processed (total in cache: 4)
+2025-07-21 09:05:59,046 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 4
+2025-07-21 09:05:59,047 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 4, frequency=2, enabled=True
+2025-07-21 09:05:59,047 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=4, modulo=0
+2025-07-21 09:05:59,048 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:59,048 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:05:59,049 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:59,049 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:05:59,049 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:05:59,054 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:05:59,055 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 4 products to cache...
+2025-07-21 09:05:59,055 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:59,062 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 2 existing products for deduplication
+2025-07-21 09:05:59,063 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 2 URL duplicates and 0 EAN duplicates.
+2025-07-21 09:05:59,063 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:05:59,076 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 4 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 2362 bytes)
+2025-07-21 09:05:59,076 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 4 products to cache (every 2 products)
+2025-07-21 09:05:59,094 - configurable_supplier_scraper - INFO - Visiting product page 5/250: https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted
+2025-07-21 09:05:59,095 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted (attempt 1/3)
+2025-07-21 09:05:59,095 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:05:59,096 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted
+2025-07-21 09:06:01,546 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted in 2.01s...
+2025-07-21 09:06:03,562 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted (attempt 2/3)
+2025-07-21 09:06:03,564 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:03,564 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted
+2025-07-21 09:06:06,492 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted
+2025-07-21 09:06:06,492 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted
+2025-07-21 09:06:06,620 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/jaunty-silver-metallic-number-candle-balloon-1-pack-assorted (Size: 672750 bytes)
+2025-07-21 09:06:06,886 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 5 to shared accumulator (total: 5)
+2025-07-21 09:06:06,887 - configurable_supplier_scraper - INFO - ✅ Extracted product 5: Jaunty Silver Metallic Number Candle Balloon 1 Pack Assorted - £0.71 (EAN: 5056683923360)
+2025-07-21 09:06:06,905 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 5/250
+2025-07-21 09:06:06,906 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 5 processed (total in cache: 5)
+2025-07-21 09:06:06,906 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 5
+2025-07-21 09:06:06,907 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 5, frequency=2, enabled=True
+2025-07-21 09:06:06,907 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=5, modulo=1
+2025-07-21 09:06:06,921 - configurable_supplier_scraper - INFO - Visiting product page 6/250: https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack
+2025-07-21 09:06:06,922 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack (attempt 1/3)
+2025-07-21 09:06:06,922 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:06,923 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack
+2025-07-21 09:06:09,693 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack in 1.70s...
+2025-07-21 09:06:11,394 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack (attempt 2/3)
+2025-07-21 09:06:11,395 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:11,395 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack
+2025-07-21 09:06:13,994 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack
+2025-07-21 09:06:13,995 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack
+2025-07-21 09:06:14,167 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack (Size: 689339 bytes)
+2025-07-21 09:06:14,444 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 6 to shared accumulator (total: 6)
+2025-07-21 09:06:14,445 - configurable_supplier_scraper - INFO - ✅ Extracted product 6: Bello Assorted Colour PP Chip & Dip Bowl 15cm 2 Pack - £0.43 (EAN: 5015302422455)
+2025-07-21 09:06:14,472 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 6/250
+2025-07-21 09:06:14,472 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 6 processed (total in cache: 6)
+2025-07-21 09:06:14,473 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 6
+2025-07-21 09:06:14,474 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 6, frequency=2, enabled=True
+2025-07-21 09:06:14,475 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=6, modulo=0
+2025-07-21 09:06:14,475 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:14,476 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:06:14,476 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:14,477 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:06:14,477 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:14,484 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:14,485 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 6 products to cache...
+2025-07-21 09:06:14,486 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:14,495 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 4 existing products for deduplication
+2025-07-21 09:06:14,496 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 4 URL duplicates and 0 EAN duplicates.
+2025-07-21 09:06:14,496 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:14,505 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 6 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 3569 bytes)
+2025-07-21 09:06:14,505 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 6 products to cache (every 2 products)
+2025-07-21 09:06:14,525 - configurable_supplier_scraper - INFO - Visiting product page 7/250: https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack
+2025-07-21 09:06:14,526 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack (attempt 1/3)
+2025-07-21 09:06:14,526 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:14,526 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack
+2025-07-21 09:06:16,878 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack in 2.20s...
+2025-07-21 09:06:19,084 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack (attempt 2/3)
+2025-07-21 09:06:19,085 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:19,086 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack
+2025-07-21 09:06:20,404 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack
+2025-07-21 09:06:20,406 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack
+2025-07-21 09:06:20,555 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/jaunty-partyware-2-ply-paper-napkins-20-pack (Size: 671502 bytes)
+2025-07-21 09:06:20,914 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 7 to shared accumulator (total: 7)
+2025-07-21 09:06:20,915 - configurable_supplier_scraper - INFO - ✅ Extracted product 7: Jaunty Partyware 2-Ply Paper Napkins 20 Pack - £0.65 (EAN: 5055566908586)
+2025-07-21 09:06:20,940 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 7/250
+2025-07-21 09:06:20,941 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 7 processed (total in cache: 7)
+2025-07-21 09:06:20,941 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 7
+2025-07-21 09:06:20,942 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 7, frequency=2, enabled=True
+2025-07-21 09:06:20,942 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=7, modulo=1
+2025-07-21 09:06:20,964 - configurable_supplier_scraper - INFO - Visiting product page 8/250: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml
+2025-07-21 09:06:20,965 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml (attempt 1/3)
+2025-07-21 09:06:20,965 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:20,966 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml
+2025-07-21 09:06:23,576 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml in 2.01s...
+2025-07-21 09:06:25,588 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml (attempt 2/3)
+2025-07-21 09:06:25,589 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:25,590 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml
+2025-07-21 09:06:27,534 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml
+2025-07-21 09:06:27,536 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml
+2025-07-21 09:06:27,722 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml (Size: 683428 bytes)
+2025-07-21 09:06:27,997 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 8 to shared accumulator (total: 8)
+2025-07-21 09:06:27,998 - configurable_supplier_scraper - INFO - ✅ Extracted product 8: Bello Plastic Glass Effect Pitcher 1700ml - £3.3 (EAN: 5015302422110)
+2025-07-21 09:06:28,026 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 8/250
+2025-07-21 09:06:28,026 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 8 processed (total in cache: 8)
+2025-07-21 09:06:28,027 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 8
+2025-07-21 09:06:28,027 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 8, frequency=2, enabled=True
+2025-07-21 09:06:28,028 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=8, modulo=0
+2025-07-21 09:06:28,029 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:28,029 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:06:28,030 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:28,031 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:06:28,031 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:28,038 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:28,039 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 8 products to cache...
+2025-07-21 09:06:28,039 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:28,047 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 6 existing products for deduplication
+2025-07-21 09:06:28,048 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 6 URL duplicates and 0 EAN duplicates.
+2025-07-21 09:06:28,048 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:28,064 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 8 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 4723 bytes)
+2025-07-21 09:06:28,065 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 8 products to cache (every 2 products)
+2025-07-21 09:06:28,087 - configurable_supplier_scraper - INFO - Visiting product page 9/250: https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted
+2025-07-21 09:06:28,088 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted (attempt 1/3)
+2025-07-21 09:06:28,088 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:28,088 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted
+2025-07-21 09:06:30,705 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted in 2.20s...
+2025-07-21 09:06:32,910 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted (attempt 2/3)
+2025-07-21 09:06:32,912 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:32,913 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted
+2025-07-21 09:06:34,776 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted
+2025-07-21 09:06:34,778 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted
+2025-07-21 09:06:34,942 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pop-multicoloured-foil-number-balloon-65cm-assorted (Size: 671440 bytes)
+2025-07-21 09:06:35,212 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 9 to shared accumulator (total: 9)
+2025-07-21 09:06:35,213 - configurable_supplier_scraper - INFO - ✅ Extracted product 9: Pop Multicoloured Foil Number Balloon 65cm Assorted - £0.63 (EAN: 5056170327817)
+2025-07-21 09:06:35,238 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 9/250
+2025-07-21 09:06:35,239 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 9 processed (total in cache: 9)
+2025-07-21 09:06:35,240 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 9
+2025-07-21 09:06:35,240 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 9, frequency=2, enabled=True
+2025-07-21 09:06:35,241 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=9, modulo=1
+2025-07-21 09:06:35,263 - configurable_supplier_scraper - INFO - Visiting product page 10/250: https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack
+2025-07-21 09:06:35,263 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack (attempt 1/3)
+2025-07-21 09:06:35,264 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:35,264 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack
+2025-07-21 09:06:38,070 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack in 2.29s...
+2025-07-21 09:06:40,368 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack (attempt 2/3)
+2025-07-21 09:06:40,369 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:40,370 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack
+2025-07-21 09:06:42,815 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack
+2025-07-21 09:06:42,816 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack
+2025-07-21 09:06:42,939 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/green-plastic-party-table-covers-54-x-54-2-pack (Size: 676971 bytes)
+2025-07-21 09:06:43,335 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 10 to shared accumulator (total: 10)
+2025-07-21 09:06:43,336 - configurable_supplier_scraper - INFO - ✅ Extracted product 10: Green Plastic Party Table Covers 54" X 54" 2 Pack - £0.64 (EAN: 5030481943065)
+2025-07-21 09:06:43,353 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 10/250
+2025-07-21 09:06:43,353 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 10 processed (total in cache: 10)
+2025-07-21 09:06:43,354 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 10
+2025-07-21 09:06:43,354 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 10, frequency=2, enabled=True
+2025-07-21 09:06:43,355 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=10, modulo=0
+2025-07-21 09:06:43,355 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:43,356 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:06:43,356 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:43,356 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:06:43,357 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:43,361 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:43,362 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 10 products to cache...
+2025-07-21 09:06:43,362 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:43,371 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 8 existing products for deduplication
+2025-07-21 09:06:43,371 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 8 URL duplicates and 0 EAN duplicates.
+2025-07-21 09:06:43,372 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:43,382 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 10 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5908 bytes)
+2025-07-21 09:06:43,383 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 10 products to cache (every 2 products)
+2025-07-21 09:06:43,398 - configurable_supplier_scraper - INFO - Visiting product page 11/250: https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml
+2025-07-21 09:06:43,399 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml (attempt 1/3)
+2025-07-21 09:06:43,399 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:43,400 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml
+2025-07-21 09:06:46,156 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml in 2.17s...
+2025-07-21 09:06:47,743 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml (attempt 2/3)
+2025-07-21 09:06:47,744 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:47,744 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml
+2025-07-21 09:06:49,811 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml
+2025-07-21 09:06:49,812 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml
+2025-07-21 09:06:49,960 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/clear-plastic-champagne-flutes-140ml (Size: 673533 bytes)
+2025-07-21 09:06:50,234 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 11 to shared accumulator (total: 11)
+2025-07-21 09:06:50,234 - configurable_supplier_scraper - INFO - ✅ Extracted product 11: Clear Plastic Champagne Flutes 140ml - £0.64 (EAN: 5030481960154)
+2025-07-21 09:06:50,251 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 11/250
+2025-07-21 09:06:50,252 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 11 processed (total in cache: 11)
+2025-07-21 09:06:50,252 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 11
+2025-07-21 09:06:50,253 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 11, frequency=2, enabled=True
+2025-07-21 09:06:50,253 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=11, modulo=1
+2025-07-21 09:06:50,275 - configurable_supplier_scraper - INFO - Visiting product page 12/250: https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack
+2025-07-21 09:06:50,275 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack (attempt 1/3)
+2025-07-21 09:06:50,276 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:50,276 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack
+2025-07-21 09:06:52,781 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack in 2.21s...
+2025-07-21 09:06:54,991 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack (attempt 2/3)
+2025-07-21 09:06:54,992 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:54,992 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack
+2025-07-21 09:06:56,975 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack
+2025-07-21 09:06:56,976 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack
+2025-07-21 09:06:57,139 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/white-biodegradable-bagasse-plates-26cm-10-pack (Size: 672109 bytes)
+2025-07-21 09:06:57,417 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 12 to shared accumulator (total: 12)
+2025-07-21 09:06:57,418 - configurable_supplier_scraper - INFO - ✅ Extracted product 12: White Biodegradable Bagasse Plates 26cm 10 Pack - £1.13 (EAN: 5030481985348)
+2025-07-21 09:06:57,435 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 12/250
+2025-07-21 09:06:57,435 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 12 processed (total in cache: 12)
+2025-07-21 09:06:57,436 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 12
+2025-07-21 09:06:57,436 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 12, frequency=2, enabled=True
+2025-07-21 09:06:57,436 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=12, modulo=0
+2025-07-21 09:06:57,437 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:57,437 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:06:57,438 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:57,438 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:06:57,439 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:57,443 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:06:57,443 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 12 products to cache...
+2025-07-21 09:06:57,443 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:57,451 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 10 existing products for deduplication
+2025-07-21 09:06:57,451 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 10 URL duplicates and 0 EAN duplicates.
+2025-07-21 09:06:57,452 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:06:57,462 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 12 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 7058 bytes)
+2025-07-21 09:06:57,463 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 12 products to cache (every 2 products)
+2025-07-21 09:06:57,481 - configurable_supplier_scraper - INFO - Visiting product page 13/250: https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted
+2025-07-21 09:06:57,481 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted (attempt 1/3)
+2025-07-21 09:06:57,482 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:06:57,482 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted
+2025-07-21 09:06:59,478 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted in 2.20s...
+2025-07-21 09:07:01,688 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted (attempt 2/3)
+2025-07-21 09:07:01,689 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:07:01,691 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted
+2025-07-21 09:07:03,544 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted
+2025-07-21 09:07:03,544 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted
+2025-07-21 09:07:03,659 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/jaunty-6-metallic-gold-wild-animal-leopard-giraffe-party-hats-4-pack-assorted (Size: 370540 bytes)
+2025-07-21 09:07:03,845 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 13 to shared accumulator (total: 13)
+2025-07-21 09:07:03,846 - configurable_supplier_scraper - INFO - ✅ Extracted product 13: Jaunty 6" Metallic Gold Wild Animal Leopard & Giraffe Party Hats 4 Pack Assorted - £0.75 (EAN: 5056683919820)
+2025-07-21 09:07:03,863 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 13/250
+2025-07-21 09:07:03,864 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 13 processed (total in cache: 13)
+2025-07-21 09:07:03,864 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 13
+2025-07-21 09:07:03,865 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 13, frequency=2, enabled=True
+2025-07-21 09:07:03,865 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=13, modulo=1
+2025-07-21 09:07:03,883 - configurable_supplier_scraper - INFO - Visiting product page 14/250: https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack
+2025-07-21 09:07:03,884 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack (attempt 1/3)
+2025-07-21 09:07:03,885 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:07:03,885 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack
+2025-07-21 09:07:07,336 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack in 1.94s...
+2025-07-21 09:07:09,284 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack (attempt 2/3)
+2025-07-21 09:07:09,285 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:07:09,285 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack
+2025-07-21 09:07:11,385 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack
+2025-07-21 09:07:11,386 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack
+2025-07-21 09:07:11,518 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/white-plastic-reusable-oval-plates-26cm-6-pack (Size: 679730 bytes)
+2025-07-21 09:07:11,935 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 14 to shared accumulator (total: 14)
+2025-07-21 09:07:11,936 - configurable_supplier_scraper - INFO - ✅ Extracted product 14: White Plastic Reusable Oval Plates 26cm 6 Pack - £0.64 (EAN: 5030481981197)
+2025-07-21 09:07:11,964 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 14/250
+2025-07-21 09:07:11,965 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 14 processed (total in cache: 14)
+2025-07-21 09:07:11,966 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 14
+2025-07-21 09:07:11,966 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 14, frequency=2, enabled=True
+2025-07-21 09:07:11,967 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=14, modulo=0
+2025-07-21 09:07:11,967 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:07:11,968 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-21 09:07:11,968 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:07:11,969 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-21 09:07:11,969 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:07:11,973 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-21 09:07:11,974 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 14 products to cache...
+2025-07-21 09:07:11,974 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:07:11,982 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 12 existing products for deduplication
+2025-07-21 09:07:11,983 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 12 URL duplicates and 0 EAN duplicates.
+2025-07-21 09:07:11,983 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-21 09:07:11,999 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 14 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 8293 bytes)
+2025-07-21 09:07:12,000 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 14 products to cache (every 2 products)
+2025-07-21 09:07:12,024 - configurable_supplier_scraper - INFO - Visiting product page 15/250: https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack
+2025-07-21 09:07:12,024 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack (attempt 1/3)
+2025-07-21 09:07:12,025 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:07:12,026 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack
+2025-07-21 09:07:14,610 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack in 2.46s...
+2025-07-21 09:07:17,068 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack (attempt 2/3)
+2025-07-21 09:07:17,069 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:07:17,070 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack
+2025-07-21 09:07:19,382 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack
+2025-07-21 09:07:19,383 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack
+2025-07-21 09:07:19,525 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/clear-plastic-wine-goblets-170ml-5-pack (Size: 675104 bytes)
+2025-07-21 09:07:19,802 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 15 to shared accumulator (total: 15)
+2025-07-21 09:07:19,803 - configurable_supplier_scraper - INFO - ✅ Extracted product 15: Clear Plastic Wine Goblets 170ml 5 Pack - £0.64 (EAN: 5030481960147)
+2025-07-21 09:07:19,827 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 15/250
+2025-07-21 09:07:19,827 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 15 processed (total in cache: 15)
+2025-07-21 09:07:19,828 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 15
+2025-07-21 09:07:19,828 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 15, frequency=2, enabled=True
+2025-07-21 09:07:19,829 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=15, modulo=1
+2025-07-21 09:07:19,856 - configurable_supplier_scraper - INFO - Visiting product page 16/250: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-small-bowl-700ml
+2025-07-21 09:07:19,857 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-small-bowl-700ml (attempt 1/3)
+2025-07-21 09:07:19,857 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-21 09:07:19,857 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-small-bowl-700ml
+2025-07-21 09:07:22,711 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-small-bowl-700ml in 2.41s...
+2025-07-21 09:07:23,983 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-21 09:07:23,986 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

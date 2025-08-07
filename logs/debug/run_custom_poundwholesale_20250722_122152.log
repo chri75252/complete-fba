@@ -1,0 +1,665 @@
+2025-07-22 12:21:52,653 - utils.logger - INFO - 🔧 Logging initialised – log file: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/run_custom_poundwholesale_20250722_122152.log
+2025-07-22 12:21:52,654 - __main__ - INFO - 📋 Debug log file: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/run_custom_poundwholesale_20250722_122152.log
+2025-07-22 12:21:52,654 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-22 12:21:52,658 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-07-22 12:21:52,658 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-07-22 12:21:53,262 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:21:53,605 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:21:53,606 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:21:53,606 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:21:53,607 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:21:53,625 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:21:53,626 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:21:53,626 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-22 12:21:53,631 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-22 12:21:53,631 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-22 12:21:59,694 - tools.supplier_authentication_service - INFO - ❌ Login form detected - not authenticated
+2025-07-22 12:21:59,695 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-07-22 12:21:59,696 - tools.supplier_authentication_service - INFO - 🔧 Using standalone playwright authentication
+2025-07-22 12:21:59,697 - tools.standalone_playwright_login - INFO - 🔗 Connecting to shared Chrome instance...
+2025-07-22 12:22:00,319 - tools.standalone_playwright_login - INFO - ✅ Connected to shared Chrome instance at http://localhost:9222
+2025-07-22 12:22:00,319 - tools.standalone_playwright_login - DEBUG - Using existing browser context
+2025-07-22 12:22:00,320 - tools.standalone_playwright_login - DEBUG - Using existing page
+2025-07-22 12:22:00,388 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-07-22 12:22:04,508 - tools.standalone_playwright_login - INFO - ❌ No login indicators found - need to log in
+2025-07-22 12:22:04,508 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-07-22 12:22:04,509 - tools.standalone_playwright_login - INFO - 📍 Navigating to login page: https://www.poundwholesale.co.uk/customer/account/login/
+2025-07-22 12:22:07,812 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="email"]
+2025-07-22 12:22:08,340 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input[type="password"]
+2025-07-22 12:22:11,313 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button[type="submit"]
+2025-07-22 12:22:11,314 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-07-22 12:22:14,427 - tools.standalone_playwright_login - INFO - ✅ Login success confirmed by indicator: text=Log out
+2025-07-22 12:22:14,428 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-07-22 12:22:19,598 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-07-22 12:22:19,599 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 15.1s)
+2025-07-22 12:22:19,625 - tools.standalone_playwright_login - DEBUG - Disconnected from shared Chrome browser
+2025-07-22 12:22:19,633 - tools.standalone_playwright_login - DEBUG - Playwright stopped
+2025-07-22 12:22:19,633 - tools.supplier_authentication_service - INFO - ✅ Standalone authentication successful: playwright_selectors
+2025-07-22 12:22:19,636 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = '/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS'
+2025-07-22 12:22:19,636 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = '/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products'
+2025-07-22 12:22:19,651 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-22 12:22:19,657 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/amazon_cache
+2025-07-22 12:22:19,662 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-07-22 12:22:19,663 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-22 12:22:19,669 - amazon_playwright_extractor - INFO - Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/CACHE/amazon_data
+2025-07-22 12:22:19,670 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-22 12:22:19,672 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/system_config.json
+2025-07-22 12:22:19,672 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-22 12:22:19,673 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-22 12:22:19,674 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-22 12:22:19,674 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-22 12:22:19,674 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-22 12:22:19,675 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-22 12:22:19,675 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-22 12:22:19,676 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-22 12:22:19,677 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS
+2025-07-22 12:22:19,679 - PassiveExtractionWorkflow - INFO - 📚 No reference supplier cache found - starting fresh
+2025-07-22 12:22:19,696 - PassiveExtractionWorkflow - INFO - 📚 Loaded 0 mappings from reference linking map
+2025-07-22 12:22:19,697 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-22 12:22:19,698 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-22 12:22:19,698 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250722_122219
+2025-07-22 12:22:19,699 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-22 12:22:19,699 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-22 12:22:19,699 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-07-22 12:22:19,700 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-22 12:22:19,700 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 20
+2025-07-22 12:22:19,700 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-22 12:22:19,700 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-22 12:22:19,710 - utils.enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resuming from index 60
+2025-07-22 12:22:19,710 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-22 12:22:19,711 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 60
+2025-07-22 12:22:19,711 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-22 12:22:19,724 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json with 539 entries
+2025-07-22 12:22:19,724 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 539
+2025-07-22 12:22:19,739 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 1144 products in poundwholesale-co-uk_products_cache.json
+2025-07-22 12:22:19,740 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: AMAZON_ANALYSIS (incomplete - supplier: 1144, linking map: 539)
+2025-07-22 12:22:19,766 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-22 12:22:19,779 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json with 539 entries
+2025-07-22 12:22:19,780 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-22 12:22:19,780 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-22 12:22:19,784 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 188 predefined category URLs from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/poundwholesale_categories.json
+2025-07-22 12:22:19,785 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-07-22 12:22:19,786 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 188 predefined categories (infinite mode)
+2025-07-22 12:22:19,786 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-22 12:22:19,787 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-22 12:22:19,787 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-22 12:22:19,788 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-07-22 12:22:19,788 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-07-22 12:22:19,805 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 1144 products in poundwholesale-co-uk_products_cache.json
+2025-07-22 12:22:19,822 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Need to extract remaining products for chunk (297/1000 expected)
+2025-07-22 12:22:19,840 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 1144 products in poundwholesale-co-uk_products_cache.json
+2025-07-22 12:22:19,857 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION DETECTED: Found 297 cached products but resuming from index 60
+2025-07-22 12:22:19,857 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category
+2025-07-22 12:22:19,858 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CACHE MISS: No cached products found for chunk categories: ['https://www.poundwholesale.co.uk/party-gift/wholesale-partyware']
+2025-07-22 12:22:19,858 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories
+2025-07-22 12:22:19,859 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-07-22 12:22:19,859 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-07-22 12:22:19,875 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 1144 products in poundwholesale-co-uk_products_cache.json
+2025-07-22 12:22:19,887 - PassiveExtractionWorkflow - INFO - ✅ RESUMPTION: Loaded 1144 existing products from cache file: poundwholesale-co-uk_products_cache.json
+2025-07-22 12:22:19,887 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-07-22 12:22:19,887 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-07-22 12:22:19,888 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-07-22 12:22:19,893 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:19,893 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:19,899 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:19,899 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:19,900 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-07-22 12:22:21,514 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-07-22 12:22:25,938 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-22 12:22:25,999 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-22 12:22:26,000 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-22 12:22:26,000 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-07-22 12:22:26,033 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-07-22 12:22:26,033 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:26,034 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:26,034 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:26,035 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:26,035 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:26,041 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:26,041 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:26,064 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/suppliers/poundwholesale-co-uk/config/product_selectors.json
+2025-07-22 12:22:26,064 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-07-22 12:22:26,065 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:26,066 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:26,066 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware (attempt 1/3)
+2025-07-22 12:22:26,066 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:26,067 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:26,072 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:26,073 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:22:26,073 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:22:26,075 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:22:26,075 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:22:26,088 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:22:26,088 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:22:28,407 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:22:28,767 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:22:28,768 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:22:28,768 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:22:28,769 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:22:28,769 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:28,769 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:31,024 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware in 1.61s...
+2025-07-22 12:22:32,641 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware (attempt 2/3)
+2025-07-22 12:22:32,642 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:32,642 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:32,647 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:32,648 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:32,648 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:34,325 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:34,325 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware
+2025-07-22 12:22:34,477 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware (Size: 639708 bytes)
+2025-07-22 12:22:34,770 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-07-22 12:22:34,770 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-22 12:22:34,771 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 (attempt 1/3)
+2025-07-22 12:22:34,771 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:34,772 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:34,779 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:34,779 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:34,780 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-22 12:22:36,892 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 in 2.18s...
+2025-07-22 12:22:39,070 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 (attempt 2/3)
+2025-07-22 12:22:39,070 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:39,071 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:39,077 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:39,077 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:39,078 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-22 12:22:41,168 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-22 12:22:41,169 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2
+2025-07-22 12:22:41,318 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=2 (Size: 643120 bytes)
+2025-07-22 12:22:41,555 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-07-22 12:22:41,556 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-22 12:22:41,556 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 (attempt 1/3)
+2025-07-22 12:22:41,557 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:41,557 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:41,563 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:41,563 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:22:41,564 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:22:41,564 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:22:41,565 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:22:41,577 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:22:41,577 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:22:43,892 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:22:44,214 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:22:44,214 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:22:44,215 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:22:44,215 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:22:44,216 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:44,216 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-22 12:22:46,380 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 in 1.69s...
+2025-07-22 12:22:47,308 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 (attempt 2/3)
+2025-07-22 12:22:47,308 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:47,308 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:47,313 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:47,314 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:47,314 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-22 12:22:49,482 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-22 12:22:49,482 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3
+2025-07-22 12:22:49,610 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=3 (Size: 660676 bytes)
+2025-07-22 12:22:49,865 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-07-22 12:22:49,866 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-22 12:22:49,866 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 (attempt 1/3)
+2025-07-22 12:22:49,867 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:49,868 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:49,873 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:49,873 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:49,874 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-22 12:22:51,897 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 in 2.40s...
+2025-07-22 12:22:54,298 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 (attempt 2/3)
+2025-07-22 12:22:54,299 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:54,299 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:54,304 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:54,305 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:22:54,305 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-22 12:22:57,177 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-22 12:22:57,178 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4
+2025-07-22 12:22:57,330 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=4 (Size: 641743 bytes)
+2025-07-22 12:22:57,635 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-07-22 12:22:57,636 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-22 12:22:57,636 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 (attempt 1/3)
+2025-07-22 12:22:57,637 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:22:57,637 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:22:57,642 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:22:57,643 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:22:57,643 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:22:57,644 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:22:57,644 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:22:57,653 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:22:57,654 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:23:00,035 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:23:00,419 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:23:00,421 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:23:00,421 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:23:00,422 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:23:00,423 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:00,423 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-22 12:23:02,551 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 in 2.20s...
+2025-07-22 12:23:04,756 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 (attempt 2/3)
+2025-07-22 12:23:04,757 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:04,757 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:04,763 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:04,763 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:04,764 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-22 12:23:06,648 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-22 12:23:06,649 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5
+2025-07-22 12:23:06,779 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=5 (Size: 645293 bytes)
+2025-07-22 12:23:07,020 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-07-22 12:23:07,020 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-22 12:23:07,021 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 (attempt 1/3)
+2025-07-22 12:23:07,021 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:07,022 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:07,027 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:07,028 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:07,028 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-22 12:23:09,117 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 in 2.33s...
+2025-07-22 12:23:11,454 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 (attempt 2/3)
+2025-07-22 12:23:11,455 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:11,455 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:11,461 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:11,461 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:11,462 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-22 12:23:12,652 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-22 12:23:12,653 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6
+2025-07-22 12:23:12,886 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=6 (Size: 650584 bytes)
+2025-07-22 12:23:13,141 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 6
+2025-07-22 12:23:13,142 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-22 12:23:13,142 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 (attempt 1/3)
+2025-07-22 12:23:13,143 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:13,143 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:13,149 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:13,150 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:23:13,150 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:23:13,151 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:23:13,151 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:23:13,161 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:23:13,161 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:23:15,552 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:23:15,960 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:23:15,961 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:23:15,961 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:23:15,962 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:23:15,962 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:15,963 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-22 12:23:18,124 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 in 1.69s...
+2025-07-22 12:23:19,144 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 (attempt 2/3)
+2025-07-22 12:23:19,147 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:19,150 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:19,158 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:19,159 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:19,160 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-22 12:23:20,459 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-22 12:23:20,460 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7
+2025-07-22 12:23:21,499 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=7 (Size: 651971 bytes)
+2025-07-22 12:23:21,845 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 7
+2025-07-22 12:23:21,846 - configurable_supplier_scraper - INFO - Processing page 8: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-22 12:23:21,847 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 (attempt 1/3)
+2025-07-22 12:23:21,848 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:21,848 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:21,853 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:21,854 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:21,854 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-22 12:23:24,055 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 in 1.60s...
+2025-07-22 12:23:25,657 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 (attempt 2/3)
+2025-07-22 12:23:25,658 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:25,659 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:25,664 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:25,665 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:25,666 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-22 12:23:26,906 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-22 12:23:26,907 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8
+2025-07-22 12:23:27,612 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=8 (Size: 648471 bytes)
+2025-07-22 12:23:27,855 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 8
+2025-07-22 12:23:27,856 - configurable_supplier_scraper - INFO - Processing page 9: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-22 12:23:27,856 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 (attempt 1/3)
+2025-07-22 12:23:27,857 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:27,857 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:27,862 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:27,863 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:23:27,863 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:23:27,864 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:23:27,864 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:23:27,874 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:23:27,874 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:23:30,226 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:23:30,573 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:23:30,574 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:23:30,575 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:23:30,575 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:23:30,576 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:30,576 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-22 12:23:33,113 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 in 1.69s...
+2025-07-22 12:23:34,806 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 (attempt 2/3)
+2025-07-22 12:23:34,807 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:34,807 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:34,815 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:34,816 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:34,816 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-22 12:23:37,298 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-22 12:23:37,299 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9
+2025-07-22 12:23:37,453 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=9 (Size: 648975 bytes)
+2025-07-22 12:23:37,695 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 9
+2025-07-22 12:23:37,696 - configurable_supplier_scraper - INFO - Processing page 10: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-22 12:23:37,696 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 (attempt 1/3)
+2025-07-22 12:23:37,697 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:37,698 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:37,703 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:37,704 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:37,704 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-22 12:23:39,863 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 in 1.99s...
+2025-07-22 12:23:41,857 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 (attempt 2/3)
+2025-07-22 12:23:41,858 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:41,858 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:41,865 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:41,866 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:41,867 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-22 12:23:43,321 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-22 12:23:43,322 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10
+2025-07-22 12:23:44,051 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=10 (Size: 635576 bytes)
+2025-07-22 12:23:44,396 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 10
+2025-07-22 12:23:44,397 - configurable_supplier_scraper - INFO - Processing page 11: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-22 12:23:44,397 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 (attempt 1/3)
+2025-07-22 12:23:44,398 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:44,398 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:44,404 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:44,405 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:23:44,405 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:23:44,406 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:23:44,406 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:23:44,416 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:23:44,416 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:23:46,750 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:23:47,086 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:23:47,087 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:23:47,087 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:23:47,088 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:23:47,088 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:47,089 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-22 12:23:49,253 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 in 1.60s...
+2025-07-22 12:23:50,052 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 (attempt 2/3)
+2025-07-22 12:23:50,052 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:50,053 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:50,058 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:50,059 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:50,059 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-22 12:23:52,815 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-22 12:23:52,815 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11
+2025-07-22 12:23:52,948 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=11 (Size: 634814 bytes)
+2025-07-22 12:23:53,190 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 11
+2025-07-22 12:23:53,190 - configurable_supplier_scraper - INFO - Processing page 12: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-22 12:23:53,191 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 (attempt 1/3)
+2025-07-22 12:23:53,191 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:53,192 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:53,197 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:53,198 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:53,198 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-22 12:23:55,241 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 in 2.15s...
+2025-07-22 12:23:57,394 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 (attempt 2/3)
+2025-07-22 12:23:57,395 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:57,396 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:57,401 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:57,402 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:23:57,402 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-22 12:23:58,527 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-22 12:23:58,527 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12
+2025-07-22 12:23:58,844 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=12 (Size: 646767 bytes)
+2025-07-22 12:23:59,087 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 12
+2025-07-22 12:23:59,087 - configurable_supplier_scraper - INFO - Processing page 13: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-22 12:23:59,088 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 (attempt 1/3)
+2025-07-22 12:23:59,088 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:23:59,089 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:23:59,094 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:23:59,095 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:23:59,095 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:23:59,096 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:23:59,097 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:23:59,106 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:23:59,107 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:24:01,453 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:24:01,818 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:24:01,819 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:24:01,819 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:24:01,820 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:24:01,820 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:01,821 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-22 12:24:04,195 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 in 2.00s...
+2025-07-22 12:24:06,201 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 (attempt 2/3)
+2025-07-22 12:24:06,202 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:06,203 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:06,211 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:06,211 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:06,212 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-22 12:24:09,048 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-22 12:24:09,049 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13
+2025-07-22 12:24:09,267 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=13 (Size: 646826 bytes)
+2025-07-22 12:24:09,615 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 13
+2025-07-22 12:24:09,616 - configurable_supplier_scraper - INFO - Processing page 14: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14
+2025-07-22 12:24:09,617 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14 (attempt 1/3)
+2025-07-22 12:24:09,617 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:09,618 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:09,623 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:09,624 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:09,624 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14
+2025-07-22 12:24:11,838 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14 in 2.24s...
+2025-07-22 12:24:14,081 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14 (attempt 2/3)
+2025-07-22 12:24:14,082 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:14,083 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:14,087 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:14,088 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:14,088 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14
+2025-07-22 12:24:16,363 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14
+2025-07-22 12:24:16,364 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14
+2025-07-22 12:24:16,503 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=14 (Size: 634605 bytes)
+2025-07-22 12:24:16,741 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 14
+2025-07-22 12:24:16,741 - configurable_supplier_scraper - INFO - Processing page 15: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15
+2025-07-22 12:24:16,742 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15 (attempt 1/3)
+2025-07-22 12:24:16,743 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:16,743 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:16,748 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:16,749 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:24:16,750 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:24:16,750 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:24:16,750 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:24:16,760 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:24:16,760 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:24:19,125 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:24:19,486 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:24:19,486 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:24:19,487 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:24:19,488 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:24:19,488 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:19,489 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15
+2025-07-22 12:24:21,724 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15 in 2.04s...
+2025-07-22 12:24:23,069 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15 (attempt 2/3)
+2025-07-22 12:24:23,071 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:23,071 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:23,078 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:23,080 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:23,080 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15
+2025-07-22 12:24:25,230 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15
+2025-07-22 12:24:25,231 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15
+2025-07-22 12:24:25,365 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=15 (Size: 572106 bytes)
+2025-07-22 12:24:25,569 - configurable_supplier_scraper - INFO - Found 17 new product URLs on page 15
+2025-07-22 12:24:25,570 - configurable_supplier_scraper - INFO - Processing page 16: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16
+2025-07-22 12:24:25,571 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16 (attempt 1/3)
+2025-07-22 12:24:25,571 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:25,571 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:25,577 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:25,578 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:25,578 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16
+2025-07-22 12:24:27,303 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16 in 2.31s...
+2025-07-22 12:24:29,624 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16 (attempt 2/3)
+2025-07-22 12:24:29,624 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:29,625 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:29,630 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:29,631 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:29,631 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16
+2025-07-22 12:24:31,046 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16
+2025-07-22 12:24:31,046 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16
+2025-07-22 12:24:31,140 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/party-gift/wholesale-partyware?p=16 (Size: 336447 bytes)
+2025-07-22 12:24:31,266 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 16
+2025-07-22 12:24:31,267 - configurable_supplier_scraper - INFO - Collected 297 total product URLs across 16 pages
+2025-07-22 12:24:31,268 - configurable_supplier_scraper - INFO - Found 297 total product URLs across all pages
+2025-07-22 12:24:31,269 - configurable_supplier_scraper - INFO - Visiting product page 1/297: https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack
+2025-07-22 12:24:31,269 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack (attempt 1/3)
+2025-07-22 12:24:31,270 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:31,274 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:31,281 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:31,282 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:24:31,282 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:24:31,283 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:24:31,283 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:24:31,295 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:24:31,296 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:24:33,627 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:24:33,988 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:24:33,989 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:24:33,989 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:24:33,990 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:24:33,990 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:33,991 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack
+2025-07-22 12:24:36,407 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack in 2.33s...
+2025-07-22 12:24:38,738 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack (attempt 2/3)
+2025-07-22 12:24:38,738 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:38,739 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:38,745 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:38,745 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:38,746 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack
+2025-07-22 12:24:40,257 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack
+2025-07-22 12:24:40,258 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack
+2025-07-22 12:24:40,380 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pink-3-ply-paper-napkins-33cm-20-pack (Size: 670628 bytes)
+2025-07-22 12:24:40,778 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 1 to shared accumulator (total: 1145)
+2025-07-22 12:24:40,779 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Pink 3 Ply Paper Napkins 33cm 20 Pack - £0.67 (EAN: 5030481991066)
+2025-07-22 12:24:40,814 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1145/297
+2025-07-22 12:24:40,815 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1145 processed (total in cache: 1145)
+2025-07-22 12:24:40,815 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1145
+2025-07-22 12:24:40,816 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1145, frequency=2, enabled=True
+2025-07-22 12:24:40,816 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1145, modulo=1
+2025-07-22 12:24:40,850 - configurable_supplier_scraper - INFO - Visiting product page 2/297: https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack
+2025-07-22 12:24:40,851 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack (attempt 1/3)
+2025-07-22 12:24:40,852 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:40,852 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:40,859 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:40,860 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:40,860 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack
+2025-07-22 12:24:43,302 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack in 1.72s...
+2025-07-22 12:24:45,033 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack (attempt 2/3)
+2025-07-22 12:24:45,034 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:45,035 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:45,042 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:45,043 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:45,043 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack
+2025-07-22 12:24:47,379 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack
+2025-07-22 12:24:47,379 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack
+2025-07-22 12:24:47,512 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/jaunty-assorted-coloured-flame-birthday-candles-12-pack (Size: 672188 bytes)
+2025-07-22 12:24:47,793 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 2 to shared accumulator (total: 1146)
+2025-07-22 12:24:47,794 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Jaunty Assorted Coloured Flame Birthday Candles 12 Pack - £0.75 (EAN: 5056683920116)
+2025-07-22 12:24:47,822 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1146/297
+2025-07-22 12:24:47,823 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1146 processed (total in cache: 1146)
+2025-07-22 12:24:47,824 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1146
+2025-07-22 12:24:47,824 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1146, frequency=2, enabled=True
+2025-07-22 12:24:47,825 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1146, modulo=0
+2025-07-22 12:24:47,825 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:24:47,826 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-22 12:24:47,826 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:24:47,826 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-22 12:24:47,827 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-22 12:24:47,831 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-22 12:24:47,831 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 1146 products to cache...
+2025-07-22 12:24:47,832 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:24:47,849 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 1144 existing products for deduplication
+2025-07-22 12:24:47,851 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 1146 URL duplicates and 0 EAN duplicates.
+2025-07-22 12:24:47,852 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:24:47,908 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 1144 products (0 new) to cache: poundwholesale-co-uk_products_cache.json (size: 671809 bytes)
+2025-07-22 12:24:47,908 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 1146 products to cache (every 2 products)
+2025-07-22 12:24:47,951 - configurable_supplier_scraper - INFO - Visiting product page 3/297: https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack
+2025-07-22 12:24:47,951 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack (attempt 1/3)
+2025-07-22 12:24:47,952 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:47,952 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:47,958 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:47,958 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:24:47,959 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:24:47,959 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:24:47,959 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:24:47,969 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:24:47,969 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:24:50,301 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:24:50,683 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:24:50,684 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:24:50,684 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:24:50,685 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:24:50,685 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:50,685 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack
+2025-07-22 12:24:53,433 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack in 2.08s...
+2025-07-22 12:24:54,801 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack (attempt 2/3)
+2025-07-22 12:24:54,802 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:54,802 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:54,808 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:54,808 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:54,809 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack
+2025-07-22 12:24:57,670 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack
+2025-07-22 12:24:57,671 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack
+2025-07-22 12:24:57,790 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/ember-bbq-bamboo-gun-skewers-50-pack (Size: 669522 bytes)
+2025-07-22 12:24:58,061 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 3 to shared accumulator (total: 1147)
+2025-07-22 12:24:58,062 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Ember BBQ Bamboo Gun Skewers 50 Pack - £0.56 (EAN: 5056170352901)
+2025-07-22 12:24:58,094 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1147/297
+2025-07-22 12:24:58,094 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1147 processed (total in cache: 1147)
+2025-07-22 12:24:58,095 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1147
+2025-07-22 12:24:58,095 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1147, frequency=2, enabled=True
+2025-07-22 12:24:58,096 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1147, modulo=1
+2025-07-22 12:24:58,121 - configurable_supplier_scraper - INFO - Visiting product page 4/297: https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack
+2025-07-22 12:24:58,121 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack (attempt 1/3)
+2025-07-22 12:24:58,122 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:24:58,122 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:24:58,127 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:24:58,128 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:24:58,128 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack
+2025-07-22 12:25:01,216 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack in 2.14s...
+2025-07-22 12:25:03,363 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack (attempt 2/3)
+2025-07-22 12:25:03,363 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:25:03,363 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:25:03,368 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:25:03,369 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:25:03,369 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack
+2025-07-22 12:25:06,339 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack
+2025-07-22 12:25:06,339 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack
+2025-07-22 12:25:06,463 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack (Size: 687038 bytes)
+2025-07-22 12:25:06,836 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 4 to shared accumulator (total: 1148)
+2025-07-22 12:25:06,837 - configurable_supplier_scraper - INFO - ✅ Extracted product 4: Bello Assorted Colour Paper Umbrella Straws 30 Pack - £1.06 (EAN: 5015302422912)
+2025-07-22 12:25:06,860 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1148/297
+2025-07-22 12:25:06,861 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1148 processed (total in cache: 1148)
+2025-07-22 12:25:06,861 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1148
+2025-07-22 12:25:06,861 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1148, frequency=2, enabled=True
+2025-07-22 12:25:06,862 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1148, modulo=0
+2025-07-22 12:25:06,862 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:25:06,863 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-07-22 12:25:06,863 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:25:06,864 - PassiveExtractionWorkflow - WARNING - WSL path detected: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json. Using WSL-compatible approach.
+2025-07-22 12:25:06,864 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Directory extracted via os.path.dirname: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-22 12:25:06,867 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured via os.makedirs: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products
+2025-07-22 12:25:06,868 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 1148 products to cache...
+2025-07-22 12:25:06,868 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:25:06,883 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 1144 existing products for deduplication
+2025-07-22 12:25:06,885 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 1148 URL duplicates and 0 EAN duplicates.
+2025-07-22 12:25:06,885 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-07-22 12:25:06,941 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 1144 products (0 new) to cache: poundwholesale-co-uk_products_cache.json (size: 671809 bytes)
+2025-07-22 12:25:06,942 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 1148 products to cache (every 2 products)
+2025-07-22 12:25:06,969 - configurable_supplier_scraper - INFO - Visiting product page 5/297: https://www.poundwholesale.co.uk/paper-plates-white-18cm-40-pack
+2025-07-22 12:25:06,969 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/paper-plates-white-18cm-40-pack (attempt 1/3)
+2025-07-22 12:25:06,970 - utils.browser_manager - WARNING - 🔴 Browser health check failed: 'str' object is not callable
+2025-07-22 12:25:06,970 - utils.browser_manager - WARNING - 🔴 Browser health check failed - attempting restart
+2025-07-22 12:25:06,975 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 0.0 MB
+2025-07-22 12:25:06,975 - utils.browser_manager - WARNING - 🔴 Browser restart needed: 4 connection failures
+2025-07-22 12:25:06,976 - utils.browser_manager - INFO - 🔄 Starting graceful browser restart...
+2025-07-22 12:25:06,976 - utils.browser_manager - INFO - 🧹 Starting browser cleanup...
+2025-07-22 12:25:06,977 - utils.browser_manager - INFO - 🔌 Disconnecting from persistent Chrome instance (keeping browser running)
+2025-07-22 12:25:06,987 - utils.browser_manager - INFO - 🎭 Stopped Playwright instance (browser remains running)
+2025-07-22 12:25:06,987 - utils.browser_manager - INFO - ✅ Disconnected from persistent browser (Chrome debug port remains active)
+2025-07-22 12:25:09,327 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-22 12:25:09,702 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-22 12:25:09,703 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-22 12:25:09,703 - utils.browser_circuit_breaker - INFO - Circuit breaker manually reset to CLOSED state
+2025-07-22 12:25:09,704 - utils.browser_manager - INFO - ✅ Browser restart completed successfully
+2025-07-22 12:25:09,704 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-22 12:25:09,704 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/paper-plates-white-18cm-40-pack
+2025-07-22 12:25:12,763 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/paper-plates-white-18cm-40-pack in 2.21s...
+2025-07-22 12:25:13,212 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-22 12:25:13,214 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

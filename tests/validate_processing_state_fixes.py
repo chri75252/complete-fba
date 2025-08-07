@@ -1,0 +1,317 @@
+#!/usr/bin/env python3
+"""
+Processing State Fixes Validation Script
+========================================
+
+This script validates that the surgical fixes for processing state discrepancies
+are working correctly by checking the processing state file after a test run.
+
+Based on comprehensive analysis from July 31, 2025 - validates fixes for:
+1. URL discovery integration (update_discovered_products_in_category)  
+2. Category URL tracking
+3. Product index tracking during processing
+4. Gap processing detection for reverse gap scenario
+
+Author: Claude Code - Processing State Fix Implementation
+Date: July 31, 2025
+"""
+
+import json
+import sys
+import os
+from pathlib import Path
+from typing import Dict, Any, List, Optional
+from datetime import datetime
+
+# Add project root to path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+def load_processing_state() -> Optional[Dict[str, Any]]:
+    """Load the latest processing state file."""
+    processing_states_dir = project_root / "OUTPUTS" / "CACHE" / "processing_states"
+    
+    if not processing_states_dir.exists():
+        print(f"❌ Processing states directory not found: {processing_states_dir}")
+        return None
+    
+    # Find the most recent processing state file
+    state_files = list(processing_states_dir.glob("poundwholesale*.json"))
+    if not state_files:
+        print(f"❌ No processing state files found in {processing_states_dir}")
+        return None
+    
+    # Get the most recent file
+    latest_file = max(state_files, key=lambda f: f.stat().st_mtime)
+    print(f"📂 Loading processing state from: {latest_file}")
+    
+    try:
+        with open(latest_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"❌ Failed to load processing state: {e}")
+        return None
+
+def load_latest_log() -> Optional[List[str]]:
+    """Load the latest log file to compare with processing state."""
+    logs_dir = project_root / "logs" / "debug"
+    
+    if not logs_dir.exists():
+        print(f"❌ Logs directory not found: {logs_dir}")
+        return None
+    
+    # Find the most recent log file
+    log_files = list(logs_dir.glob("run_custom_poundwholesale_*.log"))
+    if not log_files:
+        print(f"❌ No log files found in {logs_dir}")
+        return None
+    
+    latest_log = max(log_files, key=lambda f: f.stat().st_mtime)
+    print(f"📂 Loading log from: {latest_log}")
+    
+    try:
+        with open(latest_log, 'r', encoding='utf-8') as f:
+            return f.readlines()
+    except Exception as e:
+        print(f"❌ Failed to load log file: {e}")
+        return None
+
+def extract_log_metrics(log_lines: List[str]) -> Dict[str, Any]:
+    """Extract metrics from log lines for comparison."""
+    metrics = {
+        'categories_processed': [],
+        'urls_discovered': {},
+        'products_processed': 0,
+        'reverse_gap_detected': False,
+        'startup_analysis_completed': False
+    }
+    
+    for line in log_lines:
+        # Extract category processing
+        if "Scraping category:" in line:
+            category_url = line.split("Scraping category: ")[1].strip()
+            metrics['categories_processed'].append(category_url)
+        
+        # Extract URL discovery counts
+        if "Found" in line and "total product URLs across" in line:
+            try:
+                count = int(line.split("Found ")[1].split(" total product URLs")[0])
+                if metrics['categories_processed']:
+                    current_category = metrics['categories_processed'][-1]
+                    metrics['urls_discovered'][current_category] = count
+            except:
+                pass
+        
+        # Extract product processing
+        if "Processing supplier product" in line and "/" in line:
+            try:
+                # Extract current/total from "Processing supplier product X/Y:"
+                parts = line.split("Processing supplier product ")[1].split(":")[0]
+                current, total = parts.split("/")
+                metrics['products_processed'] = max(metrics['products_processed'], int(current))
+            except:
+                pass
+        
+        # Check for reverse gap detection
+        if "REVERSE GAP DETECTED" in line:
+            metrics['reverse_gap_detected'] = True
+        
+        # Check for startup analysis
+        if "Startup analysis performed" in line:
+            metrics['startup_analysis_completed'] = True
+    
+    return metrics
+
+def validate_fix_1_url_discovery(state: Dict[str, Any], log_metrics: Dict[str, Any]) -> bool:
+    """Validate Fix 1: URL Discovery Integration."""
+    print("\n🔍 VALIDATING FIX 1: URL Discovery Integration")
+    
+    discovered_in_state = state.get('supplier_extraction_progress', {}).get('discovered_products_in_current_category', 0)
+    current_category = state.get('supplier_extraction_progress', {}).get('current_category_url', '')
+    
+    # Check if we have URL discovery data in logs
+    urls_discovered_in_logs = log_metrics.get('urls_discovered', {})
+    
+    success = True
+    
+    if current_category and current_category in urls_discovered_in_logs:
+        expected_count = urls_discovered_in_logs[current_category]
+        if discovered_in_state == expected_count:
+            print(f"✅ URL discovery integration working: {discovered_in_state} products discovered for {current_category}")
+        else:
+            print(f"❌ URL discovery mismatch: State shows {discovered_in_state}, log shows {expected_count}")
+            success = False
+    else:
+        if discovered_in_state > 0:
+            print(f"✅ URL discovery integration working: {discovered_in_state} products discovered")
+        else:
+            print(f"❌ URL discovery not working: State shows {discovered_in_state} discovered products")
+            success = False
+    
+    return success
+
+def validate_fix_2_category_url_tracking(state: Dict[str, Any], log_metrics: Dict[str, Any]) -> bool:
+    """Validate Fix 2: Category URL Tracking."""
+    print("\n🔍 VALIDATING FIX 2: Category URL Tracking")
+    
+    current_category_in_state = state.get('supplier_extraction_progress', {}).get('current_category_url', '')
+    categories_in_logs = log_metrics.get('categories_processed', [])
+    
+    success = True
+    
+    if categories_in_logs:
+        expected_category = categories_in_logs[-1]  # Last processed category
+        if current_category_in_state == expected_category:
+            print(f"✅ Category URL tracking working: {current_category_in_state}")
+        else:
+            print(f"❌ Category URL mismatch: State shows '{current_category_in_state}', log shows '{expected_category}'")
+            success = False
+    else:
+        if current_category_in_state:
+            print(f"✅ Category URL tracking working: {current_category_in_state}")
+        else:
+            print(f"❌ Category URL tracking not working: No current category in state")
+            success = False
+    
+    return success
+
+def validate_fix_3_product_index_tracking(state: Dict[str, Any], log_metrics: Dict[str, Any]) -> bool:
+    """Validate Fix 3: Product Index Tracking."""
+    print("\n🔍 VALIDATING FIX 3: Product Index Tracking")
+    
+    current_product_index = state.get('supplier_extraction_progress', {}).get('current_product_index_in_category', 0)
+    products_processed_in_logs = log_metrics.get('products_processed', 0)
+    
+    success = True
+    
+    if products_processed_in_logs > 0:
+        if current_product_index > 0:
+            print(f"✅ Product index tracking working: State shows {current_product_index}, log shows {products_processed_in_logs} products processed")
+        else:
+            print(f"❌ Product index not updating: State shows {current_product_index}, but log shows {products_processed_in_logs} products processed")
+            success = False
+    else:
+        print(f"ℹ️ No products processed in this run - index tracking cannot be validated")
+    
+    return success
+
+def validate_fix_4_gap_processing_detection(state: Dict[str, Any], log_metrics: Dict[str, Any]) -> bool:
+    """Validate Fix 4: Gap Processing Detection."""
+    print("\n🔍 VALIDATING FIX 4: Gap Processing Detection")
+    
+    gap_processing = state.get('gap_processing', {})
+    startup_analysis_completed = gap_processing.get('startup_analysis_completed', False)
+    reverse_gap_detected = gap_processing.get('reverse_gap_detected', False)
+    
+    # Check runtime settings for reverse gap scenario
+    runtime_settings = state.get('runtime_settings', {})
+    linking_map_count = runtime_settings.get('linking_map_count', 0)
+    supplier_cache_count = runtime_settings.get('supplier_cache_count', 0)
+    
+    success = True
+    
+    print(f"📊 Runtime Settings: Linking Map = {linking_map_count}, Cache = {supplier_cache_count}")
+    
+    if startup_analysis_completed:
+        print("✅ Startup analysis completed")
+    else:
+        print("❌ Startup analysis not completed")
+        success = False
+    
+    # Check for reverse gap scenario
+    if linking_map_count > supplier_cache_count:
+        if reverse_gap_detected:
+            print(f"✅ Reverse gap correctly detected: {linking_map_count} > {supplier_cache_count}")
+        else:
+            print(f"❌ Reverse gap not detected in state, but should be: {linking_map_count} > {supplier_cache_count}")
+            success = False
+    else:
+        print(f"ℹ️ No reverse gap scenario: {linking_map_count} <= {supplier_cache_count}")
+    
+    return success
+
+def print_summary(state: Dict[str, Any]) -> None:
+    """Print a summary of the current processing state."""
+    print("\n📊 PROCESSING STATE SUMMARY")
+    print("=" * 50)
+    
+    # Basic info
+    schema_version = state.get('schema_version', 'unknown')
+    last_updated = state.get('last_updated', 'unknown')
+    print(f"Schema Version: {schema_version}")
+    print(f"Last Updated: {last_updated}")
+    
+    # Progress info
+    supplier_progress = state.get('supplier_extraction_progress', {})
+    print(f"Current Category: {supplier_progress.get('current_category_url', 'none')}")
+    print(f"Products Discovered: {supplier_progress.get('discovered_products_in_current_category', 0)}")
+    print(f"Current Product Index: {supplier_progress.get('current_product_index_in_category', 0)}")
+    print(f"Total Products in Category: {supplier_progress.get('total_products_in_current_category', 0)}")
+    
+    # Gap processing info
+    gap_processing = state.get('gap_processing', {})
+    print(f"Gap Processing Phase: {gap_processing.get('phase', 'unknown')}")
+    print(f"Reverse Gap Detected: {gap_processing.get('reverse_gap_detected', False)}")
+    print(f"Startup Analysis Completed: {gap_processing.get('startup_analysis_completed', False)}")
+    
+    # Runtime settings
+    runtime_settings = state.get('runtime_settings', {})
+    linking_map_count = runtime_settings.get('linking_map_count', 0)
+    supplier_cache_count = runtime_settings.get('supplier_cache_count', 0)
+    print(f"Linking Map Count: {linking_map_count}")
+    print(f"Supplier Cache Count: {supplier_cache_count}")
+
+def main():
+    """Main validation function."""
+    print("🧪 PROCESSING STATE FIXES VALIDATION")
+    print("=" * 50)
+    print(f"Timestamp: {datetime.now().isoformat()}")
+    print(f"Project Root: {project_root}")
+    
+    # Load processing state
+    state = load_processing_state()
+    if not state:
+        print("❌ Cannot validate without processing state file")
+        return False
+    
+    # Load log file
+    log_lines = load_latest_log()
+    if not log_lines:
+        print("❌ Cannot validate without log file")
+        return False
+    
+    # Extract metrics from log
+    log_metrics = extract_log_metrics(log_lines)
+    print(f"📊 Log Metrics Extracted: {len(log_metrics)} categories, {sum(log_metrics['urls_discovered'].values())} URLs discovered")
+    
+    # Run validations
+    validations = [
+        validate_fix_1_url_discovery(state, log_metrics),
+        validate_fix_2_category_url_tracking(state, log_metrics),
+        validate_fix_3_product_index_tracking(state, log_metrics),
+        validate_fix_4_gap_processing_detection(state, log_metrics)
+    ]
+    
+    # Print summary
+    print_summary(state)
+    
+    # Final result
+    all_passed = all(validations)
+    passed_count = sum(validations)
+    
+    print(f"\n🎯 VALIDATION RESULTS")
+    print("=" * 50)
+    print(f"Fixes Validated: {passed_count}/4")
+    
+    if all_passed:
+        print("✅ ALL PROCESSING STATE FIXES WORKING CORRECTLY!")
+        print("🎉 The system should now show accurate processing state metrics")
+    else:
+        print("❌ Some fixes need attention")
+        print("🔧 Check the individual validation results above")
+    
+    return all_passed
+
+if __name__ == "__main__":
+    success = main()
+    sys.exit(0 if success else 1)
