@@ -22,6 +22,7 @@ The Amazon FBA Agent System v3.7+ is a production-ready automation platform desi
 - ✅ **Atomic File Operations**: Windows-native atomic saves eliminating file permission issues
 - ✅ **Browser Health Management**: Circuit breaker protection and automatic restart capabilities
 - ✅ **Multi-Category Deduplication**: Products appearing in multiple categories processed only once
+- ✅ **Configurable Financial Reports**: FBA calculator auto-runs after every N new linking map entries (configurable)
 - ✅ **Marathon Session Support**: 18+ hour processing without cascading failures
 
 ---

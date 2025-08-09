@@ -111,6 +111,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # 🚀 HASH OPTIMIZATION: Import hash lookup optimizer for O(1) performance
 sys.path.append(os.path.join(current_dir, '..', 'utils'))
 from hash_lookup_optimizer import HashLookupOptimizer, LegacyPerformanceComparator
+from url_filter import filter_urls
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(current_dir)
 if parent_dir not in sys.path:
@@ -1090,13 +1091,19 @@ class PassiveExtractionWorkflow:
         Args:
             entry: Linking map entry to add
         """
-        # Add to the main linking map
-        self.linking_map.append(entry)
-        
-        # Add to hash indexes for O(1) lookups
-        self.hash_optimizer.add_entry(entry)
-        
-        self.log.debug(f"🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: {entry.get('supplier_ean', 'N/A')}, URL: {entry.get('supplier_url', 'N/A')}")
+        # Add to hash indexes first to detect duplicates
+        is_new_entry = self.hash_optimizer.add_entry(entry)
+
+        if is_new_entry:
+            # Only append to main linking map if truly new
+            self.linking_map.append(entry)
+            self.log.debug(
+                f"🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: {entry.get('supplier_ean', 'N/A')}, URL: {entry.get('supplier_url', 'N/A')}"
+            )
+        else:
+            self.log.debug(
+                f"🔄 HASH OPTIMIZATION: Duplicate entry updated - EAN: {entry.get('supplier_ean', 'N/A')}, URL: {entry.get('supplier_url', 'N/A')}"
+            )
         
         # Update performance metrics
         stats = self.hash_optimizer.get_index_stats()
@@ -3561,6 +3568,12 @@ Return ONLY valid JSON, no additional text."""
                 # Update detailed progress tracking
                 if progress_config.get("enabled", True) and hasattr(self, 'state_manager'):
                     category_index = (batch_num - 1) * supplier_extraction_batch_size + subcategory_index
+                    # Initialize category tracking for precise resumption
+                    self.state_manager.initialize_category_processing(
+                        category_index=category_index - 1,
+                        category_url=category_url,
+                        total_categories=len(category_urls)
+                    )
                     self.state_manager.update_supplier_extraction_progress(
                         category_index=category_index,
                         total_categories=len(category_urls),
@@ -3662,6 +3675,8 @@ Return ONLY valid JSON, no additional text."""
                         # Update the main processing index during supplier extraction based on actual cache length
                         actual_cache_count = len(getattr(self, '_current_all_products', []))
                         self.state_manager.update_processing_index(actual_cache_count, total_products)
+                        if product_url:
+                            self.state_manager.update_supplier_extraction_progress_new(product_url)
                         self.log.info(f"🔍 SUPPLIER STATE UPDATE: Index updated to {actual_cache_count}/{total_products}")
                     except Exception as e:
                         self.log.error(f"❌ SUPPLIER STATE UPDATE FAILED: {e}")
@@ -3782,6 +3797,8 @@ Return ONLY valid JSON, no additional text."""
     async def _get_amazon_data(self, product_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Handle Amazon search logic (EAN first, then title)."""
         supplier_ean = product_data.get("ean")
+        if hasattr(self, 'state_manager'):
+            self.state_manager.update_amazon_analysis_progress_new(product_data.get("url", ""))
         
         # 🚨 FIX: Handle multiple EANs - use first valid EAN only for Amazon search
         if supplier_ean:
@@ -4197,10 +4214,22 @@ Return ONLY valid JSON, no additional text."""
                     )
                 
                 if chunk_products:
-                    # Immediately analyze these products
-                    # Use the same detailed processing logic as main workflow
+                    urls = [p.get("url") for p in chunk_products if p.get("url")]
+                    cached_products = existing_products if actual_cache_file else []
+                    filtered = filter_urls(urls, self.linking_map, cached_products)
+
+                    analysis_products = [
+                        p for p in chunk_products
+                        if p.get("url") in filtered["needs_amazon_only"]
+                        or p.get("url") in filtered["needs_full_extraction"]
+                    ]
+                    skipped = len(filtered["skip_entirely"])
+                    if skipped:
+                        self.log.info(f"🔁 Skipping {skipped} products already in linking map")
+
+                    # Immediately analyze remaining products
                     chunk_results = await self._process_chunk_with_main_workflow_logic(
-                        chunk_products, max_products_per_cycle
+                        analysis_products, max_products_per_cycle
                     )
                     profitable_results.extend(chunk_results)
                     
