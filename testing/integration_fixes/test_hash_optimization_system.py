@@ -339,6 +339,40 @@ class HashOptimizationTestSuite(unittest.TestCase):
         self.logger.info(f"   🔗 Processed URLs: {len(processed_urls)}")
 
 
+    def test_08_duplicate_prevention(self):
+        """Ensure duplicate entries update existing records instead of duplicating."""
+        self.logger.info("🧪 TEST 8: Duplicate Prevention")
+
+        # Start with empty optimizer and build indexes
+        self.hash_optimizer.build_indexes([])
+
+        entry = {
+            "supplier_ean": "DUP123",
+            "supplier_url": "https://supplier.com/product/dup",
+            "amazon_asin": "B000000001",
+            "supplier_title": "Original",
+        }
+
+        added_first = self.hash_optimizer.add_entry(entry)
+        self.assertTrue(added_first, "First addition should be new")
+
+        # Add duplicate with updated data
+        dup_entry = entry.copy()
+        dup_entry["supplier_title"] = "Updated"
+        added_second = self.hash_optimizer.add_entry(dup_entry)
+        self.assertFalse(added_second, "Duplicate should not create new entry")
+
+        found, existing = self.hash_optimizer.check_product_in_linking_map(
+            supplier_ean="DUP123", supplier_url="https://supplier.com/product/dup"
+        )
+        self.assertTrue(found, "Existing entry should be found")
+        self.assertEqual(
+            existing["supplier_title"],
+            "Updated",
+            "Existing entry should be updated with new data",
+        )
+
+
 def run_performance_stress_test():
     """Run comprehensive performance stress test"""
     print("🚀 RUNNING PERFORMANCE STRESS TEST")
