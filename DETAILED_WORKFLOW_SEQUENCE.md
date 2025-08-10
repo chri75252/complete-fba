@@ -14,12 +14,22 @@ recorded indices only – user-facing counts never influence recovery.
 3. **Restore system progression** (`current_phase`, category index and product
    indices) from the processing state file for exact resume capability.
 
+## Gap Processing
+Before moving to new categories, the workflow compares the counts of cached
+supplier products with existing linking-map entries. Any surplus cached products
+are treated as a "gap" and are passed directly to Amazon analysis. During this
+phase the system logs an **ENHANCED FILTERING RESULTS** block detailing cache and
+linking-map hits. Once the gap is cleared, normal category processing resumes.
+
 ## Category Loop
-1. **Iterate categories sequentially.** State manager records the category index
-   and URL with `initialize_category_processing`.
+1. **Iterate categories sequentially starting from the resumption index.** The
+   state manager reads `system_progression.current_category_index` on startup so
+   interrupted runs continue with the first unprocessed category. Each category's
+   index and URL are recorded via `initialize_category_processing`.
 2. **Extract product URLs** from the supplier category.
 3. **Update category denominator:** call
-   `update_discovered_products_in_category` so the processing state reflects the
+   `correct_category_totals_realtime` so the processing state reflects the
+
    real product count if the initial estimate was wrong.
 4. **Pre-filter URLs** using `utils.url_filter`:
    - Check the linking map first via `HashLookupOptimizer` indexes; any URL
