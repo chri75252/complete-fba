@@ -46,3 +46,4 @@ def test_correct_category_totals_realtime_updates_denominator():
         data = json.load(f)
     assert data["supplier_extraction_progress"]["total_products_in_current_category"] == 5
     path.unlink(missing_ok=True)
+
