@@ -29,6 +29,7 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
 2. **Extract product URLs** from the supplier category.
 3. **Update category denominator:** call
    `correct_category_totals_realtime` so the processing state reflects the
+
    real product count if the initial estimate was wrong.
 4. **Pre-filter URLs** using `utils.url_filter`:
    - Check the linking map first via `HashLookupOptimizer` indexes; any URL
