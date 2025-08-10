@@ -111,6 +111,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # 🚀 HASH OPTIMIZATION: Import hash lookup optimizer for O(1) performance
 sys.path.append(os.path.join(current_dir, '..', 'utils'))
 from hash_lookup_optimizer import HashLookupOptimizer, LegacyPerformanceComparator
+from url_filter import filter_urls
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(current_dir)
 if parent_dir not in sys.path:
@@ -1090,13 +1091,19 @@ class PassiveExtractionWorkflow:
         Args:
             entry: Linking map entry to add
         """
-        # Add to the main linking map
-        self.linking_map.append(entry)
-        
-        # Add to hash indexes for O(1) lookups
-        self.hash_optimizer.add_entry(entry)
-        
-        self.log.debug(f"🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: {entry.get('supplier_ean', 'N/A')}, URL: {entry.get('supplier_url', 'N/A')}")
+        # Add to hash indexes first to detect duplicates
+        is_new_entry = self.hash_optimizer.add_entry(entry)
+
+        if is_new_entry:
+            # Only append to main linking map if truly new
+            self.linking_map.append(entry)
+            self.log.debug(
+                f"🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: {entry.get('supplier_ean', 'N/A')}, URL: {entry.get('supplier_url', 'N/A')}"
+            )
+        else:
+            self.log.debug(
+                f"🔄 HASH OPTIMIZATION: Duplicate entry updated - EAN: {entry.get('supplier_ean', 'N/A')}, URL: {entry.get('supplier_url', 'N/A')}"
+            )
         
         # Update performance metrics
         stats = self.hash_optimizer.get_index_stats()
@@ -1876,14 +1883,27 @@ class PassiveExtractionWorkflow:
         
         # Process categories sequentially - only NEW products from each category
         chunk_size = supplier_extraction_batch_size
-        total_chunks = (len(category_urls_to_scrape) + chunk_size - 1) // chunk_size
-        
-        for chunk_index in range(total_chunks):
-            start_idx = chunk_index * chunk_size
-            end_idx = min(start_idx + chunk_size, len(category_urls_to_scrape))
+        total_categories = len(category_urls_to_scrape)
+
+        start_category = self.state_manager.state_data.get(
+            "supplier_extraction_progress", {}
+        ).get("current_category_index", 0)
+        if start_category > 0:
+            self.log.info(
+                f"🔄 Resuming category processing from index {start_category}"
+            )
+
+        remaining = total_categories - start_category
+        total_chunks = (remaining + chunk_size - 1) // chunk_size
+
+        for chunk_offset in range(total_chunks):
+            start_idx = start_category + chunk_offset * chunk_size
+            end_idx = min(start_idx + chunk_size, total_categories)
             chunk_category_urls = category_urls_to_scrape[start_idx:end_idx]
-            
-            self.log.info(f"🔄 Processing chunk {chunk_index + 1}/{total_chunks}: categories {start_idx + 1}-{end_idx}")
+
+            self.log.info(
+                f"🔄 Processing chunk {chunk_offset + 1}/{total_chunks}: categories {start_idx + 1}-{end_idx}"
+            )
             
             # Extract NEW products from current chunk of categories
             chunk_products = await self._extract_supplier_products(
@@ -1892,15 +1912,33 @@ class PassiveExtractionWorkflow:
             )
             
             if not chunk_products:
-                self.log.info(f"📋 No NEW products extracted from chunk {chunk_index + 1}")
+                self.log.info(
+                    f"📋 No NEW products extracted from chunk {chunk_offset + 1}"
+                )
+                # Update progress so resumption skips this chunk next run
+                self.state_manager.update_supplier_extraction_progress(
+                    end_idx, total_categories, category_url=chunk_category_urls[-1] if chunk_category_urls else None
+                )
                 continue
-            
-            self.log.info(f"🔍 EXTRACTION RESULT: {len(chunk_products)} NEW products extracted from {len(chunk_category_urls)} categories")
-            
+
+            self.log.info(
+                f"🔍 EXTRACTION RESULT: {len(chunk_products)} NEW products extracted from {len(chunk_category_urls)} categories"
+            )
+
             # CRITICAL FIX: Process only NEW products, not all cached products
-            self.log.info(f"🔍 Processing {len(chunk_products)} products with main workflow logic")
-            
+            self.log.info(
+                f"🔍 Processing {len(chunk_products)} products with main workflow logic"
+            )
+
             # Filter and process only the NEW products from this chunk
+
+            # Update progress after successful extraction so interruptions resume
+            # from the next category rather than repeating work.
+            self.state_manager.update_supplier_extraction_progress(
+                end_idx,
+                total_categories,
+                category_url=chunk_category_urls[-1] if chunk_category_urls else None,
+            )
             
     async def _process_gap_products(self, gap_size: int, supplier_cache_count: int, linking_map_count: int) -> List[Dict[str, Any]]:
         """
@@ -3561,6 +3599,12 @@ Return ONLY valid JSON, no additional text."""
                 # Update detailed progress tracking
                 if progress_config.get("enabled", True) and hasattr(self, 'state_manager'):
                     category_index = (batch_num - 1) * supplier_extraction_batch_size + subcategory_index
+                    # Initialize category tracking for precise resumption
+                    self.state_manager.initialize_category_processing(
+                        category_index=category_index - 1,
+                        category_url=category_url,
+                        total_categories=len(category_urls)
+                    )
                     self.state_manager.update_supplier_extraction_progress(
                         category_index=category_index,
                         total_categories=len(category_urls),
@@ -3611,7 +3655,7 @@ Return ONLY valid JSON, no additional text."""
                     # Get the actual discovered count from scraper (may be more than extracted due to URL cache filtering)
                     # This ensures processing state shows real-time discovery totals, not just processed totals
                     discovered_count = getattr(self.supplier_scraper, 'last_discovered_count', len(products))
-                    self.state_manager.update_discovered_products_in_category(category_url, discovered_count)
+                    self.state_manager.correct_category_totals_realtime(category_url, discovered_count)
                     self.log.info(f"🔄 STATE UPDATE: Updated category {category_url} with {discovered_count} discovered products")
                 
                 # 🚨 REMOVED: Category-based cache saving logic (now handled per-product in progress callback)
@@ -3662,6 +3706,8 @@ Return ONLY valid JSON, no additional text."""
                         # Update the main processing index during supplier extraction based on actual cache length
                         actual_cache_count = len(getattr(self, '_current_all_products', []))
                         self.state_manager.update_processing_index(actual_cache_count, total_products)
+                        if product_url:
+                            self.state_manager.update_supplier_extraction_progress_new(product_url)
                         self.log.info(f"🔍 SUPPLIER STATE UPDATE: Index updated to {actual_cache_count}/{total_products}")
                     except Exception as e:
                         self.log.error(f"❌ SUPPLIER STATE UPDATE FAILED: {e}")
@@ -3782,6 +3828,8 @@ Return ONLY valid JSON, no additional text."""
     async def _get_amazon_data(self, product_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Handle Amazon search logic (EAN first, then title)."""
         supplier_ean = product_data.get("ean")
+        if hasattr(self, 'state_manager'):
+            self.state_manager.update_amazon_analysis_progress_new(product_data.get("url", ""))
         
         # 🚨 FIX: Handle multiple EANs - use first valid EAN only for Amazon search
         if supplier_ean:
@@ -4175,7 +4223,9 @@ Return ONLY valid JSON, no additional text."""
                             self.log.info(f"✅ SUPPLIER CACHE HIT: Chunk categories already extracted ({len(products_for_chunk)} products)")
                             chunk_products = products_for_chunk
                         else:
-                            self.log.info(f"🔄 SUPPLIER EXTRACTION: Need to extract remaining products for chunk ({len(products_for_chunk)}/{max_products_per_category * len(chunk_categories)} expected)")
+                            self.log.info(
+                                f"📦 PLAN: chunk capacity {max_products_per_category * len(chunk_categories)}, candidates {len(products_for_chunk)} from cache/index"
+                            )
                             # Extract from this chunk of categories
                             chunk_products = await self._extract_supplier_products(
                                 supplier_url, supplier_name, chunk_categories, 
@@ -4197,10 +4247,22 @@ Return ONLY valid JSON, no additional text."""
                     )
                 
                 if chunk_products:
-                    # Immediately analyze these products
-                    # Use the same detailed processing logic as main workflow
+                    urls = [p.get("url") for p in chunk_products if p.get("url")]
+                    cached_products = existing_products if actual_cache_file else []
+                    filtered = filter_urls(urls, self.linking_map, cached_products)
+
+                    analysis_products = [
+                        p for p in chunk_products
+                        if p.get("url") in filtered["needs_amazon_only"]
+                        or p.get("url") in filtered["needs_full_extraction"]
+                    ]
+                    skipped = len(filtered["skip_entirely"])
+                    if skipped:
+                        self.log.info(f"🔁 Skipping {skipped} products already in linking map")
+
+                    # Immediately analyze remaining products
                     chunk_results = await self._process_chunk_with_main_workflow_logic(
-                        chunk_products, max_products_per_cycle
+                        analysis_products, max_products_per_cycle
                     )
                     profitable_results.extend(chunk_results)
                     
