@@ -42,6 +42,22 @@ class SystemConfigLoader:
         return self._config.get("workflows", {}).get(workflow_key, {})
 
     # ------------------------------------------------------------------
+    # backward compatible helpers
+    # ------------------------------------------------------------------
+    def load_config(self) -> Dict[str, Any]:
+        """Return the full parsed configuration.
+
+        Older parts of the codebase expect ``SystemConfigLoader`` to expose a
+        ``load_config`` method that returns the complete JSON structure.  The
+        modern implementation keeps the parsed data in ``self._config`` and
+        offers granular getters.  Providing this method restores backward
+        compatibility without forcing callers to reach into the private
+        attribute directly.
+        """
+
+        return self._config
+
+    # ------------------------------------------------------------------
     # internals
     # ------------------------------------------------------------------
     def _load(self) -> None:
@@ -55,4 +71,5 @@ class SystemConfigLoader:
                 self._config = json.load(fh)
         except Exception as exc:
             log.exception("Failed to parse system config JSON: %s", exc)
-            self._config = {} 
+            self._config = {}
+
