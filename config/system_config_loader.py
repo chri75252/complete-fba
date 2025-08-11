@@ -28,6 +28,10 @@ class SystemConfigLoader:
     def get_system_config(self) -> Dict[str, Any]:
         return self._config.get("system", self._config)
 
+    def get_full_config(self) -> Dict[str, Any]:
+        """Return the entire parsed configuration tree."""
+        return self._config
+
     def get_amazon_config(self) -> Dict[str, Any]:
         return self._config.get("amazon", {})
 

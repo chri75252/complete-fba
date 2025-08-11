@@ -457,9 +457,30 @@ class FixedEnhancedStateManager:
         except Exception as e:
             log.error(f"❌ Failed to save state: {e}")
 
+        sp = self.state_data.get("system_progression", {})
+        phase = sp.get("current_phase", "unknown")
+        cci = sp.get("current_category_index", 0)
+        tc = sp.get("total_categories", 0)
+        cpi = sp.get("current_product_index_in_category", 0)
+        tpc = sp.get("total_products_in_current_category", 0)
+        ccu = sp.get("current_category_url", "")
+        log.info(
+            f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}"
+        )
+
     def save_state_atomic(self):
         """Atomic save wrapper used by new progression methods"""
         self.save_state(preserve_interruption_state=True)
+
+    def validate_and_repair_state(self) -> None:
+        """Basic sanity checks to ensure resume pointers are within bounds."""
+        sp = self.state_data.get("system_progression", {})
+        total = sp.get("total_categories", 0)
+        if sp.get("current_category_index", 0) > total:
+            sp["current_category_index"] = max(total - 1, 0)
+        if sp.get("current_product_index_in_category", 0) > sp.get("total_products_in_current_category", 0):
+            sp["current_product_index_in_category"] = 0
+        self.state_data["system_progression"] = sp
 
     def _calculate_file_grounded_totals(self) -> Dict[str, Any]:
         """

@@ -26,17 +26,19 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
    state manager reads `system_progression.current_category_index` on startup so
    interrupted runs continue with the first unprocessed category. Each category's
    index and URL are recorded via `initialize_category_processing`.
-2. **Extract product URLs** from the supplier category.
-3. **Update category denominator:** call
+2. **Extract product URLs** from the supplier category (always fresh).
+3. **Persist a category manifest** listing all URLs and their count
+   (`OUTPUTS/manifests/<supplier>/<slug>.json`).
+4. **Update category denominator:** call
    `correct_category_totals_realtime` so the processing state reflects the
    real product count if the initial estimate was wrong.
-4. **Check extracted URLs against the linking map first.** Any match is
-   considered fully processed and skipped.
-5. **Check remaining URLs against the product cache.** Matches here indicate
-   supplier data already exists, so these URLs are queued for Amazon analysis.
-6. **Whatever remains requires full supplier extraction.** These URLs are
-   appended to the extraction queue.
-7. **Update user-facing counts** (discovered totals) based on the size of each
+5. **Filter URLs against the linking map first.** Matches are fully processed
+   and removed.
+6. **Filter remaining URLs against the product cache.** These URLs already have
+   supplier data and are queued for Amazon analysis.
+7. **Whatever remains requires full supplier extraction.** These URLs are
+   processed immediately and then queued for Amazon analysis.
+8. **Update user-facing counts** (discovered totals) based on the size of each
    queue. These counts are for monitoring only and do not affect resumption.
 
 ## Supplier Extraction Phase

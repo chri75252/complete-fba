@@ -56,10 +56,7 @@ The system's architecture is now properly decoupled. The `PassiveExtractionWorkf
 
 import os, logging
 if not os.getenv("OPENAI_API_KEY"):
-    os.environ["OPENAI_API_KEY"] = (
-        "sk-s2-Q4jjFLfsmK1su4XzrXFdsYbTsZH4SWSES8efNDBT3BlbkFJGYMdHui-NLIdqGTgob3syatBmf40zqu9v8VPG6adUA"
-    )
-    logging.warning("OPENAI_API_KEY not supplied – using hard-coded fallback")
+    logging.warning("OPENAI_API_KEY not set – AI features disabled")
 
 import os
 import asyncio
@@ -959,7 +956,8 @@ class PassiveExtractionWorkflow:
         
         # Core components initialized here
         self.supplier_name = self.workflow_config.get('supplier_name')
-        self.system_config = self.config_loader.get_system_config()
+        self.full_config = self.config_loader.get_full_config()
+        self.system_config = self.full_config.get("system", {})
         
         # Initialize paths using centralized path management
         self.output_dir = self._initialize_output_directory()
@@ -1305,6 +1303,8 @@ class PassiveExtractionWorkflow:
 
         # Load state and linking map
         self.state_manager.load_state()
+        if hasattr(self.state_manager, 'validate_and_repair_state'):
+            self.state_manager.validate_and_repair_state()
         self.last_processed_index = self.state_manager.get_resumption_index()
         self.consecutive_amazon_price_misses = self.state_manager.state_data.get('consecutive_amazon_price_misses', 0)
         self.log.info(f"📋 Loaded existing processing state for {self.supplier_name}")
@@ -2291,6 +2291,24 @@ class PassiveExtractionWorkflow:
             if any(k in path for k in kws):
                 return "avoid"
         return "neutral"
+
+    # ------------------------------------------------------------------
+    def _save_category_manifest(self, supplier_name: str, category_url: str, urls: List[str]) -> str:
+        """Persist the ground-truth list of product URLs for a category."""
+        slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")
+        manifest_dir = Path("OUTPUTS") / "manifests" / supplier_name
+        manifest_dir.mkdir(parents=True, exist_ok=True)
+        manifest_path = manifest_dir / f"{slug}.json"
+        doc = {
+            "category_url": category_url,
+            "scraped_at": datetime.utcnow().isoformat() + "Z",
+            "product_urls": urls,
+            "count": len(urls),
+        }
+        with open(manifest_path, "w", encoding="utf-8") as fh:
+            json.dump(doc, fh, indent=2, ensure_ascii=False)
+        self.log.info(f"📝 MANIFEST: {len(urls)} URLs → {manifest_path}")
+        return str(manifest_path)
 
     # ──────────────────────── ③  Enhanced State tracking helpers ──────────────────────
     def _load_history(self):
@@ -4208,64 +4226,42 @@ Return ONLY valid JSON, no additional text."""
                 
                 self.log.info(f"🔄 Processing chunk {chunk_start//chunk_size + 1}: categories {chunk_start+1}-{chunk_end}")
                 
-                # 🚨 CRITICAL FIX: Two-Phase Resumption Logic - Find actual supplier cache file
-                actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(supplier_name)
-                
-                if actual_cache_file:
-                    try:
-                        with open(actual_cache_file, 'r', encoding='utf-8') as f:
-                            existing_products = json.load(f)
-                        
-                        # Check if current chunk categories are already fully extracted
-                        chunk_category_urls = set(chunk_categories)
-                        products_for_chunk = [p for p in existing_products if p.get('source_url', '') in chunk_category_urls]
-                        
-                        if len(products_for_chunk) >= max_products_per_category * len(chunk_categories):
-                            self.log.info(f"✅ SUPPLIER CACHE HIT: Chunk categories already extracted ({len(products_for_chunk)} products)")
-                            chunk_products = products_for_chunk
-                        else:
-                            self.log.info(
-                                f"📦 PLAN: chunk capacity {max_products_per_category * len(chunk_categories)}, candidates {len(products_for_chunk)} from cache/index"
-                            )
-                            # Extract from this chunk of categories
-                            chunk_products = await self._extract_supplier_products(
-                                supplier_url, supplier_name, chunk_categories, 
-                                max_products_per_category, max_products_to_process, supplier_extraction_batch_size
-                            )
-                    except Exception as e:
-                        self.log.warning(f"⚠️ Could not read supplier cache: {e} - proceeding with extraction")
-                        # Extract from this chunk of categories
-                        chunk_products = await self._extract_supplier_products(
-                            supplier_url, supplier_name, chunk_categories, 
-                            max_products_per_category, max_products_to_process, supplier_extraction_batch_size
-                        )
-                else:
-                    self.log.info(f"📝 SUPPLIER PHASE: No existing cache found - starting fresh extraction")
-                    # Extract from this chunk of categories
-                    chunk_products = await self._extract_supplier_products(
-                        supplier_url, supplier_name, chunk_categories, 
-                        max_products_per_category, max_products_to_process, supplier_extraction_batch_size
-                    )
-                
+                chunk_products = await self._extract_supplier_products(
+                    supplier_url, supplier_name, chunk_categories,
+                    max_products_per_category, max_products_to_process, supplier_extraction_batch_size
+                )
+
                 if chunk_products:
-                    urls = [p.get("url") for p in chunk_products if p.get("url")]
-                    cached_products = existing_products if actual_cache_file else []
-                    filtered = filter_urls(urls, self.linking_map, cached_products)
+                    actual_cache_file, _ = self._find_actual_supplier_cache_file(supplier_name)
+                    cached_products: List[Dict[str, Any]] = []
+                    if actual_cache_file:
+                        try:
+                            with open(actual_cache_file, 'r', encoding='utf-8') as fh:
+                                cached_products = json.load(fh)
+                        except Exception as e:
+                            self.log.warning(f"⚠️ Could not read supplier cache: {e}")
 
-                    analysis_products = [
-                        p for p in chunk_products
-                        if p.get("url") in filtered["needs_amazon_only"]
-                        or p.get("url") in filtered["needs_full_extraction"]
-                    ]
-                    skipped = len(filtered["skip_entirely"])
-                    if skipped:
-                        self.log.info(f"🔁 Skipping {skipped} products already in linking map")
+                    analysis_products: List[Dict[str, Any]] = []
+                    for idx_offset, category_url in enumerate(chunk_categories):
+                        urls = [p.get("url") for p in chunk_products if p.get("source_url") == category_url]
+                        self._save_category_manifest(supplier_name, category_url, urls)
+                        filtered = filter_urls(urls, self.linking_map, cached_products)
+                        self.log.info(
+                            f"FILTER[C{chunk_start + idx_offset + 1}]: in={len(urls)} "
+                            f"skip={len(filtered['skip_entirely'])} "
+                            f"needs_amz={len(filtered['needs_amazon_only'])} "
+                            f"needs_full={len(filtered['needs_full_extraction'])}"
+                        )
+                        for url in filtered['needs_amazon_only'] + filtered['needs_full_extraction']:
+                            prod = next((p for p in chunk_products if p.get('url') == url), None)
+                            if prod:
+                                analysis_products.append(prod)
 
-                    # Immediately analyze remaining products
-                    chunk_results = await self._process_chunk_with_main_workflow_logic(
-                        analysis_products, max_products_per_cycle
-                    )
-                    profitable_results.extend(chunk_results)
+                    if analysis_products:
+                        chunk_results = await self._process_chunk_with_main_workflow_logic(
+                            analysis_products, max_products_per_cycle
+                        )
+                        profitable_results.extend(chunk_results)
                     
                     # 🚨 CRITICAL FIX: Financial Report Triggering Mechanism - Monitor linking map count as TRIGGER
                     financial_batch_size = self.system_config.get("financial_report_batch_size", 2)
@@ -6860,12 +6856,9 @@ Return ONLY valid JSON, no additional text."""
                     self.log.warning("Could not get page from browser manager for authentication")
             
             if page:
-                # Use hardcoded credentials (as shown in the auth service)
-                credentials = {
-                    "email": "info@theblacksmithmarket.com",
-                    "password": "0Dqixm9c&"
-                }
-                
+                credentials = self.config_loader.get_credentials(self.supplier_name)
+                masked = {k: '***' for k in credentials}
+                self.log.info(f"Using configured credentials {masked}")
                 success, method = await auth_service.ensure_authenticated_session(page, credentials, force_reauth=True)
                 
                 if success:
