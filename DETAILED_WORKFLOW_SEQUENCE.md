@@ -26,19 +26,26 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
    state manager reads `system_progression.current_category_index` on startup so
    interrupted runs continue with the first unprocessed category. Each category's
    index and URL are recorded via `initialize_category_processing`.
-2. **Extract product URLs** from the supplier category.
-3. **Update category denominator:** call
+2. **Extract product URLs** from the supplier category (always fresh) with full
+   pagination and network retries. Each page is fetched until no `next` page is
+   found, and the workflow logs the total pages scraped.
+3. **Persist a category manifest** listing all normalized URLs and their count
+   (`OUTPUTS/manifests/<supplier>/<slug>.json`). Manifests are written atomically
+   to prevent corruption, and any change in count from a previous run is logged
+   as `MANIFEST COUNT MISMATCH`.
+4. **Update category denominator:** call
    `correct_category_totals_realtime` so the processing state reflects the
-
    real product count if the initial estimate was wrong.
-4. **Pre-filter URLs** using `utils.url_filter`:
-   - Check the linking map first via `HashLookupOptimizer` indexes; any URL
-     found here is treated as fully processed and added to `skip_entirely`.
-   - Remaining URLs are checked against the product cache to populate
-     `needs_amazon_only` (supplier data already cached).
-   - URLs in neither file become `needs_full_extraction`.
-5. **Update user-facing counts** (discovered totals) based on the size of these
-   lists. These counts are for monitoring only and do not affect resumption.
+5. **Filter URLs against the linking map first** using normalized URL keys. The
+   filter summary log includes the category slug for context, e.g.
+   `FILTER[C3 toys-wholesale]: in=76 ...`.
+6. **Filter remaining URLs against the product cache** (also normalized). These
+   URLs already have supplier data and are queued for Amazon analysis.
+7. **Whatever remains requires full supplier extraction.** These URLs are
+   processed immediately and then queued for Amazon analysis.
+8. **Update user-facing counts** (discovered totals) based on the size of each
+   queue. These counts are for monitoring only and do not affect resumption.
+
 
 ## Supplier Extraction Phase
 1. Process `needs_full_extraction` URLs.
@@ -46,15 +53,13 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
    - Save supplier data to the cache.
    - Call `update_supplier_extraction_progress_new` to increment:
      - `system_progression.supplier_extraction_resumption_index`
+     - `system_progression.current_category_index`
+     - `system_progression.current_subcategory_index`
+     - `system_progression.pages_scraped_in_session`
      - `system_progression.current_product_index_in_category`
      - `user_display_metrics.progress_count`
-   - Append to the linking map using `HashLookupOptimizer.add_entry()`. Duplicate
-     supplier URLs or EANs update the existing record instead of adding a new
-     entry, preventing growth of duplicates.
-   - After each insertion the current linking map count is evaluated. When the
-     count reaches a multiple of `financial_report_batch_size` from
-     `system_config.json`, the system runs `FBA_Financial_calculator.run_calculations`
-     to generate a CSV profitability report.
+   - Queue the product for Amazon analysis.
+
 3. State is saved atomically after each product via `save_state_atomic`.
    `system_progression` indices and `user_display_metrics.progress_count` are
    updated every product.
@@ -69,10 +74,14 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
      `amazon_analysis_resumption_index` and
      `session_products_processed`.
    - The resulting data is cached and merged into the linking map via
-     `HashLookupOptimizer`, again updating existing entries if duplicates are
-     detected.
-   - The financial-report trigger described above also applies as new linking
-     map entries accumulate during this phase.
+     `HashLookupOptimizer`. Duplicate supplier URLs or EANs update the existing
+     record instead of creating a new entry.
+   - After each successful merge the current linking map count is evaluated.
+     When the count reaches a multiple of `financial_report_batch_size` from
+     `system_config.json`, the system runs
+     `FBA_Financial_calculator.run_calculations` to generate a CSV profitability
+     report.
+
 3. Atomic state saves occur after each product to enable exact resumption.
 
 ## Progress Metrics
@@ -91,5 +100,8 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
 `user_display_metrics` values are never used for interruption recovery. The
 system relies solely on `system_progression` indices, which are persisted after
 every product. On restart, the workflow resumes from the recorded phase and
-resumption index of the last processed product.
+exact product index in either the supplier or Amazon phase. Hybrid mode ensures
+each category’s supplier extraction and Amazon analysis are completed before the
+workflow advances to the next category.
+
 
