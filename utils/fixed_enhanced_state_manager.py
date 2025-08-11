@@ -142,6 +142,26 @@ class FixedEnhancedStateManager:
                 "category_completion_status": {},
                 "reverse_gap_detected": False,  # 🚨 NEW: Track reverse gap state
                 "startup_analysis_completed": False  # 🚨 NEW: Track startup completion
+            },
+
+            # ✅ NEW: Separated progression metrics for precise resumption
+            "system_progression": {
+                "current_phase": "supplier_extraction",
+                "current_category_index": 0,
+                "current_category_url": "",
+                "total_categories": 0,
+                "current_product_index_in_category": 0,
+                "total_products_in_current_category": 0,
+                "supplier_extraction_resumption_index": 0,
+                "amazon_analysis_resumption_index": 0
+            },
+
+            # ✅ NEW: User-facing metrics (not used for resumption logic)
+            "user_display_metrics": {
+                "total_products": 0,
+                "successful_products": 0,
+                "progress_count": 0,
+                "session_products_processed": 0
             }
         }
     
@@ -230,22 +250,33 @@ class FixedEnhancedStateManager:
         # 🚨 CRITICAL FIX: Only perform reverse gap detection on startup
         if file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
             log.info(f"🔄 REVERSE GAP DETECTED: Linking map ({file_grounded_data['linking_map_count']}) > Cache ({file_grounded_data['total_products']})")
-            
+
             # Set resumption index to 0 for fresh category processing
             self.state_data["resumption_index"] = 0
             self.state_data["progress_index"] = 0
             self.state_data["processing_status"] = "FRESH_CATEGORIES"
             self.state_data["gap_processing"]["reverse_gap_detected"] = True
-            
+
+            # Track why we are starting fresh
+            self.state_data["resume_reason"] = "reverse_gap_detected"
+
             log.info(f"✅ Set resumption_index = 0 for fresh category processing")
         else:
             # Normal gap processing - resume from linking map count
             self.state_data["resumption_index"] = file_grounded_data["linking_map_count"]
             self.state_data["progress_index"] = 0  # Always start fresh progress tracking
             self.state_data["gap_processing"]["reverse_gap_detected"] = False
-            
+
+            # Track normal resume path
+            self.state_data["resume_reason"] = "normal_startup"
+
             log.info(f"✅ Normal startup - resumption_index = {file_grounded_data['linking_map_count']}")
         
+        # Log final resume decision for observability
+        log.info(
+            f"RESUME DECISION: START_AT_INDEX={self.state_data['resumption_index']} (reason: {self.state_data['resume_reason']})"
+        )
+
         # Update total products from file-grounded data
         self.state_data["total_products"] = file_grounded_data["total_products"]
         self.state_data["successful_products"] = file_grounded_data["processed_products"]
@@ -298,10 +329,21 @@ class FixedEnhancedStateManager:
                     else:
                         self.state_data["gap_processing"]["category_completion_status"][category_url]["status"] = "PARTIALLY_PROCESSED"
             
-            # Save the updated discovery
-            self.save_state(preserve_interruption_state=True)
-            
+            # Save the updated discovery using atomic write for safety
+            self.save_state_atomic()
+
             log.info(f"✅ REAL-TIME UPDATE: Category total updated to {discovered_count} products")
+
+    def correct_category_totals_realtime(self, category_url: str, actual_discovered: int):
+        """Public wrapper for real-time category total correction.
+
+        This method satisfies the design requirement to expose a
+        ``correct_category_totals_realtime`` helper.  It delegates to
+        ``update_discovered_products_in_category`` which performs the
+        actual update and atomic save.
+        """
+
+        self.update_discovered_products_in_category(category_url, actual_discovered)
     
     def update_processing_progress(self, increment: int = 1, product_url: Optional[str] = None):
         """
@@ -329,7 +371,54 @@ class FixedEnhancedStateManager:
         self.state_data["last_processed_index"] = self.state_data["resumption_index"]
         
         log.debug(f"📊 PROGRESS UPDATE: resumption={self.state_data['resumption_index']}, session={self.state_data['session_products_processed']}, total={self.state_data['last_processed_index']}")
-    
+
+    # === NEW PROGRESSION METHODS ===
+    def initialize_category_processing(self, category_index: int, category_url: str, total_categories: int):
+        """Initialize tracking for a new category"""
+        sp = self.state_data.setdefault("system_progression", {})
+        sp.update({
+            "current_phase": "supplier_extraction",
+            "current_category_index": category_index,
+            "current_category_url": category_url,
+            "total_categories": total_categories,
+            "current_product_index_in_category": 0,
+            "total_products_in_current_category": 0
+        })
+        self.save_state_atomic()
+
+    def update_supplier_extraction_progress_new(self, product_url: str, increment: int = 1):
+        """Update progress during supplier extraction phase"""
+        sp = self.state_data.setdefault("system_progression", {})
+        sp["current_phase"] = "supplier_extraction"
+        sp["supplier_extraction_resumption_index"] = sp.get("supplier_extraction_resumption_index", 0) + increment
+        sp["current_product_index_in_category"] = sp.get("current_product_index_in_category", 0) + increment
+
+        ud = self.state_data.setdefault("user_display_metrics", {})
+        ud["progress_count"] = ud.get("progress_count", 0) + increment
+
+        self.state_data.setdefault("processed_products", {})[product_url] = {
+            "status": "supplier_extracted",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+
+        self.save_state_atomic()
+
+    def update_amazon_analysis_progress_new(self, product_url: str, increment: int = 1):
+        """Update progress during Amazon analysis phase"""
+        sp = self.state_data.setdefault("system_progression", {})
+        sp["current_phase"] = "amazon_analysis"
+        sp["amazon_analysis_resumption_index"] = sp.get("amazon_analysis_resumption_index", 0) + increment
+
+        ud = self.state_data.setdefault("user_display_metrics", {})
+        ud["session_products_processed"] = ud.get("session_products_processed", 0) + increment
+
+        self.state_data.setdefault("processed_products", {})[product_url] = {
+            "status": "amazon_analyzed",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+
+        self.save_state_atomic()
+
     def save_state(self, preserve_interruption_state: bool = True):
         """
         🚨 CRITICAL FIX 6: Save state WITHOUT performing reverse gap detection
@@ -364,10 +453,14 @@ class FixedEnhancedStateManager:
                 with open(self.state_file_path, 'w', encoding='utf-8') as f:
                     json.dump(self.state_data, f, indent=2, ensure_ascii=False)
                 log.debug(f"✅ State saved (fallback method) to {self.state_file_path}")
-                
+
         except Exception as e:
             log.error(f"❌ Failed to save state: {e}")
-    
+
+    def save_state_atomic(self):
+        """Atomic save wrapper used by new progression methods"""
+        self.save_state(preserve_interruption_state=True)
+
     def _calculate_file_grounded_totals(self) -> Dict[str, Any]:
         """
         Calculate all totals by reading actual files on disk
@@ -707,10 +800,18 @@ class FixedEnhancedStateManager:
                                             subcategory_index: int = None, total_subcategories: int = None,
                                             batch_number: int = None, total_batches: int = None,
                                             category_url: str = None, extraction_phase: str = None):
-        """Update supplier extraction progress"""
+        """Update supplier extraction progress.
+
+        The original implementation mistakenly stored the category position under
+        ``category_index`` which didn't match the schema's
+        ``current_category_index`` field.  As a result, the workflow could not
+        accurately resume from the last category after an interruption.  This
+        method now writes to ``current_category_index`` so subsequent runs pick
+        up exactly where they left off.
+        """
         progress = self.state_data.get("supplier_extraction_progress", {})
         progress.update({
-            "category_index": category_index,
+            "current_category_index": category_index,
             "total_categories": total_categories,
             "last_update": datetime.now(timezone.utc).isoformat()
         })
