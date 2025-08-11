@@ -9,6 +9,7 @@ def filter_urls(
     linking_map: List[Dict[str, Any]],
     cached_products: List[Dict[str, Any]],
 ) -> Dict[str, List[str]]:
+
     """Classify product URLs based on linking map and cache presence.
 
     Priority: linking map (fully processed) > product cache (supplier data available).
@@ -20,6 +21,7 @@ def filter_urls(
     }
     cached_urls = {normalize_url(p.get("url")) for p in cached_products}
 
+
     result = {
         "skip_entirely": [],
         "needs_amazon_only": [],
@@ -30,6 +32,7 @@ def filter_urls(
         if norm_url in linking_map_urls:
             result["skip_entirely"].append(url)
         elif norm_url in cached_urls:
+
             result["needs_amazon_only"].append(url)
         else:
             result["needs_full_extraction"].append(url)

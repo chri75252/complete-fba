@@ -4324,6 +4324,7 @@ Return ONLY valid JSON, no additional text."""
                             analysis_products, max_products_per_cycle
                         )
                         profitable_results.extend(chunk_results)
+
                     
                     # 🚨 CRITICAL FIX: Financial Report Triggering Mechanism - Monitor linking map count as TRIGGER
                     financial_batch_size = self.system_config.get("financial_report_batch_size", 2)
