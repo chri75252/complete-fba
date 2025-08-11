@@ -1,4 +1,5 @@
 import pytest
+
 from utils.url_filter import filter_urls
 
 
@@ -27,8 +28,8 @@ def test_filter_urls_normalization():
     linking_map = [{"supplier_url": "https://site.com/product/a"}]
     cached_products = []
     result = filter_urls(product_urls, linking_map, cached_products)
-    # Both URLs should be treated as same and skipped entirely
-    assert result["skip_entirely"] == product_urls
+    # Both URLs should be treated as same and skipped entirely (normalized once per input)
+    normalized = ["https://site.com/product/a", "https://site.com/product/a"]
+    assert result["skip_entirely"] == normalized
     assert result["needs_amazon_only"] == []
     assert result["needs_full_extraction"] == []
-
