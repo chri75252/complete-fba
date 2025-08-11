@@ -2294,21 +2294,66 @@ class PassiveExtractionWorkflow:
 
     # ------------------------------------------------------------------
     def _save_category_manifest(self, supplier_name: str, category_url: str, urls: List[str]) -> str:
-        """Persist the ground-truth list of product URLs for a category."""
+        """Persist the ground-truth list of product URLs for a category with atomic write."""
+        from utils.normalization import normalize_url
+        import tempfile
         slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")
         manifest_dir = Path("OUTPUTS") / "manifests" / supplier_name
         manifest_dir.mkdir(parents=True, exist_ok=True)
         manifest_path = manifest_dir / f"{slug}.json"
+        normalized_urls = [normalize_url(u) for u in urls]
         doc = {
             "category_url": category_url,
             "scraped_at": datetime.utcnow().isoformat() + "Z",
-            "product_urls": urls,
-            "count": len(urls),
+            "product_urls": normalized_urls,
+            "count": len(normalized_urls),
         }
-        with open(manifest_path, "w", encoding="utf-8") as fh:
-            json.dump(doc, fh, indent=2, ensure_ascii=False)
-        self.log.info(f"📝 MANIFEST: {len(urls)} URLs → {manifest_path}")
-        return str(manifest_path)
+
+        # Warn if previous manifest count differs
+        if manifest_path.exists():
+            try:
+                prev = json.loads(manifest_path.read_text())
+                prev_count = prev.get("count")
+                if prev_count is not None and prev_count != len(normalized_urls):
+                    self.log.warning(
+                        f"MANIFEST COUNT MISMATCH: prev={prev_count} now={len(normalized_urls)} for {category_url}"
+                    )
+            except Exception:
+                self.log.warning(f"Could not read existing manifest for {category_url} to compare counts")
+
+        tmp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", delete=False, dir=manifest_dir
+            ) as fh:
+                json.dump(doc, fh, indent=2, ensure_ascii=False)
+                tmp_path = Path(fh.name)
+            os.replace(tmp_path, manifest_path)
+            self.log.info(f"📝 MANIFEST: {len(normalized_urls)} URLs → {manifest_path}")
+            return str(manifest_path)
+        finally:
+            if tmp_path and tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except Exception:
+                    pass
+
+    async def _scrape_with_retries(self, url: str, max_products_per_category: int, product_accumulator: List[Dict[str, Any]]):
+        """Wrapper around supplier scraper with exponential backoff retries."""
+        from tenacity import retry, stop_after_attempt, wait_exponential, before_sleep_log
+        import logging
+
+        @retry(
+            stop=stop_after_attempt(3),
+            wait=wait_exponential(multiplier=1, min=2, max=10),
+            before_sleep=before_sleep_log(self.log, logging.WARNING),
+        )
+        async def _inner():
+            return await self.supplier_scraper.scrape_products_from_url(
+                url, max_products_per_category, product_accumulator=product_accumulator
+            )
+
+        return await _inner()
 
     # ──────────────────────── ③  Enhanced State tracking helpers ──────────────────────
     def _load_history(self):
@@ -3548,6 +3593,8 @@ Return ONLY valid JSON, no additional text."""
         
         # Process categories in batches for better memory management
         all_products = []
+        # Mapping of category_url -> full list of product URLs for manifest generation
+        self.category_manifests = {}
         
         # 🚨 CRITICAL FIX: Load existing cached products and filter against linking map
         actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(supplier_name)
@@ -3647,7 +3694,7 @@ Return ONLY valid JSON, no additional text."""
                     break
                     
                 self.log.info(f"Scraping category: {category_url}")
-                
+
                 # 🚨 SURGICAL FIX: Update state manager with current category URL being processed
                 if hasattr(self, 'state_manager') and self.state_manager:
                     if hasattr(self.state_manager, 'update_current_category_url'):
@@ -3658,16 +3705,25 @@ Return ONLY valid JSON, no additional text."""
                             self.state_manager.state_data.setdefault('supplier_extraction_progress', {})['current_category_url'] = category_url
                 
                 # 🚨 DEFINITIVE FIX: Pass all_products as product_accumulator for real-time updates
-                products = await self.supplier_scraper.scrape_products_from_url(
+                products = await self._scrape_with_retries(
                     category_url,
                     max_products_per_category,
-                    product_accumulator=all_products  # Share the list for real-time cache saves
+                    all_products,
                 )
-                
+
+                urls_for_manifest = getattr(self.supplier_scraper, 'last_collected_urls', [])
+                page_count = getattr(self.supplier_scraper, 'last_page_count', 1)
+                self.category_manifests[category_url] = urls_for_manifest
+                self.log.info(
+                    f"Finished scraping category {category_url}: Found {len(urls_for_manifest)} products across {page_count} pages."
+                )
+
                 # 🚨 REMOVED: Price filtering and product extension now handled in progress callback
                 # Products are added to all_products immediately when found via progress_callback
                 # This ensures per-product cache saves work correctly with live data
-                self.log.info(f"📊 Category completed: {len(products)} raw products extracted, {len(all_products)} total products accumulated")
+                self.log.info(
+                    f"📊 Category completed: {len(products)} raw products extracted, {len(all_products)} total products accumulated"
+                )
                 
                 # 🚨 SURGICAL FIX: Update state manager with discovered product count for accurate processing state
                 if hasattr(self, 'state_manager') and self.state_manager and len(products) > 0:
@@ -4243,16 +4299,22 @@ Return ONLY valid JSON, no additional text."""
 
                     analysis_products: List[Dict[str, Any]] = []
                     for idx_offset, category_url in enumerate(chunk_categories):
-                        urls = [p.get("url") for p in chunk_products if p.get("source_url") == category_url]
+                        urls = self.category_manifests.get(category_url, [])
                         self._save_category_manifest(supplier_name, category_url, urls)
                         filtered = filter_urls(urls, self.linking_map, cached_products)
+                        slug = re.sub(r"[^a-z0-9]+","-", category_url.lower()).strip("-")[:30]
                         self.log.info(
-                            f"FILTER[C{chunk_start + idx_offset + 1}]: in={len(urls)} "
+                            f"FILTER[C{chunk_start + idx_offset + 1} {slug}]: in={len(urls)} "
                             f"skip={len(filtered['skip_entirely'])} "
                             f"needs_amz={len(filtered['needs_amazon_only'])} "
                             f"needs_full={len(filtered['needs_full_extraction'])}"
                         )
-                        for url in filtered['needs_amazon_only'] + filtered['needs_full_extraction']:
+                        # Gather supplier data: cached for amazon-only, fresh for new extractions
+                        for url in filtered['needs_amazon_only']:
+                            prod = next((p for p in cached_products if p.get('url') == url), None)
+                            if prod:
+                                analysis_products.append(prod)
+                        for url in filtered['needs_full_extraction']:
                             prod = next((p for p in chunk_products if p.get('url') == url), None)
                             if prod:
                                 analysis_products.append(prod)

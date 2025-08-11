@@ -26,16 +26,21 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
    state manager reads `system_progression.current_category_index` on startup so
    interrupted runs continue with the first unprocessed category. Each category's
    index and URL are recorded via `initialize_category_processing`.
-2. **Extract product URLs** from the supplier category (always fresh).
-3. **Persist a category manifest** listing all URLs and their count
-   (`OUTPUTS/manifests/<supplier>/<slug>.json`).
+2. **Extract product URLs** from the supplier category (always fresh) with full
+   pagination and network retries. Each page is fetched until no `next` page is
+   found, and the workflow logs the total pages scraped.
+3. **Persist a category manifest** listing all normalized URLs and their count
+   (`OUTPUTS/manifests/<supplier>/<slug>.json`). Manifests are written atomically
+   to prevent corruption, and any change in count from a previous run is logged
+   as `MANIFEST COUNT MISMATCH`.
 4. **Update category denominator:** call
    `correct_category_totals_realtime` so the processing state reflects the
    real product count if the initial estimate was wrong.
-5. **Filter URLs against the linking map first.** Matches are fully processed
-   and removed.
-6. **Filter remaining URLs against the product cache.** These URLs already have
-   supplier data and are queued for Amazon analysis.
+5. **Filter URLs against the linking map first** using normalized URL keys. The
+   filter summary log includes the category slug for context, e.g.
+   `FILTER[C3 toys-wholesale]: in=76 ...`.
+6. **Filter remaining URLs against the product cache** (also normalized). These
+   URLs already have supplier data and are queued for Amazon analysis.
 7. **Whatever remains requires full supplier extraction.** These URLs are
    processed immediately and then queued for Amazon analysis.
 8. **Update user-facing counts** (discovered totals) based on the size of each

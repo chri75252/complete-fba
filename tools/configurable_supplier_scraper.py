@@ -827,7 +827,10 @@ class ConfigurableSupplierScraper:
                 break
         
         log.info(f"Collected {len(all_product_urls)} total product URLs across {current_page} pages")
-        return list(all_product_urls)[:max_products]
+        # Expose details for external consumers (e.g., workflow manifest generation)
+        self.last_collected_urls = list(all_product_urls)[:max_products]
+        self.last_page_count = current_page
+        return self.last_collected_urls
 
     def _extract_text_by_selector(self, soup: BeautifulSoup, selectors: List[str]) -> Optional[str]:
         """Extract text using a list of CSS selectors."""
