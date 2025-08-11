@@ -17,3 +17,18 @@ def test_filter_urls_priority():
     assert result["skip_entirely"] == ["u1", "u2"]
     assert result["needs_amazon_only"] == ["u3"]
     assert result["needs_full_extraction"] == ["u4"]
+
+
+def test_filter_urls_normalization():
+    product_urls = [
+        "https://site.com/product/A/",
+        "https://site.com/product/A?utm_source=123",
+    ]
+    linking_map = [{"supplier_url": "https://site.com/product/a"}]
+    cached_products = []
+    result = filter_urls(product_urls, linking_map, cached_products)
+    # Both URLs should be treated as same and skipped entirely
+    assert result["skip_entirely"] == product_urls
+    assert result["needs_amazon_only"] == []
+    assert result["needs_full_extraction"] == []
+

@@ -56,10 +56,7 @@ The system's architecture is now properly decoupled. The `PassiveExtractionWorkf
 
 import os, logging
 if not os.getenv("OPENAI_API_KEY"):
-    os.environ["OPENAI_API_KEY"] = (
-        "sk-s2-Q4jjFLfsmK1su4XzrXFdsYbTsZH4SWSES8efNDBT3BlbkFJGYMdHui-NLIdqGTgob3syatBmf40zqu9v8VPG6adUA"
-    )
-    logging.warning("OPENAI_API_KEY not supplied – using hard-coded fallback")
+    logging.warning("OPENAI_API_KEY not set – AI features disabled")
 
 import os
 import asyncio
@@ -959,7 +956,8 @@ class PassiveExtractionWorkflow:
         
         # Core components initialized here
         self.supplier_name = self.workflow_config.get('supplier_name')
-        self.system_config = self.config_loader.get_system_config()
+        self.full_config = self.config_loader.get_full_config()
+        self.system_config = self.full_config.get("system", {})
         
         # Initialize paths using centralized path management
         self.output_dir = self._initialize_output_directory()
@@ -1305,6 +1303,8 @@ class PassiveExtractionWorkflow:
 
         # Load state and linking map
         self.state_manager.load_state()
+        if hasattr(self.state_manager, 'validate_and_repair_state'):
+            self.state_manager.validate_and_repair_state()
         self.last_processed_index = self.state_manager.get_resumption_index()
         self.consecutive_amazon_price_misses = self.state_manager.state_data.get('consecutive_amazon_price_misses', 0)
         self.log.info(f"📋 Loaded existing processing state for {self.supplier_name}")
@@ -2291,6 +2291,69 @@ class PassiveExtractionWorkflow:
             if any(k in path for k in kws):
                 return "avoid"
         return "neutral"
+
+    # ------------------------------------------------------------------
+    def _save_category_manifest(self, supplier_name: str, category_url: str, urls: List[str]) -> str:
+        """Persist the ground-truth list of product URLs for a category with atomic write."""
+        from utils.normalization import normalize_url
+        import tempfile
+        slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")
+        manifest_dir = Path("OUTPUTS") / "manifests" / supplier_name
+        manifest_dir.mkdir(parents=True, exist_ok=True)
+        manifest_path = manifest_dir / f"{slug}.json"
+        normalized_urls = [normalize_url(u) for u in urls]
+        doc = {
+            "category_url": category_url,
+            "scraped_at": datetime.utcnow().isoformat() + "Z",
+            "product_urls": normalized_urls,
+            "count": len(normalized_urls),
+        }
+
+        # Warn if previous manifest count differs
+        if manifest_path.exists():
+            try:
+                prev = json.loads(manifest_path.read_text())
+                prev_count = prev.get("count")
+                if prev_count is not None and prev_count != len(normalized_urls):
+                    self.log.warning(
+                        f"MANIFEST COUNT MISMATCH: prev={prev_count} now={len(normalized_urls)} for {category_url}"
+                    )
+            except Exception:
+                self.log.warning(f"Could not read existing manifest for {category_url} to compare counts")
+
+        tmp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", delete=False, dir=manifest_dir
+            ) as fh:
+                json.dump(doc, fh, indent=2, ensure_ascii=False)
+                tmp_path = Path(fh.name)
+            os.replace(tmp_path, manifest_path)
+            self.log.info(f"📝 MANIFEST: {len(normalized_urls)} URLs → {manifest_path}")
+            return str(manifest_path)
+        finally:
+            if tmp_path and tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except Exception:
+                    pass
+
+    async def _scrape_with_retries(self, url: str, max_products_per_category: int, product_accumulator: List[Dict[str, Any]]):
+        """Wrapper around supplier scraper with exponential backoff retries."""
+        from tenacity import retry, stop_after_attempt, wait_exponential, before_sleep_log
+        import logging
+
+        @retry(
+            stop=stop_after_attempt(3),
+            wait=wait_exponential(multiplier=1, min=2, max=10),
+            before_sleep=before_sleep_log(self.log, logging.WARNING),
+        )
+        async def _inner():
+            return await self.supplier_scraper.scrape_products_from_url(
+                url, max_products_per_category, product_accumulator=product_accumulator
+            )
+
+        return await _inner()
 
     # ──────────────────────── ③  Enhanced State tracking helpers ──────────────────────
     def _load_history(self):
@@ -3478,23 +3541,24 @@ Return ONLY valid JSON, no additional text."""
                             if product.get('source_url', '') in chunk_category_urls
                         ]
                         
-                        # 🚨 RESUMPTION FIX: Check if we're resuming mid-extraction before returning cached products
+                        # 🚨 RESUMPTION FIX: Check cache but always perform fresh extraction
                         if len(products_for_chunk_categories) > 0:
-                            # If we're resuming from a previous interruption, don't return cached products immediately
-                            # We need to continue extraction to get the remaining products from current category
                             if hasattr(self, 'last_processed_index') and self.last_processed_index > 0:
-                                self.log.info(f"🔄 RESUMPTION DETECTED: Found {len(products_for_chunk_categories)} cached products but resuming from index {self.last_processed_index}")
-                                self.log.info(f"🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category")
-                                # Fall through to continue with supplier extraction for remaining products
+                                self.log.info(
+                                    f"🔄 RESUMPTION DETECTED: Found {len(products_for_chunk_categories)} cached products but resuming from index {self.last_processed_index}"
+                                )
+                                self.log.info("🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category")
                             else:
-                                self.log.info(f"✅ CHUNK CACHE HIT: Found {len(products_for_chunk_categories)} cached products for current chunk categories")
+                                self.log.info(
+                                    f"🔄 CHUNK CACHE REFERENCE: {len(products_for_chunk_categories)} cached products exist for current chunk categories – performing fresh extraction to detect updates"
+                                )
                                 self.log.info(f"🔄 CHUNK CATEGORIES: {list(chunk_category_urls)}")
-                                return products_for_chunk_categories
-                        
-                        # If no products for current chunk categories, we need to extract from these new categories
-                        self.log.info(f"🔄 CHUNK CACHE MISS: No cached products found for chunk categories: {list(chunk_category_urls)}")
-                        self.log.info(f"🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories")
-                        # Fall through to continue with supplier extraction for these new categories
+                        else:
+                            self.log.info(
+                                f"🔄 CHUNK CACHE MISS: No cached products found for chunk categories: {list(chunk_category_urls)}"
+                            )
+                            self.log.info("🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories")
+                        # Fall through to continue with supplier extraction regardless of cache state
                         
                     elif last_index > 0 and not cache_is_fresh:
                         self.log.info(f"🔄 CACHE STALE: Cache age {cache_age_hours:.1f}h > 24h threshold, proceeding with fresh scraping")
@@ -3529,6 +3593,8 @@ Return ONLY valid JSON, no additional text."""
         
         # Process categories in batches for better memory management
         all_products = []
+        # Mapping of category_url -> full list of product URLs for manifest generation
+        self.category_manifests = {}
         
         # 🚨 CRITICAL FIX: Load existing cached products and filter against linking map
         actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(supplier_name)
@@ -3628,7 +3694,7 @@ Return ONLY valid JSON, no additional text."""
                     break
                     
                 self.log.info(f"Scraping category: {category_url}")
-                
+
                 # 🚨 SURGICAL FIX: Update state manager with current category URL being processed
                 if hasattr(self, 'state_manager') and self.state_manager:
                     if hasattr(self.state_manager, 'update_current_category_url'):
@@ -3639,16 +3705,25 @@ Return ONLY valid JSON, no additional text."""
                             self.state_manager.state_data.setdefault('supplier_extraction_progress', {})['current_category_url'] = category_url
                 
                 # 🚨 DEFINITIVE FIX: Pass all_products as product_accumulator for real-time updates
-                products = await self.supplier_scraper.scrape_products_from_url(
+                products = await self._scrape_with_retries(
                     category_url,
                     max_products_per_category,
-                    product_accumulator=all_products  # Share the list for real-time cache saves
+                    all_products,
                 )
-                
+
+                urls_for_manifest = getattr(self.supplier_scraper, 'last_collected_urls', [])
+                page_count = getattr(self.supplier_scraper, 'last_page_count', 1)
+                self.category_manifests[category_url] = urls_for_manifest
+                self.log.info(
+                    f"Finished scraping category {category_url}: Found {len(urls_for_manifest)} products across {page_count} pages."
+                )
+
                 # 🚨 REMOVED: Price filtering and product extension now handled in progress callback
                 # Products are added to all_products immediately when found via progress_callback
                 # This ensures per-product cache saves work correctly with live data
-                self.log.info(f"📊 Category completed: {len(products)} raw products extracted, {len(all_products)} total products accumulated")
+                self.log.info(
+                    f"📊 Category completed: {len(products)} raw products extracted, {len(all_products)} total products accumulated"
+                )
                 
                 # 🚨 SURGICAL FIX: Update state manager with discovered product count for accurate processing state
                 if hasattr(self, 'state_manager') and self.state_manager and len(products) > 0:
@@ -4207,64 +4282,49 @@ Return ONLY valid JSON, no additional text."""
                 
                 self.log.info(f"🔄 Processing chunk {chunk_start//chunk_size + 1}: categories {chunk_start+1}-{chunk_end}")
                 
-                # 🚨 CRITICAL FIX: Two-Phase Resumption Logic - Find actual supplier cache file
-                actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(supplier_name)
-                
-                if actual_cache_file:
-                    try:
-                        with open(actual_cache_file, 'r', encoding='utf-8') as f:
-                            existing_products = json.load(f)
-                        
-                        # Check if current chunk categories are already fully extracted
-                        chunk_category_urls = set(chunk_categories)
-                        products_for_chunk = [p for p in existing_products if p.get('source_url', '') in chunk_category_urls]
-                        
-                        if len(products_for_chunk) >= max_products_per_category * len(chunk_categories):
-                            self.log.info(f"✅ SUPPLIER CACHE HIT: Chunk categories already extracted ({len(products_for_chunk)} products)")
-                            chunk_products = products_for_chunk
-                        else:
-                            self.log.info(
-                                f"📦 PLAN: chunk capacity {max_products_per_category * len(chunk_categories)}, candidates {len(products_for_chunk)} from cache/index"
-                            )
-                            # Extract from this chunk of categories
-                            chunk_products = await self._extract_supplier_products(
-                                supplier_url, supplier_name, chunk_categories, 
-                                max_products_per_category, max_products_to_process, supplier_extraction_batch_size
-                            )
-                    except Exception as e:
-                        self.log.warning(f"⚠️ Could not read supplier cache: {e} - proceeding with extraction")
-                        # Extract from this chunk of categories
-                        chunk_products = await self._extract_supplier_products(
-                            supplier_url, supplier_name, chunk_categories, 
-                            max_products_per_category, max_products_to_process, supplier_extraction_batch_size
-                        )
-                else:
-                    self.log.info(f"📝 SUPPLIER PHASE: No existing cache found - starting fresh extraction")
-                    # Extract from this chunk of categories
-                    chunk_products = await self._extract_supplier_products(
-                        supplier_url, supplier_name, chunk_categories, 
-                        max_products_per_category, max_products_to_process, supplier_extraction_batch_size
-                    )
-                
+                chunk_products = await self._extract_supplier_products(
+                    supplier_url, supplier_name, chunk_categories,
+                    max_products_per_category, max_products_to_process, supplier_extraction_batch_size
+                )
+
                 if chunk_products:
-                    urls = [p.get("url") for p in chunk_products if p.get("url")]
-                    cached_products = existing_products if actual_cache_file else []
-                    filtered = filter_urls(urls, self.linking_map, cached_products)
+                    actual_cache_file, _ = self._find_actual_supplier_cache_file(supplier_name)
+                    cached_products: List[Dict[str, Any]] = []
+                    if actual_cache_file:
+                        try:
+                            with open(actual_cache_file, 'r', encoding='utf-8') as fh:
+                                cached_products = json.load(fh)
+                        except Exception as e:
+                            self.log.warning(f"⚠️ Could not read supplier cache: {e}")
 
-                    analysis_products = [
-                        p for p in chunk_products
-                        if p.get("url") in filtered["needs_amazon_only"]
-                        or p.get("url") in filtered["needs_full_extraction"]
-                    ]
-                    skipped = len(filtered["skip_entirely"])
-                    if skipped:
-                        self.log.info(f"🔁 Skipping {skipped} products already in linking map")
+                    analysis_products: List[Dict[str, Any]] = []
+                    for idx_offset, category_url in enumerate(chunk_categories):
+                        urls = self.category_manifests.get(category_url, [])
+                        self._save_category_manifest(supplier_name, category_url, urls)
+                        filtered = filter_urls(urls, self.linking_map, cached_products)
+                        slug = re.sub(r"[^a-z0-9]+","-", category_url.lower()).strip("-")[:30]
+                        self.log.info(
+                            f"FILTER[C{chunk_start + idx_offset + 1} {slug}]: in={len(urls)} "
+                            f"skip={len(filtered['skip_entirely'])} "
+                            f"needs_amz={len(filtered['needs_amazon_only'])} "
+                            f"needs_full={len(filtered['needs_full_extraction'])}"
+                        )
+                        # Gather supplier data: cached for amazon-only, fresh for new extractions
+                        for url in filtered['needs_amazon_only']:
+                            prod = next((p for p in cached_products if p.get('url') == url), None)
+                            if prod:
+                                analysis_products.append(prod)
+                        for url in filtered['needs_full_extraction']:
+                            prod = next((p for p in chunk_products if p.get('url') == url), None)
+                            if prod:
+                                analysis_products.append(prod)
 
-                    # Immediately analyze remaining products
-                    chunk_results = await self._process_chunk_with_main_workflow_logic(
-                        analysis_products, max_products_per_cycle
-                    )
-                    profitable_results.extend(chunk_results)
+                    if analysis_products:
+                        chunk_results = await self._process_chunk_with_main_workflow_logic(
+                            analysis_products, max_products_per_cycle
+                        )
+                        profitable_results.extend(chunk_results)
+
                     
                     # 🚨 CRITICAL FIX: Financial Report Triggering Mechanism - Monitor linking map count as TRIGGER
                     financial_batch_size = self.system_config.get("financial_report_batch_size", 2)
@@ -6859,12 +6919,9 @@ Return ONLY valid JSON, no additional text."""
                     self.log.warning("Could not get page from browser manager for authentication")
             
             if page:
-                # Use hardcoded credentials (as shown in the auth service)
-                credentials = {
-                    "email": "info@theblacksmithmarket.com",
-                    "password": "0Dqixm9c&"
-                }
-                
+                credentials = self.config_loader.get_credentials(self.supplier_name)
+                masked = {k: '***' for k in credentials}
+                self.log.info(f"Using configured credentials {masked}")
                 success, method = await auth_service.ensure_authenticated_session(page, credentials, force_reauth=True)
                 
                 if success:
