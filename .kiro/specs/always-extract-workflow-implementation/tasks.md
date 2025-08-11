@@ -89,7 +89,8 @@
   - Eliminate duplicated configuration code with different default values
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [-] 9. Add Import Path Hygiene and Module Validation
+- [x] 9. Add Import Path Hygiene and Module Validation
+
 
   - Add module path logging at workflow startup to confirm correct module is running
   - Ensure main orchestrator imports PassiveExtractionWorkflow from authoritative tools/ path
@@ -99,6 +100,8 @@
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
 - [ ] 10. Implement Reverse Gap Policy Fixes
+
+
   - Modify reverse gap detection to preserve existing resume index unless explicit cache rebuild
   - Add logging when reverse gap is detected but resume index is preserved
   - Ensure resumption_index is not reset to 0 on every startup
