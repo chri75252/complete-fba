@@ -31,3 +31,4 @@ def test_filter_urls_normalization():
     assert result["skip_entirely"] == product_urls
     assert result["needs_amazon_only"] == []
     assert result["needs_full_extraction"] == []
+

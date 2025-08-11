@@ -46,6 +46,7 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
 8. **Update user-facing counts** (discovered totals) based on the size of each
    queue. These counts are for monitoring only and do not affect resumption.
 
+
 ## Supplier Extraction Phase
 1. Process `needs_full_extraction` URLs.
 2. For each extracted product:
@@ -58,6 +59,7 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
      - `system_progression.current_product_index_in_category`
      - `user_display_metrics.progress_count`
    - Queue the product for Amazon analysis.
+
 3. State is saved atomically after each product via `save_state_atomic`.
    `system_progression` indices and `user_display_metrics.progress_count` are
    updated every product.
@@ -79,6 +81,7 @@ linking-map hits. Once the gap is cleared, normal category processing resumes.
      `system_config.json`, the system runs
      `FBA_Financial_calculator.run_calculations` to generate a CSV profitability
      report.
+
 3. Atomic state saves occur after each product to enable exact resumption.
 
 ## Progress Metrics
@@ -100,4 +103,5 @@ every product. On restart, the workflow resumes from the recorded phase and
 exact product index in either the supplier or Amazon phase. Hybrid mode ensures
 each category’s supplier extraction and Amazon analysis are completed before the
 workflow advances to the next category.
+
 

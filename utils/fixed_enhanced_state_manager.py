@@ -468,6 +468,7 @@ class FixedEnhancedStateManager:
             f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}"
         )
 
+
     def save_state_atomic(self):
         """Atomic save wrapper used by new progression methods"""
         self.save_state(preserve_interruption_state=True)
@@ -481,6 +482,7 @@ class FixedEnhancedStateManager:
         if sp.get("current_product_index_in_category", 0) > sp.get("total_products_in_current_category", 0):
             sp["current_product_index_in_category"] = 0
         self.state_data["system_progression"] = sp
+
 
     def _calculate_file_grounded_totals(self) -> Dict[str, Any]:
         """
