@@ -247,20 +247,27 @@ class FixedEnhancedStateManager:
         # Calculate file-grounded totals
         file_grounded_data = self._calculate_file_grounded_totals()
         
-        # 🚨 CRITICAL FIX: Only perform reverse gap detection on startup
+        # 🚨 REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
         if file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
             log.info(f"🔄 REVERSE GAP DETECTED: Linking map ({file_grounded_data['linking_map_count']}) > Cache ({file_grounded_data['total_products']})")
 
-            # Set resumption index to 0 for fresh category processing
-            self.state_data["resumption_index"] = 0
+            # Check if we should preserve existing resume index or reset
+            current_resumption_index = self.state_data.get("resumption_index", 0)
+            explicit_cache_rebuild = self.state_data.get("force_cache_rebuild", False)
+            
+            if explicit_cache_rebuild or current_resumption_index == 0:
+                # Only reset to 0 if explicitly rebuilding cache or no valid resume point
+                self.state_data["resumption_index"] = 0
+                self.state_data["resume_reason"] = "reverse_gap_cache_rebuild"
+                log.info(f"✅ REVERSE GAP: Reset resumption_index = 0 (explicit rebuild or no valid resume point)")
+            else:
+                # Preserve existing resume index to avoid restarting from first category
+                log.warning(f"🔄 REVERSE GAP: Preserving existing resumption_index = {current_resumption_index} (no explicit rebuild)")
+                self.state_data["resume_reason"] = "reverse_gap_preserved_resume"
+            
             self.state_data["progress_index"] = 0
             self.state_data["processing_status"] = "FRESH_CATEGORIES"
             self.state_data["gap_processing"]["reverse_gap_detected"] = True
-
-            # Track why we are starting fresh
-            self.state_data["resume_reason"] = "reverse_gap_detected"
-
-            log.info(f"✅ Set resumption_index = 0 for fresh category processing")
         else:
             # Normal gap processing - resume from linking map count
             self.state_data["resumption_index"] = file_grounded_data["linking_map_count"]
@@ -298,6 +305,78 @@ class FixedEnhancedStateManager:
         
         log.info("✅ STARTUP ANALYSIS: Completed comprehensive state analysis")
         return self.state_data.get("gap_processing", {}).get("category_completion_status", {})
+    
+    def force_cache_rebuild(self, reason: str = "manual_request"):
+        """
+        🚨 REVERSE GAP POLICY: Explicitly force cache rebuild and reset resume index
+        This should only be called when intentionally rebuilding the cache
+        """
+        log.info(f"🔄 FORCE CACHE REBUILD: {reason}")
+        self.state_data["force_cache_rebuild"] = True
+        self.state_data["resumption_index"] = 0
+        self.state_data["progress_index"] = 0
+        self.state_data["resume_reason"] = f"force_rebuild_{reason}"
+        self.state_data["processing_status"] = "FRESH_CATEGORIES"
+        
+        # Clear startup completion to trigger fresh analysis
+        self._startup_completed = False
+        self.state_data["gap_processing"]["startup_analysis_completed"] = False
+        
+        log.info("✅ Cache rebuild forced - resumption_index reset to 0")
+    
+    def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
+        """
+        🚨 STATE VALIDATION: Validate state consistency and repair issues
+        Returns (is_valid, repairs_made)
+        """
+        repairs_made = []
+        
+        # Ensure required keys exist
+        required_keys = ["resumption_index", "progress_index", "total_products", "processing_status"]
+        for key in required_keys:
+            if key not in self.state_data:
+                self.state_data[key] = 0 if key.endswith("_index") or key == "total_products" else "initialized"
+                repairs_made.append(f"Added missing key: {key}")
+        
+        # Ensure resumption_index is within bounds and monotonic
+        resumption_index = self.state_data.get("resumption_index", 0)
+        total_products = self.state_data.get("total_products", 0)
+        
+        if resumption_index < 0:
+            self.state_data["resumption_index"] = 0
+            repairs_made.append("Fixed negative resumption_index")
+        
+        if total_products > 0 and resumption_index > total_products:
+            self.state_data["resumption_index"] = total_products
+            repairs_made.append(f"Fixed resumption_index bounds: {resumption_index} -> {total_products}")
+        
+        # Ensure gap_processing structure exists
+        if "gap_processing" not in self.state_data:
+            self.state_data["gap_processing"] = {
+                "reverse_gap_detected": False,
+                "startup_analysis_completed": False
+            }
+            repairs_made.append("Added missing gap_processing structure")
+        
+        # Ensure system_progression exists for breadcrumbs
+        if "system_progression" not in self.state_data:
+            self.state_data["system_progression"] = {
+                "current_phase": "supplier",
+                "current_category_index": 0,
+                "current_category_url": "",
+                "total_categories": 0,
+                "current_product_index_in_category": 0,
+                "total_products_in_current_category": 0,
+                "supplier_extraction_resumption_index": resumption_index,
+                "amazon_analysis_resumption_index": 0
+            }
+            repairs_made.append("Added missing system_progression structure")
+        
+        # Log repairs if any were made
+        if repairs_made:
+            log.info(f"State repaired: {', '.join(repairs_made)}")
+        
+        return len(repairs_made) == 0, repairs_made
     
     def update_discovered_products_in_category(self, category_url: str, discovered_count: int):
         """

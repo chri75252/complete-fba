@@ -44,6 +44,16 @@ from utils.browser_manager import global_cleanup
 from utils.path_manager import get_run_output_dir, path_manager
 import shutil
 
+# 🚨 IMPORT HYGIENE: Validate correct module is imported
+import inspect
+workflow_module_path = inspect.getfile(PassiveExtractionWorkflow)
+expected_path_suffix = os.path.join("tools", "passive_extraction_workflow_latest.py")
+if not workflow_module_path.endswith(expected_path_suffix.replace(os.sep, "/")):
+    print(f"⚠️ WARNING: PassiveExtractionWorkflow imported from unexpected path: {workflow_module_path}")
+    print(f"Expected path to end with: {expected_path_suffix}")
+else:
+    print(f"✅ IMPORT HYGIENE: PassiveExtractionWorkflow imported from correct path: {workflow_module_path}")
+
 # Configure enhanced detailed logging system to match test_run_1.log format
 def setup_detailed_logging():
     """Setup comprehensive logging system with component-level detail"""
