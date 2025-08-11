@@ -775,6 +775,7 @@ class ConfigurableSupplierScraper:
         """
         log.info(f"Collecting product URLs from paginated pages starting at: {url}")
         all_product_urls = set()
+        urls_per_page = []  # Track URLs found per page for pagination logging
         current_page = 1
         
         while len(all_product_urls) < max_products:
@@ -813,6 +814,8 @@ class ConfigurableSupplierScraper:
                     if len(all_product_urls) >= max_products:
                         break
             
+            # Track URLs found on this page
+            urls_per_page.append(len(page_urls))
             log.info(f"Found {len(page_urls)} new product URLs on page {current_page}")
             
             # Stop if no new products found or max reached
@@ -830,6 +833,7 @@ class ConfigurableSupplierScraper:
         # Expose details for external consumers (e.g., workflow manifest generation)
         self.last_collected_urls = list(all_product_urls)[:max_products]
         self.last_page_count = current_page
+        self.last_urls_per_page = urls_per_page  # New: track URLs per page for pagination logging
         return self.last_collected_urls
 
     def _extract_text_by_selector(self, soup: BeautifulSoup, selectors: List[str]) -> Optional[str]:

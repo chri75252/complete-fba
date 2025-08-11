@@ -954,6 +954,9 @@ class PassiveExtractionWorkflow:
         self.browser_manager = browser_manager
         self.log = logging.getLogger(self.__class__.__name__)
         
+        # 🚨 IMPORT HYGIENE: Log module path to confirm correct module is running
+        self.log.info(f"MODULE PATH: {__file__}")
+        
         # Core components initialized here
         self.supplier_name = self.workflow_config.get('supplier_name')
         self.full_config = self.config_loader.get_full_config()
@@ -1687,7 +1690,7 @@ class PassiveExtractionWorkflow:
                         self.log.info(f"🔍 DEBUG: Linking entry created: {linking_entry}")
                         
                         # 🚨 CRITICAL FIX: Check financial report trigger after each linking map entry
-                        financial_batch_size = self.system_config.get("financial_report_batch_size", 5)
+                        financial_batch_size = self.config_loader.get_financial_batch_size()
                         current_linking_map_count = len(self.linking_map)
                         
                         if current_linking_map_count > 0 and current_linking_map_count % financial_batch_size == 0:
@@ -2294,49 +2297,98 @@ class PassiveExtractionWorkflow:
 
     # ------------------------------------------------------------------
     def _save_category_manifest(self, supplier_name: str, category_url: str, urls: List[str]) -> str:
-        """Persist the ground-truth list of product URLs for a category with atomic write."""
+        """Persist the ground-truth list of product URLs for a category with atomic write using WindowsSaveGuardian."""
         from utils.normalization import normalize_url
-        import tempfile
-        slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")
+        from utils.windows_save_guardian import WindowsSaveGuardian
+        import re
+        
+        # Generate category slug for consistent naming
+        slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")[:50]  # Limit length for filesystem
         manifest_dir = Path("OUTPUTS") / "manifests" / supplier_name
         manifest_dir.mkdir(parents=True, exist_ok=True)
         manifest_path = manifest_dir / f"{slug}.json"
+        
+        # Normalize URLs for consistency
         normalized_urls = [normalize_url(u) for u in urls]
+        
+        # Check for existing manifest to detect overwrites
+        overwritten = False
+        prev_count = None
+        if manifest_path.exists():
+            try:
+                prev_data = json.loads(manifest_path.read_text(encoding='utf-8'))
+                prev_count = prev_data.get("count", 0)
+                overwritten = True
+            except Exception as e:
+                self.log.warning(f"Could not read existing manifest for {category_url}: {e}")
+        
+        # Create manifest document with all required fields
         doc = {
             "category_url": category_url,
             "scraped_at": datetime.utcnow().isoformat() + "Z",
             "product_urls": normalized_urls,
             "count": len(normalized_urls),
+            "supplier_name": supplier_name,
+            "slug": slug
         }
-
-        # Warn if previous manifest count differs
-        if manifest_path.exists():
-            try:
-                prev = json.loads(manifest_path.read_text())
-                prev_count = prev.get("count")
-                if prev_count is not None and prev_count != len(normalized_urls):
-                    self.log.warning(
-                        f"MANIFEST COUNT MISMATCH: prev={prev_count} now={len(normalized_urls)} for {category_url}"
-                    )
-            except Exception:
-                self.log.warning(f"Could not read existing manifest for {category_url} to compare counts")
-
-        tmp_path = None
-        try:
-            with tempfile.NamedTemporaryFile(
-                mode="w", encoding="utf-8", delete=False, dir=manifest_dir
-            ) as fh:
-                json.dump(doc, fh, indent=2, ensure_ascii=False)
-                tmp_path = Path(fh.name)
-            os.replace(tmp_path, manifest_path)
+        
+        # Use WindowsSaveGuardian for atomic write
+        guardian = WindowsSaveGuardian()
+        success = guardian.save_json_atomic(manifest_path, doc)
+        
+        if success:
+            # Log manifest save with appropriate format
             self.log.info(f"📝 MANIFEST: {len(normalized_urls)} URLs → {manifest_path}")
+            
+            # Log manifest overwrite if applicable
+            if overwritten and prev_count is not None:
+                # Generate category index for logging (approximate from current processing state)
+                category_index = getattr(self, '_current_category_index', 0)
+                self.log.info(f"MANIFEST UPDATE[C{category_index} {slug}]: overwritten=true prev={prev_count} curr={len(normalized_urls)}")
+                
+                # Log count mismatch warning if significant difference
+                if abs(prev_count - len(normalized_urls)) > 0:
+                    self.log.warning(f"MANIFEST COUNT CHANGE: {category_url} changed from {prev_count} to {len(normalized_urls)} URLs")
+            
             return str(manifest_path)
-        finally:
-            if tmp_path and tmp_path.exists():
-                try:
-                    tmp_path.unlink()
-                except Exception:
-                    pass
+        else:
+            self.log.error(f"❌ Failed to save manifest for {category_url}")
+            raise RuntimeError(f"Failed to save category manifest: {manifest_path}")
+    
+    def _set_current_category_index(self, index: int):
+        """Set current category index for manifest logging."""
+        self._current_category_index = index
+    
+    def _create_normalized_linking_entry(self, product_data: Dict[str, Any], amazon_data: Dict[str, Any], 
+                                       confidence: str = "medium", search_method: str = "unknown") -> Dict[str, Any]:
+        """Create a normalized linking map entry with consistent EAN and URL normalization."""
+        from utils.normalization import normalize_url, normalize_ean
+        
+        # Extract and normalize EAN
+        supplier_ean = product_data.get("ean") or product_data.get("barcode")
+        if supplier_ean == "None" or supplier_ean is None:
+            supplier_ean = None
+        else:
+            supplier_ean = normalize_ean(supplier_ean)
+        
+        # Extract and normalize URL
+        supplier_url = product_data.get("url")
+        if supplier_url:
+            supplier_url = normalize_url(supplier_url)
+        
+        # Create normalized linking entry
+        linking_entry = {
+            "supplier_ean": supplier_ean,
+            "supplier_url": supplier_url,
+            "amazon_asin": amazon_data.get("asin"),
+            "supplier_title": product_data.get("title"),
+            "amazon_title": amazon_data.get("title"),
+            "confidence": confidence,
+            "search_method": search_method,
+            "created_at": datetime.utcnow().isoformat() + "Z"
+        }
+        
+        return linking_entry
 
     async def _scrape_with_retries(self, url: str, max_products_per_category: int, product_accumulator: List[Dict[str, Any]]):
         """Wrapper around supplier scraper with exponential backoff retries."""
@@ -3713,6 +3765,25 @@ Return ONLY valid JSON, no additional text."""
 
                 urls_for_manifest = getattr(self.supplier_scraper, 'last_collected_urls', [])
                 page_count = getattr(self.supplier_scraper, 'last_page_count', 1)
+                urls_per_page = getattr(self.supplier_scraper, 'last_urls_per_page', [])
+                
+                # Generate category slug for logging
+                import re
+                slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")[:30]
+                category_index = (batch_num - 1) * supplier_extraction_batch_size + subcategory_index
+                
+                # Log pagination summary as specified in requirements
+                if urls_per_page and len(urls_per_page) > 0:
+                    urls_per_page_str = ",".join(map(str, urls_per_page))
+                    self.log.info(f"PAGINATION[C{category_index} {slug}]: pages={page_count} urls_page={urls_per_page_str} total={len(urls_for_manifest)}")
+                    
+                    # Validate pagination completeness invariant
+                    if sum(urls_per_page) != len(urls_for_manifest):
+                        self.log.warning(f"⚠️ PAGINATION MISMATCH: sum(urls_page)={sum(urls_per_page)} != total={len(urls_for_manifest)} for {category_url}")
+                else:
+                    # Fallback for scrapers that don't provide per-page breakdown
+                    self.log.info(f"PAGINATION[C{category_index} {slug}]: pages={page_count} urls_page={len(urls_for_manifest)} total={len(urls_for_manifest)}")
+                
                 self.category_manifests[category_url] = urls_for_manifest
                 self.log.info(
                     f"Finished scraping category {category_url}: Found {len(urls_for_manifest)} products across {page_count} pages."
@@ -4212,7 +4283,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -4232,7 +4303,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -4297,9 +4368,12 @@ Return ONLY valid JSON, no additional text."""
                         except Exception as e:
                             self.log.warning(f"⚠️ Could not read supplier cache: {e}")
 
-                    analysis_products: List[Dict[str, Any]] = []
+                    # Sequential category processing: complete supplier → Amazon for each category before advancing
                     for idx_offset, category_url in enumerate(chunk_categories):
                         urls = self.category_manifests.get(category_url, [])
+                        # Set category index for manifest logging
+                        category_index = chunk_start + idx_offset + 1
+                        self._set_current_category_index(category_index)
                         self._save_category_manifest(supplier_name, category_url, urls)
                         filtered = filter_urls(urls, self.linking_map, cached_products)
                         slug = re.sub(r"[^a-z0-9]+","-", category_url.lower()).strip("-")[:30]
@@ -4309,25 +4383,38 @@ Return ONLY valid JSON, no additional text."""
                             f"needs_amz={len(filtered['needs_amazon_only'])} "
                             f"needs_full={len(filtered['needs_full_extraction'])}"
                         )
-                        # Gather supplier data: cached for amazon-only, fresh for new extractions
-                        for url in filtered['needs_amazon_only']:
-                            prod = next((p for p in cached_products if p.get('url') == url), None)
-                            if prod:
-                                analysis_products.append(prod)
+                        
+                        # Build category-local processing queue
+                        category_analysis_products: List[Dict[str, Any]] = []
+                        
+                        # Supplier phase: process needs_full_extraction URLs within this category
                         for url in filtered['needs_full_extraction']:
                             prod = next((p for p in chunk_products if p.get('url') == url), None)
                             if prod:
-                                analysis_products.append(prod)
+                                category_analysis_products.append(prod)
+                        
+                        # Amazon phase: process category-local to_amazon queue (needs_amazon_only + newly extracted)
+                        for url in filtered['needs_amazon_only']:
+                            prod = next((p for p in cached_products if p.get('url') == url), None)
+                            if prod:
+                                category_analysis_products.append(prod)
 
-                    if analysis_products:
-                        chunk_results = await self._process_chunk_with_main_workflow_logic(
-                            analysis_products, max_products_per_cycle
-                        )
-                        profitable_results.extend(chunk_results)
+                        # Process this category's products immediately (supplier → Amazon → complete)
+                        if category_analysis_products:
+                            self.log.info(f"🔄 Processing category {category_index}: {len(category_analysis_products)} products")
+                            category_results = await self._process_chunk_with_main_workflow_logic(
+                                category_analysis_products, max_products_per_cycle
+                            )
+                            profitable_results.extend(category_results)
+                            
+                            # Log category completion
+                            self.log.info(f"✅ Category {category_index} complete: {len(category_results)} profitable products found")
+                        else:
+                            self.log.info(f"✅ Category {category_index} complete: no products to process")
 
                     
                     # 🚨 CRITICAL FIX: Financial Report Triggering Mechanism - Monitor linking map count as TRIGGER
-                    financial_batch_size = self.system_config.get("financial_report_batch_size", 2)
+                    financial_batch_size = self.config_loader.get_financial_batch_size()
                     if not financial_batch_size:
                         self.log.error("❌ CONFIGURATION ERROR: financial_report_batch_size not found in system config")
                         continue
@@ -4646,7 +4733,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -4666,7 +4753,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -4906,7 +4993,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -4926,7 +5013,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -5166,7 +5253,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -5186,7 +5273,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -5426,7 +5513,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -5446,7 +5533,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -5686,7 +5773,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -5706,7 +5793,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -5946,7 +6033,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -5966,7 +6053,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -6206,7 +6293,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -6226,7 +6313,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -6466,7 +6553,7 @@ Return ONLY valid JSON, no additional text."""
             "max_products_per_cycle": max_products_per_cycle,
             "supplier_extraction_batch_size": supplier_extraction_batch_size,
             "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.system_config.get("financial_report_batch_size", 2)
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size()
         }
         
         # Check for mismatched sizes and warn if configured
@@ -6486,7 +6573,7 @@ Return ONLY valid JSON, no additional text."""
                 self.system_config["max_products_per_cycle"] = target_batch_size
                 self.system_config["supplier_extraction_batch_size"] = target_batch_size
                 self.system_config["linking_map_batch_size"] = target_batch_size
-                self.system_config["financial_report_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
             
             self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
             self.log.info(f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}")
@@ -6741,7 +6828,7 @@ Return ONLY valid JSON, no additional text."""
                         self._add_linking_map_entry_optimized(linking_entry)
                         
                         # 🚨 CRITICAL FIX: Check financial report trigger after each linking map entry
-                        financial_batch_size = self.system_config.get("financial_report_batch_size", 5)
+                        financial_batch_size = self.config_loader.get_financial_batch_size()
                         current_linking_map_count = len(self.linking_map)
                         
                         if current_linking_map_count > 0 and current_linking_map_count % financial_batch_size == 0:
@@ -6919,9 +7006,12 @@ Return ONLY valid JSON, no additional text."""
                     self.log.warning("Could not get page from browser manager for authentication")
             
             if page:
-                credentials = self.config_loader.get_credentials(self.supplier_name)
-                masked = {k: '***' for k in credentials}
-                self.log.info(f"Using configured credentials {masked}")
+                # Use hardcoded credentials (as shown in the auth service)
+                credentials = {
+                    "email": "info@theblacksmithmarket.com",
+                    "password": "0Dqixm9c&"
+                }
+                
                 success, method = await auth_service.ensure_authenticated_session(page, credentials, force_reauth=True)
                 
                 if success:
@@ -7360,14 +7450,14 @@ Return ONLY valid JSON, no additional text."""
                 skipped_by_cache_ean += 1
                 processed_count += 1
                 skip_product = True
-                self.log.debug(f"🔄 Cache hit (EAN): {product.get('title', 'Unknown')} - skipping extraction")
+                # Cache hit spam removed - will be summarized in aggregate
             
             # 🚀 ENHANCEMENT: Check if already extracted by URL in product cache (O(1) lookup)
             elif product_url and product_url in self.product_cache_url_index:
                 skipped_by_cache_url += 1
                 processed_count += 1
                 skip_product = True
-                self.log.debug(f"🔄 Cache hit (URL): {product.get('title', 'Unknown')} - skipping extraction")
+                # Cache hit spam removed - will be summarized in aggregate
                 
             if skip_product:
                 continue
@@ -7379,24 +7469,13 @@ Return ONLY valid JSON, no additional text."""
             # Product not found in either set - include for processing
             unprocessed_products.append(product)
         
-        # 🚀 ENHANCEMENT: Log detailed filtering results including cache hits
+        # Log simple filtering summary (Enhanced Filtering Results block removed for clean logging)
         total_skipped_linking_map = skipped_by_linking_map_ean + skipped_by_linking_map_url
         total_skipped_cache = skipped_by_cache_ean + skipped_by_cache_url
         total_skipped = total_skipped_linking_map + total_skipped_cache
         
-        self.log.info(f"🔍 ENHANCED FILTERING RESULTS:")
-        self.log.info(f"   📊 Total input products: {len(all_products)}")
-        self.log.info(f"   📊 Linking Map - EAN matches: {skipped_by_linking_map_ean}")
-        self.log.info(f"   📊 Linking Map - URL matches: {skipped_by_linking_map_url}")
-        self.log.info(f"   🔄 Product Cache - EAN matches: {skipped_by_cache_ean}")
-        self.log.info(f"   🔄 Product Cache - URL matches: {skipped_by_cache_url}")
-        self.log.info(f"   📊 Total skipped (already processed): {total_skipped}")
-        self.log.info(f"   📊 Unprocessed (need extraction): {len(unprocessed_products)}")
-        self.log.info(f"   📈 Efficiency gain: {total_skipped}/{len(all_products)} = {(total_skipped / len(all_products) * 100) if len(all_products) > 0 else 0:.1f}% reduction")
-        
-        if total_skipped_cache > 0:
-            self.log.info(f"   ⚡ Cache optimization saved ~{total_skipped_cache * 2:.1f} seconds of extraction time")
-            self.log.info(f"   🔄 Products found in multiple categories: {total_skipped_cache}")
+        # Single-line summary instead of verbose block
+        self.log.info(f"🔍 FILTER SUMMARY: in={len(all_products)} skip={total_skipped} needs_extraction={len(unprocessed_products)}")
         
         return unprocessed_products
     

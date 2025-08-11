@@ -24,7 +24,7 @@ import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional, Union, Tuple
 import hashlib
 import logging
 from collections import defaultdict
@@ -312,7 +312,11 @@ class FixedEnhancedStateManager:
             # Update the current category total
             self.state_data["supplier_extraction_progress"]["total_products_in_current_category"] = discovered_count
             self.state_data["supplier_extraction_progress"]["discovered_products_in_current_category"] = discovered_count
-            self.state_data["supplier_extraction_progress"]["current_category_url"] = category_url
+            # Use normalized URL for consistent key comparison
+            from utils.normalization import normalize_url
+            normalized_category_url = normalize_url(category_url)
+            self.state_data["supplier_extraction_progress"]["current_category_url"] = normalized_category_url
+            self.state_data["supplier_extraction_progress"]["original_category_url"] = category_url
             
             # Update the category completion status if it exists
             if "gap_processing" in self.state_data and "category_completion_status" in self.state_data["gap_processing"]:
@@ -360,11 +364,14 @@ class FixedEnhancedStateManager:
         # Update current product index in category
         self.state_data["supplier_extraction_progress"]["current_product_index_in_category"] += increment
         
-        # Update processed products mapping if URL provided
+        # Update processed products mapping if URL provided (with normalization)
         if product_url:
-            self.state_data["processed_products"][product_url] = {
+            from utils.normalization import normalize_url
+            normalized_url = normalize_url(product_url)
+            self.state_data["processed_products"][normalized_url] = {
                 "processed_at": datetime.now(timezone.utc).isoformat(),
-                "session_index": self.state_data["session_products_processed"]
+                "session_index": self.state_data["session_products_processed"],
+                "original_url": product_url  # Keep original for reference
             }
         
         # Update the legacy last_processed_index (now same as resumption_index for exact recovery)
@@ -375,11 +382,15 @@ class FixedEnhancedStateManager:
     # === NEW PROGRESSION METHODS ===
     def initialize_category_processing(self, category_index: int, category_url: str, total_categories: int):
         """Initialize tracking for a new category"""
+        from utils.normalization import normalize_url
+        normalized_category_url = normalize_url(category_url)
+        
         sp = self.state_data.setdefault("system_progression", {})
         sp.update({
             "current_phase": "supplier_extraction",
             "current_category_index": category_index,
-            "current_category_url": category_url,
+            "current_category_url": normalized_category_url,
+            "original_category_url": category_url,  # Keep original for reference
             "total_categories": total_categories,
             "current_product_index_in_category": 0,
             "total_products_in_current_category": 0
@@ -396,9 +407,13 @@ class FixedEnhancedStateManager:
         ud = self.state_data.setdefault("user_display_metrics", {})
         ud["progress_count"] = ud.get("progress_count", 0) + increment
 
-        self.state_data.setdefault("processed_products", {})[product_url] = {
+        # Use normalized URL for consistent key comparison
+        from utils.normalization import normalize_url
+        normalized_url = normalize_url(product_url)
+        self.state_data.setdefault("processed_products", {})[normalized_url] = {
             "status": "supplier_extracted",
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "original_url": product_url  # Keep original for reference
         }
 
         self.save_state_atomic()
@@ -412,9 +427,13 @@ class FixedEnhancedStateManager:
         ud = self.state_data.setdefault("user_display_metrics", {})
         ud["session_products_processed"] = ud.get("session_products_processed", 0) + increment
 
-        self.state_data.setdefault("processed_products", {})[product_url] = {
+        # Use normalized URL for consistent key comparison
+        from utils.normalization import normalize_url
+        normalized_url = normalize_url(product_url)
+        self.state_data.setdefault("processed_products", {})[normalized_url] = {
             "status": "amazon_analyzed",
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "original_url": product_url  # Keep original for reference
         }
 
         self.save_state_atomic()
@@ -473,15 +492,96 @@ class FixedEnhancedStateManager:
         """Atomic save wrapper used by new progression methods"""
         self.save_state(preserve_interruption_state=True)
 
-    def validate_and_repair_state(self) -> None:
-        """Basic sanity checks to ensure resume pointers are within bounds."""
-        sp = self.state_data.get("system_progression", {})
-        total = sp.get("total_categories", 0)
-        if sp.get("current_category_index", 0) > total:
-            sp["current_category_index"] = max(total - 1, 0)
-        if sp.get("current_product_index_in_category", 0) > sp.get("total_products_in_current_category", 0):
+    def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
+        """
+        Validate state consistency and repair issues automatically.
+        
+        Returns:
+            Tuple[bool, List[str]]: (is_valid, repairs_made)
+        """
+        repairs_made = []
+        is_valid = True
+        
+        # Ensure required keys exist
+        required_keys = ["system_progression", "user_display_metrics", "supplier_extraction_progress"]
+        for key in required_keys:
+            if key not in self.state_data:
+                self.state_data[key] = {}
+                repairs_made.append(f"Added missing key: {key}")
+                is_valid = False
+        
+        # Validate system_progression structure
+        sp = self.state_data.setdefault("system_progression", {})
+        required_sp_keys = [
+            "current_phase", "current_category_index", "current_category_url",
+            "total_categories", "current_product_index_in_category", 
+            "total_products_in_current_category", "supplier_extraction_resumption_index",
+            "amazon_analysis_resumption_index"
+        ]
+        
+        for key in required_sp_keys:
+            if key not in sp:
+                default_value = "" if "url" in key else 0
+                sp[key] = default_value
+                repairs_made.append(f"Added missing system_progression key: {key}")
+                is_valid = False
+        
+        # Validate bounds and monotonic progression
+        total_categories = sp.get("total_categories", 0)
+        current_category_index = sp.get("current_category_index", 0)
+        
+        if current_category_index > total_categories:
+            sp["current_category_index"] = max(total_categories - 1, 0)
+            repairs_made.append(f"Fixed category index bounds: {current_category_index} -> {sp['current_category_index']}")
+            is_valid = False
+        
+        total_products_in_category = sp.get("total_products_in_current_category", 0)
+        current_product_index = sp.get("current_product_index_in_category", 0)
+        
+        if current_product_index > total_products_in_category:
             sp["current_product_index_in_category"] = 0
-        self.state_data["system_progression"] = sp
+            repairs_made.append(f"Fixed product index bounds: {current_product_index} -> 0")
+            is_valid = False
+        
+        # Ensure resumption indices are monotonic
+        supplier_resumption = sp.get("supplier_extraction_resumption_index", 0)
+        amazon_resumption = sp.get("amazon_analysis_resumption_index", 0)
+        
+        if supplier_resumption < 0:
+            sp["supplier_extraction_resumption_index"] = 0
+            repairs_made.append("Fixed negative supplier resumption index")
+            is_valid = False
+            
+        if amazon_resumption < 0:
+            sp["amazon_analysis_resumption_index"] = 0
+            repairs_made.append("Fixed negative Amazon resumption index")
+            is_valid = False
+        
+        # Ensure supplier_extraction_progress keys exist
+        sep = self.state_data.setdefault("supplier_extraction_progress", {})
+        required_sep_keys = [
+            "total_products_in_current_category", "discovered_products_in_current_category",
+            "current_category_url", "current_product_index_in_category"
+        ]
+        
+        for key in required_sep_keys:
+            if key not in sep:
+                default_value = "" if "url" in key else 0
+                sep[key] = default_value
+                repairs_made.append(f"Added missing supplier_extraction_progress key: {key}")
+                is_valid = False
+        
+        # Sync progress counters if they're inconsistent
+        if "resumption_index" not in self.state_data:
+            self.state_data["resumption_index"] = supplier_resumption
+            repairs_made.append("Synced resumption_index with supplier_extraction_resumption_index")
+            is_valid = False
+        
+        # Log repairs if any were made
+        if repairs_made:
+            log.info(f"State repaired: {'; '.join(repairs_made)}")
+        
+        return is_valid, repairs_made
 
 
     def _calculate_file_grounded_totals(self) -> Dict[str, Any]:

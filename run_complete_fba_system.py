@@ -701,7 +701,7 @@ class CompleteFBASystem:
             
             logger.info(f"🔧 Workflow configured: force_ai_scraping={force_ai_scraping}, "
                        f"linking_batch={system_config.get('system', {}).get('linking_map_batch_size', 10)}, "
-                       f"financial_batch={system_config.get('system', {}).get('financial_report_batch_size', 20)}, "
+                       f"financial_batch={config_loader.get_financial_batch_size()}, "
                        f"ai_client={'enabled' if ai_client_instance else 'disabled'}")
             
             # Configure browser mode

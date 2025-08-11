@@ -33,8 +33,8 @@ class LoginResult:
 class StandalonePlaywrightLogin:
     """Standalone Playwright login for PoundWholesale"""
     
-    def __init__(self, cdp_port: int = 9222):
-        """Initialize login handler"""
+    def __init__(self, cdp_port: int = 9222, email: str = None, password: str = None):
+        """Initialize login handler with credentials"""
         self.cdp_port = cdp_port
         self.cdp_endpoint = f"http://localhost:{cdp_port}"
         
@@ -44,9 +44,9 @@ class StandalonePlaywrightLogin:
         self.context = None
         self.page = None
         
-        # Credentials
-        self.email = "info@theblacksmithmarket.com"
-        self.password = "0Dqixm9c&"
+        # Credentials - accept from constructor or use defaults
+        self.email = email or "info@theblacksmithmarket.com"
+        self.password = password or "0Dqixm9c&"
         self.base_url = "https://www.poundwholesale.co.uk"
         self.login_url = f"{self.base_url}/customer/account/login/"
         
@@ -164,8 +164,9 @@ class StandalonePlaywrightLogin:
             await self.page.goto(self.login_url, wait_until='domcontentloaded')
             await self.page.wait_for_load_state('networkidle', timeout=10000)
             
-            # Enhanced email field selectors (in order of preference)
+            # PoundWholesale/Magento-specific email field selectors (in order of preference)
             email_selectors = [
+                'input[name="login[username]"]',  # Magento-specific
                 'input[name="email"]',
                 'input[type="email"]', 
                 '#email',
@@ -199,8 +200,9 @@ class StandalonePlaywrightLogin:
                     login_duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            # Enhanced password field selectors (in order of preference)
+            # PoundWholesale/Magento-specific password field selectors (in order of preference)
             password_selectors = [
+                'input[name="login[password]"]',  # Magento-specific
                 'input[name="password"]',
                 'input[type="password"]', 
                 '#password',
@@ -233,16 +235,16 @@ class StandalonePlaywrightLogin:
                     login_duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
             
-            # Enhanced submit button selectors (in order of preference)
+            # PoundWholesale/Magento-specific submit button selectors (in order of preference)
             submit_selectors = [
                 'button[type="submit"]',
-                '.login-button',
                 'input[type="submit"]',
-                '#login-btn',
-                '#customer_login_btn',
+                '.login-button',
                 'button:has-text("Sign In")',
                 'button:has-text("Log In")',
                 'button:has-text("Login")',
+                '#login-btn',
+                '#customer_login_btn',
                 '.btn-login',
                 '.submit-button'
             ]
@@ -371,39 +373,59 @@ class StandalonePlaywrightLogin:
             log.error(f"Error verifying login: {e}")
             return False
     
-    async def verify_price_access(self) -> bool:
-        """Verify that logged-in user can see wholesale prices"""
+    async def verify_price_access(self, page: Page = None) -> bool:
+        """
+        Verify that logged-in user can see wholesale prices with currency symbols
+        
+        Args:
+            page: Optional page object to use (uses self.page if not provided)
+        
+        Returns:
+            bool: True if price access is verified, False otherwise
+        """
         try:
             log.info("💰 Verifying price access...")
             
-            # Navigate to a test product
-            test_product = f"{self.base_url}/sealapack-turkey-roasting-bags-2-pack"
-            await self.page.goto(test_product, wait_until='domcontentloaded')
-            await self.page.wait_for_load_state('networkidle', timeout=10000)
+            # Use provided page or default to self.page
+            target_page = page or self.page
+            if not target_page:
+                log.error("No page available for price verification")
+                return False
             
-            # Look for price elements
+            # Navigate to a test product that requires login to see prices
+            test_product = f"{self.base_url}/sealapack-turkey-roasting-bags-2-pack"
+            await target_page.goto(test_product, wait_until='domcontentloaded')
+            await target_page.wait_for_load_state('networkidle', timeout=10000)
+            
+            # Look for price elements with currency symbols
             for selector in self.PRICE_SELECTORS:
                 try:
-                    elements = await self.page.locator(selector).all()
+                    elements = await target_page.locator(selector).all()
                     for element in elements:
                         if await element.is_visible():
                             text = await element.text_content()
                             if text and '£' in text and len(text.strip()) > 1:
-                                log.info(f"✅ Price access confirmed: {text.strip()}")
-                                return True
+                                # Additional validation: ensure it's a real price, not just text containing £
+                                import re
+                                price_pattern = r'£\s*\d+\.?\d*'
+                                if re.search(price_pattern, text):
+                                    log.info(f"✅ Price access confirmed: {text.strip()}")
+                                    return True
                 except Exception:
                     continue
             
-            # Look for "login required" messages
+            # Look for "login required" messages that indicate no price access
             login_required_indicators = [
                 'text=Login to view prices',
-                'text=login to view prices',
-                'text=Sign in to see prices'
+                'text=login to view prices', 
+                'text=Sign in to see prices',
+                'text=Please login to view prices',
+                'text=Login required'
             ]
             
             for indicator in login_required_indicators:
                 try:
-                    element = self.page.locator(indicator).first
+                    element = target_page.locator(indicator).first
                     if await element.is_visible():
                         log.warning(f"❌ Still seeing login required message: {indicator}")
                         return False
@@ -466,17 +488,19 @@ class StandalonePlaywrightLogin:
             log.warning(f"Cleanup warning: {e}")
 
 # Convenience function for easy import
-async def login_to_poundwholesale(cdp_port: int = 9222) -> LoginResult:
+async def login_to_poundwholesale(cdp_port: int = 9222, email: str = None, password: str = None) -> LoginResult:
     """
     Convenience function to login to PoundWholesale
     
     Args:
         cdp_port: CDP port for Chrome connection (default 9222)
+        email: Login email (optional, uses default if not provided)
+        password: Login password (optional, uses default if not provided)
     
     Returns:
         LoginResult with success status and details
     """
-    login_handler = StandalonePlaywrightLogin(cdp_port)
+    login_handler = StandalonePlaywrightLogin(cdp_port, email, password)
     
     try:
         result = await login_handler.login_workflow()

@@ -99,18 +99,24 @@ class HashLookupOptimizer:
             )
     
     def _add_entry_to_indexes(self, entry: Dict[str, Any]) -> None:
-        """Add a single entry to all relevant indexes (thread-safe)"""
-        # Index by supplier EAN
+        """Add a single entry to all relevant indexes (thread-safe) with normalization"""
+        from utils.normalization import normalize_url, normalize_ean
+        
+        # Index by supplier EAN (normalized)
         supplier_ean = entry.get("supplier_ean") or entry.get("ean")
         if supplier_ean:
-            self._ean_index[supplier_ean] = entry
+            normalized_ean = normalize_ean(supplier_ean)
+            if normalized_ean:  # Only index non-empty normalized EANs
+                self._ean_index[normalized_ean] = entry
         
-        # Index by supplier URL
+        # Index by supplier URL (normalized)
         supplier_url = entry.get("supplier_url") or entry.get("url")
         if supplier_url:
-            self._url_index[supplier_url] = entry
+            normalized_url = normalize_url(supplier_url)
+            if normalized_url:  # Only index non-empty normalized URLs
+                self._url_index[normalized_url] = entry
         
-        # Index by Amazon ASIN
+        # Index by Amazon ASIN (no normalization needed for ASINs)
         amazon_asin = (entry.get("amazon_asin") or 
                       entry.get("chosen_amazon_asin") or 
                       entry.get("asin"))
@@ -120,15 +126,16 @@ class HashLookupOptimizer:
     def check_product_in_linking_map(self, supplier_ean: Optional[str] = None, 
                                    supplier_url: Optional[str] = None) -> Tuple[bool, Optional[Dict[str, Any]]]:
         """
-        Fast O(1) lookup to check if product exists in linking map.
+        Fast O(1) lookup to check if product exists in linking map with normalization.
         
         Args:
-            supplier_ean: EAN to search for
-            supplier_url: URL to search for
+            supplier_ean: EAN to search for (will be normalized)
+            supplier_url: URL to search for (will be normalized)
             
         Returns:
             Tuple of (found, entry) where found is bool and entry is the matching record
         """
+        from utils.normalization import normalize_url, normalize_ean
         start_time = time.time()
         
         with self._lock:
@@ -136,21 +143,25 @@ class HashLookupOptimizer:
                 self.logger.warning("⚠️ Hash indexes not built - cannot perform O(1) lookup")
                 return False, None
             
-            # Try EAN lookup first (most reliable)
-            if supplier_ean and supplier_ean in self._ean_index:
-                entry = self._ean_index[supplier_ean]
-                self.metrics.hash_lookups += 1
-                self.metrics.hash_lookup_time += time.time() - start_time
-                self.metrics.cache_hits += 1
-                return True, entry
+            # Try EAN lookup first (most reliable) with normalization
+            if supplier_ean:
+                normalized_ean = normalize_ean(supplier_ean)
+                if normalized_ean and normalized_ean in self._ean_index:
+                    entry = self._ean_index[normalized_ean]
+                    self.metrics.hash_lookups += 1
+                    self.metrics.hash_lookup_time += time.time() - start_time
+                    self.metrics.cache_hits += 1
+                    return True, entry
             
-            # Try URL lookup
-            if supplier_url and supplier_url in self._url_index:
-                entry = self._url_index[supplier_url]
-                self.metrics.hash_lookups += 1
-                self.metrics.hash_lookup_time += time.time() - start_time
-                self.metrics.cache_hits += 1
-                return True, entry
+            # Try URL lookup with normalization
+            if supplier_url:
+                normalized_url = normalize_url(supplier_url)
+                if normalized_url and normalized_url in self._url_index:
+                    entry = self._url_index[normalized_url]
+                    self.metrics.hash_lookups += 1
+                    self.metrics.hash_lookup_time += time.time() - start_time
+                    self.metrics.cache_hits += 1
+                    return True, entry
             
             # Not found in any index
             self.metrics.hash_lookups += 1
@@ -160,21 +171,25 @@ class HashLookupOptimizer:
     
     def get_entry_by_ean(self, supplier_ean: str) -> Optional[Dict[str, Any]]:
         """
-        Fast O(1) EAN lookup.
+        Fast O(1) EAN lookup with normalization.
         
         Args:
-            supplier_ean: EAN to search for
+            supplier_ean: EAN to search for (will be normalized)
             
         Returns:
             Matching entry or None if not found
         """
+        from utils.normalization import normalize_ean
         start_time = time.time()
         
         with self._lock:
             if not self._index_valid:
                 return None
             
-            entry = self._ean_index.get(supplier_ean)
+            # Normalize EAN for consistent lookup
+            normalized_ean = normalize_ean(supplier_ean)
+            entry = self._ean_index.get(normalized_ean) if normalized_ean else None
+            
             self.metrics.hash_lookups += 1
             self.metrics.hash_lookup_time += time.time() - start_time
             
@@ -187,21 +202,24 @@ class HashLookupOptimizer:
     
     def get_entry_by_url(self, supplier_url: str) -> Optional[Dict[str, Any]]:
         """
-        Fast O(1) URL lookup.
+        Fast O(1) URL lookup with normalization.
         
         Args:
-            supplier_url: URL to search for
+            supplier_url: URL to search for (will be normalized)
             
         Returns:
             Matching entry or None if not found
         """
+        from utils.normalization import normalize_url
         start_time = time.time()
         
         with self._lock:
             if not self._index_valid:
                 return None
             
-            entry = self._url_index.get(supplier_url)
+            # Normalize URL for consistent lookup
+            normalized_url = normalize_url(supplier_url)
+            entry = self._url_index.get(normalized_url) if normalized_url else None
             self.metrics.hash_lookups += 1
             self.metrics.hash_lookup_time += time.time() - start_time
             
