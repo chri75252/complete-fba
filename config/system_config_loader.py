@@ -44,6 +44,10 @@ class SystemConfigLoader:
 
     def get_workflow_config(self, workflow_key: str) -> Dict[str, Any]:
         return self._config.get("workflows", {}).get(workflow_key, {})
+    
+    def get_financial_batch_size(self) -> int:
+        """Single accessor for financial_report_batch_size with consistent default."""
+        return self.get_system_config().get("financial_report_batch_size", 5)
 
     # ------------------------------------------------------------------
     # backward compatible helpers

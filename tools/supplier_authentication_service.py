@@ -78,7 +78,15 @@ class SupplierAuthenticationService:
         try:
             # Check if already authenticated (unless force reauth)
             if not force_reauth and await self._is_session_authenticated(page):
-                self.log.info("✅ Session already authenticated - skipping login")
+                # Verify price access for complete authentication confirmation
+                try:
+                    from tools.standalone_playwright_login import StandalonePlaywrightLogin
+                    login_handler = StandalonePlaywrightLogin()
+                    price_access = await login_handler.verify_price_access(page)
+                    self.log.info(f"✅ Already logged in! Price access verified: {price_access}")
+                except Exception:
+                    self.log.info("✅ Already logged in!")
+                
                 self._auth_state["is_authenticated"] = True
                 return True, "existing_session"
             
@@ -118,59 +126,55 @@ class SupplierAuthenticationService:
     
     async def _is_session_authenticated(self, page: Page) -> bool:
         """
-        Check if the current session is already authenticated
-        by looking for authenticated-user indicators
+        Check if the current session is already authenticated using DOM-based indicators
         """
         try:
             # Navigate to a page that requires authentication
             await page.goto(self.supplier_url)
             await page.wait_for_load_state('networkidle', timeout=10000)
             
-            # Look for SPECIFIC authentication indicators that indicate logged-in state
-            # Use more precise indicators to avoid false positives
-            auth_indicators = [
-                "logout", "sign out", "log out",  # Clear logout indicators
-                "my account", "my profile", "account dashboard",  # Specific account pages
-                "welcome back", "hello ", "hi ",  # Personal greetings
-                "my orders", "order history", "account settings",  # Account-specific features
-                "wholesale dashboard", "customer dashboard"  # Supplier-specific areas
-            ]
-            
-            page_content = await page.content()
-            page_text = page_content.lower()
-            
-            # Check for precise authentication indicators
-            authenticated = False
-            for indicator in auth_indicators:
-                if indicator in page_text:
-                    self.log.info(f"✅ Authentication indicator found: '{indicator}'")
-                    authenticated = True
-                    break
-            
-            # Additional verification: check for logout links in navigation
+            # DOM-based authentication detection - check for logout links first (most reliable)
             try:
-                # Look for logout/sign out links which are clear indicators of being logged in
                 logout_elements = await page.query_selector_all('a[href*="logout"], a[href*="signout"], a[href*="sign-out"]')
                 if logout_elements:
                     self.log.info("✅ Logout link found - user is authenticated")
-                    authenticated = True
+                    return True
             except Exception as e:
                 self.log.debug(f"Could not check logout links: {e}")
             
-            if authenticated:
-                return True
+            # Check for account UI elements
+            try:
+                account_elements = await page.query_selector_all('.customer-welcome')
+                if account_elements:
+                    for element in account_elements:
+                        if await element.is_visible():
+                            self.log.info("✅ Customer welcome element found - user is authenticated")
+                            return True
+            except Exception as e:
+                self.log.debug(f"Could not check account UI: {e}")
+            
+            # Price access verification - navigate to a known product and check for price visibility
+            try:
+                from tools.standalone_playwright_login import StandalonePlaywrightLogin
+                login_handler = StandalonePlaywrightLogin()
+                price_access = await login_handler.verify_price_access(page)
+                if price_access:
+                    self.log.info("✅ Price access verified - user is authenticated")
+                    return True
+            except Exception as e:
+                self.log.debug(f"Could not verify price access: {e}")
             
             # Check for login form (indicates not authenticated)
-            login_indicators = ["login", "sign in", "email", "password"]
-            login_found = any(indicator in page_text for indicator in login_indicators)
-            
-            if login_found:
-                self.log.info("❌ Login form detected - not authenticated")
-                return False
+            try:
+                login_form = await page.query_selector('form[action*="login"], input[name*="login"], input[type="password"]')
+                if login_form:
+                    self.log.info("❌ Login form detected - not authenticated")
+                    return False
+            except Exception as e:
+                self.log.debug(f"Could not check login form: {e}")
             
             # Default to not authenticated if unclear
             self.log.info("⚠️ No clear authentication indicators found - assuming not authenticated")
-            self.log.debug(f"Page content length: {len(page_content)} characters")
             return False
             
         except Exception as e:
@@ -182,18 +186,22 @@ class SupplierAuthenticationService:
         try:
             self.log.info("🔧 Using standalone playwright authentication")
             
-            # Call the standalone login function with CDP port 9222
-            result = await login_to_poundwholesale(cdp_port=9222)
+            # Extract credentials
+            email = credentials.get("email", "")
+            password = credentials.get("password", "")
+            
+            # Call the standalone login function with CDP port 9222 and credentials
+            result = await login_to_poundwholesale(cdp_port=9222, email=email, password=password)
             
             if result.success:
                 self.log.info(f"✅ Standalone authentication successful: {result.method_used}")
                 return True
             else:
-                self.log.warning(f"❌ Standalone authentication failed: {result.error_message}")
+                self.log.error(f"❌ Standalone authentication failed: {result.error_message}")
                 return False
                 
         except Exception as e:
-            self.log.error(f"Standalone authentication error: {e}")
+            self.log.error(f"❌ Standalone authentication failed: {e}")
             return False
     
     def _should_use_vision_login(self) -> bool:
@@ -226,16 +234,16 @@ class SupplierAuthenticationService:
             await page.goto(f"{self.supplier_url}/customer/account/login/")
             await page.wait_for_load_state('networkidle')
             
-            # Try common login selectors
+            # PoundWholesale/Magento-specific login selectors
             email_selectors = [
-                'input[name="login[username]"]',
+                'input[name="login[username]"]',  # Magento-specific
                 'input[type="email"]',
                 'input[name="email"]',
                 '#email'
             ]
             
             password_selectors = [
-                'input[name="login[password]"]',
+                'input[name="login[password]"]',  # Magento-specific
                 'input[type="password"]',
                 'input[name="password"]',
                 '#password'
