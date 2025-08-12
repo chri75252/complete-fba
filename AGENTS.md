@@ -1,5 +1,46 @@
 # FBA Agent System: Component Architecture
+# Repository Guidelines
 
+## Project Structure & Module Organization
+- Tools: core agents in `tools/` (e.g., `supplier_authentication_service.py`, `configurable_supplier_scraper.py`, `amazon_playwright_extractor.py`, `FBA_Financial_calculator.py`, `passive_extraction_workflow_latest.py`).
+- Utilities: shared infrastructure in `utils/` (e.g., `enhanced_state_manager.py`, `browser_manager.py`).
+- Config: settings in `config/` (e.g., `system_config.json`, `poundwholesale_categories.json`).
+- Outputs: caches and reports in `OUTPUTS/` (e.g., `FBA_ANALYSIS/`, `CACHE/`).
+- Orchestration: `PassiveExtractionWorkflow` coordinates agents (see `tools/passive_extraction_workflow_latest.py`).
+
+## Build, Test, and Development Commands
+- Install deps: `python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt`.
+- Run workflow: `python run_complete_fba_system.py` (or `python run_custom_poundwholesale.py`).
+- Tests: `pytest -q` (unit/integration markers configured). Fast subset: `pytest -m "not requires_browser"`.
+- Coverage: `pytest --cov`.
+- Lint/format: `ruff check .` and `black .` (see `pyproject.toml`).
+
+## Coding Style & Naming Conventions
+- Python 3.12, 4-space indentation, max line length 100.
+- Names: functions/modules `snake_case`, classes `PascalCase`, constants `UPPER_SNAKE_CASE`.
+- Imports: follow Ruff/isort rules (first-party: `tools`, `utils`, `config`).
+- Type hints encouraged; MyPy config present (`mypy` optional).
+
+## Testing Guidelines
+- Framework: `pytest` with markers (`unit`, `integration`, `requires_browser`).
+- Locations: tests in `tests/`; name files `test_*.py`.
+- Browser tests: isolate with `-m requires_browser`; avoid network by default.
+- Aim for coverage on `tools/`, `utils/`, `config/` code paths that you change.
+
+## Commit & Pull Request Guidelines
+- Use Conventional Commits when possible: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`.
+- Commits: small, scoped, descriptive subject (<=72 chars); body explains why.
+- PRs: clear summary, linked issues, steps to validate, risks/rollbacks; include sample command outputs or screenshots when UI/logs change.
+
+## Security & Configuration Tips
+- Credentials: stored in `config/system_config.json`; never commit secrets. Prefer `.env` and reference via config loader.
+- Authentication flow uses a pre-launched Chrome with remote debugging; ensure the browser is running on the configured port before scraping.
+- Long runs write to `OUTPUTS/`; avoid deleting caches while agents run.
+
+## Agent-Specific Pointers
+- Authentication Agent verifies login via visible prices; prefer price-check as source of truth.
+- Supplier Scraper: consider periodic cache flushes to `OUTPUTS/cached_products/...` during long runs.
+- Amazon Extractor: try EAN-first, title as fallback; cache JSON to `OUTPUTS/FBA_ANALYSIS/amazon_cache/`.
 **Last Updated:** 2025-07-15
 
 This document provides a detailed breakdown of the individual "agents" or autonomous components that make up the Amazon FBA Agent System. Each agent has a specialized role, and they work together in a pipeline to automate the process of finding profitable products.

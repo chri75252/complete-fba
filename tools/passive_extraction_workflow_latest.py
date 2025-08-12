@@ -954,7 +954,7 @@ class PassiveExtractionWorkflow:
         self.browser_manager = browser_manager
         self.log = logging.getLogger(self.__class__.__name__)
         
-        # 🚨 IMPORT HYGIENE: Log module path to confirm correct module is running
+        # 🚨 IMPORT HYGIENE: Log module path to confirm correct workflow is running
         self.log.info(f"MODULE PATH: {__file__}")
         
         # Core components initialized here
@@ -2358,6 +2358,40 @@ class PassiveExtractionWorkflow:
     def _set_current_category_index(self, index: int):
         """Set current category index for manifest logging."""
         self._current_category_index = index
+    
+    def _generate_category_slug(self, category_url: str) -> str:
+        """Generate readable slug from category URL path"""
+        try:
+            from urllib.parse import urlparse
+            import re
+            
+            # Parse URL and extract path
+            parsed = urlparse(category_url)
+            path = parsed.path.strip('/')
+            
+            # Get the last meaningful part of the path
+            if path:
+                path_parts = path.split('/')
+                # Take the last part, or second-to-last if last is very short
+                if len(path_parts) > 1 and len(path_parts[-1]) < 5:
+                    slug_base = path_parts[-2] if len(path_parts) > 1 else path_parts[-1]
+                else:
+                    slug_base = path_parts[-1]
+            else:
+                # Fallback to domain if no path
+                slug_base = parsed.netloc.replace('www.', '').replace('.', '-')
+            
+            # Clean up the slug
+            slug = re.sub(r'[^a-z0-9]+', '-', slug_base.lower()).strip('-')
+            
+            # Limit length and ensure it's not empty
+            slug = slug[:30] if slug else 'unknown'
+            
+            return slug
+            
+        except Exception as e:
+            self.log.warning(f"Failed to generate slug for {category_url}: {e}")
+            return 'unknown'
     
     def _create_normalized_linking_entry(self, product_data: Dict[str, Any], amazon_data: Dict[str, Any], 
                                        confidence: str = "medium", search_method: str = "unknown") -> Dict[str, Any]:
@@ -3768,8 +3802,7 @@ Return ONLY valid JSON, no additional text."""
                 urls_per_page = getattr(self.supplier_scraper, 'last_urls_per_page', [])
                 
                 # Generate category slug for logging
-                import re
-                slug = re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")[:30]
+                slug = self._generate_category_slug(category_url)
                 category_index = (batch_num - 1) * supplier_extraction_batch_size + subcategory_index
                 
                 # Log pagination summary as specified in requirements
@@ -3783,6 +3816,26 @@ Return ONLY valid JSON, no additional text."""
                 else:
                     # Fallback for scrapers that don't provide per-page breakdown
                     self.log.info(f"PAGINATION[C{category_index} {slug}]: pages={page_count} urls_page={len(urls_for_manifest)} total={len(urls_for_manifest)}")
+                
+                # Save category manifest atomically after pagination
+                if urls_for_manifest:
+                    self._set_current_category_index(category_index)
+                    self._save_category_manifest(supplier_name, category_url, urls_for_manifest)
+                    
+                    # Update state manager with accurate totals for breadcrumb logging
+                    if hasattr(self, 'state_manager') and self.state_manager:
+                        # Set total categories from config
+                        total_categories = len(category_urls_to_scrape) if hasattr(self, 'category_urls_to_scrape') else 119
+                        
+                        # Update system progression with accurate totals
+                        sp = self.state_manager.state_data.setdefault("system_progression", {})
+                        sp.update({
+                            "total_categories": total_categories,
+                            "current_category_index": category_index,
+                            "current_category_url": category_url,
+                            "total_products_in_current_category": len(urls_for_manifest),
+                            "current_product_index_in_category": 0
+                        })
                 
                 self.category_manifests[category_url] = urls_for_manifest
                 self.log.info(
@@ -4410,6 +4463,8 @@ Return ONLY valid JSON, no additional text."""
                             # Log category completion
                             self.log.info(f"✅ Category {category_index} complete: {len(category_results)} profitable products found")
                         else:
+                            # Log when Amazon phase is skipped due to empty queue
+                            self.log.info(f"Amazon skipped: nothing to analyze for category {category_index}")
                             self.log.info(f"✅ Category {category_index} complete: no products to process")
 
                     
