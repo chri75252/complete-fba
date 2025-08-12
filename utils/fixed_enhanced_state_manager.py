@@ -146,7 +146,7 @@ class FixedEnhancedStateManager:
 
             # ✅ NEW: Separated progression metrics for precise resumption
             "system_progression": {
-                "current_phase": "supplier_extraction",
+                "current_phase": "supplier",
                 "current_category_index": 0,
                 "current_category_url": "",
                 "total_categories": 0,
@@ -255,11 +255,29 @@ class FixedEnhancedStateManager:
             current_resumption_index = self.state_data.get("resumption_index", 0)
             explicit_cache_rebuild = self.state_data.get("force_cache_rebuild", False)
             
-            if explicit_cache_rebuild or current_resumption_index == 0:
-                # Only reset to 0 if explicitly rebuilding cache or no valid resume point
+            if explicit_cache_rebuild:
+                # Only reset to 0 if explicitly rebuilding cache
                 self.state_data["resumption_index"] = 0
                 self.state_data["resume_reason"] = "reverse_gap_cache_rebuild"
-                log.info(f"✅ REVERSE GAP: Reset resumption_index = 0 (explicit rebuild or no valid resume point)")
+                log.info(f"✅ REVERSE GAP: Reset resumption_index = 0 (explicit cache rebuild requested)")
+            elif current_resumption_index == 0:
+                # If resumption_index is 0, check if this is truly a fresh start or a restart
+                # Look for evidence of previous processing
+                has_previous_state = (
+                    self.state_data.get("total_products", 0) > 0 or
+                    len(self.state_data.get("category_performance", {})) > 0 or
+                    self.state_data.get("successful_products", 0) > 0
+                )
+                
+                if has_previous_state:
+                    # This appears to be a restart, not a fresh start - preserve some progress
+                    log.warning(f"🔄 REVERSE GAP: Detected restart with resumption_index=0 but previous state exists - preserving index")
+                    self.state_data["resume_reason"] = "reverse_gap_restart_preserved"
+                else:
+                    # Truly fresh start
+                    self.state_data["resumption_index"] = 0
+                    self.state_data["resume_reason"] = "reverse_gap_fresh_start"
+                    log.info(f"✅ REVERSE GAP: Fresh start confirmed - resumption_index = 0")
             else:
                 # Preserve existing resume index to avoid restarting from first category
                 log.warning(f"🔄 REVERSE GAP: Preserving existing resumption_index = {current_resumption_index} (no explicit rebuild)")
@@ -466,7 +484,7 @@ class FixedEnhancedStateManager:
         
         sp = self.state_data.setdefault("system_progression", {})
         sp.update({
-            "current_phase": "supplier_extraction",
+            "current_phase": "supplier",
             "current_category_index": category_index,
             "current_category_url": normalized_category_url,
             "original_category_url": category_url,  # Keep original for reference
@@ -479,7 +497,7 @@ class FixedEnhancedStateManager:
     def update_supplier_extraction_progress_new(self, product_url: str, increment: int = 1):
         """Update progress during supplier extraction phase"""
         sp = self.state_data.setdefault("system_progression", {})
-        sp["current_phase"] = "supplier_extraction"
+        sp["current_phase"] = "supplier"
         sp["supplier_extraction_resumption_index"] = sp.get("supplier_extraction_resumption_index", 0) + increment
         sp["current_product_index_in_category"] = sp.get("current_product_index_in_category", 0) + increment
 
@@ -562,9 +580,17 @@ class FixedEnhancedStateManager:
         cpi = sp.get("current_product_index_in_category", 0)
         tpc = sp.get("total_products_in_current_category", 0)
         ccu = sp.get("current_category_url", "")
-        log.info(
-            f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}"
-        )
+        
+        # Only log breadcrumbs when denominators are non-zero (accurate totals available)
+        if tc > 0 and tpc > 0:
+            log.info(
+                f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}"
+            )
+        elif tc > 0:
+            # Log with category info only if we have category totals
+            log.info(
+                f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/pending"
+            )
 
 
     def save_state_atomic(self):

@@ -4,6 +4,11 @@ This document describes the updated hybrid processing workflow used by the Amazo
 All state metrics are derived from files on disk and the workflow resumes using
 recorded indices only – user-facing counts never influence recovery.
 
+## Pre-Run Setup
+**IMPORTANT**: Before starting the system, ensure processing state is cleared for a clean run:
+- Remove or clear: `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json`
+- Verify directories exist: `OUTPUTS/manifests/`, `OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/`
+
 ## Startup
 1. **Load configuration** from `config/system_config.json` and supplier category
    list from `config/poundwholesale_categories.json`.
@@ -13,6 +18,18 @@ recorded indices only – user-facing counts never influence recovery.
    `_calculate_file_grounded_totals`.
 3. **Restore system progression** (`current_phase`, category index and product
    indices) from the processing state file for exact resume capability.
+
+## System Start Command
+```bash
+python run_custom_poundwholesale.py
+```
+
+## Expected Runtime Artifacts
+- **Processing State**: `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json`
+- **Linking Map**: `OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json`
+- **Product Cache**: `OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json`
+- **Category Manifests**: `OUTPUTS/manifests/poundwholesale.co.uk/*.json`
+- **Debug Logs**: `logs/debug/run_custom_poundwholesale_*.log`
 
 ## Gap Processing
 Before moving to new categories, the workflow compares the counts of cached
