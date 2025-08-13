@@ -2,582 +2,510 @@
 
 ## Overview
 
-This design document outlines the critical fixes needed to complete the Always-Extract Workflow implementation. Based on analysis of the current system behavior versus the intended behavior, this design addresses the gaps in logging formats, state management, normalization, and processing flow.
-
-The current system has partial implementations that need to be corrected:
-- Pagination logging uses incorrect format and hardcoded category indices
-- Breadcrumb logging shows 0/0 denominators due to timing issues
-- Manifest generation is completely missing
-- Filter summary logging is absent
-- URL/EAN normalization is not implemented
-- State validation and repair functionality is missing
-- Import hygiene logging is not present
+This design addresses the critical systemic failures in the FBA Data Extraction System by implementing a comprehensive state management overhaul, filter-workflow synchronization, and robust resume functionality. The solution focuses on eliminating state drift, ensuring data consistency, and providing reliable interruption recovery.
 
 ## Architecture
 
-### Current System Analysis
+### Core Components
 
-From the log file analysis, the current system shows these patterns:
+1. **Unified State Manager** - Centralized state tracking with consistency guarantees
+2. **Enhanced URL Filter** - Synchronized filtering with state reconciliation
+3. **Resume Controller** - Intelligent resume point calculation and validation
+4. **Data Integrity Guardian** - Automatic inconsistency detection and repair
+5. **Queue Processor** - Accurate processing with separate phases
 
-**Current Pagination Format (Incorrect):**
-```
-PAGINATION[C1 https-www-poundwholesale-co-uk]: pages=5 urls_page=20,20,20,16,0 total=76
-```
+### Component Interactions
 
-**Current Breadcrumb Format (Incorrect):**
-```
-RESUME PTR: phase=supplier_extraction cat_idx=0/1 url=https://... prod_idx=1/0
-```
-
-**Missing Patterns:**
-- No manifest logging
-- No filter summary logging  
-- No module path logging
-- No state validation logging
-
-### Target System Architecture
-
-The fixed system will implement these corrected patterns:
-
-**Target Pagination Format:**
-```
-PAGINATION[C5 wholesale-hand-tools]: pages=3 urls_page=166,166,166 total=498
-```
-
-**Target Breadcrumb Format:**
-```
-RESUME PTR: phase=supplier cat_idx=5/119 url=https://...wholesale-hand-tools prod_idx=3/498
-```
-
-**New Required Patterns:**
-```
-MODULE PATH: C:\...\tools\passive_extraction_workflow_latest.py
-📝 MANIFEST: 498 URLs → C:\...\OUTPUTS\manifests\poundwholesale.co.uk\wholesale-hand-tools.json
-FILTER[C5 wholesale-hand-tools]: in=498 skip=491 needs_amz=0 needs_full=7
-State repaired: resumption_index bounds corrected
+```mermaid
+graph TD
+    A[Startup] --> B[Load State]
+    B --> C[Reconcile Data]
+    C --> D[Calculate Resume Point]
+    D --> E[Process Categories]
+    E --> F[Filter URLs]
+    F --> G[Update State]
+    G --> H[Process Queue]
+    H --> I[Save State]
+    I --> E
+    
+    B --> J[State Validator]
+    C --> K[Data Guardian]
+    F --> L[Enhanced Filter]
+    H --> M[Queue Processor]
 ```
 
 ## Components and Interfaces
 
-### 1. Pagination Logging Fix
+### 1. Unified State Manager
 
-**Current Issue:** Hardcoded "C1" and incorrect slug generation
-**Location:** `tools/passive_extraction_workflow_latest.py`
+**Purpose:** Eliminate state drift by providing a single source of truth for all progress tracking with deterministic accumulator resets.
 
-**Required Changes:**
+**Interface:**
 ```python
-def _log_pagination_summary(self, category_index: int, category_url: str, pages_scraped: int, urls_per_page: List[int], total_urls: int):
-    """Log pagination summary with correct format"""
-    slug = self._generate_category_slug(category_url)
-    urls_page_str = ','.join(map(str, urls_per_page))
-    self.log.info(f"PAGINATION[C{category_index} {slug}]: pages={pages_scraped} urls_page={urls_page_str} total={total_urls}")
-
-def _generate_category_slug(self, category_url: str) -> str:
-    """Generate readable slug from category URL"""
-    from urllib.parse import urlparse
-    path = urlparse(category_url).path.strip('/')
-    return path.split('/')[-1] if path else 'unknown'
+class UnifiedStateManager:
+    def update_progression(self, **kwargs) -> None
+    def get_resume_point(self) -> Dict[str, Any]
+    def validate_state(self) -> Tuple[bool, List[str]]
+    def save_state_atomic(self) -> bool
+    def load_state_with_validation(self) -> bool
+    def reset_category_accumulators(self, category_index: int) -> None
+    def log_breadcrumb_guarded(self) -> None
 ```
 
-### 2. Breadcrumb Logging Fix
+**Key Methods:**
 
-**Current Issue:** Zero denominators and incorrect timing
-**Location:** `utils/fixed_enhanced_state_manager.py`
+- `update_progression()`: Updates both `system_progression` and `supplier_extraction_progress` atomically
+- `get_resume_point()`: Calculates accurate resume point with validation
+- `validate_state()`: Checks for regression and inconsistencies
+- `save_state_atomic()`: Atomic save with backup rotation
+- `reset_category_accumulators()`: Deterministic reset of per-category state on completion/resume
+- `log_breadcrumb_guarded()`: Only logs breadcrumbs when all required fields are populated
 
-**Required Changes:**
+### 2. Enhanced URL Filter with Invariant Enforcement
+
+**Purpose:** Provide consistent filtering with mandatory invariant validation and denominator calculation.
+
+**Interface:**
 ```python
-def save_state_atomic(self):
-    """Save state with accurate breadcrumbs only when denominators are known"""
-    # Only log breadcrumbs if we have valid totals
-    if (self.state_data.get('system_progression', {}).get('total_categories', 0) > 0 and
-        self.state_data.get('system_progression', {}).get('total_products_in_current_category', 0) > 0):
-        breadcrumb = self._generate_resume_breadcrumb()
-        self.log.info(f"RESUME PTR: {breadcrumb}")
-    
-    # Perform atomic save
-    self._atomic_save()
-
-def _generate_resume_breadcrumb(self) -> str:
-    """Generate accurate resume breadcrumb with non-zero denominators"""
-    progression = self.state_data.get('system_progression', {})
-    phase = progression.get('current_phase', 'supplier')
-    cat_idx = progression.get('current_category_index', 0)
-    total_cats = progression.get('total_categories', 0)
-    prod_idx = progression.get('current_product_index_in_category', 0)
-    total_prods = progression.get('total_products_in_current_category', 0)
-    url = progression.get('current_category_url', '')
-    
-    return f"phase={phase} cat_idx={cat_idx}/{total_cats} url={url} prod_idx={prod_idx}/{total_prods}"
+def filter_urls_enhanced(
+    product_urls: List[str],
+    linking_map: List[Dict[str, Any]],
+    cached_products: List[Dict[str, Any]],
+    processed_urls_set: Set[str],
+    category_id: str
+) -> Dict[str, List[str]]
 ```
 
-### 3. Manifest Generation System
+**Logic Flow:**
+1. Check linking map (skip entirely)
+2. Check supplier cache (needs Amazon only)
+3. Check processed products state
+4. Reconcile inconsistencies
+5. **MANDATORY: Validate invariant skip + needs_amazon + needs_full == total_input**
+6. **Calculate denominator: discovered_urls - linking_map_hits**
+7. **Log invariant status with category ID**
+8. **Gate queue construction on passing invariant**
+9. Return classified URLs with denominator
 
-**Current Issue:** Completely missing
-**Location:** `tools/passive_extraction_workflow_latest.py`
-
-**Required Implementation:**
+**Invariant Enforcement:**
 ```python
-def _save_category_manifest(self, supplier_name: str, category_url: str, category_index: int, urls: List[str]) -> str:
-    """Save category manifest atomically with proper logging"""
-    slug = self._generate_category_slug(category_url)
-    manifest_dir = Path(self.output_dir) / "manifests" / supplier_name
-    manifest_dir.mkdir(parents=True, exist_ok=True)
+def validate_filter_invariant(result: Dict) -> bool:
+    total_classified = len(result['skip_entirely']) + len(result['needs_amazon_only']) + len(result['needs_full_extraction'])
+    invariant_passed = total_classified == result['total_input']
     
-    manifest_path = manifest_dir / f"{slug}.json"
-    
-    manifest_data = {
-        "category_url": category_url,
-        "scraped_at": datetime.now(timezone.utc).isoformat(),
-        "product_urls": urls,
-        "count": len(urls),
-        "supplier_name": supplier_name,
-        "slug": slug
-    }
-    
-    # Check if manifest exists for overwrite detection
-    prev_count = 0
-    overwrite = False
-    if manifest_path.exists():
-        try:
-            with open(manifest_path, 'r') as f:
-                prev_data = json.load(f)
-                prev_count = prev_data.get('count', 0)
-                overwrite = True
-        except:
-            pass
-    
-    # Atomic save using WindowsSaveGuardian
-    self.save_guardian.save_json(manifest_data, str(manifest_path))
-    
-    # Log appropriate message
-    if overwrite:
-        self.log.info(f"MANIFEST UPDATE[C{category_index} {slug}]: overwritten=true prev={prev_count} curr={len(urls)}")
-    else:
-        self.log.info(f"📝 MANIFEST: {len(urls)} URLs → {manifest_path}")
-    
-    return str(manifest_path)
+    if not invariant_passed:
+        log.error(f"INVARIANT FAILURE: {total_classified} != {result['total_input']}")
+        # Snapshot offending URLs for debugging
+        snapshot_filter_failure(result)
+        # Enter repair mode or halt
+        return False
+    return True
 ```
 
-### 4. Filter Summary Logging System
+### 3. Resume Controller
 
-**Current Issue:** Missing clean filter summary
-**Location:** `tools/passive_extraction_workflow_latest.py`
+**Purpose:** Intelligent resume point calculation with validation and error recovery.
 
-**Required Implementation:**
+**Interface:**
 ```python
-def _log_filter_summary(self, category_index: int, category_url: str, filter_results: Dict[str, List[str]]):
-    """Log clean filter summary with invariant validation"""
-    slug = self._generate_category_slug(category_url)
-    
-    input_count = filter_results.get('input_count', 0)
-    skip_count = len(filter_results.get('skip_entirely', []))
-    needs_amz_count = len(filter_results.get('needs_amazon_only', []))
-    needs_full_count = len(filter_results.get('needs_full_extraction', []))
-    
-    # Validate invariant
-    total_classified = skip_count + needs_amz_count + needs_full_count
-    if total_classified != input_count:
-        self.log.warning(f"FILTER INVARIANT VIOLATION: {skip_count} + {needs_amz_count} + {needs_full_count} = {total_classified} != {input_count}")
-    
-    self.log.info(f"FILTER[C{category_index} {slug}]: in={input_count} skip={skip_count} needs_amz={needs_amz_count} needs_full={needs_full_count}")
+class ResumeController:
+    def calculate_resume_point(self, total_categories: int) -> Dict[str, Any]
+    def validate_resume_point(self, resume_point: Dict) -> bool
+    def get_safe_fallback_point(self) -> Dict[str, Any]
 ```
 
-### 5. URL/EAN Normalization System
+**Resume Logic:**
+1. Load system_progression data
+2. Validate indices against current totals
+3. Check for logical consistency
+4. Provide safe fallback if validation fails
 
-**Current Issue:** Not implemented
-**Location:** `utils/url_filter.py` (new file)
+### 4. Data Integrity Guardian with Sequenced Startup
 
-**Required Implementation:**
+**Purpose:** Automatic detection and repair of data inconsistencies with mandatory pre-resume reconciliation.
+
+**Interface:**
 ```python
-import re
-from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
-from typing import Optional
+class DataIntegrityGuardian:
+    def reconcile_on_startup_prereq(self) -> Tuple[bool, List[str]]
+    def hydrate_linking_map_entry(self, url: str) -> bool
+    def validate_data_consistency(self) -> List[str]
+    def repair_inconsistencies(self, issues: List[str]) -> int
+    def persist_reconciled_state_atomic(self) -> bool
+```
 
-def normalize_url(url: str) -> str:
-    """Normalize URL for consistent matching"""
-    try:
-        parsed = urlparse(url.lower())
-        
-        # Remove tracking parameters
-        tracking_params = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid'}
-        query_params = parse_qs(parsed.query)
-        filtered_params = {k: v for k, v in query_params.items() if k not in tracking_params}
-        
-        # Sort parameters for stable ordering
-        sorted_query = urlencode(sorted(filtered_params.items()), doseq=True)
-        
-        # Normalize path (remove trailing slash unless root)
-        path = parsed.path.rstrip('/') if parsed.path != '/' else '/'
-        
-        # Reconstruct URL
-        normalized = urlunparse((
-            parsed.scheme,
-            parsed.netloc,
-            path,
-            parsed.params,
-            sorted_query,
-            ''  # Remove fragment
-        ))
-        
-        return normalized
-    except Exception as e:
-        logging.warning(f"URL normalization failed for {url}: {e}")
-        return url
+**MANDATORY Startup Reconciliation Sequence:**
+1. **BEFORE resume-point calculation**
+2. **BEFORE any filtering operations**
+3. Compare processed_products vs linking_map
+4. Identify missing linking map entries
+5. Attempt hydration from supplier cache
+6. Mark unhydratable items for needs_amazon
+7. **Persist reconciled state atomically**
+8. **ONLY THEN proceed to resume point calculation**
 
-def normalize_ean(ean: str) -> str:
-    """Normalize EAN for consistent matching"""
-    try:
-        # Convert to string and strip whitespace
-        normalized = str(ean).strip()
-        
-        # Preserve leading zeros - don't convert to int
-        # Remove any non-digit characters except leading zeros
-        normalized = re.sub(r'[^\d]', '', normalized)
-        
-        return normalized
-    except Exception as e:
-        logging.warning(f"EAN normalization failed for {ean}: {e}")
-        return str(ean)
-
-def filter_urls(urls: List[str], linking_map: List[Dict], cached_products: List[Dict]) -> Dict[str, List[str]]:
-    """Filter URLs with normalization and return categorized results"""
-    # Build normalized lookup sets
-    linking_map_urls = set()
-    linking_map_eans = set()
-    for entry in linking_map:
-        if 'supplier_url' in entry:
-            linking_map_urls.add(normalize_url(entry['supplier_url']))
-        if 'ean' in entry:
-            linking_map_eans.add(normalize_ean(entry['ean']))
+**Reconciliation Logic:**
+```python
+def reconcile_on_startup_prereq(self) -> Tuple[bool, List[str]]:
+    """MUST be called before resume calculation and filtering."""
+    processed_urls = set(self.state_data.get("processed_products", {}).keys())
+    linking_map_urls = {normalize_url(entry.get("supplier_url")) for entry in self.linking_map}
     
-    cache_urls = set()
-    cache_eans = set()
-    for product in cached_products:
-        if 'url' in product:
-            cache_urls.add(normalize_url(product['url']))
-        if 'ean' in product:
-            cache_eans.add(normalize_ean(product['ean']))
+    missing_entries = processed_urls - linking_map_urls
+    reconciled_items = []
     
-    # Categorize URLs
-    skip_entirely = []
-    needs_amazon_only = []
-    needs_full_extraction = []
-    
-    for url in urls:
-        normalized_url = normalize_url(url)
-        
-        # Check linking map first (highest priority)
-        if normalized_url in linking_map_urls:
-            skip_entirely.append(url)
-        # Check cache second
-        elif normalized_url in cache_urls:
-            needs_amazon_only.append(url)
-        # Not found anywhere - needs full extraction
+    for url in missing_entries:
+        if self.hydrate_linking_map_entry(url):
+            reconciled_items.append(f"hydrated:{url}")
         else:
-            needs_full_extraction.append(url)
+            # Mark for Amazon analysis
+            self.mark_for_amazon_analysis(url)
+            reconciled_items.append(f"marked_amazon:{url}")
     
-    return {
-        'input_count': len(urls),
-        'skip_entirely': skip_entirely,
-        'needs_amazon_only': needs_amazon_only,
-        'needs_full_extraction': needs_full_extraction
-    }
+    # Atomic persistence before proceeding
+    success = self.persist_reconciled_state_atomic()
+    return success, reconciled_items
 ```
 
-### 6. State Validation and Repair System
+### 5. Queue Processor with Denominator Formula
 
-**Current Issue:** Not implemented
-**Location:** `utils/fixed_enhanced_state_manager.py`
+**Purpose:** Accurate queue processing with formal denominator calculation and accumulator resets.
 
-**Required Implementation:**
+**Interface:**
 ```python
-def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
-    """Validate state consistency and repair common issues"""
-    repairs = []
-    
-    # Ensure system_progression exists
-    if 'system_progression' not in self.state_data:
-        self.state_data['system_progression'] = {}
-        repairs.append("added missing system_progression")
-    
-    progression = self.state_data['system_progression']
-    
-    # Validate and repair resumption_index bounds
-    resumption_index = self.state_data.get('resumption_index', 0)
-    total_categories = progression.get('total_categories', 0)
-    
-    if resumption_index < 0:
-        self.state_data['resumption_index'] = 0
-        repairs.append("corrected negative resumption_index")
-    elif total_categories > 0 and resumption_index >= total_categories:
-        self.state_data['resumption_index'] = max(0, total_categories - 1)
-        repairs.append("corrected resumption_index bounds")
-    
-    # Ensure monotonic progression
-    last_processed = self.state_data.get('last_processed_index', 0)
-    if last_processed > resumption_index:
-        self.state_data['resumption_index'] = last_processed
-        repairs.append("aligned resumption_index with last_processed_index")
-    
-    # Validate category indices
-    cat_index = progression.get('current_category_index', 0)
-    if cat_index < 0:
-        progression['current_category_index'] = 0
-        repairs.append("corrected negative category_index")
-    
-    # Ensure required fields exist with defaults
-    required_fields = {
-        'current_phase': 'supplier',
-        'current_category_index': 0,
-        'current_category_url': '',
-        'total_categories': 0,
-        'current_product_index_in_category': 0,
-        'total_products_in_current_category': 0
-    }
-    
-    for field, default in required_fields.items():
-        if field not in progression:
-            progression[field] = default
-            repairs.append(f"added missing field {field}")
-    
-    # Log repairs if any were made
-    if repairs:
-        self.log.info(f"State repaired: {', '.join(repairs)}")
-        self._atomic_save()
-    
-    return len(repairs) == 0, repairs
+class QueueProcessor:
+    def process_supplier_phase(self, urls: List[str]) -> int
+    def process_amazon_phase(self, urls: List[str]) -> int
+    def update_phase_progress(self, phase: str, index: int, total: int) -> None
+    def calculate_category_denominator(self, filter_result: Dict) -> int
+    def reset_category_state_on_entry(self, category_index: int) -> None
+    def reset_category_state_on_completion(self, category_index: int) -> None
 ```
 
-### 7. Module Path Logging System
-
-**Current Issue:** Not implemented
-**Location:** `tools/passive_extraction_workflow_latest.py`
-
-**Required Implementation:**
+**Formal Denominator Specification:**
 ```python
-def __init__(self, supplier_name: str, use_predefined_categories: bool = False, **kwargs):
-    """Initialize workflow with module path logging"""
-    # Log module path for import hygiene
-    self.log.info(f"MODULE PATH: {__file__}")
+def calculate_category_denominator(self, filter_result: Dict) -> int:
+    """
+    Denominator = discovered_urls - linking_map_hits
+    This represents the actual work items for the current category.
+    """
+    discovered_urls = filter_result['total_input']
+    linking_map_hits = len(filter_result['skip_entirely'])
+    denominator = discovered_urls - linking_map_hits
     
-    # Check for duplicate workflow modules
-    self._check_import_hygiene()
+    # Log with category ID for traceability
+    log.info(f"DENOMINATOR[{self.current_category_id}]: {denominator} = {discovered_urls} - {linking_map_hits}")
     
-    # Continue with existing initialization...
+    return denominator
+```
 
-def _check_import_hygiene(self):
-    """Check for potential import conflicts with duplicate workflow files"""
-    import glob
-    import os
-    
-    # Look for other workflow files that might cause conflicts
-    project_root = Path(__file__).parent.parent
-    workflow_patterns = [
-        "passive_extraction_workflow*.py",
-        "*workflow*.py"
-    ]
-    
-    potential_conflicts = []
-    for pattern in workflow_patterns:
-        matches = list(project_root.rglob(pattern))
-        for match in matches:
-            if match != Path(__file__) and 'archive' not in str(match) and 'backup' not in str(match):
-                potential_conflicts.append(str(match))
-    
-    if potential_conflicts:
-        self.log.warning(f"Potential workflow import conflicts detected: {potential_conflicts}")
-        self.log.warning("Ensure you're importing from the canonical tools/ directory")
+**Deterministic Accumulator Reset:**
+```python
+def reset_category_state_on_entry(self, category_index: int) -> None:
+    """Reset all per-category state before processing."""
+    self.current_manifest = None
+    self.current_filtered_queues = {'skip_entirely': [], 'needs_amazon_only': [], 'needs_full_extraction': []}
+    self.category_counters = {'processed': 0, 'total': 0, 'errors': 0}
+    self.in_memory_trackers = {}
+    log.info(f"🔄 RESET: Category {category_index} accumulators cleared")
+
+def reset_category_state_on_completion(self, category_index: int) -> None:
+    """Reset all per-category state after completion."""
+    self.reset_category_state_on_entry(category_index + 1)
+    log.info(f"✅ RESET: Category {category_index} completed, accumulators cleared")
 ```
 
 ## Data Models
 
-### CategoryManifest
-```python
-@dataclass
-class CategoryManifest:
-    category_url: str
-    scraped_at: str  # ISO timestamp
-    product_urls: List[str]
-    count: int
-    supplier_name: str
-    slug: str
-```
+### Enhanced State Structure
 
-### FilterResults
 ```python
-@dataclass
-class FilterResults:
-    input_count: int
-    skip_entirely: List[str]
-    needs_amazon_only: List[str]
-    needs_full_extraction: List[str]
+{
+    "schema_version": "2.0_UNIFIED",
+    "created_at": "ISO timestamp",
+    "last_updated": "ISO timestamp",
     
-    def validate_invariant(self) -> bool:
-        """Validate that all inputs are accounted for"""
-        total = len(self.skip_entirely) + len(self.needs_amazon_only) + len(self.needs_full_extraction)
-        return total == self.input_count
+    # Unified progression tracking
+    "system_progression": {
+        "current_category_index": int,
+        "total_categories": int,
+        "current_product_index_in_category": int,
+        "total_products_in_current_category": int,
+        "current_phase": "supplier|amazon|complete",
+        "current_category_url": str,
+        "phase_start_time": "ISO timestamp"
+    },
+    
+    # Legacy compatibility (kept in sync)
+    "supplier_extraction_progress": {
+        "current_category_index": int,
+        "last_processed_index": int,
+        "progress_index": int
+    },
+    
+    # Protected global counters
+    "global_counters": {
+        "total_products_discovered": int,
+        "total_products_processed": int,
+        "total_categories_completed": int
+    },
+    
+    # Data integrity tracking
+    "integrity_status": {
+        "last_reconciliation": "ISO timestamp",
+        "items_reconciled": int,
+        "consistency_score": float
+    }
+}
 ```
 
-### StateValidationResult
+### Filter Result Structure with Denominator
+
 ```python
-@dataclass
-class StateValidationResult:
-    is_valid: bool
-    repairs_made: List[str]
-    resumption_index: int
-    category_index: int
+{
+    "skip_entirely": List[str],
+    "needs_amazon_only": List[str], 
+    "needs_full_extraction": List[str],
+    "reconciled_items": List[str],  # Items moved during reconciliation
+    "total_input": int,
+    "invariant_check": bool,  # skip + needs_amazon + needs_full == total_input
+    "denominator": int,  # discovered_urls - linking_map_hits (formal specification)
+    "category_id": str,  # For traceability in logs
+    "linking_map_hits": int,  # Number of URLs found in linking map
+    "invariant_details": {  # Detailed breakdown for debugging
+        "skip_count": int,
+        "amazon_count": int, 
+        "full_count": int,
+        "total_classified": int,
+        "invariant_passed": bool
+    }
+}
+```
+
+### Guarded Breadcrumb Logging Structure
+
+```python
+def log_breadcrumb_guarded(self) -> None:
+    """Only log breadcrumbs when all required fields are populated."""
+    sp = self.state_data.get("system_progression", {})
+    
+    required_fields = [
+        "current_category_index",
+        "total_categories", 
+        "current_product_index_in_category",
+        "total_products_in_current_category",
+        "current_phase"
+    ]
+    
+    missing_fields = [field for field in required_fields if not sp.get(field)]
+    
+    if missing_fields:
+        log.warning(f"🚨 BREADCRUMB DELAYED: Missing fields {missing_fields}")
+        return
+    
+    # All fields present and valid
+    if sp["total_categories"] > 0 and sp["total_products_in_current_category"] > 0:
+        log.info(
+            f"RESUME PTR: phase={sp['current_phase']} "
+            f"cat_idx={sp['current_category_index']}/{sp['total_categories']} "
+            f"url={sp.get('current_category_url', '')} "
+            f"prod_idx={sp['current_product_index_in_category']}/{sp['total_products_in_current_category']}"
+        )
+    else:
+        log.warning(f"🚨 BREADCRUMB INVALID: Zero denominators detected")
 ```
 
 ## Error Handling
 
-### Pagination Logging Failures
-- **Detection**: Monitor for missing category index or invalid URL parsing
-- **Recovery**: Use fallback values (index=0, slug="unknown")
-- **Logging**: Log parsing failures with original URL
+### State Regression Protection
 
-### Manifest Generation Failures
-- **Detection**: File system errors, permission issues, JSON serialization failures
-- **Recovery**: Retry with temporary directory, fallback to non-atomic writes
-- **Logging**: Clear error messages with suggested actions
+```python
+class StateRegressionError(Exception):
+    """Raised when state would regress without explicit permission."""
+    pass
 
-### State Validation Failures
-- **Detection**: Missing required fields, invalid indices, corrupted data
-- **Recovery**: Apply default values, correct bounds, rebuild missing sections
-- **Logging**: Detailed repair log with before/after values
+def validate_state_progression(old_state, new_state):
+    if new_state.resumption_index < old_state.resumption_index:
+        if not os.getenv('ALLOW_STATE_REGRESSION'):
+            raise StateRegressionError(
+                f"Resumption index would regress: {new_state.resumption_index} < {old_state.resumption_index}"
+            )
+```
 
-### Normalization Failures
-- **Detection**: URL parsing errors, invalid EAN formats
-- **Recovery**: Use original values as fallback
-- **Logging**: Log normalization failures with input values
+### Data Inconsistency Recovery
+
+```python
+class DataInconsistencyWarning(Warning):
+    """Warning for non-critical data inconsistencies."""
+    pass
+
+def handle_inconsistency(issue_type, details):
+    if issue_type == "missing_linking_entry":
+        # Attempt automatic repair
+        if repair_linking_entry(details):
+            log.warning(f"Repaired missing linking entry: {details}")
+        else:
+            log.error(f"Failed to repair linking entry: {details}")
+    elif issue_type == "queue_count_mismatch":
+        # Log and continue with best effort
+        log.warning(f"Queue count mismatch detected: {details}")
+```
 
 ## Testing Strategy
 
 ### Unit Tests
-1. **Pagination Format Tests**
-   - Test category index calculation
-   - Test slug generation from various URL formats
-   - Test pagination summary with edge cases (0 pages, 1 page, many pages)
 
-2. **Breadcrumb Generation Tests**
-   - Test breadcrumb format with various phase/index combinations
-   - Test handling of zero denominators
-   - Test breadcrumb generation timing
+1. **State Manager Tests**
+   - Test unified progression updates
+   - Test regression protection
+   - Test atomic save operations
 
-3. **Manifest Generation Tests**
-   - Test atomic manifest saving
-   - Test overwrite detection and logging
-   - Test manifest structure validation
+2. **Filter Tests**
+   - Test reconciliation logic
+   - Test invariant validation
+   - Test edge cases (empty inputs, all skipped, etc.)
 
-4. **Filter Summary Tests**
-   - Test invariant validation (skip + needs_amz + needs_full = in)
-   - Test edge cases with empty results
-   - Test filter summary format
-
-5. **Normalization Tests**
-   - Test URL normalization with tracking parameters
-   - Test EAN normalization with leading zeros
-   - Test normalization failure handling
-
-6. **State Validation Tests**
-   - Test repair of missing fields
-   - Test bounds correction
-   - Test monotonic progression validation
+3. **Resume Controller Tests**
+   - Test resume point calculation
+   - Test validation logic
+   - Test fallback mechanisms
 
 ### Integration Tests
-1. **End-to-End Category Processing**
-   - Test complete category workflow with all logging
-   - Verify manifest generation and filter summary
-   - Check breadcrumb accuracy throughout processing
 
-2. **Resume Functionality**
-   - Test state validation on startup
-   - Test resume from various interruption points
-   - Verify breadcrumb accuracy after resume
+1. **End-to-End Resume Test**
+   - Process categories 1-3
+   - Interrupt during category 2
+   - Resume and verify continuation
 
-3. **Multi-Category Processing**
-   - Test category index progression
-   - Test manifest generation for multiple categories
-   - Verify filter summaries for each category
+2. **Data Consistency Test**
+   - Create inconsistent state
+   - Run reconciliation
+   - Verify repairs
 
-## Implementation Phases
+3. **Queue Processing Test**
+   - Mixed category (skip/amazon/full)
+   - Verify accurate counts
+   - Verify separate phase processing
 
-### Phase 1: Logging Format Fixes (High Priority)
-1. Fix pagination logging format with correct category indices and slugs
-2. Fix breadcrumb logging with accurate denominators and timing
-3. Add module path logging for import hygiene
-4. Remove cache hit spam logging
+### Performance Tests
 
-### Phase 2: Manifest Generation (High Priority)
-1. Implement atomic manifest saving with WindowsSaveGuardian
-2. Add manifest logging with correct format
-3. Implement overwrite detection and logging
-4. Create manifest directory structure
+1. **Large State File Loading**
+   - Test with 10k+ processed products
+   - Measure load time and memory usage
 
-### Phase 3: Filter Summary and Normalization (High Priority)
-1. Implement clean filter summary logging
-2. Add URL/EAN normalization utilities
-3. Apply normalization consistently in filtering
-4. Validate filter summary invariants
+2. **Reconciliation Performance**
+   - Test with 1k+ inconsistent items
+   - Measure repair time
 
-### Phase 4: State Management Enhancement (Medium Priority)
-1. Implement validate_and_repair_state() functionality
-2. Add state validation on startup
-3. Implement automatic repair of common issues
-4. Add detailed repair logging
+## Implementation Plan with Sequencing Requirements
 
-### Phase 5: Category-Local Processing (Medium Priority)
-1. Implement category-local queue building
-2. Add sequential category processing (supplier → Amazon per category)
-3. Add Amazon phase skipping when queue is empty
-4. Implement proper phase transition logging
+### Phase 1: Core Infrastructure with Sequencing (Week 1)
 
-### Phase 6: Testing and Validation (Medium Priority)
-1. Create comprehensive test suite for all fixes
-2. Add log format validation
-3. Implement invariant checking
-4. Add performance monitoring
+1. **FIRST: Implement DataIntegrityGuardian with mandatory startup sequence**
+   - Must run BEFORE resume calculation
+   - Must run BEFORE any filtering
+   - Atomic state persistence after reconciliation
+
+2. **SECOND: Implement UnifiedStateManager with accumulator resets**
+   - Deterministic per-category accumulator reset
+   - Guarded breadcrumb logging
+   - State regression protection
+
+3. **THIRD: Create enhanced URL filter with invariant enforcement**
+   - Mandatory invariant validation
+   - Formal denominator calculation
+   - Gate queue construction on invariant pass
+
+### Phase 2: Resume Functionality with Prerequisites (Week 2)
+
+1. **Implement ResumeController (depends on Phase 1 completion)**
+   - Resume point calculation AFTER reconciliation
+   - Validation against reconciled state
+   - Safe fallback mechanisms
+
+2. **Add startup sequence orchestration**
+   - Reconcile → Resume → Filter → Process
+   - Atomic state saves between phases
+   - Comprehensive sequence logging
+
+### Phase 3: Queue Processing with Formal Specifications (Week 3)
+
+1. **Implement QueueProcessor with denominator formula**
+   - discovered_urls - linking_map_hits calculation
+   - Separate phase processing with accurate counts
+   - Per-category state resets on entry/completion
+
+2. **Add invariant enforcement throughout pipeline**
+   - Filter invariant validation
+   - Queue count verification
+   - Progress tracking accuracy
+
+### Phase 4: Error Handling and Recovery (Week 4)
+
+1. **Implement comprehensive error recovery**
+   - Invariant failure handling
+   - State corruption detection
+   - Automatic repair mechanisms
+
+2. **Add diagnostic capabilities**
+   - Filter failure snapshots
+   - State inconsistency logging
+   - Recovery procedure documentation
+
+### Phase 5: Testing with Sequence Validation (Week 5)
+
+1. **Test startup sequence integrity**
+   - Reconcile → Resume → Filter order
+   - Atomic state transitions
+   - Sequence failure recovery
+
+2. **Test invariant enforcement**
+   - Filter invariant validation
+   - Queue count accuracy
+   - Denominator calculation correctness
+
+3. **Performance and deployment**
+   - Large state file handling
+   - Gradual rollout with feature flags
+   - Monitoring and alerting setup
+
+## Migration Strategy
+
+### Backward Compatibility
+
+- Keep existing state structure fields
+- Add new unified fields alongside legacy ones
+- Gradually migrate to new structure
+- Provide conversion utilities
+
+### Rollback Plan
+
+- Feature flags for each component
+- Ability to disable new logic
+- Fallback to legacy behavior
+- State backup and restore procedures
 
 ## Monitoring and Observability
 
 ### Key Metrics
-- **Log Format Compliance**: Monitor for correct pagination, breadcrumb, and filter formats
-- **Manifest Generation Rate**: Track successful manifest saves per category
-- **State Validation Success**: Monitor state repair frequency and types
-- **Filter Invariant Compliance**: Track filter summary mathematical accuracy
-- **Normalization Success Rate**: Monitor URL/EAN normalization failures
 
-### Alerting Thresholds
-- Log format violations > 5%
-- Manifest generation failures > 2%
-- State validation failures > 1%
-- Filter invariant violations > 1%
-- Normalization failures > 10%
+1. **Resume Success Rate** - Percentage of successful resumes
+2. **State Consistency Score** - Measure of data integrity
+3. **Reconciliation Items** - Number of items repaired per run
+4. **Processing Accuracy** - Filter vs actual processing counts
 
-### Performance Targets
-- Pagination logging: < 100ms per category
-- Manifest generation: < 2 seconds per category
-- State validation: < 5 seconds on startup
-- Filter summary: < 1 second per category
-- Normalization: < 10ms per URL/EAN
+### Alerts
 
-## Deployment Strategy
+1. **State Regression Detected** - Critical alert
+2. **High Inconsistency Rate** - Warning alert
+3. **Resume Failure** - Error alert
+4. **Queue Count Mismatch** - Warning alert
 
-### Feature Flags
-- **CORRECT_LOG_FORMATS=ON**: Enable corrected logging formats (default ON)
-- **MANIFEST_GENERATION=ON**: Enable manifest generation (default ON)
-- **STATE_VALIDATION=ON**: Enable state validation and repair (default ON)
-- **URL_NORMALIZATION=ON**: Enable URL/EAN normalization (default ON)
+### Dashboards
 
-### Rollout Plan
-1. **Development Testing**: Test all fixes with sample categories
-2. **Canary Deployment**: Deploy to 2-3 categories with monitoring
-3. **Staged Rollout**: Deploy to 10-20 categories with validation
-4. **Full Production**: Deploy to all categories with monitoring
+1. **System Health** - Overall system status
+2. **Processing Progress** - Real-time progress tracking
+3. **Data Integrity** - Consistency metrics
+4. **Performance** - Processing speed and efficiency
 
-### Success Criteria
-- All required log formats appear correctly
-- Manifest files generated for all processed categories
-- State validation completes without errors
-- Filter invariants hold for all categories
-- No cache hit spam in logs
-- Breadcrumbs show accurate denominators
+This design provides a comprehensive solution to the identified issues while maintaining backward compatibility and providing robust error handling and recovery mechanisms.
