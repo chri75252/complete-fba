@@ -1308,6 +1308,93 @@ class PassiveExtractionWorkflow:
         self.state_manager.load_state()
         if hasattr(self.state_manager, 'validate_and_repair_state'):
             self.state_manager.validate_and_repair_state()
+        
+        # Load the linking map for the current supplier
+        self.linking_map = self._load_linking_map(self.supplier_name)
+        self.log.debug(f"🔍 DEBUG: linking_map loaded as type: {type(self.linking_map)}, length: {len(self.linking_map)}")
+        
+        # Load category URLs for startup sequence
+        category_urls = []
+        if self.workflow_config.get('use_predefined_categories'):
+            category_urls = await self._get_predefined_categories(self.supplier_name)
+            self.log.info(f"📋 Loaded {len(category_urls)} predefined category URLs for startup sequence")
+        
+        # 🚨 MANDATORY: Execute complete startup sequence orchestration
+        try:
+            from utils.fixed_enhanced_state_manager import StartupOrchestrator
+            
+            # Load cached products for startup sequence
+            cached_products = self._load_supplier_cache(self.supplier_name)
+            
+            startup_orchestrator = StartupOrchestrator(self.state_manager, self.log)
+            startup_result = startup_orchestrator.execute_startup_sequence(
+                self.linking_map, cached_products, category_urls
+            )
+            
+            if startup_result["status"] != "success":
+                error_msg = f"🚨 STARTUP SEQUENCE FAILED: {startup_result.get('error', 'unknown')} in phase {startup_result.get('phase', 'unknown')}"
+                self.log.error(error_msg)
+                raise SystemExit(error_msg)
+            
+            self.log.info("🚀 STARTUP SEQUENCE: All phases completed successfully")
+            
+            # Run state corruption detection after startup
+            try:
+                from utils.fixed_enhanced_state_manager import ErrorHandler
+                error_handler = ErrorHandler(self.state_manager, self.log)
+                corruption_result = error_handler.detect_state_corruption()
+                
+                if corruption_result["corruption_detected"]:
+                    severity = corruption_result.get("corruption_severity", "unknown")
+                    if severity == "critical":
+                        error_msg = f"🚨 CRITICAL STATE CORRUPTION: {corruption_result['corrupted_checks']}"
+                        self.log.error(error_msg)
+                        raise SystemExit(error_msg)
+                    else:
+                        self.log.warning(f"⚠️ STATE CORRUPTION ({severity}): {corruption_result['corrupted_checks']} - recovery attempted")
+                else:
+                    self.log.info("✅ STATE INTEGRITY: No corruption detected")
+                    
+            except ImportError:
+                self.log.warning("⚠️ STATE CORRUPTION: Detection not available")
+            
+            # Extract resume point from startup result
+            resume_point = startup_result["resume_point"]
+            self.last_processed_index = resume_point.get("resumption_index", 0)
+            
+            # Handle hydrated entries if any
+            reconciled_items = startup_result.get("reconciled_items", [])
+            if reconciled_items:
+                self.log.info(f"🔧 STARTUP: Processed {len(reconciled_items)} reconciled items")
+                
+                # Reload linking map if entries were hydrated
+                hydrated_entries = self.state_manager.get_hydrated_entries()
+                if hydrated_entries:
+                    # Add hydrated entries to linking map
+                    self.linking_map.extend(hydrated_entries)
+                    self.log.info(f"🔗 HYDRATION: Added {len(hydrated_entries)} entries to linking map")
+                    
+                    # Save updated linking map
+                    self._save_linking_map()
+                    
+                    # Clear hydrated entries from state
+                    self.state_manager.clear_hydrated_entries()
+            
+        except ImportError:
+            self.log.warning("⚠️ STARTUP: StartupOrchestrator not available - using legacy startup")
+            # Fallback to legacy reconciliation
+            if hasattr(self.state_manager, 'reconcile_on_startup_prereq'):
+                cached_products = self._load_supplier_cache(self.supplier_name)
+                reconciliation_success, reconciled_items = self.state_manager.reconcile_on_startup_prereq(
+                    self.linking_map, cached_products
+                )
+                if reconciliation_success:
+                    self.log.info(f"🔧 LEGACY RECONCILIATION: Processed {len(reconciled_items)} items")
+        except Exception as e:
+            self.log.error(f"❌ STARTUP SEQUENCE: Critical error: {e}")
+            raise SystemExit(f"Startup sequence failed: {e}")
+        
+        # Now calculate resume point after reconciliation
         self.last_processed_index = self.state_manager.get_resumption_index()
         self.consecutive_amazon_price_misses = self.state_manager.state_data.get('consecutive_amazon_price_misses', 0)
         self.log.info(f"📋 Loaded existing processing state for {self.supplier_name}")
@@ -1316,10 +1403,6 @@ class PassiveExtractionWorkflow:
         # 🚨 REMOVED: Hard reset logic removed per user request - was causing incorrect cache validation
         # System will now always attempt to resume from processing state without validation conflicts
         self.log.info("✅ Processing state loaded - system will resume from last position")
-        
-        # Load the linking map for the current supplier
-        self.linking_map = self._load_linking_map(self.supplier_name)
-        self.log.debug(f"🔍 DEBUG: linking_map loaded as type: {type(self.linking_map)}, length: {len(self.linking_map)}")
         
         # 🚨 CRITICAL: Two-Phase Detection Logic - Find actual supplier cache file
         supplier_cache_file, supplier_cache_count = self._find_actual_supplier_cache_file(self.supplier_name)
@@ -4428,7 +4511,45 @@ Return ONLY valid JSON, no additional text."""
                         category_index = chunk_start + idx_offset + 1
                         self._set_current_category_index(category_index)
                         self._save_category_manifest(supplier_name, category_url, urls)
-                        filtered = filter_urls(urls, self.linking_map, cached_products)
+                        
+                        # 🚨 NEW: Enhanced filtering with invariant enforcement and reconciliation
+                        processed_urls_set = set(self.state_manager.state_data.get("processed_products", {}).keys())
+                        category_id = f"C{category_index}"
+                        
+                        # Reset category accumulators before processing
+                        if hasattr(self.state_manager, 'reset_category_accumulators'):
+                            self.state_manager.reset_category_accumulators(category_index)
+                        
+                        filtered = filter_urls(
+                            urls, 
+                            self.linking_map, 
+                            cached_products,
+                            processed_urls_set=processed_urls_set,
+                            category_id=category_id
+                        )
+                        
+                        # 🚨 MANDATORY: Validate filter invariant with error handling
+                        if not filtered.get('invariant_check', False):
+                            self.log.error(f"❌ FILTER INVARIANT FAILED for {category_id} - attempting recovery")
+                            
+                            try:
+                                from utils.fixed_enhanced_state_manager import ErrorHandler
+                                
+                                # Use error handler for invariant failure
+                                error_handler = ErrorHandler(self.state_manager, self.log)
+                                recovery_result = error_handler.handle_invariant_failure(filtered, category_id)
+                                
+                                if recovery_result["success"]:
+                                    self.log.info(f"✅ FILTER RECOVERY[{category_id}]: Invariant repaired, continuing")
+                                    # Update filtered result with repaired data
+                                    filtered.update(recovery_result.get("repair_result", {}))
+                                    filtered['invariant_check'] = True  # Mark as repaired
+                                else:
+                                    self.log.error(f"❌ FILTER RECOVERY[{category_id}]: Recovery failed, continuing with best effort")
+                                    
+                            except ImportError:
+                                self.log.warning(f"⚠️ FILTER RECOVERY[{category_id}]: ErrorHandler not available, continuing with best effort")
+                        
                         slug = re.sub(r"[^a-z0-9]+","-", category_url.lower()).strip("-")[:30]
                         self.log.info(
                             f"FILTER[C{chunk_start + idx_offset + 1} {slug}]: in={len(urls)} "
@@ -4436,6 +4557,18 @@ Return ONLY valid JSON, no additional text."""
                             f"needs_amz={len(filtered['needs_amazon_only'])} "
                             f"needs_full={len(filtered['needs_full_extraction'])}"
                         )
+                        
+                        # 🚨 NEW: Update system progression with accurate denominator
+                        if hasattr(self.state_manager, 'update_progression_unified'):
+                            work_items = len(filtered['needs_amazon_only']) + len(filtered['needs_full_extraction'])
+                            self.state_manager.update_progression_unified(
+                                current_category_index=category_index,
+                                total_categories=len(category_urls),
+                                current_product_index_in_category=0,
+                                total_products_in_current_category=work_items,
+                                current_phase="supplier",
+                                current_category_url=category_url
+                            )
                         
                         # Build category-local processing queue
                         category_analysis_products: List[Dict[str, Any]] = []
