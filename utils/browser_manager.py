@@ -571,11 +571,29 @@ async def global_cleanup():
 # This allows the cleanup to be registered with atexit
 def run_global_cleanup():
     try:
+        # Check if we're in the middle of normal workflow execution
+        # Only perform cleanup during actual process termination
+        import threading
+        main_thread = threading.main_thread()
+        if main_thread and main_thread.is_alive():
+            # Main thread still active - likely normal workflow, not process exit
+            log.debug("🔌 Browser cleanup skipped - main thread still active (normal workflow)")
+            return
+            
         loop = asyncio.get_running_loop()
-        if loop.is_running():
+        # FIX: Check if loop is still valid before using
+        if loop and not loop.is_closed() and loop.is_running():
             loop.create_task(global_cleanup())
         else:
-            asyncio.run(global_cleanup())
+            # FIX: Use try-except for asyncio.run during exit
+            try:
+                asyncio.run(global_cleanup())
+            except RuntimeError:
+                # Event loop already closed during exit - safe to ignore
+                log.info("🔌 Browser cleanup skipped - event loop already closed")
+    except RuntimeError:
+        # No event loop available during exit - safe to ignore
+        log.info("🔌 Browser cleanup skipped - no event loop available")
     except Exception as e:
         log.warning(f"Error during global cleanup: {e}")
 

@@ -1,0 +1,1084 @@
+2025-08-15 01:38:34,815 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\logs\debug\run_custom_poundwholesale_20250815_013834.log
+2025-08-15 01:38:34,816 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\logs\debug\run_custom_poundwholesale_20250815_013834.log
+2025-08-15 01:38:34,816 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-08-15 01:38:34,817 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-08-15 01:38:34,817 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-08-15 01:38:35,541 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-08-15 01:38:35,814 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-08-15 01:38:35,815 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-08-15 01:38:35,815 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:38:35,815 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:38:35,816 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-08-15 01:38:35,817 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-08-15 01:38:35,818 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-08-15 01:38:41,180 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 01:38:45,145 - tools.standalone_playwright_login - WARNING - ⚠️ No clear price elements found - price access unclear
+2025-08-15 01:38:45,178 - tools.supplier_authentication_service - INFO - ❌ Login form detected - not authenticated
+2025-08-15 01:38:45,179 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-08-15 01:38:45,179 - tools.supplier_authentication_service - INFO - 🔧 Using standalone playwright authentication
+2025-08-15 01:38:45,179 - tools.standalone_playwright_login - INFO - 🔗 Connecting to shared Chrome instance...
+2025-08-15 01:38:45,988 - tools.standalone_playwright_login - INFO - ✅ Connected to shared Chrome instance at http://localhost:9222
+2025-08-15 01:38:45,988 - tools.standalone_playwright_login - DEBUG - Using existing browser context
+2025-08-15 01:38:45,989 - tools.standalone_playwright_login - DEBUG - Using existing page
+2025-08-15 01:38:46,015 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-08-15 01:38:49,007 - tools.standalone_playwright_login - INFO - ❌ No login indicators found - need to log in
+2025-08-15 01:38:49,008 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-08-15 01:38:49,008 - tools.standalone_playwright_login - INFO - 📍 Navigating to login page: https://www.poundwholesale.co.uk/customer/account/login/
+2025-08-15 01:38:51,998 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="login[username]"]
+2025-08-15 01:38:52,418 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input[name="login[password]"]
+2025-08-15 01:38:55,070 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button[type="submit"]
+2025-08-15 01:38:55,071 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-08-15 01:38:58,232 - tools.standalone_playwright_login - INFO - ✅ Login success confirmed by indicator: text=Log out
+2025-08-15 01:38:58,232 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 01:39:03,864 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-15 01:39:03,865 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 14.9s)
+2025-08-15 01:39:03,880 - tools.standalone_playwright_login - DEBUG - Disconnected from shared Chrome browser
+2025-08-15 01:39:03,897 - tools.standalone_playwright_login - DEBUG - Playwright stopped
+2025-08-15 01:39:03,898 - tools.supplier_authentication_service - INFO - ✅ Standalone authentication successful: playwright_selectors
+2025-08-15 01:39:03,898 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\tools\passive_extraction_workflow_latest.py
+2025-08-15 01:39:03,899 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS'
+2025-08-15 01:39:03,900 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products'
+2025-08-15 01:39:03,900 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 01:39:03,901 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-08-15 01:39:03,967 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:03,970 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 9032 products, 0 categories
+2025-08-15 01:39:03,971 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-08-15 01:39:04,040 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 9032 actual products in cache (total entries: 9032)
+2025-08-15 01:39:04,186 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 8378 processed products in linking map
+2025-08-15 01:39:04,345 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 113 categories
+2025-08-15 01:39:04,351 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 233 categories in config
+2025-08-15 01:39:04,356 - utils.fixed_enhanced_state_manager - INFO - ✅ Normal startup - resumption_index = 8378
+2025-08-15 01:39:04,357 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=8378 (reason: normal_startup)
+2025-08-15 01:39:04,387 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-08-15 01:39:04,389 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:39:04,390 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-08-15 01:39:04,390 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-08-15 01:39:04,391 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-08-15 01:39:04,391 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-08-15 01:39:04,392 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\amazon_data
+2025-08-15 01:39:04,392 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-08-15 01:39:04,393 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\system_config.json
+2025-08-15 01:39:04,394 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-08-15 01:39:04,394 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-08-15 01:39:04,395 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-08-15 01:39:04,395 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-08-15 01:39:04,395 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-08-15 01:39:04,396 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-08-15 01:39:04,396 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-08-15 01:39:04,397 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-08-15 01:39:04,397 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-08-15 01:39:04,398 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-08-15 01:39:04,398 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-08-15 01:39:04,401 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-08-15 01:39:04,401 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-08-15 01:39:04,402 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS
+2025-08-15 01:39:04,402 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-08-15 01:39:04,403 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-08-15 01:39:04,403 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250815_013904
+2025-08-15 01:39:04,403 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-08-15 01:39:04,404 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-08-15 01:39:04,404 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-08-15 01:39:04,405 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-08-15 01:39:04,405 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-08-15 01:39:04,405 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-08-15 01:39:04,406 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-08-15 01:39:04,407 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: current_category_index = 1 FROM supplier_extraction_progress
+2025-08-15 01:39:04,408 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: total_products_in_current_category = 2 FROM supplier_extraction_progress
+2025-08-15 01:39:04,408 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: current_category_url = https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials FROM supplier_extraction_progress
+2025-08-15 01:39:04,409 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: total_categories = 233 FROM supplier_extraction_progress
+2025-08-15 01:39:04,409 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 8378
+2025-08-15 01:39:04,410 - utils.fixed_enhanced_state_manager - INFO - State repaired: Added missing system_progression key with default: current_product_index_in_category; Added missing system_progression key with default: supplier_extraction_resumption_index; Added missing system_progression key with default: amazon_analysis_resumption_index
+2025-08-15 01:39:04,498 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 8378 entries
+2025-08-15 01:39:04,618 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8084 EANs, 8293 URLs, 5682 ASINs in 0.119s
+2025-08-15 01:39:04,619 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 8378 entries
+2025-08-15 01:39:04,620 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 8378
+2025-08-15 01:39:04,620 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-15 01:39:04,621 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 233 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\poundwholesale_categories.json
+2025-08-15 01:39:04,621 - PassiveExtractionWorkflow - INFO - 📋 Loaded 233 predefined category URLs for startup sequence
+2025-08-15 01:39:04,693 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:04,758 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 9032 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:04,759 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: Beginning mandatory startup orchestration
+2025-08-15 01:39:04,759 - PassiveExtractionWorkflow - INFO - ⚡ STARTUP PHASE 0: Linking Map to Processed Products Sync
+2025-08-15 01:39:04,761 - PassiveExtractionWorkflow - INFO - ⚡ SYNC: Processing 8293 linking map URLs
+2025-08-15 01:39:04,783 - PassiveExtractionWorkflow - INFO - ⚡ SYNC: Completed successfully! Added: 8293, Updated: 0, Total: 8293 processed products
+2025-08-15 01:39:04,784 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 0: Linking map sync completed - massive performance boost enabled
+2025-08-15 01:39:04,784 - PassiveExtractionWorkflow - INFO - 🔧 STARTUP PHASE 1: Data Integrity Reconciliation
+2025-08-15 01:39:04,784 - utils.fixed_enhanced_state_manager - INFO - 🔧 STARTUP RECONCILIATION: Beginning mandatory data integrity check...
+2025-08-15 01:39:05,096 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: No inconsistencies found - state is clean
+2025-08-15 01:39:05,099 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 01:39:05,204 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 01:39:05,205 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 01:39:05,206 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after reconciliation_completed
+2025-08-15 01:39:05,206 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 1: Reconciliation completed - 0 items reconciled
+2025-08-15 01:39:05,207 - PassiveExtractionWorkflow - INFO - 🔄 STARTUP PHASE 2: Resume Point Calculation
+2025-08-15 01:39:05,207 - PassiveExtractionWorkflow - INFO - 🔧 RESUME SOURCE: Using supplier_extraction_progress (operational data)
+2025-08-15 01:39:05,207 - PassiveExtractionWorkflow - INFO - ✅ RESUME: Valid resume point calculated - cat=1/233, phase=supplier
+2025-08-15 01:39:05,210 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 01:39:05,344 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 01:39:05,345 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 01:39:05,346 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after resume_calculated
+2025-08-15 01:39:05,347 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 2: Resume point calculated - starting from category 1
+2025-08-15 01:39:05,347 - PassiveExtractionWorkflow - INFO - 🔍 STARTUP PHASE 3: Filter System Preparation
+2025-08-15 01:39:05,352 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 01:39:05,488 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 01:39:05,489 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 01:39:05,490 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after filter_prepared
+2025-08-15 01:39:05,490 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 3: Filter system prepared
+2025-08-15 01:39:05,491 - PassiveExtractionWorkflow - INFO - 🎯 STARTUP PHASE 4: Processing System Readiness
+2025-08-15 01:39:05,491 - PassiveExtractionWorkflow - INFO - ✅ PROCESSING READINESS: All systems ready for processing
+2025-08-15 01:39:05,495 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 01:39:05,629 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 01:39:05,631 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 01:39:05,632 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after startup_completed
+2025-08-15 01:39:05,632 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: All phases completed successfully
+2025-08-15 01:39:05,633 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: All phases completed successfully
+2025-08-15 01:39:05,665 - PassiveExtractionWorkflow - INFO - ✅ STATE INTEGRITY: No corruption detected
+2025-08-15 01:39:05,666 - PassiveExtractionWorkflow - INFO - ✅ STATE INTEGRITY: No corruption detected
+2025-08-15 01:39:05,666 - PassiveExtractionWorkflow - INFO - 📍 RESUME POINT STORED: cat=1, validation=valid
+2025-08-15 01:39:05,667 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-08-15 01:39:05,667 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 8378
+2025-08-15 01:39:05,667 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-08-15 01:39:05,731 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:05,735 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: GAP_PROCESSING (normal gap - cache: 9032 > linking map: 8378)
+2025-08-15 01:39:05,735 - PassiveExtractionWorkflow - INFO - 📊 GAP SIZE: 654 products need Amazon analysis first
+2025-08-15 01:39:05,736 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-08-15 01:39:05,814 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 8378 entries
+2025-08-15 01:39:05,937 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8084 EANs, 8293 URLs, 5682 ASINs in 0.122s
+2025-08-15 01:39:05,938 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 8378 entries
+2025-08-15 01:39:05,939 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-08-15 01:39:05,939 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-15 01:39:05,940 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 233 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\poundwholesale_categories.json
+2025-08-15 01:39:05,941 - PassiveExtractionWorkflow - INFO - 📊 TOTAL CATEGORIES STORED: 233 categories for resume calculations
+2025-08-15 01:39:05,941 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-08-15 01:39:05,942 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 233 predefined categories (infinite mode)
+2025-08-15 01:39:05,942 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-08-15 01:39:05,942 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-08-15 01:39:05,943 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-08-15 01:39:05,943 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-08-15 01:39:05,943 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-08-15 01:39:06,010 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:06,014 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-08-15 01:39:06,014 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-15 01:39:06,015 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-15 01:39:06,086 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:06,172 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9032 total → 766 unprocessed (8293 already in linking map)
+2025-08-15 01:39:06,172 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 91.5% products skipped (already processed)
+2025-08-15 01:39:06,173 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-15 01:39:06,173 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-15 01:39:06,174 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-15 01:39:06,175 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:06,175 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:06,175 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-08-15 01:39:08,642 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-08-15 01:39:12,840 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-15 01:39:12,840 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 01:39:17,238 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-15 01:39:17,238 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-15 01:39:17,239 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-15 01:39:17,239 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 0 accumulators cleared
+2025-08-15 01:39:17,240 - utils.fixed_enhanced_state_manager - DEBUG - 📊 UNIFIED UPDATE: {'current_category_index': 1, 'total_categories': 233, 'current_product_index_in_category': 0, 'total_products_in_current_category': 0, 'current_phase': 'supplier', 'current_category_url': 'https://www.poundwholesale.co.uk/seasonal/wholesale-halloween'}
+2025-08-15 01:39:17,372 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:39:17,373 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:39:17,374 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-halloween prod_idx=0/0
+2025-08-15 01:39:17,374 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-halloween prod_idx=0/0
+2025-08-15 01:39:17,375 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-08-15 01:39:17,375 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:17,402 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween with memory management
+2025-08-15 01:39:19,949 - utils.browser_manager - DEBUG - 🪟 Found 67 Chrome processes, total memory: 10604.5MB
+2025-08-15 01:39:19,950 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 10604.5 MB
+2025-08-15 01:39:22,519 - utils.browser_manager - DEBUG - 🪟 Windows: 67 Chrome processes, 10600MB total
+2025-08-15 01:39:22,519 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=10604MB, Python=171MB, System=83.8%
+2025-08-15 01:39:22,520 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:22,520 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:22,521 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:22,522 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-08-15 01:39:22,522 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-15 01:39:22,523 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:22,523 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:22,524 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (attempt 1/3)
+2025-08-15 01:39:22,524 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:22,524 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:22,525 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:24,622 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween in 1.55s...
+2025-08-15 01:39:26,183 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (attempt 2/3)
+2025-08-15 01:39:26,184 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:26,184 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:26,185 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:28,879 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:28,880 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 01:39:28,965 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (Size: 635001 bytes)
+2025-08-15 01:39:29,175 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-15 01:39:29,176 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 01:39:29,176 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (attempt 1/3)
+2025-08-15 01:39:29,176 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:29,177 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:29,177 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 01:39:31,121 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 in 1.88s...
+2025-08-15 01:39:33,016 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (attempt 2/3)
+2025-08-15 01:39:33,016 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:33,017 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:33,017 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 01:39:34,260 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 01:39:34,261 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 01:39:34,343 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (Size: 637420 bytes)
+2025-08-15 01:39:34,560 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-15 01:39:34,561 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 01:39:34,561 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 1/3)
+2025-08-15 01:39:34,562 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:34,562 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:34,562 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 01:39:36,771 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 in 2.40s...
+2025-08-15 01:39:39,181 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 2/3)
+2025-08-15 01:39:39,182 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:39,182 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:39,183 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 01:39:41,663 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 01:39:41,664 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 01:39:41,732 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (Size: 609582 bytes)
+2025-08-15 01:39:41,888 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-08-15 01:39:41,888 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4
+2025-08-15 01:39:41,889 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4 (attempt 1/3)
+2025-08-15 01:39:41,889 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:41,889 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:41,890 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4
+2025-08-15 01:39:43,789 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4 in 1.89s...
+2025-08-15 01:39:45,680 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4 (attempt 2/3)
+2025-08-15 01:39:45,681 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:45,681 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:45,681 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4
+2025-08-15 01:39:46,718 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4
+2025-08-15 01:39:46,718 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4
+2025-08-15 01:39:46,784 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=4 (Size: 547271 bytes)
+2025-08-15 01:39:46,907 - configurable_supplier_scraper - INFO - Found 16 new product URLs on page 4
+2025-08-15 01:39:46,908 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5
+2025-08-15 01:39:46,908 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5 (attempt 1/3)
+2025-08-15 01:39:46,909 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:46,909 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:46,909 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5
+2025-08-15 01:39:48,573 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5 in 1.56s...
+2025-08-15 01:39:50,132 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5 (attempt 2/3)
+2025-08-15 01:39:50,133 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:50,133 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:39:50,133 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5
+2025-08-15 01:39:51,807 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5
+2025-08-15 01:39:51,807 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5
+2025-08-15 01:39:51,865 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=5 (Size: 331685 bytes)
+2025-08-15 01:39:51,956 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 5
+2025-08-15 01:39:51,956 - configurable_supplier_scraper - INFO - Collected 76 total product URLs across 5 pages
+2025-08-15 01:39:51,957 - configurable_supplier_scraper - INFO - Found 76 total product URLs across all pages
+2025-08-15 01:39:51,961 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-08-15 01:39:52,018 - utils.url_cache_filter - INFO - ✅ Loaded 9032 URLs from poundwholesale.co.uk cache
+2025-08-15 01:39:52,019 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 9032 (+9032 new)
+2025-08-15 01:39:52,020 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 9032 cached URLs for efficiency filtering
+2025-08-15 01:39:52,021 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 76 already cached
+2025-08-15 01:39:52,021 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 76 already cached
+2025-08-15 01:39:52,022 - configurable_supplier_scraper - INFO - 🎯 All URLs are already cached - no new products to scrape!
+2025-08-15 01:39:52,026 - PassiveExtractionWorkflow - INFO - PAGINATION[C1 wholesale-halloween]: pages=5 urls_page=20,20,20,16,0 total=76
+2025-08-15 01:39:52,030 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-seasonal-wholesale-.json (6 entries) saved successfully
+2025-08-15 01:39:52,031 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 76 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-seasonal-wholesale-.json
+2025-08-15 01:39:52,032 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C1 https-www-poundwholesale-co-uk-seasonal-wholesale-]: overwritten=true prev=76 curr=76
+2025-08-15 01:39:52,032 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/seasonal/wholesale-halloween: Found 76 products across 5 pages.
+2025-08-15 01:39:52,032 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 0 raw products extracted, 766 total products accumulated
+2025-08-15 01:39:52,033 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 766 total products extracted so far
+2025-08-15 01:39:52,098 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 8084 processed EANs and 8293 processed URLs from linking map
+2025-08-15 01:39:52,099 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-08-15 01:39:52,099 - PassiveExtractionWorkflow - INFO - 🔍 Building product cache hash indexes for duplicate prevention...
+2025-08-15 01:39:52,156 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:52,211 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 9032 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:52,217 - PassiveExtractionWorkflow - INFO - ✅ Product cache indexes built:
+2025-08-15 01:39:52,217 - PassiveExtractionWorkflow - INFO -    📊 URL Index: 9032 entries
+2025-08-15 01:39:52,218 - PassiveExtractionWorkflow - INFO -    📊 EAN Index: 8774 entries
+2025-08-15 01:39:52,219 - PassiveExtractionWorkflow - INFO - 🔍 FILTER SUMMARY: in=766 skip=766 needs_extraction=0
+2025-08-15 01:39:52,222 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 766 total cached products → 0 unprocessed products
+2025-08-15 01:39:52,222 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 766 already processed products
+2025-08-15 01:39:52,223 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 2: categories 2-2
+2025-08-15 01:39:52,276 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:52,278 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-08-15 01:39:52,278 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-15 01:39:52,279 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-15 01:39:52,330 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9032 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 01:39:52,387 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9032 total → 766 unprocessed (8293 already in linking map)
+2025-08-15 01:39:52,388 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 91.5% products skipped (already processed)
+2025-08-15 01:39:52,388 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-15 01:39:52,388 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-15 01:39:52,389 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-15 01:39:52,389 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:39:52,389 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-15 01:39:56,732 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-15 01:39:56,732 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 01:40:02,590 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-15 01:40:02,590 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-15 01:40:02,591 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-15 01:40:02,591 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 0 accumulators cleared
+2025-08-15 01:40:02,592 - utils.fixed_enhanced_state_manager - DEBUG - 📊 UNIFIED UPDATE: {'current_category_index': 1, 'total_categories': 233, 'current_product_index_in_category': 0, 'total_products_in_current_category': 0, 'current_phase': 'supplier', 'current_category_url': 'https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials'}
+2025-08-15 01:40:02,698 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:40:02,700 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:40:02,701 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=0/0
+2025-08-15 01:40:02,701 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=0/0
+2025-08-15 01:40:02,701 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-08-15 01:40:02,702 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:02,702 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials with memory management
+2025-08-15 01:40:03,812 - utils.browser_manager - DEBUG - 🪟 Found 67 Chrome processes, total memory: 10547.9MB
+2025-08-15 01:40:03,812 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 10547.9 MB
+2025-08-15 01:40:06,015 - utils.browser_manager - DEBUG - 🪟 Windows: 67 Chrome processes, 10541MB total
+2025-08-15 01:40:06,016 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=10547MB, Python=221MB, System=84.5%
+2025-08-15 01:40:06,016 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:06,016 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:06,016 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:06,017 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-15 01:40:06,017 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:06,017 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:06,018 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials (attempt 1/3)
+2025-08-15 01:40:06,018 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:06,018 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:06,018 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:08,127 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials in 1.72s...
+2025-08-15 01:40:09,852 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials (attempt 2/3)
+2025-08-15 01:40:09,853 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:09,853 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:09,853 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:12,413 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:12,414 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 01:40:12,501 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials (Size: 642658 bytes)
+2025-08-15 01:40:12,672 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-15 01:40:12,672 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2
+2025-08-15 01:40:12,673 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2 (attempt 1/3)
+2025-08-15 01:40:12,673 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:12,674 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:12,674 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2
+2025-08-15 01:40:14,668 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2 in 2.13s...
+2025-08-15 01:40:16,801 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2 (attempt 2/3)
+2025-08-15 01:40:16,802 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:16,802 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:16,802 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2
+2025-08-15 01:40:18,724 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2
+2025-08-15 01:40:18,725 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2
+2025-08-15 01:40:18,823 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=2 (Size: 646228 bytes)
+2025-08-15 01:40:19,017 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-15 01:40:19,018 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3
+2025-08-15 01:40:19,018 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3 (attempt 1/3)
+2025-08-15 01:40:19,019 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:19,019 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:19,019 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3
+2025-08-15 01:40:20,936 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3 in 1.72s...
+2025-08-15 01:40:22,671 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3 (attempt 2/3)
+2025-08-15 01:40:22,671 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:22,672 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:22,672 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3
+2025-08-15 01:40:24,585 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3
+2025-08-15 01:40:24,585 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3
+2025-08-15 01:40:24,660 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=3 (Size: 642849 bytes)
+2025-08-15 01:40:24,826 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-08-15 01:40:24,827 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4
+2025-08-15 01:40:24,827 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4 (attempt 1/3)
+2025-08-15 01:40:24,827 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:24,828 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:24,828 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4
+2025-08-15 01:40:26,731 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4 in 2.34s...
+2025-08-15 01:40:29,076 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4 (attempt 2/3)
+2025-08-15 01:40:29,076 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:29,077 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:29,077 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4
+2025-08-15 01:40:31,928 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4
+2025-08-15 01:40:31,929 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4
+2025-08-15 01:40:32,001 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=4 (Size: 643779 bytes)
+2025-08-15 01:40:32,257 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-08-15 01:40:32,258 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5
+2025-08-15 01:40:32,258 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5 (attempt 1/3)
+2025-08-15 01:40:32,258 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:32,259 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:32,259 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5
+2025-08-15 01:40:34,235 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5 in 1.91s...
+2025-08-15 01:40:36,161 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5 (attempt 2/3)
+2025-08-15 01:40:36,162 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:36,162 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:36,162 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5
+2025-08-15 01:40:37,195 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5
+2025-08-15 01:40:37,196 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5
+2025-08-15 01:40:37,280 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=5 (Size: 637129 bytes)
+2025-08-15 01:40:37,448 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-08-15 01:40:37,449 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6
+2025-08-15 01:40:37,449 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6 (attempt 1/3)
+2025-08-15 01:40:37,449 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:37,449 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:37,450 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6
+2025-08-15 01:40:39,486 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6 in 1.78s...
+2025-08-15 01:40:41,267 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6 (attempt 2/3)
+2025-08-15 01:40:41,267 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:41,268 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:41,268 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6
+2025-08-15 01:40:43,526 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6
+2025-08-15 01:40:43,527 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6
+2025-08-15 01:40:43,604 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=6 (Size: 648088 bytes)
+2025-08-15 01:40:43,771 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 6
+2025-08-15 01:40:43,771 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7
+2025-08-15 01:40:43,771 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7 (attempt 1/3)
+2025-08-15 01:40:43,772 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:43,772 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:43,772 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7
+2025-08-15 01:40:45,794 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7 in 2.13s...
+2025-08-15 01:40:47,928 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7 (attempt 2/3)
+2025-08-15 01:40:47,929 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:47,929 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:47,930 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7
+2025-08-15 01:40:49,097 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7
+2025-08-15 01:40:49,098 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7
+2025-08-15 01:40:49,179 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=7 (Size: 618074 bytes)
+2025-08-15 01:40:49,337 - configurable_supplier_scraper - INFO - Found 19 new product URLs on page 7
+2025-08-15 01:40:49,337 - configurable_supplier_scraper - INFO - Processing page 8: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8
+2025-08-15 01:40:49,338 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8 (attempt 1/3)
+2025-08-15 01:40:49,338 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:49,338 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:49,339 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8
+2025-08-15 01:40:50,876 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8 in 1.57s...
+2025-08-15 01:40:52,446 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8 (attempt 2/3)
+2025-08-15 01:40:52,446 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:52,446 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:52,447 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8
+2025-08-15 01:40:54,251 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8
+2025-08-15 01:40:54,252 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8
+2025-08-15 01:40:54,306 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials?p=8 (Size: 330494 bytes)
+2025-08-15 01:40:54,383 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 8
+2025-08-15 01:40:54,383 - configurable_supplier_scraper - INFO - Collected 139 total product URLs across 8 pages
+2025-08-15 01:40:54,383 - configurable_supplier_scraper - INFO - Found 139 total product URLs across all pages
+2025-08-15 01:40:54,384 - utils.url_cache_filter - DEBUG - 🔄 URLs already loaded for poundwholesale.co.uk: 9032 URLs
+2025-08-15 01:40:54,384 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 9032 cached URLs for efficiency filtering
+2025-08-15 01:40:54,384 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 88 new URLs, 51 already cached
+2025-08-15 01:40:54,384 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 88 new URLs need processing, 51 already cached
+2025-08-15 01:40:54,385 - configurable_supplier_scraper - INFO - Visiting product page 1/88: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:40:54,385 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes (attempt 1/3)
+2025-08-15 01:40:54,385 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:54,386 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:54,386 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:40:56,949 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes in 1.64s...
+2025-08-15 01:40:58,598 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes (attempt 2/3)
+2025-08-15 01:40:58,599 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:40:58,599 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:40:58,600 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:41:00,813 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:41:00,814 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:41:00,886 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes (Size: 656356 bytes)
+2025-08-15 01:41:01,057 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 1 to shared accumulator (total: 767)
+2025-08-15 01:41:01,057 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Eleanor Wescott Women's Black Thermal Leggings Assorted Sizes - £2.2 (EAN: 5056683917741)
+2025-08-15 01:41:01,057 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:41:01,058 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-black-thermal-leggings-assorted-sizes
+2025-08-15 01:41:01,155 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:01,156 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:01,156 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=1/0
+2025-08-15 01:41:01,157 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 767/88
+2025-08-15 01:41:01,157 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 767 processed (total in cache: 767)
+2025-08-15 01:41:01,157 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 767
+2025-08-15 01:41:01,158 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 767, frequency=2, enabled=True
+2025-08-15 01:41:01,158 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=767, modulo=1
+2025-08-15 01:41:01,256 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:01,257 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:01,258 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=1/0
+2025-08-15 01:41:01,258 - configurable_supplier_scraper - INFO - Visiting product page 2/88: https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:01,258 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack (attempt 1/3)
+2025-08-15 01:41:01,259 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:01,259 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:01,259 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:04,276 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack in 1.92s...
+2025-08-15 01:41:06,203 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack (attempt 2/3)
+2025-08-15 01:41:06,204 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:06,204 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:06,204 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:09,016 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:09,016 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:09,098 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack (Size: 668348 bytes)
+2025-08-15 01:41:09,275 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 2 to shared accumulator (total: 768)
+2025-08-15 01:41:09,275 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Farley Mill Men's Black Thermal Boot Socks 2 Pack - £1.57 (EAN: 5056283824708)
+2025-08-15 01:41:09,276 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:09,276 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/farley-mill-men-s-black-thermal-boot-socks-2-pack
+2025-08-15 01:41:09,372 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:09,373 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:09,374 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=2/0
+2025-08-15 01:41:09,374 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 768/88
+2025-08-15 01:41:09,374 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 768 processed (total in cache: 768)
+2025-08-15 01:41:09,375 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 768
+2025-08-15 01:41:09,375 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 768, frequency=2, enabled=True
+2025-08-15 01:41:09,375 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=768, modulo=0
+2025-08-15 01:41:09,376 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:09,376 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-15 01:41:09,377 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:09,377 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 01:41:09,377 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 768 products to cache...
+2025-08-15 01:41:09,378 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:09,429 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9032 existing products for deduplication
+2025-08-15 01:41:09,433 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 766 URL duplicates and 0 EAN duplicates.
+2025-08-15 01:41:09,433 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:09,568 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9034 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5385073 bytes)
+2025-08-15 01:41:09,571 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 768 products to cache (every 2 products)
+2025-08-15 01:41:09,665 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:09,666 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:09,667 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=2/0
+2025-08-15 01:41:09,667 - configurable_supplier_scraper - INFO - Visiting product page 3/88: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:09,667 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours (attempt 1/3)
+2025-08-15 01:41:09,668 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:09,668 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:09,668 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:12,427 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours in 1.98s...
+2025-08-15 01:41:14,413 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours (attempt 2/3)
+2025-08-15 01:41:14,414 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:14,414 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:14,414 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:16,278 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:16,279 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:16,359 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours (Size: 666860 bytes)
+2025-08-15 01:41:16,534 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 3 to shared accumulator (total: 769)
+2025-08-15 01:41:16,535 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Eleanor Wescott Women's Thermal Gloves Assorted Colours - £3.05 (EAN: 5056683917802)
+2025-08-15 01:41:16,535 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:16,535 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-gloves-assorted-colours
+2025-08-15 01:41:16,632 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:16,634 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:16,634 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=3/0
+2025-08-15 01:41:16,635 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 769/88
+2025-08-15 01:41:16,635 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 769 processed (total in cache: 769)
+2025-08-15 01:41:16,635 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 769
+2025-08-15 01:41:16,636 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 769, frequency=2, enabled=True
+2025-08-15 01:41:16,636 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=769, modulo=1
+2025-08-15 01:41:16,736 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:16,737 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:16,737 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=3/0
+2025-08-15 01:41:16,738 - configurable_supplier_scraper - INFO - Visiting product page 4/88: https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:16,738 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours (attempt 1/3)
+2025-08-15 01:41:16,738 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:16,739 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:16,739 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:19,393 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours in 1.68s...
+2025-08-15 01:41:21,080 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours (attempt 2/3)
+2025-08-15 01:41:21,081 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:21,081 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:21,082 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:22,292 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:22,293 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:22,369 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours (Size: 578521 bytes)
+2025-08-15 01:41:22,530 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 4 to shared accumulator (total: 770)
+2025-08-15 01:41:22,530 - configurable_supplier_scraper - INFO - ✅ Extracted product 4: Farley Mill Kids Plain Magic Gloves Assorted Colours - £0.54 (EAN: 5056170316422)
+2025-08-15 01:41:22,531 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:22,531 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/farley-mill-kids-plain-magic-gloves-assorted-colours
+2025-08-15 01:41:22,639 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:22,641 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:22,641 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=4/0
+2025-08-15 01:41:22,642 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 770/88
+2025-08-15 01:41:22,642 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 770 processed (total in cache: 770)
+2025-08-15 01:41:22,642 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 770
+2025-08-15 01:41:22,643 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 770, frequency=2, enabled=True
+2025-08-15 01:41:22,643 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=770, modulo=0
+2025-08-15 01:41:22,643 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:22,644 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-15 01:41:22,644 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:22,644 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 01:41:22,645 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 770 products to cache...
+2025-08-15 01:41:22,645 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:22,702 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9034 existing products for deduplication
+2025-08-15 01:41:22,706 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 768 URL duplicates and 0 EAN duplicates.
+2025-08-15 01:41:22,707 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:22,847 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9036 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5386307 bytes)
+2025-08-15 01:41:22,850 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 770 products to cache (every 2 products)
+2025-08-15 01:41:22,951 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:22,952 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:22,952 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=4/0
+2025-08-15 01:41:22,953 - configurable_supplier_scraper - INFO - Visiting product page 5/88: https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:22,953 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted (attempt 1/3)
+2025-08-15 01:41:22,953 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:22,953 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:22,954 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:25,567 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted in 1.71s...
+2025-08-15 01:41:27,283 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted (attempt 2/3)
+2025-08-15 01:41:27,284 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:27,284 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:27,285 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:28,931 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:28,932 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:29,006 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted (Size: 667803 bytes)
+2025-08-15 01:41:29,198 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 5 to shared accumulator (total: 771)
+2025-08-15 01:41:29,198 - configurable_supplier_scraper - INFO - ✅ Extracted product 5: Farley Mill Men's Melange Beanie Hat Assorted - £1.06 (EAN: 5056283824500)
+2025-08-15 01:41:29,199 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:29,199 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/farley-mill-men-s-melange-beanie-hat-assorted
+2025-08-15 01:41:29,301 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:29,303 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:29,303 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=5/0
+2025-08-15 01:41:29,304 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 771/88
+2025-08-15 01:41:29,304 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 771 processed (total in cache: 771)
+2025-08-15 01:41:29,305 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 771
+2025-08-15 01:41:29,305 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 771, frequency=2, enabled=True
+2025-08-15 01:41:29,306 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=771, modulo=1
+2025-08-15 01:41:29,410 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:29,412 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:29,412 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=5/0
+2025-08-15 01:41:29,413 - configurable_supplier_scraper - INFO - Visiting product page 6/88: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:29,413 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours (attempt 1/3)
+2025-08-15 01:41:29,414 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:29,414 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:29,414 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:32,106 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours in 2.41s...
+2025-08-15 01:41:34,524 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours (attempt 2/3)
+2025-08-15 01:41:34,525 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:34,525 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:34,525 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:35,832 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:35,833 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:35,915 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours (Size: 670580 bytes)
+2025-08-15 01:41:36,249 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 6 to shared accumulator (total: 772)
+2025-08-15 01:41:36,250 - configurable_supplier_scraper - INFO - ✅ Extracted product 6: Farley Mill UK 4-8 Ladies Mixed Cosy Socks 2 Pack Assorted Colours - £1.76 (EAN: 5056283886393)
+2025-08-15 01:41:36,250 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:36,250 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-mixed-cosy-socks-2-pack-assorted-colours
+2025-08-15 01:41:36,371 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:36,372 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:36,372 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=6/0
+2025-08-15 01:41:36,373 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 772/88
+2025-08-15 01:41:36,373 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 772 processed (total in cache: 772)
+2025-08-15 01:41:36,373 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 772
+2025-08-15 01:41:36,374 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 772, frequency=2, enabled=True
+2025-08-15 01:41:36,374 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=772, modulo=0
+2025-08-15 01:41:36,375 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:36,375 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-15 01:41:36,375 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:36,376 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 01:41:36,376 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 772 products to cache...
+2025-08-15 01:41:36,377 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:36,436 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9036 existing products for deduplication
+2025-08-15 01:41:36,443 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 770 URL duplicates and 0 EAN duplicates.
+2025-08-15 01:41:36,444 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:41:36,594 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9038 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5387553 bytes)
+2025-08-15 01:41:36,597 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 772 products to cache (every 2 products)
+2025-08-15 01:41:36,704 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:41:36,706 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:41:36,706 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=6/0
+2025-08-15 01:41:36,706 - configurable_supplier_scraper - INFO - Visiting product page 7/88: https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:36,707 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves (attempt 1/3)
+2025-08-15 01:41:36,707 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:36,708 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:36,708 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:39,020 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves in 2.19s...
+2025-08-15 01:41:41,213 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves (attempt 2/3)
+2025-08-15 01:41:41,214 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:41,214 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:41,215 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:43,993 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:43,994 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:45,802 - configurable_supplier_scraper - ERROR - Navigation error for https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves (attempt 2): Page.content: Unable to retrieve content because the page is navigating and changing the content.
+2025-08-15 01:41:45,803 - configurable_supplier_scraper - ERROR - Error fetching https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves (attempt 2): Page.content: Unable to retrieve content because the page is navigating and changing the content.
+2025-08-15 01:41:45,803 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves in 3.15s...
+2025-08-15 01:41:48,950 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves (attempt 3/3)
+2025-08-15 01:41:48,951 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:48,951 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:48,952 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:53,631 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves after 3 attempts.
+2025-08-15 01:41:53,632 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/austin-cole-men-s-black-classic-gloves
+2025-08-15 01:41:53,632 - configurable_supplier_scraper - INFO - Visiting product page 8/88: https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:41:53,633 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted (attempt 1/3)
+2025-08-15 01:41:53,633 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:53,634 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:53,634 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:41:56,321 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted in 2.12s...
+2025-08-15 01:41:58,455 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted (attempt 2/3)
+2025-08-15 01:41:58,456 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:41:58,456 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:41:58,456 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:42:00,624 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:42:00,625 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:42:00,714 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted (Size: 669240 bytes)
+2025-08-15 01:42:00,924 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 8 to shared accumulator (total: 773)
+2025-08-15 01:42:00,925 - configurable_supplier_scraper - INFO - ✅ Extracted product 8: Farley Mill Men's Size 7-11 Thermal Socks 2 Pack Assorted - £1.46 (EAN: 5056283824692)
+2025-08-15 01:42:00,926 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:42:00,926 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/farley-mill-men-s-size-7-11-thermal-socks-2-pack-assorted
+2025-08-15 01:42:01,010 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:42:01,011 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:42:01,011 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=7/0
+2025-08-15 01:42:01,012 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 773/88
+2025-08-15 01:42:01,012 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 773 processed (total in cache: 773)
+2025-08-15 01:42:01,012 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 773
+2025-08-15 01:42:01,013 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 773, frequency=2, enabled=True
+2025-08-15 01:42:01,013 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=773, modulo=1
+2025-08-15 01:42:01,133 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:42:01,134 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:42:01,135 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=7/0
+2025-08-15 01:42:01,135 - configurable_supplier_scraper - INFO - Visiting product page 9/88: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+2025-08-15 01:42:01,136 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted (attempt 1/3)
+2025-08-15 01:42:01,136 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:01,136 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:01,137 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+2025-08-15 01:42:02,023 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted", waiting until "domcontentloaded"
+
+2025-08-15 01:42:02,024 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted (attempt 1)
+2025-08-15 01:42:02,025 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted (attempt 2/3)
+2025-08-15 01:42:02,027 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:02,028 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:02,029 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+2025-08-15 01:42:03,385 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted", waiting until "domcontentloaded"
+
+2025-08-15 01:42:03,386 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted (attempt 2)
+2025-08-15 01:42:03,386 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted (attempt 3/3)
+2025-08-15 01:42:03,387 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:03,387 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:03,388 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+2025-08-15 01:42:07,441 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted after 3 attempts.
+2025-08-15 01:42:07,441 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-2-pack-assorted
+2025-08-15 01:42:07,442 - configurable_supplier_scraper - INFO - Visiting product page 10/88: https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:07,442 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours (attempt 1/3)
+2025-08-15 01:42:07,442 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:07,442 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:07,443 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:10,243 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours in 2.02s...
+2025-08-15 01:42:12,270 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours (attempt 2/3)
+2025-08-15 01:42:12,271 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:12,271 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:12,271 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:13,774 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:13,775 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:14,170 - configurable_supplier_scraper - ERROR - Navigation error for https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours (attempt 2): Page.content: Unable to retrieve content because the page is navigating and changing the content.
+2025-08-15 01:42:14,171 - configurable_supplier_scraper - ERROR - Error fetching https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours (attempt 2): Page.content: Unable to retrieve content because the page is navigating and changing the content.
+2025-08-15 01:42:14,173 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours in 2.81s...
+2025-08-15 01:42:16,993 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours (attempt 3/3)
+2025-08-15 01:42:16,993 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:16,994 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:16,994 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:21,581 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours after 3 attempts.
+2025-08-15 01:42:21,581 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-men-s-ribbed-thermal-wool-socks-2-pack-assorted-colours
+2025-08-15 01:42:21,582 - configurable_supplier_scraper - INFO - Visiting product page 11/88: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:21,583 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours (attempt 1/3)
+2025-08-15 01:42:21,584 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:21,585 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:21,586 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:24,215 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours in 2.40s...
+2025-08-15 01:42:26,629 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours (attempt 2/3)
+2025-08-15 01:42:26,631 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:26,632 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:26,633 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:30,282 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours in 3.12s...
+2025-08-15 01:42:33,399 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours (attempt 3/3)
+2025-08-15 01:42:33,401 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:33,401 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:33,402 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:34,926 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:34,927 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:35,781 - configurable_supplier_scraper - ERROR - Navigation error for https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours (attempt 3): Page.content: Unable to retrieve content because the page is navigating and changing the content.
+2025-08-15 01:42:35,783 - configurable_supplier_scraper - ERROR - Error fetching https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours (attempt 3): Page.content: Unable to retrieve content because the page is navigating and changing the content.
+2025-08-15 01:42:35,783 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours after 3 attempts.
+2025-08-15 01:42:35,784 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/eleanor-wescott-women-s-thermal-hat-assorted-colours
+2025-08-15 01:42:35,784 - configurable_supplier_scraper - INFO - Visiting product page 12/88: https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:35,785 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted (attempt 1/3)
+2025-08-15 01:42:35,786 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:35,786 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:35,787 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:37,748 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted: Page.goto: Navigation to "https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted" is interrupted by another navigation to "https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2"
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted", waiting until "domcontentloaded"
+
+2025-08-15 01:42:37,752 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted (attempt 1)
+2025-08-15 01:42:37,752 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted (attempt 2/3)
+2025-08-15 01:42:37,752 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:37,753 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:37,753 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:39,156 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:39,157 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:42,083 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted (Size: 671474 bytes)
+2025-08-15 01:42:42,369 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 12 to shared accumulator (total: 774)
+2025-08-15 01:42:42,370 - configurable_supplier_scraper - INFO - ✅ Extracted product 12: Fairy Mill Kids Cosy Socks 2 Pack Assorted - £1.25 (EAN: 5056283870361)
+2025-08-15 01:42:42,370 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:42,371 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/fairy-mill-kids-cosy-socks-2-pack-assorted
+2025-08-15 01:42:42,606 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:42:42,611 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:42:42,612 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=8/0
+2025-08-15 01:42:42,613 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 774/88
+2025-08-15 01:42:42,615 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 774 processed (total in cache: 774)
+2025-08-15 01:42:42,617 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 774
+2025-08-15 01:42:42,617 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 774, frequency=2, enabled=True
+2025-08-15 01:42:42,618 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=774, modulo=0
+2025-08-15 01:42:42,619 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:42:42,624 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-15 01:42:42,625 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-15 01:42:42,629 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 01:42:42,630 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 774 products to cache...
+2025-08-15 01:42:42,631 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:42:42,687 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9038 existing products for deduplication
+2025-08-15 01:42:42,692 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 772 URL duplicates and 0 EAN duplicates.
+2025-08-15 01:42:42,692 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:42:42,946 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9040 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5388775 bytes)
+2025-08-15 01:42:42,949 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 774 products to cache (every 2 products)
+2025-08-15 01:42:43,147 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:42:43,150 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:42:43,152 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=8/0
+2025-08-15 01:42:43,153 - configurable_supplier_scraper - INFO - Visiting product page 13/88: https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted
+2025-08-15 01:42:43,153 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted (attempt 1/3)
+2025-08-15 01:42:43,154 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:43,155 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:43,156 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted
+2025-08-15 01:42:45,876 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted in 1.53s...
+2025-08-15 01:42:47,421 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted (attempt 2/3)
+2025-08-15 01:42:47,422 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:47,423 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:47,424 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted
+2025-08-15 01:42:51,653 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted in 3.25s...
+2025-08-15 01:42:54,910 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted (attempt 3/3)
+2025-08-15 01:42:54,910 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:54,911 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:54,911 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted
+2025-08-15 01:42:58,723 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted after 3 attempts.
+2025-08-15 01:42:58,723 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-ladies-140-denier-thermal-tights-assorted
+2025-08-15 01:42:58,724 - configurable_supplier_scraper - INFO - Visiting product page 14/88: https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted
+2025-08-15 01:42:58,724 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted (attempt 1/3)
+2025-08-15 01:42:58,725 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:42:58,725 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:42:58,725 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted
+2025-08-15 01:43:01,777 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted in 2.17s...
+2025-08-15 01:43:03,945 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted (attempt 2/3)
+2025-08-15 01:43:03,946 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:03,946 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:03,947 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted
+2025-08-15 01:43:07,864 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted in 3.41s...
+2025-08-15 01:43:11,276 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted (attempt 3/3)
+2025-08-15 01:43:11,277 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:11,277 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:11,278 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted
+2025-08-15 01:43:14,225 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted after 3 attempts.
+2025-08-15 01:43:14,226 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-faux-fur-memory-foam-slipper-socks-assorted
+2025-08-15 01:43:14,226 - configurable_supplier_scraper - INFO - Visiting product page 15/88: https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes
+2025-08-15 01:43:14,227 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes (attempt 1/3)
+2025-08-15 01:43:14,227 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:14,227 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:14,228 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes
+2025-08-15 01:43:14,544 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes", waiting until "domcontentloaded"
+
+2025-08-15 01:43:14,547 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes (attempt 1)
+2025-08-15 01:43:14,547 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes (attempt 2/3)
+2025-08-15 01:43:14,548 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:14,548 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:14,548 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes
+2025-08-15 01:43:20,486 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes in 3.23s...
+2025-08-15 01:43:23,734 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes (attempt 3/3)
+2025-08-15 01:43:23,735 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:23,735 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:23,735 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes
+2025-08-15 01:43:29,921 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes after 3 attempts.
+2025-08-15 01:43:29,922 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/fairy-mill-kids-unicorn-3d-cosy-socks-assorted-sizes
+2025-08-15 01:43:29,922 - configurable_supplier_scraper - INFO - Visiting product page 16/88: https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted
+2025-08-15 01:43:29,923 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted (attempt 1/3)
+2025-08-15 01:43:29,923 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:29,924 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:29,924 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted
+2025-08-15 01:43:32,819 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted (attempt 1)
+2025-08-15 01:43:32,820 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted (attempt 2/3)
+2025-08-15 01:43:32,821 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:32,821 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:32,821 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted
+2025-08-15 01:43:35,820 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted in 3.18s...
+2025-08-15 01:43:39,004 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted (attempt 3/3)
+2025-08-15 01:43:39,005 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:39,005 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:39,005 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted
+2025-08-15 01:43:44,054 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted after 3 attempts.
+2025-08-15 01:43:44,055 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-ladies-size-4-6-super-cosy-striped-socks-assorted
+2025-08-15 01:43:44,055 - configurable_supplier_scraper - INFO - Visiting product page 17/88: https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted
+2025-08-15 01:43:44,056 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted (attempt 1/3)
+2025-08-15 01:43:44,056 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:44,056 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:44,057 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted
+2025-08-15 01:43:46,766 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted in 2.47s...
+2025-08-15 01:43:49,237 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted (attempt 2/3)
+2025-08-15 01:43:49,238 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:49,239 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:49,239 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted
+2025-08-15 01:43:53,188 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted in 3.07s...
+2025-08-15 01:43:56,269 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted (attempt 3/3)
+2025-08-15 01:43:56,269 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:43:56,270 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:43:56,270 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted
+2025-08-15 01:44:00,247 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted after 3 attempts.
+2025-08-15 01:44:00,247 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-girls-hat-mittens-knitted-set-assorted
+2025-08-15 01:44:00,248 - configurable_supplier_scraper - INFO - Visiting product page 18/88: https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted
+2025-08-15 01:44:00,248 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted (attempt 1/3)
+2025-08-15 01:44:00,249 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:00,249 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:00,249 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted
+2025-08-15 01:44:03,031 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted in 2.16s...
+2025-08-15 01:44:05,207 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted (attempt 2/3)
+2025-08-15 01:44:05,208 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:05,208 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:05,208 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted
+2025-08-15 01:44:09,268 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted in 3.19s...
+2025-08-15 01:44:12,457 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted (attempt 3/3)
+2025-08-15 01:44:12,458 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:12,458 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:12,458 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted
+2025-08-15 01:44:15,651 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted after 3 attempts.
+2025-08-15 01:44:15,652 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-men-s-pattern-knitted-cable-cuffed-winter-slipper-socks-assorted
+2025-08-15 01:44:15,652 - configurable_supplier_scraper - INFO - Visiting product page 19/88: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours
+2025-08-15 01:44:15,653 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours (attempt 1/3)
+2025-08-15 01:44:15,653 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:15,653 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:15,653 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours
+2025-08-15 01:44:17,724 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours in 1.95s...
+2025-08-15 01:44:19,680 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours (attempt 2/3)
+2025-08-15 01:44:19,681 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:19,682 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:19,682 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours
+2025-08-15 01:44:23,060 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours in 2.75s...
+2025-08-15 01:44:25,816 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours (attempt 3/3)
+2025-08-15 01:44:25,817 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:25,817 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:25,818 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours
+2025-08-15 01:44:29,078 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours after 3 attempts.
+2025-08-15 01:44:29,078 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-uk-4-8-ladies-plain-chenille-slouch-socks-2-pack-assorted-colours
+2025-08-15 01:44:29,079 - configurable_supplier_scraper - INFO - Visiting product page 20/88: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted
+2025-08-15 01:44:29,079 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted (attempt 1/3)
+2025-08-15 01:44:29,080 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:29,080 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:29,080 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted
+2025-08-15 01:44:31,131 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted in 1.93s...
+2025-08-15 01:44:33,068 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted (attempt 2/3)
+2025-08-15 01:44:33,068 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:33,069 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:33,069 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted
+2025-08-15 01:44:37,337 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted in 3.14s...
+2025-08-15 01:44:40,490 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted (attempt 3/3)
+2025-08-15 01:44:40,491 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:40,491 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:40,491 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted
+2025-08-15 01:44:45,058 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted after 3 attempts.
+2025-08-15 01:44:45,059 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-boys-knitted-hat-mittens-set-assorted
+2025-08-15 01:44:45,060 - configurable_supplier_scraper - INFO - Visiting product page 21/88: https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours
+2025-08-15 01:44:45,061 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours (attempt 1/3)
+2025-08-15 01:44:45,061 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:45,062 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:45,062 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours
+2025-08-15 01:44:46,121 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours", waiting until "domcontentloaded"
+
+2025-08-15 01:44:46,123 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours (attempt 1)
+2025-08-15 01:44:46,123 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours (attempt 2/3)
+2025-08-15 01:44:46,124 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:46,125 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:46,125 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours
+2025-08-15 01:44:50,236 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours in 2.94s...
+2025-08-15 01:44:53,186 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours (attempt 3/3)
+2025-08-15 01:44:53,187 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:53,187 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:53,187 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours
+2025-08-15 01:44:57,531 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours after 3 attempts.
+2025-08-15 01:44:57,531 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-boys-beanie-hat-gloves-set-3pc-assorted-colours
+2025-08-15 01:44:57,532 - configurable_supplier_scraper - INFO - Visiting product page 22/88: https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours
+2025-08-15 01:44:57,532 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours (attempt 1/3)
+2025-08-15 01:44:57,532 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:57,533 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:57,533 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours
+2025-08-15 01:44:58,530 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours", waiting until "domcontentloaded"
+
+2025-08-15 01:44:58,532 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours (attempt 1)
+2025-08-15 01:44:58,532 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours (attempt 2/3)
+2025-08-15 01:44:58,533 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:44:58,534 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:44:58,535 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours
+2025-08-15 01:45:02,409 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours in 2.74s...
+2025-08-15 01:45:05,166 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours (attempt 3/3)
+2025-08-15 01:45:05,167 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:05,167 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:05,168 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours
+2025-08-15 01:45:08,073 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours after 3 attempts.
+2025-08-15 01:45:08,074 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-ladies-chenille-gloves-assorted-colours
+2025-08-15 01:45:08,074 - configurable_supplier_scraper - INFO - Visiting product page 23/88: https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted
+2025-08-15 01:45:08,074 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted (attempt 1/3)
+2025-08-15 01:45:08,075 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:08,075 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:08,075 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted
+2025-08-15 01:45:08,252 - configurable_supplier_scraper - WARNING - Navigation failed for https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted", waiting until "domcontentloaded"
+
+2025-08-15 01:45:08,253 - configurable_supplier_scraper - WARNING - No response received for https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted (attempt 1)
+2025-08-15 01:45:08,253 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted (attempt 2/3)
+2025-08-15 01:45:08,254 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:08,255 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:08,255 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted
+2025-08-15 01:45:14,217 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted in 2.98s...
+2025-08-15 01:45:17,212 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted (attempt 3/3)
+2025-08-15 01:45:17,213 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:17,213 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:17,213 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted
+2025-08-15 01:45:21,724 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted after 3 attempts.
+2025-08-15 01:45:21,724 - configurable_supplier_scraper - WARNING - Failed to fetch product page: https://www.poundwholesale.co.uk/farley-mill-kids-printed-thermal-socks-4-pack-assorted
+2025-08-15 01:45:21,724 - configurable_supplier_scraper - INFO - Visiting product page 24/88: https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:21,725 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack (attempt 1/3)
+2025-08-15 01:45:21,725 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:21,726 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:21,726 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:23,997 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack in 1.62s...
+2025-08-15 01:45:25,626 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack (attempt 2/3)
+2025-08-15 01:45:25,626 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:25,627 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:25,627 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:28,137 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:28,138 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:28,221 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack (Size: 555667 bytes)
+2025-08-15 01:45:28,382 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 24 to shared accumulator (total: 775)
+2025-08-15 01:45:28,383 - configurable_supplier_scraper - INFO - ✅ Extracted product 24: Farley Mill Assorted Colour Boys Thermal Socks 3 Pack - £1.83 (EAN: 5056283870385)
+2025-08-15 01:45:28,384 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:28,384 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/farley-mill-assorted-colour-boys-thermal-socks-3-pack
+2025-08-15 01:45:28,474 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:45:28,476 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:45:28,476 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=9/0
+2025-08-15 01:45:28,476 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 775/88
+2025-08-15 01:45:28,477 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 775 processed (total in cache: 775)
+2025-08-15 01:45:28,477 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 775
+2025-08-15 01:45:28,477 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 775, frequency=2, enabled=True
+2025-08-15 01:45:28,478 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=775, modulo=1
+2025-08-15 01:45:28,569 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:45:28,570 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:45:28,570 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=9/0
+2025-08-15 01:45:28,571 - configurable_supplier_scraper - INFO - Visiting product page 25/88: https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:28,571 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat (attempt 1/3)
+2025-08-15 01:45:28,572 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:28,572 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:28,572 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:30,730 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat in 1.67s...
+2025-08-15 01:45:32,404 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat (attempt 2/3)
+2025-08-15 01:45:32,405 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:32,406 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:32,406 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:35,191 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:35,192 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:35,260 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat (Size: 548522 bytes)
+2025-08-15 01:45:35,431 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 25 to shared accumulator (total: 776)
+2025-08-15 01:45:35,431 - configurable_supplier_scraper - INFO - ✅ Extracted product 25: Austin Cole Men's Black Beanie Hat - £0.74 (EAN: 5056175910045)
+2025-08-15 01:45:35,432 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:35,432 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/austin-cole-men-s-black-beanie-hat
+2025-08-15 01:45:35,537 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:45:35,539 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:45:35,539 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=10/0
+2025-08-15 01:45:35,540 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 776/88
+2025-08-15 01:45:35,540 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 776 processed (total in cache: 776)
+2025-08-15 01:45:35,540 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 776
+2025-08-15 01:45:35,541 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 776, frequency=2, enabled=True
+2025-08-15 01:45:35,541 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=776, modulo=0
+2025-08-15 01:45:35,541 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:45:35,542 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-15 01:45:35,542 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-15 01:45:35,543 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 01:45:35,543 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 776 products to cache...
+2025-08-15 01:45:35,544 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:45:35,595 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9040 existing products for deduplication
+2025-08-15 01:45:35,599 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 774 URL duplicates and 0 EAN duplicates.
+2025-08-15 01:45:35,600 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 01:45:35,759 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9042 products (2 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5389971 bytes)
+2025-08-15 01:45:35,761 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 776 products to cache (every 2 products)
+2025-08-15 01:45:35,855 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 01:45:35,856 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 01:45:35,856 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url=https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials prod_idx=10/0
+2025-08-15 01:45:35,857 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 01:45:35,857 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 01:45:35,858 - configurable_supplier_scraper - INFO - 🔐 PROACTIVE AUTH CHECK: Verifying login at product 26
+2025-08-15 01:45:40,394 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-15 01:45:40,395 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 01:45:44,154 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-08-15 01:45:44,159 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

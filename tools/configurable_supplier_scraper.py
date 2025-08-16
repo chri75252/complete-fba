@@ -488,8 +488,40 @@ class ConfigurableSupplierScraper:
             log.info(f"✅ URL Pre-filtering: {filtered_count} new URLs need processing, {original_count - filtered_count} already cached")
             
             if filtered_count == 0:
-                log.info("🎯 All URLs are already cached - no new products to scrape!")
-                return []  # Return empty list if all URLs are cached
+                log.info("🎯 All URLs are already cached - loading cached products!")
+                # Load cached products instead of returning empty list
+                try:
+                    cache_filename = f"{domain.replace('.', '-')}_products_cache.json"
+                    cache_file_path = os.path.join(output_root, "cached_products", cache_filename)
+                    
+                    if os.path.exists(cache_file_path):
+                        with open(cache_file_path, 'r', encoding='utf-8') as f:
+                            cached_products = json.load(f)
+                        
+                        # Filter cached products to match the requested category URL
+                        category_products = []
+                        for product in cached_products:
+                            if isinstance(product, dict) and product.get('source_url') == url:
+                                category_products.append(product)
+                        
+                        # 🚨 CRITICAL FIX: Update cache file timestamp when loading cached products
+                        # This ensures the cache file reflects when the system last processed this category
+                        try:
+                            # Touch the cache file to update timestamp
+                            os.utime(cache_file_path, None)  # Updates both access and modification time to current time
+                            log.info(f"🔄 Cache timestamp updated for: {cache_file_path}")
+                        except Exception as touch_error:
+                            log.warning(f"⚠️ Could not update cache timestamp: {touch_error}")
+                        
+                        log.info(f"✅ Loaded {len(category_products)} cached products for category: {url}")
+                        return category_products
+                    else:
+                        log.warning(f"⚠️ Cache file not found: {cache_file_path}")
+                        return []
+                        
+                except Exception as cache_error:
+                    log.error(f"❌ Failed to load cached products: {cache_error}")
+                    return []
             
         except Exception as filter_error:
             log.warning(f"⚠️ URL pre-filtering failed: {filter_error} - continuing with all URLs")

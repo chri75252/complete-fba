@@ -1,0 +1,396 @@
+2025-08-15 22:24:50,637 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\logs\debug\run_custom_poundwholesale_20250815_222450.log
+2025-08-15 22:24:50,637 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\logs\debug\run_custom_poundwholesale_20250815_222450.log
+2025-08-15 22:24:50,638 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-08-15 22:24:50,638 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-08-15 22:24:50,643 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-08-15 22:24:51,222 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-08-15 22:24:51,489 - utils.browser_manager - INFO - 📄 Using existing context with 4 pages
+2025-08-15 22:24:51,489 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-08-15 22:24:51,489 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:24:51,490 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:24:51,490 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-08-15 22:24:51,491 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-08-15 22:24:51,491 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-08-15 22:24:57,392 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 22:25:01,760 - tools.standalone_playwright_login - WARNING - ⚠️ No clear price elements found - price access unclear
+2025-08-15 22:25:01,786 - tools.supplier_authentication_service - INFO - ❌ Login form detected - not authenticated
+2025-08-15 22:25:01,787 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-08-15 22:25:01,787 - tools.supplier_authentication_service - INFO - 🔧 Using standalone playwright authentication
+2025-08-15 22:25:01,787 - tools.standalone_playwright_login - INFO - 🔗 Connecting to shared Chrome instance...
+2025-08-15 22:25:02,557 - tools.standalone_playwright_login - INFO - ✅ Connected to shared Chrome instance at http://localhost:9222
+2025-08-15 22:25:02,557 - tools.standalone_playwright_login - DEBUG - Using existing browser context
+2025-08-15 22:25:02,558 - tools.standalone_playwright_login - DEBUG - Using existing page
+2025-08-15 22:25:02,591 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-08-15 22:25:06,133 - tools.standalone_playwright_login - INFO - ❌ No login indicators found - need to log in
+2025-08-15 22:25:06,133 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-08-15 22:25:06,133 - tools.standalone_playwright_login - INFO - 📍 Navigating to login page: https://www.poundwholesale.co.uk/customer/account/login/
+2025-08-15 22:25:09,489 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="login[username]"]
+2025-08-15 22:25:09,949 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input[name="login[password]"]
+2025-08-15 22:25:12,831 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button[type="submit"]
+2025-08-15 22:25:12,831 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-08-15 22:25:16,259 - tools.standalone_playwright_login - INFO - ✅ Login success confirmed by indicator: text=Log out
+2025-08-15 22:25:16,260 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 22:25:22,584 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-15 22:25:22,584 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 16.5s)
+2025-08-15 22:25:22,601 - tools.standalone_playwright_login - DEBUG - Disconnected from shared Chrome browser
+2025-08-15 22:25:22,634 - tools.standalone_playwright_login - DEBUG - Playwright stopped
+2025-08-15 22:25:22,634 - tools.supplier_authentication_service - INFO - ✅ Standalone authentication successful: playwright_selectors
+2025-08-15 22:25:22,635 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\tools\passive_extraction_workflow_latest.py
+2025-08-15 22:25:22,637 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS'
+2025-08-15 22:25:22,637 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products'
+2025-08-15 22:25:22,638 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-15 22:25:22,638 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-08-15 22:25:22,708 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7689 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 22:25:22,713 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 7689 products, 0 categories
+2025-08-15 22:25:22,714 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-08-15 22:25:22,878 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 7689 actual products in cache (total entries: 7689)
+2025-08-15 22:25:23,021 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 8386 processed products in linking map
+2025-08-15 22:25:23,248 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 87 categories
+2025-08-15 22:25:23,257 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 233 categories in config
+2025-08-15 22:25:23,265 - utils.fixed_enhanced_state_manager - INFO - 🔄 REVERSE GAP DETECTED: Linking map (8386) > Cache (7689)
+2025-08-15 22:25:23,265 - utils.fixed_enhanced_state_manager - WARNING - 🔄 REVERSE GAP: Detected restart with resumption_index=0 but previous state exists - preserving index
+2025-08-15 22:25:23,266 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: reverse_gap_restart_preserved)
+2025-08-15 22:25:23,267 - utils.fixed_enhanced_state_manager - INFO - 🔧 FRESH START: Starting from first category (index 0): https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:23,276 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-08-15 22:25:23,278 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 22:25:23,278 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-08-15 22:25:23,278 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-08-15 22:25:23,279 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-08-15 22:25:23,279 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-08-15 22:25:23,280 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\amazon_data
+2025-08-15 22:25:23,281 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-08-15 22:25:23,282 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\system_config.json
+2025-08-15 22:25:23,283 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-08-15 22:25:23,283 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-08-15 22:25:23,283 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-08-15 22:25:23,283 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-08-15 22:25:23,284 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-08-15 22:25:23,284 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-08-15 22:25:23,285 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-08-15 22:25:23,285 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-08-15 22:25:23,286 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-08-15 22:25:23,286 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-08-15 22:25:23,287 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-08-15 22:25:23,289 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-08-15 22:25:23,289 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-08-15 22:25:23,290 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS
+2025-08-15 22:25:23,290 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-08-15 22:25:23,290 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-08-15 22:25:23,291 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250815_222523
+2025-08-15 22:25:23,291 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-08-15 22:25:23,291 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-08-15 22:25:23,292 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-08-15 22:25:23,292 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-08-15 22:25:23,293 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-08-15 22:25:23,293 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-08-15 22:25:23,293 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-08-15 22:25:23,294 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: current_product_index_in_category = 76 FROM supplier_extraction_progress
+2025-08-15 22:25:23,294 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: total_products_in_current_category = 76 FROM supplier_extraction_progress
+2025-08-15 22:25:23,295 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: current_category_url = https://www.poundwholesale.co.uk/seasonal/wholesale-halloween FROM supplier_extraction_progress
+2025-08-15 22:25:23,295 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 BACKFILL: total_categories = 233 FROM supplier_extraction_progress
+2025-08-15 22:25:23,295 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 STATE CHECK: Index comparison - operational=0, tracking=0
+2025-08-15 22:25:23,495 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 GAP PROCESSING: Updated category completion status for 87 categories
+2025-08-15 22:25:23,495 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 CATEGORIES: 86 fully processed categories
+2025-08-15 22:25:23,495 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 0
+2025-08-15 22:25:23,496 - utils.fixed_enhanced_state_manager - INFO - State repaired: Added missing system_progression key with default: current_category_index; Added missing system_progression key with default: supplier_extraction_resumption_index; Added missing system_progression key with default: amazon_analysis_resumption_index
+2025-08-15 22:25:23,614 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 8386 entries
+2025-08-15 22:25:23,836 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8092 EANs, 8301 URLs, 5684 ASINs in 0.222s
+2025-08-15 22:25:23,837 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 8386 entries
+2025-08-15 22:25:23,837 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 8386
+2025-08-15 22:25:23,838 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-15 22:25:23,839 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 233 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\poundwholesale_categories.json
+2025-08-15 22:25:23,840 - PassiveExtractionWorkflow - INFO - 📋 Loaded 233 predefined category URLs for startup sequence
+2025-08-15 22:25:23,940 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7689 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 22:25:24,044 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 7689 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-15 22:25:24,044 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: Beginning mandatory startup orchestration
+2025-08-15 22:25:24,044 - PassiveExtractionWorkflow - INFO - ⚡ STARTUP PHASE 0: Linking Map to Processed Products Sync
+2025-08-15 22:25:24,047 - PassiveExtractionWorkflow - INFO - ⚡ SYNC: Processing 8301 linking map URLs
+2025-08-15 22:25:24,089 - PassiveExtractionWorkflow - INFO - ⚡ SYNC: Completed successfully! Added: 8301, Updated: 0, Total: 8301 processed products
+2025-08-15 22:25:24,090 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 0: Linking map sync completed - massive performance boost enabled
+2025-08-15 22:25:24,091 - PassiveExtractionWorkflow - INFO - 🔧 STARTUP PHASE 1: Data Integrity Reconciliation
+2025-08-15 22:25:24,091 - utils.fixed_enhanced_state_manager - INFO - 🔧 STARTUP RECONCILIATION: Beginning mandatory data integrity check...
+2025-08-15 22:25:24,633 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: No inconsistencies found - state is clean
+2025-08-15 22:25:24,638 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 22:25:24,822 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 22:25:24,823 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 22:25:24,824 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after reconciliation_completed
+2025-08-15 22:25:24,824 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 1: Reconciliation completed - 0 items reconciled
+2025-08-15 22:25:24,825 - PassiveExtractionWorkflow - INFO - 🔄 STARTUP PHASE 2: Resume Point Calculation
+2025-08-15 22:25:24,826 - PassiveExtractionWorkflow - INFO - 🔧 RESUME SOURCE: Using supplier_extraction_progress (operational data)
+2025-08-15 22:25:24,827 - PassiveExtractionWorkflow - INFO - ✅ RESUME: Valid resume point calculated - cat=0/233, phase=supplier
+2025-08-15 22:25:24,830 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 22:25:25,054 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 22:25:25,055 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 22:25:25,055 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after resume_calculated
+2025-08-15 22:25:25,056 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 2: Resume point calculated - starting from category 0
+2025-08-15 22:25:25,056 - PassiveExtractionWorkflow - INFO - 🔍 STARTUP PHASE 3: Filter System Preparation
+2025-08-15 22:25:25,062 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 22:25:25,253 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 22:25:25,254 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 22:25:25,254 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after filter_prepared
+2025-08-15 22:25:25,254 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 3: Filter system prepared
+2025-08-15 22:25:25,255 - PassiveExtractionWorkflow - INFO - 🎯 STARTUP PHASE 4: Processing System Readiness
+2025-08-15 22:25:25,255 - PassiveExtractionWorkflow - INFO - ✅ PROCESSING READINESS: All systems ready for processing
+2025-08-15 22:25:25,260 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-15 22:25:25,477 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-08-15 22:25:25,478 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-15 22:25:25,479 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after startup_completed
+2025-08-15 22:25:25,479 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: All phases completed successfully
+2025-08-15 22:25:25,480 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: All phases completed successfully
+2025-08-15 22:25:25,523 - PassiveExtractionWorkflow - INFO - ✅ STATE INTEGRITY: No corruption detected
+2025-08-15 22:25:25,524 - PassiveExtractionWorkflow - INFO - ✅ STATE INTEGRITY: No corruption detected
+2025-08-15 22:25:25,524 - PassiveExtractionWorkflow - INFO - 📍 RESUME POINT STORED: cat=0, validation=valid
+2025-08-15 22:25:25,524 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-08-15 22:25:25,524 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-08-15 22:25:25,525 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-08-15 22:25:25,623 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7689 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 22:25:25,626 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 8386 > cache: 7689)
+2025-08-15 22:25:25,627 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-08-15 22:25:25,628 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-08-15 22:25:25,773 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 8386 entries
+2025-08-15 22:25:25,971 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8092 EANs, 8301 URLs, 5684 ASINs in 0.196s
+2025-08-15 22:25:25,971 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 8386 entries
+2025-08-15 22:25:25,972 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-08-15 22:25:25,972 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-15 22:25:25,974 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 233 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\poundwholesale_categories.json
+2025-08-15 22:25:25,974 - PassiveExtractionWorkflow - INFO - 📊 TOTAL CATEGORIES STORED: 233 categories for resume calculations
+2025-08-15 22:25:25,974 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-08-15 22:25:25,974 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 233 predefined categories (infinite mode)
+2025-08-15 22:25:25,975 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-08-15 22:25:25,975 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-08-15 22:25:25,976 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-08-15 22:25:25,976 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-08-15 22:25:25,976 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_index() = 0 from supplier_extraction_progress
+2025-08-15 22:25:25,977 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_url() = https://www.poundwholesale.co.uk/seasonal/wholesale-halloween from supplier_extraction_progress
+2025-08-15 22:25:25,977 - PassiveExtractionWorkflow - INFO - 🔄 RESUME: Starting from category index 0
+2025-08-15 22:25:25,978 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-08-15 22:25:25,978 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_url() = https://www.poundwholesale.co.uk/seasonal/wholesale-halloween from supplier_extraction_progress
+2025-08-15 22:25:25,979 - PassiveExtractionWorkflow - INFO - ✅ VALIDATION: Category URL matches resume point: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:25,980 - PassiveExtractionWorkflow - INFO - 🔄 RESUME: Processing category URL: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:25,980 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_index() = 0 from supplier_extraction_progress
+2025-08-15 22:25:25,980 - PassiveExtractionWorkflow - INFO - 🔄 RESUMING: Starting from category index 0
+2025-08-15 22:25:25,980 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-15 22:25:25,981 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 0/1 (1 categories)
+2025-08-15 22:25:25,981 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_0
+2025-08-15 22:25:25,982 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:25:25,983 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:25:25,984 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-08-15 22:25:30,435 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-08-15 22:25:34,998 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-15 22:25:34,998 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 22:25:39,987 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-15 22:25:39,987 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-15 22:25:39,987 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_0
+2025-08-15 22:25:39,988 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 0 accumulators cleared
+2025-08-15 22:25:39,988 - PassiveExtractionWorkflow - INFO - 🔍 Extracting from category 1/1: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:39,988 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween with memory management
+2025-08-15 22:25:43,199 - utils.browser_manager - DEBUG - 🪟 Found 65 Chrome processes, total memory: 9927.9MB
+2025-08-15 22:25:43,199 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 9927.9 MB
+2025-08-15 22:25:47,037 - utils.browser_manager - DEBUG - 🪟 Windows: 65 Chrome processes, 9919MB total
+2025-08-15 22:25:47,038 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=9927MB, Python=163MB, System=80.6%
+2025-08-15 22:25:47,039 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:47,040 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:25:47,041 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:25:47,043 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-08-15 22:25:47,045 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-15 22:25:47,046 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:47,046 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:47,047 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (attempt 1/3)
+2025-08-15 22:25:47,047 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:25:47,048 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:25:47,048 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:49,149 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween in 1.56s...
+2025-08-15 22:25:50,717 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (attempt 2/3)
+2025-08-15 22:25:50,717 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:25:50,717 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:25:50,717 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:51,909 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:51,910 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:25:52,249 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (Size: 635001 bytes)
+2025-08-15 22:25:52,584 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-15 22:25:52,585 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:25:52,586 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (attempt 1/3)
+2025-08-15 22:25:52,586 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:25:52,587 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:25:52,587 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:25:54,669 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 in 2.32s...
+2025-08-15 22:25:56,995 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (attempt 2/3)
+2025-08-15 22:25:56,995 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:25:56,996 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:25:56,996 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:25:59,813 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:25:59,813 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:25:59,936 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (Size: 637420 bytes)
+2025-08-15 22:26:00,221 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-15 22:26:00,222 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:00,222 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 1/3)
+2025-08-15 22:26:00,222 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:00,223 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:26:00,223 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:02,488 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 in 1.83s...
+2025-08-15 22:26:04,323 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 2/3)
+2025-08-15 22:26:04,323 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:04,324 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:26:04,324 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:07,248 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:07,248 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:17,262 - configurable_supplier_scraper - ERROR - Navigation error for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 2): Timeout 10000ms exceeded.
+2025-08-15 22:26:17,263 - configurable_supplier_scraper - ERROR - Error fetching https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 2): Timeout 10000ms exceeded.
+2025-08-15 22:26:17,263 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 in 2.90s...
+2025-08-15 22:26:20,175 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 3/3)
+2025-08-15 22:26:20,176 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:20,176 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:26:20,176 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:21,620 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:21,621 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:26:31,641 - configurable_supplier_scraper - ERROR - Navigation error for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 3): Timeout 10000ms exceeded.
+2025-08-15 22:26:31,642 - configurable_supplier_scraper - ERROR - Error fetching https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 3): Timeout 10000ms exceeded.
+2025-08-15 22:26:31,642 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 after 3 attempts.
+2025-08-15 22:26:31,643 - configurable_supplier_scraper - WARNING - Failed to fetch page 3
+2025-08-15 22:26:31,643 - configurable_supplier_scraper - INFO - Collected 40 total product URLs across 3 pages
+2025-08-15 22:26:31,643 - configurable_supplier_scraper - INFO - Found 40 total product URLs across all pages
+2025-08-15 22:26:31,645 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-08-15 22:26:31,766 - utils.url_cache_filter - INFO - ✅ Loaded 7689 URLs from poundwholesale.co.uk cache
+2025-08-15 22:26:31,767 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 7689 (+7689 new)
+2025-08-15 22:26:31,770 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 7689 cached URLs for efficiency filtering
+2025-08-15 22:26:31,770 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 40 already cached
+2025-08-15 22:26:31,771 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 40 already cached
+2025-08-15 22:26:31,772 - configurable_supplier_scraper - INFO - 🎯 All URLs are already cached - loading cached products!
+2025-08-15 22:26:31,873 - configurable_supplier_scraper - INFO - ✅ Loaded 76 cached products for category: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:31,874 - PassiveExtractionWorkflow - INFO - ✅ Extracted 76 products from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:31,874 - PassiveExtractionWorkflow - INFO - 🎉 EXTRACTION COMPLETE: Total products extracted: 76
+2025-08-15 22:26:31,985 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7689 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 22:26:32,098 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-seasonal-wholesale-.json (6 entries) saved successfully
+2025-08-15 22:26:32,099 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 0 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-seasonal-wholesale-.json
+2025-08-15 22:26:32,099 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C0 https-www-poundwholesale-co-uk-seasonal-wholesale-]: overwritten=true prev=0 curr=0
+2025-08-15 22:26:32,101 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 0 accumulators cleared
+2025-08-15 22:26:32,398 - url_filter - INFO - DENOMINATOR[C0]: 0 = 0 - 0
+2025-08-15 22:26:32,399 - PassiveExtractionWorkflow - INFO - FILTER[C1 https-www-poundwholesale-co-uk]: in=0 skip=0 needs_amz=0 needs_full=0
+2025-08-15 22:26:32,400 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 SYNC: total_categories = 1 FROM supplier_extraction_progress
+2025-08-15 22:26:32,400 - utils.fixed_enhanced_state_manager - DEBUG - 📊 UNIFIED UPDATE: {'current_product_index_in_category': 0, 'total_products_in_current_category': 0}
+2025-08-15 22:26:32,599 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 22:26:32,600 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 22:26:32,600 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url= prod_idx=0/0
+2025-08-15 22:26:32,600 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url= prod_idx=0/0
+2025-08-15 22:26:32,601 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 SYNC: total_categories = 1 FROM supplier_extraction_progress
+2025-08-15 22:26:32,601 - utils.fixed_enhanced_state_manager - DEBUG - 📊 UNIFIED UPDATE: {'current_category_index': 0, 'total_categories': 233, 'current_product_index_in_category': 0, 'total_products_in_current_category': 0, 'current_phase': 'supplier', 'current_category_url': 'https://www.poundwholesale.co.uk/seasonal/wholesale-halloween'}
+2025-08-15 22:26:32,601 - PassiveExtractionWorkflow - INFO - Amazon skipped: nothing to analyze for category 0
+2025-08-15 22:26:32,601 - PassiveExtractionWorkflow - INFO - ✅ Category 0 complete: no products to process
+2025-08-15 22:26:32,601 - PassiveExtractionWorkflow - INFO - 💡 FINANCIAL REPORT TRIGGER: Next trigger at 8400 linking map entries (current: 8386, trigger frequency: 50)
+2025-08-15 22:26:32,602 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 2: categories 2-2
+2025-08-15 22:26:32,602 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_url() = https://www.poundwholesale.co.uk/seasonal/wholesale-halloween from supplier_extraction_progress
+2025-08-15 22:26:32,602 - PassiveExtractionWorkflow - WARNING - ⚠️ VALIDATION: Category mismatch - Expected: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween, Selected: https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials
+2025-08-15 22:26:32,602 - PassiveExtractionWorkflow - INFO - 🔧 CORRECTION: Found expected category at index 0, using correct URL
+2025-08-15 22:26:32,602 - PassiveExtractionWorkflow - INFO - 🔧 CORRECTED: Using validated category URL: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:32,603 - PassiveExtractionWorkflow - INFO - 🔄 RESUME: Processing category URL: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:32,603 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_index() = 0 from supplier_extraction_progress
+2025-08-15 22:26:32,603 - PassiveExtractionWorkflow - INFO - 🔄 RESUMING: Starting from category index 0
+2025-08-15 22:26:32,603 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-15 22:26:32,603 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 0/1 (1 categories)
+2025-08-15 22:26:32,603 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_0
+2025-08-15 22:26:32,604 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:32,604 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-15 22:26:46,047 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-15 22:26:46,047 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 22:26:50,765 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-15 22:26:50,766 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-15 22:26:50,766 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_0
+2025-08-15 22:26:50,766 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 0 accumulators cleared
+2025-08-15 22:26:50,767 - PassiveExtractionWorkflow - INFO - 🔍 Extracting from category 1/1: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:50,767 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween with memory management
+2025-08-15 22:26:52,399 - utils.browser_manager - DEBUG - 🪟 Found 64 Chrome processes, total memory: 9733.2MB
+2025-08-15 22:26:52,399 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 9733.2 MB
+2025-08-15 22:26:56,128 - utils.browser_manager - DEBUG - 🪟 Windows: 64 Chrome processes, 9733MB total
+2025-08-15 22:26:56,128 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=9733MB, Python=191MB, System=80.3%
+2025-08-15 22:26:56,128 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:56,128 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:56,129 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:26:56,129 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-15 22:26:56,130 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:56,130 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:56,130 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (attempt 1/3)
+2025-08-15 22:26:56,131 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:56,131 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:26:56,132 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:26:57,572 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween in 1.82s...
+2025-08-15 22:26:59,404 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (attempt 2/3)
+2025-08-15 22:26:59,405 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:26:59,405 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:26:59,406 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:01,802 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:01,802 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:01,912 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween (Size: 635001 bytes)
+2025-08-15 22:27:02,093 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-15 22:27:02,093 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:27:02,094 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (attempt 1/3)
+2025-08-15 22:27:02,095 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:27:02,095 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:27:02,095 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:27:03,788 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 in 1.77s...
+2025-08-15 22:27:05,571 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (attempt 2/3)
+2025-08-15 22:27:05,580 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:27:05,585 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:27:05,604 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:27:07,201 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:27:07,201 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2
+2025-08-15 22:27:10,169 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=2 (Size: 637420 bytes)
+2025-08-15 22:27:10,387 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-15 22:27:10,388 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:27:10,388 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 1/3)
+2025-08-15 22:27:10,388 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:27:10,389 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:27:10,389 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:27:11,829 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 in 1.86s...
+2025-08-15 22:27:13,698 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (attempt 2/3)
+2025-08-15 22:27:13,698 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:27:13,699 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-15 22:27:13,699 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:27:14,989 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:27:14,990 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3
+2025-08-15 22:27:15,089 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween?p=3 (Size: 607962 bytes)
+2025-08-15 22:27:15,318 - configurable_supplier_scraper - INFO - Found 10 new product URLs on page 3
+2025-08-15 22:27:15,318 - configurable_supplier_scraper - INFO - Collected 50 total product URLs across 3 pages
+2025-08-15 22:27:15,318 - configurable_supplier_scraper - INFO - Found 50 total product URLs across all pages
+2025-08-15 22:27:15,319 - utils.url_cache_filter - DEBUG - 🔄 URLs already loaded for poundwholesale.co.uk: 7689 URLs
+2025-08-15 22:27:15,319 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 7689 cached URLs for efficiency filtering
+2025-08-15 22:27:15,319 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 50 already cached
+2025-08-15 22:27:15,319 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 50 already cached
+2025-08-15 22:27:15,319 - configurable_supplier_scraper - INFO - 🎯 All URLs are already cached - loading cached products!
+2025-08-15 22:27:15,360 - configurable_supplier_scraper - INFO - ✅ Loaded 76 cached products for category: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:15,362 - PassiveExtractionWorkflow - INFO - ✅ Extracted 76 products from https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:15,362 - PassiveExtractionWorkflow - INFO - 🎉 EXTRACTION COMPLETE: Total products extracted: 76
+2025-08-15 22:27:15,406 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7689 products in poundwholesale-co-uk_products_cache.json
+2025-08-15 22:27:15,457 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-seasonal-wholesale-.json (6 entries) saved successfully
+2025-08-15 22:27:15,458 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 0 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-seasonal-wholesale-.json
+2025-08-15 22:27:15,458 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C1 https-www-poundwholesale-co-uk-seasonal-wholesale-]: overwritten=true prev=0 curr=0
+2025-08-15 22:27:15,460 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 1 accumulators cleared
+2025-08-15 22:27:15,849 - url_filter - INFO - DENOMINATOR[C1]: 0 = 0 - 0
+2025-08-15 22:27:15,851 - PassiveExtractionWorkflow - INFO - FILTER[C2 https-www-poundwholesale-co-uk]: in=0 skip=0 needs_amz=0 needs_full=0
+2025-08-15 22:27:15,852 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 SYNC: total_categories = 1 FROM supplier_extraction_progress
+2025-08-15 22:27:15,852 - utils.fixed_enhanced_state_manager - DEBUG - 📊 UNIFIED UPDATE: {'current_product_index_in_category': 0, 'total_products_in_current_category': 0}
+2025-08-15 22:27:16,070 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-15 22:27:16,071 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-15 22:27:16,071 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url= prod_idx=0/0
+2025-08-15 22:27:16,072 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url= prod_idx=0/0
+2025-08-15 22:27:16,072 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 SYNC: total_categories = 1 FROM supplier_extraction_progress
+2025-08-15 22:27:16,072 - utils.fixed_enhanced_state_manager - DEBUG - 📊 UNIFIED UPDATE: {'current_category_index': 1, 'total_categories': 233, 'current_product_index_in_category': 0, 'total_products_in_current_category': 0, 'current_phase': 'supplier', 'current_category_url': 'https://www.poundwholesale.co.uk/seasonal/wholesale-halloween'}
+2025-08-15 22:27:16,072 - PassiveExtractionWorkflow - INFO - Amazon skipped: nothing to analyze for category 1
+2025-08-15 22:27:16,073 - PassiveExtractionWorkflow - INFO - ✅ Category 1 complete: no products to process
+2025-08-15 22:27:16,073 - PassiveExtractionWorkflow - INFO - 💡 FINANCIAL REPORT TRIGGER: Next trigger at 8400 linking map entries (current: 8386, trigger frequency: 50)
+2025-08-15 22:27:16,073 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 3: categories 3-3
+2025-08-15 22:27:16,073 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_url() = https://www.poundwholesale.co.uk/seasonal/wholesale-halloween from supplier_extraction_progress
+2025-08-15 22:27:16,074 - PassiveExtractionWorkflow - WARNING - ⚠️ VALIDATION: Category mismatch - Expected: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween, Selected: https://www.poundwholesale.co.uk/health-beauty/wholesale-perfume-fragrances
+2025-08-15 22:27:16,074 - PassiveExtractionWorkflow - INFO - 🔧 CORRECTION: Found expected category at index 0, using correct URL
+2025-08-15 22:27:16,074 - PassiveExtractionWorkflow - INFO - 🔧 CORRECTED: Using validated category URL: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:16,074 - PassiveExtractionWorkflow - INFO - 🔄 RESUME: Processing category URL: https://www.poundwholesale.co.uk/seasonal/wholesale-halloween
+2025-08-15 22:27:16,074 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 HELPER: get_current_category_index() = 0 from supplier_extraction_progress
+2025-08-15 22:27:16,075 - PassiveExtractionWorkflow - INFO - 🔄 RESUMING: Starting from category index 0
+2025-08-15 22:27:16,075 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-15 22:27:16,075 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 0/1 (1 categories)
+2025-08-15 22:27:16,075 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_0
+2025-08-15 22:27:16,075 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-15 22:27:16,076 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-15 22:27:20,474 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-15 22:27:20,474 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-15 22:27:24,170 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-08-15 22:27:24,173 - utils.browser_manager - INFO - 🔌 Browser cleanup skipped - no event loop available
