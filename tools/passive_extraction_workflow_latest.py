@@ -1080,6 +1080,9 @@ class PassiveExtractionWorkflow:
 
         self.log.info(f"✅ Output directory set to: {self.output_dir}")
         
+        # 🚨 SURGICAL FIX: Initialize missing category_manifests attribute
+        self.category_manifests = {}
+        
         self._validate_initialization()
 
     def _add_linking_map_entry_optimized(self, entry: Dict[str, Any]) -> None:
@@ -1266,6 +1269,67 @@ class PassiveExtractionWorkflow:
         
         self.log.info("✅ Initialization validation passed - all critical attributes verified")
 
+    def _validate_category_consistency(self, selected_category_url: str, category_urls_to_scrape: List[str]) -> str:
+        """
+        Enhanced validation that uses new helper methods for category URL consistency.
+        Now includes correction capability using find_category_by_url helper method.
+        """
+        
+        # Get expected category URL from state management
+        expected_url = self.state_manager.get_current_category_url()
+        
+        if not expected_url:
+            self.log.info("🔄 VALIDATION: No expected category URL in state, using selected category")
+            return selected_category_url
+        
+        if expected_url == selected_category_url:
+            self.log.info(f"✅ VALIDATION: Category URL matches resume point: {expected_url}")
+            return selected_category_url
+        
+        # Mismatch detected - attempt correction using new helper method
+        self.log.warning(f"⚠️ VALIDATION: Category mismatch - Expected: {expected_url}, Selected: {selected_category_url}")
+        
+        # 🚨 PRIORITY 2: Use new find_category_by_url helper method
+        if hasattr(self.state_manager, 'find_category_by_url'):
+            correct_index = self.state_manager.find_category_by_url(expected_url, category_urls_to_scrape)
+            if correct_index is not None:
+                self.log.info(f"🔧 CORRECTION: Found expected category at index {correct_index}, using correct URL")
+                
+                # Update state manager with correct values using atomic update
+                if hasattr(self.state_manager, 'update_supplier_extraction_progress'):
+                    self.state_manager.update_supplier_extraction_progress(
+                        correct_index, len(category_urls_to_scrape), category_url=expected_url
+                    )
+                
+                return expected_url
+            else:
+                self.log.warning(f"⚠️ CORRECTION: Expected category URL not found in current category list")
+                self.log.info(f"🔧 AUTO-RECOVERY: Continuing with selected category and updating state")
+        else:
+            # Fallback to original logic if helper method not available
+            try:
+                correct_index = category_urls_to_scrape.index(expected_url)
+                self.log.info(f"🔧 CORRECTION: Found expected category at index {correct_index}, using correct URL")
+                return expected_url
+            except ValueError:
+                self.log.warning(f"⚠️ CORRECTION: Expected category URL not found in current category list")
+                self.log.info(f"🔧 AUTO-RECOVERY: Continuing with selected category and updating state")
+        
+        # Auto-recovery: Update state with the selected category URL to maintain sync
+        if hasattr(self.state_manager, 'update_supplier_extraction_progress'):
+            # Get current category index for the selected URL
+            try:
+                selected_index = category_urls_to_scrape.index(selected_category_url)
+                self.state_manager.update_supplier_extraction_progress(
+                    selected_index, len(category_urls_to_scrape), category_url=selected_category_url
+                )
+                self.log.info(f"🔧 RECOVERY: State updated with selected category at index {selected_index}")
+            except ValueError:
+                self.log.warning(f"⚠️ RECOVERY: Could not determine index for selected category")
+        
+        self.log.info(f"🔧 CONTINUING: Processing with selected category URL: {selected_category_url}")
+        return selected_category_url
+
     async def run(self):
         """Main execution loop for the workflow."""
         profitable_results: List[Dict[str, Any]] = []
@@ -1361,6 +1425,10 @@ class PassiveExtractionWorkflow:
             # Extract resume point from startup result
             resume_point = startup_result["resume_point"]
             self.last_processed_index = resume_point.get("resumption_index", 0)
+            
+            # 🚨 CRITICAL FIX: Store resume point for use in hybrid processing
+            self._resume_point = resume_point
+            self.log.info(f"📍 RESUME POINT STORED: cat={resume_point.get('current_category_index', 0)}, validation={resume_point.get('validation_status', 'unknown')}")
             
             # Handle hydrated entries if any
             reconciled_items = startup_result.get("reconciled_items", [])
@@ -1465,6 +1533,10 @@ class PassiveExtractionWorkflow:
                 if not category_urls_to_scrape:
                     self.log.error("CUSTOM MODE FAILED: No URLs found in predefined list. Aborting.")
                     return []
+                
+                # 🚨 CRITICAL FIX: Store total categories for resume calculations
+                self._total_categories = len(category_urls_to_scrape)
+                self.log.info(f"📊 TOTAL CATEGORIES STORED: {self._total_categories} categories for resume calculations")
                 # 🚨 DYNAMIC CATEGORY CALCULATION: Calculate categories needed based on max_products / max_products_per_category
                 import math
                 
@@ -1648,7 +1720,8 @@ class PassiveExtractionWorkflow:
                         
                         # If in linking map but not marked as processed, update state
                         if already_in_linking_map and not is_already_processed:
-                            self.state_manager.mark_product_processed(supplier_url, "completed_from_linking_map")
+                            source_category_url = product_data.get('source_url', 'unknown')
+                            self.state_manager.mark_product_processed(supplier_url, "completed_from_linking_map", source_category_url)
                             self.log.info(f"📋 Updated state: Marked product as completed from linking map")
                         
                         continue  # Skip further processing - Amazon analysis already complete
@@ -1702,7 +1775,8 @@ class PassiveExtractionWorkflow:
                         self.log.info(f"🔍 DEBUG: Current linking_map size: {len(self.linking_map)} entries")
                         
                         # Mark as processed to prevent state manager reprocessing
-                        self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                        source_category_url = product_data.get('source_url', 'unknown')
+                        self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                         continue
 
                     # Save the Amazon data with the correct filename
@@ -1827,7 +1901,8 @@ class PassiveExtractionWorkflow:
                             
                     except Exception as e:
                         self.log.error(f"Financial calculation failed for '{product_data.get('title')}': {e}")
-                        self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                        source_category_url = product_data.get('source_url', 'unknown')
+                        self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
                         # Continue with empty financials rather than failing completely
                         financials = {}
 
@@ -1835,14 +1910,15 @@ class PassiveExtractionWorkflow:
                     combined_data = {**product_data, "amazon_data": amazon_data, "financials": financials}
                                 
                     # Check for profitability
+                    source_category_url = product_data.get('source_url', 'unknown')
                     if financials.get("ROI", 0) > MIN_ROI_PERCENT and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT:
                         self.log.info(f"✅ Profitable product found: '{product_data.get('title')}' (ROI: {financials.get('ROI'):.2f}%, Profit: £{financials.get('NetProfit'):.2f})")
                         profitable_results.append(combined_data)
                         self.results_summary["profitable_products"] += 1
-                        self.state_manager.mark_product_processed(product_data.get("url"), "profitable")
+                        self.state_manager.mark_product_processed(product_data.get("url"), "profitable", source_category_url)
                     else:
                         self.log.info(f"Product not profitable: '{product_data.get('title')}' (ROI: {financials.get('ROI', 0):.2f}%, Profit: £{financials.get('NetProfit', 0):.2f})")
-                        self.state_manager.mark_product_processed(product_data.get("url"), "not_profitable")
+                        self.state_manager.mark_product_processed(product_data.get("url"), "not_profitable", source_category_url)
 
                     # Save state periodically using configurable batch sizes
                     overall_product_index = start_idx + i + 1
@@ -1971,9 +2047,19 @@ class PassiveExtractionWorkflow:
         chunk_size = supplier_extraction_batch_size
         total_categories = len(category_urls_to_scrape)
 
-        start_category = self.state_manager.state_data.get(
-            "supplier_extraction_progress", {}
-        ).get("current_category_index", 0)
+        # 🚨 CRITICAL FIX: Use calculated resume point instead of supplier_extraction_progress
+        # The startup sequence calculates the correct resume point, but workflow was ignoring it
+        resume_point = getattr(self, '_resume_point', None)
+        if resume_point and resume_point.get("validation_status") in ["valid", "fallback"]:
+            start_category = resume_point.get("current_category_index", 0)
+            self.log.info(f"🔄 RESUME FIX: Using calculated resume point - starting from category {start_category}")
+        else:
+            # Fallback to legacy logic if resume point not available
+            start_category = self.state_manager.state_data.get(
+                "supplier_extraction_progress", {}
+            ).get("current_category_index", 0)
+            self.log.warning(f"⚠️ RESUME FALLBACK: Using legacy category index {start_category}")
+        
         if start_category > 0:
             self.log.info(
                 f"🔄 Resuming category processing from index {start_category}"
@@ -2156,7 +2242,8 @@ class PassiveExtractionWorkflow:
                     self.log.info(f"❌ No Amazon match for gap product: {product_data.get('title')} - Added no-match linking entry")
                 
                 # Mark as processed
-                self.state_manager.mark_product_processed(supplier_url, "completed_gap_processing")
+                source_category_url = product_data.get('source_url', 'unknown')
+                self.state_manager.mark_product_processed(supplier_url, "completed_gap_processing", source_category_url)
                 
                 # Save periodically
                 if current_gap_index % 5 == 0:
@@ -3673,152 +3760,50 @@ Return ONLY valid JSON, no additional text."""
 
         return optimized_urls
 
-    async def _extract_supplier_products(self, supplier_url: str, supplier_name: str, category_urls: List[str], max_products_per_category: int, max_products_to_process: int = None, supplier_extraction_batch_size: int = 3) -> List[Dict[str, Any]]:
-        """Extract products from a list of category URLs with overall product limit enforcement."""
-        import json  # Import at function level to ensure availability
+    async def _extract_supplier_products(self, supplier_url, supplier_name, category_urls, max_products_per_category=None, max_products_to_process=None, supplier_extraction_batch_size=None):
+        """
+        Extract products from supplier categories with enhanced state management and progress tracking.
         
-        # 🔄 SUPPLIER CACHE FRESHNESS CHECK
-        # If we have cached products and processing state indicates progress, skip supplier scraping
-        actual_cache_file, cache_count = self._find_actual_supplier_cache_file(supplier_name)
-        
-        if actual_cache_file and hasattr(self, 'state_manager') and self.state_manager:
-            try:
-                # Check if we have processing state indicating previous progress
-                if hasattr(self.state_manager, 'state_data') and self.state_manager.state_data:
-                    last_index = self.state_manager.state_data.get('last_processed_index', 0)
-                    processing_status = self.state_manager.state_data.get('processing_status', 'not_started')
-                    
-                    # Check cache file age (fresh within 24 hours)
-                    import time
-                    cache_age_hours = (time.time() - os.path.getmtime(actual_cache_file)) / 3600
-                    cache_is_fresh = cache_age_hours < 24
-                    
-                    if last_index > 0 and cache_is_fresh:
-                        # Check if supplier extraction is complete before returning cache
-                        import json
-                        with open(actual_cache_file, 'r', encoding='utf-8') as f:
-                            cached_products = json.load(f)
-                        
-                        # Get extraction progress from state
-                        extraction_progress = self.state_manager.state_data.get('supplier_extraction_progress', {})
-                        products_extracted = extraction_progress.get('products_extracted_total', len(cached_products))
-                        
-                        # 🚨 HYBRID MODE FIX: Check if current chunk categories are already in cache
-                        chunk_category_urls = set(category_urls)
-                        products_for_chunk_categories = [
-                            product for product in cached_products 
-                            if product.get('source_url', '') in chunk_category_urls
-                        ]
-                        
-                        # 🚨 RESUMPTION FIX: Check cache but always perform fresh extraction
-                        if len(products_for_chunk_categories) > 0:
-                            if hasattr(self, 'last_processed_index') and self.last_processed_index > 0:
-                                self.log.info(
-                                    f"🔄 RESUMPTION DETECTED: Found {len(products_for_chunk_categories)} cached products but resuming from index {self.last_processed_index}"
-                                )
-                                self.log.info("🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category")
-                            else:
-                                self.log.info(
-                                    f"🔄 CHUNK CACHE REFERENCE: {len(products_for_chunk_categories)} cached products exist for current chunk categories – performing fresh extraction to detect updates"
-                                )
-                                self.log.info(f"🔄 CHUNK CATEGORIES: {list(chunk_category_urls)}")
-                        else:
-                            self.log.info(
-                                f"🔄 CHUNK CACHE MISS: No cached products found for chunk categories: {list(chunk_category_urls)}"
-                            )
-                            self.log.info("🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories")
-                        # Fall through to continue with supplier extraction regardless of cache state
-                        
-                    elif last_index > 0 and not cache_is_fresh:
-                        self.log.info(f"🔄 CACHE STALE: Cache age {cache_age_hours:.1f}h > 24h threshold, proceeding with fresh scraping")
-                        # Reset processing index since we're re-scraping (product list may have changed)
-                        if hasattr(self, 'last_processed_index'):
-                            self.last_processed_index = 0
-                            self.log.info(f"⚠️ Reset processing index to 0 due to stale cache")
-                    elif last_index > 0:
-                        # This handles the case where cache exists but extraction was incomplete
-                        import json
-                        with open(actual_cache_file, 'r', encoding='utf-8') as f:
-                            cached_products = json.load(f)
-                        extraction_progress = self.state_manager.state_data.get('supplier_extraction_progress', {})
-                        products_extracted = extraction_progress.get('products_extracted_total', len(cached_products))
-                        
-                        self.log.info(f"🔄 SUPPLIER EXTRACTION INCOMPLETE: {products_extracted}/{max_products_per_category} products extracted")
-                        self.log.info(f"🔄 RESUMPTION: Continuing supplier scraping from product {products_extracted + 1}")
-                        # Set the starting counter to resume from where we left off
-                        if not hasattr(self, '_supplier_product_counter'):
-                            self._supplier_product_counter = products_extracted
-                            self.log.info(f"📊 RESUMPTION: Setting product counter to {self._supplier_product_counter}")
-                    else:
-                        self.log.info(f"🔄 NO PROCESSING PROGRESS: index={last_index}, proceeding with scraping")
-                        
-            except Exception as e:
-                self.log.warning(f"⚠️ Error checking supplier cache freshness: {e}, proceeding with scraping")
-        
-        # Proceed with normal supplier scraping with batching
-        # supplier_extraction_batch_size is now passed as a parameter
-        self.log.info(f"🕷️ PERFORMING SUPPLIER SCRAPING from {len(category_urls)} categories")
-        self.log.info(f"📦 Using supplier extraction batch size: {supplier_extraction_batch_size}")
-        
-        # Process categories in batches for better memory management
+        Args:
+            supplier_url: Base supplier URL (for compatibility)
+            supplier_name: Supplier name (for compatibility)
+            category_urls: List of category URLs to scrape
+            max_products_per_category: Optional limit per category
+            max_products_to_process: Optional limit on total products to extract
+            supplier_extraction_batch_size: Optional batch size for processing
+            
+        Returns:
+            List of extracted product data
+        """
         all_products = []
-        # Mapping of category_url -> full list of product URLs for manifest generation
-        self.category_manifests = {}
         
-        # 🚨 CRITICAL FIX: Load existing cached products and filter against linking map
-        actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(supplier_name)
-        if actual_cache_file:
+        # Load system configuration for batch processing
+        if supplier_extraction_batch_size is None:
+            supplier_extraction_batch_size = self.system_config.get("supplier_extraction_batch_size", 10)
+        progress_config = self.system_config.get("progress_tracking", {})
+        
+        # Split categories into batches for memory management
+        category_batches = [
+            category_urls[i:i + supplier_extraction_batch_size] 
+            for i in range(0, len(category_urls), supplier_extraction_batch_size)
+        ]
+        
+        # 🚨 CRITICAL FIX: Get resume point from state manager
+        resume_category_index = 0
+        if hasattr(self, 'state_manager') and hasattr(self.state_manager, 'get_current_category_index'):
             try:
-                with open(actual_cache_file, 'r', encoding='utf-8') as f:
-                    existing_cached_products = json.load(f)
-                
-                # 🚨 CRITICAL FIX: Filter against linking map to only return unprocessed products
-                if self.linking_map and len(self.linking_map) > 0:
-                    # Build hash set for O(1) lookup performance
-                    processed_urls = {entry.get("supplier_url") for entry in self.linking_map 
-                                    if entry.get("supplier_url")}
-                    processed_eans = {entry.get("supplier_ean") for entry in self.linking_map 
-                                    if entry.get("supplier_ean")}
-                    
-                    # Filter out already processed products
-                    unprocessed_products = []
-                    for product in existing_cached_products:
-                        if isinstance(product, dict) and not product.get("_cache_metadata"):
-                            product_url = product.get("url", "")
-                            product_ean = product.get("ean", "") or product.get("barcode", "")
-                            
-                            # Skip if already in linking map (processed by either EAN or URL)
-                            if (product_ean and product_ean in processed_eans) or \
-                               (product_url and product_url in processed_urls):
-                                continue
-                            
-                            unprocessed_products.append(product)
-                    
-                    all_products = unprocessed_products
-                    self.log.info(f"🔍 FILTERING APPLIED: {len(existing_cached_products)} total → {len(unprocessed_products)} unprocessed ({len(processed_urls)} already in linking map)")
-                    self.log.info(f"📊 EFFICIENCY GAIN: {((len(existing_cached_products) - len(unprocessed_products)) / max(len(existing_cached_products), 1) * 100):.1f}% products skipped (already processed)")
-                else:
-                    # No linking map available, process all cached products
-                    all_products = existing_cached_products.copy()
-                    self.log.info(f"⚠️ NO LINKING MAP: Processing all {len(existing_cached_products)} cached products (no filtering applied)")
-                    
+                resume_category_index = self.state_manager.get_current_category_index()
+                self.log.info(f"🔄 RESUMING: Starting from category index {resume_category_index}")
             except Exception as e:
-                self.log.warning(f"⚠️ Could not load existing cache during resumption: {e}")
-                all_products = []  # Fallback to empty list
-        
-        # Store as instance variable for progress callback access
-        self._current_all_products = all_products
-        category_batches = [category_urls[i:i + supplier_extraction_batch_size] for i in range(0, len(category_urls), supplier_extraction_batch_size)]
-        
-        # Get progress tracking configuration
-        progress_config = self.system_config.get("supplier_extraction_progress", {})
-        cache_config = self.system_config.get("supplier_cache_control", {})
+                self.log.warning(f"⚠️ Could not get resume point, starting from 0: {e}")
+                resume_category_index = 0
         
         # Initialize extraction progress tracking
         if progress_config.get("enabled", True):
             self.log.info(f"📊 PROGRESS TRACKING: Extracting from {len(category_urls)} categories in {len(category_batches)} batches")
         
-        for batch_num, category_batch in enumerate(category_batches, 1):
+        # 🚨 PRIORITY 1 FIX: Change enumerate(..., 1) to enumerate(..., 0)
+        for batch_num, category_batch in enumerate(category_batches, 0):
             # Check if we've reached the overall product limit before starting a new batch
             if max_products_to_process and len(all_products) >= max_products_to_process:
                 self.log.info(f"🛑 STOPPING: Reached max_products_to_process limit of {max_products_to_process} products before batch {batch_num}")
@@ -3828,144 +3813,58 @@ Return ONLY valid JSON, no additional text."""
             
             # 🚨 LOGIN SCRIPT TRIGGER - At start of every supplier category extraction after Amazon product detail extraction
             # This ensures authentication is verified before each new category batch processing
-            await self._trigger_authentication_check(f"category_batch_{batch_num}")
+            try:
+                await self._trigger_authentication_check(f"category_batch_{batch_num}")
+            except Exception as auth_error:
+                self.log.warning(f"⚠️ Authentication check failed for batch {batch_num}: {auth_error}")
+                self.log.info("🔄 Continuing with category processing despite authentication check failure")
             
-            for subcategory_index, category_url in enumerate(category_batch, 1):
+            # 🚨 PRIORITY 1 FIX: Change enumerate(..., 1) to enumerate(..., 0)
+            for subcategory_index, category_url in enumerate(category_batch, 0):
                 # Update detailed progress tracking
                 if progress_config.get("enabled", True) and hasattr(self, 'state_manager'):
-                    category_index = (batch_num - 1) * supplier_extraction_batch_size + subcategory_index
-                    # Initialize category tracking for precise resumption
-                    self.state_manager.initialize_category_processing(
-                        category_index=category_index - 1,
-                        category_url=category_url,
-                        total_categories=len(category_urls)
-                    )
-                    self.state_manager.update_supplier_extraction_progress(
-                        category_index=category_index,
-                        total_categories=len(category_urls),
-                        subcategory_index=subcategory_index,
-                        total_subcategories=len(category_batch),
-                        batch_number=batch_num,
-                        total_batches=len(category_batches),
-                        category_url=category_url,
-                        extraction_phase="categories"
-                    )
+                    # 🚨 PRIORITY 1 FIX: Adjust index calculation after enumerate fix
+                    category_index = batch_num * supplier_extraction_batch_size + subcategory_index
                     
-                    if progress_config.get("progress_display", {}).get("show_subcategory_progress", True):
-                        self.log.info(f"🔄 EXTRACTION PROGRESS: Processing subcategory {subcategory_index}/{len(category_batch)} in batch {batch_num} (Category {category_index}/{len(category_urls)})")
-                
-                # Setup progress callback for individual product tracking
-                if hasattr(self.supplier_scraper, 'set_progress_callback'):
-                    self.supplier_scraper.set_progress_callback(self._create_product_progress_callback(category_url, progress_config))
-                # Check if we've reached the overall product limit
-                if max_products_to_process and len(all_products) >= max_products_to_process:
-                    self.log.info(f"🛑 STOPPING: Reached max_products_to_process limit of {max_products_to_process} products")
-                    break
+                    # 🚨 WRITE-AHEAD POINT 1: Category start (before any filtering)
+                    if hasattr(self.state_manager, 'reset_category_accumulators'):
+                        # 🚨 PRIORITY 1 FIX: Remove -1 offset after enumerate fix
+                        self.state_manager.reset_category_accumulators(category_index)
                     
-                self.log.info(f"Scraping category: {category_url}")
-
-                # 🚨 SURGICAL FIX: Update state manager with current category URL being processed
-                if hasattr(self, 'state_manager') and self.state_manager:
-                    if hasattr(self.state_manager, 'update_current_category_url'):
-                        self.state_manager.update_current_category_url(category_url)
-                    else:
-                        # Fallback: directly update the category URL in supplier_extraction_progress
-                        if hasattr(self.state_manager, 'state_data'):
-                            self.state_manager.state_data.setdefault('supplier_extraction_progress', {})['current_category_url'] = category_url
+                    # Update current category in state
+                    if hasattr(self.state_manager, 'update_supplier_extraction_progress'):
+                        self.state_manager.update_supplier_extraction_progress(
+                            category_index, len(category_urls), category_url=category_url
+                        )
                 
-                # 🚨 DEFINITIVE FIX: Pass all_products as product_accumulator for real-time updates
-                products = await self._scrape_with_retries(
-                    category_url,
-                    max_products_per_category,
-                    all_products,
-                )
-
-                urls_for_manifest = getattr(self.supplier_scraper, 'last_collected_urls', [])
-                page_count = getattr(self.supplier_scraper, 'last_page_count', 1)
-                urls_per_page = getattr(self.supplier_scraper, 'last_urls_per_page', [])
-                
-                # Generate category slug for logging
-                slug = self._generate_category_slug(category_url)
-                category_index = (batch_num - 1) * supplier_extraction_batch_size + subcategory_index
-                
-                # Log pagination summary as specified in requirements
-                if urls_per_page and len(urls_per_page) > 0:
-                    urls_per_page_str = ",".join(map(str, urls_per_page))
-                    self.log.info(f"PAGINATION[C{category_index} {slug}]: pages={page_count} urls_page={urls_per_page_str} total={len(urls_for_manifest)}")
+                try:
+                    self.log.info(f"🔍 Extracting from category {subcategory_index + 1}/{len(category_batch)}: {category_url}")
                     
-                    # Validate pagination completeness invariant
-                    if sum(urls_per_page) != len(urls_for_manifest):
-                        self.log.warning(f"⚠️ PAGINATION MISMATCH: sum(urls_page)={sum(urls_per_page)} != total={len(urls_for_manifest)} for {category_url}")
-                else:
-                    # Fallback for scrapers that don't provide per-page breakdown
-                    self.log.info(f"PAGINATION[C{category_index} {slug}]: pages={page_count} urls_page={len(urls_for_manifest)} total={len(urls_for_manifest)}")
-                
-                # Save category manifest atomically after pagination
-                if urls_for_manifest:
-                    self._set_current_category_index(category_index)
-                    self._save_category_manifest(supplier_name, category_url, urls_for_manifest)
+                    # 🚨 SCRAPER ATTRIBUTE FIX: Use correct scraper attribute name
+                    category_products = await self.supplier_scraper.scrape_products_from_url(category_url)
                     
-                    # Update state manager with accurate totals for breadcrumb logging
-                    if hasattr(self, 'state_manager') and self.state_manager:
-                        # Set total categories from config
-                        total_categories = len(category_urls_to_scrape) if hasattr(self, 'category_urls_to_scrape') else 119
+                    if category_products:
+                        # Apply per-category limit if specified
+                        if max_products_per_category and len(category_products) > max_products_per_category:
+                            category_products = category_products[:max_products_per_category]
+                            self.log.info(f"🔢 LIMITED: Reduced to {max_products_per_category} products per category limit")
                         
-                        # Update system progression with accurate totals
-                        sp = self.state_manager.state_data.setdefault("system_progression", {})
-                        sp.update({
-                            "total_categories": total_categories,
-                            "current_category_index": category_index,
-                            "current_category_url": category_url,
-                            "total_products_in_current_category": len(urls_for_manifest),
-                            "current_product_index_in_category": 0
-                        })
-                
-                self.category_manifests[category_url] = urls_for_manifest
-                self.log.info(
-                    f"Finished scraping category {category_url}: Found {len(urls_for_manifest)} products across {page_count} pages."
-                )
-
-                # 🚨 REMOVED: Price filtering and product extension now handled in progress callback
-                # Products are added to all_products immediately when found via progress_callback
-                # This ensures per-product cache saves work correctly with live data
-                self.log.info(
-                    f"📊 Category completed: {len(products)} raw products extracted, {len(all_products)} total products accumulated"
-                )
-                
-                # 🚨 SURGICAL FIX: Update state manager with discovered product count for accurate processing state
-                if hasattr(self, 'state_manager') and self.state_manager and len(products) > 0:
-                    # Get the actual discovered count from scraper (may be more than extracted due to URL cache filtering)
-                    # This ensures processing state shows real-time discovery totals, not just processed totals
-                    discovered_count = getattr(self.supplier_scraper, 'last_discovered_count', len(products))
-                    self.state_manager.correct_category_totals_realtime(category_url, discovered_count)
-                    self.log.info(f"🔄 STATE UPDATE: Updated category {category_url} with {discovered_count} discovered products")
-                
-                # 🚨 REMOVED: Category-based cache saving logic (now handled per-product in progress callback)
-                # This was causing the update_frequency_products to only save after complete categories
-                # instead of respecting the per-product frequency configuration
-                
-                # Check again after adding products from this category
-                if max_products_to_process and len(all_products) >= max_products_to_process:
-                    # Trim to exact limit if we exceeded it
-                    all_products = all_products[:max_products_to_process]
-                    self.log.info(f"🛑 TRIMMED: Limited to exactly {max_products_to_process} products")
-                    break
-            
-            # Batch completion logging
-            self.log.info(f"✅ Completed batch {batch_num}: {len(all_products)} total products extracted so far")
-                
-        # 🚨 CRITICAL FIX #1: LINKING MAP FILTERING
-        # Filter out products that have already been processed (exist in linking map)
-        # This prevents loading all 2,335 cached products when only 50-100 are unprocessed
-        unprocessed_products = self._filter_unprocessed_products_with_hash_lookup(all_products, supplier_name)
-        
-        if len(unprocessed_products) != len(all_products):
-            self.log.info(f"🔍 GAP PROCESSING FILTER: {len(all_products)} total cached products → {len(unprocessed_products)} unprocessed products")
-            self.log.info(f"🔍 FILTERING EFFICIENCY: Removed {len(all_products) - len(unprocessed_products)} already processed products")
-        else:
-            self.log.info(f"🔍 GAP PROCESSING FILTER: All {len(all_products)} products are unprocessed (first run or fresh cache)")
-        
-        return unprocessed_products
+                        self.log.info(f"✅ Extracted {len(category_products)} products from {category_url}")
+                        all_products.extend(category_products)
+                        
+                        # Check if we've hit the overall limit after adding products
+                        if max_products_to_process and len(all_products) >= max_products_to_process:
+                            self.log.info(f"🛑 STOPPING: Reached max_products_to_process limit of {max_products_to_process} products")
+                            return all_products[:max_products_to_process]
+                    else:
+                        self.log.warning(f"⚠️ No products extracted from {category_url}")
+                        
+                except Exception as e:
+                    self.log.error(f"❌ Error extracting from {category_url}: {e}")
+                    continue
+                    
+        self.log.info(f"🎉 EXTRACTION COMPLETE: Total products extracted: {len(all_products)}")
+        return all_products
 
     def _create_product_progress_callback(self, category_url: str, progress_config: Dict[str, Any]):
         """Create a progress callback for individual product extraction with proper caching"""
@@ -4482,12 +4381,61 @@ Return ONLY valid JSON, no additional text."""
             self.log.info(f"🔄 HYBRID MODE: Chunked processing (chunk size: {chunk_size} categories)")
             
 
-            # Process categories in chunks
-            for chunk_start in range(0, len(category_urls_to_scrape), chunk_size):
+            # 🚨 CRITICAL FIX: Get resume point from state management with URL validation
+            resume_category_index = self.state_manager.get_current_category_index()
+            expected_category_url = self.state_manager.get_current_category_url()
+            
+            if resume_category_index is None:
+                resume_category_index = 0
+                self.log.info("🔄 RESUME: No resume point found, starting from category 0")
+            else:
+                # 🚨 SURGICAL FIX: Validate that the index matches the expected URL
+                if expected_category_url and resume_category_index < len(category_urls_to_scrape):
+                    actual_url_at_index = category_urls_to_scrape[resume_category_index]
+                    if actual_url_at_index != expected_category_url:
+                        # Find the correct index for the expected URL
+                        try:
+                            correct_index = category_urls_to_scrape.index(expected_category_url)
+                            self.log.warning(f"🔧 RESUME FIX: Index {resume_category_index} points to wrong URL")
+                            self.log.warning(f"   Expected: {expected_category_url}")
+                            self.log.warning(f"   Found at index: {actual_url_at_index}")
+                            self.log.info(f"🔧 CORRECTED: Using correct index {correct_index} for expected URL")
+                            resume_category_index = correct_index
+                        except ValueError:
+                            self.log.error(f"❌ RESUME ERROR: Expected URL not found in category list: {expected_category_url}")
+                            self.log.info("🔧 FALLBACK: Starting from category 0")
+                            resume_category_index = 0
+                
+                self.log.info(f"🔄 RESUME: Starting from category index {resume_category_index}")
+            
+            # Validate resume point is within bounds
+            if resume_category_index >= len(category_urls_to_scrape):
+                self.log.warning(f"⚠️ RESUME: Index {resume_category_index} exceeds category list length {len(category_urls_to_scrape)}, resetting to 0")
+                resume_category_index = 0
+            
+            # Process categories in chunks starting from resume point
+            for chunk_start in range(resume_category_index, len(category_urls_to_scrape), chunk_size):
                 chunk_end = min(chunk_start + chunk_size, len(category_urls_to_scrape))
                 chunk_categories = category_urls_to_scrape[chunk_start:chunk_end]
                 
-                self.log.info(f"🔄 Processing chunk {chunk_start//chunk_size + 1}: categories {chunk_start+1}-{chunk_end}")
+                # Calculate chunk number relative to resume point
+                chunk_number = (chunk_start - resume_category_index) // chunk_size + 1
+                self.log.info(f"🔄 Processing chunk {chunk_number}: categories {chunk_start+1}-{chunk_end}")
+                
+                # Log the actual category being processed for verification
+                if chunk_categories:
+                    # Validate category consistency with resume point
+                    validated_url = self._validate_category_consistency(chunk_categories[0], category_urls_to_scrape)
+                    if validated_url != chunk_categories[0]:
+                        # Update chunk_categories with corrected URL
+                        try:
+                            correct_index = category_urls_to_scrape.index(validated_url)
+                            chunk_categories = [validated_url]
+                            self.log.info(f"🔧 CORRECTED: Using validated category URL: {validated_url}")
+                        except ValueError:
+                            self.log.warning(f"⚠️ CORRECTION FAILED: Continuing with original URL: {chunk_categories[0]}")
+                    
+                    self.log.info(f"🔄 RESUME: Processing category URL: {chunk_categories[0]}")
                 
                 chunk_products = await self._extract_supplier_products(
                     supplier_url, supplier_name, chunk_categories,
@@ -4508,7 +4456,7 @@ Return ONLY valid JSON, no additional text."""
                     for idx_offset, category_url in enumerate(chunk_categories):
                         urls = self.category_manifests.get(category_url, [])
                         # Set category index for manifest logging
-                        category_index = chunk_start + idx_offset + 1
+                        category_index = chunk_start + idx_offset  # 🚨 CRITICAL FIX: Removed +1 to fix off-by-one error
                         self._set_current_category_index(category_index)
                         self._save_category_manifest(supplier_name, category_url, urls)
                         
@@ -4558,12 +4506,32 @@ Return ONLY valid JSON, no additional text."""
                             f"needs_full={len(filtered['needs_full_extraction'])}"
                         )
                         
-                        # 🚨 NEW: Update system progression with accurate denominator
+                        # 🚨 WRITE-AHEAD POINT 2: Immediately after filtering (persist totals using denominator)
+                        if not filtered.get("invariant_check", False):
+                            # Keep existing error handling path
+                            try:
+                                from utils.fixed_enhanced_state_manager import ErrorHandler
+                                error_handler = ErrorHandler(self.state_manager, self.log)
+                                recovery = error_handler.handle_invariant_failure(filtered, category_id)
+                            except ImportError:
+                                self.log.warning(f"⚠️ ErrorHandler not available for {category_id}")
+                        else:
+                            # Use denominator from filter result for accurate totals
+                            denominator = filtered.get("denominator", len(filtered['needs_amazon_only']) + len(filtered['needs_full_extraction']))
+                            if hasattr(self.state_manager, 'update_progression_unified'):
+                                self.state_manager.update_progression_unified(
+                                    current_product_index_in_category=0,
+                                    total_products_in_current_category=denominator
+                                )
+                                self.state_manager.save_state_atomic()
+                                self.state_manager.log_breadcrumb_guarded()
+                        
+                        # Legacy progression update for backward compatibility
                         if hasattr(self.state_manager, 'update_progression_unified'):
                             work_items = len(filtered['needs_amazon_only']) + len(filtered['needs_full_extraction'])
                             self.state_manager.update_progression_unified(
                                 current_category_index=category_index,
-                                total_categories=len(category_urls),
+                                total_categories=len(category_urls_to_scrape),
                                 current_product_index_in_category=0,
                                 total_products_in_current_category=work_items,
                                 current_phase="supplier",
@@ -4595,10 +4563,38 @@ Return ONLY valid JSON, no additional text."""
                             
                             # Log category completion
                             self.log.info(f"✅ Category {category_index} complete: {len(category_results)} profitable products found")
+                            
+                            # 🚨 CRITICAL FIX: Advance to next category to prevent infinite loop
+                            next_category_index = category_index + 1
+                            if next_category_index < len(category_urls_to_scrape):
+                                next_category_url = category_urls_to_scrape[next_category_index]
+                                self.state_manager.update_supplier_extraction_progress(
+                                    category_index=next_category_index,
+                                    total_categories=len(category_urls_to_scrape),
+                                    category_url=next_category_url,
+                                    extraction_phase='supplier'
+                                )
+                                self.log.info(f"🔄 ADVANCED: State updated to next category {next_category_index}")
+                            else:
+                                self.log.info(f"🏁 COMPLETION: All {len(category_urls_to_scrape)} categories processed")
                         else:
                             # Log when Amazon phase is skipped due to empty queue
                             self.log.info(f"Amazon skipped: nothing to analyze for category {category_index}")
                             self.log.info(f"✅ Category {category_index} complete: no products to process")
+                            
+                            # 🚨 CRITICAL FIX: Advance to next category to prevent infinite loop
+                            next_category_index = category_index + 1
+                            if next_category_index < len(category_urls_to_scrape):
+                                next_category_url = category_urls_to_scrape[next_category_index]
+                                self.state_manager.update_supplier_extraction_progress(
+                                    category_index=next_category_index,
+                                    total_categories=len(category_urls_to_scrape),
+                                    category_url=next_category_url,
+                                    extraction_phase='supplier'
+                                )
+                                self.log.info(f"🔄 ADVANCED: State updated to next category {next_category_index}")
+                            else:
+                                self.log.info(f"🏁 COMPLETION: All {len(category_urls_to_scrape)} categories processed")
 
                     
                     # 🚨 CRITICAL FIX: Financial Report Triggering Mechanism - Monitor linking map count as TRIGGER
@@ -4632,6 +4628,27 @@ Return ONLY valid JSON, no additional text."""
                     if memory_config.get("clear_cache_between_phases", False):
                         self.log.info("🧹 Clearing cache between processing phases")
                         # Add cache clearing logic here if needed
+                
+                else:
+                    # 🚨 CRITICAL FIX: Handle case when chunk_products is empty (extraction failed)
+                    # Ensure category advancement even when extraction fails
+                    for idx_offset, category_url in enumerate(chunk_categories):
+                        category_index = chunk_start + idx_offset
+                        self.log.warning(f"⚠️ No products extracted from category {category_index}: {category_url}")
+                        
+                        # Advance to next category to prevent infinite loop
+                        next_category_index = category_index + 1
+                        if next_category_index < len(category_urls_to_scrape):
+                            next_category_url = category_urls_to_scrape[next_category_index]
+                            self.state_manager.update_supplier_extraction_progress(
+                                category_index=next_category_index,
+                                total_categories=len(category_urls_to_scrape),
+                                category_url=next_category_url,
+                                extraction_phase='supplier'
+                            )
+                            self.log.info(f"🔄 ADVANCED: State updated to next category {next_category_index} after extraction failure")
+                        else:
+                            self.log.info(f"🏁 COMPLETION: All {len(category_urls_to_scrape)} categories processed (extraction failure)")
                 
         elif processing_modes.get("balanced", {}).get("enabled", False):
             # Balanced mode: Extract in batches, analyze each batch
@@ -4767,7 +4784,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -4804,15 +4824,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -5027,7 +5053,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -5064,15 +5093,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -5287,7 +5322,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -5324,15 +5362,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -5547,7 +5591,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -5584,15 +5631,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -5807,7 +5860,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -5844,15 +5900,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -6067,7 +6129,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -6104,15 +6169,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -6327,7 +6398,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -6364,15 +6438,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -6587,7 +6667,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -6624,15 +6707,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -6847,7 +6936,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                     continue
                 
                 # Save Amazon cache and create linking map
@@ -6884,15 +6976,21 @@ Return ONLY valid JSON, no additional text."""
                             profitable_results.append(combined_data)
                             
                             self.state_manager.update_success_metrics(True, True, financials.get("NetProfit", 0))
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                         else:
                             self.log.info(f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}")
                             self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                            source_category_url = product_data.get('source_url', 'unknown')
+
+                            self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                             
                 except Exception as e:
                     self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
         
         return profitable_results
 
@@ -6936,8 +7034,15 @@ Return ONLY valid JSON, no additional text."""
                 current_index = start_idx + i + 1
                 self.log.info(f"--- Processing supplier product {current_index}/{len(price_filtered_products)}: '{product_data.get('title')}' ---")
                 
-                # 🚨 SURGICAL FIX: Update state manager with product index tracking (gap processing)
-                if hasattr(self, 'state_manager') and self.state_manager:
+                # 🚨 WRITE-AHEAD POINT 3: During per-product processing (supplier phase) with throttling
+                if hasattr(self.state_manager, 'update_progression_unified'):
+                    # BEFORE side-effects; update pointer
+                    self.state_manager.update_progression_unified(current_product_index_in_category=current_index)
+                    if (current_index) % 10 == 0:  # staggered write pattern
+                        self.state_manager.save_state_atomic()
+                        self.state_manager.log_breadcrumb_guarded()
+                else:
+                    # Fallback to existing methods
                     if hasattr(self.state_manager, 'update_product_extraction_progress'):
                         self.state_manager.update_product_extraction_progress(current_index, len(price_filtered_products))
                     else:
@@ -6949,14 +7054,14 @@ Return ONLY valid JSON, no additional text."""
                 
                 # 🔄 UPDATE PROCESSING STATE: Update detailed progress tracking for hybrid mode
                 if hasattr(self, 'state_manager') and self.state_manager:
-                    # Calculate current category and subcategory indexes
-                    # For hybrid mode, we process by chunks, so category index = batch_num + 1
+                    # Calculate current category and subcategory indexes  
+                    # 🚨 CRITICAL FIX: Use 0-based indexing for internal state, not 1-based for display
                     self.state_manager.update_supplier_extraction_progress(
-                        category_index=batch_num + 1,
+                        category_index=batch_num,  # 🚨 FIXED: Removed +1 to fix off-by-one error
                         total_categories=total_batches,
-                        subcategory_index=i + 1,
+                        subcategory_index=i,  # 🚨 FIXED: Removed +1 to fix off-by-one error  
                         total_subcategories=len(batch_products),
-                        batch_number=batch_num + 1,
+                        batch_number=batch_num,  # 🚨 FIXED: Removed +1 to fix off-by-one error
                         total_batches=total_batches,
                         category_url=product_data.get('source_url', 'unknown'),
                         extraction_phase="amazon_analysis"
@@ -7072,13 +7177,19 @@ Return ONLY valid JSON, no additional text."""
                     if financial_result and financial_result.get("is_profitable"):
                         profitable_results.append(financial_result)
                         self.log.info(f"✅ Profitable product found: {product_data.get('title')}")
-                        self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable")
+                        source_category_url = product_data.get('source_url', 'unknown')
+
+                        self.state_manager.mark_product_processed(product_data.get("url"), "completed_profitable", source_category_url)
                     elif financial_result and financial_result.get("error"):
                         self.log.info(f"❌ Financial analysis failed: {financial_result.get('error')}")
-                        self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation")
+                        source_category_url = product_data.get('source_url', 'unknown')
+
+                        self.state_manager.mark_product_processed(product_data.get("url"), "failed_financial_calculation", source_category_url)
                     else:
                         self.log.info(f"❌ Not profitable product: {product_data.get('title')}")
-                        self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable")
+                        source_category_url = product_data.get('source_url', 'unknown')
+
+                        self.state_manager.mark_product_processed(product_data.get("url"), "completed_not_profitable", source_category_url)
                 
                 else:
                     # Handle no Amazon data or error cases
@@ -7111,7 +7222,10 @@ Return ONLY valid JSON, no additional text."""
                     self._add_linking_map_entry_optimized(no_match_entry)
                     self.log.info(f"✅ Added NO-MATCH linking entry for chunk product: {supplier_ean or 'NO_EAN'} → NO MATCH")
                     
-                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction")
+                    source_category_url = product_data.get('source_url', 'unknown')
+
+                    
+                    self.state_manager.mark_product_processed(product_data.get("url"), "failed_amazon_extraction", source_category_url)
                 
                 # Save state periodically using configurable batch size
                 linking_map_batch = self.system_config.get("linking_map_batch_size", 1)
@@ -7119,6 +7233,11 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.save_state(preserve_interruption_state=True)
                     self._save_linking_map(self.supplier_name)
                     self.log.info(f"📊 Periodic save at product {current_index} (linking_map_batch_size: {linking_map_batch})")
+        
+        # 🚨 WRITE-AHEAD POINT 4: Ensure final sync at loop end
+        if hasattr(self.state_manager, 'update_progression_unified'):
+            self.state_manager.save_state_atomic()
+            self.state_manager.log_breadcrumb_guarded()
         
         try:
             # Final save of linking map with all entries

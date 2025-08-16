@@ -2,126 +2,73 @@
 
 ## Introduction
 
-This specification addresses the critical breadcrumb tracking and resumption system issues in the FBA Data Extraction System. The system currently suffers from missing resumption field population, inconsistent state synchronization, and persistent breadcrumb warnings that prevent accurate progress tracking and precise resumption functionality.
+This specification addresses the critical breadcrumb tracking and resumption system issues in the FBA Data Extraction System using a **write-ahead, minimal change approach**. The system currently suffers from timing issues where breadcrumb logging occurs before field population, causing persistent "BREADCRUMB DELAYED" warnings and preventing reliable resumption.
+
+## Implementation Approach: Write-Ahead Unified Progression
+
+**Core Strategy**: Enforce write-ahead unified progression updates at four precise workflow points, keeping guarded breadcrumbs, persisting totals immediately after filtering, and adding minimal disk-first load-time backfill.
+
+**Scope**: Edit only 3 files (`tools/passive_extraction_workflow_latest.py`, `utils/fixed_enhanced_state_manager.py`, `utils/url_filter.py`) with no new components or schema fields.
+
+## Non-Goals (Explicitly Out of Scope)
+
+- No new classes (UnifiedProgressTracker, StateSynchronizationManager, BreadcrumbEnhancementSystem, WorkflowIntegrationLayer)
+- No schema additions (estimated_completion, breadcrumb_metadata, confidence scores, category_completion maps)
+- No complex field reconstruction in breadcrumb logging
+- No extensive monitoring/alerting additions in this change set
+
+## Key Implementation Constraints
+
+1. **Write-Ahead Updates**: Enforce progression updates at 4 workflow points BEFORE any side-effects
+2. **Single Update Surface**: Use `update_progression_unified()` to update both structures atomically
+3. **Staggered Writes**: Throttle saves/logs (every 10 items) with small gaps to prevent file conflicts
+4. **Feature Flags**: Support `STATE_STRICT_MODE` and `ALLOW_STATE_REGRESSION` for rollout safety
+5. **Fallback Safety**: Maintain existing URL-based resumption and ErrorHandler paths
+6. **Minimal Integration**: Enhance existing methods without breaking changes
 
 ## Requirements
 
-### Requirement 1: Breadcrumb Field Population
+### Requirement 1: Write-Ahead Field Population
 
-**User Story:** As a system operator, I want all resumption tracking fields to be accurately populated during processing, so that I can monitor exact progress and resume from precise interruption points.
-
-#### Acceptance Criteria
-
-1. WHEN the system processes a category THEN it SHALL populate `current_category_index` and `total_categories` fields
-2. WHEN the system processes a product THEN it SHALL populate `current_product_index_in_category` and `total_products_in_current_category` fields  
-3. WHEN the system transitions phases THEN it SHALL update the `current_phase` field accurately
-4. WHEN the system saves state THEN all breadcrumb fields SHALL be present and valid
-5. IF any breadcrumb field is missing THEN the system SHALL populate it before logging breadcrumbs
-
-### Requirement 2: State Structure Synchronization
-
-**User Story:** As a system operator, I want both state structures to remain synchronized, so that resumption works consistently regardless of which structure is accessed.
+**User Story:** As a system operator, I want breadcrumb fields populated BEFORE any side-effects occur, so that "BREADCRUMB DELAYED" warnings are eliminated through timing fixes.
 
 #### Acceptance Criteria
 
-1. WHEN `system_progression` is updated THEN `supplier_extraction_progress` SHALL be updated with corresponding values
-2. WHEN category processing begins THEN both structures SHALL reflect the same category index and URL
-3. WHEN product processing progresses THEN both structures SHALL show the same product index
-4. WHEN state is saved THEN both structures SHALL contain consistent values
-5. IF state inconsistency is detected THEN the system SHALL automatically synchronize the structures
+1. WHEN category processing begins THEN all category fields SHALL be populated before filtering
+2. WHEN filtering completes THEN product totals SHALL be persisted using filter denominator
+3. WHEN products are processed THEN index updates SHALL occur before each product's side-effects
+4. WHEN phases transition THEN current_phase field SHALL be updated atomically
+5. IF any write-ahead point fails THEN system SHALL log error but continue processing
 
-### Requirement 3: Workflow Integration
+### Requirement 2: Staggered Write Protection
 
-**User Story:** As a system operator, I want the workflow to properly integrate with resumption tracking, so that progress is accurately tracked without breaking existing functionality.
-
-#### Acceptance Criteria
-
-1. WHEN a category begins processing THEN the workflow SHALL call category initialization methods
-2. WHEN a product is processed THEN the workflow SHALL call product progress update methods
-3. WHEN a category completes THEN the workflow SHALL call category completion methods
-4. WHEN processing phases change THEN the workflow SHALL update phase tracking
-5. IF workflow integration is missing THEN the system SHALL provide fallback population mechanisms
-
-### Requirement 4: Index-Based Resumption
-
-**User Story:** As a system operator, I want the system to support index-based resumption, so that processing can skip entire completed categories and resume at exact product positions.
+**User Story:** As a system operator, I want state saves throttled to prevent file conflicts, so that rapid processing doesn't corrupt state files.
 
 #### Acceptance Criteria
 
-1. WHEN the system resumes THEN it SHALL skip completed categories based on category index
-2. WHEN resuming within a category THEN it SHALL skip completed products based on product index
-3. WHEN resumption indices are invalid THEN it SHALL fall back to URL-based resumption
-4. WHEN resumption is successful THEN it SHALL log the exact resumption point
-5. IF index-based resumption fails THEN the system SHALL use URL-based resumption as backup
+1. WHEN processing products THEN saves SHALL occur every 10 items maximum
+2. WHEN concurrent saves occur THEN timing gaps SHALL prevent file access conflicts
+3. WHEN processing completes THEN final save SHALL occur regardless of throttle count
+4. IF write conflicts occur THEN atomic save mechanism SHALL prevent corruption
 
-### Requirement 5: Category Processing Optimization
+### Requirement 3: Index-Based Progression
 
-**User Story:** As a system operator, I want the system to efficiently skip completed categories, so that resumption is fast and doesn't waste time re-scanning completed work.
-
-#### Acceptance Criteria
-
-1. WHEN a category is fully processed THEN it SHALL be marked as completed in state
-2. WHEN resuming THEN the system SHALL skip entirely completed categories without scanning
-3. WHEN a category is partially processed THEN it SHALL resume at the correct product index
-4. WHEN category totals change THEN the system SHALL update the tracking accordingly
-5. IF category completion status is unclear THEN the system SHALL verify by checking processed products
-
-### Requirement 6: Progress Tracking Accuracy
-
-**User Story:** As a system operator, I want accurate progress tracking and completion estimates, so that I can monitor system performance and predict completion times.
+**User Story:** As a system operator, I want progression tracked by indexes only, so that resumption is deterministic and independent of cache state.
 
 #### Acceptance Criteria
 
-1. WHEN processing begins THEN the system SHALL calculate total work items accurately
-2. WHEN progress updates THEN completion percentages SHALL be calculated correctly
-3. WHEN categories are discovered THEN total category counts SHALL be updated in real-time
-4. WHEN products are discovered THEN category product counts SHALL be updated dynamically
-5. IF progress calculations are inaccurate THEN the system SHALL recalculate based on current state
+1. WHEN products are processed THEN index advancement SHALL use stored values only
+2. WHEN cache is cleared THEN progression SHALL continue using disk-based indexes
+3. WHEN linking map entries exist THEN they SHALL NOT affect index progression
+4. IF index validation fails THEN system SHALL fall back to URL-based resumption
 
-### Requirement 7: Breadcrumb Logging Enhancement
+### Requirement 4: Graceful Integration
 
-**User Story:** As a system operator, I want clear and actionable breadcrumb messages, so that I can understand system status and troubleshoot issues effectively.
-
-#### Acceptance Criteria
-
-1. WHEN all fields are populated THEN breadcrumbs SHALL show complete resumption information
-2. WHEN fields are missing THEN the system SHALL populate them before logging
-3. WHEN resumption points are logged THEN they SHALL include category URL and phase information
-4. WHEN errors occur THEN breadcrumb messages SHALL provide actionable guidance
-5. IF breadcrumb logging fails THEN the system SHALL continue processing without interruption
-
-### Requirement 8: Error Recovery and Validation
-
-**User Story:** As a system operator, I want robust error recovery for resumption tracking, so that temporary issues don't break the entire processing workflow.
+**User Story:** As a system operator, I want workflow integration without breaking existing functionality, so that rollback is safe and immediate.
 
 #### Acceptance Criteria
 
-1. WHEN resumption fields are missing THEN the system SHALL attempt to reconstruct them from available data
-2. WHEN state corruption is detected THEN the system SHALL repair inconsistencies automatically
-3. WHEN resumption indices are out of bounds THEN the system SHALL reset to safe values
-4. WHEN category/product counts change THEN the system SHALL adjust indices accordingly
-5. IF automatic recovery fails THEN the system SHALL provide manual recovery procedures
-
-### Requirement 9: Backward Compatibility
-
-**User Story:** As a system operator, I want the enhanced resumption system to maintain compatibility with existing functionality, so that current workflows continue to work without modification.
-
-#### Acceptance Criteria
-
-1. WHEN URL-based resumption is used THEN it SHALL continue to work as before
-2. WHEN legacy state structures are accessed THEN they SHALL contain valid data
-3. WHEN existing workflow methods are called THEN they SHALL work without modification
-4. WHEN resumption fails THEN the system SHALL fall back to existing URL-based logic
-5. IF new features cause issues THEN they SHALL be disabled automatically with graceful degradation
-
-### Requirement 10: Performance Optimization
-
-**User Story:** As a system operator, I want resumption enhancements to improve rather than degrade system performance, so that processing becomes more efficient over time.
-
-#### Acceptance Criteria
-
-1. WHEN categories are completed THEN they SHALL be skipped without URL scanning
-2. WHEN resuming within categories THEN only remaining products SHALL be processed
-3. WHEN progress is tracked THEN overhead SHALL be minimal and non-blocking
-4. WHEN state is updated THEN operations SHALL be atomic and efficient
-5. IF performance degrades THEN optimizations SHALL be applied to maintain speed
+1. WHEN new methods are unavailable THEN system SHALL use hasattr() checks for graceful fallback
+2. WHEN integration is disabled THEN existing URL-based resumption SHALL continue working
+3. WHEN feature flags are set THEN behavior SHALL be controllable via environment variables
+4. IF integration causes issues THEN system SHALL degrade gracefully to previous behavior

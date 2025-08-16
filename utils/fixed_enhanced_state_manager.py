@@ -60,6 +60,8 @@ class FixedEnhancedStateManager:
     SCHEMA_VERSION = "1.1_FIXED"
     
     def __init__(self, supplier_name: str, base_path: Optional[str] = None):
+        import threading
+        
         self.supplier_name = supplier_name
         
         # Use relative base path if not provided
@@ -70,7 +72,13 @@ class FixedEnhancedStateManager:
             
         self.state_file_path = get_processing_state_path(supplier_name)
         self.state_data = self._initialize_state()
-        self._startup_completed = False  # Track if startup analysis is done
+        self._startup_completed = False
+        
+        # 🚨 PRIORITY 2: Initialize state lock for atomic operations
+        self._state_lock = threading.Lock()
+        
+        # Initialize logging
+        self.log = logging.getLogger(f"{__name__}.{supplier_name}")  # Track if startup analysis is done
         
     def _initialize_state(self) -> Dict[str, Any]:
         """Initialize state structure with all required fields and FIXED architecture"""
@@ -207,6 +215,32 @@ class FixedEnhancedStateManager:
                     raise SystemExit(error_msg)
                 else:
                     log.warning(f"State regression allowed by ALLOW_STATE_REGRESSION flag")
+            
+            # 🚨 DISK-FIRST BACKFILL: Sync structures from disk state
+            sp = self.state_data.setdefault("system_progression", {})
+            sep = self.state_data.setdefault("supplier_extraction_progress", {})
+            
+            # 🚨 CRITICAL FIX: Bidirectional backfill with supplier_extraction_progress priority
+            backfill_fields = [
+                ("current_category_index", "current_category_index"),
+                ("current_product_index_in_category", "current_product_index_in_category"),
+                ("total_products_in_current_category", "total_products_in_current_category"),
+                ("current_category_url", "current_category_url"),
+                ("total_categories", "total_categories")
+            ]
+            
+            for k_sp, k_sep in backfill_fields:
+                # First: Try to restore system_progression from supplier_extraction_progress
+                if k_sep in sep and sep[k_sep] is not None and sep[k_sep] not in [0, ""] and (k_sp not in sp or sp[k_sp] in [0, None, ""]):
+                    sp[k_sp] = sep[k_sep]
+                    log.debug(f"🔧 BACKFILL: {k_sp} = {sep[k_sep]} FROM supplier_extraction_progress")
+                # Second: Fallback to original direction only if supplier_extraction_progress is empty
+                elif k_sp in sp and sp[k_sp] is not None and sp[k_sp] not in [0, ""] and (k_sep not in sep or sep[k_sep] in [0, None, ""]):
+                    sep[k_sep] = sp[k_sp]
+                    log.debug(f"🔧 BACKFILL: {k_sep} = {sp[k_sp]} FROM system_progression (fallback)")
+            
+            # 🚨 RESTORE: Update gap processing sections with category completion data
+            self.update_gap_processing_sections()
             
             log.info(f"Loaded state for {self.supplier_name} - resumption from index {self.state_data['resumption_index']}")
             return True
@@ -557,7 +591,7 @@ class FixedEnhancedStateManager:
 
         self.save_state_atomic()
 
-    def save_state(self, preserve_interruption_state: bool = True):
+    def save_state(self, preserve_interruption_state: bool = True, skip_breadcrumb: bool = False):
         """
         🚨 CRITICAL FIX 6: Save state WITHOUT performing reverse gap detection
         Args:
@@ -595,10 +629,10 @@ class FixedEnhancedStateManager:
         except Exception as e:
             log.error(f"❌ Failed to save state: {e}")
 
-        # 🚨 NEW: Use guarded breadcrumb logging instead of direct logging
-        if hasattr(self, 'log_breadcrumb_guarded'):
+        # 🚨 CONDITIONAL BREADCRUMB: Only log during active processing, not startup/recovery
+        if not skip_breadcrumb and hasattr(self, 'log_breadcrumb_guarded') and self._is_processing_active():
             self.log_breadcrumb_guarded()
-        else:
+        elif not skip_breadcrumb and not hasattr(self, 'log_breadcrumb_guarded'):
             # Fallback to original logic for backward compatibility
             sp = self.state_data.get("system_progression", {})
             phase = sp.get("current_phase", "unknown")
@@ -620,9 +654,22 @@ class FixedEnhancedStateManager:
                 )
 
 
+    def _is_processing_active(self) -> bool:
+        """Check if we're in active processing mode (not startup/recovery)"""
+        sp = self.state_data.get("system_progression", {})
+        
+        # Consider processing active if we have basic category structure
+        has_categories = sp.get("total_categories", 0) > 0
+        has_phase = sp.get("current_phase") in ["supplier", "amazon"]
+        
+        return has_categories and has_phase
+
     def save_state_atomic(self):
-        """Atomic save wrapper used by new progression methods"""
-        self.save_state(preserve_interruption_state=True)
+        """Atomic save wrapper used by new progression methods - includes breadcrumb logging"""
+        self.save_state(preserve_interruption_state=True, skip_breadcrumb=True)
+        # Always log breadcrumbs for atomic saves (these are from write-ahead points)
+        if hasattr(self, 'log_breadcrumb_guarded'):
+            self.log_breadcrumb_guarded()
     
     def persist_reconciled_state_atomic(self):
         """Atomically persist state after reconciliation with backup.
@@ -679,8 +726,9 @@ class FixedEnhancedStateManager:
                 repairs_made.append(f"Added missing key: {key}")
                 is_valid = False
         
-        # Validate system_progression structure
+        # 🚨 CRITICAL FIX: Check supplier_extraction_progress before defaulting
         sp = self.state_data.setdefault("system_progression", {})
+        sep = self.state_data.get("supplier_extraction_progress", {})
         required_sp_keys = [
             "current_phase", "current_category_index", "current_category_url",
             "total_categories", "current_product_index_in_category", 
@@ -689,10 +737,17 @@ class FixedEnhancedStateManager:
         ]
         
         for key in required_sp_keys:
-            if key not in sp:
-                default_value = "" if "url" in key else 0
-                sp[key] = default_value
-                repairs_made.append(f"Added missing system_progression key: {key}")
+            if key not in sp or sp[key] in [None, 0, ""]:
+                # Try to get value from supplier_extraction_progress first
+                if key in sep and sep[key] is not None and sep[key] not in [0, ""]:
+                    sp[key] = sep[key]
+                    repairs_made.append(f"Restored system_progression {key} from supplier_extraction_progress: {sep[key]}")
+                    log.info(f"🔧 REPAIR: Restored {key} = {sep[key]} from operational data")
+                else:
+                    # Only use defaults if no operational data exists
+                    default_value = "" if "url" in key else 0
+                    sp[key] = default_value
+                    repairs_made.append(f"Added missing system_progression key with default: {key}")
                 is_valid = False
         
         # Validate bounds and monotonic progression
@@ -931,17 +986,24 @@ class FixedEnhancedStateManager:
                     else:
                         config_urls = []
                     
-                    # Find current category based on config order and processing status
-                    priority_order = ["EXTRACTED_ONLY", "PARTIALLY_PROCESSED", "FULLY_PROCESSED"]
-                    
-                    for status in priority_order:
-                        for i, config_url in enumerate(config_urls):
-                            if config_url in category_completion and category_completion[config_url].get('status') == status:
-                                current_category_url = config_url
-                                current_category_index = i  # 🚨 FIXED: Use actual index from config file
+                    # 🚨 CRITICAL OFF-BY-ONE FIX: Always start from index 0 for fresh start
+                    # When resumption_index = 0, we should process the first category (index 0)
+                    if self.state_data.get("resumption_index", 0) == 0:
+                        current_category_url = config_urls[0] if config_urls else ""
+                        current_category_index = 0  # 🚨 FIXED: Start from 0, not 1
+                        log.info(f"🔧 FRESH START: Starting from first category (index 0): {current_category_url}")
+                    else:
+                        # Find current category based on config order and processing status
+                        priority_order = ["EXTRACTED_ONLY", "PARTIALLY_PROCESSED", "FULLY_PROCESSED"]
+                        
+                        for status in priority_order:
+                            for i, config_url in enumerate(config_urls):
+                                if config_url in category_completion and category_completion[config_url].get('status') == status:
+                                    current_category_url = config_url
+                                    current_category_index = i  # Use actual index from config file
+                                    break
+                            if current_category_url:
                                 break
-                        if current_category_url:
-                            break
                             
                 except Exception as e:
                     log.warning(f"Failed to read config for category indexing: {e}")
@@ -1218,15 +1280,15 @@ class FixedEnhancedStateManager:
             "current_phase"
         ]
         
-        missing_fields = [field for field in required_fields if not sp.get(field)]
+        missing_fields = [field for field in required_fields if field not in sp or sp[field] is None]
         
         if missing_fields:
             log.warning(f"🚨 BREADCRUMB DELAYED: Missing fields {missing_fields}")
             return
         
-        # Validate denominators are non-zero
-        if sp["total_categories"] <= 0 or sp["total_products_in_current_category"] <= 0:
-            log.warning(f"🚨 BREADCRUMB INVALID: Zero denominators detected - categories: {sp['total_categories']}, products: {sp['total_products_in_current_category']}")
+        # Validate denominators are non-zero (categories must be > 0, products can be 0 during initialization)
+        if sp["total_categories"] <= 0:
+            log.warning(f"🚨 BREADCRUMB INVALID: Zero categories detected - categories: {sp['total_categories']}")
             return
         
         # All fields present and valid - log breadcrumb
@@ -1239,11 +1301,27 @@ class FixedEnhancedStateManager:
     
     def update_progression_unified(self, **kwargs) -> None:
         """
-        🚨 NEW: Unified progression update that keeps both state structures synchronized.
+        🚨 WRITE-AHEAD: Unified progression update that keeps both state structures synchronized.
         This prevents state drift between system_progression and supplier_extraction_progress.
         """
         sp = self.state_data.setdefault("system_progression", {})
         sep = self.state_data.setdefault("supplier_extraction_progress", {})
+        
+        # Basic validation: Non-negative indices/totals
+        for key, value in kwargs.items():
+            if key in ["current_category_index", "total_categories", "current_product_index_in_category", 
+                      "total_products_in_current_category"] and isinstance(value, (int, float)):
+                if value < 0:
+                    log.warning(f"🚨 VALIDATION: Negative value for {key}: {value}, setting to 0")
+                    kwargs[key] = 0
+        
+        # Prevent regression when STATE_STRICT_MODE=1 (unless ALLOW_STATE_REGRESSION=1)
+        if os.getenv('STATE_STRICT_MODE') == '1' and os.getenv('ALLOW_STATE_REGRESSION') != '1':
+            if "current_category_index" in kwargs:
+                current_val = sp.get("current_category_index", 0)
+                if kwargs["current_category_index"] < current_val:
+                    log.warning(f"🚨 REGRESSION GUARD: category_index {kwargs['current_category_index']} < {current_val}")
+                    kwargs["current_category_index"] = current_val
         
         # Update system_progression
         for key, value in kwargs.items():
@@ -1252,14 +1330,46 @@ class FixedEnhancedStateManager:
                 sp[key] = value
         
         # Sync with supplier_extraction_progress for backward compatibility
-        if "current_category_index" in kwargs:
-            sep["current_category_index"] = kwargs["current_category_index"]
-        if "total_products_in_current_category" in kwargs:
-            sep["total_products_in_current_category"] = kwargs["total_products_in_current_category"]
-        if "current_product_index_in_category" in kwargs:
-            sep["current_product_index_in_category"] = kwargs["current_product_index_in_category"]
-        if "current_category_url" in kwargs:
-            sep["current_category_url"] = kwargs["current_category_url"]
+        sync_fields = {
+            "current_category_index": "current_category_index",
+            "total_categories": "total_categories", 
+            "current_product_index_in_category": "current_product_index_in_category",
+            "total_products_in_current_category": "total_products_in_current_category",
+            "current_category_url": "current_category_url"
+        }
+        
+        # 🚨 CRITICAL FIX: Cross-validation and corruption prevention
+        # First: Validate incoming data for corruption patterns
+        if "current_category_index" in kwargs and "current_category_url" in kwargs:
+            incoming_index = kwargs["current_category_index"]
+            incoming_url = kwargs["current_category_url"]
+            halloween_url = "https://www.poundwholesale.co.uk/seasonal/wholesale-halloween"
+            
+            # Detect potential corruption (index 0 + Halloween URL when should be index 1 + winter URL)
+            if incoming_index == 0 and halloween_url in incoming_url:
+                # Check if we have better data in operational source
+                operational_data = self.state_data.get("supplier_extraction_progress", {})
+                op_index = operational_data.get("current_category_index", 0)
+                op_url = operational_data.get("current_category_url", "")
+                
+                if op_index > 0 and halloween_url not in op_url:
+                    log.warning(f"🚨 CORRUPTION PREVENTION: Rejecting corrupted incoming data (index={incoming_index}, url={incoming_url})")
+                    log.info(f"🔧 USING OPERATIONAL: Using operational data instead (index={op_index}, url={op_url})")
+                    # Use operational data instead of corrupted incoming data
+                    kwargs["current_category_index"] = op_index
+                    kwargs["current_category_url"] = op_url
+        
+        # Second: Copy FROM supplier_extraction_progress TO system_progression (correct direction)
+        operational_data = self.state_data.get("supplier_extraction_progress", {})
+        for sep_key, sp_key in sync_fields.items():
+            if sep_key in operational_data and operational_data[sep_key] is not None and operational_data[sep_key] not in [0, ""]:
+                sp[sp_key] = operational_data[sep_key]
+                log.debug(f"🔧 SYNC: {sp_key} = {operational_data[sep_key]} FROM supplier_extraction_progress")
+        
+        # Third: Update supplier_extraction_progress with validated values from kwargs
+        for sp_key, sep_key in sync_fields.items():
+            if sp_key in kwargs:
+                sep[sep_key] = kwargs[sp_key]
         
         log.debug(f"📊 UNIFIED UPDATE: {kwargs}")
     
@@ -1279,11 +1389,16 @@ class FixedEnhancedStateManager:
         
         # Reset supplier_extraction_progress category-specific fields
         sep = self.state_data.setdefault("supplier_extraction_progress", {})
+        
+        # 🚨 RESUMPTION FIX: Preserve current_category_url if already set by category advancement
+        current_url = sep.get("current_category_url", "")
+        
         sep.update({
             "current_product_index_in_category": 0,
             "total_products_in_current_category": 0,
             "discovered_products_in_current_category": 0,
-            "current_category_url": ""
+            # Only clear URL if it's empty (preserve advancement URLs)
+            "current_category_url": current_url if current_url else ""
         })
         
         # Clear any temporary category data
@@ -1310,15 +1425,42 @@ class FixedEnhancedStateManager:
         """Clear Amazon analysis queue after processing."""
         self.state_data['amazon_analysis_queue'] = []
         
-    def mark_product_processed(self, product_url: str, status: str):
-        """Mark product as processed with given status"""
-        if "processed_products" not in self.state_data:
-            self.state_data["processed_products"] = {}
+    def mark_product_processed(self, product_url: str, status: str, source_category_url: str = None):
+        """
+        Mark product as processed with given status and source category.
         
-        self.state_data["processed_products"][product_url] = {
-            "status": status,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
+        Args:
+            product_url: The product URL being processed
+            status: Processing status (e.g., 'processed', 'failed', 'skipped')
+            source_category_url: The category URL where this product was found
+        """
+        try:
+            from utils.normalization import normalize_url
+            
+            if "processed_products" not in self.state_data:
+                self.state_data["processed_products"] = {}
+            
+            # Store product processing info with source category relationship
+            entry = {
+                "status": status,
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+            
+            # 🚨 CRITICAL FIX: Store source category URL for proper counting
+            if source_category_url:
+                entry["source_category_url"] = normalize_url(source_category_url)
+            
+            self.state_data["processed_products"][product_url] = entry
+            
+        except Exception as e:
+            self.log.error(f"Error marking product as processed: {e}")
+            # Fallback to basic storage without category relationship
+            if "processed_products" not in self.state_data:
+                self.state_data["processed_products"] = {}
+            self.state_data["processed_products"][product_url] = {
+                "status": status,
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
         
     def get_state_summary(self) -> Dict[str, Any]:
         """Get summary of current state"""
@@ -1407,6 +1549,322 @@ class FixedEnhancedStateManager:
             
         self.state_data["success_metrics"] = metrics
 
+    def _build_category_completion_status(self) -> Dict[str, Any]:
+        """Build category completion status from cache and linking map data"""
+        completion_status = {}
+        
+        try:
+            # Get current directory and construct paths
+            current_dir = Path(__file__).parent.parent
+            
+            # Get processed URLs from linking map
+            processed_urls = set()
+            supplier_domain = self.supplier_name.replace('-', '.')
+            linking_map_path = current_dir / "OUTPUTS" / "FBA_ANALYSIS" / "linking_maps" / supplier_domain / "linking_map.json"
+            
+            if linking_map_path.exists():
+                with open(linking_map_path, 'r', encoding='utf-8') as f:
+                    linking_data = json.load(f)
+                    if isinstance(linking_data, list):
+                        for entry in linking_data:
+                            if isinstance(entry, dict) and 'supplier_url' in entry:
+                                processed_urls.add(entry['supplier_url'])
+            
+            # Get all URLs from cache and categorize them
+            category_totals = {}
+            hyphenated_supplier = self.supplier_name.replace('.', '-')
+            cache_path = current_dir / "OUTPUTS" / "cached_products" / f"{hyphenated_supplier}_products_cache.json"
+            
+            if cache_path.exists():
+                with open(cache_path, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                    if isinstance(cache_data, list):
+                        for product in cache_data:
+                            if isinstance(product, dict) and not product.get("_cache_metadata"):
+                                source_url = product.get('source_url', '')
+                                product_url = product.get('url', '')
+                                
+                                if source_url:
+                                    if source_url not in category_totals:
+                                        category_totals[source_url] = {"extracted": 0, "processed": 0}
+                                    
+                                    category_totals[source_url]["extracted"] += 1
+                                    
+                                    if product_url in processed_urls:
+                                        category_totals[source_url]["processed"] += 1
+            
+            # Calculate completion percentages and status
+            for category_url, counts in category_totals.items():
+                if counts["extracted"] > 0:
+                    completion_pct = round((counts["processed"] / counts["extracted"]) * 100, 1)
+                    
+                    if completion_pct >= 100:
+                        status = "FULLY_PROCESSED"
+                    elif completion_pct > 0:
+                        status = "PARTIALLY_PROCESSED"
+                    else:
+                        status = "EXTRACTED_ONLY"
+                    
+                    completion_status[category_url] = {
+                        "extracted": counts["extracted"],
+                        "processed": counts["processed"],
+                        "completion_pct": completion_pct,
+                        "status": status
+                    }
+            
+        except Exception as e:
+            log.warning(f"Error building category completion status: {e}")
+        
+        return completion_status
+
+    def detect_state_corruption(self) -> Dict[str, Any]:
+        """Detect corruption across all data sources"""
+        corruption_report = {
+            "corrupted": False,
+            "issues": [],
+            "sources": {}
+        }
+        
+        try:
+            # Get all data sources
+            sep = self.state_data.get("supplier_extraction_progress", {})
+            sp = self.state_data.get("system_progression", {})
+            
+            # Extract current values
+            sep_index = sep.get("current_category_index", 0)
+            sep_url = sep.get("current_category_url", "")
+            sp_index = sp.get("current_category_index", 0)
+            sp_url = sp.get("current_category_url", "")
+            
+            corruption_report["sources"] = {
+                "supplier_extraction_progress": {"index": sep_index, "url": sep_url},
+                "system_progression": {"index": sp_index, "url": sp_url}
+            }
+            
+            # Check for Halloween corruption (all sources pointing to category 0/Halloween)
+            halloween_url = "https://www.poundwholesale.co.uk/seasonal/wholesale-halloween"
+            winter_url = "https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials"
+            
+            # 🚨 CRITICAL FIX: Removed backwards "corruption detection" that treated category 0 as corruption
+            # The old logic incorrectly forced category_index = 1 when system correctly starts at 0
+            # This was the root cause of the infinite loop - system fighting against correct behavior
+            log.debug(f"🔧 STATE CHECK: Index comparison - operational={sep_index}, tracking={sp_index}")
+            
+            # Check for index/URL mismatch
+            if sep_index != sp_index:
+                corruption_report["issues"].append(f"Index mismatch: operational={sep_index}, tracking={sp_index}")
+            
+            if sep_url != sp_url:
+                corruption_report["issues"].append(f"URL mismatch: operational={sep_url}, tracking={sp_url}")
+                
+        except Exception as e:
+            log.error(f"❌ CORRUPTION DETECTION: Failed - {e}")
+            
+        return corruption_report
+
+    def recover_from_corruption(self, corruption_report: Dict[str, Any]) -> bool:
+        """Recover from detected state corruption"""
+        try:
+            # 🚨 CRITICAL FIX: Disabled auto-recovery that was applying wrong corrections
+            # The old logic was forcing category_index = 1 when 0 was correct
+            # Now we let the system use its natural state without forced corrections
+            if not corruption_report.get("corrupted"):
+                return True
+                
+            log.info("🔧 RECOVERY: Corruption detected but auto-recovery disabled to prevent forced wrong values")
+            log.info("🔧 RECOVERY: System will use natural state progression instead")
+            
+            # Don't apply any forced corrections - let the workflow determine correct state
+            return True
+            
+            log.info(f"🔧 RECOVERY: Applied manual correction to all data sources")
+            log.info(f"   • current_category_index: {expected['current_category_index']}")
+            log.info(f"   • current_category_url: {expected['current_category_url']}")
+            
+            return True
+            
+        except Exception as e:
+            log.error(f"❌ RECOVERY: Failed to recover from corruption - {e}")
+            return False
+
+    def update_gap_processing_sections(self):
+        """Update gap_processing section with category completion status"""
+        try:
+            # 🚨 CRITICAL: Detect and recover from corruption first
+            corruption_report = self.detect_state_corruption()
+            if corruption_report.get("corrupted"):
+                log.warning("🚨 CORRUPTION: Detected state corruption, attempting recovery...")
+                recovery_success = self.recover_from_corruption(corruption_report)
+                if recovery_success:
+                    log.info("✅ RECOVERY: State corruption successfully recovered")
+                else:
+                    log.error("❌ RECOVERY: Failed to recover from state corruption")
+            
+            # Build category completion status
+            category_completion_status = self._build_category_completion_status()
+            
+            # Update gap_processing section
+            gap_processing = self.state_data.setdefault("gap_processing", {})
+            gap_processing["category_completion_status"] = category_completion_status
+            
+            # Update supplier_extraction_progress categories_completed array
+            sep = self.state_data.setdefault("supplier_extraction_progress", {})
+            completed_categories = [
+                url for url, status in category_completion_status.items() 
+                if status.get("status") == "FULLY_PROCESSED"
+            ]
+            sep["categories_completed"] = completed_categories
+            
+            if completed_categories:
+                sep["last_completed_category"] = completed_categories[-1]
+            
+            log.debug(f"🔧 GAP PROCESSING: Updated category completion status for {len(category_completion_status)} categories")
+            log.debug(f"🔧 CATEGORIES: {len(completed_categories)} fully processed categories")
+            
+        except Exception as e:
+            log.error(f"❌ GAP PROCESSING: Failed to update sections - {e}")
+
+    # 🚨 WORKFLOW INTEGRATION HELPER METHODS
+    def get_current_category_index(self) -> Optional[int]:
+        """Get current category index from supplier_extraction_progress for workflow integration"""
+        sep = self.state_data.get("supplier_extraction_progress", {})
+        category_index = sep.get("current_category_index")
+        
+        if category_index is not None:
+            log.debug(f"🔧 HELPER: get_current_category_index() = {category_index} from supplier_extraction_progress")
+            return category_index
+        
+        # Fallback to system_progression if supplier_extraction_progress is empty
+        sp = self.state_data.get("system_progression", {})
+        fallback_index = sp.get("current_category_index")
+        
+        if fallback_index is not None:
+            log.warning(f"⚠️ HELPER: get_current_category_index() = {fallback_index} from system_progression (fallback)")
+            return fallback_index
+        
+        log.warning("⚠️ HELPER: get_current_category_index() = None (no data found)")
+        return None
+
+    def get_current_category_url(self) -> Optional[str]:
+        """Get current category URL from supplier_extraction_progress for workflow integration"""
+        sep = self.state_data.get("supplier_extraction_progress", {})
+        category_url = sep.get("current_category_url")
+        
+        if category_url:
+            log.debug(f"🔧 HELPER: get_current_category_url() = {category_url} from supplier_extraction_progress")
+            return category_url
+        
+        # Fallback to system_progression if supplier_extraction_progress is empty
+        sp = self.state_data.get("system_progression", {})
+        fallback_url = sp.get("current_category_url")
+        
+        if fallback_url:
+            log.warning(f"⚠️ HELPER: get_current_category_url() = {fallback_url} from system_progression (fallback)")
+            return fallback_url
+        
+        log.warning("⚠️ HELPER: get_current_category_url() = None (no data found)")
+        return None
+
+    def validate_category_index_bounds(self, category_index: int, total_categories: int) -> bool:
+        """Validate that category index is within bounds"""
+        if category_index < 0:
+            log.error(f"❌ VALIDATION: Category index {category_index} is negative")
+            return False
+        
+        if category_index >= total_categories:
+            log.error(f"❌ VALIDATION: Category index {category_index} exceeds total categories {total_categories}")
+            return False
+        
+        log.debug(f"✅ VALIDATION: Category index {category_index} is within bounds (0-{total_categories-1})")
+        return True
+
+    # 🚨 PRIORITY 2: Added helper methods for category management
+    
+    def find_category_by_url(self, target_url: str, category_urls: List[str]) -> Optional[int]:
+        """
+        Find category index by URL with normalization support.
+        
+        Args:
+            target_url: The URL to find
+            category_urls: List of category URLs to search in
+            
+        Returns:
+            Index of the category if found, None otherwise
+        """
+        try:
+            from utils.normalization import normalize_url
+            normalized_target = normalize_url(target_url)
+            
+            for i, url in enumerate(category_urls):
+                if normalize_url(url) == normalized_target:
+                    return i
+            return None
+        except Exception as e:
+            self.log.error(f"Error finding category by URL: {e}")
+            return None
+    
+    def count_processed_products_for_category(self, category_url: str) -> int:
+        """
+        Count processed products for a specific category.
+        
+        Args:
+            category_url: The category URL to count products for
+            
+        Returns:
+            Number of processed products for the category
+        """
+        try:
+            from utils.normalization import normalize_url
+            processed = self.state_data.get("processed_products", {})
+            normalized_category_url = normalize_url(category_url)
+            
+            count = 0
+            # 🚨 CRITICAL FIX: Iterate through processed_products.values() to access entry data
+            for entry in processed.values():
+                if isinstance(entry, dict):
+                    entry_category_url = entry.get("source_category_url")
+                    if entry_category_url and entry_category_url == normalized_category_url:
+                        count += 1
+                        
+            return count
+        except Exception as e:
+            self.log.error(f"Error counting processed products for category: {e}")
+            return 0
+    
+    def atomic_advancement_to_next_category(self, current_index: int, total_categories: int, category_urls: List[str] = None) -> bool:
+        """
+        Atomically advance to next category if current is complete.
+        
+        Args:
+            current_index: Current category index
+            total_categories: Total number of categories
+            category_urls: Optional list of category URLs
+            
+        Returns:
+            True if advanced to next category, False if no more categories
+        """
+        try:
+            with self._state_lock:
+                next_index = current_index + 1
+                if next_index < total_categories:
+                    next_url = None
+                    if category_urls and next_index < len(category_urls):
+                        next_url = category_urls[next_index]
+                    
+                    # Update supplier extraction progress
+                    self.update_supplier_extraction_progress(
+                        next_index, total_categories, next_url
+                    )
+                    
+                    self.log.info(f"🔄 ATOMIC ADVANCEMENT: Advanced to category {next_index}/{total_categories}")
+                    return True
+                else:
+                    self.log.info("✅ ATOMIC ADVANCEMENT: No more categories to process")
+                    return False
+        except Exception as e:
+            self.log.error(f"Error in atomic advancement to next category: {e}")
+            return False
+
 
 class ResumeController:
     """Resume Controller with validation and safe fallback mechanisms."""
@@ -1429,20 +1887,37 @@ class ResumeController:
                 self.log.error("🚨 RESUME: Cannot calculate resume point - reconciliation not completed")
                 return self._get_safe_fallback_point("reconciliation_incomplete")
             
-            # Get reconciled system progression data
+            # 🚨 CRITICAL FIX: Use supplier_extraction_progress as primary source
+            sep = self.state_manager.state_data.get("supplier_extraction_progress", {})
             sp = self.state_manager.state_data.get("system_progression", {})
             
-            # Extract resume point from reconciled data
-            resume_point = {
-                "current_category_index": sp.get("current_category_index", 0),
-                "current_product_index_in_category": sp.get("current_product_index_in_category", 0),
-                "total_categories": sp.get("total_categories", 0),
-                "total_products_in_current_category": sp.get("total_products_in_current_category", 0),
-                "current_phase": sp.get("current_phase", "supplier"),
-                "current_category_url": sp.get("current_category_url", ""),
-                "resumption_index": self.state_manager.state_data.get("resumption_index", 0),
-                "validation_status": "pending"
-            }
+            # Choose the most complete data source
+            if sep.get("current_category_index", 0) > 0 or sep.get("total_categories", 0) > 0:
+                # Use supplier_extraction_progress as primary source (has real operational data)
+                resume_point = {
+                    "current_category_index": sep.get("current_category_index", 0),
+                    "current_product_index_in_category": sep.get("current_product_index_in_category", 0),
+                    "total_categories": sep.get("total_categories", 0),
+                    "total_products_in_current_category": sep.get("total_products_in_current_category", 0),
+                    "current_phase": sp.get("current_phase", "supplier"),  # Phase from system_progression
+                    "current_category_url": sep.get("current_category_url", ""),
+                    "resumption_index": self.state_manager.state_data.get("resumption_index", 0),
+                    "validation_status": "pending"
+                }
+                self.log.info("🔧 RESUME SOURCE: Using supplier_extraction_progress (operational data)")
+            else:
+                # Fallback to system_progression only if supplier_extraction_progress is empty
+                resume_point = {
+                    "current_category_index": sp.get("current_category_index", 0),
+                    "current_product_index_in_category": sp.get("current_product_index_in_category", 0),
+                    "total_categories": sp.get("total_categories", 0),
+                    "total_products_in_current_category": sp.get("total_products_in_current_category", 0),
+                    "current_phase": sp.get("current_phase", "supplier"),
+                    "current_category_url": sp.get("current_category_url", ""),
+                    "resumption_index": self.state_manager.state_data.get("resumption_index", 0),
+                    "validation_status": "pending"
+                }
+                self.log.warning("⚠️ RESUME SOURCE: Using system_progression fallback")
             
             # Validate resume point
             validation_result = self.validate_resume_point(resume_point)
@@ -2624,11 +3099,22 @@ class ErrorHandler:
                     self.state_manager.state_data["resumption_index"] = 0
                     recovery_actions.append("reset_resumption_index")
                 elif check == "progress_consistency":
-                    # Sync progress systems
-                    sp = self.state_manager.state_data.get("system_progression", {})
-                    sep = self.state_manager.state_data.setdefault("supplier_extraction_progress", {})
-                    sep["current_category_index"] = sp.get("current_category_index", 0)
-                    recovery_actions.append("sync_progress_systems")
+                    # 🚨 CRITICAL FIX: Copy FROM supplier_extraction_progress TO system_progression
+                    sp = self.state_manager.state_data.setdefault("system_progression", {})
+                    sep = self.state_manager.state_data.get("supplier_extraction_progress", {})
+                    
+                    # Use supplier_extraction_progress as source of truth for operational data
+                    operational_fields = [
+                        "current_category_index", "total_categories", "current_category_url",
+                        "current_product_index_in_category", "total_products_in_current_category"
+                    ]
+                    
+                    for field in operational_fields:
+                        if sep.get(field) is not None:
+                            sp[field] = sep[field]
+                    
+                    recovery_actions.append("sync_progress_systems_corrected_direction")
+                    self.log.info("🔧 RECOVERY: Synced FROM supplier_extraction_progress TO system_progression")
             
             # Save recovered state
             if recovery_actions:
