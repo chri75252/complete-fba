@@ -1,0 +1,59 @@
+Metadata-Version: 2.4
+Name: amazon-fba-agent-system
+Version: 3.5.0
+Summary: Enterprise-grade Amazon FBA product analysis and automation system with AI-driven category discovery and multi-phase processing
+Author: Amazon FBA Agent System Team
+Maintainer: Amazon FBA Agent System Team
+Project-URL: Homepage, https://github.com/amazon-fba-agent/amazon-fba-agent-system
+Project-URL: Repository, https://github.com/amazon-fba-agent/amazon-fba-agent-system
+Project-URL: Documentation, https://github.com/amazon-fba-agent/amazon-fba-agent-system/tree/main/docs
+Project-URL: Bug Reports, https://github.com/amazon-fba-agent/amazon-fba-agent-system/issues
+Keywords: amazon,fba,automation,ai,product-analysis,e-commerce,profit-analysis,scraping
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Office/Business :: Financial
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: aiohttp==3.9.1
+Requires-Dist: beautifulsoup4==4.12.2
+Requires-Dist: requests==2.31.0
+Requires-Dist: pandas==2.1.4
+Requires-Dist: numpy==1.26.2
+Requires-Dist: lxml==4.9.3
+Requires-Dist: aiofiles==23.2.1
+Requires-Dist: python-json-logger==2.0.7
+Requires-Dist: colorama==0.4.6
+Requires-Dist: aiolimiter==1.1.0
+Requires-Dist: python-dateutil==2.8.2
+Requires-Dist: pytz==2023.3
+Requires-Dist: python-dotenv==1.0.0
+Requires-Dist: pyyaml==6.0.1
+Requires-Dist: urllib3==2.1.0
+Requires-Dist: certifi==2023.11.17
+Requires-Dist: openpyxl==3.1.2
+Requires-Dist: xlrd==2.0.1
+Requires-Dist: psutil==5.9.6
+Provides-Extra: dev
+Requires-Dist: pytest==7.4.3; extra == "dev"
+Requires-Dist: pytest-asyncio==0.21.1; extra == "dev"
+Requires-Dist: pytest-mock==3.12.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black==23.12.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: mypy==1.7.1; extra == "dev"
+Requires-Dist: faker==20.1.0; extra == "dev"
+Requires-Dist: factory-boy==3.3.0; extra == "dev"
+Provides-Extra: database
+Requires-Dist: sqlalchemy>=2.0.0; extra == "database"
+Requires-Dist: alembic>=1.13.0; extra == "database"
+Provides-Extra: images
+Requires-Dist: Pillow>=10.1.0; extra == "images"
+Provides-Extra: all
+Requires-Dist: amazon-fba-agent-system[database,dev,images]; extra == "all"

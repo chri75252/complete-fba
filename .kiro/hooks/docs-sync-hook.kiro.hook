@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "name": "Documentation Sync",
-  "description": "Listens to Python source files and configuration changes to automatically update project documentation in README and docs folder.\nOrganize any implementation md files generated, or test scripts and/or loose documentation",
+  "description": "Listens to Python source files and configuration changes to automatically update project documentation in README and docs folder.\nOrganize any implementation md files generated, or test scripts and/or loose documentation, and update DOCUMENTATION_APPENDIX_CURRENT_FILES.md for the system to know which and where all the relevant and up to date documentations are.",
   "version": "1",
   "when": {
     "type": "userTriggered",
@@ -22,6 +22,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Source files have been modified in this Python project. Please analyze the changes and update the documentation accordingly. Focus on:\n\n1. Update the main README.md file if core functionality has changed\n2. Update relevant documentation in the /docs folder for specific components\n3. Ensure API documentation reflects any new or modified functions/classes\n4. Update configuration documentation if config files changed\n5. Update setup/installation instructions if requirements changed\n6. Place any generated md files for specific implemetnations in \"improvement\" folder,  with proper organization ( e.g: clear folder names based on implementations.)\n7. Place any test scripts generate for implemenations in \"test\" folder , proper organizations (e.g: clear folder name based on tests and/or implementation ) \n\nPlease review the changed files and provide comprehensive documentation updates that accurately reflect the current state of the codebase."
+    "prompt": "Source files have been modified in this Python project. Please analyze the changes and update the documentation accordingly. Focus on:\n\n1. Update the main README.md file if core functionality has changed\n2. Update relevant documentation in the /docs folder for specific components\n3. Update configuration documentation if config files changed\n4. Update setup/installation instructions if requirements changed\n5. Place any generated md files for specific implemetnations in \"improvement\" folder,  with proper organization ( e.g: clear folder names based on implementations.)\n6. Place any test scripts generate for implemenations in \"test\" folder , proper organizations (e.g: clear folder name based on tests and/or implementation ) \n7. archive all the outdate files in the respective foders\n\nPlease review the changed files and provide comprehensive documentation updates that accurately reflect the current state of the codebase."
   }
 }

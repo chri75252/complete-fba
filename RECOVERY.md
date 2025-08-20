@@ -1,111 +1,299 @@
 # State Consistency Recovery Playbook
 
-## 🚨 CRITICAL: State Persistence Failure Recovery
+**Incident**: State Persistence Inconsistencies  
+**Created**: 2025-08-16  
+**Status**: Ready for Execution  
 
-### Problem Summary
-Multiple state files with contradictory data:
-- Main state shows 2337 products, Cache shows 8386 products
-- Index inconsistencies (3097 vs 0)
-- Timestamp format mismatches
-- No single source of truth
+## Quick Assessment
 
-### Assessment Commands
-
-#### 1. Diagnose Current State
+### 1. Assess Current State
 ```bash
-# Run diagnostic analysis
+# Run diagnostic to capture current state
 python scripts/state_dump.py
 
-# Check for multiple state files
-find OUTPUTS -name "*state*.json" -type f
-
-# Verify state manager configuration
-python -c "from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager; print('State manager imports OK')"
+# Check for critical inconsistencies
+python scripts/state_reconcile.py --dry-run
 ```
 
-#### 2. Backup Current State
+**Expected Output**: 
+- Inconsistency count and types
+- Backup location confirmation
+- Repair plan summary
+
+### 2. Validate System Health
 ```bash
-# Create timestamped backup
-mkdir -p artifacts/recovery/$(date +%Y%m%d_%H%M%S)
-cp OUTPUTS/processing_state.json artifacts/recovery/$(date +%Y%m%d_%H%M%S)/
-cp OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json artifacts/recovery/$(date +%Y%m%d_%H%M%S)/
+# Check if main state file is accessible
+python -c "import json; json.load(open('OUTPUTS/processing_state.json')); print('✅ State file readable')"
+
+# Verify state manager can load
+python -c "from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager; sm = FixedEnhancedStateManager(); print('✅ State manager functional')"
 ```
 
-### Recovery Options
+## Recovery Procedures
 
-#### Option A: Choose Single Source of Truth (RECOMMENDED)
+### Procedure A: Standard Reconciliation (Recommended)
+
+**When to use**: Normal inconsistencies detected, system otherwise functional
+
 ```bash
-# Use cache state as SoT (more recent, more complete)
-python scripts/state_reconcile.py --source cache --dry-run
-python scripts/state_reconcile.py --source cache --apply
+# Step 1: Create diagnostic snapshot
+python scripts/state_dump.py > recovery_assessment.log
+
+# Step 2: Run dry-run reconciliation
+python scripts/state_reconcile.py --dry-run
+
+# Step 3: Review planned changes
+# Check the output for reasonableness
+
+# Step 4: Apply reconciliation
+python scripts/state_reconcile.py
+
+# Step 5: Validate repair
+python scripts/state_dump.py
 ```
 
-#### Option B: Merge States Intelligently
+**Success Criteria**:
+- ✅ `products_extracted_total == successful_products`
+- ✅ `current_category_url` consistent across sections
+- ✅ `current_category_index` consistent across sections
+- ✅ No invariant violations reported
+
+### Procedure B: Manual State Repair (Advanced)
+
+**When to use**: Reconciliation script fails or complex corruption detected
+
 ```bash
-# Merge with conflict resolution
-python scripts/state_reconcile.py --merge --dry-run
-python scripts/state_reconcile.py --merge --apply
-```
+# Step 1: Create backup
+mkdir -p artifacts/backups/manual_$(date +%Y%m%d_%H%M%S)
+cp OUTPUTS/processing_state.json artifacts/backups/manual_$(date +%Y%m%d_%H%M%S)/
 
-#### Option C: Fresh Start with Data Preservation
-```bash
-# Preserve processed products, reset indices
-python scripts/state_reconcile.py --fresh-start --preserve-products --dry-run
-python scripts/state_reconcile.py --fresh-start --preserve-products --apply
-```
-
-### Validation Steps
-
-#### 1. Verify State Consistency
-```bash
-# Run invariant checks
-python scripts/state_verify.py
-
-# Check single source of truth
-find OUTPUTS -name "*state*.json" -type f | wc -l  # Should be 1
-```
-
-#### 2. Test Resume Functionality
-```bash
-# Simulate resume
-python scripts/test_resume.py --dry-run
-```
-
-#### 3. Validate Metrics
-```bash
-# Check product counts match
+# Step 2: Extract key values
 python -c "
 import json
 with open('OUTPUTS/processing_state.json') as f:
     state = json.load(f)
-print(f'Products: {state.get(\"successful_products\", 0)}')
-print(f'Total: {state.get(\"total_products\", 0)}')
+    print('successful_products:', state.get('successful_products', 0))
+    sep = state.get('supplier_extraction_progress', {})
+    print('current_category_url:', sep.get('current_category_url', ''))
+    print('current_category_index:', sep.get('current_category_index', 0))
+"
+
+# Step 3: Apply manual fixes using Python
+python -c "
+import json
+with open('OUTPUTS/processing_state.json') as f:
+    state = json.load(f)
+
+# Fix product count mismatch
+successful = state.get('successful_products', 0)
+state.setdefault('supplier_extraction_progress', {})['products_extracted_total'] = successful
+
+# Ensure URL consistency (use supplier_extraction_progress as source of truth)
+sep = state.get('supplier_extraction_progress', {})
+sp = state.setdefault('system_progression', {})
+if 'current_category_url' in sep:
+    sp['current_category_url'] = sep['current_category_url']
+if 'current_category_index' in sep:
+    sp['current_category_index'] = sep['current_category_index']
+
+# Save atomically
+import os
+temp_file = 'OUTPUTS/processing_state.json.tmp'
+with open(temp_file, 'w') as f:
+    json.dump(state, f, indent=2)
+os.replace(temp_file, 'OUTPUTS/processing_state.json')
+print('✅ Manual repair completed')
+"
+
+# Step 4: Validate
+python scripts/state_dump.py
+```
+
+### Procedure C: Emergency Reset (Last Resort)
+
+**When to use**: State file corrupted beyond repair, system cannot start
+
+⚠️ **WARNING**: This will reset processing progress
+
+```bash
+# Step 1: Backup corrupted state
+mkdir -p artifacts/backups/emergency_$(date +%Y%m%d_%H%M%S)
+cp OUTPUTS/processing_state.json artifacts/backups/emergency_$(date +%Y%m%d_%H%M%S)/corrupted_state.json
+
+# Step 2: Reset to minimal valid state
+python -c "
+import json
+from datetime import datetime
+
+minimal_state = {
+    'schema_version': '1.1_FIXED',
+    'created_at': datetime.now().isoformat(),
+    'last_updated': datetime.now().isoformat(),
+    'supplier_name': 'poundwholesale.co.uk',
+    'resumption_index': 0,
+    'total_products': 0,
+    'successful_products': 0,
+    'supplier_extraction_progress': {
+        'current_category_url': '',
+        'current_category_index': 0,
+        'products_extracted_total': 0,
+        'total_products_in_current_category': 0,
+        'current_product_index_in_category': 0
+    },
+    'system_progression': {
+        'current_phase': 'supplier',
+        'current_category_url': '',
+        'current_category_index': 0
+    },
+    'processed_products': {}
+}
+
+with open('OUTPUTS/processing_state.json', 'w') as f:
+    json.dump(minimal_state, f, indent=2)
+
+print('✅ Emergency reset completed - system will start fresh')
 "
 ```
 
-### Emergency Rollback
+## Validation Steps
 
-If recovery fails:
+### Post-Recovery Validation
 ```bash
-# Restore from backup
-BACKUP_DIR=$(ls -1t artifacts/recovery/ | head -1)
-cp artifacts/recovery/$BACKUP_DIR/processing_state.json OUTPUTS/
-cp artifacts/recovery/$BACKUP_DIR/poundwholesale_co_uk_processing_state.json OUTPUTS/CACHE/processing_states/
+# 1. Run full diagnostic
+python scripts/state_dump.py
+
+# 2. Check invariants
+python -c "
+import json
+with open('OUTPUTS/processing_state.json') as f:
+    state = json.load(f)
+
+sep = state.get('supplier_extraction_progress', {})
+sp = state.get('system_progression', {})
+
+# Check product count consistency
+products_extracted = sep.get('products_extracted_total', 0)
+successful = state.get('successful_products', 0)
+assert products_extracted == successful, f'Product count mismatch: {products_extracted} != {successful}'
+
+# Check URL consistency
+sep_url = sep.get('current_category_url', '')
+sp_url = sp.get('current_category_url', '')
+if sep_url and sp_url:
+    assert sep_url == sp_url, f'URL mismatch: {sep_url} != {sp_url}'
+
+# Check index consistency  
+sep_idx = sep.get('current_category_index')
+sp_idx = sp.get('current_category_index')
+if sep_idx is not None and sp_idx is not None:
+    assert sep_idx == sp_idx, f'Index mismatch: {sep_idx} != {sp_idx}'
+
+print('✅ All invariants validated')
+"
+
+# 3. Test state manager functionality
+python -c "
+from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager
+sm = FixedEnhancedStateManager()
+sm.load_state()
+print('✅ State manager can load state successfully')
+print(f'Current category URL: {sm.get_current_category_url()}')
+"
 ```
 
-### Prevention Measures
+### Resume Functionality Test
+```bash
+# Test that system can resume properly
+python -c "
+from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager
+sm = FixedEnhancedStateManager()
+sm.load_state()
 
-1. **Single State File**: Enforce one canonical state file
-2. **Atomic Operations**: All state updates must be atomic
-3. **Invariant Checks**: Validate state consistency on every save
-4. **Backup Strategy**: Automatic backups before state changes
-5. **Monitoring**: Alert on state file proliferation
+# Get resume point
+resume_data = sm.calculate_resume_data()
+print('✅ Resume calculation successful')
+print(f'Resume index: {resume_data.get(\"resumption_index\", 0)}')
+print(f'Current category: {resume_data.get(\"current_category_url\", \"None\")}')
+"
+```
 
-### Success Criteria
+## Prevention Measures
 
-- [ ] Only one state file exists
-- [ ] All product counts consistent
-- [ ] Timestamps use consistent format
-- [ ] Resume functionality works
-- [ ] Invariant checks pass
-- [ ] No data loss occurred
+### 1. Add State Validation to Workflow
+Add this check at workflow startup:
+```python
+# In passive_extraction_workflow_latest.py
+def validate_state_consistency(self):
+    state_data = self.state_manager.state_data
+    sep = state_data.get("supplier_extraction_progress", {})
+    
+    # Check product count consistency
+    products_extracted = sep.get("products_extracted_total", 0)
+    successful = state_data.get("successful_products", 0)
+    
+    if products_extracted != successful:
+        self.log.warning(f"🚨 State inconsistency detected: products_extracted_total ({products_extracted}) != successful_products ({successful})")
+        # Auto-repair
+        sep["products_extracted_total"] = successful
+        self.state_manager.save_state_atomic()
+        self.log.info("✅ Auto-repaired product count inconsistency")
+```
+
+### 2. Implement Atomic State Updates
+Replace multiple separate updates with single atomic operations:
+```python
+# Instead of:
+# self.state_data["supplier_extraction_progress"]["current_category_url"] = url
+# self.state_data["system_progression"]["current_category_url"] = url
+
+# Use:
+def update_category_atomic(self, url, index):
+    with self._state_lock:
+        self.state_data["supplier_extraction_progress"]["current_category_url"] = url
+        self.state_data["supplier_extraction_progress"]["current_category_index"] = index
+        self.state_data["system_progression"]["current_category_url"] = url  
+        self.state_data["system_progression"]["current_category_index"] = index
+        self.save_state_atomic()
+```
+
+### 3. Add Invariant Checks
+```python
+def validate_invariants(self):
+    """Validate state invariants before saving"""
+    sep = self.state_data.get("supplier_extraction_progress", {})
+    sp = self.state_data.get("system_progression", {})
+    
+    # Invariant 1: Product counts must match
+    products_extracted = sep.get("products_extracted_total", 0)
+    successful = self.state_data.get("successful_products", 0)
+    assert products_extracted == successful, f"Product count invariant violated"
+    
+    # Invariant 2: URLs must be consistent
+    sep_url = sep.get("current_category_url", "")
+    sp_url = sp.get("current_category_url", "")
+    if sep_url and sp_url:
+        assert sep_url == sp_url, f"URL consistency invariant violated"
+    
+    return True
+```
+
+## Monitoring
+
+### Health Check Command
+```bash
+# Add to system monitoring
+python scripts/state_dump.py --health-check
+```
+
+### Automated Repair
+```bash
+# Add to cron/scheduled tasks
+python scripts/state_reconcile.py --dry-run --alert-on-issues
+```
+
+---
+
+**Recovery Playbook Version**: 1.0  
+**Last Updated**: 2025-08-16  
+**Tested**: Ready for validation  
+**Contact**: System Administrator

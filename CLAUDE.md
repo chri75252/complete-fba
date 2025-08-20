@@ -27,6 +27,93 @@ REFER TO TO[Testing Plan]/tEMPLATE WHENEVER i EXPLICETELY ASK YOU TO USE MULTI-A
 - 🚨 **NO_FAKE_OUTPUTS**: Never claim file paths or content that haven't been actually verified
 - 🚨 **ASK_FOR_SCREENSHOTS**: When fix involves verification you cannot perform (like LangSmith dashboard), explicitly ask user for screenshots
 
+## 🔍 **CRITICAL INVESTIGATION METHODOLOGY - EXECUTE IMMEDIATELY**
+
+### **🚨 LOGIC-FIRST DEBUGGING MANDATE**
+- 🚨 **FUNDAMENTAL ASSUMPTION**: Existing architecture likely has necessary data and components
+- 🚨 **PRIMARY FOCUS**: Logic interpretation gaps, NOT missing implementations  
+- 🚨 **EVIDENCE REQUIREMENT**: Every proposed architectural change must be justified by proof that logic fixes won't work
+- 🚨 **SURGICAL PREFERENCE**: Single-line logic corrections over multi-component integration
+
+### **⚠️ MANDATORY INVESTIGATION SEQUENCE**
+**🚨 EXECUTE IN ORDER - DO NOT SKIP STEPS:**
+
+1. **📊 DATA FLOW TRACE**: What data exists and flows correctly? 
+   - ✅ Read logs to identify where system shows success (data populated, operations completed)
+   - ✅ Follow successful data through the system step-by-step
+   - ✅ Document what data is available at each stage
+
+2. **🔍 DECISION POINT ANALYSIS**: Where does correct data get ignored/misclassified?
+   - ✅ Find the exact transition from "data exists" to "system fails"
+   - ✅ Identify the specific conditional logic or workflow routing
+   - ✅ Focus on if/else branches, classification rules, workflow decisions
+
+3. **🎯 LOGIC BRANCH REVIEW**: What conditions cause wrong paths?
+   - ✅ Examine the logic that determines system behavior
+   - ✅ Look for classification errors, misinterpretation of data
+   - ✅ Check workflow routing logic and decision trees
+
+4. **🔧 MINIMAL FIX IDENTIFICATION**: What's the smallest logic change that fixes the flow?
+   - ✅ Prefer single-line conditional changes
+   - ✅ Focus on interpretation logic, not data generation
+   - ✅ Use existing data structures and workflows
+
+5. **🏗️ ARCHITECTURE CHANGES**: Only if steps 1-4 prove insufficient
+   - ✅ Must provide concrete evidence that logic fixes are impossible
+   - ✅ Document why existing architecture cannot support the fix
+   - ✅ Justify the architectural complexity
+
+### **🚨 INVESTIGATION RED FLAGS - STOP AND RECONSIDER**
+- ❌ **Proposing callback systems** → Check if existing communication just needs logic fixes
+- ❌ **Suggesting new components** → Verify existing components don't already have the data
+- ❌ **Building integration layers** → Confirm the integration isn't just a conditional logic error
+- ❌ **Tests pass but production fails** → Look for logic interpretation, not implementation gaps
+- ❌ **"Missing implementation" conclusions** → Verify implementation doesn't exist but is bypassed
+
+### **✅ KIRO-STYLE SPECIFICATION APPROACH**
+**When conducting major investigations, ALWAYS create structured specifications:**
+
+1. **📋 REQUIREMENTS.MD**: Define exactly what should happen vs. what is happening
+   - ✅ User stories with acceptance criteria
+   - ✅ Expected behavior vs. actual behavior
+   - ✅ Success criteria with specific metrics
+
+2. **🏗️ DESIGN.MD**: Document the investigation approach and solution architecture
+   - ✅ Investigation methodology and steps
+   - ✅ Root cause analysis framework
+   - ✅ Solution options with trade-offs
+
+3. **📝 TASKS.MD**: Break down implementation into atomic, verifiable tasks
+   - ✅ Task dependencies and sequence
+   - ✅ Verification criteria for each task
+   - ✅ Risk mitigation and rollback plans
+
+### **🎯 INVESTIGATION TEMPLATES**
+
+#### **Logic Flow Tracing Template**
+```
+1. **What data is correctly generated?** [Log evidence: line X shows data Y]
+2. **Where does correct data get dropped/ignored?** [Code location: file.py:line]
+3. **What logic condition causes the drop?** [if/else branch, classification rule]
+4. **What's the minimal fix?** [Single condition change, classification adjustment]
+```
+
+#### **Success-to-Failure Trace Template**  
+```
+1. **Success Point**: [Log line showing system working correctly]
+2. **Failure Point**: [Log line showing system failing]  
+3. **Decision Point**: [Code location between success and failure]
+4. **Logic Fix**: [Minimal change to preserve success path]
+```
+
+### **🔍 EVIDENCE-DRIVEN DEBUGGING PHRASES**
+**Use these investigation approaches:**
+- ✅ "The system generates correct data but makes wrong decisions - trace the decision logic"
+- ✅ "Assume all components work, find where good data gets misclassified" 
+- ✅ "Focus on workflow routing and conditional logic, not component integration"
+- ✅ "Look for single-line logic errors before proposing architectural changes"
+- ✅ "The data exists but isn't being used correctly - find the interpretation gap"
+
 ## ⚠️ MANDATORY_PROTOCOLS
 
 ### 🚀 AGENT / TOOL INVOCATION QUICK‑START
@@ -64,21 +151,59 @@ Never improvise agent selection or skip the orchestrator step.
    - ✅ REQUIRED: Test that all scripts still work with new paths
 
 
-### **🔧 ZEN MCP TOOLS AVAILABLE:**
-When user explicitly requests ZEN MCP tools, available tools include:
-- **chat**: General collaborative thinking and brainstorming (models: o3, flash)
-- **thinkdeep**: Multi-stage comprehensive investigation and reasoning (models: o3, flash)
-- **planner**: Interactive sequential planning with step-by-step breakdown (models: o3, flash)
-- **consensus**: Multi-model consensus workflow for decision making (models: o3, flash)
-- **codereview**: Step-by-step code review with expert analysis (models: o3, flash)
-- **precommit**: Pre-commit validation workflow with expert analysis (models: o3, flash)
-- **debug**: Root cause analysis and systematic debugging (models: o3, flash)
-- **secaudit**: Security audit workflow with OWASP compliance (models: o3, flash)
-- **docgen**: Documentation generation with complexity analysis (models: o3, flash)
-- **analyze**: Comprehensive code analysis and architectural assessment (models: o3, flash)
-- **refactor**: Refactoring analysis with code smell detection (models: o3, flash)
-- **tracer**: Code tracing workflow for execution flow analysis (models: o3, flash)
-- **testgen**: Test generation with edge case coverage (models: o3, flash)
+### **🔧 SERENA MCP INTEGRATION - CODE ANALYSIS & EXPLORATION:**
+
+**⚠️ PRIMARY FUNCTION: Serena MCP for continuous code analysis and exploration (READ-ONLY)**
+
+**Current Configuration:** Amazon FBA Agent System v3.8+
+- **Mode**: Read-Only (SAFE: Analysis only, no code modifications)
+- **Primary Use**: Continuous code exploration, bug investigation, architecture analysis
+- **Memory**: Enabled for storing findings and architectural insights
+
+#### **Serena Core Analysis Tools (Always Available):**
+- **get_symbols_overview**: Map class structures and methods
+- **find_symbol**: Locate method/attribute definitions  
+- **find_referencing_symbols**: Find usage patterns and dependencies
+- **search_for_pattern**: Analyze code patterns and integration points
+- **read_file**: Examine implementation details
+- **write_memory/read_memory**: Store and retrieve investigation findings
+
+#### **Serena Analysis Modes (Prompt-Driven):**
+- **Diagnostic Mode**: `"Use diagnostic mode to trace processing state corruption"`
+- **Forensic Mode**: `"Use forensic mode to follow authentication flow from start to failure"`
+- **Exploratory Mode**: `"Use exploratory mode to map passive extraction workflow structure"`
+- **Focused Mode**: `"Use focused mode to analyze only state management methods"`
+- **Comprehensive Mode**: `"Use comprehensive mode for deep system architecture analysis"`
+
+### **🎯 OPTIMAL WORKFLOW STRATEGY:**
+
+#### **Phase 1: Investigation (Serena MCP - Continuous Use)**
+```bash
+# Safe exploration and analysis - use freely
+get_symbols_overview([target_file])     # Map code structure
+find_symbol([method_name])              # Verify symbols exist
+search_for_pattern([error_pattern])     # Find patterns
+write_memory("findings", "analysis")    # Store insights
+```
+
+#### **Phase 2: Implementation (ZEN MCP - Only When Explicitly Requested)**
+```bash
+# Use ONLY when user explicitly requests ZEN MCP tools
+zen_debug() or zen_codereview()         # Expert-guided fixes
+zen_thinkdeep() or zen_analyze()        # Complex reasoning
+```
+
+### **🚨 TOOL USAGE RULES:**
+- ✅ **Serena MCP**: Use continuously for all code analysis, exploration, and investigation
+- ⚠️ **ZEN MCP**: Use ONLY when explicitly requested by user during conversation
+- 🔒 **Read-Only Safety**: Serena cannot break code - perfect for continuous exploration
+
+### **🔧 ZEN MCP TOOLS AVAILABLE (Secondary):**
+When Serena MCP is insufficient or user explicitly requests ZEN MCP tools:
+- **thinkdeep**: Multi-stage comprehensive investigation and reasoning
+- **debug**: Root cause analysis and systematic debugging
+- **analyze**: Comprehensive code analysis and architectural assessment
+- **codereview**: Step-by-step code review with expert analysis
 
 ### **MANDATORY_SESSION_INITIALIZATION:**
 - 🚨 **SELECTIVE_FILE_ACCESS**: REQUIRED - Only read files when explicitly requested or necessary for specific tasks
@@ -88,6 +213,8 @@ When user explicitly requests ZEN MCP tools, available tools include:
 - ⚠️ **UPDATE_PROTOCOL_COMPLIANCE**: CRITICAL - Cascading updates for ANY file changes
 - ⚠️ **DOCUMENTATION_SYNC**: Update ALL related docs when changes occur
 - 🚨 **API_KEY_PRESERVATION**: CRITICAL - NEVER remove or modify existing API keys in scripts or env files
+- 🚨 **SURGICAL_CODE_MODIFICATION_COMPLIANCE**: MANDATORY - Follow rules in `.kiro/steering/surgical-code-modification-rules.md`
+- 🚨 **SERENA_MCP_PROTOCOL_COMPLIANCE**: MANDATORY - Use Serena MCP tools for all code analysis and modifications
 
 
 
@@ -227,7 +354,32 @@ ACTIONS: Regenerate dependent files, update documentation, validate consistency
 ---
 
 ## 🎯 Purpose
-This document establishes the standardized file organization system for the Amazon FBA Agent System v3.5. All scripts, tools, and processes MUST follow these conventions to maintain consistency, enable proper automation, and ensure maintainability.
+This document establishes the standardized file organization system for the Amazon FBA Agent System v3.8+. All scripts, tools, and processes MUST follow these conventions to maintain consistency, enable proper automation, and ensure maintainability.
+
+## 🔧 SERENA MCP SETUP INSTRUCTIONS
+
+### **📋 Quick Setup for Claude Code Integration:**
+```bash
+# From your project directory:
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project $(pwd)
+```
+
+### **🎯 Project Activation and Indexing:**
+```bash
+# Index the project for faster performance (recommended for large projects):
+uvx --from git+https://github.com/oraios/serena serena project index
+
+# The project will auto-activate with the name:
+# "Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy"
+```
+
+### **📁 Serena Project Configuration Status:**
+- **Project File**: `.serena/project.yml` (configured for Python)
+- **Language**: Python with full symbolic analysis support
+- **Context**: `ide-assistant` (optimized for surgical code modifications)
+- **Read-Only Mode**: `false` (editing enabled with safety protocols)
+- **Ignored Paths**: Follows `.gitignore` patterns
+- **Memory Location**: `.serena/memories/` (for storing architectural insights)
 
 ### Key System Characteristics
 

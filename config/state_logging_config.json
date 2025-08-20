@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "detailed": {
+      "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    },
+    "structured": {
+      "format": "%(asctime)s - %(name)s - %(levelname)s - [%(operation)s] %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    }
+  },
+  "handlers": {
+    "state_operations_file": {
+      "class": "logging.FileHandler",
+      "level": "INFO",
+      "formatter": "detailed",
+      "filename": "logs/state_operations.log",
+      "mode": "a"
+    },
+    "state_operations_console": {
+      "class": "logging.StreamHandler",
+      "level": "INFO",
+      "formatter": "structured",
+      "stream": "ext://sys.stdout"
+    },
+    "invariant_violations_file": {
+      "class": "logging.FileHandler",
+      "level": "WARNING",
+      "formatter": "detailed",
+      "filename": "logs/invariant_violations.log",
+      "mode": "a"
+    }
+  },
+  "loggers": {
+    "StateOperations": {
+      "level": "INFO",
+      "handlers": ["state_operations_file", "state_operations_console"],
+      "propagate": false
+    },
+    "InvariantValidator": {
+      "level": "WARNING",
+      "handlers": ["invariant_violations_file", "state_operations_console"],
+      "propagate": false
+    },
+    "AtomicStateUpdater": {
+      "level": "INFO",
+      "handlers": ["state_operations_file"],
+      "propagate": false
+    },
+    "ProductsExtractedCalculator": {
+      "level": "INFO",
+      "handlers": ["state_operations_file"],
+      "propagate": false
+    }
+  },
+  "root": {
+    "level": "INFO",
+    "handlers": ["state_operations_console"]
+  }
+}

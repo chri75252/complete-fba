@@ -46,6 +46,7 @@ def filter_urls(
         "skip_entirely": [],
         "needs_amazon_only": [],
         "needs_full_extraction": [],
+        "linking_map_items": [],  # NEW: Track items in linking map for potential Amazon processing
         "reconciled_items": [],
         "total_input": len(product_urls),
         "category_id": category_id,
@@ -57,6 +58,7 @@ def filter_urls(
         norm_url = normalize_url(url)
         if norm_url in linking_map_urls:
             result["skip_entirely"].append(url)
+            result["linking_map_items"].append(url)  # NEW: Track for potential Amazon processing
             result["linking_map_hits"] += 1
         elif norm_url in cached_urls:
             result["needs_amazon_only"].append(url)
@@ -65,9 +67,29 @@ def filter_urls(
     
     # 🚨 RECONCILIATION: Move processed-but-unlinked items from needs_full to needs_amazon
     reconciled_full = []
+    
+    # 🚀 HASH OPTIMIZATION: Use hash lookup if processed_urls_set is empty (optimization enabled)
+    use_hash_optimization = len(processed_urls_set) == 0
+    
     for url in result["needs_full_extraction"]:
         norm_url = normalize_url(url)
-        if norm_url in processed_urls_set:
+        
+        # Check if URL is processed using optimized or legacy method
+        is_processed = False
+        if use_hash_optimization:
+            # 🚀 DIRECT HASH LOOKUP: Check linking map directly instead of processed_products
+            try:
+                from utils.hash_lookup_optimizer import HashLookupOptimizer
+                hash_optimizer = HashLookupOptimizer()
+                is_processed = hash_optimizer.check_product_in_linking_map(supplier_url=url)
+            except Exception as e:
+                log.warning(f"⚠️ Hash optimization failed for {url}: {e}, falling back to legacy")
+                is_processed = norm_url in processed_urls_set
+        else:
+            # Legacy method: check processed_urls_set
+            is_processed = norm_url in processed_urls_set
+            
+        if is_processed:
             # Product processed but not in linking map - needs Amazon analysis
             result["needs_amazon_only"].append(url)
             result["reconciled_items"].append(f"moved_to_amazon:{url}")

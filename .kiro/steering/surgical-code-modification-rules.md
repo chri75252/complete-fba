@@ -5,20 +5,72 @@
 
 ---
 
+## 🚨 RULE 0: LOGIC-FIRST DEBUGGING MANDATE (ANTI-TESTING-THEATER)
+
+### **🚨 FUNDAMENTAL ASSUMPTION:**
+- **Existing architecture likely has necessary data and components**
+- **Focus on logic interpretation gaps, NOT missing implementations**
+- **Evidence requirement: Architectural changes must be justified by proof that logic fixes won't work**
+
+### **⚠️ MANDATORY INVESTIGATION SEQUENCE - EXECUTE IN ORDER:**
+
+1. **📊 DATA FLOW TRACE**: What data exists and flows correctly?
+   - ✅ Read logs to identify where system shows success (data populated, operations completed)
+   - ✅ Follow successful data through the system step-by-step
+   - ✅ Document what data is available at each stage
+
+2. **🔍 DECISION POINT ANALYSIS**: Where does correct data get ignored/misclassified?
+   - ✅ Find the exact transition from "data exists" to "system fails"
+   - ✅ Identify the specific conditional logic or workflow routing
+   - ✅ Focus on if/else branches, classification rules, workflow decisions
+
+3. **🎯 LOGIC BRANCH REVIEW**: What conditions cause wrong paths?
+   - ✅ Examine the logic that determines system behavior
+   - ✅ Look for classification errors, misinterpretation of data
+   - ✅ Check workflow routing logic and decision trees
+
+4. **🔧 MINIMAL FIX IDENTIFICATION**: What's the smallest logic change that fixes the flow?
+   - ✅ Prefer single-line conditional changes
+   - ✅ Focus on interpretation logic, not data generation
+   - ✅ Use existing data structures and workflows
+
+5. **🏗️ ARCHITECTURE CHANGES**: Only if steps 1-4 prove insufficient
+   - ✅ Must provide concrete evidence that logic fixes are impossible
+   - ✅ Document why existing architecture cannot support the fix
+
+### **🚨 INVESTIGATION RED FLAGS - STOP AND RECONSIDER:**
+- ❌ **Proposing callback systems** → Check if existing communication just needs logic fixes
+- ❌ **Suggesting new components** → Verify existing components don't already have the data
+- ❌ **Building integration layers** → Confirm the integration isn't just a conditional logic error
+- ❌ **Tests pass but production fails** → Look for logic interpretation, not implementation gaps
+- ❌ **"Missing implementation" conclusions** → Verify implementation doesn't exist but is bypassed
+
+### **🎯 EVIDENCE-BASED DEBUGGING:**
+- ✅ "The system generates correct data but makes wrong decisions - trace the decision logic"
+- ✅ "Assume all components work, find where good data gets misclassified"
+- ✅ "Focus on workflow routing and conditional logic, not component integration"
+- ✅ "Look for single-line logic errors before proposing architectural changes"
+
 ## 🚨 RULE 1: SURGICAL PRECISION ONLY
 
 ### ✅ ALLOWED:
 - **Minimal line-by-line changes** to fix specific issues
+- **Single-line conditional logic fixes** when data exists but is misinterpreted
+- **Classification logic corrections** when existing data gets dropped
+- **Workflow routing fixes** when system takes wrong path with correct data
 - **Single-line modifications** when explicitly requested
 - **Adding specific methods** when explicitly requested with exact specifications
 - **Fixing exact enumeration patterns** (e.g., `enumerate(..., 1)` to `enumerate(..., 0)`)
 
 ### ❌ FORBIDDEN:
 - **Wholesale method replacements** unless explicitly requested
+- **Adding callback systems** without proving existing communication is broken
+- **Creating new components** without verifying existing ones don't have the data
 - **Changing method signatures** without explicit user approval
 - **Modifying working code** that wasn't part of the original problem
 - **"Improving" code** that wasn't broken
 - **Adding features** not specifically requested
+- **Building integration layers** for problems that are actually logic interpretation errors
 
 ---
 

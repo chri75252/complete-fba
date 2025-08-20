@@ -514,6 +514,11 @@ class ConfigurableSupplierScraper:
                             log.warning(f"⚠️ Could not update cache timestamp: {touch_error}")
                         
                         log.info(f"✅ Loaded {len(category_products)} cached products for category: {url}")
+                        
+                        # 🚨 CRITICAL FIX: Populate category_manifests for cached products
+                        if hasattr(self, 'workflow_callback') and self.workflow_callback:
+                            self.workflow_callback('populate_manifest', url, category_products)
+                        
                         return category_products
                     else:
                         log.warning(f"⚠️ Cache file not found: {cache_file_path}")
