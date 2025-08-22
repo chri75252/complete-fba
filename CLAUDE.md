@@ -1,5 +1,9 @@
 REFER TO TO[Testing Plan]/tEMPLATE WHENEVER i EXPLICETELY ASK YOU TO USE MULTI-AGENTS/WORKTRESS (testing_plan.md)  <!-- keep on one line so Claude loads it after /compact -->
 
+🚨 **MASTER_PLAN_REFERENCE**: ALWAYS refer to ".serena/memories/AMAZON_FBA_SYSTEM_MASTER_BEHAVIOR_SPECIFICATION.md" for comprehensive implementation context and system workflow understanding when context window limits hit
+
+🚨 **SERENA_MCP_PROGRESSIVE_MEMORY**: After each major implementation step or fix completion, generate a comprehensive memory file using Serena MCP that references the latest implementation AND provides a complete summary of all previous implementations completed (including what they consisted of and what files were edited for each) to maintain full context for future chat sessions
+
 # CLAUDE.MD - Amazon FBA Agent System v3.7+ File Organization & Development Standards
 
 ## 🚨 CLAUDE_DIRECTIVES - EXECUTE IMMEDIATELY

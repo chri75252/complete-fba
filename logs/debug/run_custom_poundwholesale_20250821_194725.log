@@ -1,0 +1,1023 @@
+2025-08-21 19:47:25,397 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\logs\debug\run_custom_poundwholesale_20250821_194725.log
+2025-08-21 19:47:25,398 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\logs\debug\run_custom_poundwholesale_20250821_194725.log
+2025-08-21 19:47:25,399 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-08-21 19:47:25,400 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-08-21 19:47:25,402 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-08-21 19:47:26,208 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-08-21 19:47:26,742 - utils.browser_manager - INFO - 📄 Using existing context with 3 pages
+2025-08-21 19:47:26,743 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-08-21 19:47:26,744 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:47:26,744 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:47:26,745 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-08-21 19:47:26,748 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-08-21 19:47:26,749 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-08-21 19:47:30,992 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-21 19:47:34,351 - tools.standalone_playwright_login - WARNING - ⚠️ No clear price elements found - price access unclear
+2025-08-21 19:47:34,380 - tools.supplier_authentication_service - INFO - ❌ Login form detected - not authenticated
+2025-08-21 19:47:34,381 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-08-21 19:47:34,381 - tools.supplier_authentication_service - INFO - 🔧 Using standalone playwright authentication
+2025-08-21 19:47:34,382 - tools.standalone_playwright_login - INFO - 🔗 Connecting to shared Chrome instance...
+2025-08-21 19:47:35,459 - tools.standalone_playwright_login - INFO - ✅ Connected to shared Chrome instance at http://localhost:9222
+2025-08-21 19:47:35,460 - tools.standalone_playwright_login - DEBUG - Using existing browser context
+2025-08-21 19:47:35,460 - tools.standalone_playwright_login - DEBUG - Using existing page
+2025-08-21 19:47:35,471 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-08-21 19:47:37,895 - tools.standalone_playwright_login - INFO - ❌ No login indicators found - need to log in
+2025-08-21 19:47:37,896 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-08-21 19:47:37,896 - tools.standalone_playwright_login - INFO - 📍 Navigating to login page: https://www.poundwholesale.co.uk/customer/account/login/
+2025-08-21 19:47:40,043 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="login[username]"]
+2025-08-21 19:47:40,460 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input[name="login[password]"]
+2025-08-21 19:47:41,837 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button[type="submit"]
+2025-08-21 19:47:41,838 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-08-21 19:47:43,977 - tools.standalone_playwright_login - INFO - ✅ Login success confirmed by indicator: text=Log out
+2025-08-21 19:47:43,977 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-21 19:47:48,092 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-21 19:47:48,092 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 10.2s)
+2025-08-21 19:47:48,112 - tools.standalone_playwright_login - DEBUG - Disconnected from shared Chrome browser
+2025-08-21 19:47:48,137 - tools.standalone_playwright_login - DEBUG - Playwright stopped
+2025-08-21 19:47:48,137 - tools.supplier_authentication_service - INFO - ✅ Standalone authentication successful: playwright_selectors
+2025-08-21 19:47:48,137 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\tools\passive_extraction_workflow_latest.py
+2025-08-21 19:47:48,138 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS'
+2025-08-21 19:47:48,138 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products'
+2025-08-21 19:47:48,139 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products
+2025-08-21 19:47:48,139 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-08-21 19:47:48,140 - utils.enhanced_state_components - INFO - ✅ Enhanced state components created for poundwholesale.co.uk
+2025-08-21 19:47:48,140 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - INFO - ✅ Enhanced state components initialized successfully
+2025-08-21 19:47:48,140 - utils.enhanced_state_components - INFO - ✅ Enhanced state components created for poundwholesale.co.uk
+2025-08-21 19:47:48,140 - PassiveExtractionWorkflow - INFO - ✅ Enhanced state components integrated
+2025-08-21 19:47:48,201 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7708 products in poundwholesale-co-uk_products_cache.json
+2025-08-21 19:47:48,207 - PassiveExtractionWorkflow - INFO - ✅ Loaded 233 category URLs from poundwholesale_categories.json
+2025-08-21 19:47:48,208 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 7708 products, 233 categories
+2025-08-21 19:47:48,208 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-08-21 19:47:48,287 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 7708 actual products in cache (total entries: 7708)
+2025-08-21 19:47:48,553 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 8819 processed products in linking map
+2025-08-21 19:47:48,725 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 88 categories
+2025-08-21 19:47:48,730 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 233 categories in config
+2025-08-21 19:47:48,735 - utils.fixed_enhanced_state_manager - INFO - ✅ Normal startup - resumption_index = 8819
+2025-08-21 19:47:48,736 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=8819 (reason: normal_startup)
+2025-08-21 19:47:48,741 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (23 entries) saved successfully
+2025-08-21 19:47:48,747 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-21 19:47:48,748 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-08-21 19:47:48,748 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-08-21 19:47:48,749 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-08-21 19:47:48,749 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-08-21 19:47:48,750 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\amazon_data
+2025-08-21 19:47:48,750 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-08-21 19:47:48,750 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\system_config.json
+2025-08-21 19:47:48,751 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-08-21 19:47:48,751 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-08-21 19:47:48,751 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-08-21 19:47:48,752 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-08-21 19:47:48,752 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-08-21 19:47:48,752 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-08-21 19:47:48,752 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-08-21 19:47:48,753 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-08-21 19:47:48,753 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-08-21 19:47:48,753 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-08-21 19:47:48,754 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-08-21 19:47:48,756 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-08-21 19:47:48,757 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-08-21 19:47:48,757 - PassiveExtractionWorkflow - INFO - ✅ Constructor completed - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS
+2025-08-21 19:47:48,758 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-08-21 19:47:48,758 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-08-21 19:47:48,759 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250821_194748
+2025-08-21 19:47:48,759 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-08-21 19:47:48,759 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-08-21 19:47:48,760 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-08-21 19:47:48,760 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-08-21 19:47:48,760 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-08-21 19:47:48,761 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-08-21 19:47:48,761 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-08-21 19:47:48,762 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ Failed to load state file: 'FixedEnhancedStateManager' object has no attribute '_detect_fresh_start_conditions', starting fresh
+2025-08-21 19:47:48,846 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 8819 entries
+2025-08-21 19:47:49,140 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8476 EANs, 8735 URLs, 5876 ASINs in 0.293s
+2025-08-21 19:47:49,141 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 8819 entries
+2025-08-21 19:47:49,142 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 8819
+2025-08-21 19:47:49,142 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-21 19:47:49,143 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 233 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\poundwholesale_categories.json
+2025-08-21 19:47:49,144 - PassiveExtractionWorkflow - INFO - 📋 Loaded 233 predefined category URLs for startup sequence
+2025-08-21 19:47:49,245 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7708 products in poundwholesale-co-uk_products_cache.json
+2025-08-21 19:47:49,361 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 7708 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-21 19:47:49,362 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: Beginning mandatory startup orchestration
+2025-08-21 19:47:49,362 - PassiveExtractionWorkflow - INFO - ⚡ STARTUP PHASE 0: Linking Map to Processed Products Sync
+2025-08-21 19:47:49,363 - PassiveExtractionWorkflow - INFO - ⚡ SYNC: Hash optimization active - no processed_products sync needed for 8819 entries
+2025-08-21 19:47:49,363 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 0: Linking map sync completed - massive performance boost enabled
+2025-08-21 19:47:49,363 - PassiveExtractionWorkflow - INFO - 🔧 STARTUP PHASE 1: Data Integrity Reconciliation
+2025-08-21 19:47:49,364 - utils.fixed_enhanced_state_manager - INFO - 🔧 STARTUP RECONCILIATION: Beginning mandatory data integrity check...
+2025-08-21 19:47:49,738 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: No inconsistencies found - state is clean
+2025-08-21 19:47:49,740 - PassiveExtractionWorkflow - INFO - 📊 FIX F: Recalculating products_extracted_total from ground truth
+2025-08-21 19:47:49,741 - utils.enhanced_state_components.ProductsExtractedCalculator - DEBUG - Calculated from category completion: 0 products across 81 categories
+2025-08-21 19:47:49,742 - utils.enhanced_state_components.ProductsExtractedCalculator - DEBUG - Calculated from processed products: 0 products with status distribution: {}
+2025-08-21 19:47:49,743 - utils.enhanced_state_components.ProductsExtractedCalculator - DEBUG - Calculated from successful products: 8819
+2025-08-21 19:47:49,743 - utils.enhanced_state_components.ProductsExtractedCalculator - INFO - Canonical count: 8819 (method: successful_products, confidence: medium, time: 0.002s)
+2025-08-21 19:47:49,743 - utils.enhanced_state_components.ProductsExtractedCalculator - WARNING - Count inconsistency detected: {'category_completion': 0, 'processed_products': 0, 'successful_products': 8819}
+2025-08-21 19:47:49,744 - utils.enhanced_state_components.ProductsExtractedCalculator - INFO - Updated products_extracted_total: 0 → 8819 (method: successful_products)
+2025-08-21 19:47:49,744 - StateOps.poundwholesale.co.uk - INFO - ✅ State Update: update_products_extracted_total - 1 fields updated in 0.0ms
+2025-08-21 19:47:49,744 - StateOps.poundwholesale.co.uk - DEBUG - State update details: {
+  "timestamp": "2025-08-21T15:47:49.744641+00:00",
+  "event_type": "state_update",
+  "operation": "update_products_extracted_total",
+  "fields_updated": [
+    "products_extracted_total"
+  ],
+  "success": true,
+  "duration_ms": 0
+}
+2025-08-21 19:47:49,745 - PassiveExtractionWorkflow - INFO - ✅ FIX F: Products extracted total recalculated successfully
+2025-08-21 19:47:49,747 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-21 19:47:49,755 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-21 19:47:49,757 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-21 19:47:49,757 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after reconciliation_completed
+2025-08-21 19:47:49,757 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 1: Reconciliation completed - 0 items reconciled
+2025-08-21 19:47:49,757 - PassiveExtractionWorkflow - INFO - 🔄 STARTUP PHASE 2: Resume Point Calculation
+2025-08-21 19:47:49,758 - PassiveExtractionWorkflow - INFO - 🔧 RESUME CALCULATION: Starting proper fresh start vs resume detection
+2025-08-21 19:47:49,758 - PassiveExtractionWorkflow - INFO - 🆕 FRESH START: Unclear state, defaulting to fresh start
+2025-08-21 19:47:49,758 - PassiveExtractionWorkflow - INFO - 🆕 FRESH START DETECTED: Starting from category index 0
+2025-08-21 19:47:49,759 - PassiveExtractionWorkflow - INFO - 📊 EMERGENCY FALLBACK: Loaded actual total_categories: 233 from config
+2025-08-21 19:47:49,759 - PassiveExtractionWorkflow - INFO - 🆕 FRESH START POINT: Starting from category 0 of 233 total categories
+2025-08-21 19:47:49,761 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-21 19:47:49,767 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-21 19:47:49,768 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-21 19:47:49,769 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after resume_calculated
+2025-08-21 19:47:49,769 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 2: Resume point calculated - starting from category 0
+2025-08-21 19:47:49,770 - PassiveExtractionWorkflow - INFO - 🔍 STARTUP PHASE 3: Filter System Preparation
+2025-08-21 19:47:49,772 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-21 19:47:49,778 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-21 19:47:49,780 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-21 19:47:49,780 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after filter_prepared
+2025-08-21 19:47:49,780 - PassiveExtractionWorkflow - INFO - ✅ STARTUP PHASE 3: Filter system prepared
+2025-08-21 19:47:49,781 - PassiveExtractionWorkflow - INFO - 🎯 STARTUP PHASE 4: Processing System Readiness
+2025-08-21 19:47:49,781 - PassiveExtractionWorkflow - INFO - ✅ PROCESSING READINESS: All systems ready for processing
+2025-08-21 19:47:49,782 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: Created backup at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json.reconciliation_backup
+2025-08-21 19:47:49,795 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-21 19:47:49,799 - utils.fixed_enhanced_state_manager - INFO - 🔧 RECONCILIATION: State persisted atomically
+2025-08-21 19:47:49,800 - PassiveExtractionWorkflow - INFO - 💾 PHASE TRANSITION: Saved state after startup_completed
+2025-08-21 19:47:49,801 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: All phases completed successfully
+2025-08-21 19:47:49,801 - PassiveExtractionWorkflow - INFO - 🚀 STARTUP SEQUENCE: All phases completed successfully
+2025-08-21 19:47:49,802 - PassiveExtractionWorkflow - INFO - ✅ STATE INTEGRITY: No corruption detected
+2025-08-21 19:47:49,802 - PassiveExtractionWorkflow - INFO - ✅ STATE INTEGRITY: No corruption detected
+2025-08-21 19:47:49,802 - PassiveExtractionWorkflow - INFO - 📍 RESUME POINT STORED: cat=0, validation=valid
+2025-08-21 19:47:49,802 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-08-21 19:47:49,803 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 8819
+2025-08-21 19:47:49,803 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-08-21 19:47:49,868 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7708 products in poundwholesale-co-uk_products_cache.json
+2025-08-21 19:47:49,871 - utils.sentinel_monitor - WARNING - ⚠️ WARNING: supplier_cache_vs_linking_map divergence 14.4% (session: 8819, global: 7708)
+2025-08-21 19:47:49,872 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 8819 > cache: 7708)
+2025-08-21 19:47:49,872 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-08-21 19:47:49,872 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-08-21 19:47:50,000 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 8819 entries
+2025-08-21 19:47:50,343 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8476 EANs, 8735 URLs, 5876 ASINs in 0.342s
+2025-08-21 19:47:50,344 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 8819 entries
+2025-08-21 19:47:50,344 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-08-21 19:47:50,345 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-21 19:47:50,346 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 233 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\config\poundwholesale_categories.json
+2025-08-21 19:47:50,347 - PassiveExtractionWorkflow - INFO - 📊 TOTAL CATEGORIES STORED: 233 categories for resume calculations
+2025-08-21 19:47:50,348 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-08-21 19:47:50,349 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 233 predefined categories (infinite mode)
+2025-08-21 19:47:50,351 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-08-21 19:47:50,352 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-08-21 19:47:50,354 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-08-21 19:47:50,357 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-08-21 19:47:50,358 - PassiveExtractionWorkflow - INFO - 🆕 FRESH START: Overriding resume logic, starting from category 0
+2025-08-21 19:47:50,359 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-08-21 19:47:50,360 - PassiveExtractionWorkflow - INFO - ➡️ START CATEGORY: index=0 url=https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:50,361 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 SP-ONLY: get_current_category_index() = 0 from system_progression
+2025-08-21 19:47:50,362 - PassiveExtractionWorkflow - INFO - 🔄 RESUMING: Starting from category index 0
+2025-08-21 19:47:50,362 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-21 19:47:50,363 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 0/1 (1 categories)
+2025-08-21 19:47:50,363 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_0
+2025-08-21 19:47:50,365 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:47:50,365 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:47:50,366 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-08-21 19:47:50,923 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-08-21 19:47:53,417 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-21 19:47:53,417 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-21 19:47:56,143 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-21 19:47:56,143 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-21 19:47:56,144 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_0
+2025-08-21 19:47:56,144 - PassiveExtractionWorkflow - DEBUG - 🔧 FIX C INDEX CALC: start_index=0 + (batch_num=0 * batch_size=100) + subcategory_index=0 = 0
+2025-08-21 19:47:56,144 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 FIX E: Set absolute category_index=0 in reset_category_accumulators
+2025-08-21 19:47:56,144 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 FIX E MIRROR: Set absolute category_index=0 in supplier_extraction_progress
+2025-08-21 19:47:56,145 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 0 accumulators cleared
+2025-08-21 19:47:56,145 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_index = 0 (system_progression)
+2025-08-21 19:47:56,145 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: total_categories = 233 (system_progression)
+2025-08-21 19:47:56,145 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_url = https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys (system_progression)
+2025-08-21 19:47:56,146 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: progress_index/last_processed_index = 0
+2025-08-21 19:47:56,146 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_index = 0
+2025-08-21 19:47:56,146 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_categories = 233
+2025-08-21 19:47:56,146 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_products_in_current_category = 0
+2025-08-21 19:47:56,147 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_url = https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:56,147 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_phase = supplier
+2025-08-21 19:47:56,147 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - ✅ SP-FIRST COMPLETE: Updated SP first, mirrored to SEP. kwargs: {'current_category_index': 0, 'total_categories': 233, 'current_category_url': 'https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys'}
+2025-08-21 19:47:56,147 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 AUTHORITATIVE (system_progression): index=0, url=https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:56,147 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 MIRROR (supplier_extraction_progress): index=0, url=https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:56,148 - PassiveExtractionWorkflow - INFO - 🔎 URL DISCOVERY: extracting product URLs for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys (always run)
+2025-08-21 19:47:56,148 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys with memory management
+2025-08-21 19:47:57,942 - utils.browser_manager - DEBUG - 🪟 Found 36 Chrome processes, total memory: 4464.1MB
+2025-08-21 19:47:57,943 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 4464.1 MB
+2025-08-21 19:47:59,750 - utils.browser_manager - DEBUG - 🪟 Windows: 36 Chrome processes, 4462MB total
+2025-08-21 19:47:59,751 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=4464MB, Python=163MB, System=54.6%
+2025-08-21 19:47:59,751 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:59,752 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:47:59,752 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:47:59,758 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-08-21 19:47:59,758 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-21 19:47:59,759 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:59,759 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:47:59,759 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys (attempt 1/3)
+2025-08-21 19:47:59,760 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:47:59,760 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:47:59,760 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:00,948 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys in 2.30s...
+2025-08-21 19:48:03,262 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys (attempt 2/3)
+2025-08-21 19:48:03,262 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:03,263 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:03,263 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:06,084 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:06,085 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:06,222 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys (Size: 699191 bytes)
+2025-08-21 19:48:06,578 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-21 19:48:06,579 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2
+2025-08-21 19:48:06,579 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2 (attempt 1/3)
+2025-08-21 19:48:06,579 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:06,579 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:06,579 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2
+2025-08-21 19:48:07,835 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2 in 1.95s...
+2025-08-21 19:48:09,795 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2 (attempt 2/3)
+2025-08-21 19:48:09,796 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:09,797 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:09,798 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2
+2025-08-21 19:48:11,006 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2
+2025-08-21 19:48:11,006 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2
+2025-08-21 19:48:11,149 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=2 (Size: 711908 bytes)
+2025-08-21 19:48:11,375 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-21 19:48:11,376 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3
+2025-08-21 19:48:11,376 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3 (attempt 1/3)
+2025-08-21 19:48:11,376 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:11,376 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:11,377 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3
+2025-08-21 19:48:12,593 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3 in 2.28s...
+2025-08-21 19:48:14,878 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3 (attempt 2/3)
+2025-08-21 19:48:14,878 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:14,878 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:14,879 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3
+2025-08-21 19:48:15,906 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3
+2025-08-21 19:48:15,906 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3
+2025-08-21 19:48:16,017 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys?p=3 (Size: 693703 bytes)
+2025-08-21 19:48:16,402 - configurable_supplier_scraper - INFO - Found 10 new product URLs on page 3
+2025-08-21 19:48:16,402 - configurable_supplier_scraper - INFO - Collected 50 total product URLs across 3 pages
+2025-08-21 19:48:16,403 - configurable_supplier_scraper - INFO - Found 50 total product URLs across all pages
+2025-08-21 19:48:16,403 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-08-21 19:48:16,522 - utils.url_cache_filter - INFO - ✅ Loaded 7708 URLs from poundwholesale.co.uk cache
+2025-08-21 19:48:16,523 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 7708 (+7708 new)
+2025-08-21 19:48:16,526 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 7708 cached URLs for efficiency filtering
+2025-08-21 19:48:16,526 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 50 already cached
+2025-08-21 19:48:16,527 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 50 already cached
+2025-08-21 19:48:16,527 - configurable_supplier_scraper - INFO - 🔍 All URLs are already cached - but proceeding with URL discovery for manifest consistency
+2025-08-21 19:48:17,457 - utils.browser_manager - DEBUG - 🪟 Found 35 Chrome processes, total memory: 4428.8MB
+2025-08-21 19:48:17,458 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 4428.8 MB
+2025-08-21 19:48:19,615 - utils.browser_manager - DEBUG - 🪟 Windows: 35 Chrome processes, 4424MB total
+2025-08-21 19:48:19,615 - configurable_supplier_scraper - INFO - 🧠 Post-scraping Memory: Chrome=4428MB, Python=186MB, System=55.2%
+2025-08-21 19:48:19,615 - configurable_supplier_scraper - INFO - Successfully extracted 0 products from https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:19,616 - PassiveExtractionWorkflow - WARNING - ⚠️ No products extracted from https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:19,616 - PassiveExtractionWorkflow - INFO - 🎉 EXTRACTION COMPLETE: Total products extracted: 0
+2025-08-21 19:48:19,616 - PassiveExtractionWorkflow - WARNING - ⚠️ No products extracted from category 0: https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys
+2025-08-21 19:48:19,616 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_index = 1 (system_progression)
+2025-08-21 19:48:19,617 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: total_categories = 233 (system_progression)
+2025-08-21 19:48:19,617 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (system_progression)
+2025-08-21 19:48:19,617 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_phase = supplier (system_progression)
+2025-08-21 19:48:19,618 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: progress_index/last_processed_index = 0
+2025-08-21 19:48:19,618 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_index = 1
+2025-08-21 19:48:19,618 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_categories = 233
+2025-08-21 19:48:19,619 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_products_in_current_category = 0
+2025-08-21 19:48:19,619 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:19,619 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_phase = supplier
+2025-08-21 19:48:19,620 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - ✅ SP-FIRST COMPLETE: Updated SP first, mirrored to SEP. kwargs: {'current_category_index': 1, 'total_categories': 233, 'current_category_url': 'https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear', 'current_phase': 'supplier'}
+2025-08-21 19:48:19,620 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 AUTHORITATIVE (system_progression): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:19,620 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 MIRROR (supplier_extraction_progress): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:19,620 - PassiveExtractionWorkflow - INFO - 🔄 ADVANCED: State updated to next category 1 after extraction failure
+2025-08-21 19:48:19,620 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 2: categories 2-2
+2025-08-21 19:48:19,620 - PassiveExtractionWorkflow - INFO - ➡️ START CATEGORY: index=1 url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:19,621 - utils.fixed_enhanced_state_manager - DEBUG - 🔧 SP-ONLY: get_current_category_index() = 1 from system_progression
+2025-08-21 19:48:19,621 - PassiveExtractionWorkflow - INFO - 🔄 RESUMING: Starting from category index 1
+2025-08-21 19:48:19,621 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-21 19:48:19,621 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 0/1 (1 categories)
+2025-08-21 19:48:19,621 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_0
+2025-08-21 19:48:19,622 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:19,623 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-21 19:48:22,753 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-21 19:48:22,753 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-21 19:48:26,548 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-21 19:48:26,548 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-21 19:48:26,549 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_0
+2025-08-21 19:48:26,549 - PassiveExtractionWorkflow - DEBUG - 🔧 FIX C INDEX CALC: start_index=1 + (batch_num=0 * batch_size=100) + subcategory_index=0 = 1
+2025-08-21 19:48:26,549 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 FIX E: Set absolute category_index=1 in reset_category_accumulators
+2025-08-21 19:48:26,550 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 FIX E MIRROR: Set absolute category_index=1 in supplier_extraction_progress
+2025-08-21 19:48:26,550 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 1 accumulators cleared
+2025-08-21 19:48:26,550 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_index = 1 (system_progression)
+2025-08-21 19:48:26,551 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: total_categories = 233 (system_progression)
+2025-08-21 19:48:26,551 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (system_progression)
+2025-08-21 19:48:26,551 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: progress_index/last_processed_index = 0
+2025-08-21 19:48:26,552 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_index = 1
+2025-08-21 19:48:26,552 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_categories = 233
+2025-08-21 19:48:26,552 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_products_in_current_category = 0
+2025-08-21 19:48:26,552 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:26,553 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_phase = supplier
+2025-08-21 19:48:26,553 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - ✅ SP-FIRST COMPLETE: Updated SP first, mirrored to SEP. kwargs: {'current_category_index': 1, 'total_categories': 233, 'current_category_url': 'https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear'}
+2025-08-21 19:48:26,553 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 AUTHORITATIVE (system_progression): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:26,553 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 MIRROR (supplier_extraction_progress): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:26,554 - PassiveExtractionWorkflow - INFO - 🔎 URL DISCOVERY: extracting product URLs for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (always run)
+2025-08-21 19:48:26,554 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear with memory management
+2025-08-21 19:48:27,623 - utils.browser_manager - DEBUG - 🪟 Found 35 Chrome processes, total memory: 4432.7MB
+2025-08-21 19:48:27,624 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 4432.7 MB
+2025-08-21 19:48:29,576 - utils.browser_manager - DEBUG - 🪟 Windows: 35 Chrome processes, 4431MB total
+2025-08-21 19:48:29,576 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=4432MB, Python=184MB, System=55.1%
+2025-08-21 19:48:29,577 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:29,577 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:29,577 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:29,578 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-21 19:48:29,578 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:29,578 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:29,578 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (attempt 1/3)
+2025-08-21 19:48:29,579 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:29,579 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:29,580 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:30,831 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear in 2.03s...
+2025-08-21 19:48:32,862 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (attempt 2/3)
+2025-08-21 19:48:32,863 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:32,863 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:32,864 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:35,666 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:35,666 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:48:35,829 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (Size: 693728 bytes)
+2025-08-21 19:48:36,231 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-21 19:48:36,232 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2
+2025-08-21 19:48:36,232 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2 (attempt 1/3)
+2025-08-21 19:48:36,232 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:36,232 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:36,233 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2
+2025-08-21 19:48:37,583 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2 in 2.22s...
+2025-08-21 19:48:39,817 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2 (attempt 2/3)
+2025-08-21 19:48:39,817 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:39,817 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:39,817 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2
+2025-08-21 19:48:41,699 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2
+2025-08-21 19:48:41,700 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2
+2025-08-21 19:48:41,823 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=2 (Size: 707253 bytes)
+2025-08-21 19:48:42,123 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-21 19:48:42,123 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3
+2025-08-21 19:48:42,124 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3 (attempt 1/3)
+2025-08-21 19:48:42,124 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:42,124 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:42,125 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3
+2025-08-21 19:48:43,104 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3 in 1.58s...
+2025-08-21 19:48:44,699 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3 (attempt 2/3)
+2025-08-21 19:48:44,700 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:44,700 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:44,701 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3
+2025-08-21 19:48:47,480 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3
+2025-08-21 19:48:47,481 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3
+2025-08-21 19:48:47,571 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=3 (Size: 440636 bytes)
+2025-08-21 19:48:47,719 - configurable_supplier_scraper - INFO - Found 2 new product URLs on page 3
+2025-08-21 19:48:47,720 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4
+2025-08-21 19:48:47,720 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4 (attempt 1/3)
+2025-08-21 19:48:47,720 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:47,721 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:47,721 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4
+2025-08-21 19:48:48,504 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4 in 1.95s...
+2025-08-21 19:48:50,462 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4 (attempt 2/3)
+2025-08-21 19:48:50,462 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:50,462 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:50,463 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4
+2025-08-21 19:48:52,334 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4
+2025-08-21 19:48:52,335 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4
+2025-08-21 19:48:52,425 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear?p=4 (Size: 392306 bytes)
+2025-08-21 19:48:52,538 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 4
+2025-08-21 19:48:52,538 - configurable_supplier_scraper - INFO - Collected 42 total product URLs across 4 pages
+2025-08-21 19:48:52,538 - configurable_supplier_scraper - INFO - Found 42 total product URLs across all pages
+2025-08-21 19:48:52,539 - utils.url_cache_filter - DEBUG - 🔄 URLs already loaded for poundwholesale.co.uk: 7708 URLs
+2025-08-21 19:48:52,539 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 7708 cached URLs for efficiency filtering
+2025-08-21 19:48:52,539 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 31 new URLs, 11 already cached
+2025-08-21 19:48:52,539 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 31 new URLs need processing, 11 already cached
+2025-08-21 19:48:52,540 - configurable_supplier_scraper - INFO - Visiting product page 1/31: https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:52,540 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:48:52,540 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:52,540 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:52,541 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:54,414 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm in 2.28s...
+2025-08-21 19:48:56,712 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:48:56,713 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:56,713 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:56,714 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:59,095 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:59,095 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:59,195 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm (Size: 734266 bytes)
+2025-08-21 19:48:59,545 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: First Steps Teal Cloud Baby Blanket 75cm X 100cm - £2.71 (EAN: 5015302109561)
+2025-08-21 19:48:59,546 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:59,546 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-teal-cloud-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:59,546 - configurable_supplier_scraper - INFO - Visiting product page 2/31: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:48:59,546 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:48:59,547 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:48:59,547 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:48:59,547 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:01,767 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm in 2.42s...
+2025-08-21 19:49:04,188 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:49:04,189 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:04,190 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:04,190 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:06,064 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:06,065 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:06,186 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm (Size: 737597 bytes)
+2025-08-21 19:49:06,492 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Hugs & Kisses Mink Sherpa Woodland Baby Blanket 75cm X 100cm - £4.71 (EAN: 5015302109738)
+2025-08-21 19:49:06,492 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:06,492 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-woodland-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:06,493 - configurable_supplier_scraper - INFO - Visiting product page 3/31: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:06,493 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:49:06,493 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:06,493 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:06,493 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:08,591 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm in 1.62s...
+2025-08-21 19:49:10,223 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:49:10,224 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:10,225 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:10,226 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:11,723 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:11,723 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:11,867 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm (Size: 735554 bytes)
+2025-08-21 19:49:12,232 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Hugs & Kisses Mink Sherpa Dinosaur Baby Blanket 75cm X 100cm - £5.15 (EAN: 5015302109745)
+2025-08-21 19:49:12,233 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:12,233 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-dinosaur-baby-blanket-75cm-x-100cm
+2025-08-21 19:49:12,233 - configurable_supplier_scraper - INFO - Visiting product page 4/31: https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:12,234 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket (attempt 1/3)
+2025-08-21 19:49:12,234 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:12,234 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:12,234 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:14,253 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket in 2.33s...
+2025-08-21 19:49:16,585 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket (attempt 2/3)
+2025-08-21 19:49:16,586 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:16,586 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:16,586 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:18,848 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:18,848 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:19,002 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket (Size: 734914 bytes)
+2025-08-21 19:49:19,576 - configurable_supplier_scraper - INFO - ✅ Extracted product 4: Hugs & Kisses Giraffe Baby Blanket 70cm X 90cm - £2.41 (EAN: 5015302107154)
+2025-08-21 19:49:19,576 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:19,577 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-giraffe-baby-blanket
+2025-08-21 19:49:19,577 - configurable_supplier_scraper - INFO - Visiting product page 5/31: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:19,577 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm (attempt 1/3)
+2025-08-21 19:49:19,578 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:19,578 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:19,578 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:21,669 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm in 1.57s...
+2025-08-21 19:49:23,253 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm (attempt 2/3)
+2025-08-21 19:49:23,254 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:23,255 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:23,255 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:24,969 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:24,969 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:25,088 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm (Size: 739315 bytes)
+2025-08-21 19:49:25,498 - configurable_supplier_scraper - INFO - ✅ Extracted product 5: First Steps Double-Sided Mink Sherpa Fleece Baby Comforter Blanket Blue 30cm X 28cm - £2.44 (EAN: 5015302106928)
+2025-08-21 19:49:25,498 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:25,499 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-blue-30cm-x-28cm
+2025-08-21 19:49:25,499 - configurable_supplier_scraper - INFO - Visiting product page 6/31: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:25,500 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream (attempt 1/3)
+2025-08-21 19:49:25,501 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:25,502 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:25,502 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:27,385 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream in 2.03s...
+2025-08-21 19:49:29,421 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream (attempt 2/3)
+2025-08-21 19:49:29,422 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:29,422 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:29,423 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:30,761 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:30,762 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:30,868 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream (Size: 734716 bytes)
+2025-08-21 19:49:31,160 - configurable_supplier_scraper - INFO - ✅ Extracted product 6: First Steps Cream Baby Blanket 70cm X 70cm - £0.81 (EAN: 5015302106874)
+2025-08-21 19:49:31,161 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:31,162 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-cream
+2025-08-21 19:49:31,162 - configurable_supplier_scraper - INFO - Visiting product page 7/31: https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:31,163 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm (attempt 1/3)
+2025-08-21 19:49:31,164 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:31,165 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:31,165 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:33,333 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm in 1.66s...
+2025-08-21 19:49:34,994 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm (attempt 2/3)
+2025-08-21 19:49:34,995 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:34,995 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:34,995 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:36,703 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:36,704 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:36,840 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm (Size: 735421 bytes)
+2025-08-21 19:49:37,104 - configurable_supplier_scraper - INFO - ✅ Extracted product 7: First Steps Baby Milestone Blanket 80cm X 80cm - £3.4 (EAN: 5015302109752)
+2025-08-21 19:49:37,104 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:37,104 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-baby-milestone-blanket-80cm-x-80cm
+2025-08-21 19:49:37,105 - configurable_supplier_scraper - INFO - Visiting product page 8/31: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:37,105 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket (attempt 1/3)
+2025-08-21 19:49:37,105 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:37,105 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:37,106 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:39,017 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket in 2.13s...
+2025-08-21 19:49:41,162 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket (attempt 2/3)
+2025-08-21 19:49:41,163 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:41,163 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:41,164 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:42,881 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:42,881 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:42,989 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket (Size: 736919 bytes)
+2025-08-21 19:49:43,295 - configurable_supplier_scraper - INFO - ✅ Extracted product 8: Hugs & Kisses Bubble Mink Sherpa Cream Baby Blanket - £4.33 (EAN: 5015302108427)
+2025-08-21 19:49:43,295 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:43,295 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-cream-baby-blanket
+2025-08-21 19:49:43,296 - configurable_supplier_scraper - INFO - Visiting product page 9/31: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:43,296 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm (attempt 1/3)
+2025-08-21 19:49:43,296 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:43,297 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:43,297 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:45,277 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm in 2.13s...
+2025-08-21 19:49:47,414 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm (attempt 2/3)
+2025-08-21 19:49:47,414 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:47,414 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:47,415 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:49,131 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:49,131 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:49,232 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm (Size: 738212 bytes)
+2025-08-21 19:49:49,509 - configurable_supplier_scraper - INFO - ✅ Extracted product 9: First Steps Glow In The Dark Baby Blanket Pink 70cm X 90cm - £2.19 (EAN: 5015302107574)
+2025-08-21 19:49:49,510 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:49,510 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-pink-70cm-x-90cm
+2025-08-21 19:49:49,510 - configurable_supplier_scraper - INFO - Visiting product page 10/31: https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:49,511 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket (attempt 1/3)
+2025-08-21 19:49:49,511 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:49,511 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:49,512 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:51,773 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket in 1.75s...
+2025-08-21 19:49:53,537 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket (attempt 2/3)
+2025-08-21 19:49:53,537 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:53,538 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:53,538 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:55,806 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:55,807 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:55,960 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket (Size: 735246 bytes)
+2025-08-21 19:49:56,262 - configurable_supplier_scraper - INFO - ✅ Extracted product 10: Hugs & Kisses Elephant Baby Blanket 70cm X 90cm - £2.56 (EAN: 5015302107161)
+2025-08-21 19:49:56,263 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:56,264 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-elephant-baby-blanket
+2025-08-21 19:49:56,264 - configurable_supplier_scraper - INFO - Visiting product page 11/31: https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:49:56,265 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted (attempt 1/3)
+2025-08-21 19:49:56,265 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:49:56,266 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:49:56,266 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:49:58,263 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted in 1.97s...
+2025-08-21 19:50:00,252 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted (attempt 2/3)
+2025-08-21 19:50:00,252 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:00,252 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:00,253 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:50:03,093 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:50:03,094 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:50:03,195 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted (Size: 735720 bytes)
+2025-08-21 19:50:03,388 - configurable_supplier_scraper - INFO - ✅ Extracted product 11: First Steps Dinosaur Baby Bib Assorted - £0.92 (EAN: 5015302115548)
+2025-08-21 19:50:03,388 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:50:03,388 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-dinosaur-baby-bib-assorted
+2025-08-21 19:50:03,389 - configurable_supplier_scraper - INFO - Visiting product page 12/31: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:03,389 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink (attempt 1/3)
+2025-08-21 19:50:03,389 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:03,389 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:03,390 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:09,466 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink in 1.81s...
+2025-08-21 19:50:11,292 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink (attempt 2/3)
+2025-08-21 19:50:11,293 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:11,294 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:11,294 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:12,922 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:12,922 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:13,039 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink (Size: 735019 bytes)
+2025-08-21 19:50:13,392 - configurable_supplier_scraper - INFO - ✅ Extracted product 12: First Steps Baby Blanket 70cm X 70cm Pink - £0.82 (EAN: 5015302106850)
+2025-08-21 19:50:13,392 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:13,392 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-pink
+2025-08-21 19:50:13,393 - configurable_supplier_scraper - INFO - Visiting product page 13/31: https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:13,394 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe (attempt 1/3)
+2025-08-21 19:50:13,394 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:13,395 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:13,396 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:15,844 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe in 1.87s...
+2025-08-21 19:50:17,724 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe (attempt 2/3)
+2025-08-21 19:50:17,725 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:17,725 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:17,726 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:20,306 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:20,307 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:20,458 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe (Size: 734582 bytes)
+2025-08-21 19:50:20,744 - configurable_supplier_scraper - INFO - ✅ Extracted product 13: Hugs & Kisses Soft Flannel Pink Baby Hooded Robe - £4.32 (EAN: 5015302109639)
+2025-08-21 19:50:20,745 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:20,745 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-pink-baby-hooded-robe
+2025-08-21 19:50:20,745 - configurable_supplier_scraper - INFO - Visiting product page 14/31: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:20,745 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm (attempt 1/3)
+2025-08-21 19:50:20,745 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:20,745 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:20,746 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:22,799 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm in 1.84s...
+2025-08-21 19:50:24,649 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm (attempt 2/3)
+2025-08-21 19:50:24,650 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:24,650 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:24,650 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:25,670 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:25,670 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:25,773 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm (Size: 738589 bytes)
+2025-08-21 19:50:26,351 - configurable_supplier_scraper - INFO - ✅ Extracted product 14: First Steps Double-Sided Mink Sherpa Fleece Baby Comforter Blanket Pink 30cm X 28cm - £2.64 (EAN: 5015302106911)
+2025-08-21 19:50:26,351 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:26,352 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-pink-30cm-x-28cm
+2025-08-21 19:50:26,352 - configurable_supplier_scraper - INFO - Visiting product page 15/31: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:26,353 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm (attempt 1/3)
+2025-08-21 19:50:26,353 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:26,354 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:26,354 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:28,333 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm in 2.44s...
+2025-08-21 19:50:30,793 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm (attempt 2/3)
+2025-08-21 19:50:30,793 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:30,793 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:30,794 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:32,711 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:32,711 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:32,850 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm (Size: 741905 bytes)
+2025-08-21 19:50:33,260 - configurable_supplier_scraper - INFO - ✅ Extracted product 15: First Steps Double-Sided Mink Sherpa Fleece Baby Comforter Blanket Cream 30cm X 28cm - £2.44 (EAN: 5015302106935)
+2025-08-21 19:50:33,261 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:33,261 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-double-sided-mink-sherpa-fleece-baby-comforter-blanket-cream-30cm-x-28cm
+2025-08-21 19:50:33,261 - configurable_supplier_scraper - INFO - Visiting product page 16/31: https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:33,261 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours (attempt 1/3)
+2025-08-21 19:50:33,262 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:33,262 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:33,262 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:35,213 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours in 1.80s...
+2025-08-21 19:50:37,028 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours (attempt 2/3)
+2025-08-21 19:50:37,028 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:37,030 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:37,031 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:39,381 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:39,382 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:39,498 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours (Size: 738509 bytes)
+2025-08-21 19:50:39,884 - configurable_supplier_scraper - INFO - ✅ Extracted product 16: First Steps Soft Pure Cotton Cellular Blanket Assorted Colours - £1.97 (EAN: 5015302101930)
+2025-08-21 19:50:39,885 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:39,885 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-soft-pure-cotton-cellular-blanket-assorted-colours
+2025-08-21 19:50:39,885 - configurable_supplier_scraper - INFO - Visiting product page 17/31: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:39,885 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue (attempt 1/3)
+2025-08-21 19:50:39,886 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:39,886 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:39,887 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:41,859 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue in 2.17s...
+2025-08-21 19:50:44,031 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue (attempt 2/3)
+2025-08-21 19:50:44,031 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:44,032 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:44,033 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:46,189 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:46,190 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:46,339 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue (Size: 733892 bytes)
+2025-08-21 19:50:46,740 - configurable_supplier_scraper - INFO - ✅ Extracted product 17: First Steps Baby Blanket 70cm X 70cm Blue - £0.81 (EAN: 5015302106867)
+2025-08-21 19:50:46,740 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:46,741 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-baby-blanket-70cm-x-70cm-blue
+2025-08-21 19:50:46,741 - configurable_supplier_scraper - INFO - Visiting product page 18/31: https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:46,742 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted (attempt 1/3)
+2025-08-21 19:50:46,742 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:46,743 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:46,743 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:48,710 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted in 1.68s...
+2025-08-21 19:50:50,402 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted (attempt 2/3)
+2025-08-21 19:50:50,404 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:50,404 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:50,404 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:52,887 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:52,887 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:53,000 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted (Size: 737508 bytes)
+2025-08-21 19:50:53,330 - configurable_supplier_scraper - INFO - ✅ Extracted product 18: First Steps Animal Baby Bib 3 Pack Assorted - £2.19 (EAN: 5015302109431)
+2025-08-21 19:50:53,331 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:53,331 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-animal-baby-bib-3-pack-assorted
+2025-08-21 19:50:53,332 - configurable_supplier_scraper - INFO - Visiting product page 19/31: https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:50:53,332 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe (attempt 1/3)
+2025-08-21 19:50:53,333 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:53,333 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:53,334 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:50:55,437 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe in 2.38s...
+2025-08-21 19:50:57,822 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe (attempt 2/3)
+2025-08-21 19:50:57,822 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:50:57,823 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:50:57,823 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:51:00,444 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:51:00,444 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:51:00,601 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe (Size: 737307 bytes)
+2025-08-21 19:51:00,928 - configurable_supplier_scraper - INFO - ✅ Extracted product 19: Hugs & Kisses Soft Flannel Blue Baby Hooded Robe - £4.33 (EAN: 5015302109646)
+2025-08-21 19:51:00,928 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:51:00,929 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-soft-flannel-blue-baby-hooded-robe
+2025-08-21 19:51:00,929 - configurable_supplier_scraper - INFO - Visiting product page 20/31: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:00,929 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:51:00,930 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:00,930 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:00,931 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:02,893 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm in 2.37s...
+2025-08-21 19:51:05,265 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:51:05,266 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:05,266 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:05,267 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:07,631 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:07,632 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:07,767 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm (Size: 735240 bytes)
+2025-08-21 19:51:08,180 - configurable_supplier_scraper - INFO - ✅ Extracted product 20: Hugs & Kisses Mink Sherpa Pale Green Spot Baby Blanket 75cm X 100cm - £4.61 (EAN: 5015302109585)
+2025-08-21 19:51:08,180 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:08,180 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-pale-green-spot-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:08,181 - configurable_supplier_scraper - INFO - Visiting product page 21/31: https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:08,181 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:51:08,181 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:08,181 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:08,181 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:10,029 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm in 2.48s...
+2025-08-21 19:51:12,524 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:51:12,525 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:12,525 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:12,525 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:14,068 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:14,069 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:14,209 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm (Size: 735910 bytes)
+2025-08-21 19:51:14,557 - configurable_supplier_scraper - INFO - ✅ Extracted product 21: First Steps Pink Hearts Baby Blanket 75cm X 100cm - £2.45 (EAN: 5015302109547)
+2025-08-21 19:51:14,558 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:14,559 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-pink-hearts-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:14,559 - configurable_supplier_scraper - INFO - Visiting product page 22/31: https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:14,560 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket (attempt 1/3)
+2025-08-21 19:51:14,560 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:14,561 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:14,561 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:16,676 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket in 1.95s...
+2025-08-21 19:51:18,631 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket (attempt 2/3)
+2025-08-21 19:51:18,632 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:18,632 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:18,633 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:21,145 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:21,146 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:21,260 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket (Size: 734562 bytes)
+2025-08-21 19:51:21,615 - configurable_supplier_scraper - INFO - ✅ Extracted product 22: First Steps Teddy Bear Baby Blanket - £2.53 (EAN: 5015302107185)
+2025-08-21 19:51:21,616 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:21,616 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-teddy-bear-baby-blanket
+2025-08-21 19:51:21,616 - configurable_supplier_scraper - INFO - Visiting product page 23/31: https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:21,617 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm (attempt 1/3)
+2025-08-21 19:51:21,617 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:21,617 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:21,618 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:23,560 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm in 1.69s...
+2025-08-21 19:51:25,259 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm (attempt 2/3)
+2025-08-21 19:51:25,260 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:25,261 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:25,261 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:27,052 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:27,053 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:27,174 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm (Size: 737217 bytes)
+2025-08-21 19:51:27,582 - configurable_supplier_scraper - INFO - ✅ Extracted product 23: Hugs & Kisses Grey Elephant Baby Comforter 30cm X 30cm - £2.48 (EAN: 5015302109653)
+2025-08-21 19:51:27,582 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:27,583 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-grey-elephant-baby-comforter-30cm-x-30cm
+2025-08-21 19:51:27,584 - configurable_supplier_scraper - INFO - Visiting product page 24/31: https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:27,584 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted (attempt 1/3)
+2025-08-21 19:51:27,584 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:27,585 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:27,585 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:29,454 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted in 2.09s...
+2025-08-21 19:51:31,552 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted (attempt 2/3)
+2025-08-21 19:51:31,552 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:31,552 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:31,552 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:33,156 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:33,156 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:33,269 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted (Size: 734515 bytes)
+2025-08-21 19:51:33,734 - configurable_supplier_scraper - INFO - ✅ Extracted product 24: First Steps Wipe-Clean Coverall Baby Bib Assorted - £1.25 (EAN: 5015302107895)
+2025-08-21 19:51:33,734 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:33,735 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-wipe-clean-coverall-baby-bib-assorted
+2025-08-21 19:51:33,736 - configurable_supplier_scraper - INFO - Visiting product page 25/31: https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:33,736 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter (attempt 1/3)
+2025-08-21 19:51:33,737 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:33,737 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:33,738 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:35,865 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter in 2.34s...
+2025-08-21 19:51:38,206 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter (attempt 2/3)
+2025-08-21 19:51:38,207 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:38,207 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:38,207 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:39,519 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:39,520 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:39,630 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter (Size: 732827 bytes)
+2025-08-21 19:51:39,938 - configurable_supplier_scraper - INFO - ✅ Extracted product 25: First Steps Unicorn Baby Comforter - £2.12 (EAN: 5015302108359)
+2025-08-21 19:51:39,939 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:39,939 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-unicorn-baby-comforter
+2025-08-21 19:51:39,939 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:39,939 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:39,940 - configurable_supplier_scraper - INFO - 🔐 PROACTIVE AUTH CHECK: Verifying login at product 26
+2025-08-21 19:51:42,908 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-21 19:51:42,908 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-21 19:51:46,863 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-21 19:51:46,863 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-21 19:51:46,864 - configurable_supplier_scraper - DEBUG - ✅ PROACTIVE AUTH OK: Login verified at product 26
+2025-08-21 19:51:46,864 - configurable_supplier_scraper - INFO - Visiting product page 26/31: https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:46,865 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:51:46,866 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:46,866 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:46,866 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:48,954 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm in 1.88s...
+2025-08-21 19:51:50,835 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:51:50,835 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:50,836 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:50,836 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:52,280 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:52,281 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:52,430 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm (Size: 735502 bytes)
+2025-08-21 19:51:52,861 - configurable_supplier_scraper - INFO - ✅ Extracted product 26: Hugs & Kisses Blue Lion Baby Blanket 75cm X 100cm - £3.45 (EAN: 5015302109622)
+2025-08-21 19:51:52,861 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:52,862 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-blue-lion-baby-blanket-75cm-x-100cm
+2025-08-21 19:51:52,993 - configurable_supplier_scraper - DEBUG - 🗑️ Garbage collected 72706 objects after product 25
+2025-08-21 19:51:52,994 - configurable_supplier_scraper - INFO - Visiting product page 27/31: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:51:52,994 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket (attempt 1/3)
+2025-08-21 19:51:52,995 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:52,996 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:52,996 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:51:55,104 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket in 2.39s...
+2025-08-21 19:51:57,504 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket (attempt 2/3)
+2025-08-21 19:51:57,504 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:51:57,505 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:51:57,505 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:51:59,873 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:51:59,874 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:51:59,990 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket (Size: 735521 bytes)
+2025-08-21 19:52:00,360 - configurable_supplier_scraper - INFO - ✅ Extracted product 27: Hugs & Kisses Bubble Mink Sherpa Pink Baby Blanket - £5.96 (EAN: 5015302108410)
+2025-08-21 19:52:00,361 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:52:00,361 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-bubble-mink-sherpa-pink-baby-blanket
+2025-08-21 19:52:00,361 - configurable_supplier_scraper - INFO - Visiting product page 28/31: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:00,361 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm (attempt 1/3)
+2025-08-21 19:52:00,362 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:00,362 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:00,362 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:02,406 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm in 2.47s...
+2025-08-21 19:52:04,877 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm (attempt 2/3)
+2025-08-21 19:52:04,878 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:04,878 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:04,879 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:06,020 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:06,020 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:06,144 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm (Size: 738991 bytes)
+2025-08-21 19:52:06,483 - configurable_supplier_scraper - INFO - ✅ Extracted product 28: First Steps Glow In The Dark Baby Blanket Blue 70cm X 90cm - £2.19 (EAN: 5015302107581)
+2025-08-21 19:52:06,483 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:06,484 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/first-steps-glow-in-the-dark-baby-blanket-blue-70cm-x-90cm
+2025-08-21 19:52:06,484 - configurable_supplier_scraper - INFO - Visiting product page 29/31: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:06,485 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:52:06,485 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:06,486 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:06,486 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:08,404 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm in 1.83s...
+2025-08-21 19:52:10,243 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:52:10,244 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:10,245 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:10,245 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:12,216 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:12,217 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:12,345 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm (Size: 736885 bytes)
+2025-08-21 19:52:12,654 - configurable_supplier_scraper - INFO - ✅ Extracted product 29: Hugs & Kisses Mink Sherpa Jungle Baby Blanket 75cm X 100cm - £4.83 (EAN: 5015302109721)
+2025-08-21 19:52:12,654 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:12,654 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-mink-sherpa-jungle-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:12,654 - configurable_supplier_scraper - INFO - Visiting product page 30/31: https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:12,655 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm (attempt 1/3)
+2025-08-21 19:52:12,655 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:12,655 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:12,655 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:14,809 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm in 2.26s...
+2025-08-21 19:52:17,070 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm (attempt 2/3)
+2025-08-21 19:52:17,070 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:17,070 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:17,071 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:19,367 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:19,367 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:19,465 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm (Size: 737248 bytes)
+2025-08-21 19:52:19,831 - configurable_supplier_scraper - INFO - ✅ Extracted product 30: Hugs & Kisses White Rainbow Baby Blanket 70cm X 90cm - £2.41 (EAN: 5015302109578)
+2025-08-21 19:52:19,832 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:19,832 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-white-rainbow-baby-blanket-70cm-x-90cm
+2025-08-21 19:52:19,832 - configurable_supplier_scraper - INFO - Visiting product page 31/31: https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:19,833 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm (attempt 1/3)
+2025-08-21 19:52:19,833 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:19,833 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:19,834 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:21,807 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm in 2.23s...
+2025-08-21 19:52:24,049 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm (attempt 2/3)
+2025-08-21 19:52:24,049 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-21 19:52:24,050 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-21 19:52:24,050 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:25,203 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:25,203 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:25,320 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm (Size: 735458 bytes)
+2025-08-21 19:52:25,773 - configurable_supplier_scraper - INFO - ✅ Extracted product 31: Hugs & Kisses Grey Zebra Baby Blanket 75cm X 100cm - £2.9 (EAN: 5015302109608)
+2025-08-21 19:52:25,774 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:25,775 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/hugs-kisses-grey-zebra-baby-blanket-75cm-x-100cm
+2025-08-21 19:52:26,816 - utils.browser_manager - DEBUG - 🪟 Found 36 Chrome processes, total memory: 4622.8MB
+2025-08-21 19:52:26,817 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 4622.8 MB
+2025-08-21 19:52:28,851 - utils.browser_manager - DEBUG - 🪟 Windows: 36 Chrome processes, 4623MB total
+2025-08-21 19:52:28,851 - configurable_supplier_scraper - INFO - 🧠 Post-scraping Memory: Chrome=4622MB, Python=224MB, System=55.5%
+2025-08-21 19:52:28,851 - configurable_supplier_scraper - INFO - Successfully extracted 31 products from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:28,852 - PassiveExtractionWorkflow - INFO - ✅ Extracted 31 products from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:28,852 - PassiveExtractionWorkflow - INFO - 💾 MANIFEST: 31 URLs stored for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:28,852 - PassiveExtractionWorkflow - INFO - 🎉 EXTRACTION COMPLETE: Total products extracted: 31
+2025-08-21 19:52:28,940 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 7708 products in poundwholesale-co-uk_products_cache.json
+2025-08-21 19:52:29,059 - PassiveExtractionWorkflow - INFO - 🔍 CACHE DEBUG: Starting deduplication - 31 new products vs 7708 cached products
+2025-08-21 19:52:29,060 - PassiveExtractionWorkflow - INFO - 🔍 CACHE DEBUG: Existing keys count: 15405
+2025-08-21 19:52:29,060 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #1: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-teal-...)
+2025-08-21 19:52:29,060 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #2: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-mink-...)
+2025-08-21 19:52:29,061 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #3: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-mink-...)
+2025-08-21 19:52:29,061 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #4: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-giraf...)
+2025-08-21 19:52:29,061 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #5: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-doubl...)
+2025-08-21 19:52:29,061 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #6: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-baby-...)
+2025-08-21 19:52:29,061 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #7: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-baby-...)
+2025-08-21 19:52:29,062 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #8: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-bubbl...)
+2025-08-21 19:52:29,062 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #9: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-glow-...)
+2025-08-21 19:52:29,062 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #10: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-eleph...)
+2025-08-21 19:52:29,062 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #11: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-dinos...)
+2025-08-21 19:52:29,063 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #12: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-baby-...)
+2025-08-21 19:52:29,063 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #13: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-pink-...)
+2025-08-21 19:52:29,063 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #14: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-doubl...)
+2025-08-21 19:52:29,063 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #15: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-doubl...)
+2025-08-21 19:52:29,064 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #16: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-soft-...)
+2025-08-21 19:52:29,064 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #17: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-baby-...)
+2025-08-21 19:52:29,064 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #18: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-anima...)
+2025-08-21 19:52:29,065 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #19: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-soft-...)
+2025-08-21 19:52:29,065 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #20: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-mink-...)
+2025-08-21 19:52:29,065 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #21: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-pink-...)
+2025-08-21 19:52:29,065 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #22: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-teddy...)
+2025-08-21 19:52:29,066 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #23: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-grey-...)
+2025-08-21 19:52:29,066 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #24: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-wipe-...)
+2025-08-21 19:52:29,066 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #25: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-unico...)
+2025-08-21 19:52:29,066 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #26: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-blue-...)
+2025-08-21 19:52:29,067 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #27: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-bubbl...)
+2025-08-21 19:52:29,067 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #28: Added to cache (URL: https://www.poundwholesale.co.uk/first-steps-glow-...)
+2025-08-21 19:52:29,067 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #29: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-mink-...)
+2025-08-21 19:52:29,068 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #30: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-white...)
+2025-08-21 19:52:29,068 - PassiveExtractionWorkflow - INFO - ✅ NEW PRODUCT #31: Added to cache (URL: https://www.poundwholesale.co.uk/hugs-kisses-grey-...)
+2025-08-21 19:52:29,069 - PassiveExtractionWorkflow - INFO - 🔍 CACHE WRITE CHECK: new_products_added=31, actual_cache_file='C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json'
+2025-08-21 19:52:29,324 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale-co-uk_products_cache.json (7739 entries) saved successfully
+2025-08-21 19:52:29,325 - PassiveExtractionWorkflow - INFO - ✅ CACHE UPDATE SUCCESS: Added 31 new products to cache (total: 7739)
+2025-08-21 19:52:29,325 - PassiveExtractionWorkflow - INFO - 🔍 FALLBACK CACHE WRITE: Attempting to save 7739 total products
+2025-08-21 19:52:29,555 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale-co-uk_products_cache.json (7739 entries) saved successfully
+2025-08-21 19:52:29,557 - PassiveExtractionWorkflow - INFO - ✅ FALLBACK CACHE SUCCESS: Saved 7739 total products
+2025-08-21 19:52:29,569 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-baby-supplies-whole.json (6 entries) saved successfully
+2025-08-21 19:52:29,571 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 31 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-baby-supplies-whole.json
+2025-08-21 19:52:29,572 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C1 https-www-poundwholesale-co-uk-baby-supplies-whole]: overwritten=true prev=72 curr=31
+2025-08-21 19:52:29,572 - PassiveExtractionWorkflow - WARNING - MANIFEST COUNT CHANGE: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear changed from 72 to 31 URLs
+2025-08-21 19:52:29,573 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_index = 1 (system_progression)
+2025-08-21 19:52:29,574 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (system_progression)
+2025-08-21 19:52:29,575 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: total_products_in_current_category = 31 (system_progression)
+2025-08-21 19:52:29,575 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: progress_index/last_processed_index = 0
+2025-08-21 19:52:29,576 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_index = 1
+2025-08-21 19:52:29,577 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_categories = 233
+2025-08-21 19:52:29,577 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_products_in_current_category = 31
+2025-08-21 19:52:29,578 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:29,579 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_phase = supplier
+2025-08-21 19:52:29,579 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - ✅ SP-FIRST COMPLETE: Updated SP first, mirrored to SEP. kwargs: {'current_category_index': 1, 'current_category_url': 'https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear', 'total_products_in_current_category': 31}
+2025-08-21 19:52:29,581 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 AUTHORITATIVE (system_progression): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:29,582 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 MIRROR (supplier_extraction_progress): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:29,583 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 FIX E: Set absolute category_index=1 in reset_category_accumulators
+2025-08-21 19:52:29,583 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 FIX E MIRROR: Set absolute category_index=1 in supplier_extraction_progress
+2025-08-21 19:52:29,584 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESET: Category 1 accumulators cleared
+2025-08-21 19:52:29,828 - PassiveExtractionWorkflow - INFO - Filter invariant: skip=12 amazon_only=19 needs_supplier=0 total_in=31
+2025-08-21 19:52:29,828 - PassiveExtractionWorkflow - INFO - ✅ Filter invariant: skip=12 amazon_only=19 needs_supplier=0 total_in=31
+2025-08-21 19:52:29,829 - PassiveExtractionWorkflow - INFO - FILTER[C2 https-www-poundwholesale-co-uk]: in=31 skip=12 needs_amz=19 needs_full=0
+2025-08-21 19:52:29,829 - PassiveExtractionWorkflow - ERROR - 🚨 INVARIANT FAILURE[C1]: Filter invariant violated
+2025-08-21 19:52:29,836 - PassiveExtractionWorkflow - INFO - 📸 DIAGNOSTIC: Snapshot saved to OUTPUTS/DIAGNOSTICS/error_snapshots\invariant_failure_20250821_195229.json
+2025-08-21 19:52:29,836 - PassiveExtractionWorkflow - INFO - 🔧 INVARIANT REPAIR[C1]: Attempting repair - discrepancy: 31
+2025-08-21 19:52:29,836 - PassiveExtractionWorkflow - INFO - 🔧 REPAIR: Added 31 missing URLs to needs_full_extraction
+2025-08-21 19:52:29,837 - PassiveExtractionWorkflow - ERROR - ❌ INVARIANT REPAIR[C1]: Automatic repair failed - entering safe halt
+2025-08-21 19:52:29,843 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (29 entries) saved successfully
+2025-08-21 19:52:29,845 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-21 19:52:29,846 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/233 url= prod_idx=0/0
+2025-08-21 19:52:29,846 - PassiveExtractionWorkflow - ERROR - 🛑 SAFE HALT: System entering safe halt mode
+2025-08-21 19:52:29,847 - PassiveExtractionWorkflow - ERROR - 🛑 REASON: invariant_failure
+2025-08-21 19:52:29,848 - PassiveExtractionWorkflow - ERROR - 🛑 CONTEXT: C1
+2025-08-21 19:52:29,848 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 1. Review the diagnostic snapshot created for this error
+2025-08-21 19:52:29,849 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 2. Check system logs for additional context
+2025-08-21 19:52:29,849 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 3. Verify data integrity of linking map and cached products
+2025-08-21 19:52:29,850 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 4. Manually verify URL counts in category manifest
+2025-08-21 19:52:29,850 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 5. Check for duplicate URLs in linking map
+2025-08-21 19:52:29,851 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 6. Consider rebuilding linking map from scratch if corruption is severe
+2025-08-21 19:52:29,851 - PassiveExtractionWorkflow - ERROR - 🔧 RECOVERY: 7. Contact support if automatic recovery fails
+2025-08-21 19:52:29,852 - PassiveExtractionWorkflow - DEBUG - 🔧 STATE UPDATE: current_category_index=1, total_categories=233 (chunk_categories=1)
+2025-08-21 19:52:29,852 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_index = 1 (system_progression)
+2025-08-21 19:52:29,853 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: total_categories = 233 (system_progression)
+2025-08-21 19:52:29,853 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_product_index_in_category = 0 (system_progression)
+2025-08-21 19:52:29,854 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: total_products_in_current_category = 50 (system_progression)
+2025-08-21 19:52:29,854 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_phase = supplier (system_progression)
+2025-08-21 19:52:29,855 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔧 SP-FIRST: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear (system_progression)
+2025-08-21 19:52:29,855 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: progress_index/last_processed_index = 0
+2025-08-21 19:52:29,856 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_index = 1
+2025-08-21 19:52:29,856 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_categories = 233
+2025-08-21 19:52:29,857 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: total_products_in_current_category = 50
+2025-08-21 19:52:29,857 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_category_url = https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:29,858 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 🔄 SP→SEP MIRROR: current_phase = supplier
+2025-08-21 19:52:29,859 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - ✅ SP-FIRST COMPLETE: Updated SP first, mirrored to SEP. kwargs: {'current_category_index': 1, 'total_categories': 233, 'current_product_index_in_category': 0, 'total_products_in_current_category': 50, 'current_phase': 'supplier', 'current_category_url': 'https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear'}
+2025-08-21 19:52:29,859 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 AUTHORITATIVE (system_progression): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:29,860 - utils.fixed_enhanced_state_manager.poundwholesale.co.uk - DEBUG - 📊 MIRROR (supplier_extraction_progress): index=1, url=https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear
+2025-08-21 19:52:29,860 - PassiveExtractionWorkflow - ERROR - Unexpected error occurred during workflow execution: WindowsSaveGuardian.save_json_atomic() missing 1 required positional argument: 'data'
+Traceback (most recent call last):
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\tools\passive_extraction_workflow_latest.py", line 1627, in run
+    return await self._run_hybrid_processing_mode(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy\tools\passive_extraction_workflow_latest.py", line 4684, in _run_hybrid_processing_mode
+    WindowsSaveGuardian.save_json_atomic(cache_file_path, getattr(self, 'cached_products', []))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: WindowsSaveGuardian.save_json_atomic() missing 1 required positional argument: 'data'
+2025-08-21 19:52:29,878 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-08-21 19:52:29,886 - utils.browser_manager - INFO - 🔌 Browser cleanup skipped - no event loop available
