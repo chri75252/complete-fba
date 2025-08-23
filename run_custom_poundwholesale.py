@@ -19,10 +19,10 @@ import inspect
 workflow_module_path = inspect.getfile(PassiveExtractionWorkflow)
 expected_path_suffix = os.path.join("tools", "passive_extraction_workflow_latest.py")
 if not workflow_module_path.endswith(expected_path_suffix.replace(os.sep, "/")):
-    print(f"⚠️ WARNING: PassiveExtractionWorkflow imported from unexpected path: {workflow_module_path}")
+    print(f"WARNING: PassiveExtractionWorkflow imported from unexpected path: {workflow_module_path}")
     print(f"Expected path to end with: {expected_path_suffix}")
 else:
-    print(f"✅ IMPORT HYGIENE: PassiveExtractionWorkflow imported from correct path: {workflow_module_path}")
+    print(f"IMPORT HYGIENE: PassiveExtractionWorkflow imported from correct path: {workflow_module_path}")
 
 async def main():
     """Main function to run the custom extraction workflow."""
@@ -34,11 +34,11 @@ async def main():
         print("🪟 --- Starting Custom Pound Wholesale Extraction Workflow (Windows Native) ---")
         print("✅ Running on Windows - Enhanced memory management enabled")
     else:
-        print("🐧 --- Starting Custom Pound Wholesale Extraction Workflow (Linux/WSL) ---")
-        print("✅ Running on Linux/WSL - Standard memory management")
+        print("--- Starting Custom Pound Wholesale Extraction Workflow (Linux/WSL) ---")
+        print("Running on Linux/WSL - Standard memory management")
     
-    print(f"📊 Platform: {system_platform}")
-    print(f"🐍 Python: {platform.python_version()}")
+    print(f"Platform: {system_platform}")
+    print(f"Python: {platform.python_version()}")
     print("--- Starting Custom Pound Wholesale Extraction Workflow ---")
     
     # Setup logging
@@ -105,22 +105,22 @@ if __name__ == "__main__":
         if python_version >= (3, 13):
             # Python 3.13+ requires ProactorEventLoop for subprocess support on Windows
             asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
-            print("🔧 Using Windows ProactorEventLoop for Python 3.13+ compatibility")
+            print("Using Windows ProactorEventLoop for Python 3.13+ compatibility")
         else:
             # Python 3.12 and below use SelectorEventLoop
             asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-            print("🔧 Using Windows SelectorEventLoop for Python 3.12 compatibility")
+            print("Using Windows SelectorEventLoop for Python 3.12 compatibility")
     
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\n🛑 Process interrupted by user. Shutting down gracefully.")
+        print("\nProcess interrupted by user. Shutting down gracefully.")
     except NotImplementedError as e:
-        print(f"\n❌ Windows event loop error: {e}")
-        print("💡 Try installing the latest version of Playwright:")
+        print(f"\nWindows event loop error: {e}")
+        print("Try installing the latest version of Playwright:")
         print("   pip install --upgrade playwright")
         print("   playwright install chromium")
     except Exception as e:
-        print(f"\n💥 Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         import traceback
         traceback.print_exc()

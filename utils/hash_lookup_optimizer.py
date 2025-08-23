@@ -56,7 +56,6 @@ class HashLookupOptimizer:
         self._ean_index: Dict[str, Dict[str, Any]] = {}
         self._url_index: Dict[str, Dict[str, Any]] = {}
         self._asin_index: Dict[str, Dict[str, Any]] = {}
-        self._hash_index: Dict[str, Dict[str, Any]] = {}  # Hash-based lookup index
         
         # Performance tracking
         self.metrics = PerformanceMetrics()
@@ -81,7 +80,6 @@ class HashLookupOptimizer:
             self._ean_index.clear()
             self._url_index.clear()
             self._asin_index.clear()
-            self._hash_index.clear()
             
             # Build new indexes
             for entry in linking_map:
@@ -124,12 +122,6 @@ class HashLookupOptimizer:
                       entry.get("asin"))
         if amazon_asin:
             self._asin_index[amazon_asin] = entry
-        
-        # Index by canonical hash for O(1) deduplication
-        if supplier_url:
-            url_hash = self.canonical_hash(supplier_url)
-            if url_hash:
-                self._hash_index[url_hash] = entry
     
     def check_product_in_linking_map(self, supplier_ean: Optional[str] = None, 
                                    supplier_url: Optional[str] = None) -> Tuple[bool, Optional[Dict[str, Any]]]:
@@ -334,12 +326,6 @@ class HashLookupOptimizer:
             if amazon_asin and amazon_asin in self._asin_index:
                 del self._asin_index[amazon_asin]
             
-            # Remove from hash index
-            if supplier_url:
-                url_hash = self.canonical_hash(supplier_url)
-                if url_hash and url_hash in self._hash_index:
-                    del self._hash_index[url_hash]
-            
             self.logger.debug(f"✅ Removed entry from hash indexes: {entry.get('supplier_ean', 'No EAN')}")
     
     def get_processed_urls_set(self) -> Set[str]:
@@ -353,70 +339,6 @@ class HashLookupOptimizer:
             if not self._index_valid:
                 return set()
             return set(self._url_index.keys())
-    
-    def canonical_hash(self, url: str) -> str:
-        """
-        Generate a stable canonical hash from product URL for O(1) deduplication.
-        
-        Args:
-            url: Product URL (e.g., "https://www.poundwholesale.co.uk/12-cup-muffin-flower-tray")
-            
-        Returns:
-            MD5 hash of the product ID (last path segment)
-        """
-        import hashlib
-        
-        if not url:
-            return ""
-            
-        # Extract product ID from URL (last path segment)
-        try:
-            product_id = url.rstrip('/').split('/')[-1]
-            if not product_id:
-                return ""
-            
-            # Generate stable MD5 hash
-            return hashlib.md5(product_id.encode('utf-8')).hexdigest()
-        except Exception:
-            return ""
-    
-    def get_processed_hashes_set(self) -> Set[str]:
-        """
-        Get set of all processed product hashes for O(1) gap processing.
-        
-        Returns:
-            Set of canonical hashes for all supplier URLs in the linking map
-        """
-        with self._lock:
-            if not self._index_valid:
-                return set()
-            
-            # Return hash keys directly from hash index for true O(1) performance
-            return set(self._hash_index.keys())
-    
-    def is_processed_by_hash(self, url: str) -> bool:
-        """
-        Check if product URL is already processed using O(1) hash lookup.
-        
-        Args:
-            url: Product URL to check
-            
-        Returns:
-            True if the product is already processed, False otherwise
-        """
-        if not url:
-            return False
-            
-        product_hash = self.canonical_hash(url)
-        if not product_hash:
-            return False
-            
-        with self._lock:
-            if not self._index_valid:
-                return False
-                
-            # O(1) direct hash lookup using hash index
-            return product_hash in self._hash_index
     
     def get_processed_eans_set(self) -> Set[str]:
         """

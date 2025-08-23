@@ -1,6 +1,13 @@
 {
-  "__comment_exhaustive_mode": "\ud83d\ude80 EXHAUSTIVE MODE - Process EVERY product under \u00a320 from ALL categories",
-  "__comment_no_limits": "ALL artificial limits removed except \u00a320 price filter",
+  "__comment_exhaustive_mode": "🚀 EXHAUSTIVE MODE - Process EVERY product under £20 from ALL categories",
+  "__comment_no_limits": "ALL artificial limits removed except £20 price filter",
+  "pipeline_toggles": {
+    "separate_supplier_amazon_loops": true,
+    "mark_cached_only_complete": true,
+    "resume_abs_index_math": true,
+    "frozen_category_denominator": true,
+    "invariant_warn_on_resume": true
+  },
   "system": {
     "name": "Amazon FBA Agent System",
     "version": "3.5.0",
@@ -8,7 +15,6 @@
     "test_mode": false,
     "clear_cache": false,
     "selective_cache_clear": false,
-    "force_fresh_start": true,
    "archive_system": {
       "enabled": false,
       "mode": "",

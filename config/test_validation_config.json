@@ -1,0 +1,181 @@
+{
+  "__comment": "Test validation configuration for audit protocol",
+  "pipeline_toggles": {
+    "separate_supplier_amazon_loops": true,
+    "mark_cached_only_complete": true,
+    "resume_abs_index_math": true,
+    "frozen_category_denominator": true,
+    "invariant_warn_on_resume": true
+  },
+  "system": {
+    "name": "Amazon FBA Agent System",
+    "version": "3.5.0",
+    "environment": "test",
+    "test_mode": true,
+    "clear_cache": false,
+    "selective_cache_clear": false,
+    "archive_system": {
+      "enabled": false,
+      "mode": "",
+      "target_supplier": "",
+      "description": "Archive system disabled for testing"
+    },
+    "force_ai_scraping": false,
+    "max_products": 20,
+    "max_analyzed_products": 20,
+    "max_products_per_category": 10,
+    "max_products_per_cycle": 5,
+    "linking_map_batch_size": 1,
+    "financial_report_batch_size": 5,
+    "headless_probe_seconds": 0,
+    "reuse_browser": true,
+    "max_tabs": 1,
+    "supplier_login_max_retries": 1,
+    "supplier_login_backoff_sec": 2,
+    "output_root": "OUTPUTS",
+    "enable_supplier_parser": false,
+    "force_ai_category_suggestion": false,
+    "supplier_extraction_batch_size": 5,
+    "max_categories_to_process": 2
+  },
+  "processing_limits": {
+    "max_products_per_category": 10,
+    "max_products_per_run": 20,
+    "min_price_gbp": 0.01,
+    "max_price_gbp": 20.0,
+    "price_midpoint_gbp": 20.0,
+    "min_products_per_category": 1,
+    "category_validation": {
+      "enabled": true,
+      "min_products_per_category": 1,
+      "timeout_seconds": 10
+    }
+  },
+  "supplier_cache_control": {
+    "enabled": true,
+    "update_frequency_products": 1,
+    "force_update_on_interruption": true,
+    "cache_modes": {
+      "exhaustive": {
+        "update_frequency_products": 1,
+        "force_validation": true,
+        "backup_frequency": 5
+      }
+    },
+    "validation": {
+      "verify_cache_integrity": true,
+      "backup_before_update": true
+    }
+  },
+  "supplier_extraction_progress": {
+    "enabled": true,
+    "track_subcategory_index": true,
+    "track_product_index_within_category": true,
+    "recovery_mode": "product_resume",
+    "progress_display": {
+      "show_subcategory_progress": true,
+      "show_product_progress": true,
+      "update_frequency_products": 1
+    },
+    "state_persistence": {
+      "save_on_category_completion": true,
+      "save_on_product_batch": true,
+      "batch_save_frequency": 1
+    }
+  },
+  "hybrid_processing": {
+    "enabled": true,
+    "switch_to_amazon_after_categories": 1,
+    "process_existing_gap_first": true,
+    "processing_modes": {
+      "sequential": {
+        "description": "Complete all supplier extraction, then Amazon analysis",
+        "enabled": false
+      },
+      "chunked": {
+        "description": "Alternate between supplier extraction and Amazon analysis",
+        "enabled": true,
+        "chunk_size_categories": 1
+      },
+      "balanced": {
+        "description": "Process suppliers in batches, analyze each batch",
+        "enabled": false,
+        "analysis_after_extraction_batch": false
+      }
+    },
+    "memory_management": {
+      "enabled": true,
+      "clear_cache_between_phases": false,
+      "max_memory_threshold_mb": 1024,
+      "clear_frequency_products": 50,
+      "sliding_window_size": 10,
+      "file_based_counting": {
+        "enabled": true,
+        "safe_clear_frequency": 10,
+        "preserve_critical_counters": true,
+        "fallback_to_memory": false
+      }
+    }
+  },
+  "performance": {
+    "max_concurrent_requests": 2,
+    "request_timeout_seconds": 30,
+    "retry_attempts": 2,
+    "retry_delay_seconds": 2,
+    "batch_size": 5,
+    "rate_limiting": {
+      "rate_limit_delay": 0.5,
+      "batch_delay": 2.0,
+      "ai_batch_size": 2
+    },
+    "timeouts": {
+      "navigation_timeout_ms": 30000,
+      "search_input_timeout_ms": 5000,
+      "results_wait_timeout_ms": 15000,
+      "selector_wait_timeout_ms": 20000,
+      "page_load_timeout_ms": 10000,
+      "http_request_timeout_seconds": 15
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_hours": 1,
+    "max_size_mb": 100,
+    "selective_clear_config": {
+      "preserve_analyzed_products": true,
+      "preserve_ai_categories": true,
+      "preserve_linking_map": true,
+      "clear_unanalyzed_only": false,
+      "clear_failed_extractions": false
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics_interval": 60,
+    "health_check_interval": 120,
+    "log_level": "INFO",
+    "alert_thresholds": {
+      "cpu_percent": 90,
+      "memory_percent": 90,
+      "error_rate_per_hour": 10
+    }
+  },
+  "output": {
+    "base_dir": "OUTPUTS/FBA_ANALYSIS",
+    "report_format": "json",
+    "save_intermediate_results": true,
+    "file_naming": {
+      "pattern": "{supplier}_{timestamp}",
+      "timestamp_format": "%Y%m%d_%H%M%S"
+    },
+    "retention": {
+      "keep_days": 7,
+      "archive_after_days": 3
+    }
+  },
+  "chrome": {
+    "debug_port": 9222,
+    "headless": true,
+    "extensions": []
+  }
+}

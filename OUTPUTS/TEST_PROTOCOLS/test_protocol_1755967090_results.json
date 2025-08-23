@@ -1,0 +1,145 @@
+{
+  "protocol_id": "test_protocol_1755967090",
+  "start_time": 1755967090.9662743,
+  "run_results": {
+    "run1_fresh": {
+      "run_id": "run1_fresh_processing",
+      "run_type": "fresh",
+      "start_time": 1755967090.9667878,
+      "setup_completed": true,
+      "execution_completed": true,
+      "validation_results": {
+        "criteria_met": 4,
+        "total_criteria": 6,
+        "detailed_results": {
+          "Cache files update every 1 product": {
+            "passed": false,
+            "details": "Average frequency: 0.00",
+            "evidence": []
+          },
+          "Linking map entries increment correctly": {
+            "passed": true,
+            "details": "Manual validation required",
+            "evidence": []
+          },
+          "Financial reports trigger every 50 products": {
+            "passed": true,
+            "details": "Expected: 0, Actual: 0",
+            "evidence": []
+          },
+          "Processing state saves atomically": {
+            "passed": true,
+            "details": "Manual validation required",
+            "evidence": []
+          },
+          "No duplicate product processing": {
+            "passed": false,
+            "details": "Duplicate check completed",
+            "evidence": []
+          },
+          "All expected columns present in outputs": {
+            "passed": true,
+            "details": "Manual validation required",
+            "evidence": []
+          }
+        },
+        "compliance_percentage": 66.66666666666666
+      },
+      "audit_report": {
+        "run_id": "audit_20250823_203810",
+        "execution_time": "2025-08-23T20:38:10.960604",
+        "total_products_processed": 0,
+        "audit_duration_seconds": 4.0250184535980225,
+        "compliance_metrics": {
+          "cache_update_frequency": {
+            "expected": 1,
+            "actual_average": 0.0,
+            "compliance_rate": 100.0,
+            "anomalies": []
+          },
+          "financial_report_triggers": {
+            "expected_triggers": 0,
+            "actual_triggers": 0,
+            "compliance_rate": 100.0,
+            "missed_triggers": [],
+            "false_triggers": []
+          }
+        },
+        "file_validation": {
+          "cache_files": {
+            "total_updates": 1,
+            "schema_violations": 0,
+            "content_errors": 0
+          },
+          "linking_map": {
+            "total_entries": 0,
+            "invalid_entries": 0,
+            "duplicate_entries": 0
+          }
+        },
+        "resumption_validation": {},
+        "anomalies": [],
+        "recommendations": [
+          "System operating within all specified parameters",
+          "No critical issues detected",
+          "Continue with current configuration"
+        ]
+      },
+      "compliance_score": 66.66666666666666,
+      "critical_errors": [],
+      "warnings": [],
+      "end_time": 1755967095.0104747,
+      "duration": 4.043686866760254
+    },
+    "run2_resume": {
+      "run_id": "run2_resume_processing",
+      "run_type": "resume",
+      "start_time": 1755967100.012014,
+      "setup_completed": false,
+      "execution_completed": false,
+      "validation_results": {},
+      "audit_report": {},
+      "compliance_score": 0.0,
+      "critical_errors": [
+        "Setup phase failed"
+      ],
+      "warnings": [],
+      "end_time": 1755967100.0127196,
+      "duration": 0.000705718994140625
+    }
+  },
+  "comparative_analysis": {
+    "execution_time_comparison": {
+      "run1_duration": 4.043686866760254,
+      "run2_duration": 0.000705718994140625,
+      "time_difference": -4.042981147766113,
+      "efficiency_gain": true
+    },
+    "compliance_comparison": {
+      "run1_score": 66.66666666666666,
+      "run2_score": 0.0,
+      "score_difference": -66.66666666666666
+    },
+    "file_output_comparison": {},
+    "error_comparison": {
+      "run1_errors": 0,
+      "run2_errors": 1,
+      "error_reduction": -1
+    },
+    "resumption_effectiveness": {
+      "resume_successful": false,
+      "state_integrity_maintained": true,
+      "performance_impact": "minimal"
+    }
+  },
+  "overall_compliance": false,
+  "critical_issues": [],
+  "recommendations": [
+    "Fresh processing compliance below threshold - review configuration",
+    "Resume processing compliance below threshold - review resumption logic",
+    "Resume processing less compliant than fresh - investigate state handling",
+    "Increased errors in resume processing - review error handling"
+  ],
+  "end_time": 1755967100.0128477,
+  "total_duration": 9.046573400497437
+}

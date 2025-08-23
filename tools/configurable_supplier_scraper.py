@@ -488,7 +488,8 @@ class ConfigurableSupplierScraper:
             log.info(f"✅ URL Pre-filtering: {filtered_count} new URLs need processing, {original_count - filtered_count} already cached")
             
             if filtered_count == 0:
-                log.info("🔍 All URLs are already cached - but proceeding with URL discovery for manifest consistency")
+                log.info("🎯 All URLs are already cached - no new products to scrape!")
+                return []  # Return empty list if all URLs are cached
             
         except Exception as filter_error:
             log.warning(f"⚠️ URL pre-filtering failed: {filter_error} - continuing with all URLs")
