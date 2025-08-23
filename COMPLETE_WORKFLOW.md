@@ -115,7 +115,42 @@ The Amazon FBA Agent System v3.8+ is a production-ready automation platform that
 ### **🚨 CRITICAL IMPLEMENTATION GAPS IDENTIFIED**
 
 | Component | Status | Impact | Root Cause Analysis |
-|-----------|--------|--------|---------------------|
+|-----------|--------|--------|---------------------|tal Categories Count
+🚨 CRITICAL ISSUE IDENTIFIED
+Problem Description
+Issue: Processing state shows incorrect total categories count
+
+Current Value: "total_categories": 119
+Expected Value: ~233 categories
+Impact: 🔴 Critical - Affects progress calculations, user display metrics, and resumption logic accuracy
+System Impact Analysis
+This discrepancy affects several critical system components:
+
+Progress Calculations: Incorrect percentage displays to users
+Breadcrumb Logging: Wrong category index ratios (e.g., "cat_idx=50/119" instead of "cat_idx=50/233")
+State Management: Potential resumption logic issues
+User Experience: Misleading progress information
+🔍 INVESTIGATION REQUIREMENTS
+Root Cause Analysis Tasks
+The following investigation must be performed to identify the source of the incorrect count:
+
+1. Configuration Source Analysis
+Examine: config/poundwholesale_categories.json
+Verify: Actual number of category URLs defined
+Count: Manual verification of entries vs reported count
+2. Category Discovery Logic
+Search Pattern: total_categories.*=.*len\(.*\)
+File Focus: tools/passive_extraction_workflow_latest.py
+Method: _run_hybrid_processing_mode()%20-%20Copy%20-%20Copy%20-%20POSTLONGRUNPREKIRO2%20beforecompletion-\tools\passive_extraction_workflow_latest.py#L4769-L4884) and category initialization
+3. State Manager Investigation
+File: utils/fixed_enhanced_state_manager.py
+Focus: update_progression_unified()%20-%20Copy%20-%20Copy%20-%20POSTLONGRUNPREKIRO2%20beforecompletion-\utils\fixed_enhanced_state_manager.py#L604-L660) and initialize_category_processing()%20-%20Copy%20-%20Copy%20-%20POSTLONGRUNPREKIRO2%20beforecompletion-\utils\fixed_enhanced_state_manager.py#L496-L511)
+Check: Where total_categories is set and from what source
+4. Config Loading Verification
+File: SystemConfigLoader.py
+Verify: Category list loading and counting logic
+Check: Any filtering or exclusion logic that might reduce count
+📋 DETAILED IMPLEME
 | **Category Manifests** | ❌ **MISSING** | 🔴 Critical | Method exists but not called consistently in workflow |
 | **Filter Invariant Logs** | ✅ **IMPLEMENTED** | ✅ **FIXED** | Filter transparency logging with invariant validation now active |
 | **Financial Report Triggers** | ❌ **MISSING** | 🔴 Critical | Logic exists but threshold monitoring not implemented |
