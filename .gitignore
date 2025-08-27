@@ -1,42 +1,322 @@
-# Environment variables
-.env
+# Amazon FBA Agent System - Qoder IDE Ignore File
+# This file excludes heavy/generated content while preserving core codebase and latest files
 
-# API Keys and secrets
-*.key
-secrets/
+# ==============================================================================
+# ARCHIVED AND BACKUP DIRECTORIES (Complete exclusion)
+# ==============================================================================
+archive/
+archive_new/
+backup/
 
-# Cache directories
-cache/
+# ==============================================================================
+# GENERATED OUTPUT DIRECTORIES (Mostly ignored, keeping latest files)
+# ==============================================================================
+
+# Exclude all outputs except the most recent files in key directories
+OUTPUTS/BACKUP/
+OUTPUTS/COMBINED*
+OUTPUTS/EXPERIMENTS/
+OUTPUTS/ai_suggested_categories/
+OUTPUTS/test_permissions/
+OUTPUTS/test_windows_guardian/
+
+# FBA_ANALYSIS - exclude most but keep specific recent files
+OUTPUTS/FBA_ANALYSIS/ai_category_cache/
+OUTPUTS/FBA_ANALYSIS/amazon_cache*/
+OUTPUTS/FBA_ANALYSIS/navigation_dumps/
+
+# Financial reports - Dynamic exclusion (keeps latest automatically)
+OUTPUTS/FBA_ANALYSIS/financial_reports/clearance-king_co_uk/
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/combined/
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/combine_csvs.py
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/combined_reports.csv
+# Exclude older financial reports by date pattern (keeps recent ones automatically)
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202507[0-1]*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_20250801*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_20250805*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_20250806*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_20250807*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202508[0-1][0-9]*.csv
+# Exclude older months/years
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202506*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202505*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202504*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202503*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202502*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_202501*.csv
+OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_2024*.csv
+
+# Cache directories - Dynamic exclusion (keeps only latest ~20 files)
+# Exclude older cache files by pattern - only most recent stay
+OUTPUTS/CACHE/*_202508[0-1]*.json
+OUTPUTS/CACHE/*_202507*.json
+OUTPUTS/CACHE/*_202506*.json
+OUTPUTS/CACHE/*_202505*.json
+OUTPUTS/CACHE/*_202504*.json
+OUTPUTS/CACHE/*_202503*.json
+OUTPUTS/CACHE/*_202502*.json
+OUTPUTS/CACHE/*_202501*.json
+OUTPUTS/CACHE/*_2024*.json
+OUTPUTS/CACHE/*_2023*.json
 
 
-# Python cache
+# Amazon cache - exclude older patterns, keep only latest ~20 files
+OUTPUTS/amazon_cache/*_202508[0-1]*.json
+OUTPUTS/amazon_cache/*_202507*.json
+OUTPUTS/amazon_cache/*_202506*.json
+OUTPUTS/amazon_cache/*_202505*.json
+OUTPUTS/amazon_cache/*_202504*.json
+OUTPUTS/amazon_cache/*_202503*.json
+OUTPUTS/amazon_cache/*_202502*.json
+OUTPUTS/amazon_cache/*_202501*.json
+OUTPUTS/amazon_cache/*_2024*.json
+OUTPUTS/amazon_cache/*_2023*.json
+
+# Supplier cache - exclude older patterns, keep only latest ~20 files
+OUTPUTS/supplier_cache/*_202508[0-1]*.json
+OUTPUTS/supplier_cache/*_202507*.json
+OUTPUTS/supplier_cache/*_202506*.json
+OUTPUTS/supplier_cache/*_202505*.json
+OUTPUTS/supplier_cache/*_202504*.json
+OUTPUTS/supplier_cache/*_202503*.json
+OUTPUTS/supplier_cache/*_202502*.json
+OUTPUTS/supplier_cache/*_202501*.json
+OUTPUTS/supplier_cache/*_2024*.json
+OUTPUTS/supplier_cache/*_2023*.json
+
+
+# Cached products - keep main files but exclude archive
+OUTPUTS/cached_products/ARCHIVE/
+
+# ==============================================================================
+# LOG FILES (Dynamic - keeps latest files automatically)
+# ==============================================================================
+
+# System logs
+logs/api_calls/
+logs/application/
+logs/system/
+logs/tests/
+
+# Debug logs - Dynamic pattern to keep only latest ~10 files
+# This excludes older debug logs but allows newer ones to be preserved automatically
+logs/debug/*_202508[0-1]*.log
+logs/debug/*_202507*.log
+logs/debug/*_202506*.log
+logs/debug/*_202505*.log
+logs/debug/*_202504*.log
+logs/debug/*_202503*.log
+logs/debug/*_202502*.log
+logs/debug/*_202501*.log
+logs/debug/*_2024*.log
+logs/debug/*_2023*.log
+
+# Exclude very large/old debug files but keep recent patterns
+logs/debug/cleaned*.txt
+logs/debug/full-output.txt
+logs/debug/incorrect-*.txt
+logs/debug/login_*.html
+logs/debug/login_*.png
+logs/debug/login_*.json
+logs/debug/agent_test_logs/
+
+# ==============================================================================
+# TEMPORARY AND CACHE DIRECTORIES
+# ==============================================================================
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
-venv/
+.pytest_cache/
+.coverage
+.tox/
 .venv/
-pip-log.txt
-pip-delete-this-directory.txt
+venv/
+env/
+ENV/
 
-# IDE
+# ==============================================================================
+# IDE AND EDITOR FILES
+# ==============================================================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Test artifacts
-.pytest_cache/
-htmlcov/
-.coverage
+# ==============================================================================
+# LEGACY AND OLD DIRECTORIES
+# ==============================================================================
+DASHBOARD - old/
+monitoring - OLD/
+legacy_system/
 
-test_wheels/  # For offline installation
-langraph_env/
+# ==============================================================================
+# TEST AND DEVELOPMENT FILES
+# ==============================================================================
+testing/
+tests/
+testsprite_tests/
+single use/
 
+# ==============================================================================
+# DOCUMENTATION AND REPORTS (Keep core docs, exclude detailed reports)
+# ==============================================================================
+
+# Large analysis and report files
+
+
+# Keep essential docs but exclude verbose ones
+*.md.bak*
+*.md.BAK
+*BEHAVIOR_SPECIFICATION.md
+*TODO_LIST.md
+*BUG_REPORT*.md
+*FIXES*.md
+*TESTING_REPORT.md
+
+# ==============================================================================
+# SPECIFIC FILE PATTERNS
+# ==============================================================================
+
+# Configuration backups and experiments
+config/*backup*.json
+config/*experiment*.json
+config/*toggle*.json
+config/*test*.json
+config/*analysis*.json
+config/*rigorous*.json
+config/*exhaustive*.json
+config/*finite*.json
+config/*hybrid*.json
+config/comprehensive_*.json
+config/experiment_*.json
+config/rigorous_*.json
+config/evidence_*.json
+config/*duplicated.json
+
+# Log file patterns - Dynamic exclusion (keeps recent files automatically)
+# Exclude root-level log files from older periods
+fba_extraction_202507[0-1]*.log
+fba_extraction_202506*.log
+fba_extraction_202505*.log
+fba_extraction_202504*.log
+fba_extraction_202503*.log
+fba_extraction_202502*.log
+fba_extraction_202501*.log
+fba_extraction_2024*.log
+
+# JSON results and analysis files
+*_results_*.json
+*_analysis_*.json
+acceptance_gate_*.json
+config_debug_*.json
+
+# Python cache and compiled files
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Temporary files
+*.tmp
+*.temp
+*.log~
+*.bak
+*.backup
+*.orig
+*.rej
+.gitignore~
+
+# Excel and Office files
+*.xlsx
+~$*.xlsx
+*.xls
+~$*.xls
+
+# Large data files
+*.csv
+!requirements.txt
+!codex_requirements.txt
+
+# ==============================================================================
+# KEEP LATEST FILES PATTERN (for critical directories)
+# ==============================================================================
+
+# For logs/debug - we want to keep only the most recent files
+# This is a complex pattern, so we'll ignore most and rely on the fact that
+# the latest files will naturally be preserved
+
+# ==============================================================================
+# SPECIFIC EXCLUSIONS FOR SIZE REDUCTION
+# ==============================================================================
+
+# Exclude specific large/old directories entirely
+improvements needed/
+enquiry/
+suppliers/
+langgraph_integration/
+
+# Exclude specific analysis scripts and validation files
+calculate_unprocessed_products.py
+category_completion_analyzer.py
+critical_system_fixes.py
+enhanced_cache_fix.py
+enhanced_memory_fix.py
+fix_category_completion.py
+get_category_completion_status.py
+hybrid_mode_fixes.py
+implement_missing_components.py
+sentinel_demo.py
+sentinel_integration_patch.py
+state_analysis.py
+test_cache_optimization.py
+test_workflow_fixes.py
+validate_*.py
+verify_*.py
+
+# Exclude batch and script files
+*.bat
+*.sh
+*.ps1
+
+# Exclude environment and configuration files
+.env
+.env.example
+.blackboxrules
+.markdownlint.yaml
+.pre-commit-config.yaml
+pyproject.toml
+tox.ini
+
+# ==============================================================================
+# GIT AND VERSION CONTROL
+# ==============================================================================
+.git/
+.github/
+.gitignore
+.gitignore~
+
+# ==============================================================================
+# OTHER DIRECTORIES TO EXCLUDE
+# ==============================================================================
+.claude/
+.kiro/
+scripts/
