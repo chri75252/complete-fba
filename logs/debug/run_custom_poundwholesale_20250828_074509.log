@@ -1,0 +1,107 @@
+2025-08-28 07:45:09,683 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250828_074509.log
+2025-08-28 07:45:09,686 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250828_074509.log
+2025-08-28 07:45:09,686 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-08-28 07:45:09,687 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-08-28 07:45:09,688 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-08-28 07:45:10,545 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222 (headless: False)
+2025-08-28 07:45:10,681 - utils.browser_manager - INFO - ✅ Connected to existing Chrome on port 9222
+2025-08-28 07:45:10,682 - utils.browser_manager - INFO - 👁️ Ensuring browser is visible (headless=False)
+2025-08-28 07:45:10,682 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-08-28 07:45:10,682 - utils.browser_manager - INFO - ✅ Browser ready (headless: False)
+2025-08-28 07:45:10,682 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-28 07:45:10,682 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-28 07:45:10,687 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-08-28 07:45:10,687 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-08-28 07:45:10,688 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-08-28 07:45:10,688 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-08-28 07:45:15,408 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-28 07:45:15,408 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-28 07:45:19,848 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-28 07:45:19,848 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-28 07:45:19,848 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2025-08-28 07:45:19,849 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2025-08-28 07:45:19,849 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2025-08-28 07:45:19,850 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-08-28 07:45:19,850 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-08-28 07:45:19,946 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10442 products in poundwholesale-co-uk_products_cache.json
+2025-08-28 07:45:19,953 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 10442 products, 0 categories
+2025-08-28 07:45:19,954 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-08-28 07:45:20,043 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10442 actual products in cache (total entries: 10442)
+2025-08-28 07:45:20,159 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10565 processed products in linking map
+2025-08-28 07:45:20,377 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 183 categories
+2025-08-28 07:45:20,386 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 231 categories in config
+2025-08-28 07:45:20,395 - utils.fixed_enhanced_state_manager - INFO - 🔄 REVERSE GAP DETECTED: Linking map (10565) > Cache (10442)
+2025-08-28 07:45:20,395 - utils.fixed_enhanced_state_manager - WARNING - 🔄 REVERSE GAP: Detected restart with resumption_index=0 but previous state exists - preserving index
+2025-08-28 07:45:20,395 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: reverse_gap_restart_preserved)
+2025-08-28 07:45:20,411 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (23 entries) saved successfully
+2025-08-28 07:45:20,414 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-28 07:45:20,414 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-08-28 07:45:20,414 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-08-28 07:45:20,415 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-08-28 07:45:20,415 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-08-28 07:45:20,416 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-08-28 07:45:20,416 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-08-28 07:45:20,416 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2025-08-28 07:45:20,417 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-08-28 07:45:20,417 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-08-28 07:45:20,418 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-08-28 07:45:20,418 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-08-28 07:45:20,418 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-08-28 07:45:20,419 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-08-28 07:45:20,419 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-08-28 07:45:20,419 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-08-28 07:45:20,419 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-08-28 07:45:20,420 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-08-28 07:45:20,421 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-08-28 07:45:20,422 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-08-28 07:45:20,423 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-08-28 07:45:20,424 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2025-08-28 07:45:20,424 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-08-28 07:45:20,425 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-08-28 07:45:20,425 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250828_074520
+2025-08-28 07:45:20,426 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-08-28 07:45:20,426 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-08-28 07:45:20,427 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-08-28 07:45:20,427 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-08-28 07:45:20,427 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-08-28 07:45:20,428 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-08-28 07:45:20,428 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-08-28 07:45:20,431 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 0
+2025-08-28 07:45:20,431 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-08-28 07:45:20,432 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-08-28 07:45:20,432 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-08-28 07:45:20,579 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10565 entries
+2025-08-28 07:45:20,782 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10098 EANs, 10481 URLs, 6590 ASINs in 0.203s
+2025-08-28 07:45:20,782 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10565 entries
+2025-08-28 07:45:20,782 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 10565
+2025-08-28 07:45:20,852 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10442 products in poundwholesale-co-uk_products_cache.json
+2025-08-28 07:45:20,856 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 10565 > cache: 10442)
+2025-08-28 07:45:20,857 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-08-28 07:45:20,857 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-08-28 07:45:20,978 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10565 entries
+2025-08-28 07:45:21,246 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10098 EANs, 10481 URLs, 6590 ASINs in 0.266s
+2025-08-28 07:45:21,246 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10565 entries
+2025-08-28 07:45:21,246 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-08-28 07:45:21,247 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-28 07:45:21,247 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-08-28 07:45:21,247 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-08-28 07:45:21,248 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 231 predefined categories (infinite mode)
+2025-08-28 07:45:21,248 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-08-28 07:45:21,248 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-08-28 07:45:21,248 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-08-28 07:45:21,249 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-08-28 07:45:21,249 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-08-28 07:45:21,401 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10442 products in poundwholesale-co-uk_products_cache.json
+2025-08-28 07:45:21,405 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-08-28 07:45:21,406 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-28 07:45:21,406 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-28 07:45:21,495 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10442 products in poundwholesale-co-uk_products_cache.json
+2025-08-28 07:45:21,606 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10442 total → 0 unprocessed (10481 already in linking map)
+2025-08-28 07:45:21,607 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
+2025-08-28 07:45:21,608 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-28 07:45:21,609 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-28 07:45:21,609 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-28 07:45:21,610 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-28 07:45:21,610 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-28 07:45:21,621 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-08-28 07:45:21,626 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
