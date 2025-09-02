@@ -176,6 +176,35 @@ class CachedURLManager:
         self.cache_files_loaded.clear()
         log.info("🗑️ Cleared all cached URLs from memory")
 
+    def load_linking_map_urls(self, linking_map_path: str) -> set:
+        """Load URLs from linking map for filtering."""
+        try:
+            if not os.path.exists(linking_map_path):
+                log.info(f"📁 Linking map not found: {linking_map_path}")
+                return set()
+                
+            with open(linking_map_path, 'r', encoding='utf-8') as f:
+                linking_map = json.load(f)
+                
+            urls = {entry.get('supplier_url') for entry in linking_map if entry.get('supplier_url')}
+            log.info(f"🔗 Loaded {len(urls)} URLs from linking map")
+            self._linking_map_urls = urls  # Store for later use
+            return urls
+            
+        except Exception as e:
+            log.warning(f"❌ Failed to load linking map URLs: {e}")
+            return set()
+
+    def filter_urls_against_linking_map(self, urls: List[str]) -> List[str]:
+        """Filter URLs against linking map - return URLs NOT in linking map."""
+        if not hasattr(self, '_linking_map_urls'):
+            log.warning("⚠️ No linking map URLs loaded - returning all URLs")
+            return urls
+            
+        filtered = [url for url in urls if url not in self._linking_map_urls]
+        log.info(f"🔍 Linking map filter: {len(urls)} input → {len(filtered)} remaining")
+        return filtered
+
 # Global instance for easy access
 _cached_url_manager = None
 

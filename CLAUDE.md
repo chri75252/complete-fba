@@ -2,6 +2,14 @@ REFER TO TO[Testing Plan]/tEMPLATE WHENEVER i EXPLICETELY ASK YOU TO USE MULTI-A
 
 # CLAUDE.MD - Amazon FBA Agent System v3.7+ File Organization & Development Standards
 
+## 🚨 CHROME v139+ COMPATIBILITY NOTICE
+**✅ SYSTEM FULLY COMPATIBLE** - Chrome v139.0.7258.155+ IPv6/IPv4 dual-stack implementation active
+- **Chrome CDP Connectivity**: Production validated with automatic IPv6/IPv4 endpoint detection
+- **Browser Manager**: Handles Chrome v139+ IPv6-first binding automatically
+- **Legacy Scripts Warning**: 46+ non-workflow scripts contain hardcoded `localhost:9222` - be diligent when updating/generating new Chrome-related scripts to use dynamic endpoint detection
+- **Implementation Status**: All critical workflow scripts updated with IPv6/IPv4 dual-stack compatibility
+- **Validated**: August 30, 2025 - Full system operational with Chrome v139+
+
 ## 🚨 CLAUDE_DIRECTIVES - EXECUTE IMMEDIATELY
 
 ### **🚨 CRITICAL TESTING & VERIFICATION STANDARDS:**

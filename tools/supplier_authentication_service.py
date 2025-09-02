@@ -182,26 +182,48 @@ class SupplierAuthenticationService:
             return False
     
     async def _standalone_script_authentication(self, credentials: Dict[str, str]) -> bool:
-        """Use standalone_playwright_login.py for authentication"""
+        """Use browser manager's existing browser instance for authentication instead of creating new CDP connection"""
         try:
-            self.log.info("🔧 Using standalone playwright authentication")
+            self.log.info("🔧 Using browser manager's existing browser for authentication")
             
             # Extract credentials
             email = credentials.get("email", "")
             password = credentials.get("password", "")
             
-            # Call the standalone login function with CDP port 9222 and credentials
-            result = await login_to_poundwholesale(cdp_port=9222, email=email, password=password)
+            # Use the browser manager's existing browser instance instead of creating new CDP connection
+            if not self.browser_manager:
+                self.log.error("❌ No browser manager available for authentication")
+                return False
+                
+            # Get page from browser manager (this uses the already working browser)
+            page = await self.browser_manager.get_page()
+            
+            # Import the login handler but use our page instead of its CDP connection
+            from tools.standalone_playwright_login import StandalonePlaywrightLogin
+            login_handler = StandalonePlaywrightLogin(email=email, password=password)
+            
+            # Override the login handler's page with our browser manager's page
+            login_handler.page = page
+            login_handler.context = page.context
+            login_handler.browser = page.context.browser
+            
+            # Check if already logged in first
+            if await login_handler.check_if_already_logged_in():
+                self.log.info("✅ Already authenticated - no login needed")
+                return True
+            
+            # Perform login using the existing browser
+            result = await login_handler.perform_login()
             
             if result.success:
-                self.log.info(f"✅ Standalone authentication successful: {result.method_used}")
+                self.log.info(f"✅ Authentication successful using browser manager's browser: {result.method_used}")
                 return True
             else:
-                self.log.error(f"❌ Standalone authentication failed: {result.error_message}")
+                self.log.error(f"❌ Authentication failed: {result.error_message}")
                 return False
                 
         except Exception as e:
-            self.log.error(f"❌ Standalone authentication failed: {e}")
+            self.log.error(f"❌ Authentication error: {e}")
             return False
     
     def _should_use_vision_login(self) -> bool:

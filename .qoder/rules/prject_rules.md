@@ -3,7 +3,7 @@ trigger: always_on
 alwaysApply: true
 ---->
 
-# CLAUDE.MD - Amazon FBA Agent System v3.7+ File Organization & Development Standards
+
 
 ## 🚨 CLAUDE_DIRECTIVES - EXECUTE IMMEDIATELY
 

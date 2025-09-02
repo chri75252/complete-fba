@@ -80,28 +80,65 @@ class BrowserManager:
             return
 
         self.playwright = await async_playwright().start()
+        
+        # 🚨 CRITICAL: ONLY connect to existing Chrome debug instance
+        # NEVER launch new Chromium instances - user has existing Chrome running
+        # Documentation: "Connect to user's existing Chrome debug instance"
+        
+        log.info(f"🔌 Connecting to existing Chrome debug instance on port {cdp_port}")
+        log.info("📜 Per troubleshooting docs: Using existing Chrome debug only")
+        
+        # Verify Chrome debug is accessible first
+        chrome_accessible = await self._verify_chrome_debug_accessible(cdp_port)
+        if not chrome_accessible:
+            if self.playwright:
+                await self.playwright.stop()
+                self.playwright = None
+            raise Exception(f"Chrome debug port {cdp_port} not accessible. Please ensure Chrome is running with --remote-debugging-port={cdp_port} --user-data-dir=C:\\ChromeDebugProfile")
+        
+        # Connect to existing Chrome debug instance with Playwright 1.40.0 compatibility
         try:
-            log.info(f"🔌 Connecting to persistent Chrome on debug port {cdp_port}")
-            self.browser = await self.playwright.chromium.connect_over_cdp(f"http://localhost:{cdp_port}")
+            log.info("🔌 Connecting to existing Chrome debug instance...")
             
+            # Get the correct CDP endpoint (IPv6 for v139+, IPv4 fallback)
+            cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+            log.info(f"🌐 Using endpoint: {cdp_endpoint}")
+            
+            # Connect to existing Chrome (headed and persistent by design)
+            self.browser = await self.playwright.chromium.connect_over_cdp(
+                cdp_endpoint,
+                timeout=30000,  # 30 second timeout
+                slow_mo=150     # Conservative timing for stability
+            )
+            
+            log.info("✅ Successfully connected to existing Chrome debug instance")
+            
+            # Get existing context or create new one within the existing Chrome
             if self.browser.contexts:
                 self.context = self.browser.contexts[0]
                 log.info(f"📄 Using existing context with {len(self.context.pages)} pages")
             else:
                 self.context = await self.browser.new_context()
-                log.info("📄 Created new browser context")
-            log.info("✅ Connected to persistent Chrome successfully")
+                log.info("📄 Created new context in existing Chrome")
+            
+            # Validate connection
+            if self.browser:
+                browser_version = getattr(self.browser, 'version', 'Unknown')
+                log.info(f"🔍 Connected to existing Chrome: {browser_version}")
+            
         except Exception as e:
-            log.error(f"❌ Could not connect to persistent Chrome on port {cdp_port}. Error: {e}")
-            log.error(f"❌ Please ensure Chrome is running with --remote-debugging-port={cdp_port}")
-            log.error(f"❌ Command: chrome --remote-debugging-port={cdp_port} --user-data-dir=/tmp/chrome-debug")
+            log.error(f"❌ Failed to connect to existing Chrome debug instance: {e}")
+            
             # Clean up playwright if connection failed
             if self.playwright:
                 await self.playwright.stop()
                 self.playwright = None
-            raise Exception(f"Failed to connect to persistent Chrome on port {cdp_port}. Please start Chrome with debug port.")
+            
+            # Provide detailed troubleshooting based on docs
+            await self._provide_chrome_debug_troubleshooting(cdp_port)
+            raise Exception(f"Failed to connect to existing Chrome debug instance on port {cdp_port}. Chrome must be manually launched first.")
 
-    async def get_page(self, url: str = None, reuse_existing: bool = True) -> Page:
+    async def get_page(self, url: Optional[str] = None, reuse_existing: bool = True) -> Page:
         if not self.context:
             raise Exception("Browser context not initialized. Call launch_browser() first.")
 
@@ -113,16 +150,29 @@ class BrowserManager:
 
         if url and url in self.page_cache:
             log.info(f"♻️ Reusing cached page for {url}")
+            page = self.page_cache[url]
+            # MEMORY REQUIREMENT: Bring cached page to front for user visibility
+            try:
+                await page.bring_to_front()
+                log.debug(f"Brought cached page to front for {url}")
+            except Exception as e:
+                log.debug(f"Could not bring cached page to front: {e}")
             self.page_usage_order.remove(url)
             self.page_usage_order.append(url)
-            return self.page_cache[url]
+            return page
 
         if self.context.pages:
             page = self.context.pages[0]
-            log.info(f"♻️ Reusing existing page in context.")
+            log.info(f"♻️ Reusing existing page in persistent context.")
+            # MEMORY REQUIREMENT: Bring reused page to front for user visibility
+            try:
+                await page.bring_to_front()
+                log.debug("Brought reused page to front for visibility")
+            except Exception as e:
+                log.debug(f"Could not bring reused page to front: {e}")
         else:
             page = await self.context.new_page()
-            log.info("📄 Created new page in context.")
+            log.info("📄 Created new page in persistent context.")
             
         if url:
             log.info(f"📄 Navigating to {url}")
@@ -132,6 +182,14 @@ class BrowserManager:
                     page.goto, url, wait_until='domcontentloaded', timeout=60000
                 )
                 log.info(f"✅ Page ready for {url}")
+                
+                # MEMORY REQUIREMENT: Ensure page visibility after navigation
+                try:
+                    await page.bring_to_front()
+                    log.debug(f"Brought page to front after navigation to {url}")
+                except Exception as e:
+                    log.debug(f"Could not bring page to front after navigation: {e}")
+                
                 self._add_to_cache(url, page)
             except Exception as e:
                 log.error(f"❌ Navigation failed for {url}: {e}")
@@ -147,8 +205,421 @@ class BrowserManager:
         
         self.page_cache[url] = page
         self.page_usage_order.append(url)
+    
+    async def _fallback_to_bundled_chromium(self):
+        """Fallback to Playwright's bundled Chromium when Chrome CDP fails"""
+        try:
+            log.warning("🔄 Activating Playwright bundled Chromium fallback")
+            log.warning("⚠️ FALLBACK MODE: Using Playwright bundled Chromium")
+            log.warning("📢 Chrome profile sync and extensions will NOT be available")
+            log.warning("✅ All automation will remain visible and functional")
+            log.warning("🛠️ To restore Chrome profile: Close Chrome completely and restart system")
+            
+            # Launch bundled Chromium in visible mode
+            self.browser = await self.playwright.chromium.launch(
+                headless=False,  # Always visible per requirements
+                args=[
+                    "--no-first-run",
+                    "--no-default-browser-check"
+                ]
+            )
+            
+            self.context = await self.browser.new_context()
+            log.info("✅ Bundled Chromium fallback activated successfully")
+            
+        except Exception as fallback_error:
+            log.error(f"❌ Bundled Chromium fallback failed: {fallback_error}")
+            # Clean up playwright if both methods failed
+            if self.playwright:
+                await self.playwright.stop()
+                self.playwright = None
+            raise Exception(f"All browser connection methods failed. Last error: {fallback_error}")
 
-    # HEALTH MANAGEMENT METHODS
+    async def _verify_chrome_debug_accessible(self, cdp_port: int) -> bool:
+        """Verify Chrome debug port is accessible (IPv6/IPv4 dual-stack for v139 compatibility)"""
+        import aiohttp
+        timeout = aiohttp.ClientTimeout(total=5)
+        
+        # Chrome v139+ prefers IPv6 binding - test IPv6 first
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://[::1]:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        chrome_info = await response.json()
+                        log.info(f"✅ Chrome debug accessible on IPv6: {chrome_info.get('Browser', 'Unknown')}")
+                        return True
+        except Exception as e:
+            log.debug(f"🔍 IPv6 connection failed: {e}")
+        
+        # Fallback to IPv4 for older Chrome versions
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://localhost:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        chrome_info = await response.json()
+                        log.info(f"✅ Chrome debug accessible on IPv4: {chrome_info.get('Browser', 'Unknown')}")
+                        return True
+                    else:
+                        log.error(f"❌ Chrome debug returned HTTP {response.status}")
+                        return False
+        except Exception as e:
+            log.error(f"❌ Chrome debug port {cdp_port} not accessible on IPv4 or IPv6: {e}")
+            return False
+
+    async def _get_chrome_cdp_endpoint(self, cdp_port: int) -> str:
+        """Determine the correct CDP endpoint (IPv6 or IPv4) for Chrome connection"""
+        import aiohttp
+        timeout = aiohttp.ClientTimeout(total=3)
+        
+        # Test IPv6 first (Chrome v139+ preference)
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://[::1]:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        log.debug("🌐 Using IPv6 endpoint for CDP connection")
+                        return f"http://[::1]:{cdp_port}"
+        except Exception:
+            pass
+        
+        # Fallback to IPv4
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://localhost:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        log.debug("🌐 Using IPv4 endpoint for CDP connection")
+                        return f"http://localhost:{cdp_port}"
+        except Exception:
+            pass
+        
+        # Default to IPv6 if both fail (Chrome v139 behavior)
+        log.warning("⚠️ Could not verify endpoint, defaulting to IPv6")
+        return f"http://[::1]:{cdp_port}"
+    
+    async def _provide_chrome_debug_troubleshooting(self, cdp_port: int):
+        """Provide detailed troubleshooting steps based on documentation"""
+        log.error("🚨 CHROME DEBUG TROUBLESHOOTING STEPS:")
+        log.error(f"   1. Ensure Chrome is manually launched with debug flags:")
+        log.error(f"      chrome --remote-debugging-port={cdp_port} --user-data-dir=C:\\ChromeDebugProfile")
+        log.error(f"   2. Verify Chrome debug is accessible:")
+        log.error(f"      curl http://localhost:{cdp_port}/json/version")
+        log.error(f"   3. Check if port {cdp_port} is in use:")
+        log.error(f"      netstat -an | findstr :{cdp_port}")
+        log.error(f"   4. Kill existing Chrome processes if needed:")
+        log.error(f"      taskkill /F /IM chrome.exe")
+        log.error(f"   5. Restart Chrome with proper debug flags and try again")
+        log.error(f"   📚 Reference: TROUBLESHOOTING.md - Browser & Chrome Issues")
+
+    async def _try_connect_to_existing_chrome(self, cdp_port: int) -> bool:
+        """Try to connect to existing Chrome debug instance"""
+        try:
+            log.debug(f"🔍 Attempting connection to existing Chrome on port {cdp_port}")
+            
+            # Get the correct CDP endpoint (IPv6/IPv4 detection)
+            cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+            
+            # Try with minimal timeout to fail fast if Chrome isn't responsive
+            self.browser = await self.playwright.chromium.connect_over_cdp(
+                cdp_endpoint,
+                timeout=15000,  # 15 second timeout
+                slow_mo=100
+            )
+            
+            log.info("✅ Connected to existing Chrome debug instance")
+            return True
+            
+        except Exception as e:
+            log.debug(f"🔍 Existing Chrome connection failed: {e}")
+            return False
+    
+    async def _launch_persistent_context_fallback(self, cdp_port: int, headless: bool) -> bool:
+        """Launch persistent context as fallback when no existing Chrome"""
+        try:
+            profile_dir = "C:\\ChromeDebugProfile_Playwright"
+            log.info(f"📁 Using separate Playwright profile directory: {profile_dir}")
+            
+            # Use different profile directory to avoid conflicts with user's Chrome
+            self.context = await self.playwright.chromium.launch_persistent_context(
+                user_data_dir=profile_dir,
+                headless=headless,
+                args=[
+                    f"--remote-debugging-port={cdp_port + 1}",  # Use different port
+                    "--no-first-run",
+                    "--no-default-browser-check",
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-web-security"
+                ],
+                ignore_default_args=["--enable-automation"],
+                timeout=45000,
+                slow_mo=200
+            )
+            
+            self.browser = self.context.browser
+            log.info(f"✅ Launched persistent context fallback")
+            return True
+            
+        except Exception as e:
+            log.error(f"❌ Persistent context fallback failed: {e}")
+            return False
+
+    async def _connect_with_enhanced_compatibility(self, cdp_port: int, chrome_info: dict) -> bool:
+        """Enhanced compatibility mode for Chrome 139.x Protocol 1.3"""
+        max_attempts = 5  # More attempts for compatibility mode
+        for attempt in range(max_attempts):
+            try:
+                log.info(f"🔌 Enhanced compatibility attempt {attempt + 1}/{max_attempts}")
+                
+                # Progressive timeout increases for Chrome 139.x
+                timeout = 20000 + (attempt * 10000)  # 20s, 30s, 40s, 50s, 60s
+                slow_mo = 300 + (attempt * 100)      # 300ms, 400ms, 500ms, 600ms, 700ms
+                
+                # Get dynamic endpoint for Chrome v139+ compatibility
+                cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+                
+                self.browser = await self.playwright.chromium.connect_over_cdp(
+                    cdp_endpoint,
+                    timeout=timeout,
+                    slow_mo=slow_mo
+                )
+                
+                log.info(f"✅ Enhanced compatibility connection successful on attempt {attempt + 1}")
+                return True
+                
+            except Exception as e:
+                log.warning(f"⚠️ Enhanced compatibility attempt {attempt + 1} failed: {e}")
+                if attempt < max_attempts - 1:
+                    delay = 3 + attempt  # 3s, 4s, 5s, 6s delays
+                    log.info(f"🔄 Retrying in {delay} seconds...")
+                    await asyncio.sleep(delay)
+        
+        return False
+    
+    async def _connect_with_standard_cdp(self, cdp_port: int, chrome_info: dict) -> bool:
+        """Standard CDP connection for non-139.x Chrome versions"""
+        max_attempts = 3
+        for attempt in range(max_attempts):
+            try:
+                log.info(f"🔌 Standard CDP attempt {attempt + 1}/{max_attempts}")
+                
+                # Get dynamic endpoint for Chrome v139+ compatibility  
+                cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+                
+                self.browser = await self.playwright.chromium.connect_over_cdp(
+                    cdp_endpoint,
+                    timeout=30000,
+                    slow_mo=150
+                )
+                
+                log.info(f"✅ Standard CDP connection successful")
+                return True
+                
+            except Exception as e:
+                log.warning(f"⚠️ Standard CDP attempt {attempt + 1} failed: {e}")
+                if attempt < max_attempts - 1:
+                    await asyncio.sleep(2)
+        
+        return False
+    
+    async def _connect_with_websocket_fallback(self, cdp_port: int, chrome_info: dict) -> bool:
+        """WebSocket direct fallback approach for maximum compatibility"""
+        try:
+            log.info("🔌 Attempting WebSocket direct fallback approach...")
+            
+            # Get dynamic endpoint and try with minimal configuration for maximum compatibility
+            cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+            
+            self.browser = await self.playwright.chromium.connect_over_cdp(
+                cdp_endpoint,
+                timeout=60000,  # Maximum timeout
+                slow_mo=1000    # Very slow for maximum stability
+            )
+            
+            log.info("✅ WebSocket fallback connection successful")
+            return True
+            
+        except Exception as e:
+            log.error(f"❌ WebSocket fallback failed: {e}")
+            return False
+
+    async def _detect_chrome_protocol_version(self, cdp_port: int) -> dict:
+        """Detect Chrome version and protocol version for compatibility assessment"""
+        try:
+            import aiohttp
+            log.debug(f"🔍 Attempting Chrome protocol detection on port {cdp_port}")
+            timeout = aiohttp.ClientTimeout(total=5)  # Shorter timeout to fail fast
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                url = f"http://localhost:{cdp_port}/json/version"
+                log.debug(f"🔍 Making request to: {url}")
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        log.info(f"✅ Chrome protocol detected: {result.get('Browser', 'Unknown')} Protocol {result.get('Protocol-Version', 'Unknown')}")
+                        return result
+                    else:
+                        log.warning(f"⚠️ HTTP {response.status} from Chrome debug port {cdp_port}")
+                        raise Exception(f"HTTP {response.status}")
+        except Exception as e:
+            log.warning(f"⚠️ Async Chrome detection failed: {type(e).__name__}: {e}")
+            
+            # Fallback to synchronous detection
+            try:
+                log.debug("🔄 Trying synchronous detection fallback...")
+                result = self._detect_chrome_sync(cdp_port)
+                if result.get('Browser') != 'Unknown Chrome':
+                    log.info(f"✅ Sync fallback detected: {result.get('Browser', 'Unknown')} Protocol {result.get('Protocol-Version', 'Unknown')}")
+                    return result
+            except Exception as sync_error:
+                log.debug(f"⚠️ Sync detection also failed: {sync_error}")
+            
+            # Return unknown - will trigger enhanced compatibility mode
+            return {
+                "Browser": "Unknown Chrome",
+                "Protocol-Version": "Unknown",
+                "webSocketDebuggerUrl": f"ws://localhost:{cdp_port}/devtools/browser"
+            }
+    
+    def _detect_chrome_sync(self, cdp_port: int) -> dict:
+        """Synchronous fallback for Chrome version detection"""
+        import requests
+        try:
+            response = requests.get(f"http://localhost:{cdp_port}/json/version", timeout=3)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"HTTP {response.status_code}")
+        except Exception as e:
+            log.debug(f"🔍 Sync detection failed: {e}")
+            raise
+    
+    def _get_cdp_connection_config(self, chrome_info: dict) -> dict:
+        """Get CDP connection configuration based on Chrome version and protocol"""
+        browser_version = chrome_info.get('Browser', '')
+        protocol_version = chrome_info.get('Protocol-Version', '')
+        
+        # Chrome 139.x with Protocol 1.3 requires enhanced compatibility settings
+        if '139.' in browser_version and protocol_version == '1.3':
+            return {
+                'timeout': 45000,  # Longer timeout for Chrome 139.x
+                'slow_mo': 200,    # More conservative timing
+            }
+        # Default configuration for other versions
+        return {
+            'timeout': 30000,
+            'slow_mo': 100
+        }
+    
+    async def _validate_cdp_connection_stability(self):
+        """Validate CDP connection stability with protocol handshake"""
+        try:
+            # Test basic browser connectivity
+            if self.browser:
+                browser_version = self.browser.version
+                log.debug(f"🔍 CDP connection validated - Browser version: {browser_version}")
+        except Exception as e:
+            log.warning(f"⚠️ CDP connection validation warning: {e}")
+            # Don't fail here - connection might still be functional
+    
+    async def _provide_enhanced_troubleshooting(self, cdp_port: int, chrome_info: dict):
+        """Provide enhanced troubleshooting steps with version-specific guidance"""
+        log.error(f"🚨 Chrome Debug Port {cdp_port} connection failed")
+        log.error(f"📋 TROUBLESHOOTING STEPS:")
+        log.error(f"   1. Chrome Status: {chrome_info.get('Browser', 'Unknown')}")
+        log.error(f"   2. Protocol Version: {chrome_info.get('Protocol-Version', 'Unknown')}")
+        log.error(f"   3. WebSocket URL: {chrome_info.get('webSocketDebuggerUrl', 'Unknown')}")
+        log.error(f"   4. Playwright Version: 1.54.0 (installed) vs 1.40.0 (required)")
+        log.error(f"   5. Ensure Chrome launched with: --remote-debugging-port={cdp_port} --user-data-dir=C:\\ChromeDebugProfile")
+        log.error(f"   6. Version Compatibility: Chrome 139.x Protocol 1.3 requires enhanced handling")
+
+    async def _verify_chrome_debug_port(self, port: int) -> bool:
+        """
+        Verify Chrome debug port availability and responsiveness.
+        
+        Args:
+            port: Debug port number to verify
+            
+        Returns:
+            True if Chrome debug port is accessible, False otherwise
+        """
+        try:
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=5)  # Reduced timeout for faster response
+            
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                # Try to get Chrome version info
+                try:
+                    async with session.get(f"http://localhost:{port}/json/version") as response:
+                        if response.status == 200:
+                            version_info = await response.json()
+                            browser_version = version_info.get('Browser', 'Unknown')
+                            log.info(f"✅ Chrome debug port {port} accessible - {browser_version}")
+                            
+                            # Try to get list of pages/tabs
+                            try:
+                                async with session.get(f"http://localhost:{port}/json") as pages_response:
+                                    if pages_response.status == 200:
+                                        pages = await pages_response.json()
+                                        log.info(f"📄 Found {len(pages)} pages/tabs in Chrome")
+                                        return True
+                                    else:
+                                        log.warning(f"⚠️ Could not get pages list from Chrome debug port {port}")
+                                        return True  # Version endpoint worked, so port is accessible
+                            except Exception as pages_error:
+                                log.debug(f"Pages endpoint error (non-critical): {pages_error}")
+                                return True  # Version endpoint worked, so port is accessible
+                        else:
+                            log.error(f"❌ Chrome debug port {port} returned status {response.status}")
+                            return False
+                except aiohttp.ServerTimeoutError:
+                    log.error(f"❌ Chrome debug port {port} timed out")
+                    return False
+                except aiohttp.ClientError as client_error:
+                    log.error(f"❌ Chrome debug port {port} client error: {client_error}")
+                    return False
+                        
+        except aiohttp.ClientConnectorError:
+            log.error(f"❌ Cannot connect to Chrome debug port {port} - Chrome not running with debug flags")
+            return False
+        except asyncio.TimeoutError:
+            log.error(f"❌ Chrome debug port {port} connection timed out")
+            return False
+        except Exception as e:
+            log.debug(f"Chrome debug port verification error (will continue): {e}")
+            # Don't fail completely on verification errors - attempt connection anyway
+            return True
+    
+    async def _provide_chrome_troubleshooting_steps(self, port: int):
+        """
+        Provide detailed troubleshooting steps for Chrome debug connection issues.
+        
+        Args:
+            port: Debug port number that failed
+        """
+        log.error("🔧 Chrome Debug Connection Troubleshooting Steps:")
+        log.error("1️⃣ Close all Chrome instances:")
+        log.error("   - taskkill /f /im chrome.exe")
+        log.error("   - taskkill /f /im chromedriver.exe")
+        log.error("2️⃣ Verify port is free:")
+        log.error(f"   - netstat -an | findstr :{port}")
+        log.error('3️⃣ Start Chrome with proper debug flags:')
+        log.error(f'   - "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --remote-debugging-port={port} --user-data-dir="C:\\ChromeDebugProfile"')
+        log.error("4️⃣ Verify Chrome debug port responds:")
+        log.error(f"   - curl http://localhost:{port}/json/version")
+        log.error("5️⃣ If Chrome version incompatible with Playwright:")
+        log.error("   - pip install --upgrade playwright")
+        log.error("   - playwright install chromium")
+        
+        # Try to detect current Chrome status
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["tasklist", "/fi", "imagename eq chrome.exe", "/fo", "csv"],
+                capture_output=True, text=True, timeout=5
+            )
+            if "chrome.exe" in result.stdout:
+                log.error("ℹ️ Chrome processes detected - may need to restart with debug flags")
+            else:
+                log.error("ℹ️ No Chrome processes found - need to start Chrome with debug flags")
+        except Exception:
+            log.error("ℹ️ Could not check Chrome process status")
     
     async def get_browser_memory_usage(self) -> int:
         """

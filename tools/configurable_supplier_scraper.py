@@ -14,6 +14,7 @@ import time
 import json
 import random # For jitter in retries
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, List, Optional, Union
 from bs4 import BeautifulSoup, Tag
 from urllib.parse import urlparse, urljoin
@@ -114,7 +115,8 @@ class ConfigurableSupplierScraper:
         
         self.headless = headless
         self.use_shared_chrome = use_shared_chrome
-        self.cdp_endpoint = "http://localhost:9222"
+        # Note: CDP endpoint dynamically determined by browser_manager (IPv6/IPv4 dual-stack)
+        self.cdp_endpoint = "http://localhost:9222"  # Fallback only - browser_manager handles actual connections
         
         # PHASE 1: Add session management for aiohttp
         self._session = None
@@ -458,7 +460,7 @@ class ConfigurableSupplierScraper:
         # 🚨 SURGICAL FIX: Store discovered count for state manager integration
         self.last_discovered_count = len(all_product_urls)
         
-        # EFFICIENCY IMPROVEMENT: Filter URLs against cache to avoid unnecessary page visits
+        # EFFICIENCY IMPROVEMENT: Filter URLs against cache AND linking map to avoid unnecessary page visits
         try:
             from utils.url_cache_filter import get_cached_url_manager
             
@@ -480,7 +482,17 @@ class ConfigurableSupplierScraper:
             loaded_count = url_manager.load_supplier_cache_urls(domain)
             log.info(f"🚀 URL Cache: Loaded {loaded_count} cached URLs for efficiency filtering")
             
-            # Filter URLs to only include those not in cache
+            # 🚨 CRITICAL FIX: Load linking map URLs to catch already-processed products
+            # 🚨 SURGICAL FIX #5: ENSURE CONSISTENT METHOD USAGE - Use proper linking map path
+            # Get the proper linking map path that matches the main workflow's expectation
+            supplier_name = domain  # Use domain as supplier name
+            output_root_path = Path(output_root)
+            linking_map_path = output_root_path / "FBA_ANALYSIS" / "linking_maps" / supplier_name / "linking_map.json"
+            
+            linking_loaded_count = url_manager.load_linking_map_urls(str(linking_map_path))
+            log.info(f"🚀 URL Linking Map: Loaded {linking_loaded_count} processed URLs from {linking_map_path}")
+            
+            # Filter URLs to only include those not in cache OR linking map
             original_count = len(all_product_urls)
             all_product_urls = url_manager.filter_new_urls(all_product_urls)
             filtered_count = len(all_product_urls)
@@ -488,7 +500,7 @@ class ConfigurableSupplierScraper:
             log.info(f"✅ URL Pre-filtering: {filtered_count} new URLs need processing, {original_count - filtered_count} already cached")
             
             if filtered_count == 0:
-                log.info("🎯 All URLs are already cached - no new products to scrape!")
+                log.info("🎯 All URLs are already cached/processed - no new products to scrape!")
                 return []  # Return empty list if all URLs are cached
             
         except Exception as filter_error:
@@ -721,6 +733,360 @@ class ConfigurableSupplierScraper:
         
         log.info(f"Successfully extracted {len(products)} products from {url}")
         return products
+
+    # DISABLED: scrape_products_from_url_filtered method - confirmed broken and leads to extraction failures
+    # This filtered variation breaks the pipeline per project memory requirements
+    # Use standard scrape_products_from_url method with pre-filtered URLs passed externally  
+    # Method scrape_products_from_url_filtered disabled - confirmed broken per project memory
+    # Use scrape_products_from_url instead
+
+    async def _set_page_limiter(self, url: str) -> bool:
+        """
+        Set the page limiter for the given URL.
+
+        Args:
+            url: Category URL to scrape
+            max_products: Maximum products to extract
+            product_accumulator: Optional list to append products to in real-time for progress tracking
+            filtered_urls: Pre-filtered list of URLs that need full extraction
+        """
+        log.info(f"Starting filtered scraping from {url} with {len(filtered_urls) if filtered_urls else 0} pre-filtered URLs")
+        
+        if not filtered_urls:
+            log.info("No URLs need full extraction - returning empty list")
+            return []
+        
+        # MEMORY LEAK FIX: Initialize memory tracking
+        if hasattr(self, 'browser_manager') and self.browser_manager:
+            memory_info = await self.browser_manager.get_total_system_memory_usage()
+            if memory_info:
+                log.info(f"🧠 Pre-scraping Memory: Chrome={memory_info.get('chrome_memory_mb', 0)}MB, Python={memory_info.get('python_memory_mb', 0)}MB, System={memory_info.get('memory_usage_percent', 0):.1f}%")
+        
+        # Step 1: Set page limiter to 60 products per page
+        await self._set_page_limiter(url)
+        
+        # Step 2: Use pre-filtered URLs instead of collecting all URLs
+        all_product_urls = filtered_urls[:max_products]
+        
+        log.info(f"Using {len(all_product_urls)} pre-filtered URLs for extraction")
+        
+        # 🚨 SURGICAL FIX: Store discovered count for state manager integration
+        self.last_discovered_count = len(all_product_urls)
+        
+        # Step 3: Visit individual product pages to extract detailed data
+        products = []  # Local list for return value
+        # Use product_accumulator for real-time updates if provided
+        base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
+        
+        # MEMORY LEAK FIX: Track memory and implement cleanup intervals
+        memory_check_interval = 50  # Check memory every 50 products
+        cleanup_interval = 100  # Force cleanup every 100 products
+        
+        for i, product_url in enumerate(all_product_urls):
+            try:
+                # 🚨 PROACTIVE AUTHENTICATION CHECK: Verify login every 25 products to prevent pricing failures
+                if i > 0 and i % 25 == 0:
+                    try:
+                        if hasattr(self, 'browser_manager') and self.browser_manager:
+                            from tools.supplier_authentication_service import SupplierAuthenticationService
+                            from config.system_config_loader import SystemConfigLoader
+                            
+                            page = await self.browser_manager.get_page()
+                            if page:
+                                auth_service = SupplierAuthenticationService(self.browser_manager)
+                                config_loader = SystemConfigLoader()
+                                credentials = config_loader.get_credentials('poundwholesale.co.uk')
+                                
+                                if credentials:
+                                    log.info(f"🔐 PROACTIVE AUTH CHECK: Verifying login at product {i+1}")
+                                    authenticated = await auth_service.ensure_authenticated_session(page, credentials)
+                                    
+                                    if not authenticated:
+                                        log.error(f"❌ PROACTIVE AUTH FAILED: Login expired at product {i+1} - attempting re-authentication")
+                                    else:
+                                        log.debug(f"✅ PROACTIVE AUTH OK: Login verified at product {i+1}")
+                    except Exception as proactive_auth_error:
+                        log.warning(f"⚠️ Proactive authentication check failed: {proactive_auth_error}")
+                
+                # Regular memory monitoring and cleanup (without stopping)
+                if i > 0 and i % memory_check_interval == 0:
+                    if hasattr(self, 'browser_manager') and self.browser_manager:
+                        memory_healthy = await self.browser_manager.memory_check_with_cleanup(i)
+                        if not memory_healthy:
+                            log.warning(f"⚠️ MEMORY PRESSURE: High memory usage at product {i} - cleanup performed but continuing")
+                
+                # MEMORY LEAK FIX: Force cleanup every 100 products
+                if i > 0 and i % cleanup_interval == 0:
+                    if hasattr(self, 'browser_manager') and self.browser_manager:
+                        await self.browser_manager.force_memory_cleanup()
+                        log.info(f"🧹 Forced memory cleanup after product {i}")
+                
+                log.info(f"Visiting product page {i+1}/{len(all_product_urls)}: {product_url}")
+                
+                # Get individual product page content
+                product_html = await self.get_page_content(product_url)
+                if not product_html:
+                    log.warning(f"Failed to fetch product page: {product_url}")
+                    continue
+                
+                # MEMORY LEAK FIX: Use context manager for BeautifulSoup to ensure cleanup
+                soup = None
+                try:
+                    soup = BeautifulSoup(product_html, 'html.parser')
+                    
+                    # Extract core product data from individual product page
+                    title = self._extract_text_by_selector(soup, ["h1.page-title .base", "[data-ui-id='page-title-wrapper']"])
+                    # CRITICAL FIX: Use configurable price extraction instead of hardcoded selectors
+                    price = await self.extract_price(soup, product_html, product_url)
+                    ean = self._extract_text_by_selector(soup, [".value.attribute-code-product_barcode"])
+                    sku = self._extract_text_by_selector(soup, [".value.attribute-code-sku", "[itemprop='sku']"])
+                    availability = self._extract_text_by_selector(soup, [".stock.available", ".stock.unavailable"])
+                    
+                    # Get image from product page or fallback to placeholder
+                    image_url = self._extract_image_by_selector(soup, ["img.product-image-photo", ".product-image img"])
+                    
+                    # Create product data
+                    product = {
+                        'title': title,
+                        'price': price,
+                        'url': product_url,
+                        'ean': ean,
+                        'sku': sku,
+                        'availability': availability,
+                        'image_url': image_url,
+                        'source_url': url,
+                        'scraped_at': datetime.now().isoformat()
+                    }
+                    
+                    # Authentication evaluation for multi-tier authentication system
+                    if self.auth_callback:
+                        try:
+                            # Call authentication callback with price and product index
+                            await self.auth_callback(price, i+1)
+                        except Exception as auth_error:
+                            log.warning(f"🔐 Authentication callback error for product {i+1}: {auth_error}")
+                    
+                    # Only include products with valid data and apply price filtering
+                    if title and price:
+                        # Apply price filtering if max_price is configured
+                        try:
+                            price_float = float(price)
+                            max_price = getattr(self, 'max_price', 20.0)  # Default from system config
+                            if hasattr(self, 'system_config') and self.system_config:
+                                max_price = self.system_config.get('processing_limits', {}).get('max_price_gbp', 20.0)
+                            
+                            if price_float <= max_price:
+                                products.append(product)  # Always add to local return list
+                                
+                                # 🚨 DEFINITIVE FIX: Add to shared accumulator for real-time progress tracking
+                                if product_accumulator is not None:
+                                    product_accumulator.append(product)
+                                    log.info(f"🔄 REAL-TIME: Added product {i+1} to shared accumulator (total: {len(product_accumulator)})")
+                                    
+                                    # 🧹 MEMORY LEAK FIX: Clear local products list periodically to prevent memory accumulation
+                                    if len(products) > 100:  # Clear every 100 products
+                                        log.info(f"🧹 Clearing local products list to prevent memory leak ({len(products)} items)")
+                                        products.clear()
+                                        import gc
+                                        gc.collect()
+                                
+                                log.info(f"✅ Extracted product {i+1}: {title} - £{price} (EAN: {ean or 'N/A'})")
+                                
+                            else:
+                                log.info(f"🛑 PRICE FILTER: Excluding '{title}' - £{price} > £{max_price} limit")
+                        except (ValueError, TypeError):
+                            # Keep products with invalid/missing prices for now
+                            products.append(product)
+                            if product_accumulator is not None:
+                                product_accumulator.append(product)
+                            log.warning(f"⚠️ Invalid price for '{title}': {price}")
+                        
+                        # Call progress callback AFTER successful product extraction
+                        if self.progress_callback:
+                            self.progress_callback('supplier_extraction', i+1, len(all_product_urls), product_url, product)
+                            
+                    else:
+                        log.warning(f"⚠️ Skipping product {i+1} - missing title or price")
+                        
+                        # 🚨 CRITICAL FIX: Authentication check when price extraction fails
+                        if not price:
+                            log.warning(f"🔍 Price extraction failed for product {i+1} - checking authentication")
+                            
+                            # Trigger authentication check when pricing fails
+                            try:
+                                if hasattr(self, 'browser_manager') and self.browser_manager:
+                                    from tools.supplier_authentication_service import SupplierAuthenticationService
+                                    
+                                    # Get current page for authentication check
+                                    page = await self.browser_manager.get_page()
+                                    if page:
+                                        # Check if we're still authenticated
+                                        auth_service = SupplierAuthenticationService(self.browser_manager)
+                                        
+                                        # Get credentials (you may need to pass these from the workflow)
+                                        from config.system_config_loader import SystemConfigLoader
+                                        config_loader = SystemConfigLoader()
+                                        credentials = config_loader.get_credentials('poundwholesale.co.uk')
+                                        
+                                        if credentials:
+                                            log.info(f"🔐 AUTHENTICATION CHECK: Verifying login status for product {i+1}")
+                                            authenticated = await auth_service.ensure_authenticated_session(page, credentials)
+                                            
+                                            if not authenticated:
+                                                log.error(f"❌ AUTHENTICATION FAILED: Login expired during product extraction at product {i+1}")
+                                                log.info("🔄 RECOMMENDATION: Restart system or manually re-authenticate")
+                                            else:
+                                                log.info(f"✅ AUTHENTICATION OK: Login still valid, price extraction issue may be selector-related")
+                                        else:
+                                            log.warning("⚠️ No credentials available for authentication check")
+                                    else:
+                                        log.warning("⚠️ No page available for authentication check")
+                                else:
+                                    log.warning("⚠️ No browser manager available for authentication check")
+                                    
+                            except Exception as auth_error:
+                                log.warning(f"⚠️ Authentication check failed: {auth_error}")
+                                
+                            log.debug(f"🔍 Price extraction failed for product {i+1} - authentication check completed")
+                        
+                    
+                except Exception as product_error:
+                    log.error(f"❌ Error processing individual product {i+1}: {product_error}")
+                    
+                finally:
+                    # MEMORY LEAK FIX: Explicitly clear BeautifulSoup object and HTML content
+                    if soup:
+                        soup.clear()
+                        soup = None
+                    product_html = None  # Clear HTML content from memory
+                    
+                    # MEMORY LEAK FIX: Force garbage collection every 25 products
+                    if i > 0 and i % 25 == 0:
+                        import gc
+                        collected = gc.collect()
+                        log.debug(f"🗑️ Garbage collected {collected} objects after product {i}")
+                
+                # Skip to next product if there was an error
+                continue
+                
+            except Exception as outer_error:
+                log.error(f"❌ Outer loop error for product {i+1}: {outer_error}")
+                continue
+        
+        # MEMORY LEAK FIX: Final memory status logging
+    # Use standard scrape_products_from_url method with pre-filtered URLs passed externally
+    # Method scrape_products_from_url_filtered disabled - confirmed broken per project memory
+    # Use scrape_products_from_url instead
+
+    # Original broken method removed to prevent syntax errors
+
+    async def scrape_products_from_prefiltered_urls(self, filtered_urls: List[str], category_url: str = None, product_accumulator: List = None) -> List[Dict]:
+        """
+        Extract products from pre-filtered URLs only - no URL collection phase.
+        
+        This method respects the filtering contract: when filtering says N products need 
+        full extraction, we process exactly those N and only those N.
+        
+        Args:
+            filtered_urls: Pre-filtered list of URLs that need full extraction
+            category_url: Category URL for context (logging only)
+            product_accumulator: Optional list to append products to in real-time
+            
+        Returns:
+            List of extracted product dictionaries
+        """
+        if not filtered_urls:
+            log.info("✅ No URLs need full extraction - returning empty list")
+            return []
+        
+        log.info(f"🎯 FILTERED EXTRACTION: Processing {len(filtered_urls)} pre-approved URLs")
+        
+        products = []
+        for i, product_url in enumerate(filtered_urls):
+            try:
+                log.info(f"🔍 Extracting product {i+1}/{len(filtered_urls)}: {product_url}")
+                
+                # Get product page content
+                product_html = await self.get_page_content(product_url)
+                if not product_html:
+                    log.warning(f"❌ Failed to fetch: {product_url}")
+                    continue
+                
+                # Extract product data
+                soup = BeautifulSoup(product_html, 'html.parser')
+                product = await self._extract_product_data_from_soup(soup, product_url)
+                
+                if product:
+                    products.append(product)
+                    if product_accumulator is not None:
+                        product_accumulator.append(product)
+                        
+                        # Trigger workflow-controlled cache save path
+                        if getattr(self, "progress_callback", None) and callable(self.progress_callback):
+                            try:
+                                self.progress_callback(
+                                    "supplier_extraction",
+                                    i + 1,
+                                    len(filtered_urls),
+                                    product_url,
+                                    product,
+                                )
+                            except Exception as cb_err:
+                                log.debug(f"⚠️ progress_callback failed at {i+1}: {cb_err}")
+                    else:
+                        # Accumulator sanity check - critical breadcrumb for "why didn't it save?" debugging
+                        log.warning("Prefiltered path: no product_accumulator; periodic saves may not trigger.")
+                        
+                    log.info(f"✅ Extracted: {product.get('title', 'N/A')} - £{product.get('price', 'N/A')}")
+                else:
+                    log.warning(f"⚠️ No data extracted from: {product_url}")
+                    
+            except Exception as e:
+                log.error(f"❌ Error extracting product {i+1}: {e}")
+                continue
+        
+        log.info(f"🎯 FILTERED EXTRACTION COMPLETE: {len(products)} products extracted from {len(filtered_urls)} URLs")
+        return products
+
+    async def _extract_product_data_from_soup(self, soup: BeautifulSoup, product_url: str) -> Dict:
+        """Extract product data from BeautifulSoup object."""
+        try:
+            title = self._extract_text_by_selector(soup, ["h1.page-title .base", "[data-ui-id='page-title-wrapper']"])
+            price = await self.extract_price(soup, str(soup), product_url)
+            ean = self._extract_text_by_selector(soup, [".value.attribute-code-product_barcode"])
+            sku = self._extract_text_by_selector(soup, [".value.attribute-code-sku", "[itemprop='sku']"])
+            availability = self._extract_text_by_selector(soup, [".stock.available", ".stock.unavailable"])
+            image_url = self._extract_image_by_selector(soup, ["img.product-image-photo", ".product-image img"])
+            
+            return {
+                'title': title,
+                'price': price,
+                'url': product_url,
+                'ean': ean,
+                'sku': sku,
+                'availability': availability,
+                'image_url': image_url,
+                'scraped_at': datetime.now().isoformat()
+            }
+        except Exception as e:
+            log.error(f"Error extracting product data: {e}")
+            return None
+
+    async def _set_page_limiter(self, url: str) -> bool:
+        """
+        Sets the products per page limiter to the configured value (e.g., 60).
+        Uses the current browser page managed by BrowserManager.
+        """
+        try:
+            await self.browser_manager.page.goto(url)
+            await self.browser_manager.page.select_option(
+                'select[name="products_per_page"]',
+                str(self.products_per_page_limit),
+            )
+            return True
+        except Exception as e:
+            log.error(f"Error setting page limiter: {e}")
+            return False
 
     async def _set_page_limiter(self, url: str) -> bool:
         """

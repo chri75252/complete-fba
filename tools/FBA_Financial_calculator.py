@@ -6,7 +6,9 @@ supplier data (from OUTPUTS/FBA_ANALYSIS/cache) with Amazon scrape data
 (from OUTPUTS/AMAZON_SCRAPE).
 
 * VAT rate hard‑coded to 20 % (UK seller).
-* Prep cost (ex‑VAT) default 0.50 £ / unit.
+* Supplier prices are treated as EXCLUSIVE of VAT (config: supplier.prices_include_vat = false).
+* Calculator automatically adds 20% VAT to supplier prices for accurate cost calculations.
+* Prep cost (ex‑VAT) default 0.55 £ / unit.
 * Shipping cost (ex‑VAT) default 0.00 £ / unit.
 * If FBA and Referral fees are missing in Keepa product details, you can supply fallback values.
 * Results are saved to the financial reports directory in OUTPUTS/FBA_ANALYSIS/financial_reports
@@ -17,6 +19,7 @@ import json
 import pandas as pd
 from datetime import datetime
 import logging
+import numpy as np
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -60,69 +63,103 @@ _config = load_system_config()
 VAT_RATE = _config.get("amazon", {}).get("vat_rate", 0.2)
 PREP_COST = _config.get("amazon", {}).get("fba_fees", {}).get("prep_house_fixed_fee", 0.55)  # Updated default to 0.55
 SHIP_COST = 0.0
-SUPPLIER_PRICES_INCLUDE_VAT = _config.get("supplier", {}).get("prices_include_vat", True)
+SUPPLIER_PRICES_INCLUDE_VAT = _config.get("supplier", {}).get("prices_include_vat", False)
+FINANCIAL_REPORT_BATCH_SIZE = _config.get("system", {}).get("financial_report_batch_size", 50)
+
+# Debug log the configuration values
+print(f"🔧 CONFIG DEBUG: financial_report_batch_size = {FINANCIAL_REPORT_BATCH_SIZE}")
+print(f"🧮 CONFIG DEBUG: supplier_prices_include_vat = {SUPPLIER_PRICES_INCLUDE_VAT}")
+if SUPPLIER_PRICES_INCLUDE_VAT:
+    print("   📝 Supplier prices are treated as INCLUSIVE of VAT")
+else:
+    print("   📝 Supplier prices are treated as EXCLUSIVE of VAT (will add 20% VAT)")
 
 # Global variable to cache the linking map
 _linking_map = None
 
-def load_linking_map(supplier_name=None):
-    """Load the persistent linking map file for enhanced product matching."""
+def load_linking_map(supplier_name=None, latest_n=None):
+    """
+    Load the persistent linking map file for enhanced product matching.
+
+    Args:
+        supplier_name: Supplier identifier for supplier-specific paths
+        latest_n: If provided, return only the N most recent entries by created_at timestamp
+    """
     global _linking_map
     if _linking_map is not None:
-        return _linking_map
-    
-    # Use supplier-specific linking map if supplier_name provided
-    if supplier_name:
-        supplier_paths = get_supplier_specific_paths(supplier_name)
-        linking_map_path = supplier_paths['linking_map']
-        if os.path.exists(linking_map_path):
-            try:
-                with open(linking_map_path, 'r', encoding='utf-8') as f:
-                    _linking_map = json.load(f)
-                print(f"Loaded supplier-specific linking map with {len(_linking_map)} entries")
-                return _linking_map
-            except (json.JSONDecodeError, UnicodeDecodeError) as e:
-                print(f"Error reading supplier-specific linking map: {e}")
-    
-    # Fallback: try generic linking map
-    generic_linking_map_path = os.path.join(BASE_DIR, "OUTPUTS", "FBA_ANALYSIS", "linking_maps", "linking_map.json")
-    if os.path.exists(generic_linking_map_path):
-        try:
-            with open(generic_linking_map_path, 'r', encoding='utf-8') as f:
-                _linking_map = json.load(f)
-            print(f"Loaded generic linking map with {len(_linking_map)} entries")
-            return _linking_map
-        except (json.JSONDecodeError, UnicodeDecodeError) as e:
-            print(f"Error reading generic linking map: {e}")
-    
-    # Fallback: Look for linking map files in the output directory (legacy)
-    linking_files = []
-    
-    if os.path.exists(OUTPUT_DIR):
-        for fname in os.listdir(OUTPUT_DIR):
-            if fname.startswith("linking_map_") and fname.endswith(".json"):
-                linking_files.append(os.path.join(OUTPUT_DIR, fname))
-    
-    if not linking_files:
-        print("No linking map found - using fallback lookup methods")
-        _linking_map = []
-        return _linking_map
-    
-    # Use the most recent linking map
-    latest_map = max(linking_files, key=os.path.getmtime)
-    try:
-        with open(latest_map, 'r', encoding='utf-8') as f:
-            _linking_map = json.load(f)
-        print(f"Loaded legacy linking map: {latest_map} with {len(_linking_map)} entries")
-        return _linking_map
-    except (json.JSONDecodeError, UnicodeDecodeError) as e:
-        print(f"Error reading legacy linking map {latest_map}: {e}")
-        _linking_map = []
-        return _linking_map
+        linking_map = _linking_map
+    else:
+        # Use supplier-specific linking map if supplier_name provided
+        if supplier_name:
+            supplier_paths = get_supplier_specific_paths(supplier_name)
+            linking_map_path = supplier_paths['linking_map']
+            if os.path.exists(linking_map_path):
+                try:
+                    with open(linking_map_path, 'r', encoding='utf-8') as f:
+                        linking_map = json.load(f)
+                    print(f"Loaded supplier-specific linking map with {len(linking_map)} entries")
+                except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                    print(f"Error reading supplier-specific linking map: {e}")
+                    return []
+            else:
+                print(f"Supplier-specific linking map not found: {linking_map_path}")
+                return []
+        else:
+            # Fallback: try generic linking map
+            generic_linking_map_path = os.path.join(BASE_DIR, "OUTPUTS", "FBA_ANALYSIS", "linking_maps", "linking_map.json")
+            if os.path.exists(generic_linking_map_path):
+                try:
+                    with open(generic_linking_map_path, 'r', encoding='utf-8') as f:
+                        linking_map = json.load(f)
+                    print(f"Loaded generic linking map with {len(linking_map)} entries")
+                except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                    print(f"Error reading generic linking map: {e}")
+                    return []
+            else:
+                # Fallback: Look for linking map files in the output directory (legacy)
+                linking_files = []
 
-def find_amazon_json_by_linking_map(ean, title, url, supplier_name=None):
+                if os.path.exists(OUTPUT_DIR):
+                    for fname in os.listdir(OUTPUT_DIR):
+                        if fname.startswith("linking_map_") and fname.endswith(".json"):
+                            linking_files.append(os.path.join(OUTPUT_DIR, fname))
+
+                if not linking_files:
+                    print("No linking map found - using fallback lookup methods")
+                    return []
+
+                # Use the most recent linking map
+                latest_map = max(linking_files, key=os.path.getmtime)
+                try:
+                    with open(latest_map, 'r', encoding='utf-8') as f:
+                        linking_map = json.load(f)
+                    print(f"Loaded legacy linking map: {latest_map} with {len(linking_map)} entries")
+                except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                    print(f"Error reading legacy linking map {latest_map}: {e}")
+                    return []
+
+        # Cache the full linking map
+        _linking_map = linking_map
+
+    # Apply latest_n filtering if requested
+    if latest_n and isinstance(latest_n, int) and latest_n > 0:
+        # Sort by created_at timestamp (most recent first)
+        try:
+            sorted_map = sorted(linking_map,
+                              key=lambda x: x.get('created_at', ''),
+                              reverse=True)
+            filtered_map = sorted_map[:latest_n]
+            print(f"Filtered to latest {latest_n} entries (from {len(linking_map)} total)")
+            return filtered_map
+        except (KeyError, TypeError) as e:
+            print(f"Warning: Could not sort by created_at timestamp: {e}. Using original order.")
+            return linking_map[:latest_n]
+
+    return linking_map
+
+def find_amazon_json_by_linking_map(ean, title, url, supplier_name=None, latest_n=None):
     """Use linking map to find Amazon data for supplier product."""
-    linking_map = load_linking_map(supplier_name)
+    linking_map = load_linking_map(supplier_name, latest_n)
     
     # Search linking map for matching supplier product using current structure
     for link_record in linking_map:
@@ -191,13 +228,13 @@ def find_amazon_json_by_asin(asin, ean=None):
 
 # Helper to find Amazon data file by ASIN, EAN, or fuzzy title
 
-def find_amazon_json(ean, asin, title, url=None, supplier_name=None):
+def find_amazon_json(ean, asin, title, url=None, supplier_name=None, latest_n=None):
     """
     Enhanced Amazon data lookup using linking map as primary method.
     Falls back to legacy methods if linking map fails.
     """
     # Method 1: Use linking map (primary method for Fix 2.6)
-    amazon_data = find_amazon_json_by_linking_map(ean, title, url, supplier_name)
+    amazon_data = find_amazon_json_by_linking_map(ean, title, url, supplier_name, latest_n)
     if amazon_data:
         return amazon_data
     
@@ -330,104 +367,175 @@ def extract_enhanced_metrics(amazon_data):
 
     return enhanced_metrics
 
-def financials(supplier, amazon, supplier_price_inc_vat):
-    # Get current price from various possible locations in the Amazon data structure
+def _financials_internal(supplier, amazon, supplier_price_inc_vat):
+    """
+    Scenario 1 — UK-Established VAT-Registered (you account for output VAT)
+    Returns values keyed the same way as the original script, but fixes VAT/flow math:
+      - NetProceeds = Amazon payout NOW (gross − fees inc-VAT)
+      - HMRC = Output VAT − Input VAT (input VAT includes supplier + fees + prep + shipping)
+      - NetProfit = ex-VAT identity: (Selling/1.2) − (Supplier_ex + Fees_ex + Prep_ex + Ship_ex)
+      - ROI kept on (Supplier_ex + Prep_ex + Ship_ex)
+      - Breakeven (inc-VAT) = 1.2 × (Supplier_ex + Fees_ex + Prep_ex + Ship_ex)
+      - ProfitMargin on ex-VAT revenue
+    """
+    # 1) Resolve Amazon price (inc-VAT) from multiple possible fields
     amazon_price = None
     if 'current_price' in amazon:
         amazon_price = amazon['current_price']
     elif 'price' in amazon:
         amazon_price = amazon['price']
     else:
-        # Log warning and return empty dict if no price found
         print(f"WARNING: No price found in Amazon data for {amazon.get('asin_queried', 'unknown ASIN')}")
         return {}
-        
-    # Defaults (if Keepa block is missing)
-    referral_fee = 0.15 * amazon_price
-    fba_fee = 2.8
-    
-    # Extract fees from Keepa data structure as organized by amazon_playwright_extractor.py
+
+    # Normalize to float & set explicit alias used below
+    selling_price_inc_vat = float(amazon_price)
+
+    # 2) Defaults (fallbacks ONLY; prefer external/Keepa when available). All EX-VAT.
+    #    If your pipeline provides ex/ inc VAT fee fields, they will override these below.
+    referral_fee = 0.15 * (selling_price_inc_vat / (1 + VAT_RATE))  # EX-VAT fallback %
+    fba_fee = 2.8  # EX-VAT fallback flat
+
+    # 3) Pull fees from Keepa (already EX-VAT in your extractor). Keeps minimal structure you had.
     if 'keepa' in amazon and amazon['keepa']:
         keepa_data = amazon['keepa']
         if 'product_details_tab_data' in keepa_data and keepa_data['product_details_tab_data']:
             ref, fba = extract_keepa_fees(keepa_data['product_details_tab_data'])
-            if ref: referral_fee = ref
-            if fba: fba_fee = fba
-        # Fallback to old structure if needed
+            if ref is not None: referral_fee = float(ref)
+            if fba is not None: fba_fee = float(fba)
         elif 'keepa_product_details' in amazon and amazon['keepa_product_details']:
             ref, fba = extract_keepa_fees(amazon['keepa_product_details'])
-            if ref: referral_fee = ref
-            if fba: fba_fee = fba
-            
-    selling_price_inc_vat = amazon_price
-    
-    # Handle VAT calculations based on supplier price configuration
+            if ref is not None: referral_fee = float(ref)
+            if fba is not None: fba_fee = float(fba)
+
+    # 4) Supplier price normalization (compute both ex-VAT and inc-VAT consistently)
+    original_price = float(supplier_price_inc_vat)
+
     if SUPPLIER_PRICES_INCLUDE_VAT:
-        # Supplier prices already include VAT
-        supplier_price_ex_vat = supplier_price_inc_vat / (1 + VAT_RATE)
-        input_vat = supplier_price_inc_vat * VAT_RATE / (1 + VAT_RATE)
+        supplier_price_ex_vat = original_price / (1 + VAT_RATE)
+        supplier_price_inc_vat = original_price  # as provided
+        print(f"🧮 VAT: Supplier price £{original_price:.2f} inc-VAT → £{supplier_price_ex_vat:.2f} ex-VAT (÷{1+VAT_RATE})")
     else:
-        # Supplier prices are ex-VAT
-        supplier_price_ex_vat = supplier_price_inc_vat  # This is actually ex-VAT
-        input_vat = supplier_price_ex_vat * VAT_RATE
-        supplier_price_inc_vat = supplier_price_ex_vat + input_vat  # Recalculate inc VAT
-    
-    amazon_price_ex_vat = selling_price_inc_vat / (1 + VAT_RATE)
-    output_vat = selling_price_inc_vat * VAT_RATE / (1 + VAT_RATE)
-    net_proceeds = selling_price_inc_vat - referral_fee - fba_fee - output_vat - supplier_price_inc_vat
-    hmrc = output_vat - input_vat
-    net_profit = net_proceeds - hmrc - PREP_COST - SHIP_COST
-    
-    # Fixed ROI calculation: ROI = (Net Profit / Total Cost) * 100
-    # Total cost = supplier cost + all fees
-    total_cost = supplier_price_ex_vat + PREP_COST + SHIP_COST
-    roi = (net_profit / total_cost) * 100 if total_cost > 0 else 0
-    
-    breakeven = supplier_price_inc_vat + referral_fee + fba_fee + PREP_COST + SHIP_COST
-    
-    # Fixed Profit Margin calculation: Profit Margin = (Net Profit / Revenue) * 100
-    profit_margin = (net_profit / selling_price_inc_vat) * 100 if selling_price_inc_vat > 0 else 0
+        supplier_price_ex_vat = original_price   # provided ex-VAT
+        supplier_price_inc_vat = original_price * (1 + VAT_RATE)
+        print(f"🧮 VAT: Supplier price £{original_price:.2f} ex-VAT → £{supplier_price_inc_vat:.2f} inc-VAT (×{1+VAT_RATE})")
+
+    # 5) Core VAT pieces
+    amazon_price_ex_vat = selling_price_inc_vat / (1 + VAT_RATE)          # P_ex
+    output_vat = selling_price_inc_vat * VAT_RATE / (1 + VAT_RATE)        # P/6
+
+    # 6) Costs (EX-VAT)
+    fees_ex_vat = (referral_fee or 0.0) + (fba_fee or 0.0)
+    total_ex_vat_costs = supplier_price_ex_vat + fees_ex_vat + PREP_COST + SHIP_COST
+
+    # 7) Amazon payout NOW (cash): gross − fees inc-VAT
+    net_proceeds = selling_price_inc_vat - (fees_ex_vat * (1 + VAT_RATE))
+
+    # 8) HMRC later: Output VAT − Input VAT (Input VAT includes supplier + fees + prep + shipping)
+    input_vat = VAT_RATE * (supplier_price_ex_vat + fees_ex_vat + PREP_COST + SHIP_COST)
+    hmrc = output_vat - input_vat  # +payable / −refund
+
+    # 9) Eventual Net Profit (AFTER VAT return) — ex-VAT identity
+    net_profit = amazon_price_ex_vat - total_ex_vat_costs
+    # (Equivalently: (net_proceeds - supplier_price_inc_vat) - hmrc)
+
+    # 10) ROI — keep your original convention (supplier_ex + prep + shipping)
+    _roi_base = supplier_price_ex_vat + PREP_COST + SHIP_COST
+    roi = (net_profit / _roi_base * 100) if _roi_base > 0 else 0.0
+
+    # 11) Breakeven (inc-VAT) and Profit Margin (on ex-VAT revenue)
+    breakeven = total_ex_vat_costs * (1 + VAT_RATE)
+    profit_margin = (net_profit / amazon_price_ex_vat * 100) if amazon_price_ex_vat > 0 else 0.0
+
+    # 12) Return keys unchanged
     return {
         'SupplierPrice_incVAT': supplier_price_inc_vat,
         'SupplierPrice_exVAT': supplier_price_ex_vat,
         'SellingPrice_incVAT': selling_price_inc_vat,
-        'ReferralFee': referral_fee,
-        'FBAFee': fba_fee,
-        'PrepHouseFee': PREP_COST,  # Added prep house fee as separate column
+        'ReferralFee': referral_fee,               # EX-VAT
+        'FBAFee': fba_fee,                         # EX-VAT
+        'PrepHouseFee': PREP_COST,                 # EX-VAT
         'OutputVAT': output_vat,
         'InputVAT': input_vat,
-        'NetProceeds': net_proceeds,
-        'HMRC': hmrc,
-        'NetProfit': net_profit,
-        'ROI': roi,
-        'Breakeven': breakeven,
-        'ProfitMargin': profit_margin,
+        'NetProceeds': net_proceeds,               # Amazon payout (cash now)
+        'HMRC': hmrc,                              # +payable / −refund later
+        'NetProfit': net_profit,                   # AFTER VAT return
+        'ROI': roi,                                # %
+        'Breakeven': breakeven,                    # inc-VAT price
+        'ProfitMargin': profit_margin,             # % on ex-VAT revenue
     }
 
-def run_calculations(supplier_name, supplier_cache_path=None, output_dir=None, amazon_scrape_dir=None):
+
+def financials(supplier_price, amazon_price, amazon_sales_rank=None, amazon_rating=None, amazon_review_count=None):
     """
-    Core calculation function extracted from main() for testability.
-    
+    Backward compatibility wrapper for the financials function.
+    This maintains the original API that the workflow expects.
+
+    Args:
+        supplier_price: The supplier price (treated as exclusive of VAT based on config)
+        amazon_price: The Amazon selling price (inclusive of VAT)
+        amazon_sales_rank: Optional sales rank for enhanced metrics
+        amazon_rating: Optional rating for enhanced metrics
+        amazon_review_count: Optional review count for enhanced metrics
+
+    Returns:
+        dict: Financial calculations with proper VAT handling
+    """
+    # Create mock objects to match the expected function signature
+    supplier_mock = {
+        'price': supplier_price,
+        'title': 'Unknown Product',
+        'url': 'Unknown URL'
+    }
+
+    amazon_mock = {
+        'current_price': amazon_price,
+        'price': amazon_price,
+        'sales_rank': amazon_sales_rank or 999999,
+        'rating': amazon_rating or 0,
+        'reviews': amazon_review_count or 0,
+        'asin_queried': 'UNKNOWN_ASIN'
+    }
+
+    # Call the internal financials function with proper VAT handling
+    return _financials_internal(supplier_mock, amazon_mock, supplier_price)
+
+
+def run_calculations(supplier_name, supplier_cache_path=None, output_dir=None, amazon_scrape_dir=None,
+                    latest_n=None, batch_size=None):
+    """
+    Core calculation function with batching support.
+
     Args:
         supplier_name: Supplier identifier for supplier-specific paths (REQUIRED)
         supplier_cache_path: Path to supplier cache JSON file
         output_dir: Directory to save financial reports
         amazon_scrape_dir: Directory containing Amazon scrape data
-        
+        latest_n: If provided, process only the N most recent linking map entries
+        batch_size: Size of batches for CSV generation (uses config default if None)
+
     Returns:
-        dict: Results containing DataFrame, statistics, and file path
+        dict: Results containing DataFrames, statistics, and file paths
     """
     if not supplier_name:
         raise ValueError("supplier_name is required for supplier-specific path generation")
-    
+
+    # Use provided batch_size or config default
+    if batch_size is None:
+        batch_size = FINANCIAL_REPORT_BATCH_SIZE
+
+    print(f"🔧 CONFIG: Using batch_size = {batch_size}")
+    if latest_n:
+        print(f"🔧 CONFIG: Processing latest_n = {latest_n} linking map entries")
+
     # Generate supplier-specific paths
     supplier_paths = get_supplier_specific_paths(supplier_name)
-    
+
     # Use parameters or supplier-specific defaults
     cache_path = supplier_cache_path or supplier_paths['supplier_cache']
     out_dir = output_dir or supplier_paths['financial_reports_dir']
     amazon_dir = amazon_scrape_dir or AMAZON_SCRAPE_DIR
-    
+
     # Ensure output directory exists - CRITICAL for supplier-specific paths
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs(os.path.dirname(supplier_paths['supplier_cache']), exist_ok=True)
@@ -445,46 +553,81 @@ def run_calculations(supplier_name, supplier_cache_path=None, output_dir=None, a
     print(f"Loading supplier products from: {cache_path}")
     print(f"Using Amazon data from: {amazon_dir}")
     print(f"Output will be saved to: {out_dir}")
-    
+
     try:
         with open(cache_path, 'r', encoding='utf-8') as f:
             supplier_products = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         raise Exception(f"Error reading supplier cache: {e}")
 
-    records = []
-    
-    print(f"Processing {len(supplier_products)} supplier products...")
-    processed = 0
-    found_matches = 0
-    
+    # Load linking map (with latest_n filtering if specified)
+    linking_map = load_linking_map(supplier_name, latest_n)
+    if not linking_map:
+        raise Exception("No linking map entries found")
+
+    print(f"Processing {len(linking_map)} linking map entries...")
+    print(f"Supplier products cache has {len(supplier_products)} items")
+
+    # Create a lookup dict for faster supplier product matching
+    supplier_lookup = {}
     for sp in supplier_products:
         ean = sp.get('ean')
-        asin = sp.get('asin')
-        title = sp.get('title')
-        url = sp.get('url')  # Get supplier URL for linking map lookup
-        
-        # Skip if no linking information
-        if not any([ean, asin, title]):
-            print(f"Skipping product with no EAN, ASIN, or title")
+        url = sp.get('url')
+        if ean:
+            supplier_lookup[ean] = sp
+        if url:
+            supplier_lookup[url] = sp
+
+    all_records = []
+    batch_results = []
+    processed = 0
+    found_matches = 0
+    batch_number = 1
+
+    for link_record in linking_map:
+        supplier_ean = link_record.get("supplier_ean", "")
+        supplier_url = link_record.get("supplier_url", "")
+        amazon_asin = link_record.get("amazon_asin")
+
+        # Find matching supplier product
+        supplier_product = None
+        if supplier_ean and supplier_ean in supplier_lookup:
+            supplier_product = supplier_lookup[supplier_ean]
+        elif supplier_url and supplier_url in supplier_lookup:
+            supplier_product = supplier_lookup[supplier_url]
+
+        if not supplier_product:
             continue
-            
-        supplier_price = float(sp['price']) if 'price' in sp and sp['price'] else 0
-        amazon = find_amazon_json(ean, asin, title, url, supplier_name)  # Pass URL and supplier_name parameters
+
         processed += 1
-        
+
+        # Get product details
+        ean = supplier_product.get('ean')
+        asin = amazon_asin  # Use ASIN from linking map
+        title = supplier_product.get('title')
+        url = supplier_product.get('url')
+
+        supplier_price = float(supplier_product.get('price', 0))
+
+        # Find Amazon data using linking map ASIN or fallback methods
+        amazon = None
+        if amazon_asin:
+            amazon = find_amazon_json_by_asin(amazon_asin, ean)
+        if not amazon:
+            amazon = find_amazon_json(ean, asin, title, url, supplier_name, latest_n)
+
         if not amazon:
             if processed % 25 == 0:
-                print(f"Processed {processed}/{len(supplier_products)} - No Amazon data for: EAN={ean}, ASIN={asin}")
+                print(f"Processed {processed}/{len(linking_map)} - No Amazon data for: EAN={ean}, ASIN={asin}")
             continue
-            
+
         found_matches += 1
-            
-        # 🚨 ENHANCED: Check for multiple price field variations and provide detailed logging
+
+        # Check for price data
         price_fields = ['current_price', 'price', 'original_price', 'amazon_price']
         price = None
         price_source = None
-        
+
         for field in price_fields:
             if field in amazon and amazon[field] is not None:
                 try:
@@ -493,110 +636,206 @@ def run_calculations(supplier_name, supplier_cache_path=None, output_dir=None, a
                     break
                 except (ValueError, TypeError):
                     continue
-        
+
         if not price:
             missing_fields = [f"{field}={amazon.get(field)}" for field in price_fields]
-            # 🚨 FIX A-7: Use proper logging instead of print() for file logging
             logger = logging.getLogger(__name__)
             logger.warning(f"❌ NO PRICE DATA: EAN={ean}, ASIN={asin}, Available fields: {missing_fields}")
-            logger.info(f"   Title: {title}")
-            logger.debug(f"   Amazon data keys: {list(amazon.keys())}")
             continue
         else:
-            # 🚨 FIX A-7: Use proper logging instead of print() for file logging
             logger = logging.getLogger(__name__)
             logger.info(f"✅ PRICE FOUND: EAN={ean}, ASIN={asin}, Price=£{price} (from {price_source})")
-            
-        # Get Amazon URL 
+
+        # Get Amazon URL
         amazon_url = amazon.get('url')
         if not amazon_url and 'asin_queried' in amazon:
             amazon_url = f"https://www.amazon.co.uk/dp/{amazon['asin_queried']}"
-            
+
         # Get Amazon title for the CSV
         amazon_title = amazon.get('title', amazon.get('product_title', 'N/A'))
-        
-        # Create the row data with improved fields
+
+        # Create the row data
         row = {
             'EAN': ean,
-            'EAN_OnPage': amazon.get('ean_on_page'),  # Include the EAN found on the Amazon page
+            'EAN_OnPage': amazon.get('ean_on_page'),
             'ASIN': asin if asin else amazon.get('asin_queried', amazon.get('asin_from_details')),
-            'SupplierTitle': title,  # Renamed for clarity
-            'AmazonTitle': amazon_title,  # Added Amazon product title
-            'SupplierURL': sp.get('url'),
-            'AmazonURL': amazon_url
+            'SupplierTitle': title,
+            'AmazonTitle': amazon_title,
+            'SupplierURL': url,
+            'AmazonURL': amazon_url,
+            'MatchMethod': link_record.get('match_method', ''),
+            'Confidence': link_record.get('confidence', ''),
+            'CreatedAt': link_record.get('created_at', '')
         }
 
         # Add enhanced metrics
         enhanced_metrics = extract_enhanced_metrics(amazon)
         row.update(enhanced_metrics)
 
-        financial_data = financials(sp, amazon, supplier_price)
-        if financial_data:  # Only add if financial calculations were successful
+        financial_data = _financials_internal(supplier_product, amazon, supplier_price)
+        if financial_data:
             row.update(financial_data)
-            records.append(row)
-        
-    if not records:
-        raise Exception("No matching records found. Check file paths and data consistency.")
-        
-    df = pd.DataFrame(records)
-    
-    # Sort by ROI (highest first) for better analysis
-    if 'ROI' in df.columns:
-        df = df.sort_values(by='ROI', ascending=False)
-    
-    dt = datetime.now().strftime('%Y%m%d_%H%M%S')
-    out_path = os.path.join(out_dir, f'fba_financial_report_{dt}.csv')
-    df.to_csv(out_path, index=False)
-    
-    # Calculate statistics
-    stats = {
-        'processed': processed,
-        'found_matches': found_matches,
-        'generated_calculations': len(records),
-        'output_file': out_path
+            all_records.append(row)
+
+        # Check if we should generate a batch report based on linking map entries processed
+        if processed % batch_size == 0 and processed > 0:
+            # Generate batch report for this batch of linking map entries
+            if all_records:  # Only generate if we have some successful calculations
+                batch_df = pd.DataFrame(all_records)
+
+                # Sort by ROI (highest first) for better analysis
+                if 'ROI' in batch_df.columns:
+                    batch_df = batch_df.sort_values(by='ROI', ascending=False)
+
+                dt = datetime.now().strftime('%Y%m%d_%H%M%S')
+                batch_out_path = os.path.join(out_dir, f'fba_financial_report_batch_{batch_number}_{dt}.csv')
+                batch_df.to_csv(batch_out_path, index=False)
+
+                print(f"📊 Generated batch {batch_number} CSV: {batch_out_path} ({len(all_records)} records from {batch_size} linking map entries)")
+
+                # Store batch results
+                batch_stats = {
+                    'batch_number': batch_number,
+                    'records_count': len(all_records),
+                    'output_file': batch_out_path,
+                    'linking_map_entries_processed': batch_size,
+                    'successful_calculations': len(all_records)
+                }
+
+                if 'ROI' in batch_df.columns:
+                    batch_stats['profitable_count'] = batch_df[batch_df['ROI'] > 0.3].shape[0]
+                    batch_stats['marginal_count'] = batch_df[(batch_df['ROI'] <= 0.3) & (batch_df['ROI'] > 0)].shape[0]
+                    batch_stats['unprofitable_count'] = batch_df[batch_df['ROI'] <= 0].shape[0]
+
+                batch_results.append({
+                    'dataframe': batch_df,
+                    'statistics': batch_stats,
+                    'records': all_records
+                })
+
+            # Reset accumulator for next batch
+            all_records = []
+            batch_number += 1
+
+    # Process remaining records if any
+    if all_records:
+        batch_df = pd.DataFrame(all_records)
+
+        # Sort by ROI (highest first) for better analysis
+        if 'ROI' in batch_df.columns:
+            batch_df = batch_df.sort_values(by='ROI', ascending=False)
+
+        dt = datetime.now().strftime('%Y%m%d_%H%M%S')
+        batch_out_path = os.path.join(out_dir, f'fba_financial_report_batch_{batch_number}_{dt}.csv')
+        batch_df.to_csv(batch_out_path, index=False)
+
+        print(f"📊 Generated final batch {batch_number} CSV: {batch_out_path} ({len(all_records)} records)")
+
+        batch_stats = {
+            'batch_number': batch_number,
+            'records_count': len(all_records),
+            'output_file': batch_out_path,
+            'processed_in_batch': len(all_records)
+        }
+
+        if 'ROI' in batch_df.columns:
+            batch_stats['profitable_count'] = batch_df[batch_df['ROI'] > 0.3].shape[0]
+            batch_stats['marginal_count'] = batch_df[(batch_df['ROI'] <= 0.3) & (batch_df['ROI'] > 0)].shape[0]
+            batch_stats['unprofitable_count'] = batch_df[batch_df['ROI'] <= 0].shape[0]
+
+        batch_results.append({
+            'dataframe': batch_df,
+            'statistics': batch_stats,
+            'records': all_records
+        })
+
+    # Calculate overall statistics
+    total_processed = sum(batch['statistics']['records_count'] for batch in batch_results)
+
+    overall_stats = {
+        'total_batches': len(batch_results),
+        'total_processed': processed,
+        'total_found_matches': found_matches,
+        'total_generated_calculations': total_processed,
+        'linking_map_entries_processed': len(linking_map),
+        'supplier_products_total': len(supplier_products),
+        'batch_size_used': batch_size,
+        'latest_n_used': latest_n,
+        'output_files': [batch['statistics']['output_file'] for batch in batch_results]
     }
-    
-    if 'ROI' in df.columns:
-        stats['profitable_count'] = df[df['ROI'] > 0.3].shape[0]
-        stats['marginal_count'] = df[(df['ROI'] <= 0.3) & (df['ROI'] > 0)].shape[0] 
-        stats['unprofitable_count'] = df[df['ROI'] <= 0].shape[0]
-        stats['top_5_by_roi'] = df.head(5)[['ASIN', 'EAN', 'SupplierTitle', 'ROI', 'NetProfit', 'SellingPrice_incVAT', 'SupplierPrice_incVAT']].to_dict('records')
-    
+
+    # Add profitability summary across all batches
+    all_profitable = sum(batch['statistics'].get('profitable_count', 0) for batch in batch_results)
+    all_marginal = sum(batch['statistics'].get('marginal_count', 0) for batch in batch_results)
+    all_unprofitable = sum(batch['statistics'].get('unprofitable_count', 0) for batch in batch_results)
+
+    overall_stats.update({
+        'total_profitable': all_profitable,
+        'total_marginal': all_marginal,
+        'total_unprofitable': all_unprofitable
+    })
+
+    if not batch_results:
+        raise Exception("No matching records found. Check file paths and data consistency.")
+
     return {
-        'dataframe': df,
-        'statistics': stats,
-        'records': records,
-        'supplier_products_total': len(supplier_products)
+        'batch_results': batch_results,
+        'overall_statistics': overall_stats,
+        'linking_map_size': len(linking_map)
     }
 
 def main():
     """Main entry point that calls run_calculations and displays results."""
     try:
         # Default supplier name for backward compatibility - should be passed as parameter in production
-        supplier_name = "clearance-king_co_uk"  # This should be dynamic in real usage
-        results = run_calculations(supplier_name)
-        
-        df = results['dataframe']
-        stats = results['statistics']
-        
-        print(f"\nProcessed {stats['processed']}/{results['supplier_products_total']} products")
-        print(f"Found {stats['found_matches']} matching Amazon records")
-        print(f"Generated {stats['generated_calculations']} financial calculations")
-        print(f"\nFinancial report saved to: {stats['output_file']}")
-        
-        # Display statistics on results
-        if 'ROI' in df.columns:
-            print(f"\nTop 5 items by ROI:")
-            print(df.head(5)[['ASIN', 'EAN', 'SupplierTitle', 'ROI', 'NetProfit', 'SellingPrice_incVAT', 'SupplierPrice_incVAT']])
-            
-            # Show profitability breakdown
-            print(f"\nProfitability breakdown:")
-            print(f"  - Good ROI (>30%): {stats.get('profitable_count', 0)} items")
-            print(f"  - Marginal (0-30%): {stats.get('marginal_count', 0)} items")
-            print(f"  - Unprofitable: {stats.get('unprofitable_count', 0)} items")
-            
+        supplier_name = "poundwholesale.co.uk"  # Updated to match current usage
+
+        # For testing batching - process latest 100 entries with batch size 10
+        results = run_calculations(
+            supplier_name,
+            latest_n=100,  # Process only latest 100 linking map entries
+            batch_size=10  # Generate CSV every 10 records
+        )
+
+        batch_results = results['batch_results']
+        overall_stats = results['overall_statistics']
+
+        print(f"\n🎯 BATCHING RESULTS SUMMARY:")
+        print(f"Total batches generated: {overall_stats['total_batches']}")
+        print(f"Total processed: {overall_stats['total_processed']}")
+        print(f"Total found matches: {overall_stats['total_found_matches']}")
+        print(f"Total calculations: {overall_stats['total_generated_calculations']}")
+        print(f"Linking map entries processed: {overall_stats['linking_map_entries_processed']}")
+        print(f"Batch size used: {overall_stats['batch_size_used']}")
+        print(f"Latest N used: {overall_stats['latest_n_used']}")
+
+        print(f"\n📁 Generated CSV files:")
+        for i, file_path in enumerate(overall_stats['output_files'], 1):
+            print(f"  Batch {i}: {file_path}")
+
+        print(f"\n💰 Overall Profitability:")
+        print(f"  - Good ROI (>30%): {overall_stats.get('total_profitable', 0)} items")
+        print(f"  - Marginal (0-30%): {overall_stats.get('total_marginal', 0)} items")
+        print(f"  - Unprofitable: {overall_stats.get('total_unprofitable', 0)} items")
+
+        # Show details for first batch
+        if batch_results:
+            first_batch = batch_results[0]
+            df = first_batch['dataframe']
+            stats = first_batch['statistics']
+
+            print(f"\n📊 First Batch Details (Batch {stats['batch_number']}):")
+            print(f"Records in batch: {stats['records_count']}")
+            print(f"Output file: {stats['output_file']}")
+
+            if 'ROI' in df.columns and not df.empty:
+                print(f"\nTop 3 items in first batch by ROI:")
+                print(df.head(3)[['ASIN', 'EAN', 'SupplierTitle', 'ROI', 'NetProfit', 'SellingPrice_incVAT', 'SupplierPrice_incVAT']].to_string())
+
     except Exception as e:
         print(f"Error in financial calculations: {e}")
+        import traceback
+        traceback.print_exc()
         return
 
 if __name__ == '__main__':

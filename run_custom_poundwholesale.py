@@ -51,6 +51,7 @@ async def main():
     workflow_config = config_loader.get_workflow_config('poundwholesale_workflow')
     supplier_name = workflow_config.get('supplier_name', 'poundwholesale.co.uk')
     credentials = config_loader.get_credentials(supplier_name)
+    
     chrome_debug_port = config_loader.get_system_config().get('chrome_debug_port', 9222)
 
     browser_manager = None

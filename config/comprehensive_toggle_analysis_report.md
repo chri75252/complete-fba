@@ -395,7 +395,7 @@ max_products_per_category = self.system_config.get("system", {}).get("max_produc
 #### **`supplier.prices_include_vat`**
 **Status**: ✅ INTEGRATED  
 **Evidence**: Used in FBA_Financial_calculator  
-**Code**: `SUPPLIER_PRICES_INCLUDE_VAT = config.get("supplier", {}).get("prices_include_vat", True)`  
+**Code**: `SUPPLIER_PRICES_INCLUDE_VAT = config.get("supplier", {}).get("prices_include_vat", False)`  
 **Impact**: Controls how supplier prices are processed
 
 ### **CACHE CONFIGURATION GROUP**

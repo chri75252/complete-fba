@@ -262,9 +262,9 @@
 ### **Supplier Configuration Group**
 
 #### **`supplier.prices_include_vat`**
-**Previous Value**: true  
-**New Value**: true (unchanged)  
-**Observed Behavior**: Supplier prices include VAT  
+**Previous Value**: true
+**New Value**: false
+**Observed Behavior**: Supplier prices are exclusive of VAT (calculator adds 20% VAT)  
 **Proof**: Configuration value present  
 **Integration**: ✅ FUNCTIONAL  
 **Dependencies**: None  

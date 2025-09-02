@@ -88,6 +88,7 @@ class FixedEnhancedStateManager:
             
             "total_products": 0,
             "processing_status": "initialized",
+            "is_fresh_start": True,  # 🚨 FIX 1: Add missing fresh start field (corrected by _detect_actual_fresh_start)
             "category_performance": {},
             "error_log": [],
             "successful_products": 0,
@@ -164,6 +165,40 @@ class FixedEnhancedStateManager:
                 "session_products_processed": 0
             }
         }
+
+    def _detect_actual_fresh_start(self):
+        """Enhanced fresh start detection with processed product validation"""
+        
+        # Original flag-based logic
+        flag_fresh_start = self.state_data.get("is_fresh_start", True)
+        
+        # NEW: Validate against actual processed data
+        successful_products = self.state_data.get("successful_products", 0)
+        global_counters = self.state_data.get("global_counters", {})
+        total_processed = global_counters.get("total_products_processed", 0)
+        system_progression = self.state_data.get("system_progression", {})
+        current_category = system_progression.get("current_category_index")
+        
+        # True fresh start criteria: No processed products AND no category progress
+        actual_fresh_start = (
+            successful_products == 0 and
+            total_processed == 0 and
+            current_category is None
+        )
+        
+        # Detect and log contradictions
+        if flag_fresh_start != actual_fresh_start:
+            log.warning(
+                f"🚨 FRESH START CONTRADICTION DETECTED: "
+                f"flag={flag_fresh_start} actual={actual_fresh_start} "
+                f"products={successful_products} processed={total_processed} "
+                f"category={current_category}"
+            )
+            
+            # Use actual state rather than flag
+            self.state_data["is_fresh_start"] = actual_fresh_start
+        
+        return actual_fresh_start
     
     def load_state(self) -> bool:
         """
@@ -262,14 +297,10 @@ class FixedEnhancedStateManager:
                 log.info(f"✅ REVERSE GAP: Reset resumption_index = 0 (explicit cache rebuild requested)")
             elif current_resumption_index == 0:
                 # If resumption_index is 0, check if this is truly a fresh start or a restart
-                # Look for evidence of previous processing
-                has_previous_state = (
-                    self.state_data.get("total_products", 0) > 0 or
-                    len(self.state_data.get("category_performance", {})) > 0 or
-                    self.state_data.get("successful_products", 0) > 0
-                )
+                # 🚨 FIX 1: Use enhanced fresh start detection instead of manual logic
+                is_actual_fresh_start = self._detect_actual_fresh_start()
                 
-                if has_previous_state:
+                if not is_actual_fresh_start:
                     # This appears to be a restart, not a fresh start - preserve some progress
                     log.warning(f"🔄 REVERSE GAP: Detected restart with resumption_index=0 but previous state exists - preserving index")
                     self.state_data["resume_reason"] = "reverse_gap_restart_preserved"
@@ -602,24 +633,17 @@ class FixedEnhancedStateManager:
         """Atomic save wrapper used by new progression methods"""
         self.save_state(preserve_interruption_state=True)
     
-    def update_progression_unified(self, current_category_index: int = None, 
-                                 current_product_index_in_category: int = None,
-                                 total_products_in_current_category: int = None,
-                                 current_phase: str = None,
-                                 current_category_url: str = None,
-                                 total_categories: int = None):
-        """
-        🚨 UNIFIED PROGRESSION UPDATE: Update system_progression as single source of truth
-        This method implements the COMPLETE_WORKFLOW.md specification for deterministic state management
-        
-        Args:
-            current_category_index: Absolute category index (0-based)
-            current_product_index_in_category: Product index within current category
-            total_products_in_current_category: Total products in current category (frozen denominator)
-            current_phase: Processing phase ("supplier", "amazon_analysis") 
-            current_category_url: Current category URL being processed
-            total_categories: Total number of categories
-        """
+    def update_progression_unified(self,
+                                current_category_index=None,
+                                current_product_index_in_category=None,
+                                supplier_resumption_index=None,  # NEW
+                                amazon_resumption_index=None,    # NEW
+                                current_phase=None,
+                                total_products_in_current_category=None,
+                                current_category_url=None,
+                                total_categories=None,
+                                **kwargs):
+        """Extended unified progression with dual phase index tracking"""
         sp = self.state_data.setdefault("system_progression", {})
         
         # Update provided fields
@@ -633,7 +657,19 @@ class FixedEnhancedStateManager:
             sp["total_products_in_current_category"] = total_products_in_current_category
             
         if current_phase is not None:
+            old_phase = sp.get("current_phase")
             sp["current_phase"] = current_phase
+            if old_phase != current_phase:
+                log.info(f"🔄 PHASE TRANSITION: {old_phase} → {current_phase}")
+        
+        # 🚨 FIX 3: NEW - Phase-specific resumption indices
+        if supplier_resumption_index is not None:
+            sp["supplier_resumption_index"] = supplier_resumption_index
+            log.debug(f"📊 SUPPLIER RESUME INDEX: {supplier_resumption_index}")
+
+        if amazon_resumption_index is not None:
+            sp["amazon_resumption_index"] = amazon_resumption_index
+            log.debug(f"📊 AMAZON RESUME INDEX: {amazon_resumption_index}")
             
         if current_category_url is not None:
             # Normalize URL for consistent tracking
@@ -651,6 +687,9 @@ class FixedEnhancedStateManager:
         # Update timestamp
         sp["last_updated"] = datetime.now(timezone.utc).isoformat()
         
+        # 🚨 FIX 2: Cross-validate state systems
+        drift_magnitude = self._validate_state_synchronization()
+        
         # Log the progression update for observability
         cat_idx = sp.get("current_category_index", 0)
         prod_idx = sp.get("current_product_index_in_category", 0)
@@ -659,6 +698,48 @@ class FixedEnhancedStateManager:
         phase = sp.get("current_phase", "unknown")
         
         log.debug(f"📊 PROGRESSION UPDATE: cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prods} phase={phase}")
+        
+        return drift_magnitude
+
+    def _validate_state_synchronization(self):
+        """Cross-validate system_progression and supplier_extraction_progress consistency"""
+        
+        sp = self.state_data.get("system_progression", {})
+        legacy = self.state_data.get("supplier_extraction_progress", {})
+        
+        # Extract comparison values
+        sp_category = sp.get("current_category_index", 0)
+        legacy_category = legacy.get("current_category_index", 0)
+        sp_product = sp.get("current_product_index_in_category", 0)
+        legacy_product = legacy.get("current_product_index_in_category", 0)
+        
+        # Calculate drift magnitude
+        category_drift = abs(sp_category - legacy_category)
+        product_drift = abs(sp_product - legacy_product)
+        total_drift = category_drift + product_drift
+        
+        # Log significant discrepancies
+        if category_drift > 0:
+            log.warning(
+                f"⚠️ CATEGORY INDEX DRIFT: SystemProgression={sp_category} "
+                f"Legacy={legacy_category} drift={category_drift}"
+            )
+        
+        if product_drift > 1:  # Allow 1-index tolerance for processing boundaries
+            log.warning(
+                f"⚠️ PRODUCT INDEX DRIFT: SystemProgression={sp_product} "
+                f"Legacy={legacy_product} drift={product_drift}"
+            )
+        
+        # Store drift metrics for monitoring
+        self.state_data.setdefault("diagnostics", {})["state_drift"] = {
+            "category_drift": category_drift,
+            "product_drift": product_drift,
+            "total_drift": total_drift,
+            "last_checked": datetime.now(timezone.utc).isoformat()
+        }
+        
+        return total_drift
 
     def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
         """
