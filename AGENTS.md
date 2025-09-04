@@ -1,153 +1,96 @@
-# FBA Agent System: Component Architecture
 # Repository Guidelines
 
 ## Project Structure & Module Organization
 - Tools: core agents in `tools/` (e.g., `supplier_authentication_service.py`, `configurable_supplier_scraper.py`, `amazon_playwright_extractor.py`, `FBA_Financial_calculator.py`, `passive_extraction_workflow_latest.py`).
-- Utilities: shared infrastructure in `utils/` (e.g., `enhanced_state_manager.py`, `browser_manager.py`).
-- Config: settings in `config/` (e.g., `system_config.json`, `poundwholesale_categories.json`).
-- Outputs: caches and reports in `OUTPUTS/` (e.g., `FBA_ANALYSIS/`, `CACHE/`).
-- Orchestration: `PassiveExtractionWorkflow` coordinates agents (see `tools/passive_extraction_workflow_latest.py`).
+- Utilities: shared infra in `utils/` (e.g., `enhanced_state_manager.py`, `browser_manager.py`).
+- Config: settings in `config/` (`system_config.json`, `poundwholesale_categories.json`).
+- Outputs: caches/reports in `OUTPUTS/` (`FBA_ANALYSIS/`, `CACHE/`).
+- Orchestration: `PassiveExtractionWorkflow` in `tools/passive_extraction_workflow_latest.py` coordinates agents.
+- Tests: reside in `tests/`, named `test_*.py` with markers.
 
 ## Build, Test, and Development Commands
 - Install deps: `python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt`.
 - Run workflow: `python run_complete_fba_system.py` (or `python run_custom_poundwholesale.py`).
-- Tests: `pytest -q` (unit/integration markers configured). Fast subset: `pytest -m "not requires_browser"`.
+- Run tests: `pytest -q`; fast subset: `pytest -m "not requires_browser"`.
 - Coverage: `pytest --cov`.
 - Lint/format: `ruff check .` and `black .` (see `pyproject.toml`).
 
 ## Coding Style & Naming Conventions
-- Python 3.12, 4-space indentation, max line length 100.
-- Names: functions/modules `snake_case`, classes `PascalCase`, constants `UPPER_SNAKE_CASE`.
-- Imports: follow Ruff/isort rules (first-party: `tools`, `utils`, `config`).
-- Type hints encouraged; MyPy config present (`mypy` optional).
+- Python 3.12; 4-space indentation; max line length 100.
+- Naming: functions/modules `snake_case`, classes `PascalCase`, constants `UPPER_SNAKE_CASE`.
+- Imports: follow Ruff/isort grouping (standard, third-party, first-party: `tools`, `utils`, `config`).
+- Type hints encouraged; MyPy config present (optional run: `mypy .`).
 
 ## Testing Guidelines
-- Framework: `pytest` with markers (`unit`, `integration`, `requires_browser`).
-- Locations: tests in `tests/`; name files `test_*.py`.
+- Framework: `pytest` with markers: `unit`, `integration`, `requires_browser`.
+- Location/naming: put tests in `tests/`, files `test_*.py`.
 - Browser tests: isolate with `-m requires_browser`; avoid network by default.
-- Aim for coverage on `tools/`, `utils/`, `config/` code paths that you change.
+- Aim to cover code paths you touch; verify with `pytest --cov`.
 
 ## Commit & Pull Request Guidelines
-- Use Conventional Commits when possible: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`.
-- Commits: small, scoped, descriptive subject (<=72 chars); body explains why.
-- PRs: clear summary, linked issues, steps to validate, risks/rollbacks; include sample command outputs or screenshots when UI/logs change.
+- Commits: use Conventional Commits (e.g., `feat:`, `fix:`, `docs:`), subject ≤72 chars; body explains why.
+- PRs: clear summary, linked issues, validation steps, risks/rollbacks; include sample outputs or screenshots when logs/UI change.
 
 ## Security & Configuration Tips
-- Credentials: stored in `config/system_config.json`; never commit secrets. Prefer `.env` and reference via config loader.
-- Authentication flow uses a pre-launched Chrome with remote debugging; ensure the browser is running on the configured port before scraping.
-- Long runs write to `OUTPUTS/`; avoid deleting caches while agents run.
+- Do not commit secrets; prefer `.env` and load via config. Review `config/system_config.json` for placeholders only.
+- Authentication uses a pre-launched Chrome with remote debugging; ensure the configured port is running before scraping.
+- Long runs write to `OUTPUTS/`; do not remove caches while agents run.
 
 ## Agent-Specific Pointers
-- Authentication Agent verifies login via visible prices; prefer price-check as source of truth.
-- Supplier Scraper: consider periodic cache flushes to `OUTPUTS/cached_products/...` during long runs.
-- Amazon Extractor: try EAN-first, title as fallback; cache JSON to `OUTPUTS/FBA_ANALYSIS/amazon_cache/`.
-**Last Updated:** 2025-07-15
+- Authentication: `tools/supplier_authentication_service.py` uses `standalone_playwright_login.py`; verify login via visible prices (source of truth).
+- Supplier Scraper: `tools/configurable_supplier_scraper.py`; consider periodic flushes to `OUTPUTS/cached_products/...` for resilience.
+- Amazon Extractor: `tools/amazon_playwright_extractor.py` (EAN-first, title fallback); caches JSON under `OUTPUTS/FBA_ANALYSIS/amazon_cache/`.
+- Financial Analysis: `tools/FBA_Financial_calculator.py`; writes CSV to `OUTPUTS/FBA_ANALYSIS/financial_reports/`.
+- State Manager: `utils/enhanced_state_manager.py`; persists at `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json`.
 
-This document provides a detailed breakdown of the individual "agents" or autonomous components that make up the Amazon FBA Agent System. Each agent has a specialized role, and they work together in a pipeline to automate the process of finding profitable products.
+## Architecture Overview
+The system runs primarily in Hybrid Processing Mode: per-category loop performing supplier extraction → Amazon matching → financial analysis, with deterministic resumption via `system_progression` and atomic writes.
 
----
+```mermaid
+flowchart TD
+  EP[Entry Points\nrun_custom_poundwholesale.py\nrun_complete_fba_system.py] --> WF[Orchestrator\nPassiveExtractionWorkflow\n tools/passive_extraction_workflow_latest.py]
 
-## High-Level Workflow
+  subgraph Config
+    SC[config/system_config.json]
+    PC[config/poundwholesale_categories.json]
+    CL[config/system_config_loader.py]
+  end
+  SC --> CL --> WF
+  PC --> WF
 
-The system operates as a sequential pipeline, where the output of one agent often becomes the input for the next. The `PassiveExtractionWorkflow` class acts as the central orchestrator, coordinating the execution of these agents.
+  subgraph Utils
+    BM[utils/browser_manager.py]
+    WSG[utils/windows_save_guardian.py]
+    UF[utils/url_cache_filter.py]
+    PM[utils/path_manager.py]
+  end
+  BM --> WF
+  WSG --> WF
+  PM --> WF
 
+  subgraph Agents
+    AU[Authentication\n tools/supplier_authentication_service.py]
+    SS[Supplier Scraper\n tools/configurable_supplier_scraper.py]
+    AX[Amazon Extractor\n tools/amazon_playwright_extractor.py]
+    FC[Financial Calculator\n tools/FBA_Financial_calculator.py]
+    SM[State Manager\n utils/enhanced_state_manager.py]
+  end
+
+  WF --> AU -->|session cookies| WF
+  WF -->|category loop (hybrid)| SS
+  SS -.->|Filter: LM → Cache → Extract| UF
+  SS -->|products JSON\nOUTPUTS/cached_products/...| WF
+  WF -->|EAN-first, title fallback| AX
+  AX -->|amazon_cache JSON\nOUTPUTS/FBA_ANALYSIS/amazon_cache/| WF
+  WF --> FC -->|CSV append| OUT[OUTPUTS/FBA_ANALYSIS/financial_reports]
+  WF -->|update + resume\nsystem_progression| SM
+  SM -->|processing_state JSON\nOUTPUTS/CACHE/processing_states/...| WF
+  WF --> BM
+  BM --> AU
+  BM --> AX
+
+  classDef store fill:#f7f7f7,stroke:#999,color:#333
+  OUT:::store
+  SC:::store
+  PC:::store
 ```
-[ Start ]
-    |
-    ▼
-[ 1. Authentication Agent ]
- (Ensures session is logged in)
-    |
-    ▼
-[ 2. Supplier Scraping Agent ]
- (Scrapes product data from supplier website)
-    |
-    ▼
-[ 3. Amazon Matching & Extraction Agent ]
- (Finds products on Amazon and extracts data)
-    |
-    ▼
-[ 4. Financial Analysis Agent ]
- (Calculates profitability)
-    |
-    ▼
-[ 5. State Management Agent ]
- (Tracks progress and saves results)
-    |
-    ▼
-[ End ]
-```
-
----
-
-## Agent Definitions
-
-### 1. Authentication Agent
-
--   **Primary Script:** `tools/supplier_authentication_service.py`
--   **Core Responsibility:** To ensure the browser session is authenticated with the supplier website (`poundwholesale.co.uk`) before any scraping begins. It is responsible for handling the entire login lifecycle.
--   **Inputs:**
-    -   Credentials (email, password) from `config/system_config.json`.
-    -   A Playwright `Page` object to perform actions on.
--   **Outputs:**
-    -   An authenticated browser state (via session cookies).
-    -   A boolean success/failure status returned to the orchestrator.
--   **Key Logic & Tools:**
-    -   It uses the `tools/standalone_playwright_login.py` script as its primary tool.
-    -   **Verification Flaw (Identified):** The agent has a two-step verification process. It first looks for visual cues like a "Logout" button, which is unreliable. Its more robust, secondary check is to verify that it can see product prices, which are only visible to logged-in users. The system currently proceeds only if the price check is successful.
--   **Notes:** This agent connects to the user's pre-launched Chrome instance running on a debug port, allowing for visible or "background tab" execution.
-
-### 2. Supplier Scraping Agent
-
--   **Primary Script:** `tools/configurable_supplier_scraper.py`
--   **Core Responsibility:** To systematically navigate the supplier's category URLs and extract raw product data (title, price, EAN, etc.) for every item it finds.
--   **Inputs:**
-    -   A list of category URLs, loaded from `config/poundwholesale_categories.json`.
-    -   Configuration settings from `config/system_config.json` (e.g., `max_products_per_category`).
--   **Outputs:**
-    -   A list of product data dictionaries, which are held in memory.
-    -   **Primary File Output:** `OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json`.
--   **Key Logic & Tools:**
-    -   Uses Playwright to navigate pages and BeautifulSoup (implicitly) to parse HTML and find data based on selectors defined in the supplier's config.
--   **Limitations (Identified):** The agent currently scrapes all specified categories and holds the results in memory, only writing to the cache file **at the very end**. This is risky, as a crash during a long scrape would cause all collected data to be lost.
-
-### 3. Amazon Matching & Extraction Agent
-
--   **Primary Script:** `tools/amazon_playwright_extractor.py` (specifically the `FixedAmazonExtractor` class)
--   **Core Responsibility:** For each supplier product, this agent's job is to find the corresponding product on `amazon.co.uk` and extract a comprehensive set of data from the product detail page.
--   **Inputs:**
-    -   A single supplier product object, containing an EAN (if available) and a title.
--   **Outputs:**
-    -   A detailed JSON object containing all extracted Amazon data (price, BSR, reviews, etc.).
-    -   **Primary File Output:** Individual JSON files in `OUTPUTS/FBA_ANALYSIS/amazon_cache/` (e.g., `amazon_{ASIN}_{EAN}.json`).
--   **Key Logic & Tools:**
-    -   **EAN-First Strategy:** It first searches Amazon using the product's EAN for a high-confidence match.
-    -   **Title Fallback:** If the EAN search fails or returns no organic results, it falls back to searching by the product's title.
-    -   It uses Playwright to control the browser and extract data using CSS selectors.
--   **Notes:** This agent currently uses a "legacy" browser connection, creating its own connection to the debug port instead of using the central `BrowserManager`.
-
-### 4. Financial Analysis Agent
-
--   **Primary Script:** `tools/FBA_Financial_calculator.py`
--   **Core Responsibility:** To take the data from both the supplier and Amazon and calculate key financial metrics to determine if a product is profitable.
--   **Inputs:**
-    -   The combined data object for a single product (containing both supplier and Amazon details).
-    -   Financial parameters (VAT rate, referral fees, etc.) from `config/system_config.json`.
--   **Outputs:**
-    -   A dictionary of calculated financial data (e.g., `ROI`, `NetProfit`, `fees`).
-    -   **Primary File Output:** Appends a row to the final `OUTPUTS/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv`.
--   **Key Logic & Tools:**
-    -   This is a pure calculation script; it does not interact with the browser. It applies the business logic defined in its functions to the input data.
-
-### 5. State Management Agent
-
--   **Primary Script:** `utils/enhanced_state_manager.py`
--   **Core Responsibility:** To act as the system's memory. It tracks which products have already been processed, allowing the workflow to be stopped and resumed without losing progress or re-doing work.
--   **Inputs:**
-    -   Status updates from the orchestrator (e.g., "now processing product X," "product Y was profitable").
--   **Outputs:**
-    -   **Primary File Output:** `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json`.
--   **Key Logic & Tools:**
-    -   It maintains a dictionary of product URLs that have been processed and their final status.
-    -   It tracks the `last_processed_index` to know where to resume from on the next run.
-    -   It includes logic to detect when all cached products have been processed, preventing the system from running unnecessarily.

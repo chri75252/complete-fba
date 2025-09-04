@@ -1393,6 +1393,42 @@ class PassiveExtractionWorkflow:
         self.log.error("This indicates a configuration or system error that needs investigation")
         return 0  # Return 0 instead of hardcoded fallback to make the issue visible
 
+    # Authoritative, frozen total categories (precedence: runtime_settings → system_progression → computed list → fallback 1)
+    def _authoritative_total_categories(self) -> int:
+        if hasattr(self, "_frozen_total_categories"):
+            try:
+                return int(self._frozen_total_categories)
+            except Exception:
+                pass
+        rs = {}
+        sp = {}
+        try:
+            rs = self.state_manager.state_data.get("runtime_settings", {})
+            sp = self.state_manager.state_data.get("system_progression", {})
+        except Exception:
+            rs, sp = {}, {}
+        frozen = (rs.get("total_categories") if isinstance(rs, dict) else None) or (
+            sp.get("total_categories") if isinstance(sp, dict) else None
+        )
+        if frozen:
+            try:
+                self._frozen_total_categories = int(frozen)
+                return self._frozen_total_categories
+            except Exception:
+                pass
+        try:
+            cats = self._get_predefined_categories(self.supplier_name) or []
+            self._frozen_total_categories = len(cats)
+        except Exception:
+            self._frozen_total_categories = 1
+        if isinstance(rs, dict):
+            rs["total_categories"] = int(self._frozen_total_categories)
+            try:
+                self.state_manager.save_state(preserve_interruption_state=True)
+            except Exception:
+                pass
+        return int(self._frozen_total_categories)
+
     async def run(self):
         """Main execution loop for the workflow."""
         profitable_results: List[Dict[str, Any]] = []
@@ -1433,12 +1469,46 @@ class PassiveExtractionWorkflow:
 
         # Load state and linking map
         self.state_manager.load_state()
-        if hasattr(self.state_manager, 'validate_and_repair_state'):
-            self.state_manager.validate_and_repair_state()
+        # Run validation with off-by-one clamping before computing resume/slicing
+        if hasattr(self.state_manager, 'validate_loaded_state'):
+            try:
+                self.state_manager.validate_loaded_state()
+            except Exception:
+                pass
+        elif hasattr(self.state_manager, 'validate_and_repair_state'):
+            try:
+                self.state_manager.validate_and_repair_state()
+            except Exception:
+                pass
+        # Write-through: freeze total categories and set into unified progression early
+        try:
+            frozen_total = self._authoritative_total_categories()
+            self.state_manager.update_progression_unified(
+                current_phase="supplier",
+                total_categories=frozen_total
+            )
+            self.log.info(f"🔒 FROZEN TOTAL CATEGORIES set to {frozen_total} (authoritative)")
+            # Drift check between legacy and unified views
+            legacy_total = self.state_manager.state_data.get("supplier_extraction_progress", {}).get("total_categories")
+            system_total = self.state_manager.state_data.get("system_progression", {}).get("total_categories")
+            if legacy_total is not None and legacy_total != system_total:
+                self.log.warning(f"LEGACY VIEW DRIFT: legacy_total={legacy_total} vs system_total={system_total} — using system only.")
+        except Exception as e:
+            self.log.warning(f"⚠️ Could not set frozen total categories at startup: {e}")
+
         self.last_processed_index = self.state_manager.get_resumption_index()
         self.consecutive_amazon_price_misses = self.state_manager.state_data.get('consecutive_amazon_price_misses', 0)
         self.log.info(f"📋 Loaded existing processing state for {self.supplier_name}")
-        self.log.info(f"🔄 Resuming from index {self.last_processed_index}")
+        # Resume banner with frozen denominator
+        try:
+            sp = self.state_manager.state_data.get("system_progression", {})
+            total_cats = sp.get("total_categories") or self._authoritative_total_categories()
+            if self.system_config.get("resume", {}).get("banner_enabled", True):
+                self.log.info(
+                    f"▶ RESUME {sp.get('current_phase','supplier')}: category {sp.get('current_category_index',0)+1}/{total_cats} (system_progression)"
+                )
+        except Exception:
+            pass
 
         # 🚨 REMOVED: Hard reset logic removed per user request - was causing incorrect cache validation
         # System will now always attempt to resume from processing state without validation conflicts
@@ -1644,10 +1714,14 @@ class PassiveExtractionWorkflow:
             ]
             self.log.info(f"Found {len(valid_supplier_products)} valid supplier products, {len(price_filtered_products)} within price range [£{MIN_PRICE}-£{MAX_PRICE}]")
             
-            # Check if all cached products have been processed
-            if self.last_processed_index >= len(price_filtered_products):
-                self.log.info(f"📋 All cached products have been processed in previous runs (index {self.last_processed_index} >= total {len(price_filtered_products)}). Continuing with fresh data...")
-                self.last_processed_index = 0
+            # Clamp resume index against the actual product list length (avoid empty slices)
+            n = len(price_filtered_products)
+            upper = max(0, n - 1)
+            if self.last_processed_index > upper:
+                self.log.info(
+                    f"📋 Resume index {self.last_processed_index} > max {upper}; clamping to {upper}."
+                )
+                self.last_processed_index = upper
             
             # Apply max_products_to_process limit starting from resume index
             if max_products_to_process <= 0:
@@ -1656,7 +1730,7 @@ class PassiveExtractionWorkflow:
                 self.log.info(f"🔄 UNLIMITED MODE: Processing ALL {len(products_to_analyze)} remaining products starting from index {self.last_processed_index}")
             else:
                 # Limited mode - process up to max_products_to_process starting from resume index
-                end_index = min(self.last_processed_index + max_products_to_process, len(price_filtered_products))
+                end_index = min(self.last_processed_index + max_products_to_process, n)
                 products_to_analyze = price_filtered_products[self.last_processed_index:end_index]
                 self.log.info(f"🔄 LIMITED MODE: Processing {len(products_to_analyze)} products (from index {self.last_processed_index} to {end_index-1})")
             
@@ -1695,11 +1769,11 @@ class PassiveExtractionWorkflow:
                         if hasattr(self.state_manager, 'update_supplier_extraction_progress'):
                             self.state_manager.update_supplier_extraction_progress(
                                 category_index=batch_num + 1,
-                                total_categories=len(category_urls),
+                                total_categories=self._authoritative_total_categories(),
                                 subcategory_index=i + 1,
                                 total_subcategories=len(batch_products),
                                 category_url=product_data.get('source_url', 'unknown'),
-                                extraction_phase="amazon_analysis"
+                                extraction_phase="supplier"
                             )
                         
                         # Save state after every product to ensure resumability
@@ -3458,6 +3532,10 @@ Return ONLY valid JSON, no additional text."""
     def _save_products_to_cache(self, products: list, cache_file_path: str):
         """Save products to cache file with atomic deduplication and deterministic filtering."""
         try:
+            # Short-circuit: nothing to process
+            if not products:
+                self.log.info("🔍 DEDUP SUMMARY: 0 new; skipped re-scan (empty batch)")
+                return 0
             # --- PATH CORRECTION FIX V5 ---
             # Use pathlib for robust, cross-platform path handling.
             path_obj = Path(str(cache_file_path))
@@ -3545,6 +3623,11 @@ Return ONLY valid JSON, no additional text."""
 
             # 🚨 ATOMIC FIX 5: Execute atomic operation and use Windows Save Guardian
             all_products, new_count = atomic_cache_operation()
+
+            # DEDUPE GATING: avoid global write/scan churn when 0 new
+            if new_count == 0:
+                self.log.info("🔍 DEDUP SUMMARY: 0 new; skipped re-scan")
+                return 0
             
             # Use Windows Save Guardian for atomic write with file locking
             success = self.save_guardian.save_json_atomic(final_path, all_products)
@@ -3972,17 +4055,17 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.initialize_category_processing(
                         category_index=category_index - 1,
                         category_url=category_url,
-                        total_categories=len(category_urls)
+                        total_categories=self._authoritative_total_categories()
                     )
                     self.state_manager.update_supplier_extraction_progress(
                         category_index=category_index,
-                        total_categories=len(category_urls),
+                        total_categories=self._authoritative_total_categories(),
                         subcategory_index=subcategory_index,
                         total_subcategories=len(category_batch),
                         batch_number=batch_num,
                         total_batches=len(category_batches),
                         category_url=category_url,
-                        extraction_phase="categories"
+                        extraction_phase="supplier"
                     )
                     
                     if progress_config.get("progress_display", {}).get("show_subcategory_progress", True):
@@ -4101,7 +4184,11 @@ Return ONLY valid JSON, no additional text."""
                 
                 # 🚨 SURGICAL FIX #3: FILTERING CONTRACT COMPLIANCE VERIFICATION
                 filter_invariant_check = len(urls_for_manifest) == (len(skip_entirely_urls) + len(needs_amazon_only_urls) + len(needs_full_extraction_urls))
-                self.log.info(f"🧮 Filter Invariant: in={len(urls_for_manifest)} == skip+amz_only+full={len(skip_entirely_urls) + len(needs_amazon_only_urls) + len(needs_full_extraction_urls)} → {'✅ VALID' if filter_invariant_check else '❌ INVALID'}")
+                # Canonical invariant line for audit/verification (single line)
+                self.log.info(
+                    f"🧮 Filter Invariant: in={len(urls_for_manifest)} == "
+                    f"skip={len(skip_entirely_urls)} + amazon_only={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)}"
+                )
                 
                 # 🚨 CONTRACT ENFORCEMENT: Fail fast if filtering contract is violated
                 if not filter_invariant_check:
@@ -4276,8 +4363,13 @@ Return ONLY valid JSON, no additional text."""
                         # Update the main processing index during supplier extraction based on actual cache length
                         actual_cache_count = len(getattr(self, '_current_all_products', []))
                         self.state_manager.update_processing_index(actual_cache_count, total_products)
-                        if product_url:
-                            self.state_manager.update_supplier_extraction_progress_new(product_url)
+                        # Single-writer: update unified progression only
+                        self.state_manager.update_progression_unified(
+                            current_phase="supplier",
+                            current_product_index_in_category=actual_cache_count,
+                            total_categories=self._authoritative_total_categories(),
+                            current_category_url=category_url
+                        )
                         self.log.info(f"🔍 SUPPLIER STATE UPDATE: Index updated to {actual_cache_count}/{total_products}")
                     except Exception as e:
                         self.log.error(f"❌ SUPPLIER STATE UPDATE FAILED: {e}")
@@ -7574,7 +7666,7 @@ Return ONLY valid JSON, no additional text."""
                     # For hybrid mode, we process by chunks, so category index = batch_num + 1
                     self.state_manager.update_supplier_extraction_progress(
                         category_index=batch_num + 1,
-                        total_categories=len(category_urls),
+                        total_categories=self._authoritative_total_categories(),
                         subcategory_index=i + 1,
                         total_subcategories=len(batch_products),
                         batch_number=batch_num + 1,

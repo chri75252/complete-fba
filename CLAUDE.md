@@ -220,19 +220,6 @@ Configuration is controlled through [config/system_config.json](config/system_co
 - [ ] Documentation sync mechanisms active
 ```
 
-### **AUTO_UPDATE_TRIGGER_CONDITIONS:**
-```
-🚨 DIRECTIVE: AUTO_REGENERATION
-TRIGGERS:
-- File modifications in tools/, config/, docs/
-- CLAUDE_STANDARDS.md changes
-- New supplier configurations
-- Security policy updates
-- Path structure changes
-ACTIONS: Regenerate dependent files, update documentation, validate consistency
-```
-
----
 
 ## 🎯 Purpose
 This document establishes the standardized file organization system for the Amazon FBA Agent System v3.5. All scripts, tools, and processes MUST follow these conventions to maintain consistency, enable proper automation, and ensure maintainability.

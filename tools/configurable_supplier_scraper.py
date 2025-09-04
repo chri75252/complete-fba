@@ -1020,22 +1020,24 @@ class ConfigurableSupplierScraper:
                     products.append(product)
                     if product_accumulator is not None:
                         product_accumulator.append(product)
-                        
-                        # Trigger workflow-controlled cache save path
-                        if getattr(self, "progress_callback", None) and callable(self.progress_callback):
-                            try:
-                                self.progress_callback(
-                                    "supplier_extraction",
-                                    i + 1,
-                                    len(filtered_urls),
-                                    product_url,
-                                    product,
-                                )
-                            except Exception as cb_err:
-                                log.debug(f"⚠️ progress_callback failed at {i+1}: {cb_err}")
                     else:
                         # Accumulator sanity check - critical breadcrumb for "why didn't it save?" debugging
                         log.warning("Prefiltered path: no product_accumulator; periodic saves may not trigger.")
+
+                    # Trigger per-product progress so N-cadence saves fire
+                    if getattr(self, "progress_callback", None) and callable(self.progress_callback):
+                        try:
+                            self.progress_callback(
+                                "supplier_extraction",
+                                i + 1,
+                                len(filtered_urls),
+                                product_url,
+                                product,
+                            )
+                        except Exception as cb_err:
+                            log.warning(f"⚠️ progress_callback failed at {i+1}: {cb_err}")
+                    else:
+                        log.warning("Prefiltered path: no progress_callback bound; periodic saves may not trigger.")
                         
                     log.info(f"✅ Extracted: {product.get('title', 'N/A')} - £{product.get('price', 'N/A')}")
                 else:

@@ -22,6 +22,7 @@ Version: v3.7+ Critical Fix
 
 import json
 import os
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Union, Tuple
@@ -71,6 +72,13 @@ class FixedEnhancedStateManager:
         self.state_file_path = get_processing_state_path(supplier_name)
         self.state_data = self._initialize_state()
         self._startup_completed = False  # Track if startup analysis is done
+        # Load system config for toggles (best-effort)
+        self.system_config: Dict[str, Any] = {}
+        try:
+            from config.system_config_loader import SystemConfigLoader
+            self.system_config = SystemConfigLoader().get_system_config()
+        except Exception:
+            self.system_config = {}
         
     def _initialize_state(self) -> Dict[str, Any]:
         """Initialize state structure with all required fields and FIXED architecture"""
@@ -282,8 +290,23 @@ class FixedEnhancedStateManager:
         # Calculate file-grounded totals
         file_grounded_data = self._calculate_file_grounded_totals()
         
+        # Toggle: allow disabling reverse gap heuristic entirely via config
+        use_reverse_gap_heuristic = (
+            self.system_config.get("pipeline_toggles", {})
+            .get("resume", {})
+            .get("use_reverse_gap_heuristic", False)
+        )
+
+        if not use_reverse_gap_heuristic:
+            # Deterministic resume: use linking map count as resume index
+            start_at = int(file_grounded_data.get("linking_map_count", 0))
+            self.state_data["resumption_index"] = start_at
+            self.state_data["progress_index"] = 0
+            self.state_data.setdefault("gap_processing", {})["reverse_gap_detected"] = False
+            self.state_data["resume_reason"] = "system_progression"
+            log.info(f"RESUME DECISION: START_AT_INDEX={start_at} (reason: system_progression)")
         # 🚨 REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
-        if file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
+        elif file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
             log.info(f"🔄 REVERSE GAP DETECTED: Linking map ({file_grounded_data['linking_map_count']}) > Cache ({file_grounded_data['total_products']})")
 
             # Check if we should preserve existing resume index or reset
@@ -328,10 +351,11 @@ class FixedEnhancedStateManager:
 
             log.info(f"✅ Normal startup - resumption_index = {file_grounded_data['linking_map_count']}")
         
-        # Log final resume decision for observability
-        log.info(
-            f"RESUME DECISION: START_AT_INDEX={self.state_data['resumption_index']} (reason: {self.state_data['resume_reason']})"
-        )
+        # Log final resume decision for observability (if not already logged)
+        if "resume_reason" in self.state_data and "resumption_index" in self.state_data:
+            log.info(
+                f"RESUME DECISION: START_AT_INDEX={self.state_data['resumption_index']} (reason: {self.state_data['resume_reason']})"
+            )
 
         # Update total products from file-grounded data
         self.state_data["total_products"] = file_grounded_data["total_products"]
@@ -601,10 +625,23 @@ class FixedEnhancedStateManager:
                     log.error(f"❌ Failed to save state to {self.state_file_path}")
                     
             except ImportError:
-                # Fallback to regular save if guardian not available
-                with open(self.state_file_path, 'w', encoding='utf-8') as f:
-                    json.dump(self.state_data, f, indent=2, ensure_ascii=False)
-                log.debug(f"✅ State saved (fallback method) to {self.state_file_path}")
+                # Atomic fallback: write to temp then replace
+                try:
+                    dir_name = os.path.dirname(str(self.state_file_path)) or "."
+                    fd, tmp_path = tempfile.mkstemp(prefix="state_", suffix=".tmp", dir=dir_name, text=True)
+                    try:
+                        with os.fdopen(fd, "w", encoding="utf-8") as tmp:
+                            json.dump(self.state_data, tmp, indent=2, ensure_ascii=False)
+                        os.replace(tmp_path, str(self.state_file_path))
+                        log.debug(f"✅ State saved atomically (fallback) to {self.state_file_path}")
+                    except Exception as e:
+                        log.error(f"❌ Atomic fallback save failed: {e}")
+                        try:
+                            os.remove(tmp_path)
+                        except Exception:
+                            pass
+                except Exception as e:
+                    log.error(f"❌ Could not perform atomic fallback save: {e}")
 
         except Exception as e:
             log.error(f"❌ Failed to save state: {e}")
@@ -740,6 +777,59 @@ class FixedEnhancedStateManager:
         }
         
         return total_drift
+
+    def validate_loaded_state(self) -> None:
+        """Clamp out-of-range indices and warn on contradictions; persist once atomically."""
+        sp = self.state_data.setdefault("system_progression", {})
+
+        # Clamp category index to max valid (0..total-1)
+        try:
+            total_cats = int(sp.get("total_categories", 1) or 1)
+        except Exception:
+            total_cats = 1
+        try:
+            ci = int(sp.get("current_category_index", 0))
+        except Exception:
+            ci = 0
+        max_cat_index = max(0, total_cats - 1)
+        if ci > max_cat_index:
+            log.warning(f"⚠️ State validation: current_category_index {ci} > max_index {max_cat_index}; capping")
+            sp["current_category_index"] = max_cat_index
+
+        # Clamp product index within category (0..tp-1)
+        try:
+            tp = int(sp.get("total_products_in_current_category", 0))
+        except Exception:
+            tp = 0
+        try:
+            pi = int(sp.get("current_product_index_in_category", 0))
+        except Exception:
+            pi = 0
+        max_prod_index = max(0, tp - 1) if tp > 0 else 0
+        if pi > max_prod_index:
+            log.warning(f"⚠️ State validation: product_index {pi} > max_index {max_prod_index}; capping")
+            sp["current_product_index_in_category"] = max_prod_index
+
+        # Simple contradiction: fresh-start with non-zero progress
+        fs = bool(self.state_data.get("is_fresh_start", False))
+        if fs and ((sp.get("current_category_index", 0) or 0) > 0 or (sp.get("current_product_index_in_category", 0) or 0) > 0):
+            log.warning("⚠️ Contradiction: is_fresh_start=True with non-zero progress; normalizing is_fresh_start=False")
+            self.state_data["is_fresh_start"] = False
+
+        # Optional phase transition sanity (log-only)
+        last = sp.get("last_phase")
+        cur = sp.get("current_phase")
+        allowed = {
+            "supplier": {"amazon_analysis", "completed"},
+            "amazon_analysis": {"supplier", "completed"},
+            "completed": {"supplier"},
+        }
+        if last and cur and last != cur and last in allowed and cur not in allowed[last]:
+            log.warning(f"⚠️ Phase transition {last} → {cur} not in allowed set")
+        sp["last_phase"] = cur
+
+        # Persist once
+        self.save_state()
 
     def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
         """
@@ -1177,34 +1267,64 @@ class FixedEnhancedStateManager:
                                             subcategory_index: int = None, total_subcategories: int = None,
                                             batch_number: int = None, total_batches: int = None,
                                             category_url: str = None, extraction_phase: str = None):
-        """Update supplier extraction progress.
+        """Normalizing shim: accept legacy progress writes but persist only into system_progression.
 
-        The original implementation mistakenly stored the category position under
-        ``category_index`` which didn't match the schema's
-        ``current_category_index`` field.  As a result, the workflow could not
-        accurately resume from the last category after an interruption.  This
-        method now writes to ``current_category_index`` so subsequent runs pick
-        up exactly where they left off.
+        - Clamps indices to sane ranges
+        - Enforces frozen denominator precedence (runtime_settings → system_progression → incoming)
+        - Normalizes phase labels (fresh_categories → supplier)
+        - Leaves supplier_extraction_progress structure as a read-only view (no index mutation)
         """
-        progress = self.state_data.get("supplier_extraction_progress", {})
-        progress.update({
-            "current_category_index": category_index,
-            "total_categories": total_categories,
-            "last_update": datetime.now(timezone.utc).isoformat()
-        })
-        if subcategory_index is not None:
-            progress["current_subcategory_index"] = subcategory_index
-        if total_subcategories is not None:
-            progress["pages_scraped_in_session"] = total_subcategories
-        if batch_number is not None:
-            progress["current_batch_number"] = batch_number
-        if total_batches is not None:
-            progress["total_batches"] = total_batches
-        if category_url is not None:
-            progress["current_category_url"] = category_url
+        # Ensure system_progression exists
+        sp = self.state_data.setdefault("system_progression", {})
+
+        # Clamp category index
+        try:
+            if category_index is not None:
+                sp["current_category_index"] = max(0, int(category_index))
+        except Exception:
+            sp["current_category_index"] = sp.get("current_category_index", 0)
+
+        # Determine frozen total categories with precedence
+        frozen_total = (
+            self.state_data.get("runtime_settings", {}).get("total_categories")
+            or sp.get("total_categories")
+            or total_categories
+        )
+        try:
+            sp["total_categories"] = max(1, int(frozen_total)) if frozen_total is not None else max(1, int(sp.get("total_categories", 1)))
+        except Exception:
+            sp["total_categories"] = max(1, int(sp.get("total_categories", 1)))
+
+        # Normalize phase
         if extraction_phase is not None:
-            progress["extraction_phase"] = extraction_phase
-        self.state_data["supplier_extraction_progress"] = progress
+            phase_map = {"fresh_categories": "supplier", "amazon_analysis": "amazon_analysis", "completed": "completed"}
+            sp["current_phase"] = phase_map.get(str(extraction_phase), str(extraction_phase))
+
+        # URL passthrough
+        if category_url is not None:
+            try:
+                from utils.normalization import normalize_url
+                sp["current_category_url"] = normalize_url(category_url)
+                sp["original_category_url"] = category_url
+            except Exception:
+                sp["current_category_url"] = category_url
+
+        # Preserve a minimal legacy view without mutating indices (read-only compatibility)
+        legacy = self.state_data.setdefault("supplier_extraction_progress", {})
+        legacy.setdefault("last_update", datetime.now(timezone.utc).isoformat())
+        if category_url is not None:
+            legacy["current_category_url"] = category_url
+        if batch_number is not None:
+            legacy["current_batch_number"] = batch_number
+        if total_batches is not None:
+            legacy["total_batches"] = total_batches
+        if subcategory_index is not None:
+            legacy["current_subcategory_index"] = subcategory_index
+        if total_subcategories is not None:
+            legacy["pages_scraped_in_session"] = total_subcategories
+
+        # Atomic save
+        self.save_state()
         
     def update_success_metrics(self, amazon_success: bool, profitable: bool, profit: float = 0):
         """Update success metrics"""
