@@ -2099,7 +2099,7 @@ class PassiveExtractionWorkflow:
             # --- CUSTOM CATEGORY LOGIC ---
             if self.workflow_config.get("use_predefined_categories"):
                 self.log.info("CUSTOM MODE: Using predefined category list.")
-                category_urls_to_scrape = await self._get_predefined_categories(self.supplier_name)
+                category_urls_to_scrape = self._get_predefined_categories(self.supplier_name)
                 if not category_urls_to_scrape:
                     self.log.error(
                         "CUSTOM MODE FAILED: No URLs found in predefined list. Aborting."
@@ -3591,7 +3591,7 @@ class PassiveExtractionWorkflow:
             "ai_decision_history": [],  # New field for AI decisions
         }
 
-    async def _get_predefined_categories(self, supplier_name: str) -> list:
+    def _get_predefined_categories(self, supplier_name: str) -> list:
         """Load predefined category URLs from a custom JSON file."""
         log.info(f"Attempting to load predefined categories for {supplier_name}")
         try:
