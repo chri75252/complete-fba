@@ -1,0 +1,962 @@
+2025-09-05 09:13:15,220 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250905_091315.log
+2025-09-05 09:13:15,220 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250905_091315.log
+2025-09-05 09:13:15,221 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-09-05 09:13:15,222 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-09-05 09:13:15,223 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-09-05 09:13:15,788 - utils.browser_manager - INFO - 🔌 Connecting to existing Chrome debug instance on port 9222
+2025-09-05 09:13:15,789 - utils.browser_manager - INFO - 📜 Per troubleshooting docs: Using existing Chrome debug only
+2025-09-05 09:13:15,791 - utils.browser_manager - INFO - ✅ Chrome debug accessible on IPv6: Chrome/139.0.7258.155
+2025-09-05 09:13:15,791 - utils.browser_manager - INFO - 🔌 Connecting to existing Chrome debug instance...
+2025-09-05 09:13:15,793 - utils.browser_manager - DEBUG - 🌐 Using IPv6 endpoint for CDP connection
+2025-09-05 09:13:15,794 - utils.browser_manager - INFO - 🌐 Using endpoint: http://[::1]:9222
+2025-09-05 09:13:15,914 - utils.browser_manager - INFO - ✅ Successfully connected to existing Chrome debug instance
+2025-09-05 09:13:15,915 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-09-05 09:13:15,915 - utils.browser_manager - INFO - 🔍 Connected to existing Chrome: 139.0.7258.155
+2025-09-05 09:13:15,915 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:13:15,915 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:13:15,920 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:13:15,920 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-09-05 09:13:15,920 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-09-05 09:13:15,920 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-09-05 09:13:18,811 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-05 09:13:21,597 - tools.standalone_playwright_login - WARNING - ⚠️ No clear price elements found - price access unclear
+2025-09-05 09:13:21,613 - tools.supplier_authentication_service - INFO - ❌ Login form detected - not authenticated
+2025-09-05 09:13:21,613 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-09-05 09:13:21,614 - tools.supplier_authentication_service - INFO - 🔧 Using browser manager's existing browser for authentication
+2025-09-05 09:13:21,614 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:13:21,614 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:13:21,629 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:13:21,629 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-09-05 09:13:24,161 - tools.standalone_playwright_login - INFO - ❌ No login indicators found - need to log in
+2025-09-05 09:13:24,161 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-09-05 09:13:24,162 - tools.standalone_playwright_login - INFO - 📍 Navigating to login page: https://www.poundwholesale.co.uk/customer/account/login/
+2025-09-05 09:13:27,346 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="login[username]"]
+2025-09-05 09:13:28,231 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input[name="login[password]"]
+2025-09-05 09:13:31,295 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button[type="submit"]
+2025-09-05 09:13:31,295 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-09-05 09:13:33,950 - tools.standalone_playwright_login - WARNING - ⚠️ Login status unclear - no clear success indicators
+2025-09-05 09:13:33,951 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-05 09:13:39,263 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-05 09:13:39,263 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 15.1s)
+2025-09-05 09:13:39,263 - tools.supplier_authentication_service - INFO - ✅ Authentication successful using browser manager's browser: playwright_selectors
+2025-09-05 09:13:39,264 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2025-09-05 09:13:39,264 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2025-09-05 09:13:39,264 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2025-09-05 09:13:39,265 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-09-05 09:13:39,265 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-09-05 09:13:39,368 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:13:39,375 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 10392 products, 0 categories
+2025-09-05 09:13:39,376 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-09-05 09:13:39,511 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10392 actual products in cache (total entries: 10392)
+2025-09-05 09:13:39,610 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10537 processed products in linking map
+2025-09-05 09:13:39,854 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 177 categories
+2025-09-05 09:13:39,863 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 231 categories in config
+2025-09-05 09:13:39,872 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=10537 (reason: system_progression)
+2025-09-05 09:13:39,873 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=10537 (reason: system_progression)
+2025-09-05 09:13:39,889 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-09-05 09:13:39,892 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:13:39,892 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-09-05 09:13:39,893 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-09-05 09:13:39,894 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-09-05 09:13:39,894 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-09-05 09:13:39,895 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-09-05 09:13:39,896 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-09-05 09:13:39,897 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2025-09-05 09:13:39,898 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-09-05 09:13:39,898 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-09-05 09:13:39,899 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-09-05 09:13:39,899 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-09-05 09:13:39,900 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-09-05 09:13:39,900 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-09-05 09:13:39,901 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-09-05 09:13:39,901 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-09-05 09:13:39,902 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-09-05 09:13:39,903 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-09-05 09:13:39,903 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-09-05 09:13:39,905 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-09-05 09:13:39,905 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-09-05 09:13:39,906 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2025-09-05 09:13:39,907 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-09-05 09:13:39,907 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-09-05 09:13:39,908 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250905_091339
+2025-09-05 09:13:39,908 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:13:39,910 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:13:39,923 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-09-05 09:13:39,974 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:13:39,981 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/231 url= prod_idx=0/pending
+2025-09-05 09:13:39,981 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (denominator-freeze)
+2025-09-05 09:13:39,982 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN TOTAL CATEGORIES set to 231 (hash d58f2ecc)
+2025-09-05 09:13:39,982 - PassiveExtractionWorkflow - INFO - ▶ RESUME PTR: cat=0 prod=0
+2025-09-05 09:13:39,982 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-09-05 09:13:39,983 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-09-05 09:13:39,983 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-09-05 09:13:39,984 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-09-05 09:13:39,984 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-09-05 09:13:39,985 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-09-05 09:13:39,985 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-09-05 09:13:39,987 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 10537
+2025-09-05 09:13:40,004 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-09-05 09:13:40,005 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:13:40,005 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/231 url= prod_idx=0/pending
+2025-09-05 09:13:40,005 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:13:40,006 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:13:40,007 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=0 Legacy=92 drift=92
+2025-09-05 09:13:40,007 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=0 Legacy=16 drift=16
+2025-09-05 09:13:40,007 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=0/231 prod=0/0 phase=supplier
+2025-09-05 09:13:40,007 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN TOTAL CATEGORIES set to 231 (authoritative)
+2025-09-05 09:13:40,008 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-09-05 09:13:40,008 - PassiveExtractionWorkflow - INFO - ▶ RESUME supplier: category 1/231 (system_progression)
+2025-09-05 09:13:40,008 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-09-05 09:13:40,209 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10537 entries
+2025-09-05 09:13:40,320 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10453 URLs, 6587 ASINs in 0.111s
+2025-09-05 09:13:40,320 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10537 entries
+2025-09-05 09:13:40,321 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 10537
+2025-09-05 09:13:40,391 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:13:40,395 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 10537 > cache: 10392)
+2025-09-05 09:13:40,395 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-09-05 09:13:40,395 - PassiveExtractionWorkflow - INFO - 🔍 STATE CONTRADICTION CHECK DEBUG:
+2025-09-05 09:13:40,395 - PassiveExtractionWorkflow - INFO -    is_fresh_start: True
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - INFO -    successful_products: 10537
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - INFO -    system_progression.current_category_index: 0
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - INFO -    supplier_extraction.current_category_index: 92
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - INFO -    supplier_extraction.categories_completed: 173 categories
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - INFO -    has_evidence_of_work: True
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - WARNING - 🚨 STATE CONTRADICTION DETECTED - PREVENTING start_processing() CALL...
+2025-09-05 09:13:40,396 - PassiveExtractionWorkflow - WARNING -    Fresh start flag=True but evidence shows 10537 successful products
+2025-09-05 09:13:40,397 - PassiveExtractionWorkflow - WARNING -    and 173 completed categories
+2025-09-05 09:13:40,397 - PassiveExtractionWorkflow - INFO - ✅ State contradiction resolved - preserved existing progress
+2025-09-05 09:13:40,547 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10537 entries
+2025-09-05 09:13:40,722 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10453 URLs, 6587 ASINs in 0.174s
+2025-09-05 09:13:40,722 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10537 entries
+2025-09-05 09:13:40,722 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-09-05 09:13:40,723 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:13:40,723 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:13:40,724 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-09-05 09:13:40,724 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 231 predefined categories (infinite mode)
+2025-09-05 09:13:40,724 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-09-05 09:13:40,724 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-09-05 09:13:40,724 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-09-05 09:13:40,725 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-09-05 09:13:40,725 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-09-05 09:13:40,833 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:13:40,838 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-09-05 09:13:40,839 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-09-05 09:13:40,839 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-09-05 09:13:40,944 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:13:41,019 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10392 total → 2 unprocessed (10453 already in linking map)
+2025-09-05 09:13:41,020 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
+2025-09-05 09:13:41,020 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-09-05 09:13:41,020 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-09-05 09:13:41,021 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-09-05 09:13:41,022 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:13:41,023 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:13:41,041 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:13:41,042 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-09-05 09:13:43,521 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-09-05 09:13:43,530 - utils.browser_manager - DEBUG - Brought page to front after navigation to https://www.poundwholesale.co.uk
+2025-09-05 09:13:47,985 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-09-05 09:13:47,985 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-05 09:13:52,229 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-05 09:13:52,229 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-09-05 09:13:52,229 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-09-05 09:13:52,229 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:13:52,230 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:13:52,235 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:13:52,236 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:13:52,236 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=0/pending
+2025-09-05 09:13:52,237 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:13:52,237 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:13:52,238 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-09-05 09:13:52,238 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:52,238 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:52,239 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:52,239 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (attempt 1/3)
+2025-09-05 09:13:52,239 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:13:52,240 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:13:52,247 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:13:52,247 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:54,443 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets in 2.24s...
+2025-09-05 09:13:56,688 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (attempt 2/3)
+2025-09-05 09:13:56,689 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:13:56,690 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:13:56,698 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:13:56,699 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:59,609 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:59,609 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-05 09:13:59,702 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (Size: 687253 bytes)
+2025-09-05 09:13:59,983 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-09-05 09:14:00,057 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-09-05 09:14:00,058 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-05 09:14:00,058 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (attempt 1/3)
+2025-09-05 09:14:00,059 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:00,059 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:00,066 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:00,066 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-05 09:14:02,232 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 in 1.95s...
+2025-09-05 09:14:04,185 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (attempt 2/3)
+2025-09-05 09:14:04,185 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:04,186 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:04,193 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:04,193 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-05 09:14:05,437 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-05 09:14:05,438 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-05 09:14:05,534 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (Size: 696595 bytes)
+2025-09-05 09:14:05,866 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-09-05 09:14:05,866 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-05 09:14:05,867 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (attempt 1/3)
+2025-09-05 09:14:05,867 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:05,868 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:05,874 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:05,874 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-05 09:14:08,002 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 in 1.55s...
+2025-09-05 09:14:09,563 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (attempt 2/3)
+2025-09-05 09:14:09,564 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:09,564 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:09,574 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:09,574 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-05 09:14:12,024 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-05 09:14:12,025 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-05 09:14:12,108 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (Size: 645579 bytes)
+2025-09-05 09:14:12,404 - configurable_supplier_scraper - INFO - Found 19 new product URLs on page 3
+2025-09-05 09:14:12,405 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-05 09:14:12,405 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (attempt 1/3)
+2025-09-05 09:14:12,405 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:12,406 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:12,431 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:12,431 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-05 09:14:14,209 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 in 2.14s...
+2025-09-05 09:14:16,361 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (attempt 2/3)
+2025-09-05 09:14:16,362 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:16,362 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:16,370 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:16,370 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-05 09:14:18,181 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-05 09:14:18,181 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-05 09:14:18,244 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (Size: 397588 bytes)
+2025-09-05 09:14:18,407 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 4
+2025-09-05 09:14:18,408 - configurable_supplier_scraper - INFO - Collected 59 total product URLs across 4 pages
+2025-09-05 09:14:18,408 - PassiveExtractionWorkflow - INFO - PAGINATION[C2 wholesale-big-boys-toys-gadget]: pages=4 urls_page=20,20,19,0 total=59
+2025-09-05 09:14:18,409 - PassiveExtractionWorkflow - INFO - 🔗 DETAILED PRE-EXTRACTION FILTERING: Analyzing 59 collected URLs
+2025-09-05 09:14:18,418 - PassiveExtractionWorkflow - DEBUG - 🔗 UNIFIED FILTER: Loaded 10073 EANs and 10453 URLs from linking map
+2025-09-05 09:14:18,532 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:18,618 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 10392 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:18,622 - PassiveExtractionWorkflow - INFO - 🔗 STEP 1 - LINKING MAP CHECK: 55 complete (skipped)
+2025-09-05 09:14:18,623 - PassiveExtractionWorkflow - INFO - 💾 STEP 2 - PRODUCT CACHE CHECK: 1 have supplier data; 3 need supplier extraction
+2025-09-05 09:14:18,623 - PassiveExtractionWorkflow - INFO - 🧮 Filter Invariant: in=59 == skip=55 + amazon_only=1 + full=3
+2025-09-05 09:14:18,623 - PassiveExtractionWorkflow - INFO - ✅ SKIP_ENTIRELY (55): ['https://www.poundwholesale.co.uk/kids-ludo-board-game-set', 'https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook', 'https://www.poundwholesale.co.uk/space-baby-diy-building-block-model', 'https://www.poundwholesale.co.uk/rc-racing-i-r-helicopter-gyro-4-5-channel', 'https://www.poundwholesale.co.uk/hoot-two-player-badminton-set']...
+2025-09-05 09:14:18,623 - PassiveExtractionWorkflow - INFO - 🚀 NEEDS_AMAZON_ONLY (1): ['https://www.poundwholesale.co.uk/rail-racing-115pc-metal-car-play-set']
+2025-09-05 09:14:18,624 - PassiveExtractionWorkflow - INFO - 📊 NEEDS_FULL_EXTRACTION (3): ['https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft', 'https://www.poundwholesale.co.uk/intex-hi-output-air-pump', 'https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17']
+2025-09-05 09:14:18,624 - PassiveExtractionWorkflow - INFO - 📈 FILTERING EFFICIENCY: 55/59 = 93.2% already processed
+2025-09-05 09:14:18,624 - PassiveExtractionWorkflow - INFO - 💾 CACHE UTILIZATION: 1/59 = 1.7% have supplier data
+2025-09-05 09:14:18,624 - PassiveExtractionWorkflow - INFO - 📊 EXTRACTION NEEDED: 3/59 = 5.1% need fresh extraction
+2025-09-05 09:14:18,624 - PassiveExtractionWorkflow - INFO - 🚀 PROCEEDING WITH EXTRACTION: 3 products need full extraction
+2025-09-05 09:14:18,624 - PassiveExtractionWorkflow - INFO - 📝 EXTRACTION CONTRACT: Promising to extract exactly 3 products
+2025-09-05 09:14:18,624 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION: Processing 3 pre-approved URLs
+2025-09-05 09:14:18,625 - configurable_supplier_scraper - INFO - 🔍 Extracting product 1/3: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-05 09:14:18,625 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (attempt 1/3)
+2025-09-05 09:14:18,625 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:18,625 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:18,629 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:18,629 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-05 09:14:21,030 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft in 2.45s...
+2025-09-05 09:14:23,485 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (attempt 2/3)
+2025-09-05 09:14:23,485 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:23,486 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:23,491 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:23,491 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-05 09:14:26,148 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-05 09:14:26,149 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-05 09:14:26,236 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (Size: 537570 bytes)
+2025-09-05 09:14:26,481 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:14:26,483 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:14:26,483 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=1 Legacy=92 drift=91
+2025-09-05 09:14:26,484 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=3 Legacy=16 drift=13
+2025-09-05 09:14:26,484 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=1/231 prod=3/0 phase=supplier
+2025-09-05 09:14:26,484 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 3/3
+2025-09-05 09:14:26,484 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 3 processed (total in cache: 3)
+2025-09-05 09:14:26,484 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 3
+2025-09-05 09:14:26,485 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 3, frequency=1, enabled=True
+2025-09-05 09:14:26,485 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=3, modulo=0
+2025-09-05 09:14:26,486 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:26,486 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-09-05 09:14:26,487 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:26,487 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-09-05 09:14:26,488 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 3 products to cache...
+2025-09-05 09:14:26,488 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:26,635 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC: Loaded 10392 existing products for deduplication
+2025-09-05 09:14:26,642 - PassiveExtractionWorkflow - INFO - 🔄 ATOMIC DEDUPLICATION: Skipped 2 URL duplicates and 1 EAN duplicates.
+2025-09-05 09:14:26,643 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC RESULT: 10392 existing + 0 new = 10392 total
+2025-09-05 09:14:26,644 - PassiveExtractionWorkflow - INFO - 🔍 DEDUP SUMMARY: 0 new; skipped re-scan
+2025-09-05 09:14:26,646 - PassiveExtractionWorkflow - INFO - 💾 ATOMIC PERIODIC SAVE: Saved 3 products (0 new) to cache (every 1 products)
+2025-09-05 09:14:26,658 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:26,659 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:26,660 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=3/pending
+2025-09-05 09:14:26,660 - PassiveExtractionWorkflow - DEBUG - 🔄 ATOMIC STATE: State synchronized with cache after saving 0 new products
+2025-09-05 09:14:26,660 - configurable_supplier_scraper - WARNING - Prefiltered path: state_manager missing; progress not persisted.
+2025-09-05 09:14:26,661 - configurable_supplier_scraper - INFO - ✅ Extracted: Fit2Live Metal & Rubber Skipping Rope 9ft - £0.92
+2025-09-05 09:14:26,661 - configurable_supplier_scraper - INFO - 🔍 Extracting product 2/3: https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-05 09:14:26,662 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/intex-hi-output-air-pump (attempt 1/3)
+2025-09-05 09:14:26,662 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:26,662 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:26,669 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:26,669 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-05 09:14:28,709 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/intex-hi-output-air-pump in 2.06s...
+2025-09-05 09:14:30,779 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/intex-hi-output-air-pump (attempt 2/3)
+2025-09-05 09:14:30,780 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:30,780 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:30,787 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:30,787 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-05 09:14:32,207 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-05 09:14:32,208 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-05 09:14:32,272 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/intex-hi-output-air-pump (Size: 416685 bytes)
+2025-09-05 09:14:32,484 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:14:32,484 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:14:32,485 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=1 Legacy=92 drift=91
+2025-09-05 09:14:32,485 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=4 Legacy=16 drift=12
+2025-09-05 09:14:32,485 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=1/231 prod=4/0 phase=supplier
+2025-09-05 09:14:32,485 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 4/3
+2025-09-05 09:14:32,485 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 4 processed (total in cache: 4)
+2025-09-05 09:14:32,485 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 4
+2025-09-05 09:14:32,486 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 4, frequency=1, enabled=True
+2025-09-05 09:14:32,486 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=4, modulo=0
+2025-09-05 09:14:32,486 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:32,486 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-09-05 09:14:32,486 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:32,487 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-09-05 09:14:32,487 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 4 products to cache...
+2025-09-05 09:14:32,487 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:32,579 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC: Loaded 10392 existing products for deduplication
+2025-09-05 09:14:32,593 - PassiveExtractionWorkflow - INFO - 🔄 ATOMIC DEDUPLICATION: Skipped 2 URL duplicates and 2 EAN duplicates.
+2025-09-05 09:14:32,593 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC RESULT: 10392 existing + 0 new = 10392 total
+2025-09-05 09:14:32,596 - PassiveExtractionWorkflow - INFO - 🔍 DEDUP SUMMARY: 0 new; skipped re-scan
+2025-09-05 09:14:32,602 - PassiveExtractionWorkflow - INFO - 💾 ATOMIC PERIODIC SAVE: Saved 4 products (0 new) to cache (every 1 products)
+2025-09-05 09:14:32,613 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:32,614 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:32,615 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=4/pending
+2025-09-05 09:14:32,615 - PassiveExtractionWorkflow - DEBUG - 🔄 ATOMIC STATE: State synchronized with cache after saving 0 new products
+2025-09-05 09:14:32,615 - configurable_supplier_scraper - WARNING - Prefiltered path: state_manager missing; progress not persisted.
+2025-09-05 09:14:32,615 - configurable_supplier_scraper - INFO - ✅ Extracted: Intex Hi-OutPUt Air Pump - £2.74
+2025-09-05 09:14:32,616 - configurable_supplier_scraper - INFO - 🔍 Extracting product 3/3: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-05 09:14:32,616 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (attempt 1/3)
+2025-09-05 09:14:32,616 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:32,617 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:32,624 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:32,624 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-05 09:14:35,140 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 in 2.25s...
+2025-09-05 09:14:37,421 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (attempt 2/3)
+2025-09-05 09:14:37,421 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:37,421 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:37,427 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:37,427 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-05 09:14:39,594 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-05 09:14:39,594 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-05 09:14:39,686 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (Size: 616611 bytes)
+2025-09-05 09:14:40,010 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:14:40,012 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:14:40,013 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=1 Legacy=92 drift=91
+2025-09-05 09:14:40,013 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=5 Legacy=16 drift=11
+2025-09-05 09:14:40,014 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=1/231 prod=5/0 phase=supplier
+2025-09-05 09:14:40,014 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 5/3
+2025-09-05 09:14:40,015 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 5 processed (total in cache: 5)
+2025-09-05 09:14:40,015 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 5
+2025-09-05 09:14:40,015 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 5, frequency=1, enabled=True
+2025-09-05 09:14:40,015 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=5, modulo=0
+2025-09-05 09:14:40,016 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:40,016 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-09-05 09:14:40,017 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:40,017 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-09-05 09:14:40,018 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 5 products to cache...
+2025-09-05 09:14:40,018 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:40,106 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC: Loaded 10392 existing products for deduplication
+2025-09-05 09:14:40,119 - PassiveExtractionWorkflow - INFO - 🔄 ATOMIC DEDUPLICATION: Skipped 2 URL duplicates and 3 EAN duplicates.
+2025-09-05 09:14:40,120 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC RESULT: 10392 existing + 0 new = 10392 total
+2025-09-05 09:14:40,121 - PassiveExtractionWorkflow - INFO - 🔍 DEDUP SUMMARY: 0 new; skipped re-scan
+2025-09-05 09:14:40,127 - PassiveExtractionWorkflow - INFO - 💾 ATOMIC PERIODIC SAVE: Saved 5 products (0 new) to cache (every 1 products)
+2025-09-05 09:14:40,136 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:40,138 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:40,138 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=5/pending
+2025-09-05 09:14:40,138 - PassiveExtractionWorkflow - DEBUG - 🔄 ATOMIC STATE: State synchronized with cache after saving 0 new products
+2025-09-05 09:14:40,139 - configurable_supplier_scraper - WARNING - Prefiltered path: state_manager missing; progress not persisted.
+2025-09-05 09:14:40,139 - configurable_supplier_scraper - INFO - ✅ Extracted: MY Double-Sided Dartboard Set 17" - £4.35
+2025-09-05 09:14:40,139 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION COMPLETE: 3 products extracted from 3 URLs
+2025-09-05 09:14:40,139 - PassiveExtractionWorkflow - INFO - 📝 EXTRACTION CONTRACT VERIFICATION:
+2025-09-05 09:14:40,140 - PassiveExtractionWorkflow - INFO -    Promised: 3 products
+2025-09-05 09:14:40,140 - PassiveExtractionWorkflow - INFO -    Delivered: 3 products
+2025-09-05 09:14:40,140 - PassiveExtractionWorkflow - INFO -    Contract: ✅ FULFILLED
+2025-09-05 09:14:40,141 - PassiveExtractionWorkflow - INFO - 📋 ADDING TO AMAZON ANALYSIS: 1 products have supplier data and need Amazon analysis
+2025-09-05 09:14:40,255 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:40,386 - PassiveExtractionWorkflow - INFO - 📋 CACHE LOAD: Found 1 cached products for 1 URLs
+2025-09-05 09:14:40,389 - PassiveExtractionWorkflow - INFO - ✅ Added 1 cached products to Amazon analysis queue
+2025-09-05 09:14:40,389 - utils.fixed_enhanced_state_manager - INFO - 🔍 REAL-TIME DISCOVERY: Category https://www.poundwholesale.co.uk/toys/wholesale-bi... discovered 59 products (was 17)
+2025-09-05 09:14:40,397 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:40,398 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:40,398 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=5/pending
+2025-09-05 09:14:40,398 - utils.fixed_enhanced_state_manager - INFO - ✅ REAL-TIME UPDATE: Category total updated to 59 products
+2025-09-05 09:14:40,404 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:40,405 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:40,405 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=5/59
+2025-09-05 09:14:40,406 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Set to 59 products for category https://www.poundwholesale.co.uk/toys/wholesale-bi...
+2025-09-05 09:14:40,414 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:40,416 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:40,416 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=5/59
+2025-09-05 09:14:40,417 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets → 59 products (snapshot taken)
+2025-09-05 09:14:40,422 - PassiveExtractionWorkflow - INFO - 📊 AUTHORITATIVE COUNT: 231 categories from config file
+2025-09-05 09:14:40,423 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets: Found 59 products across 4 pages.
+2025-09-05 09:14:40,423 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 3 raw products extracted, 6 total products accumulated
+2025-09-05 09:14:40,424 - PassiveExtractionWorkflow - INFO - 🔄 STATE UPDATE: Updated category https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets with 59 discovered products
+2025-09-05 09:14:40,424 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 6 total products extracted so far
+2025-09-05 09:14:40,864 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 10073 processed EANs and 10453 processed URLs from linking map
+2025-09-05 09:14:40,864 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:14:40,865 - PassiveExtractionWorkflow - INFO - 🔗 PRE-EXTRACTION PRODUCT FILTERING: Starting with 6 products from cache
+2025-09-05 09:14:40,865 - PassiveExtractionWorkflow - INFO - 🔗 Filtering against linking map and product cache to identify unprocessed products
+2025-09-05 09:14:40,866 - PassiveExtractionWorkflow - DEBUG - 🔄 Linking map hit (EAN): Fit2Live Metal & Rubber Skipping Rope 9ft - skipping extraction
+2025-09-05 09:14:40,866 - PassiveExtractionWorkflow - DEBUG - 🔄 Linking map hit (EAN): Intex Hi-OutPUt Air Pump - skipping extraction
+2025-09-05 09:14:40,868 - PassiveExtractionWorkflow - DEBUG - 🔄 Linking map hit (EAN): MY Double-Sided Dartboard Set 17" - skipping extraction
+2025-09-05 09:14:40,869 - PassiveExtractionWorkflow - INFO - 🔗 LINKING MAP FILTER (Step 1): 3 products already processed
+2025-09-05 09:14:40,869 - PassiveExtractionWorkflow - INFO -    📊 EAN-based skips: 3
+2025-09-05 09:14:40,870 - PassiveExtractionWorkflow - INFO -    📊 URL-based skips: 0
+2025-09-05 09:14:40,872 - PassiveExtractionWorkflow - INFO - 💾 PRODUCT CACHE FILTER (Step 2): 3 products have supplier data cached
+2025-09-05 09:14:40,873 - PassiveExtractionWorkflow - INFO - 📊 FULL EXTRACTION NEEDED: 0 products need fresh extraction
+2025-09-05 09:14:40,874 - PassiveExtractionWorkflow - INFO - 🧮 FILTER INVARIANT: in=6 == skip=3 + remaining=3
+2025-09-05 09:14:40,875 - PassiveExtractionWorkflow - INFO - 🔍 CORRECTED FILTER RESULTS:
+2025-09-05 09:14:40,875 - PassiveExtractionWorkflow - INFO -    📊 Input products: 6
+2025-09-05 09:14:40,876 - PassiveExtractionWorkflow - INFO -    ✅ Linking map skipped (fully processed): 3
+2025-09-05 09:14:40,876 - PassiveExtractionWorkflow - INFO -    🚀 Cached supplier data available: 3 (will use for Amazon analysis)
+2025-09-05 09:14:40,877 - PassiveExtractionWorkflow - INFO -    📋 Need Amazon analysis: 3
+2025-09-05 09:14:40,877 - PassiveExtractionWorkflow - INFO -    📈 Efficiency: 3/6 = 50.0% reduction
+2025-09-05 09:14:40,880 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 6 total cached products → 3 unprocessed products
+2025-09-05 09:14:40,880 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 3 already processed products
+2025-09-05 09:14:40,886 - PassiveExtractionWorkflow - INFO - 🔍 Processing 1 products with main workflow logic (after deduplication)
+2025-09-05 09:14:40,886 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 1/1: 'Sarina Double Bottom Glass Jar 500CC Assorted' ---
+2025-09-05 09:14:40,886 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:14:40,887 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:14:40,900 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:40,901 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:40,902 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/231 url=https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation prod_idx=0/59
+2025-09-05 09:14:40,902 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8680518411400
+2025-09-05 09:14:40,902 - tools.passive_extraction_workflow_latest - INFO - 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2025-09-05 09:14:40,902 - tools.passive_extraction_workflow_latest - INFO - ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2025-09-05 09:14:40,903 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 8680518411400 for supplier product: 'Sarina Double Bottom Glass Jar 500CC Assorted' (FixedAmazonExtractor)
+2025-09-05 09:14:40,903 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-09-05 09:14:40,903 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:40,903 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:14:40,908 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:14:40,909 - utils.browser_manager - INFO - 📄 Navigating to https://www.amazon.co.uk
+2025-09-05 09:14:42,493 - utils.browser_manager - INFO - ✅ Page ready for https://www.amazon.co.uk
+2025-09-05 09:14:42,532 - utils.browser_manager - DEBUG - Brought page to front after navigation to https://www.amazon.co.uk
+2025-09-05 09:14:42,532 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 8680518411400
+2025-09-05 09:14:45,253 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 8680518411400...
+2025-09-05 09:14:45,600 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-09-05 09:14:47,641 - tools.passive_extraction_workflow_latest - INFO - Found 2 search result elements using selector: div.s-result-item[data-asin]:not([data-asin=''])
+2025-09-05 09:14:47,641 - tools.passive_extraction_workflow_latest - INFO - Processing 2 search result elements for EAN 8680518411400
+2025-09-05 09:14:47,650 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN 1382032404
+2025-09-05 09:14:47,657 - tools.passive_extraction_workflow_latest - DEBUG - ASIN 1382032404 HTML structure sample: <div role="listitem" data-asin="1382032404" data-index="4" data-uuid="3a8e6e2a-39a5-4cd5-a5ee-ac556a6dc180" id="3a8e6e2a-39a5-4cd5-a5ee-ac556a6dc180" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="9" data-cel-widget="search_result_1"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-4" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sear...
+2025-09-05 09:14:47,658 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN 1382032404: 'ElementHandle' object has no attribute 'locator'
+2025-09-05 09:14:47,658 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN 1382032404: 'ElementHandle' object has no attribute 'locator'
+2025-09-05 09:14:47,667 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN 1382032404 (detected by ad-specific class: 'AdHolder')
+2025-09-05 09:14:47,672 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 2: ASIN 0198398840
+2025-09-05 09:14:47,679 - tools.passive_extraction_workflow_latest - DEBUG - ASIN 0198398840 HTML structure sample: <div role="listitem" data-asin="0198398840" data-index="5" data-uuid="ee00ecf9-549c-4f13-b2d0-ae6767e6a588" id="ee00ecf9-549c-4f13-b2d0-ae6767e6a588" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="11" data-cel-widget="search_result_2"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-5" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sea...
+2025-09-05 09:14:47,679 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN 0198398840: 'ElementHandle' object has no attribute 'locator'
+2025-09-05 09:14:47,679 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN 0198398840: 'ElementHandle' object has no attribute 'locator'
+2025-09-05 09:14:47,689 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN 0198398840 (detected by ad-specific class: 'AdHolder')
+2025-09-05 09:14:47,689 - tools.passive_extraction_workflow_latest - WARNING - EAN 8680518411400 returned no organic results - skipping
+2025-09-05 09:14:47,690 - tools.passive_extraction_workflow_latest - WARNING - No Amazon results or error for EAN '8680518411400'. Details: no_organic_results
+2025-09-05 09:14:47,690 - tools.passive_extraction_workflow_latest - INFO - Falling back to title search for supplier product: 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:14:47,690 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:14:47,690 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Sarina Double Bottom Glass Jar 500CC Assorted
+2025-09-05 09:14:50,571 - tools.passive_extraction_workflow_latest - INFO - Title search found 2 elements using selector: div.s-search-results > div[data-asin]
+2025-09-05 09:14:50,631 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:14:50,631 - tools.passive_extraction_workflow_latest - WARNING - Both EAN '8680518411400' and title 'Sarina Double Bottom Glass Jar 500CC Assorted' searches failed
+2025-09-05 09:14:50,632 - PassiveExtractionWorkflow - INFO - ❌ EAN search failed for 8680518411400. Will fall back to title search.
+2025-09-05 09:14:50,635 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: amazon_None_8680518411400.json (1 entries) saved successfully
+2025-09-05 09:14:50,637 - PassiveExtractionWorkflow - INFO - 💾 Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_None_8680518411400.json
+2025-09-05 09:14:50,637 - PassiveExtractionWorkflow - ERROR - Financial calculation error: float() argument must be a string or a real number, not 'dict'
+2025-09-05 09:14:50,637 - PassiveExtractionWorkflow - INFO - ❌ Financial analysis failed: float() argument must be a string or a real number, not 'dict'
+2025-09-05 09:14:50,644 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:14:50,646 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:14:50,646 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/231 url=https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation prod_idx=0/59
+2025-09-05 09:14:50,646 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 10537 entries for supplier poundwholesale.co.uk
+2025-09-05 09:14:50,767 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 10537, sample: {'supplier_ean': '5012128582868', 'amazon_asin': 'B0DK1BVZN8', 'supplier_title': 'Giftmaker Christmas Wishes Robin Gift Bag Medium', 'amazon_title': 'Gcardist Medium 32Pcs Kraft Bags With Handles 27x2...', 'supplier_price': 0.53, 'amazon_price': 14.35, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-07-26T03:15:15.274059', 'supplier_url': 'https://www.poundwholesale.co.uk/giftmaker-christm...'}
+2025-09-05 09:14:50,768 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:14:50,768 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 10537 entries using atomic strategy...
+2025-09-05 09:14:51,027 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (10537 entries) saved successfully
+2025-09-05 09:14:51,028 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 10537 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:14:51,029 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 5768346 bytes
+2025-09-05 09:14:51,183 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10453 URLs, 6587 ASINs in 0.154s
+2025-09-05 09:14:51,183 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10537 entries
+2025-09-05 09:14:51,185 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 1 (linking_map_batch_size: 1)
+2025-09-05 09:14:51,186 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 10537 entries for supplier poundwholesale.co.uk
+2025-09-05 09:14:51,265 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 10537, sample: {'supplier_ean': '5012128582868', 'amazon_asin': 'B0DK1BVZN8', 'supplier_title': 'Giftmaker Christmas Wishes Robin Gift Bag Medium', 'amazon_title': 'Gcardist Medium 32Pcs Kraft Bags With Handles 27x2...', 'supplier_price': 0.53, 'amazon_price': 14.35, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-07-26T03:15:15.274059', 'supplier_url': 'https://www.poundwholesale.co.uk/giftmaker-christm...'}
+2025-09-05 09:14:51,265 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:14:51,265 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 10537 entries using atomic strategy...
+2025-09-05 09:14:51,589 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (10537 entries) saved successfully
+2025-09-05 09:14:51,591 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 10537 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:14:51,591 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 5768346 bytes
+2025-09-05 09:14:51,749 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10453 URLs, 6587 ASINs in 0.158s
+2025-09-05 09:14:51,750 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10537 entries
+2025-09-05 09:14:51,752 - PassiveExtractionWorkflow - INFO - ✅ Chunk processing: Final linking map save completed
+2025-09-05 09:14:51,752 - PassiveExtractionWorkflow - INFO - --- Chunk Processing with Main Workflow Logic Finished ---
+2025-09-05 09:14:51,753 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 2: categories 2-2
+2025-09-05 09:14:51,853 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:51,949 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CACHE MISS: No cached products found for chunk categories: ['https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney']
+2025-09-05 09:14:51,950 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories
+2025-09-05 09:14:51,950 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-09-05 09:14:51,951 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-09-05 09:14:52,092 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:14:52,240 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10392 total → 2 unprocessed (10453 already in linking map)
+2025-09-05 09:14:52,241 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
+2025-09-05 09:14:52,241 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-09-05 09:14:52,241 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-09-05 09:14:52,242 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-09-05 09:14:52,243 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:14:52,244 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-09-05 09:14:52,319 - utils.browser_manager - DEBUG - Brought cached page to front for https://www.poundwholesale.co.uk
+2025-09-05 09:14:57,037 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-09-05 09:14:57,038 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-05 09:15:01,438 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-05 09:15:01,438 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-09-05 09:15:01,439 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-09-05 09:15:01,439 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:15:01,439 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:15:01,445 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:15:01,445 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:15:01,446 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney prod_idx=0/pending
+2025-09-05 09:15:01,446 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:15:01,447 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:15:01,447 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 2/1)
+2025-09-05 09:15:01,447 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:01,447 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:01,447 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:01,448 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney (attempt 1/3)
+2025-09-05 09:15:01,448 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:01,448 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:01,452 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:01,452 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:03,557 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney in 1.89s...
+2025-09-05 09:15:05,454 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney (attempt 2/3)
+2025-09-05 09:15:05,454 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:05,455 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:05,462 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:05,463 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:07,874 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:07,874 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney
+2025-09-05 09:15:07,949 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney (Size: 512728 bytes)
+2025-09-05 09:15:08,151 - configurable_supplier_scraper - INFO - Found 8 new product URLs on page 1
+2025-09-05 09:15:08,151 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2
+2025-09-05 09:15:08,151 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2 (attempt 1/3)
+2025-09-05 09:15:08,151 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:08,151 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:08,156 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:08,156 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2
+2025-09-05 09:15:10,007 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2 in 1.77s...
+2025-09-05 09:15:11,780 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2 (attempt 2/3)
+2025-09-05 09:15:11,781 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:11,781 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:11,786 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:11,786 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2
+2025-09-05 09:15:13,197 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2
+2025-09-05 09:15:13,198 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2
+2025-09-05 09:15:13,279 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney?p=2 (Size: 392236 bytes)
+2025-09-05 09:15:13,387 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 2
+2025-09-05 09:15:13,387 - configurable_supplier_scraper - INFO - Collected 8 total product URLs across 2 pages
+2025-09-05 09:15:13,387 - PassiveExtractionWorkflow - INFO - PAGINATION[C3 disney]: pages=2 urls_page=8,0 total=8
+2025-09-05 09:15:13,388 - PassiveExtractionWorkflow - INFO - 🔗 DETAILED PRE-EXTRACTION FILTERING: Analyzing 8 collected URLs
+2025-09-05 09:15:13,394 - PassiveExtractionWorkflow - DEBUG - 🔗 UNIFIED FILTER: Loaded 10073 EANs and 10453 URLs from linking map
+2025-09-05 09:15:13,394 - PassiveExtractionWorkflow - INFO - 🔗 STEP 1 - LINKING MAP CHECK: 8 complete (skipped)
+2025-09-05 09:15:13,395 - PassiveExtractionWorkflow - INFO - 💾 STEP 2 - PRODUCT CACHE CHECK: 0 have supplier data; 0 need supplier extraction
+2025-09-05 09:15:13,395 - PassiveExtractionWorkflow - INFO - 🧮 Filter Invariant: in=8 == skip=8 + amazon_only=0 + full=0
+2025-09-05 09:15:13,395 - PassiveExtractionWorkflow - INFO - ✅ SKIP_ENTIRELY (8): ['https://www.poundwholesale.co.uk/disney-tsum-tsum-fancy-rings-jewellery', 'https://www.poundwholesale.co.uk/disney-minnie-mouse-winter-hat', 'https://www.poundwholesale.co.uk/disney-magical-birthday-card-gift-wrap-set', 'https://www.poundwholesale.co.uk/lexibook-disney-frozen-2000mah-power-bank', 'https://www.poundwholesale.co.uk/minnie-mouse-cap']...
+2025-09-05 09:15:13,396 - PassiveExtractionWorkflow - INFO - 📈 FILTERING EFFICIENCY: 8/8 = 100.0% already processed
+2025-09-05 09:15:13,396 - PassiveExtractionWorkflow - INFO - 💾 CACHE UTILIZATION: 0/8 = 0.0% have supplier data
+2025-09-05 09:15:13,397 - PassiveExtractionWorkflow - INFO - 📊 EXTRACTION NEEDED: 0/8 = 0.0% need fresh extraction
+2025-09-05 09:15:13,397 - PassiveExtractionWorkflow - INFO - ✅ NO EXTRACTION NEEDED: All products are either already processed or have cached supplier data
+2025-09-05 09:15:13,398 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 2 total products extracted so far
+2025-09-05 09:15:13,579 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 10073 processed EANs and 10453 processed URLs from linking map
+2025-09-05 09:15:13,580 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:15:13,580 - PassiveExtractionWorkflow - INFO - 🔗 PRE-EXTRACTION PRODUCT FILTERING: Starting with 2 products from cache
+2025-09-05 09:15:13,581 - PassiveExtractionWorkflow - INFO - 🔗 Filtering against linking map and product cache to identify unprocessed products
+2025-09-05 09:15:13,581 - PassiveExtractionWorkflow - INFO - 🔗 LINKING MAP FILTER (Step 1): 0 products already processed
+2025-09-05 09:15:13,582 - PassiveExtractionWorkflow - INFO -    📊 EAN-based skips: 0
+2025-09-05 09:15:13,582 - PassiveExtractionWorkflow - INFO -    📊 URL-based skips: 0
+2025-09-05 09:15:13,582 - PassiveExtractionWorkflow - INFO - 💾 PRODUCT CACHE FILTER (Step 2): 2 products have supplier data cached
+2025-09-05 09:15:13,583 - PassiveExtractionWorkflow - INFO - 📊 FULL EXTRACTION NEEDED: 0 products need fresh extraction
+2025-09-05 09:15:13,583 - PassiveExtractionWorkflow - INFO - 🧮 FILTER INVARIANT: in=2 == skip=0 + remaining=2
+2025-09-05 09:15:13,583 - PassiveExtractionWorkflow - INFO - 🔍 CORRECTED FILTER RESULTS:
+2025-09-05 09:15:13,583 - PassiveExtractionWorkflow - INFO -    📊 Input products: 2
+2025-09-05 09:15:13,584 - PassiveExtractionWorkflow - INFO -    ✅ Linking map skipped (fully processed): 0
+2025-09-05 09:15:13,584 - PassiveExtractionWorkflow - INFO -    🚀 Cached supplier data available: 2 (will use for Amazon analysis)
+2025-09-05 09:15:13,585 - PassiveExtractionWorkflow - INFO -    📋 Need Amazon analysis: 2
+2025-09-05 09:15:13,585 - PassiveExtractionWorkflow - INFO -    📈 Efficiency: 0/2 = 0.0% reduction
+2025-09-05 09:15:13,592 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: All 2 products are unprocessed (first run or fresh cache)
+2025-09-05 09:15:13,603 - PassiveExtractionWorkflow - INFO - 🔍 Processing 1 products with main workflow logic (after deduplication)
+2025-09-05 09:15:13,604 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 1/1: 'Sarina Double Bottom Glass Jar 500CC Assorted' ---
+2025-09-05 09:15:13,604 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:15:13,606 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:15:13,618 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:15:13,619 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:15:13,619 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/231 url=https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation prod_idx=0/pending
+2025-09-05 09:15:13,620 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8680518411400
+2025-09-05 09:15:13,621 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 8680518411400 for supplier product: 'Sarina Double Bottom Glass Jar 500CC Assorted' (FixedAmazonExtractor)
+2025-09-05 09:15:13,621 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-09-05 09:15:13,622 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:13,622 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-09-05 09:15:13,629 - utils.browser_manager - DEBUG - Brought cached page to front for https://www.amazon.co.uk
+2025-09-05 09:15:13,630 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 8680518411400
+2025-09-05 09:15:16,548 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 8680518411400...
+2025-09-05 09:15:16,602 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-09-05 09:15:18,653 - tools.passive_extraction_workflow_latest - INFO - Found 5 search result elements using selector: div.s-search-results > div[data-asin]
+2025-09-05 09:15:18,654 - tools.passive_extraction_workflow_latest - INFO - Processing 5 search result elements for EAN 8680518411400
+2025-09-05 09:15:18,661 - tools.passive_extraction_workflow_latest - DEBUG - Element 1: Invalid or missing ASIN: 
+2025-09-05 09:15:18,668 - tools.passive_extraction_workflow_latest - DEBUG - Element 2: Invalid or missing ASIN: 
+2025-09-05 09:15:18,675 - tools.passive_extraction_workflow_latest - DEBUG - Element 3: Invalid or missing ASIN: 
+2025-09-05 09:15:18,690 - tools.passive_extraction_workflow_latest - DEBUG - Element 4: Invalid or missing ASIN: 
+2025-09-05 09:15:18,699 - tools.passive_extraction_workflow_latest - DEBUG - Element 5: Invalid or missing ASIN: 
+2025-09-05 09:15:18,699 - tools.passive_extraction_workflow_latest - WARNING - EAN 8680518411400 returned no organic results - skipping
+2025-09-05 09:15:18,700 - tools.passive_extraction_workflow_latest - WARNING - No Amazon results or error for EAN '8680518411400'. Details: no_organic_results
+2025-09-05 09:15:18,700 - tools.passive_extraction_workflow_latest - INFO - Falling back to title search for supplier product: 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:15:18,700 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:15:18,701 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Sarina Double Bottom Glass Jar 500CC Assorted
+2025-09-05 09:15:21,410 - tools.passive_extraction_workflow_latest - INFO - Title search found 2 elements using selector: div.s-search-results > div[data-asin]
+2025-09-05 09:15:21,424 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:15:21,424 - tools.passive_extraction_workflow_latest - WARNING - Both EAN '8680518411400' and title 'Sarina Double Bottom Glass Jar 500CC Assorted' searches failed
+2025-09-05 09:15:21,424 - PassiveExtractionWorkflow - INFO - ❌ EAN search failed for 8680518411400. Will fall back to title search.
+2025-09-05 09:15:21,427 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: amazon_None_8680518411400.json (1 entries) saved successfully
+2025-09-05 09:15:21,428 - PassiveExtractionWorkflow - INFO - 💾 Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_None_8680518411400.json
+2025-09-05 09:15:21,428 - PassiveExtractionWorkflow - ERROR - Financial calculation error: float() argument must be a string or a real number, not 'dict'
+2025-09-05 09:15:21,428 - PassiveExtractionWorkflow - INFO - ❌ Financial analysis failed: float() argument must be a string or a real number, not 'dict'
+2025-09-05 09:15:21,434 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:15:21,435 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:15:21,435 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/231 url=https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation prod_idx=0/pending
+2025-09-05 09:15:21,435 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 10537 entries for supplier poundwholesale.co.uk
+2025-09-05 09:15:21,527 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 10537, sample: {'supplier_ean': '5012128582868', 'amazon_asin': 'B0DK1BVZN8', 'supplier_title': 'Giftmaker Christmas Wishes Robin Gift Bag Medium', 'amazon_title': 'Gcardist Medium 32Pcs Kraft Bags With Handles 27x2...', 'supplier_price': 0.53, 'amazon_price': 14.35, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-07-26T03:15:15.274059', 'supplier_url': 'https://www.poundwholesale.co.uk/giftmaker-christm...'}
+2025-09-05 09:15:21,528 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:15:21,529 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 10537 entries using atomic strategy...
+2025-09-05 09:15:21,792 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (10537 entries) saved successfully
+2025-09-05 09:15:21,793 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 10537 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:15:21,793 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 5768346 bytes
+2025-09-05 09:15:21,949 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10453 URLs, 6587 ASINs in 0.155s
+2025-09-05 09:15:21,949 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10537 entries
+2025-09-05 09:15:21,952 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 1 (linking_map_batch_size: 1)
+2025-09-05 09:15:21,952 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 10537 entries for supplier poundwholesale.co.uk
+2025-09-05 09:15:22,040 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 10537, sample: {'supplier_ean': '5012128582868', 'amazon_asin': 'B0DK1BVZN8', 'supplier_title': 'Giftmaker Christmas Wishes Robin Gift Bag Medium', 'amazon_title': 'Gcardist Medium 32Pcs Kraft Bags With Handles 27x2...', 'supplier_price': 0.53, 'amazon_price': 14.35, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-07-26T03:15:15.274059', 'supplier_url': 'https://www.poundwholesale.co.uk/giftmaker-christm...'}
+2025-09-05 09:15:22,040 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:15:22,041 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 10537 entries using atomic strategy...
+2025-09-05 09:15:22,258 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (10537 entries) saved successfully
+2025-09-05 09:15:22,259 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 10537 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:15:22,259 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 5768346 bytes
+2025-09-05 09:15:22,458 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10453 URLs, 6587 ASINs in 0.198s
+2025-09-05 09:15:22,458 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10537 entries
+2025-09-05 09:15:22,463 - PassiveExtractionWorkflow - INFO - ✅ Chunk processing: Final linking map save completed
+2025-09-05 09:15:22,464 - PassiveExtractionWorkflow - INFO - --- Chunk Processing with Main Workflow Logic Finished ---
+2025-09-05 09:15:22,464 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 3: categories 3-3
+2025-09-05 09:15:22,541 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:15:22,671 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CACHE REFERENCE: 46 cached products exist for current chunk categories – performing fresh extraction to detect updates
+2025-09-05 09:15:22,671 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CATEGORIES: ['https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage']
+2025-09-05 09:15:22,672 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-09-05 09:15:22,672 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-09-05 09:15:22,774 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:15:22,918 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10392 total → 2 unprocessed (10453 already in linking map)
+2025-09-05 09:15:22,919 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
+2025-09-05 09:15:22,919 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-09-05 09:15:22,919 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-09-05 09:15:22,920 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-09-05 09:15:22,921 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:22,921 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-09-05 09:15:23,017 - utils.browser_manager - DEBUG - Brought cached page to front for https://www.poundwholesale.co.uk
+2025-09-05 09:15:27,635 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-09-05 09:15:27,635 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-05 09:15:32,260 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-05 09:15:32,260 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-09-05 09:15:32,261 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-09-05 09:15:32,261 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:15:32,261 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:15:32,267 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:15:32,268 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:15:32,268 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=0/pending
+2025-09-05 09:15:32,268 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:15:32,269 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:15:32,270 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 2/1)
+2025-09-05 09:15:32,271 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:32,271 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:32,272 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:32,272 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage (attempt 1/3)
+2025-09-05 09:15:32,273 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:32,273 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:32,278 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:32,278 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:34,690 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage in 1.58s...
+2025-09-05 09:15:36,275 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage (attempt 2/3)
+2025-09-05 09:15:36,275 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:36,276 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:36,281 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:36,281 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:37,720 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:37,720 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-09-05 09:15:37,819 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage (Size: 696808 bytes)
+2025-09-05 09:15:38,309 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-09-05 09:15:38,309 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-09-05 09:15:38,309 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 (attempt 1/3)
+2025-09-05 09:15:38,310 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:38,310 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:38,315 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:38,315 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-09-05 09:15:40,454 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 in 1.87s...
+2025-09-05 09:15:42,337 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 (attempt 2/3)
+2025-09-05 09:15:42,337 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:42,338 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:42,344 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:42,344 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-09-05 09:15:44,915 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-09-05 09:15:44,916 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-09-05 09:15:45,039 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 (Size: 692375 bytes)
+2025-09-05 09:15:45,401 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-09-05 09:15:45,401 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-09-05 09:15:45,402 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 (attempt 1/3)
+2025-09-05 09:15:45,402 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:45,403 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:45,407 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:45,407 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-09-05 09:15:47,598 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 in 2.00s...
+2025-09-05 09:15:49,610 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 (attempt 2/3)
+2025-09-05 09:15:49,611 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:49,611 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:49,615 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:49,615 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-09-05 09:15:51,185 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-09-05 09:15:51,186 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-09-05 09:15:51,271 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 (Size: 649060 bytes)
+2025-09-05 09:15:51,544 - configurable_supplier_scraper - INFO - Found 17 new product URLs on page 3
+2025-09-05 09:15:51,545 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-09-05 09:15:51,545 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 (attempt 1/3)
+2025-09-05 09:15:51,546 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:51,546 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:51,551 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:51,552 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-09-05 09:15:53,359 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 in 2.03s...
+2025-09-05 09:15:55,392 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 (attempt 2/3)
+2025-09-05 09:15:55,393 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:55,393 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:15:55,399 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:15:55,399 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-09-05 09:15:57,633 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-09-05 09:15:57,633 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-09-05 09:15:57,701 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 (Size: 402169 bytes)
+2025-09-05 09:15:57,816 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 4
+2025-09-05 09:15:57,817 - configurable_supplier_scraper - INFO - Collected 57 total product URLs across 4 pages
+2025-09-05 09:15:57,817 - PassiveExtractionWorkflow - INFO - PAGINATION[C3 bowls-storage]: pages=4 urls_page=20,20,17,0 total=57
+2025-09-05 09:15:57,817 - PassiveExtractionWorkflow - INFO - 🔗 DETAILED PRE-EXTRACTION FILTERING: Analyzing 57 collected URLs
+2025-09-05 09:15:57,821 - PassiveExtractionWorkflow - DEBUG - 🔗 UNIFIED FILTER: Loaded 10073 EANs and 10453 URLs from linking map
+2025-09-05 09:15:57,822 - PassiveExtractionWorkflow - INFO - 🔗 STEP 1 - LINKING MAP CHECK: 57 complete (skipped)
+2025-09-05 09:15:57,822 - PassiveExtractionWorkflow - INFO - 💾 STEP 2 - PRODUCT CACHE CHECK: 0 have supplier data; 0 need supplier extraction
+2025-09-05 09:15:57,823 - PassiveExtractionWorkflow - INFO - 🧮 Filter Invariant: in=57 == skip=57 + amazon_only=0 + full=0
+2025-09-05 09:15:57,823 - PassiveExtractionWorkflow - INFO - ✅ SKIP_ENTIRELY (57): ['https://www.poundwholesale.co.uk/round-bowl-8ltr-graphite', 'https://www.poundwholesale.co.uk/small-cutlery-tray-taupe', 'https://www.poundwholesale.co.uk/rectangular-washing-up-bowl-11ltr-glitter-red', 'https://www.poundwholesale.co.uk/square-washing-up-bowl-taupe-7l', 'https://www.poundwholesale.co.uk/square-bowl-7ltr-silver']...
+2025-09-05 09:15:57,824 - PassiveExtractionWorkflow - INFO - 📈 FILTERING EFFICIENCY: 57/57 = 100.0% already processed
+2025-09-05 09:15:57,824 - PassiveExtractionWorkflow - INFO - 💾 CACHE UTILIZATION: 0/57 = 0.0% have supplier data
+2025-09-05 09:15:57,825 - PassiveExtractionWorkflow - INFO - 📊 EXTRACTION NEEDED: 0/57 = 0.0% need fresh extraction
+2025-09-05 09:15:57,825 - PassiveExtractionWorkflow - INFO - ✅ NO EXTRACTION NEEDED: All products are either already processed or have cached supplier data
+2025-09-05 09:15:57,826 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 2 total products extracted so far
+2025-09-05 09:15:58,160 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 10073 processed EANs and 10453 processed URLs from linking map
+2025-09-05 09:15:58,161 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:15:58,161 - PassiveExtractionWorkflow - INFO - 🔗 PRE-EXTRACTION PRODUCT FILTERING: Starting with 2 products from cache
+2025-09-05 09:15:58,161 - PassiveExtractionWorkflow - INFO - 🔗 Filtering against linking map and product cache to identify unprocessed products
+2025-09-05 09:15:58,161 - PassiveExtractionWorkflow - INFO - 🔗 LINKING MAP FILTER (Step 1): 0 products already processed
+2025-09-05 09:15:58,161 - PassiveExtractionWorkflow - INFO -    📊 EAN-based skips: 0
+2025-09-05 09:15:58,161 - PassiveExtractionWorkflow - INFO -    📊 URL-based skips: 0
+2025-09-05 09:15:58,162 - PassiveExtractionWorkflow - INFO - 💾 PRODUCT CACHE FILTER (Step 2): 2 products have supplier data cached
+2025-09-05 09:15:58,162 - PassiveExtractionWorkflow - INFO - 📊 FULL EXTRACTION NEEDED: 0 products need fresh extraction
+2025-09-05 09:15:58,162 - PassiveExtractionWorkflow - INFO - 🧮 FILTER INVARIANT: in=2 == skip=0 + remaining=2
+2025-09-05 09:15:58,162 - PassiveExtractionWorkflow - INFO - 🔍 CORRECTED FILTER RESULTS:
+2025-09-05 09:15:58,162 - PassiveExtractionWorkflow - INFO -    📊 Input products: 2
+2025-09-05 09:15:58,163 - PassiveExtractionWorkflow - INFO -    ✅ Linking map skipped (fully processed): 0
+2025-09-05 09:15:58,163 - PassiveExtractionWorkflow - INFO -    🚀 Cached supplier data available: 2 (will use for Amazon analysis)
+2025-09-05 09:15:58,163 - PassiveExtractionWorkflow - INFO -    📋 Need Amazon analysis: 2
+2025-09-05 09:15:58,163 - PassiveExtractionWorkflow - INFO -    📈 Efficiency: 0/2 = 0.0% reduction
+2025-09-05 09:15:58,166 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: All 2 products are unprocessed (first run or fresh cache)
+2025-09-05 09:15:58,172 - PassiveExtractionWorkflow - INFO - 🔍 Processing 1 products with main workflow logic (after deduplication)
+2025-09-05 09:15:58,172 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 1/1: 'Sarina Double Bottom Glass Jar 500CC Assorted' ---
+2025-09-05 09:15:58,173 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:15:58,174 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:15:58,181 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:15:58,182 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:15:58,182 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/231 url=https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation prod_idx=0/pending
+2025-09-05 09:15:58,182 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 8680518411400
+2025-09-05 09:15:58,183 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 8680518411400 for supplier product: 'Sarina Double Bottom Glass Jar 500CC Assorted' (FixedAmazonExtractor)
+2025-09-05 09:15:58,183 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-09-05 09:15:58,183 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:15:58,183 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-09-05 09:15:58,188 - utils.browser_manager - DEBUG - Brought cached page to front for https://www.amazon.co.uk
+2025-09-05 09:15:58,188 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 8680518411400
+2025-09-05 09:16:00,850 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 8680518411400...
+2025-09-05 09:16:00,929 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-09-05 09:16:02,992 - tools.passive_extraction_workflow_latest - INFO - Found 5 search result elements using selector: div.s-search-results > div[data-asin]
+2025-09-05 09:16:02,993 - tools.passive_extraction_workflow_latest - INFO - Processing 5 search result elements for EAN 8680518411400
+2025-09-05 09:16:03,001 - tools.passive_extraction_workflow_latest - DEBUG - Element 1: Invalid or missing ASIN: 
+2025-09-05 09:16:03,008 - tools.passive_extraction_workflow_latest - DEBUG - Element 2: Invalid or missing ASIN: 
+2025-09-05 09:16:03,015 - tools.passive_extraction_workflow_latest - DEBUG - Element 3: Invalid or missing ASIN: 
+2025-09-05 09:16:03,021 - tools.passive_extraction_workflow_latest - DEBUG - Element 4: Invalid or missing ASIN: 
+2025-09-05 09:16:03,028 - tools.passive_extraction_workflow_latest - DEBUG - Element 5: Invalid or missing ASIN: 
+2025-09-05 09:16:03,028 - tools.passive_extraction_workflow_latest - WARNING - EAN 8680518411400 returned no organic results - skipping
+2025-09-05 09:16:03,029 - tools.passive_extraction_workflow_latest - WARNING - No Amazon results or error for EAN '8680518411400'. Details: no_organic_results
+2025-09-05 09:16:03,029 - tools.passive_extraction_workflow_latest - INFO - Falling back to title search for supplier product: 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:16:03,029 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:16:03,029 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Sarina Double Bottom Glass Jar 500CC Assorted
+2025-09-05 09:16:05,781 - tools.passive_extraction_workflow_latest - INFO - Title search found 9 elements using selector: div.s-search-results > div[data-asin]
+2025-09-05 09:16:06,253 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CZ9JRHQ8 title extracted using selector 'h2': AirBaking Essentials Rustic Fermenting Jar, 25 Oz ...
+2025-09-05 09:16:06,837 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B07SCK2TM2 title extracted using selector 'h2': MASTERTOP Glass Storage Jars, 3.9L Cookie Jar with...
+2025-09-05 09:16:06,899 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0C5M9NZLY title extracted using selector 'h2': WOPPLXY 18PCS 200ml Glass Jars with Metal Lids - 7...
+2025-09-05 09:16:06,979 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DHS5FTY2 title extracted using selector 'h2': HEFTMAN Glass Mason Jars with Lids 1L - Set of 12 ...
+2025-09-05 09:16:07,054 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BC2RGDD9 title extracted using selector 'h2': Franklin Lade Glass Storage Jars | 3 Piece Set 900...
+2025-09-05 09:16:07,197 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CRL6JZN8 title extracted using selector 'h2': Best House Round Double Bottom Glass Jar 750 ml Fo...
+2025-09-05 09:16:07,299 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B07J2QF8FP title extracted using selector 'h2': Clip Top Glass Jars Set of 5 with Labels & Chalk P...
+2025-09-05 09:16:07,299 - tools.passive_extraction_workflow_latest - INFO - Title search found 7 results for 'Sarina Double Bottom Glass Jar 500CC Assorted'
+2025-09-05 09:16:07,300 - tools.passive_extraction_workflow_latest - INFO - Title search successful for 'Sarina Double Bottom Glass Jar 500CC Assorted' after EAN '8680518411400' failed
+2025-09-05 09:16:07,300 - tools.passive_extraction_workflow_latest - INFO - Extracting complete data for fallback ASIN B0CZ9JRHQ8 from title search
+2025-09-05 09:16:07,300 - amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0CZ9JRHQ8. Getting a new one from BrowserManager.
+2025-09-05 09:16:07,301 - amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=Sarina+Double+Bottom+Glass+Jar+500CC+Assorted&crid=3UGA3YNU7ZM9B&sprefix=sarina+double+bottom+glass+jar+500cc+assorted%2Caps%2C187&ref=nb_sb_noss
+2025-09-05 09:16:10,179 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-09-05 09:16:10,622 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-09-05 09:16:11,625 - amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2025-09-05 09:16:14,641 - amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2025-09-05 09:16:14,642 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-09-05 09:16:14,696 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-09-05 09:16:14,697 - amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2025-09-05 09:16:19,705 - amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2025-09-05 09:16:26,713 - amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0CZ9JRHQ8
+2025-09-05 09:16:26,713 - amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2025-09-05 09:16:26,778 - amazon_playwright_extractor - INFO - Title found: 'AirBaking Essentials Rustic Fermenting Jar, 25 Oz (730ml), Glass, Round, Screw Top, Reusable, Dishwasher & Microwave Safe, Bread Fermentation Kit' via #productTitle
+2025-09-05 09:16:26,778 - amazon_playwright_extractor - INFO - Extracting price details...
+2025-09-05 09:16:26,804 - amazon_playwright_extractor - INFO - Current price: 10.99 via #corePrice_feature_div .a-offscreen
+2025-09-05 09:16:26,868 - amazon_playwright_extractor - INFO - Original price: 11.1 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2025-09-05 09:16:26,930 - amazon_playwright_extractor - INFO - Extracting image URLs...
+2025-09-05 09:16:26,968 - amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/81HwQ5W+RxL._AC_SL1500_.jpg via #landingImage
+2025-09-05 09:16:27,046 - amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2025-09-05 09:16:27,050 - amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2025-09-05 09:16:27,298 - amazon_playwright_extractor - INFO - Extracting sales rank information...
+2025-09-05 09:16:27,507 - amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2025-09-05 09:16:27,533 - amazon_playwright_extractor - INFO - Rating: 3.8 via #acrPopover[title*='out of 5 stars']
+2025-09-05 09:16:27,557 - amazon_playwright_extractor - INFO - Review count: 42 via #acrCustomerReviewText
+2025-09-05 09:16:27,557 - amazon_playwright_extractor - INFO - Extracting stock information...
+2025-09-05 09:16:27,590 - amazon_playwright_extractor - INFO - Availability text: 'Only 3 left in stock.' via #availability span.a-color-price
+2025-09-05 09:16:27,590 - amazon_playwright_extractor - INFO - Extracting features/bullets...
+2025-09-05 09:16:27,804 - amazon_playwright_extractor - INFO - Found 6 features.
+2025-09-05 09:16:27,804 - amazon_playwright_extractor - INFO - Extracting product description...
+2025-09-05 09:16:27,825 - amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2025-09-05 09:16:27,825 - amazon_playwright_extractor - INFO - Extracting product specifications table...
+2025-09-05 09:16:28,688 - amazon_playwright_extractor - INFO - Specifications table parsed using selector: #productDetails_techSpec_section_1
+2025-09-05 09:16:28,689 - amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2025-09-05 09:16:28,689 - amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2025-09-05 09:16:28,689 - amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2025-09-05 09:16:28,689 - amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2025-09-05 09:16:31,705 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2025-09-05 09:16:34,716 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2025-09-05 09:16:34,788 - amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2025-09-05 09:16:34,888 - amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2025-09-05 09:16:34,888 - amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2025-09-05 09:16:34,921 - amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2025-09-05 09:16:34,922 - amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2025-09-05 09:16:37,260 - amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2025-09-05 09:16:37,291 - amazon_playwright_extractor - INFO - ✅ Product-Details wrapper appeared on attempt 1
+2025-09-05 09:16:37,337 - amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2025-09-05 09:16:37,379 - amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2025-09-05 09:16:38,421 - amazon_playwright_extractor - INFO - ✅ Primary attempt successful: 130 rows found
+2025-09-05 09:16:38,437 - amazon_playwright_extractor - INFO - Processing 130 rows in Keepa Product Details AG Grid.
+2025-09-05 09:16:39,957 - amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.04' in Keepa AG Grid.
+2025-09-05 09:16:40,097 - amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 1.65' in Keepa AG Grid.
+2025-09-05 09:16:42,548 - amazon_playwright_extractor - INFO - ✅ Successfully parsed 37 items from Keepa Product Details AG Grid.
+2025-09-05 09:16:42,548 - amazon_playwright_extractor - INFO - ASIN B0CZ9JRHQ8: Attempting to extract EANs from Keepa product_details_tab_data.
+2025-09-05 09:16:42,549 - amazon_playwright_extractor - INFO - ASIN B0CZ9JRHQ8: EAN '5070002547730' found in Keepa details via key 'Product Codes - EAN'.
+2025-09-05 09:16:42,549 - amazon_playwright_extractor - INFO - ASIN B0CZ9JRHQ8: BSR not found or invalid from page. Attempting fallback from Keepa.
+2025-09-05 09:16:42,549 - amazon_playwright_extractor - INFO - ASIN B0CZ9JRHQ8: BSR 151046 in 'Home & Kitchen 3.3' from Keepa SalesRankDetailsTable.
+2025-09-05 09:16:42,550 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 8680518411400. Using EAN result without title fallback.
+2025-09-05 09:16:42,553 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: amazon_B0CZ9JRHQ8_8680518411400.json (33 entries) saved successfully
+2025-09-05 09:16:42,554 - PassiveExtractionWorkflow - INFO - 💾 Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0CZ9JRHQ8_8680518411400.json
+2025-09-05 09:16:42,554 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map type: <class 'list'>, size: 10537 entries
+2025-09-05 09:16:42,555 - PassiveExtractionWorkflow - DEBUG - ✅ Added entry to hash indexes: 8680518411400
+2025-09-05 09:16:42,555 - PassiveExtractionWorkflow - DEBUG - 🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 8680518411400, URL: https://www.poundwholesale.co.uk/sarina-double-bottom-glass-jar-500cc-assorted
+2025-09-05 09:16:42,555 - PassiveExtractionWorkflow - INFO - 💡 FINANCIAL REPORT TRIGGER: Next trigger at 10550 linking map entries (current: 10538, trigger frequency: 50)
+2025-09-05 09:16:42,555 - PassiveExtractionWorkflow - ERROR - Financial calculation error: float() argument must be a string or a real number, not 'dict'
+2025-09-05 09:16:42,555 - PassiveExtractionWorkflow - INFO - ❌ Financial analysis failed: float() argument must be a string or a real number, not 'dict'
+2025-09-05 09:16:42,562 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:16:42,564 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:16:42,564 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/231 url=https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation prod_idx=0/pending
+2025-09-05 09:16:42,565 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 10538 entries for supplier poundwholesale.co.uk
+2025-09-05 09:16:42,708 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 10538, sample: {'supplier_ean': '5012128582868', 'amazon_asin': 'B0DK1BVZN8', 'supplier_title': 'Giftmaker Christmas Wishes Robin Gift Bag Medium', 'amazon_title': 'Gcardist Medium 32Pcs Kraft Bags With Handles 27x2...', 'supplier_price': 0.53, 'amazon_price': 14.35, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-07-26T03:15:15.274059', 'supplier_url': 'https://www.poundwholesale.co.uk/giftmaker-christm...'}
+2025-09-05 09:16:42,709 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:16:42,709 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 10538 entries using atomic strategy...
+2025-09-05 09:16:43,051 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (10538 entries) saved successfully
+2025-09-05 09:16:43,053 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 10538 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:16:43,053 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 5768938 bytes
+2025-09-05 09:16:43,260 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10074 EANs, 10454 URLs, 6588 ASINs in 0.206s
+2025-09-05 09:16:43,260 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10538 entries
+2025-09-05 09:16:43,263 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 1 (linking_map_batch_size: 1)
+2025-09-05 09:16:43,263 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 10538 entries for supplier poundwholesale.co.uk
+2025-09-05 09:16:43,372 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 10538, sample: {'supplier_ean': '5012128582868', 'amazon_asin': 'B0DK1BVZN8', 'supplier_title': 'Giftmaker Christmas Wishes Robin Gift Bag Medium', 'amazon_title': 'Gcardist Medium 32Pcs Kraft Bags With Handles 27x2...', 'supplier_price': 0.53, 'amazon_price': 14.35, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-07-26T03:15:15.274059', 'supplier_url': 'https://www.poundwholesale.co.uk/giftmaker-christm...'}
+2025-09-05 09:16:43,372 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:16:43,372 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 10538 entries using atomic strategy...
+2025-09-05 09:16:43,646 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (10538 entries) saved successfully
+2025-09-05 09:16:43,648 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 10538 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-09-05 09:16:43,649 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 5768938 bytes
+2025-09-05 09:16:43,878 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10074 EANs, 10454 URLs, 6588 ASINs in 0.229s
+2025-09-05 09:16:43,879 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10538 entries
+2025-09-05 09:16:43,884 - PassiveExtractionWorkflow - INFO - ✅ Chunk processing: Final linking map save completed
+2025-09-05 09:16:43,885 - PassiveExtractionWorkflow - INFO - --- Chunk Processing with Main Workflow Logic Finished ---
+2025-09-05 09:16:43,885 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 4: categories 4-4
+2025-09-05 09:16:44,016 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:16:44,083 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CACHE REFERENCE: 7 cached products exist for current chunk categories – performing fresh extraction to detect updates
+2025-09-05 09:16:44,084 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CATEGORIES: ['https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers']
+2025-09-05 09:16:44,084 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-09-05 09:16:44,084 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-09-05 09:16:44,173 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
+2025-09-05 09:16:44,276 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10392 total → 1 unprocessed (10454 already in linking map)
+2025-09-05 09:16:44,276 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
+2025-09-05 09:16:44,276 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-09-05 09:16:44,277 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-09-05 09:16:44,277 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-09-05 09:16:44,278 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:16:44,279 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-09-05 09:16:44,286 - utils.browser_manager - DEBUG - Brought cached page to front for https://www.poundwholesale.co.uk
+2025-09-05 09:16:49,948 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-09-05 09:16:49,948 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-05 09:16:55,397 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-05 09:16:55,397 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-09-05 09:16:55,398 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-09-05 09:16:55,398 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:16:55,398 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:16:55,404 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-09-05 09:16:55,405 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-05 09:16:55,405 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers prod_idx=0/pending
+2025-09-05 09:16:55,405 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-05 09:16:55,406 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-05 09:16:55,406 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 2/1)
+2025-09-05 09:16:55,406 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:16:55,407 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:16:55,407 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:16:55,407 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers (attempt 1/3)
+2025-09-05 09:16:55,407 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:16:55,407 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:16:55,411 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:16:55,412 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:16:57,657 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers in 2.35s...
+2025-09-05 09:17:00,008 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers (attempt 2/3)
+2025-09-05 09:17:00,008 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:17:00,009 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:17:00,018 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:17:00,018 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:17:02,117 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:17:02,118 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-09-05 09:17:02,194 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers (Size: 689441 bytes)
+2025-09-05 09:17:02,380 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-09-05 09:17:02,381 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-09-05 09:17:02,381 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2 (attempt 1/3)
+2025-09-05 09:17:02,381 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-05 09:17:02,381 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-05 09:17:02,390 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-05 09:17:02,390 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-09-05 09:17:04,339 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-09-05 09:17:04,343 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
