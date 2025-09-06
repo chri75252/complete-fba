@@ -727,23 +727,15 @@ class FixedEnhancedStateManager:
         tpc = sp.get("total_products_in_current_category", 0)
         ccu = sp.get("current_category_url", "")
 
-        # Only emit resume breadcrumbs AFTER the workflow has committed frozen totals.
-        # This prevents misleading "pending" denominators in resume logs.
+        # Emit resume breadcrumbs ONLY after frozen totals are explicitly committed
         frozen_ok = bool(sp.get("frozen_totals_committed", False))
-
         if not frozen_ok:
-            # Suppress resume banners until frozen totals are explicitly committed by workflow.
             log.debug("RESUME PTR suppressed: frozen_totals_committed=False")
-        else:
-            # Frozen totals committed; we can safely print resume breadcrumbs.
-            if tc > 0 and tpc > 0:
-                log.info(
-                    f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}"
-                )
-            elif tc > 0:
-                log.info(
-                    f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/pending"
-                )
+            return
+        if tc > 0 and tpc > 0:
+            log.info(f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}")
+        elif tc > 0:
+            log.info(f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/pending")
 
     def save_state_atomic(self):
         """Atomic save wrapper used by new progression methods"""
@@ -782,70 +774,56 @@ class FixedEnhancedStateManager:
         sp = self.state_data.setdefault("system_progression", {})
         sp["total_categories"] = n_int
 
-    # ---------------------------------------------------------------------
-    # Phase-scoped atomic commit helpers (small, focused writers to system_progression)
-    # ---------------------------------------------------------------------
     def mark_frozen_totals_committed(self) -> None:
-        """
-        Mark that the workflow has saved frozen totals (e.g., total_categories)
-        and it is now safe to emit resume breadcrumbs.
-        """
+        """Mark frozen totals as committed, enabling RESUME PTR logs."""
         sp = self.state_data.setdefault("system_progression", {})
         sp["frozen_totals_committed"] = True
         self.save_state_atomic()
 
-    def commit_supplier_progress(
-        self,
-        *,
-        cat_idx: int,
-        prod_idx: int,
-        total_cats: int,
-        cat_url: str,
-        total_prod_in_cat: int,
-    ) -> None:
-        """Atomic commit for supplier-phase progress."""
+    def commit_supplier_progress(self, *, cat_idx: int, prod_idx: int,
+                                 total_cats: int, cat_url: str, total_prod_in_cat: int) -> None:
+        """Atomic supplier-phase commit (category-relative cursor)."""
         sp = self.state_data.setdefault("system_progression", {})
         sp["current_phase"] = "supplier"
         sp["current_category_index"] = int(cat_idx)
         sp["total_categories"] = int(total_cats)
-        sp["current_category_url"] = cat_url
-        sp["current_product_index_in_category"] = int(prod_idx)
-        sp["total_products_in_current_category"] = int(total_prod_in_cat)
-        # Monotonic pointer (keeps resumption safe)
-        self.set_resumption_ptr(int(cat_idx), int(prod_idx))
-        self.save_state_atomic()
+        sp["current_category_url"] = str(cat_url)
+        sp["current_product_index_in_category"] = int(prod_idx)           # ✅ category-relative (last completed)
+        sp["total_products_in_current_category"] = int(total_prod_in_cat) # ✅ frozen per category
+        self.set_resumption_ptr(int(cat_idx), int(prod_idx) + 1)           # Store NEXT to process
+        self.save_debounced("supplier-progress")
+        self.log_resume_proof_after_commit("SUPPLIER")
 
-    def commit_amazon_progress(
-        self,
-        *,
-        cat_idx: int,
-        queue_idx: int,
-        total_cats: int,
-        cat_url: str,
-        queue_len: int,
-    ) -> None:
-        """Atomic commit for Amazon-phase progress."""
+    def commit_amazon_progress(self, *, cat_idx: int, queue_idx: int,
+                               total_cats: int, cat_url: str, queue_len: int) -> None:
+        """Atomic Amazon-phase commit (queue-relative cursor)."""
         sp = self.state_data.setdefault("system_progression", {})
         sp["current_phase"] = "amazon_analysis"
         sp["current_category_index"] = int(cat_idx)
         sp["total_categories"] = int(total_cats)
-        sp["current_category_url"] = cat_url
-        sp["current_product_index_in_category"] = int(queue_idx)
-        sp["total_products_in_current_category"] = int(queue_len)
-        self.save_state_atomic()
+        sp["current_category_url"] = str(cat_url)
+        sp["current_product_index_in_category"] = int(queue_idx)  # ✅ queue-relative
+        sp["total_products_in_current_category"] = int(queue_len) # ✅ frozen queue length
+        self.save_debounced("amazon-progress")
+        self.log_resume_proof_after_commit("AMAZON")
 
     def commit_phase_switch(self, *, new_phase: str, reset_index: bool = True) -> None:
-        """Atomic phase transition helper."""
+        """Switch processing phase with optional index reset."""
         sp = self.state_data.setdefault("system_progression", {})
         old = sp.get("current_phase", "supplier")
         sp["current_phase"] = str(new_phase)
         if reset_index:
             sp["current_product_index_in_category"] = 0
-        try:
-            log.info(f"🔄 PHASE TRANSITION: {old} → {new_phase}")
-        except Exception:
-            pass
+        log.info(f"🔄 PHASE TRANSITION: {old} → {new_phase}")
         self.save_state_atomic()
+        self.log_resume_proof_after_commit("PHASE_SWITCH")
+
+    def _authoritative_total_categories(self) -> int:
+        """Get authoritative total categories count."""
+        sp = self.state_data.get("system_progression", {})
+        return sp.get("total_categories", 0)
+
+    # (reverted) removed phase-scoped atomic commit helpers and frozen flag gating
 
     def set_resumption_ptr(self, cat_idx: int, prod_idx: int) -> None:
         """Set monotonic resumption pointer (category, product)."""
@@ -1624,3 +1602,20 @@ class FixedEnhancedStateManager:
             metrics["total_profit"] += profit
 
         self.state_data["success_metrics"] = metrics
+
+    def log_resume_proof_after_commit(self, commit_type: str) -> None:
+        """RESUME PROOF LOG 2: LOG after each atomic commit with current state summary."""
+        if hasattr(self, "_log") and self._log:
+            sp = self.state_data.setdefault("system_progression", {})
+            cat_idx = sp.get("current_category_index", 0)
+            prod_idx = sp.get("current_product_index_in_category", 0)
+            total_cats = sp.get("total_categories", 0)
+            total_prod = sp.get("total_products_in_current_category", 0)
+            phase = sp.get("current_phase", "supplier")
+            
+            self._log.info(f"📋 RESUME PROOF ({commit_type}): cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} phase={phase}")
+        else:
+            # Fallback to module logger if instance logger not available
+            import logging
+            log = logging.getLogger(__name__)
+            log.info(f"📋 RESUME PROOF ({commit_type}): State committed successfully")

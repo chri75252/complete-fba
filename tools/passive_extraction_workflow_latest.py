@@ -1871,29 +1871,24 @@ class PassiveExtractionWorkflow:
         self.log.info(f"--- Starting Passive Extraction Workflow for: {self.supplier_name} ---")
         self.log.info(f"Session ID: {session_id}")
 
-        # Freeze total categories and config hash before any resume logic
+        # Resolve categories and compute config hash
         category_urls = self._get_predefined_categories(self.supplier_name) or []
-        frozen_total = len(category_urls)
-        config_hash = self.state_manager.compute_supplier_config_hash(category_urls)
-        # Set totals first (no save yet), then log banner, then save (so banner precedes any resume ptr lines)
-        try:
-            self.state_manager.set_total_categories(frozen_total, config_hash)
-        except Exception:
-            # Fallback: write fields directly if helper missing
-            rs = self.state_manager.state_data.setdefault("runtime_settings", {})
-            rs["total_categories"] = frozen_total
-            rs["supplier_config_hash"] = config_hash
-            sp = self.state_manager.state_data.setdefault("system_progression", {})
-            sp["total_categories"] = frozen_total
-        self.log.info(f"🔒 FROZEN TOTAL CATEGORIES set to {frozen_total} with hash {config_hash[:8]}")
-        self.state_manager.save(note="denominator-freeze")
-        # NEW: signal manager that frozen totals were committed and resume logs can be emitted safely
-        if hasattr(self.state_manager, "mark_frozen_totals_committed"):
-            try:
-                self.state_manager.mark_frozen_totals_committed()
-            except Exception:
-                self.log.exception("Failed to mark frozen totals as committed in state manager")
+        cfg_hash = self.state_manager.compute_supplier_config_hash(category_urls)
 
+        # Freeze total categories and mark frozen BEFORE any resume logic
+        self.state_manager.set_total_categories(len(category_urls), cfg_hash)
+        self.state_manager.save_state_atomic()
+        self.log.info(f"🔒 FROZEN TOTAL CATEGORIES set to {len(category_urls)} (hash={cfg_hash[:8]})")
+        if hasattr(self.state_manager, "mark_frozen_totals_committed"):
+            self.state_manager.mark_frozen_totals_committed()
+
+        # RESUME PROOF LOG 1: LOG at startup if frozen totals are committed
+        if hasattr(self.state_manager, "is_frozen_totals_committed") and self.state_manager.is_frozen_totals_committed():
+            self.log.info("✅ RESUME PROOF: Frozen totals are committed, safe to calculate resume pointers")
+        else:
+            self.log.warning("⚠️ RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable")
+
+        # Now it is safe to fetch the resume pointer and log it
         cat_idx, prod_idx = self.state_manager.get_resumption_ptr()
         self.log.info(f"▶ RESUME PTR: cat={cat_idx} prod={prod_idx}")
 
@@ -1944,26 +1939,7 @@ class PassiveExtractionWorkflow:
                 self.state_manager.validate_and_repair_state()
             except Exception:
                 pass
-        # Write-through: freeze total categories and set into unified progression early
-        try:
-            frozen_total = self._authoritative_total_categories()
-            self.state_manager.update_progression_unified(
-                current_phase="supplier", total_categories=frozen_total
-            )
-            self.log.info(f"🔒 FROZEN TOTAL CATEGORIES set to {frozen_total} (authoritative)")
-            # Drift check between legacy and unified views
-            legacy_total = self.state_manager.state_data.get(
-                "supplier_extraction_progress", {}
-            ).get("total_categories")
-            system_total = self.state_manager.state_data.get("system_progression", {}).get(
-                "total_categories"
-            )
-            if legacy_total is not None and legacy_total != system_total:
-                self.log.warning(
-                    f"LEGACY VIEW DRIFT: legacy_total={legacy_total} vs system_total={system_total} — using system only."
-                )
-        except Exception as e:
-            self.log.warning(f"⚠️ Could not set frozen total categories at startup: {e}")
+        # Categories are already frozen above - no need for duplicate legacy calls
 
         self.consecutive_amazon_price_misses = self.state_manager.state_data.get(
             "consecutive_amazon_price_misses", 0
@@ -2315,19 +2291,22 @@ class PassiveExtractionWorkflow:
 
                     # 🚨 FIX: Update state manager with consistent index tracking
                     if hasattr(self, "state_manager") and self.state_manager:
-                        # Save a unified supplier commit for this product (category-relative)
-                        try:
-                            if hasattr(self.state_manager, "commit_supplier_progress"):
-                                cat_url_local = product_data.get("source_url", "unknown")
-                                self.state_manager.commit_supplier_progress(
-                                    cat_idx=(batch_num),  # zero-based internally; batch_num starts at 0 index
-                                    prod_idx=current_index,
-                                    total_cats=self._authoritative_total_categories(),
-                                    cat_url=cat_url_local,
-                                    total_prod_in_cat=len(batch_products),
-                                )
-                        except Exception:
-                            self.log.exception("Failed to commit supplier progress (batch loop)")
+                        # Use unified state update method
+                        self.state_manager.update_processing_index(current_index, total_for_display)
+
+                        # Also update detailed progress for category tracking
+                        if hasattr(self.state_manager, "update_supplier_extraction_progress"):
+                            self.state_manager.update_supplier_extraction_progress(
+                                category_index=batch_num + 1,
+                                total_categories=self._authoritative_total_categories(),
+                                subcategory_index=i + 1,
+                                total_subcategories=len(batch_products),
+                                category_url=product_data.get("source_url", "unknown"),
+                                extraction_phase="supplier",
+                            )
+
+                        # Save state after every product to ensure resumability
+                        self.state_manager.save_state()
 
                     # 🔧 AUTHENTICATION FALLBACK CHECK
                     if self._check_authentication_fallback_needed():
@@ -5304,6 +5283,21 @@ Return ONLY valid JSON, no additional text."""
                         )
                         work_urls = needs_full_extraction_urls[start_offset:]
 
+                    # Freeze per-category denominator
+                    cat_total = len(needs_full_extraction_urls)  # The frozen discovered count for THIS category
+                    self.log.info(f"🔒 FROZEN DENOMINATOR: Category {absolute_cat_index} → {cat_total} products (snapshot)")
+                    if hasattr(self.state_manager, "commit_supplier_progress"):
+                        try:
+                            self.state_manager.commit_supplier_progress(
+                                cat_idx=absolute_cat_index, 
+                                prod_idx=0,
+                                total_cats=self.state_manager._authoritative_total_categories(),
+                                cat_url=category_url,
+                                total_prod_in_cat=cat_total
+                            )
+                        except Exception as e:
+                            self.log.warning(f"Could not commit supplier progress: {e}")
+
                     self.log.info(
                         f"🚀 PROCEEDING WITH EXTRACTION: {len(work_urls)} products need full extraction"
                     )
@@ -5373,21 +5367,7 @@ Return ONLY valid JSON, no additional text."""
                         self.log.info(
                             f"✅ Added {len(cached_products)} cached products to Amazon analysis queue"
                         )
-                # NEW: Phase switch to Amazon and initial commit of queue length
-                try:
-                    if hasattr(self, "state_manager") and self.state_manager and 'absolute_cat_index' in locals():
-                        if hasattr(self.state_manager, 'commit_phase_switch'):
-                            self.state_manager.commit_phase_switch(new_phase="amazon_analysis", reset_index=True)
-                        if hasattr(self.state_manager, 'commit_amazon_progress'):
-                            self.state_manager.commit_amazon_progress(
-                                cat_idx=int(absolute_cat_index),
-                                queue_idx=0,
-                                total_cats=self._authoritative_total_categories(),
-                                cat_url=category_url,
-                                queue_len=len(all_products),
-                            )
-                except Exception:
-                    self.log.exception("Failed to commit Amazon phase start")
+                # (reverted) removed Amazon phase switch and initial commit injection
                 # 🚨 SURGICAL FIX: Update state manager with current category URL being processed
                 if hasattr(self, "state_manager") and self.state_manager:
                     if hasattr(self.state_manager, "update_current_category_url"):
@@ -5543,37 +5523,35 @@ Return ONLY valid JSON, no additional text."""
                             total_categories=self._authoritative_total_categories(),
                             current_category_url=category_url,
                         )
-                        # --- ATOMIC SUPPLIER PROGRESS COMMIT (new) ---
-                        try:
-                            absolute_cat_index_local = int(absolute_cat_index) if 'absolute_cat_index' in locals() else int(getattr(self, '_current_category_index', 0))
-                            prod_idx_local = int(self._supplier_product_counter) - 1 if getattr(self, "_supplier_product_counter", 0) > 0 else 0
-                            total_cats_local = int(self._authoritative_total_categories())
-                            total_prod_in_cat_local = int(len(getattr(self, "_current_all_products", [])))
-                            if hasattr(self.state_manager, 'commit_supplier_progress'):
+                        # Calculate category-relative index and use single category-relative writer
+                        cat_abs_idx = int(absolute_cat_index)
+                        cat_rel_idx = int(start_offset) + int(product_index) - 1  # Convert to 0-based index
+                        
+                        # Get category total from the frozen denominator
+                        sp = self.state_manager.state_data.get("system_progression", {})
+                        cat_total = sp.get("total_products_in_current_category", 0)
+                        
+                        # Clamp for safety
+                        cat_rel_idx = max(0, min(cat_rel_idx, cat_total - 1)) if cat_total > 0 else cat_rel_idx
+                        
+                        # The ONLY progress writer to be called here:
+                        if hasattr(self.state_manager, "commit_supplier_progress"):
+                            try:
                                 self.state_manager.commit_supplier_progress(
-                                    cat_idx=absolute_cat_index_local,
-                                    prod_idx=prod_idx_local,
-                                    total_cats=total_cats_local,
+                                    cat_idx=cat_abs_idx,
+                                    prod_idx=cat_rel_idx,
+                                    total_cats=self.state_manager._authoritative_total_categories(),
                                     cat_url=category_url,
-                                    total_prod_in_cat=total_prod_in_cat_local,
+                                    total_prod_in_cat=cat_total,
                                 )
-                        except Exception:
-                            self.log.exception("Failed to commit supplier progress")
-                        # --- end atomic commit ---
-                        # Tuple pointer update (monotonic)
-                        try:
-                            next_prod = int(start_offset) + int(product_index)
-                            self.state_manager.set_resumption_ptr(
-                                int(absolute_cat_index), next_prod
+                            except Exception:
+                                pass
+                        
+                        # If we are resuming within a category, acknowledge on first processed item
+                        if int(start_offset) > 0 and int(product_index) == 1:
+                            self.log.info(
+                                f"✅ RESUME HONORED: cat={absolute_cat_index} prod={start_offset} key={product_url}"
                             )
-                            self.state_manager.save_debounced("progress", min_interval=0.3)
-                            # If we are resuming within a category, acknowledge on first processed item
-                            if int(start_offset) > 0 and int(product_index) == 1:
-                                self.log.info(
-                                    f"✅ RESUME HONORED: cat={absolute_cat_index} prod={start_offset} key={product_url}"
-                                )
-                        except Exception:
-                            pass
                         self.log.info(
                             f"🔍 SUPPLIER STATE UPDATE: Index updated to {actual_cache_count}/{total_products}"
                         )
@@ -6932,6 +6910,11 @@ Return ONLY valid JSON, no additional text."""
             p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
         ]
 
+        # After building the deterministic amazon_queue (price_filtered_products), switch phase to "amazon_analysis"
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("amazon_analysis")
+            self.log.info("🔀 PHASE SWITCH: supplier → amazon_analysis")
+
         self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
 
         # Process products in cycles
@@ -7002,6 +6985,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -7072,6 +7062,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -7346,6 +7348,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -7416,6 +7425,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -7690,6 +7711,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -7760,6 +7788,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -8034,6 +8074,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -8104,6 +8151,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -8378,6 +8437,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -8448,6 +8514,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -8722,6 +8800,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -8792,6 +8877,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -9066,6 +9163,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -9136,6 +9240,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -9410,6 +9526,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -9480,6 +9603,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 
@@ -9754,6 +9889,13 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        self.state_manager.commit_amazon_progress(
+                            prod_idx=i,  # 0-based index within batch
+                            total_prod_in_amazon_queue=len(batch_products)
+                        )
                     continue
 
                 # Save Amazon cache and create linking map
@@ -9824,6 +9966,18 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_financial_calculation"
                     )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    self.state_manager.commit_amazon_progress(
+                        prod_idx=i,  # 0-based index within batch
+                        total_prod_in_amazon_queue=len(batch_products)
+                    )
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
 
         return profitable_results
 

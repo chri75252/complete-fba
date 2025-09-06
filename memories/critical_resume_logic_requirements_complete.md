@@ -1,0 +1,137 @@
+# CRITICAL RESUME LOGIC REQUIREMENTS - COMPLETE SPECIFICATION
+
+## 🚨 FUNDAMENTAL ISSUE IDENTIFIED
+The system is incorrectly using `category_completion_status` count (92-93 entries) to determine starting position instead of implementing proper fresh start vs resume logic. This causes the system to start from URL #93-94 in the categories config instead of following proper resume markers.
+
+## ✅ CORRECT BEHAVIOR SPECIFICATION
+
+### Fresh Start Detection
+- **Condition**: NO processing state file exists
+- **Action**: Start from URL index 0 (first category in config)
+- **Source**: First URL in `config/poundwholesale_categories.json`
+
+### Resume Detection  
+- **Condition**: Processing state file EXISTS with valid data
+- **Action**: Use `system_progression` resume markers
+- **Source**: `system_progression` section takes ABSOLUTE precedence
+
+## 🎯 PRIMARY RESUME SOURCE: system_progression Section
+
+The system depends on `system_progression` as the primary resume source (takes precedence over legacy `supplier_extraction_progress`).
+
+### Resume Markers Retrieved by System
+```json
+{
+  "system_progression": {
+    "current_category_index": 5,           // ← RESUME MARKER: Which category to continue
+    "current_product_index_in_category": 10, // ← RESUME MARKER: Which product within category
+    "current_phase": "supplier",           // ← RESUME MARKER: Which phase was interrupted
+    "current_category_url": "https://...", // ← VALIDATION: Exact category URL for consistency check
+    "total_categories": 25,                // Context: Total categories to process
+    "total_products_in_current_category": 100 // Context: Products in current category
+  }
+}
+```
+
+## 📋 PHASE DETECTION LOGIC
+
+### Supplier Website Extraction Interruption
+- **When**: `current_phase == "supplier"`
+- **Resume Action**: Continue supplier product extraction
+- **Resume Point**:
+  - Category: `current_category_index` (e.g., category 5)
+  - Product: `current_product_index_in_category` (e.g., product 10 within that category)
+  - URL: Validate against `current_category_url`
+
+### Amazon Detail Extraction Interruption
+- **When**: `current_phase == "amazon"`
+- **Resume Action**: Continue Amazon analysis/linking
+- **Resume Point**:
+  - Category: `current_category_index` (e.g., category 5)
+  - Product: `current_product_index_in_category` (e.g., product 10 within that category)
+  - URL: Validate against `current_category_url`
+
+## 🔄 LEGACY SECTION: supplier_extraction_progress
+Used for backward compatibility only - system prefers `system_progression`.
+
+```json
+{
+  "supplier_extraction_progress": {
+    "current_category_index": 5,          // ← LEGACY: Mirrors system_progression
+    "last_processed_index": 10,           // ← LEGACY: Product index (less reliable)
+    "progress_index": 10                  // ← LEGACY: Alternative product index
+  }
+}
+```
+
+## 🎯 RESUME DECISION MATRIX
+
+| Scenario | Primary Source | Fallback Source | Action |
+|----------|---------------|-----------------|--------|
+| Both sections exist | system_progression | supplier_extraction_progress | Use system_progression values |
+| Only legacy exists | supplier_extraction_progress | None | Use legacy values |
+| Inconsistent values | system_progression | None | system_progression takes precedence |
+| Missing phase info | Infer from context | Default to "supplier" | Start with supplier phase |
+
+## 🔧 SPECIFIC RESUME ALGORITHM
+
+```python
+def get_resume_point():
+    # Primary source
+    sp = state_data.get("system_progression", {})
+    
+    if sp:
+        return {
+            'category_index': sp.get("current_category_index", 0),
+            'product_index': sp.get("current_product_index_in_category", 0),
+            'phase': sp.get("current_phase", "supplier"),
+            'category_url': sp.get("current_category_url", "")
+        }
+    
+    # Fallback to legacy
+    sep = state_data.get("supplier_extraction_progress", {})
+    return {
+        'category_index': sep.get("current_category_index", 0),
+        'product_index': sep.get("last_processed_index", 0),
+        'phase': "supplier",  # Default assumption
+        'category_url': sep.get("current_category_url", "")
+    }
+```
+
+## 📊 KEY RESUME INDEXES SUMMARY
+
+### Primary Resume Indexes (from system_progression):
+- `current_category_index` - Which category (0-based)
+- `current_product_index_in_category` - Which product within category (0-based)
+- `current_phase` - "supplier" or "amazon" phase
+- `current_category_url` - URL validation/consistency check
+
+### Legacy Resume Indexes (from supplier_extraction_progress):
+- `current_category_index` - Which category (mirrors primary)
+- `last_processed_index` - Which product (less reliable naming)
+- `progress_index` - Alternative product index (redundant)
+
+## 🔄 PHASE CONTINUATION LOGIC
+
+### Supplier Phase Resume:
+- Continue extracting products from supplier website
+- Start at `current_product_index_in_category` within `current_category_index`
+- Complete supplier extraction before moving to Amazon phase
+
+### Amazon Phase Resume:
+- Continue Amazon detail extraction/linking
+- Start at `current_product_index_in_category` within `current_category_index`
+- Process products that need Amazon analysis
+
+## 🚨 CRITICAL REQUIREMENT: NEVER USE category_completion_status COUNT
+
+The system must NEVER use `len(category_completion_status)` or similar patterns to determine starting position. This is the root cause of the current issue where the system starts from URL #93-94 instead of proper resume markers.
+
+## ✅ IMPLEMENTATION VALIDATION CHECKLIST
+
+- [ ] Fresh start detection: No processing state file → Start from index 0
+- [ ] Resume detection: Processing state exists → Use system_progression
+- [ ] system_progression precedence over supplier_extraction_progress
+- [ ] Eliminate all category_completion_status count usage for positioning
+- [ ] Validate against current_category_url for consistency
+- [ ] Phase-aware resume (supplier vs amazon phases)
