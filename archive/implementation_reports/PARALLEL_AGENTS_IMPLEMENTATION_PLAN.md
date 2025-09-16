@@ -1,282 +1,124 @@
-# PARALLEL AGENTS IMPLEMENTATION PLAN
-## Critical Hybrid Processing Fixes - Amazon FBA Agent System
-
-**Target Project**: `Amazon-FBA-Agent-System-v3-BACKUP-20250701_153247`  
-**Implementation Methodology**: Parallel Agents with Git Worktrees  
-**Priority**: CRITICAL - Immediate Implementation Required  
-**Verification Standard**: CLAUDE.MD Critical Testing & Verification Standards
-
----
-
-## 🎯 EXECUTIVE SUMMARY
-
-Based on comprehensive ZEN MCP analysis, implementing **5 specialized agents** working in parallel on the backup version to address critical hybrid processing failures:
-
-1. **Agent 1**: Processing State & Resumption Logic (CRITICAL)
-2. **Agent 2**: Authentication Integration & Fallback Timing (CRITICAL) 
-3. **Agent 3**: Financial Report Generation & Config Integration (HIGH)
-4. **Agent 4**: Performance Optimization & Memory Management (HIGH)
-5. **Agent 5**: Testing Framework & Validation Suite (CRITICAL)
-
----
-
-## 📋 PREPARATION PHASE
-
-### Step 1: Environment Setup
-
-```bash
-# Navigate to backup project
-cd "/mnt/c/Users/chris/Cloud-Drive_christianhaddad8@gmail.com/Cloud-Drive/Full/claude code/Amazon-FBA-Agent-System-v3-BACKUP-20250701_153247"
-
-# Initialize git if needed and create parallel structure
-git init
-git add .
-git commit -m "Initial backup state for parallel fixes"
-
-# Create parallel development structure
-mkdir -p .claude/commands specs trees
-```
-
-### Step 2: Custom Claude Commands Setup
-
-#### `.claude/commands/init-parallel-fixes.md`
-
-```md
-# Initialize Parallel Development for Critical Fixes
-
-You are setting up parallel development for critical hybrid processing fixes: $FEATURE_NAME with $NUM_AGENTS agents.
-
-## Setup Process
-
-1. **Create worktree branches and directories:**
-   ```bash
-   for i in $(seq 1 $NUM_AGENTS); do
-     git worktree add -B $FEATURE_NAME-agent-$i trees/$FEATURE_NAME-agent-$i
-   done
-   ```
-
-2. **Copy critical files to each worktree:**
-   ```bash
-   for i in $(seq 1 $NUM_AGENTS); do
-     cp -r config/ trees/$FEATURE_NAME-agent-$i/ 2>/dev/null || true
-     cp -r tools/ trees/$FEATURE_NAME-agent-$i/ 2>/dev/null || true
-     cp -r utils/ trees/$FEATURE_NAME-agent-$i/ 2>/dev/null || true
-     cp -r OUTPUTS/ trees/$FEATURE_NAME-agent-$i/ 2>/dev/null || true
-     cp *.py trees/$FEATURE_NAME-agent-$i/ 2>/dev/null || true
-   done
-   ```
-
-3. **Create agent coordination script:**
-   ```bash
-   cat > start-parallel-fixes.sh << EOF
-#!/bin/bash
-FEATURE_NAME="$FEATURE_NAME"
-NUM_AGENTS=$NUM_AGENTS
-
-echo "🚀 Starting $NUM_AGENTS parallel agents for critical fixes..."
-for i in $(seq 1 $NUM_AGENTS); do
-  echo "Starting Agent $i (Specialization: $(get_agent_specialization $i))"
-  (cd trees/$FEATURE_NAME-agent-$i && claude --resume) &
-done
-
-wait
-echo "✅ All agents completed. Run verification tests."
-EOF
-   chmod +x start-parallel-fixes.sh
-   ```
-
-Report completion with worktrees created and agent specializations assigned.
-```
-
-#### `.claude/commands/exe-parallel-fixes.md`
-
-```md
-# Execute Parallel Critical Fixes
-
-You are coordinating parallel development for: $SPEC_FILE with $NUM_AGENTS specialized agents.
-
-## Agent Specializations
-- **Agent 1**: Processing State & Resumption Logic  
-- **Agent 2**: Authentication Integration & Fallback Timing
-- **Agent 3**: Financial Report Generation & Config Integration
-- **Agent 4**: Performance Optimization & Memory Management  
-- **Agent 5**: Testing Framework & Validation Suite
-
-## Execution Process
-
-1. **Launch Agent 1 - Processing State Fixes:**
-   "You are Agent 1 specializing in Processing State & Resumption Logic.
-   
-   Working directory: trees/hybrid-fixes-agent-1
-   
-   CRITICAL MISSION: Fix processing state resumption failures
-   
-   SPECIFIC TASKS:
-   - Fix supplier scraping resumption from exact index (not skipping to Amazon)
-   - Eliminate 276-chunk reprocessing loops
-   - Implement proper state boundary detection
-   - Add chunk completion tracking
-   
-   KEY FILES TO MODIFY:
-   - tools/passive_extraction_workflow_latest.py (hybrid processing logic)
-   - utils/enhanced_state_manager.py (state tracking)
-   
-   SUCCESS CRITERIA:
-   - System resumes supplier scraping from index 29 after restart
-   - No more premature switching to Amazon extraction
-   - 276-chunk loops eliminated
-   - State persistence works correctly
-   
-   Document everything in AGENT1_RESULTS.md"
-
-2. **Launch Agent 2 - Authentication Integration:**
-   "You are Agent 2 specializing in Authentication Integration & Fallback Timing.
-   
-   Working directory: trees/hybrid-fixes-agent-2
-   
-   CRITICAL MISSION: Fix authentication fallback timing failures
-   
-   SPECIFIC TASKS:
-   - Add authentication triggers during supplier scraping
-   - Implement pre-category authentication checks
-   - Fix 3+ products without price trigger timing
-   - Add logout detection during scraping phase
-   
-   KEY FILES TO MODIFY:
-   - tools/passive_extraction_workflow_latest.py (auth integration)
-   - tools/supplier_authentication_service.py (timing logic)
-   
-   SUCCESS CRITERIA:
-   - Authentication fallback triggers during supplier scraping
-   - 3+ price-missing threshold respected
-   - Login script runs before each category
-   - System doesn't continue scraping after logout
-   
-   Document everything in AGENT2_RESULTS.md"
-
-3. **Launch Agent 3 - Financial Report Timing:**
-   "You are Agent 3 specializing in Financial Report Generation & Config Integration.
-   
-   Working directory: trees/hybrid-fixes-agent-3
-   
-   CRITICAL MISSION: Fix financial report generation timing
-   
-   SPECIFIC TASKS:
-   - Implement periodic financial report generation
-   - Respect config toggle values (currently set to 3)
-   - Add incremental reporting during processing
-   - Fix end-of-workflow-only report generation
-   
-   KEY FILES TO MODIFY:
-   - tools/passive_extraction_workflow_latest.py (report triggers)
-   - tools/FBA_Financial_calculator.py (incremental generation)
-   - config/system_config.json (toggle integration)
-   
-   SUCCESS CRITERIA:
-   - Reports generate every N products per config
-   - Not just at end of 276-chunk processing
-   - Config toggle value respected
-   - Incremental reports maintain quality
-   
-   Document everything in AGENT3_RESULTS.md"
-
-4. **Launch Agent 4 - Performance Optimization:**
-   "You are Agent 4 specializing in Performance Optimization & Memory Management.
-   
-   Working directory: trees/hybrid-fixes-agent-4
-   
-   CRITICAL MISSION: Optimize memory consumption and performance
-   
-   SPECIFIC TASKS:
-   - Fix linking_map debug output memory consumption
-   - Optimize 276-chunk processing loop
-   - Implement efficient product matching
-   - Fix duplicate Amazon extraction analysis
-   
-   KEY FILES TO MODIFY:
-   - tools/passive_extraction_workflow_latest.py (debug output)
-   - Link processing logic optimization
-   - Memory management improvements
-   
-   SUCCESS CRITERIA:
-   - 90% reduction in linking_map debug output
-   - Eliminated duplicate product processing
-   - Optimized chunk processing performance
-   - Memory usage under control
-   
-   Document everything in AGENT4_RESULTS.md"
-
-5. **Launch Agent 5 - Testing Framework:**
-   "You are Agent 5 specializing in Testing Framework & Validation Suite.
-   
-   Working directory: trees/hybrid-fixes-agent-5
-   
-   CRITICAL MISSION: Create comprehensive testing framework
-   
-   SPECIFIC TASKS:
-   - Develop state resumption tests
-   - Create authentication fallback tests  
-   - Build financial report validation tests
-   - Implement performance regression tests
-   
-   KEY FILES TO CREATE:
-   - tests/test_state_resumption.py
-   - tests/test_authentication_fallback.py
-   - tests/test_financial_timing.py
-   - tests/test_performance_optimization.py
-   
-   SUCCESS CRITERIA:
-   - All critical fixes have automated tests
-   - Tests follow CLAUDE.MD verification standards
-   - Integration tests validate end-to-end workflows
-   - Performance benchmarks established
-   
-   Document everything in AGENT5_RESULTS.md"
-
-## Completion Monitoring
-
-After all agents complete, collect results:
-```bash
-for i in $(seq 1 5); do
-  echo "=== Agent $i Results ==="
-  cat trees/hybrid-fixes-agent-$i/AGENT${i}_RESULTS.md 2>/dev/null || echo "No results file"
-  echo ""
-done
-```
-
-Report comprehensive summary with integration recommendations.
-```
-
----
-
-## 📄 SPECIFICATION FILES
-
-### `specs/hybrid-fixes-critical.md`
-
-```md
-# Critical Hybrid Processing Fixes Specification
-
-## Goal
-Eliminate all critical bugs in hybrid processing mode while maintaining backwards compatibility and system reliability.
-
-## Requirements
-
-### Functional Requirements
-- **Processing State Management:**
-  - System must resume supplier scraping from exact index after restart
-  - No premature switching to Amazon extraction when supplier scraping incomplete
-  - Proper chunk boundary detection and state persistence
-  
-- **Authentication Integration:**
-  - Authentication fallback triggers during supplier scraping phase
-  - Pre-category authentication checks implemented
-  - 3+ products without price threshold respected
-  - Logout detection prevents continued scraping
-  
-- **Financial Report Timing:**
-  - Reports generate according to config toggle values
-  - Incremental reporting during processing
-  - Not limited to end-of-workflow generation
+{
+  "asin_from_details": "B09MM8JQ2K",
+  "title": "Living Proof Perfect Hair Day Advanced Clean Dry Shampoo",
+  "current_price": 18.18,
+  "original_price": 27.0,
+  "amazon_monthly_sales_badge": 500,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/410SCiM+LWL._AC_SL1000_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/31DkwF1N8QL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61asMnHt-7L._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61fQzxvjmOL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51oDeP78sRL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/215tuVmSdeL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51iW3oXkvFL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61IvFZlsNxL._SX35_SY46._CR0,0,35,46_PImini-player-shuttle-50px,BottomLeft,-7,12_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Package Dimensions\n                                    ‏\n                                    :\n                                    ‎": "18.8 x 4.9 x 4.9 cm; 160 g",
+    "Date First Available\n                                    ‏\n                                    :\n                                    ‎": "26 Nov. 2021",
+    "Manufacturer\n                                    ‏\n                                    :\n                                    ‎": "Living Proof",
+    "ASIN\n                                    ‏\n                                    :\n                                    ‎": "B09MM8JQ2K",
+    "Item model number\n                                    ‏\n                                    :\n                                    ‎": "Living Proof - Phd Advanced Clean Dry",
+    "Country of origin\n                                    ‏\n                                    :\n                                    ‎": "USA",
+    "Customer reviews": "2.7 2.7 out of 5 stars (208) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); });",
+    "Package Dimensions\n                                    ‏": "‎ 18.8 x 4.9 x 4.9 cm; 160 g",
+    "Date First Available\n                                    ‏": "‎ 26 Nov. 2021",
+    "Manufacturer\n                                    ‏": "‎ Living Proof",
+    "ASIN\n                                    ‏": "‎ B09MM8JQ2K",
+    "Item model number\n                                    ‏": "‎ Living Proof - Phd Advanced Clean Dry",
+    "Country of origin\n                                    ‏": "‎ USA",
+    "Best Sellers Rank": "22 in Dry Shampoos See Top 100 in Beauty"
+  },
+  "dimensions_from_details": "‎ 18.8 x 4.9 x 4.9 cm; 160 g",
+  "date_first_available_from_details": "‎ 26 Nov. 2021",
+  "manufacturer_from_details": "‎ Living Proof",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 2.7,
+  "review_count": 208,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "description": "From the manufacturer What makes Perfect hair Day Advanced Clean Dry Shampoo different than others on the market? There are countless dry shampoo options available that don’t actually clean your hair. Perfect hair Day Advanced Clean Dry Shampoo is designed to mimic the cleansing power of an actual shampoo, while providing the look and feel of just-washed hair. Does Perfect hair Day Advanced Clean Dry Shampoo work on all hair types? Yes, it can be used on most hair types. For thicker, coarser hair, section more thoroughly. For curly hair, remove powders with a blow dryer (vs. fingers or brush, which will deconstruct the curl). I see white residue. What should I do? White residue that is easy to remove is normal and expected—especially if you have dark hair. To remove the white residue, rub and massage hair with fingers and/or use brush. If powder remains, use a blow dryer to remove the excess. Is the scent the same as PhD Dry Shampoo? Perfect hair Day Advanced Clean Dry Shampoo features a new, milder scent compared to PhD Dry Shampoo. Does Perfect hair Day Advanced Clean Dry Shampoo clear out other products from your hair? No, it won’t remove other products from your hair. We know you worked hard for your style and you don’t want to start from scratch. Instead, this dry shampoo eliminates only the bad stuff — like oil, sweat and odor.",
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 3106,
+      "main_cat_name": "Beauty 60 drops / month",
+      "sub_cat_current_rank": 0,
+      "sub_cat_name": "Shampoos & Conditioners 2"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Living Proof Perfect Hair Day™ Advanced Clean Dry Shampoo 198 ml",
+      "Sales Rank - Reference": "Beauty",
+      "Sales Rank - Display Group": "beauty_display_on_website",
+      "Bought in past month": "500+",
+      "Reviews - Rating": 2.7,
+      "Reviews - Rating Count": 208.0,
+      "Last Price Change": "1 minute ago",
+      "Buy Box Seller": "Amazon",
+      "FBA Pick&Pack Fee": 3.04,
+      "Referral Fee %": "15 %",
+      "Referral Fee based on current Buy Box price": 3.03,
+      "Lowest FBM Seller": "Best Buys Store (67% positive over last 12 months)",
+      "Total Offer Count": "3",
+      "Tracking since": "2021/11/26",
+      "Listed since": "2021/11/26",
+      "Categories - Root": "Beauty",
+      "Categories - Sub": "Dry Shampoos / Living Proof",
+      "Categories - Tree": "Beauty › Hair Care › Shampoos & Conditioners › Dry Shampoos",
+      "Website Display Group - Name": "Prestige Beauty",
+      "ASIN": "B09MM8JQ2K",
+      "Product Codes - UPC": "815305029492",
+      "Product Codes - EAN": "0815305029492",
+      "Product Codes - PartNumber": "0815305029492",
+      "Parent ASIN": "B0D5MMYLB6",
+      "Variation ASINs": "B09QCWZNR1, B09MM8JQ2K, B0F22JRLF2, B0BX48C2PT",
+      "Freq. Bought Together": "B00WHBZUFA",
+      "Type": "DRY_SHAMPOO",
+      "Manufacturer": "Living Proof",
+      "Brand": "Living proof",
+      "Product Group": "Luxury Beauty",
+      "Model": "Living Proof - Phd Advanced Clean Dry",
+      "Color": "clear",
+      "Size": "198 ml (Pack of 1)",
+      "Unit Details - Unit Value": "198",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "Unscented",
+      "Item Form": "Liquid",
+      "Style": "Perfect Hair Day Advanced Clean",
+      "Target Audience": "Unisex Adult",
+      "Recommended Uses": "Cleansing and refreshing hair without water, ideal for situations where traditional shampoo is not possible or convenient",
+      "Specific Uses": "DRY",
+      "Product Benefit": "Cleansing",
+      "Binding": "Personal Care",
+      "Number of Items": "1",
+      "Release Date": "2021-12-21",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "https://m.media-amazon.com/images/I/61IvFZlsNxL.jpg, Creator: Main, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/d132739e-ed1a-4aa7-86e5-85f91ab88593/default.vertical.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "18.8 x 4.9 x 4.9 cm (= 451 cm³ )",
+      "Package - Weight (g)": "160",
+      "Hazardous Materials": "Proper Shipping Name: United Nations Regulatory Id: Transportation Regulatory Class: AEROSOLSUN19502.1(more values available, copy cell to get all)"
+    }
+  },
+  "eans_on_page": [
+    "0815305029492"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0815305029492",
+  "sales_rank": 3106,
+  "category": "Beauty 60",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 100,
+  "asin_extracted_from_page": "B09MM8JQ2K",
+  "asin_queried": "B09MM8JQ2K",
+  "asin": "B09MM8JQ2K"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                 n
   
 - **Performance Optimization:**
   - linking_map debug output memory consumption reduced by 90%
@@ -353,97 +195,42 @@ claude
 # Check all agent results
 for i in $(seq 1 5); do
   echo "=== Agent $i Status ==="
-  ls -la trees/hybrid-fixes-agent-$i/
-  cat trees/hybrid-fixes-agent-$i/AGENT${i}_RESULTS.md 2>/dev/null || echo "In progress..."
-  echo ""
-done
-```
-
-### Step 4: Integration Testing
-```bash
-# After all agents complete, run integration tests
-cd trees/hybrid-fixes-agent-5  # Testing agent
-python -m pytest tests/ -v --tb=short
-
-# Verify each fix individually
-python test_state_resumption.py
-python test_authentication_fallback.py  
-python test_financial_timing.py
-python test_performance_optimization.py
-```
-
-### Step 5: Select and Merge Best Implementation
-```bash
-# Review results and select best approach
-# Example: If Agent 1's state management + Agent 2's auth + Agent 3's reporting works best
-git checkout main
-git merge hybrid-fixes-agent-1 --no-ff -m "Merge: Processing state fixes"
-git merge hybrid-fixes-agent-2 --no-ff -m "Merge: Authentication integration" 
-git merge hybrid-fixes-agent-3 --no-ff -m "Merge: Financial report timing"
-git merge hybrid-fixes-agent-4 --no-ff -m "Merge: Performance optimization"
-```
-
----
-
-## ✅ VERIFICATION CHECKLIST (Per CLAUDE.MD Standards)
-
-### 🚨 CRITICAL TESTING REQUIREMENTS
-- [ ] Processing state resumption verified through restart scenarios
-- [ ] Authentication fallback triggers tested with logout simulation  
-- [ ] Financial report generation tested with various config values
-- [ ] Memory consumption measured before/after optimization
-- [ ] 276-chunk loop elimination verified through monitoring
-- [ ] Match method labeling accuracy tested across EAN/title scenarios
-- [ ] Backwards compatibility confirmed with existing cache/data files
-- [ ] Performance benchmarks meet or exceed current system
-- [ ] Integration tests pass for all critical workflows
-- [ ] Zero data loss confirmed through comprehensive testing
-
-### ⚠️ UPDATE PROTOCOL COMPLIANCE
-- [ ] All changes documented with clear rationale
-- [ ] Critical fixes marked with appropriate priority
-- [ ] Integration points validated and tested
-- [ ] Security compliance maintained for authentication changes
-- [ ] Performance regression testing completed
-- [ ] Error handling and logging maintained/improved
-
----
-
-## 🎯 EXPECTED OUTCOMES
-
-### Immediate Fixes (Week 1)
-1. **Processing State**: System correctly resumes from index 29
-2. **Authentication**: Fallback triggers during supplier scraping  
-3. **Performance**: linking_map debug output optimized
-4. **Testing**: Comprehensive test suite operational
-
-### System Improvements (Week 2)
-1. **Financial Reports**: Incremental generation per config toggle
-2. **Memory Usage**: 90% reduction in debug output consumption
-3. **Reliability**: 99.9% uptime with improved error handling
-4. **Documentation**: Complete fix documentation and user guides
-
-### Long-term Benefits
-1. **Maintainability**: Clear separation of concerns with modular fixes
-2. **Scalability**: Optimized performance supports larger datasets
-3. **Reliability**: Robust state management prevents data loss
-4. **Security**: Enhanced authentication integration with proper timing
-
----
-
-## 📊 RISK MITIGATION
-
-### High Risk Areas
-- **State Management Changes**: Extensive testing required to prevent data corruption
-- **Authentication Integration**: Security validation critical
-- **Performance Optimization**: Must not sacrifice reliability for speed
-
-### Mitigation Strategies  
-- **Parallel Development**: Multiple implementation approaches reduce single point of failure
-- **Comprehensive Testing**: Agent 5 dedicated to validation framework
-- **Incremental Integration**: Merge fixes individually to isolate issues
-- **Backup Strategy**: Working on backup version prevents production impact
-
----
-
-**🎯 NEXT ACTION**: Execute `claude > /project:init-parallel-fixes hybrid-fixes 5` to begin parallel implementation.
+  ls -la trees/hyb{
+  "asin_from_details": "B09MLGK7YJ",
+  "title": "Dmore Magnetic Knife Rack with 3 Hooks-Extra Strong Magnetic Knife Holder Made of Stainless Steel, Optional Installation with Self Adhesive 3M Tape or Screws, Black Knife Strip for Knives, 40 cm",
+  "current_price": 19.49,
+  "original_price": 22.99,
+  "amazon_monthly_sales_badge": 100,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61B5rsSBcSL._AC_SL1000_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51ZMCXb2R+L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51lBYjPqloL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41BM5W66z2L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51w-epmdnUL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41f-KtaoInL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/519rR9l7L9L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/A19K7MH2mLL._SL1500_PKplay-button-mb-image-grid-small_.png"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B09MLGK7YJ",
+    "Item model number": "Dmore",
+    "Date First Available": "9 Dec. 2021"
+  },
+  "date_first_available_from_details": "9 Dec. 2021",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "lystar",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 1376,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "MULTIFUNCTIONAL & 2 TYPES OF INSTALLATION: We have added the hook design to this magnetic knife rack, not only for attaching, but also for hanging, also, you can choose self-adhesive tape (no drilling) or screw installation, keeps your kitchen, garage, workshop etc. beautiful and neat.",
+    "POWERFUL MAGNETIC FORCE: We use complete, non-partial, strong magnetic strips that have been extensively tested, so you can safely hang more and heavier items.",
+    "HIGH QUALITY STAINLESS STEEL: The magnet knife holder strip is made of 304 stainless steel which doesn't rust, even when staying in a damp kitchen, minimalist design, almost suitable for any kitchen.",
+    "IDEAL FOR GIFTS: Our well-thought-out magnetic knife holder is the Ideal gifts for your mother, friend, or a cooker etc., which makes your kitchen tidier and safer and you do not worry about scattered knives that mess up your kitchen or even scratch your children's hands.",
+    "QUALITY GUARANTEE: Each set of our knife holders comes with a lifetime guarantee. If for any reason you are not satisfied with them, please contact us for a full refund or replacement."
+  ],
+  "description": "Product Description Our voice The biggest problem of magnetic knife holder faces may lie in the magnetic strength caused by the safety risks, Many products look similar on the outside, but the internal structure is very different. Please believe that we have done absolutely more tests , in the user over and over again research, the iteration of the magnet replacement we have upgraded 3 times , we care about every detail and customer's feelings of use, whether it is functional safety, product beauty or the first hook creative collocation design, we hope to present you with better results! Maybe we are not very, very cheap, but definitely more attentive and cost-effective. If you meet any questions, we are always here! Dmore has always been innovative and spends a lot of time and effort on every aspect of the design, production and testing, carefully polishing each one. We care about every detail and customer's feelings of use, whet

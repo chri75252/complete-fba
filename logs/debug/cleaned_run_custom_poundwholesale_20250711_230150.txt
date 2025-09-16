@@ -1,208 +1,362 @@
-2025-07-11 23:01:50,996 - asyncio - DEBUG - Using selector: EpollSelector
-2025-07-11 23:01:50,997 - __main__ - INFO - --- Starting Custom Pound Wholesale Extraction Workflow ---
-2025-07-11 23:01:50,997 - __main__ - INFO - 📋 Debug log file: logs/debug/run_custom_poundwholesale_20250711_230150.log
-2025-07-11 23:01:50,998 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
-2025-07-11 23:01:50,998 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
-2025-07-11 23:01:51,121 - tools.archive.vision_login_handler - DEBUG - Vision login debug logging initialized - writing to /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/vision_login_20250711.log
-2025-07-11 23:01:51,123 - __main__ - WARNING - Authentication check failed: 'SupplierAuthenticationService' object has no attribute 'check_authentication_status' - proceeding anyway
-2025-07-11 23:01:51,134 - tools.passive_extraction_workflow_latest - INFO - PassiveExtractionWorkflow initialized WITHOUT an AI client. AI-dependent features will be skipped or use fallbacks.
-2025-07-11 23:01:51,135 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
-2025-07-11 23:01:51,145 - amazon_playwright_extractor - INFO - Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/CACHE/amazon_data
-2025-07-11 23:01:51,148 - amazon_playwright_extractor - INFO - 🔧 AmazonExtractor will use centralized BrowserManager
-2025-07-11 23:01:51,156 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/system_config.json
-2025-07-11 23:01:51,156 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
-2025-07-11 23:01:51,157 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {'product_data': ['price', 'title', 'ean', 'barcode', 'image', 'description', 'out_of_stock'], 'navigation': ['next_page', 'category_links', 'breadcrumbs'], 'pagination': ['next_page', 'previous_page', 'page_numbers'], 'filtering': ['price_filter', 'category_filter', 'search_box', 'products_per_page', 'product limiter'], 'interaction': ['add_to_cart', 'buy_now', 'product_link']}
-2025-07-11 23:01:51,158 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {'enabled': False, 'prompt_injection': {'login_discovery_hints': '', 'product_navigation_discovery_hints': "OUT OF STOCK products show a red/orange badge or overlay with text like 'Out of Stock', 'Sold Out', or 'Unavailable'"}, '_comment': 'Two API calls are made: 1) login_discovery_hints for login elements, 2) product_navigation_discovery_hints for product/navigation selectors. You can paste full console elements, XPath, or any hints here.'}
-2025-07-11 23:01:51,172 - configurable_supplier_scraper - DEBUG - Debug logging initialized - writing to /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/supplier_scraping_debug_20250711_230151.log
-2025-07-11 23:01:51,173 - configurable_supplier_scraper - DEBUG - Headless mode: False
-2025-07-11 23:01:51,174 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
-2025-07-11 23:01:51,175 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: ['product_data', 'navigation', 'pagination', 'filtering', 'interaction']
-2025-07-11 23:01:51,176 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
-2025-07-11 23:01:51,178 - tools.passive_extraction_workflow_latest - INFO - ✅ Linking map initialized - using previous version self-contained approach
-2025-07-11 23:01:51,179 - tools.passive_extraction_workflow_latest - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
-2025-07-11 23:01:51,179 - tools.passive_extraction_workflow_latest - INFO - Session ID: poundwholesale.co.uk_20250711_230151
-2025-07-11 23:01:51,180 - tools.passive_extraction_workflow_latest - INFO - 📊 CONFIGURATION VALUES:
-2025-07-11 23:01:51,181 - tools.passive_extraction_workflow_latest - INFO -    max_products_to_process: 15
-2025-07-11 23:01:51,181 - tools.passive_extraction_workflow_latest - INFO -    max_products_per_category: 4
-2025-07-11 23:01:51,182 - tools.passive_extraction_workflow_latest - INFO -    max_analyzed_products: 10
-2025-07-11 23:01:51,182 - tools.passive_extraction_workflow_latest - INFO -    max_products_per_cycle: 3
-2025-07-11 23:01:51,183 - tools.passive_extraction_workflow_latest - INFO -    supplier_extraction_batch_size: 3
-2025-07-11 23:01:51,183 - tools.passive_extraction_workflow_latest - INFO -    max_categories_per_request: 3
-2025-07-11 23:01:51,207 - utils.enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resuming from index 0
-2025-07-11 23:01:51,207 - tools.passive_extraction_workflow_latest - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
-2025-07-11 23:01:51,208 - tools.passive_extraction_workflow_latest - INFO - 🔄 Resuming from index 0
-2025-07-11 23:01:51,239 - tools.passive_extraction_workflow_latest - INFO - ✅ Loaded linking map from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json with 4 entries
-2025-07-11 23:01:51,239 - tools.passive_extraction_workflow_latest - INFO - CUSTOM MODE: Using predefined category list.
-2025-07-11 23:01:51,240 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
-2025-07-11 23:01:51,244 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 276 predefined category URLs from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/poundwholesale_categories.json
-2025-07-11 23:01:51,247 - tools.passive_extraction_workflow_latest - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 276 categories
-2025-07-11 23:01:51,248 - tools.passive_extraction_workflow_latest - INFO - 📦 Using supplier extraction batch size: 3
-2025-07-11 23:01:51,248 - tools.passive_extraction_workflow_latest - INFO - 📊 PROGRESS TRACKING: Extracting from 276 categories in 92 batches
-2025-07-11 23:01:51,248 - tools.passive_extraction_workflow_latest - INFO - 📦 Processing category batch 1/92 (3 categories)
-2025-07-11 23:01:51,268 - tools.passive_extraction_workflow_latest - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/3 in batch 1 (Category 1/276)
-2025-07-11 23:01:51,269 - tools.passive_extraction_workflow_latest - INFO - Scraping category: https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:51,270 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:51,272 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:51,273 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized
-2025-07-11 23:01:51,273 - utils.browser_manager - INFO - 🔌 Connecting to Chrome on debug port 9222
-2025-07-11 23:01:52,586 - utils.browser_manager - INFO - 📄 Using existing context with 4 pages
-2025-07-11 23:01:52,587 - utils.browser_manager - INFO - ✅ Connected to Chrome successfully
-2025-07-11 23:01:52,691 - utils.browser_manager - INFO - 📄 Created new page #1 for https://www.poundwholesale.co.uk
-2025-07-11 23:01:59,001 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:59,024 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/suppliers/poundwholesale-co-uk/config/product_selectors.json
-2025-07-11 23:01:59,025 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
-2025-07-11 23:01:59,026 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:59,027 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:59,029 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners (attempt 1/3)
-2025-07-11 23:01:59,030 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:01:59,030 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:01:59,031 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:59,032 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:59,032 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:01:59,170 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners (Size: 659345 bytes)
-2025-07-11 23:01:59,404 - configurable_supplier_scraper - INFO - Found 4 new product URLs on page 1
-2025-07-11 23:01:59,406 - configurable_supplier_scraper - INFO - Collected 4 total product URLs across 1 pages
-2025-07-11 23:01:59,408 - configurable_supplier_scraper - INFO - Found 4 total product URLs across all pages
-2025-07-11 23:01:59,410 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1
-2025-07-11 23:01:59,441 - configurable_supplier_scraper - INFO - Visiting product page 1/4: https://www.poundwholesale.co.uk/duzzit-sweet-things-biodegradable-anti-bacterial-wipes-50-pack-pallet-deal
-2025-07-11 23:02:00,030 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/duzzit-sweet-things-biodegradable-anti-bacterial-wipes-50-pack-pallet-deal (attempt 1/3)
-2025-07-11 23:02:00,032 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:00,033 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:06,740 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/duzzit-sweet-things-biodegradable-anti-bacterial-wipes-50-pack-pallet-deal
-2025-07-11 23:02:06,742 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/duzzit-sweet-things-biodegradable-anti-bacterial-wipes-50-pack-pallet-deal
-2025-07-11 23:02:06,744 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/duzzit-sweet-things-biodegradable-anti-bacterial-wipes-50-pack-pallet-deal
-2025-07-11 23:02:06,889 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/duzzit-sweet-things-biodegradable-anti-bacterial-wipes-50-pack-pallet-deal (Size: 673965 bytes)
-2025-07-11 23:02:07,228 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Duzzit Sweet Things Biodegradable Anti-Bacterial Wipes 50 Pack Pallet Deal - £0.72 (EAN: 5053249260457)
-2025-07-11 23:02:07,234 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 2
-2025-07-11 23:02:07,274 - configurable_supplier_scraper - INFO - Visiting product page 2/4: https://www.poundwholesale.co.uk/rapide-sealant-remover-spray-250ml
-2025-07-11 23:02:07,274 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/rapide-sealant-remover-spray-250ml (attempt 1/3)
-2025-07-11 23:02:07,275 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:07,276 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:13,717 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/rapide-sealant-remover-spray-250ml
-2025-07-11 23:02:13,720 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/rapide-sealant-remover-spray-250ml
-2025-07-11 23:02:13,721 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/rapide-sealant-remover-spray-250ml
-2025-07-11 23:02:13,828 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/rapide-sealant-remover-spray-250ml (Size: 674380 bytes)
-2025-07-11 23:02:14,112 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Rapide Sealant Remover Spray 250ml - £1.32 (EAN: 5055319531696)
-2025-07-11 23:02:14,113 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 3
-2025-07-11 23:02:14,139 - configurable_supplier_scraper - INFO - Visiting product page 3/4: https://www.poundwholesale.co.uk/rapide-lime-scented-tough-stuff-hand-cleaner-450ml
-2025-07-11 23:02:14,140 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/rapide-lime-scented-tough-stuff-hand-cleaner-450ml (attempt 1/3)
-2025-07-11 23:02:14,141 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:14,141 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:20,555 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/rapide-lime-scented-tough-stuff-hand-cleaner-450ml
-2025-07-11 23:02:20,557 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/rapide-lime-scented-tough-stuff-hand-cleaner-450ml
-2025-07-11 23:02:20,559 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/rapide-lime-scented-tough-stuff-hand-cleaner-450ml
-2025-07-11 23:02:20,666 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/rapide-lime-scented-tough-stuff-hand-cleaner-450ml (Size: 674966 bytes)
-2025-07-11 23:02:20,945 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Rapide Lime Scented Tough Stuff Hand Cleaner 450ml - £0.88 (EAN: 5055319520935)
-2025-07-11 23:02:20,946 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 4
-2025-07-11 23:02:20,972 - configurable_supplier_scraper - INFO - Visiting product page 4/4: https://www.poundwholesale.co.uk/home-garden-multi-purpose-white-vinegar-cleaning-spray-500ml
-2025-07-11 23:02:20,973 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/home-garden-multi-purpose-white-vinegar-cleaning-spray-500ml (attempt 1/3)
-2025-07-11 23:02:20,974 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:20,975 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:27,756 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/home-garden-multi-purpose-white-vinegar-cleaning-spray-500ml
-2025-07-11 23:02:27,757 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/home-garden-multi-purpose-white-vinegar-cleaning-spray-500ml
-2025-07-11 23:02:27,758 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/home-garden-multi-purpose-white-vinegar-cleaning-spray-500ml
-2025-07-11 23:02:27,875 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/home-garden-multi-purpose-white-vinegar-cleaning-spray-500ml (Size: 676914 bytes)
-2025-07-11 23:02:28,227 - configurable_supplier_scraper - INFO - ✅ Extracted product 4: Home & Garden Multi-Purpose White Vinegar Cleaning Spray 500ml - £0.84 (EAN: 5055319510769)
-2025-07-11 23:02:28,228 - configurable_supplier_scraper - INFO - Successfully extracted 4 products from https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
-2025-07-11 23:02:28,251 - tools.passive_extraction_workflow_latest - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 2/3 in batch 1 (Category 2/276)
-2025-07-11 23:02:28,252 - tools.passive_extraction_workflow_latest - INFO - Scraping category: https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:28,252 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:28,253 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:28,254 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:28,255 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:33,563 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
-2025-07-11 23:02:33,566 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:33,568 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:33,570 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths (attempt 1/3)
-2025-07-11 23:02:33,572 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:33,572 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:33,573 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:33,574 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:33,575 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:02:33,700 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths (Size: 636688 bytes)
-2025-07-11 23:02:33,916 - configurable_supplier_scraper - INFO - Found 4 new product URLs on page 1
-2025-07-11 23:02:33,918 - configurable_supplier_scraper - INFO - Collected 4 total product URLs across 1 pages
-2025-07-11 23:02:33,919 - configurable_supplier_scraper - INFO - Found 4 total product URLs across all pages
-2025-07-11 23:02:33,921 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 5
-2025-07-11 23:02:33,949 - configurable_supplier_scraper - INFO - Visiting product page 1/4: https://www.poundwholesale.co.uk/elbow-grease-planogram
-2025-07-11 23:02:34,586 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/elbow-grease-planogram (attempt 1/3)
-2025-07-11 23:02:34,587 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:34,588 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:42,329 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/elbow-grease-planogram
-2025-07-11 23:02:42,331 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/elbow-grease-planogram
-2025-07-11 23:02:42,334 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/elbow-grease-planogram
-2025-07-11 23:02:42,487 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/elbow-grease-planogram (Size: 857121 bytes)
-2025-07-11 23:02:42,872 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Elbow Grease Essentials Bundle (78 Products) - £1.27 (EAN: N/A)
-2025-07-11 23:02:42,874 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 6
-2025-07-11 23:02:42,904 - configurable_supplier_scraper - INFO - Visiting product page 2/4: https://www.poundwholesale.co.uk/globe-mill-textiles-strong-absorbent-dishcloths-8-pack-25cm-x-30cm
-2025-07-11 23:02:42,905 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/globe-mill-textiles-strong-absorbent-dishcloths-8-pack-25cm-x-30cm (attempt 1/3)
-2025-07-11 23:02:42,906 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:42,907 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:49,953 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/globe-mill-textiles-strong-absorbent-dishcloths-8-pack-25cm-x-30cm
-2025-07-11 23:02:49,955 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/globe-mill-textiles-strong-absorbent-dishcloths-8-pack-25cm-x-30cm
-2025-07-11 23:02:49,957 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/globe-mill-textiles-strong-absorbent-dishcloths-8-pack-25cm-x-30cm
-2025-07-11 23:02:50,209 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/globe-mill-textiles-strong-absorbent-dishcloths-8-pack-25cm-x-30cm (Size: 674881 bytes)
-2025-07-11 23:02:50,493 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Globe Mill Textiles Strong Absorbent Dishcloths 8 Pack 25cm X 30cm - £0.77 (EAN: 5053249255743)
-2025-07-11 23:02:50,495 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 7
-2025-07-11 23:02:50,530 - configurable_supplier_scraper - INFO - Visiting product page 3/4: https://www.poundwholesale.co.uk/duzzit-planogram-bundle
-2025-07-11 23:02:50,532 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/duzzit-planogram-bundle (attempt 1/3)
-2025-07-11 23:02:50,533 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:50,533 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:02:58,302 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/duzzit-planogram-bundle
-2025-07-11 23:02:58,304 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/duzzit-planogram-bundle
-2025-07-11 23:02:58,305 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/duzzit-planogram-bundle
-2025-07-11 23:02:58,419 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/duzzit-planogram-bundle (Size: 820268 bytes)
-2025-07-11 23:02:58,791 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Duzzit Essentials Bundle (63 Products) - £0.42 (EAN: N/A)
-2025-07-11 23:02:58,792 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 8
-2025-07-11 23:02:58,818 - configurable_supplier_scraper - INFO - Visiting product page 4/4: https://www.poundwholesale.co.uk/tidyz-extra-large-all-purpose-cloths-20-pack
-2025-07-11 23:02:58,819 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/tidyz-extra-large-all-purpose-cloths-20-pack (attempt 1/3)
-2025-07-11 23:02:58,820 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:02:58,821 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:03:04,408 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/tidyz-extra-large-all-purpose-cloths-20-pack
-2025-07-11 23:03:04,411 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/tidyz-extra-large-all-purpose-cloths-20-pack
-2025-07-11 23:03:04,412 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/tidyz-extra-large-all-purpose-cloths-20-pack
-2025-07-11 23:03:04,517 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/tidyz-extra-large-all-purpose-cloths-20-pack (Size: 671967 bytes)
-2025-07-11 23:03:04,909 - configurable_supplier_scraper - INFO - ✅ Extracted product 4: TidyZ Extra Large All Purpose Cloths 20 Pack - £0.46 (EAN: N/A)
-2025-07-11 23:03:04,911 - configurable_supplier_scraper - INFO - Successfully extracted 4 products from https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths
-2025-07-11 23:03:04,936 - tools.passive_extraction_workflow_latest - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 3/3 in batch 1 (Category 3/276)
-2025-07-11 23:03:04,937 - tools.passive_extraction_workflow_latest - INFO - Scraping category: https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:04,937 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:04,938 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:04,939 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:03:04,940 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:03:11,057 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
-2025-07-11 23:03:11,068 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:11,071 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:11,072 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-dental (attempt 1/3)
-2025-07-11 23:03:11,074 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:03:11,074 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:03:11,075 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:11,077 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:11,078 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-dental
-2025-07-11 23:03:11,211 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-dental (Size: 645774 bytes)
-2025-07-11 23:03:11,441 - configurable_supplier_scraper - INFO - Found 4 new product URLs on page 1
-2025-07-11 23:03:11,443 - configurable_supplier_scraper - INFO - Collected 4 total product URLs across 1 pages
-2025-07-11 23:03:11,445 - configurable_supplier_scraper - INFO - Found 4 total product URLs across all pages
-2025-07-11 23:03:11,446 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 9
-2025-07-11 23:03:11,473 - configurable_supplier_scraper - INFO - Visiting product page 1/4: https://www.poundwholesale.co.uk/claradent-assorted-colour-soft-bristle-children-s-toothbrushes-3-pack
-2025-07-11 23:03:12,095 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/claradent-assorted-colour-soft-bristle-children-s-toothbrushes-3-pack (attempt 1/3)
-2025-07-11 23:03:12,098 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:03:12,099 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:03:19,046 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/claradent-assorted-colour-soft-bristle-children-s-toothbrushes-3-pack
-2025-07-11 23:03:19,047 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/claradent-assorted-colour-soft-bristle-children-s-toothbrushes-3-pack
-2025-07-11 23:03:19,049 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/claradent-assorted-colour-soft-bristle-children-s-toothbrushes-3-pack
-2025-07-11 23:03:19,178 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/claradent-assorted-colour-soft-bristle-children-s-toothbrushes-3-pack (Size: 675525 bytes)
-2025-07-11 23:03:19,454 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Claradent Assorted Colour Soft Bristle Children's Toothbrushes 3 Pack - £0.74 (EAN: 5053249218878)
-2025-07-11 23:03:19,456 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 10
-2025-07-11 23:03:19,482 - configurable_supplier_scraper - INFO - Visiting product page 2/4: https://www.poundwholesale.co.uk/claradent-assorted-colour-medium-toothbrushes-3-pack
-2025-07-11 23:03:19,484 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/claradent-assorted-colour-medium-toothbrushes-3-pack (attempt 1/3)
-2025-07-11 23:03:19,485 - utils.browser_manager - INFO - ♻️ Reusing existing Chrome connection (port 9222)
-2025-07-11 23:03:19,485 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-07-11 23:03:26,500 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/claradent-assorted-colour-medium-toothbrushes-3-pack
-2025-07-11 23:03:26,501 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/claradent-assorted-colour-medium-toothbrushes-3-pack
-2025-07-11 23:03:26,503 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/claradent-assorted-colour-medium-toothbrushes-3-pack
-2025-07-11 23:03:26,609 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/claradent-assorted-colour-medium-toothbrushes-3-pack (Size: 674489 bytes)
-2025-07-11 23:03:26,998 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Claradent Assorted Colour Medium Toothbrushes 3 Pack - £0.74 (EAN: 5053249218847)
+{
+  "asin_from_details": "B0DD7NPL5J",
+  "title": "Rothmill A5 White Card Stock, 212gsm Weight and 280 Micron Thickness, Ideal for Arts and Craft, Office and Stationery Use - 50 Sheets",
+  "current_price": 6.49,
+  "amazon_monthly_sales_badge": 50,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/71aDcSQ7l8L._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/31Q5E2dyFML._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/412xg0Mo1xL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/A1DIbRLdzFL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0DD7NPL5J",
+    "Date First Available": "15 Aug. 2024"
+  },
+  "date_first_available_from_details": "15 Aug. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Allen Glenold Ltd",
+  "sold_by_amazon": false,
+  "rating": 4.5,
+  "review_count": 49,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "MEDIUM THICKNESS A5 CARD PACK – Includes 50 sheets of high-quality white A5 card with a weight of 212gsm and a thickness of 280 microns. This flexible yet durable card is easy to cut and fold, with scoring recommended for the best results.",
+    "PERFECT FOR ARTS, CRAFTS AND CUTTING MACHINES – Rothmill card is ideal for a wide range of creative projects. It’s also compatible with digital cutting machines like Cricut, making it a great choice for precision crafting and printing.",
+    "EASY TO PERSONALISE & DECORATE – With its smooth surface, this card is perfect for drawing, colouring, and painting. Suitable for use with pencils, markers, ballpoint pens, and a variety of paints. Also works well with glue for adding embellishments.",
+    "SUSTAINABLY SOURCED & ECO-FRIENDLY – Made from 100% recyclable materials, Rothmill card is responsibly produced using certified virgin fibre pulp from managed forests within the EU. Environmentally friendly without compromising on quality.",
+    "OVER A CENTURY OF PAPER-CRAFTING EXPERTISE – With over 100 years of heritage in crafting premium paper and card, Rothmill masterfully blends tradition, innovation, and quality to craft premium paper and card that stand the test of time."
+  ],
+  "description": "Product Description Rothmill There are lots of coloured papers on the market, so why choose ours? First, it's good stuff - well made and sourced from managed forests, and we have more colours than you can shake a stick at. Take orange, for example, there's Bright Orange, Provençal Orange, Sunset, Terracotta and, well, Orange. Then there's sizes and weights - some really weird ones that everybody else has stopped doing, but happen to be good if you are a creator or printer that needs something a little different, or a teacher perhaps. Key Features: Rothmill Tone Packs Suitable for card making, collage etc. Suitable for cutting with scissors Flexible for folding (score first for best results) Materials sourced from within the EU Rothmill Card (Pulpboard) Suitable for cutting with scissors Flexible for folding EU sourced Pulpboard Rothmill Board Suitable for cutting with scissors Flexible for folding Ideal for digital cutting machines, Cricut etc. EU sourced Pulpboard Ideal For: FOLDING CUTTING DIGITAL CUTTING/PRINTING MACHINES Rothmill Card (Thin) Rothmill Card (Thin) Rothmill Card (Medium) Rothmill Card (Thick) Rothmill Premium Weight Paper (120gsm) Add To Basket Add To Basket Buying Options Add To Basket Buying Options Customer Reviews 4.8 out of 5 stars 21 4.6 out of 5 stars 62 4.7 out of 5 stars 267 4.6 out of 5 stars 87 4.7 out of 5 stars 57 Price £13.49 £ 13 . 49 £13.49 £ 13 . 49 — no data £10.99 £ 10 . 99 — no data GSM/Microns 170 GSM/230 Microns 175 GSM/230 Microns 220 GSM/280 Microns 280 GSM/350 Microns 120 GSM Sheet Count 100 100 50 50 100 Material Pulpboard, virgin fibre Pulpboard, virgin fibre Pulpboard, virgin fibre Pulpboard, virgin fibre Paper, virgin fibre Black &amp; White ✓ - no data - no data - no data - no data Assorted Colours - no data ✓ ✓ ✓ ✓ Tone Packs - no data - no data ✓ - no data - no data Digital Print/Cut ✓ ✓ ✓ Check machine ✓ Size 210 x 297 mm (A4) 210 x 297 mm (A4) 210 x 297 mm (A4) 210 x 297 mm (A4) 210 x 297 mm (A4) Weight 1060 grams 1091 grams 686 grams ‎873 grams 748 grams",
+  "specifications_table": {
+    "Manufacturer": "‎Allen Glenold Limited",
+    "Brand": "‎Rothmill",
+    "Product Dimensions": "‎21 x 14.8 x 0.1 cm; 331 g",
+    "Colour": "‎White",
+    "Material Type": "‎Pulpboard, virgin fibre, from certified managed forests",
+    "Size": "‎A5",
+    "Sheet Size": "‎A5",
+    "Paper Finish": "‎Smooth",
+    "Manufacturer Part Number": "‎AGL5542",
+    "Item Weight": "‎331 g"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 14588,
+      "main_cat_name": "Stationery & Office Supplies 15 drops / month",
+      "sub_cat_current_rank": 100,
+      "sub_cat_name": "Coloured Paper 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Rothmill A5 White Card Stock, 212gsm Weight and 280 Micron Thickness, Ideal for Arts and Craft, Office and Stationery Use - 50 Sheets",
+      "Sales Rank - Reference": "Stationery & Office Supplies",
+      "Sales Rank - Display Group": "office_product_display_on_website",
+      "Bought in past month": "50+",
+      "Reviews - Rating": 4.5,
+      "Reviews - Rating Count": 49.0,
+      "Last Price Change": "8 hours ago",
+      "Buy Box Seller": "Allen Glenold Ltd (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Allen Glenold Ltd (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.87,
+      "Referral Fee %": "14.95 %",
+      "Referral Fee based on current Buy Box price": 0.97,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/08/19",
+      "Listed since": "2024/08/15",
+      "Categories - Root": "Stationery & Office Supplies",
+      "Categories - Sub": "Coloured Paper",
+      "Categories - Tree": "Stationery & Office Supplies › Office Paper Products › Paper › Coloured Paper",
+      "Website Display Group - Name": "Office Product",
+      "ASIN": "B0DD7NPL5J",
+      "Product Codes - EAN": "5055272606165",
+      "Product Codes - PartNumber": "AGL5542",
+      "Parent ASIN": "B0DJ1TM3DY",
+      "Variation ASINs": "B0D2P9V2XS, B0DD7J7KGL, B0D2PDYYVN, B0DD7NPL5J, B0DD7JQWML, B0DD7P9C9V",
+      "Freq. Bought Together": "B0CS3M6R1H, B0CMQRJ5F7",
+      "Type": "CARD_STOCK",
+      "Manufacturer": "Allen Glenold Limited",
+      "Brand": "Rothmill",
+      "Brand Store Name": "Rothmill",
+      "Brand Store URL Name": "Rothmill-PaperBoard",
+      "Brand Store URL": "https://www.amazon.com/stores/Rothmill-PaperBoard/page/EE5D509A-C88D-4DE2-A0F8-458328DB40DF",
+      "Product Group": "Office Product",
+      "Color": "White",
+      "Size": "A5",
+      "Unit Details - Unit Value": "50",
+      "Unit Details - Unit Type": "count",
+      "Style": "212gsm",
+      "Material": "Pulpboard, virgin fibre, from certified managed forests",
+      "Binding": "Office Product",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "https://m.media-amazon.com/images/I/A1DIbRLdzFL.jpg, Creator: Main, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/f8cd5d3e-a674-4e27-8a1b-46fc29b620c5/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "20.9 x 14.9 x 1.5 cm (= 467 cm³ )",
+      "Package - Weight (g)": "340",
+      "Item - Dimension (cm³)": "21.0 x 14.8 x 0.1 cm (= 31 cm³ )",
+      "Item - Model (g)": "331"
+    }
+  },
+  "eans_on_page": [
+    "5055272606165"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5055272606165",
+  "sales_rank": 14588,
+  "category": "Stationery & Office Supplies 15",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 20,
+  "asin_extracted_from_page": "B0DD7NPL5J",
+  "asin_queried": "B0DD7NPL5J",
+  "asin": "B0DD7NPL5J"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {
+  "asin_from_details": "B0DD7JQWML",
+  "title": "Rothmill A5 White Card Stock, 280gsm Weight and 370 Micron Thickness, Ideal for Arts and Craft, Office and Stationery Use - 50 Sheets",
+  "current_price": 6.99,
+  "amazon_monthly_sales_badge": 50,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/71fwLvPpaaL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/31+PQEJJkGL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41FH9LJMlEL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/418+1Izm1DL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/A1DIbRLdzFL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0DD7JQWML",
+    "Date First Available": "15 Aug. 2024"
+  },
+  "date_first_available_from_details": "15 Aug. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Allen Glenold Ltd",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 48,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "PREMIUM THICKNESS A5 CARD PACK – Includes 50 sheets of high-quality white A5 card with a weight of 280gsm and a thickness of 370 microns. Sturdy yet flexible, this card can be easily cut and folded, with scoring recommended for the best results.",
+    "PERFECT FOR ARTS, CRAFTS AND CUTTING MACHINES – Rothmill card is ideal for a wide range of creative projects. It’s also compatible with digital cutting machines like Cricut, making it a great choice for precision crafting and printing.",
+    "EASY TO PERSONALISE & DECORATE – With its smooth surface, this card is perfect for drawing, colouring, and painting. Suitable for use with pencils, markers, ballpoint pens, and a variety of paints. Also works well with glue for adding embellishments.",
+    "SUSTAINABLY SOURCED & ECO-FRIENDLY – Made from 100% recyclable materials, Rothmill card is responsibly produced using certified virgin fibre pulp from managed forests within the EU. Environmentally friendly without compromising on quality.",
+    "OVER A CENTURY OF PAPER-CRAFTING EXPERTISE – With over 100 years of heritage in crafting premium paper and card, Rothmill masterfully blends tradition, innovation, and quality to craft premium paper and card that stand the test of time."
+  ],
+  "description": "Product Description Rothmill There are lots of coloured papers on the market, so why choose ours? First, it's good stuff - well made and sourced from managed forests, and we have more colours than you can shake a stick at. Take orange, for example, there's Bright Orange, Provençal Orange, Sunset, Terracotta and, well, Orange. Then there's sizes and weights - some really weird ones that everybody else has stopped doing, but happen to be good if you are a creator or printer that needs something a little different, or a teacher perhaps. Key Features: Rothmill Tone Packs Suitable for card making, collage etc. Suitable for cutting with scissors Flexible for folding (score first for best results) Materials sourced from within the EU Rothmill Card (Pulpboard) Suitable for cutting with scissors Flexible for folding EU sourced Pulpboard Rothmill Board Suitable for cutting with scissors Flexible for folding Ideal for digital cutting machines, Cricut etc. EU sourced Pulpboard Ideal For: FOLDING CUTTING DIGITAL CUTTING/PRINTING MACHINES Rothmill Card (Thin) Rothmill Card (Thin) Rothmill Card (Medium) Rothmill Card (Thick) Rothmill Premium Weight Paper (120gsm) Add To Basket Add To Basket Buying Options Add To Basket Buying Options Customer Reviews 4.8 out of 5 stars 21 4.6 out of 5 stars 61 4.7 out of 5 stars 267 4.6 out of 5 stars 87 4.7 out of 5 stars 57 Price £13.49 £ 13 . 49 £13.49 £ 13 . 49 — no data £10.99 £ 10 . 99 — no data GSM/Microns 170 GSM/230 Microns 175 GSM/230 Microns 220 GSM/280 Microns 280 GSM/350 Microns 120 GSM Sheet Count 100 100 50 50 100 Material Pulpboard, virgin fibre Pulpboard, virgin fibre Pulpboard, virgin fibre Pulpboard, virgin fibre Paper, virgin fibre Black &amp; White ✓ - no data - no data - no data - no data Assorted Colours - no data ✓ ✓ ✓ ✓ Tone Packs - no data - no data ✓ - no data - no data Digital Print/Cut ✓ ✓ ✓ Check machine ✓ Size 210 x 297 mm (A4) 210 x 297 mm (A4) 210 x 297 mm (A4) 210 x 297 mm (A4) 210 x 297 mm (A4) Weight 1060 grams 1091 grams 686 grams ‎873 grams 748 grams",
+  "specifications_table": {
+    "Manufacturer": "‎Allen Glenold Limited",
+    "Brand": "‎Rothmill",
+    "Product Dimensions": "‎21 x 14.8 x 0.1 cm; 437 g",
+    "Colour": "‎White",
+    "Material Type": "‎Pulpboard, virgin fibre, from certified managed forests",
+    "Size": "‎A5",
+    "Sheet Size": "‎A5",
+    "Paper Finish": "‎Smooth",
+    "Manufacturer Part Number": "‎AGL5543",
+    "Item Weight": "‎437 g"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 6998,
+      "main_cat_name": "Home & Kitchen 14 drops / month",
+      "sub_cat_current_rank": 28,
+      "sub_cat_name": "Card Stock 4"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Rothmill A5 White Card Stock, 280gsm Weight and 370 Micron Thickness, Ideal for Arts and Craft, Office and Stationery Use - 50 Sheets",
+      "Sales Rank - Reference": "Home & Kitchen",
+      "Sales Rank - Display Group": "kitchen_display_on_website",
+      "Bought in past month": "50+",
+      "Reviews - Rating": 4.6,
+      "Reviews - Rating Count": 48.0,
+      "Last Price Change": "4 days ago",
+      "Buy Box Seller": "Allen Glenold Ltd (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Allen Glenold Ltd (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.87,
+      "Referral Fee %": "15.02 %",
+      "Referral Fee based on current Buy Box price": 1.05,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/08/19",
+      "Listed since": "2024/08/15",
+      "Categories - Root": "Home & Kitchen",
+      "Categories - Sub": "Card Stock",
+      "Categories - Tree": "Home & Kitchen › Arts & Crafts › Paper & Paper Crafts › Paper › Card Stock",
+      "Website Display Group - Name": "Office Product",
+      "ASIN": "B0DD7JQWML",
+      "Product Codes - EAN": "5055272606172",
+      "Product Codes - PartNumber": "AGL5543",
+      "Parent ASIN": "B0DJ1TM3DY",
+      "Variation ASINs": "B0D2P9V2XS, B0DD7J7KGL, B0D2PDYYVN, B0DD7NPL5J, B0DD7JQWML, B0DD7P9C9V",
+      "Freq. Bought Together": "B0CS3M6R1H, B0CMQRJ5F7",
+      "Type": "PRINT_COPY_PAPER",
+      "Manufacturer": "Allen Glenold Limited",
+      "Brand": "Rothmill",
+      "Brand Store Name": "Rothmill",
+      "Brand Store URL Name": "Rothmill-PaperBoard",
+      "Brand Store URL": "https://www.amazon.com/stores/Rothmill-PaperBoard/page/EE5D509A-C88D-4DE2-A0F8-458328DB40DF",
+      "Product Group": "Office Product",
+      "Color": "White",
+      "Size": "A5",
+      "Unit Details - Unit Value": "50",
+      "Unit Details - Unit Type": "count",
+      "Style": "280gsm",
+      "Material": "Pulpboard, virgin fibre, from certified managed forests",
+      "Binding": "Office Product",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "https://m.media-amazon.com/images/I/A1DIbRLdzFL.jpg, Creator: Main, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/f8cd5d3e-a674-4e27-8a1b-46fc29b620c5/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "21.1 x 14.9 x 1.9 cm (= 597 cm³ )",
+      "Package - Weight (g)": "440",
+      "Item - Dimension (cm³)": "21.0 x 14.8 x 0.1 cm (= 31 cm³ )",
+      "Item - Model (g)": "437"
+    }
+  },
+  "eans_on_page": [
+    "5055272606172"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5055272606172",
+  "sales_rank": 6998,
+  "category": "Home & Kitchen 14",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 50,
+  "asin_extracted_from_page": "B0DD7JQWML",
+  "asin_queried": "B0DD7JQWML",
+  "asin": "B0DD7JQWML"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {
+  "asin_from_details": "B0DD53B6PC",
+  "title": "LOCCEF Safety Work Gloves MicroFoam Nitrile Coated-12 Pairs,Seamless Knit Nylon, Home Improvement,Micro-Foam Gloves (9/L, Grey-12 Pairs)",
+  "current_price": 28.9,
+  "amazon_monthly_sales_badge": 100,
+  "main_image": "https://m.media-amazon.com/images/I/81DON7s4ALL._SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51LTldW6sNL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/41eUVGiSVaL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/41MtlZ6-3iL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51rmtsTTQSL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/41+TlIBTfoL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51DUkr+i3EL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51dnIGKolUL._SX35_SY46._CR0,0,35,46_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0DD53B6PC",
+    "Date First Available": "14 Aug. 2024"
+  },
+  "date_first_available_from_details": "14 Aug. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Loccef",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 128,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "𝐒𝐔𝐏𝐄𝐑𝐈𝐎𝐑 𝐆𝐑𝐈𝐏 𝐚𝐧𝐝 𝐄𝐗𝐂𝐄𝐋𝐋𝐄𝐍𝐓 𝐃𝐄𝐗𝐓𝐄𝐑𝐈𝐓𝐘: Work gloves with micro-foam nitrile coat resist light oils, offer great grip/abrasion resistance, and feature 3D snug fit.",
+    "𝐀𝐁𝐒𝐎𝐋𝐔𝐓𝐄𝐋𝐘 𝐁𝐑𝐄𝐀𝐓𝐇𝐀𝐁𝐈𝐋𝐈𝐓𝐘 𝐚𝐧𝐝 𝐂𝐎𝐌𝐅𝐎𝐑𝐓𝐀𝐁𝐋𝐄: Ultrathin Design provide absolutely breathability and with water repellent performance.Seamless liner and spandex assure a maximum comfort and minimum hand fatigue.",
+    "𝐖𝐑𝐈𝐒𝐓 𝐃𝐄𝐓𝐀𝐈𝐋𝐒: Knit Wrist helps prevent dirt and debris from entering the glove.",
+    "𝐂𝐎𝐌𝐏𝐋𝐈𝐀𝐍𝐂𝐄: CE CERTIFICATED EN388 2016.",
+    "𝐋𝐨𝐰-𝐋𝐢𝐧𝐭 𝐚𝐧𝐝 𝐄𝐚𝐬𝐲 𝐂𝐚𝐫𝐞: Designed to produce minimal lint and dust.Recommend washing gloves in tempered water not exceeding 104oF or 40oC."
+  ],
+  "description": "Experience superior grip and dexterity with our Micro-Foam Nitrile coated gloves, designed for compatibility with light oils and excellent abrasion resistance. The 3D snug fit ensures comfort and precision for all fingers. The ultrathin design offers breathability, water repellence, and reduced hand fatigue, making these gloves ideal for long hours of use. The knit wrist detail keeps dirt and debris out, while the seamless liner and spandex provide maximum comfort. Certified to CE EN388:2016 standards, these gloves produce minimal lint and dust. Easy care—wash in water up to 104°F (40°C).",
+  "specifications_table": {
+    "Manufacturer": "‎LOCCEF",
+    "Item Weight": "‎480 g",
+    "Package Dimensions": "‎27.1 x 15.4 x 8.9 cm; 480 g",
+    "Item model number": "‎Microfoam Nitrile Gloves",
+    "Size": "‎9/L",
+    "Colour": "‎Black",
+    "Style": "‎Microfoam Nitrile",
+    "Material": "‎Nylon",
+    "Special Features": "‎Touchscreen, Oil Proof, Lightweight, Palm Coated, Breathable",
+    "Included components": "‎Gloves",
+    "Batteries included?": "‎No",
+    "Batteries Required?": "‎No"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 3121,
+      "main_cat_name": "DIY & Tools 23 drops / month",
+      "sub_cat_current_rank": 43,
+      "sub_cat_name": "Safety Work Gloves 4"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "LOCCEF Safety Work Gloves MicroFoam Nitrile Coated-12 Pairs,Seamless Knit Nylon, Home Improvement,Micro-Foam Gloves (9/L, Grey-12 Pairs)",
+      "Sales Rank - Reference": "DIY & Tools",
+      "Sales Rank - Display Group": "home_improvement_display_on_website",
+      "Bought in past month": "100+",
+      "Reviews - Rating": 4.6,
+      "Reviews - Rating Count": 128.0,
+      "Last Price Change": "3 days ago",
+      "Buy Box Seller": "Loccef (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Loccef (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 3.04,
+      "Referral Fee %": "15.02 %",
+      "Referral Fee based on current Buy Box price": 4.34,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/10/10",
+      "Listed since": "2024/08/14",
+      "Categories - Root": "DIY & Tools",
+      "Categories - Sub": "Safety Work Gloves",
+      "Categories - Tree": "DIY & Tools › Safety & Security › Work Safety Equipment & Gear › Gloves › Safety Work Gloves",
+      "Website Display Group - Name": "BISS Basic",
+      "ASIN": "B0DD53B6PC",
+      "Product Codes - UPC": "768917799591",
+      "Product Codes - EAN": "0768917799591",
+      "Parent ASIN": "B0DD56WG15",
+      "Variation ASINs": "B0DD4Z5VMD, B0DD5BBV9R, B0DD53B6PC, B0DD4ZRL73, B0DD54GQG6",
+      "Freq. Bought Together": "B08S461BM1, B0B9NT4TTJ",
+      "Type": "PROTECTIVE_GLOVE",
+      "Manufacturer": "LOCCEF",
+      "Brand": "LOCCEF",
+      "Product Group": "BISS",
+      "Model": "Microfoam Nitrile Gloves",
+      "Color": "Black",
+      "Size": "9/L",
+      "Unit Details - Unit Value": "12",
+      "Unit Details - Unit Type": "count",
+      "Item Form": "Pair",
+      "Style": "Microfoam Nitrile",
+      "Material": "Nylon",
+      "Binding": "Apparel",
+      "Number of Items": "12",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/51dnIGKolUL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/badc3172-c5b8-429d-81d2-c16cebd6cfb7/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "27.1 x 15.4 x 8.9 cm (= 3,714 cm³ )",
+      "Package - Weight (g)": "480",
+      "Included Components": "Gloves"
+    }
+  },
+  "eans_on_page": [
+    "0768917799591"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0768917799591",
+  "sales_rank": 3121,
+  "category": "DIY & Tools 23",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 100,
+  "asin_extracted_from_page": "B0DD53B6PC",
+  "asin_queried": "B0DD53B6PC",
+  "asin": "B0DD53B6PC",
+  "_search_method_used": "title"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        :26,998 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Claradent Assorted Colour Medium Toothbrushes 3 Pack - £0.74 (EAN: 5053249218847)
 2025-07-11 23:03:27,000 - tools.passive_extraction_workflow_latest - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 11
 2025-07-11 23:03:27,029 - configurable_supplier_scraper - INFO - Visiting product page 3/4: https://www.poundwholesale.co.uk/colgate-fluoride-calcium-maximum-cavity-protection-toothpaste-100ml
 2025-07-11 23:03:27,031 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/colgate-fluoride-calcium-maximum-cavity-protection-toothpaste-100ml (attempt 1/3)

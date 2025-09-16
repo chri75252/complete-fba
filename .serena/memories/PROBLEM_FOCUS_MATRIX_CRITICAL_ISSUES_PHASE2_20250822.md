@@ -1,99 +1,87 @@
-# PROBLEM FOCUS MATRIX - Critical Issues Requiring Phase 2 Attention
-
-**Analysis Date**: 2025-08-22  
-**System**: Amazon FBA Agent System v3.8+  
-**Audit Scope**: Master Behavior Specification Compliance  
-**Evidence Sources**: Log analysis, state files, 3 implementation sessions
-
-## 🚨 CRITICAL PRIORITY MATRIX
-
-### **PRIORITY 1: SYSTEM-BREAKING CONTRADICTIONS**
-
-#### **Issue A1: Fresh Start Logic Contradiction** 
-- **Severity**: CRITICAL 
-- **Evidence**: 
-  - State file shows `"is_fresh_start": true` 
-  - BUT immediately shows `"successful_products": 8819`
-  - Log claims "FRESH START DETECTED" (line 112-113)
-  - BUT "Resuming from index 8819" (line 144)
-- **Impact**: Core workflow logic fundamentally broken
-- **Master Plan Reference**: Fix D - Enforce true Fresh-Start semantics
-- **Phase 2 Action**: Investigate fresh start detection logic vs actual resume behavior
-
-#### **Issue A2: Missing Manifest Population Evidence**
-- **Severity**: HIGH
-- **Evidence**: No log evidence of manifest population during URL discovery
-- **Master Plan Reference**: Fix A - Manifest population (P0, keep enforced)
-- **Expected Evidence**: "manifest_populated: N urls" log entries missing
-- **Phase 2 Action**: Verify if Fix A implementation is working or bypassed
-
-### **PRIORITY 2: MISSING OPERATIONAL EVIDENCE**
-
-#### **Issue B1: Amazon Processing Phase Visibility**
-- **Severity**: MEDIUM
-- **Evidence**: Log shows only supplier extraction, no Amazon processing phase
-- **Impact**: Cannot verify hybrid processing workflow completion
-- **Phase 2 Action**: Run system to Amazon processing phase and capture evidence
-
-#### **Issue B2: Filter Transparency Gap**
-- **Severity**: MEDIUM  
-- **Evidence**: No visibility into linking map → cache → extract filtering decisions
-- **Expected**: Clear skip/process decisions with counts
-- **Phase 2 Action**: Verify filter pipeline logging implementation
-
-### **PRIORITY 3: WORKING IMPLEMENTATIONS TO PRESERVE**
-
-#### **Success C1: URL Discovery Implementation**
-- **Status**: ✅ WORKING
-- **Evidence**: Line 198 - "Starting URL discovery for category" - clear and functioning
-- **Phase 2 Action**: PRESERVE - do not modify this implementation
-
-#### **Success C2: SP-First State Management**  
-- **Status**: ✅ WORKING
-- **Evidence**: Lines 186-197 show proper system_progression priority and synchronization
-- **Master Plan Reference**: Fix B - Preserve updated progression 
-- **Phase 2 Action**: PRESERVE - this fix is working correctly
-
-#### **Success C3: Category Index Calculation**
-- **Status**: ✅ WORKING  
-- **Evidence**: Line 182 shows proper absolute category index (83) calculation
-- **Master Plan Reference**: Fix C/E - Honor resume offset and absolute indexing
-- **Phase 2 Action**: PRESERVE - calculation logic is correct
-
-## 🎯 PHASE 2 INVESTIGATION PRIORITIES
-
-### **Immediate Actions Required:**
-
-1. **CRITICAL**: Resolve fresh start contradiction - determine if system should be in fresh start or resume mode
-2. **HIGH**: Verify manifest population is actually working (potential logging issue vs logic issue)  
-3. **MEDIUM**: Complete workflow execution to Amazon phase for full evidence gathering
-4. **MEDIUM**: Verify filter transparency implementation
-
-### **Implementations to Preserve:**
-- URL Discovery logging and functionality
-- SP-First state management synchronization  
-- Category index absolute calculation
-- State corruption detection and recovery systems
-
-### **Investigation Questions for Phase 2:**
-1. Why does fresh start detection claim fresh start but immediately resume from index 8819?
-2. Is manifest population working but not logging, or not working at all?
-3. What triggers the transition from supplier to Amazon processing phase?
-4. Are filter pipeline decisions being logged with sufficient detail?
-
-## 📊 COMPLIANCE SCORING SUMMARY
-
-- **CORRECT**: 3 implementations (25%)
-- **CRITICAL ISSUES**: 2 implementations (17%) 
-- **MISSING EVIDENCE**: 2 implementations (17%)
-- **UNDER INVESTIGATION**: 5 implementations (42%)
-
-**Overall System Health**: PARTIALLY FUNCTIONAL with critical logic contradictions requiring immediate resolution.
-
-## 🔧 RECOMMENDED PHASE 2 APPROACH
-
-1. **Address Critical Priority 1 issues first** - system-breaking contradictions
-2. **Preserve all Priority 3 working implementations** - avoid breaking what works
-3. **Investigate Priority 2 missing evidence** - determine if implementation vs logging issues
-4. **Use surgical fixes only** - minimal changes to resolve specific contradictions
-5. **Test each fix independently** - verify resolution without breaking working components
+{
+  "asin_from_details": "B0D73H7NQ2",
+  "title": "G.W.S® LED Filament Bulb, G45 B22 Bayonet, LED Globe Bulb, 6W Dimmable Warm White 2700K, Amber Glass",
+  "current_price": 4.9,
+  "original_price": 13.99,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41ZkYPGET8L._AC_SL1000_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/31-J0zNpWPL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41TzVKAK-UL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/31sAD7Am8SL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41bvMG+YKGL._AC_SR38,50_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0D73H7NQ2",
+    "Date First Available": "4 Jan. 2023"
+  },
+  "date_first_available_from_details": "4 Jan. 2023",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "G.W.S. LED Wholesale Ltd.",
+  "sold_by_amazon": false,
+  "rating": 5.0,
+  "review_count": 1,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "G.W.S LED Filament Bulb, G45 B22 Bayonet, LED Globe Bulb, 6W Dimmable Warm White 2700K, Amber Glass",
+    "Product type: LIGHT_BULB",
+    "Brand: G.W.S",
+    "Size: Pack of 1"
+  ],
+  "description": "Product Description Vintage Style The vintage flame LED bulb is widely used to create home atmosphere and look great in any exposed light socket such as sconces or socket pendants. Faithfully recreated from historic designs of old-style light bulbs. Specification Light Colour: Warm White/Day White Colour Temperature: 2700K/6400K Base: B22 Wattage: 6W Input Voltage: 180-240V Beam Angle: 360 Degrees Power Factor: 0.8 Lifespan: 50000 Hours Dimension: 45(D)x70(H)mm Energy Saving Save on your electricity bills and do your part for the environment. Long Lasting Performance Extremely long lifespan of 50,000 hours, reduces re-Lamp frequency. B22 Base Suitable for B22 base of any pendant lamps, wall lamps, chandeliers etc. Dimmable Compatible with most of LED dimmers, make it easy to adjust the brightness depending on the desired ambiance. Add an inviting glow and perfect mood to any space.",
+  "specifications_table": {
+    "Brand": "‎G.W.S",
+    "Manufacturer": "‎G.W.S LED",
+    "Number of Items": "‎1",
+    "Colour": "‎Amber Glass-warm White(2700k)",
+    "Shape": "‎Globe(G)",
+    "Material": "‎Glass",
+    "Voltage": "‎230 Volts",
+    "Power and Plug Description:": "‎Corded Electric",
+    "Type of Bulb": "‎LED",
+    "EU Energy Efficiency Label": "‎E",
+    "Luminous Flux": "‎720 Lumen",
+    "Wattage": "‎6 Watts",
+    "Bulb Features": "‎Dimmable",
+    "Colour Temperature": "‎2700 Kelvin",
+    "Guaranteed software updates until": "‎unknown"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 27080,
+      "main_cat_name": "Lighting 1.0 drops / month",
+      "sub_cat_current_rank": 4113,
+      "sub_cat_name": "LED Bulbs 2"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "G.W.S® LED Filament Bulb, G45 B22 Bayonet, LED Globe Bulb, 6W Dimmable Warm White 2700K, Amber Glass",
+      "Sales Rank - Reference": "Lighting",
+      "Sales Rank - Display Group": "lighting_display_on_website",
+      "Reviews - Rating": 5.0,
+      "Reviews - Rating Count": 1.0,
+      "Last Price Change": "9 months ago",
+      "Buy Box Seller": "G.W.S. LED Wholesale Ltd. (83% positive over last 12 months)",
+      "Lowest FBM Seller": "G.W.S. LED Wholesale Ltd. (83% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2024/08/14",
+      "Listed since": "2023/01/04",
+      "Categories - Root": "Lighting",
+      "Categories - Sub": "LED Bulbs",
+      "Categories - Tree": "Lighting › Light Bulbs › LED Bulbs",
+      "Website Display Group - Name": "Lighting",
+      "ASIN": "B0D73H7NQ2",
+      "Product Codes - EAN": "5060996265826",
+      "Parent ASIN": "B0D73G73NX",
+      "Variation ASINs": "B0D73GQ2Z6, B0D7MKS5W9, B0D73H7NQ2, B0D7MHH554, B0D7MHHVY5, B0D73GPJLY, B0D7MK6WN1, B0D7MGLS2Z, B0D7MH5LCF",
+      "Freq. Bought Together": "B08728343F, B09YYHF7XQ",
+      "Type": "LIGHT_BULB",
+      "Manufacturer": "G.W.S LED",
+      "Brand": "G.W.S",
+      "Bran

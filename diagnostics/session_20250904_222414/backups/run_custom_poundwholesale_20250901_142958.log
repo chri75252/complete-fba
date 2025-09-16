@@ -1,0 +1,302 @@
+2025-09-01 14:29:58,386 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250901_142958.log
+2025-09-01 14:29:58,387 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250901_142958.log
+2025-09-01 14:29:58,387 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-09-01 14:29:58,388 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-09-01 14:29:58,388 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-09-01 14:29:58,965 - utils.browser_manager - INFO - 🔌 Connecting to existing Chrome debug instance on port 9222
+2025-09-01 14:29:58,965 - utils.browser_manager - INFO - 📜 Per troubleshooting docs: Using existing Chrome debug only
+2025-09-01 14:29:58,967 - utils.browser_manager - INFO - ✅ Chrome debug accessible on IPv6: Chrome/139.0.7258.155
+2025-09-01 14:29:58,968 - utils.browser_manager - INFO - 🔌 Connecting to existing Chrome debug instance...
+2025-09-01 14:29:58,969 - utils.browser_manager - DEBUG - 🌐 Using IPv6 endpoint for CDP connection
+2025-09-01 14:29:58,969 - utils.browser_manager - INFO - 🌐 Using endpoint: http://[::1]:9222
+2025-09-01 14:29:59,111 - utils.browser_manager - INFO - ✅ Successfully connected to existing Chrome debug instance
+2025-09-01 14:29:59,111 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-09-01 14:29:59,111 - utils.browser_manager - INFO - 🔍 Connected to existing Chrome: 139.0.7258.155
+2025-09-01 14:29:59,112 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:29:59,112 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:29:59,115 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:29:59,116 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-09-01 14:29:59,116 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-09-01 14:29:59,116 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-09-01 14:30:03,651 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-09-01 14:30:03,651 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-01 14:30:08,276 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-01 14:30:08,277 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-09-01 14:30:08,277 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2025-09-01 14:30:08,278 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2025-09-01 14:30:08,278 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2025-09-01 14:30:08,279 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-09-01 14:30:08,279 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-09-01 14:30:08,389 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10401 products in poundwholesale-co-uk_products_cache.json
+2025-09-01 14:30:08,392 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 10401 products, 0 categories
+2025-09-01 14:30:08,393 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-09-01 14:30:08,502 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10401 actual products in cache (total entries: 10401)
+2025-09-01 14:30:08,606 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10532 processed products in linking map
+2025-09-01 14:30:08,849 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 178 categories
+2025-09-01 14:30:08,857 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 231 categories in config
+2025-09-01 14:30:08,864 - utils.fixed_enhanced_state_manager - INFO - 🔄 REVERSE GAP DETECTED: Linking map (10532) > Cache (10401)
+2025-09-01 14:30:08,865 - utils.fixed_enhanced_state_manager - WARNING - 🚨 FRESH START CONTRADICTION DETECTED: flag=True actual=False products=0 processed=0 category=0
+2025-09-01 14:30:08,865 - utils.fixed_enhanced_state_manager - WARNING - 🔄 REVERSE GAP: Detected restart with resumption_index=0 but previous state exists - preserving index
+2025-09-01 14:30:08,866 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: reverse_gap_restart_preserved)
+2025-09-01 14:30:08,877 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-09-01 14:30:08,879 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-01 14:30:08,879 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-09-01 14:30:08,879 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-09-01 14:30:08,880 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-09-01 14:30:08,880 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-09-01 14:30:08,881 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-09-01 14:30:08,881 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-09-01 14:30:08,882 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2025-09-01 14:30:08,882 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-09-01 14:30:08,883 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-09-01 14:30:08,883 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-09-01 14:30:08,883 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-09-01 14:30:08,884 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-09-01 14:30:08,884 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-09-01 14:30:08,884 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-09-01 14:30:08,885 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-09-01 14:30:08,885 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-09-01 14:30:08,885 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-09-01 14:30:08,886 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-09-01 14:30:08,886 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-09-01 14:30:08,887 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-09-01 14:30:08,887 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2025-09-01 14:30:08,888 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-09-01 14:30:08,888 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-09-01 14:30:08,889 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250901_143008
+2025-09-01 14:30:08,889 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-09-01 14:30:08,889 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-09-01 14:30:08,890 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-09-01 14:30:08,890 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-09-01 14:30:08,890 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-09-01 14:30:08,891 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-09-01 14:30:08,891 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-09-01 14:30:08,893 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 0
+2025-09-01 14:30:08,894 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-09-01 14:30:08,894 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-09-01 14:30:08,894 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-09-01 14:30:09,023 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10532 entries
+2025-09-01 14:30:09,198 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10448 URLs, 6580 ASINs in 0.174s
+2025-09-01 14:30:09,198 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10532 entries
+2025-09-01 14:30:09,199 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 10532
+2025-09-01 14:30:09,281 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10401 products in poundwholesale-co-uk_products_cache.json
+2025-09-01 14:30:09,285 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 10532 > cache: 10401)
+2025-09-01 14:30:09,286 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-09-01 14:30:09,286 - PassiveExtractionWorkflow - INFO - ✅ No state contradiction - proceeding with start_processing() call...
+2025-09-01 14:30:09,286 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-09-01 14:30:09,403 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10532 entries
+2025-09-01 14:30:09,646 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10073 EANs, 10448 URLs, 6580 ASINs in 0.243s
+2025-09-01 14:30:09,646 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10532 entries
+2025-09-01 14:30:09,647 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-09-01 14:30:09,647 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-09-01 14:30:09,648 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-09-01 14:30:09,648 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-09-01 14:30:09,648 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 231 predefined categories (infinite mode)
+2025-09-01 14:30:09,649 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-09-01 14:30:09,649 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-09-01 14:30:09,650 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-09-01 14:30:09,650 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-09-01 14:30:09,650 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-09-01 14:30:09,739 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10401 products in poundwholesale-co-uk_products_cache.json
+2025-09-01 14:30:09,743 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-09-01 14:30:09,744 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-09-01 14:30:09,744 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-09-01 14:30:09,831 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10401 products in poundwholesale-co-uk_products_cache.json
+2025-09-01 14:30:09,980 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10401 total → 7 unprocessed (10448 already in linking map)
+2025-09-01 14:30:09,981 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 99.9% products skipped (already processed)
+2025-09-01 14:30:09,981 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-09-01 14:30:09,981 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-09-01 14:30:09,982 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-09-01 14:30:09,983 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:09,983 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:09,994 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:09,994 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-09-01 14:30:11,598 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-09-01 14:30:11,602 - utils.browser_manager - DEBUG - Brought page to front after navigation to https://www.poundwholesale.co.uk
+2025-09-01 14:30:15,981 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-09-01 14:30:15,982 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-09-01 14:30:20,256 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-09-01 14:30:20,256 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-09-01 14:30:20,257 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-09-01 14:30:20,262 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-09-01 14:30:20,263 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-09-01 14:30:20,263 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=0/pending
+2025-09-01 14:30:20,263 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-09-01 14:30:20,263 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:20,264 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:20,264 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:20,264 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (attempt 1/3)
+2025-09-01 14:30:20,264 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:20,264 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:20,270 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:20,270 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:21,877 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets in 1.55s...
+2025-09-01 14:30:23,441 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (attempt 2/3)
+2025-09-01 14:30:23,441 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:23,442 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:23,449 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:23,450 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:24,689 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:24,690 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
+2025-09-01 14:30:24,758 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (Size: 685373 bytes)
+2025-09-01 14:30:24,905 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-09-01 14:30:24,975 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-09-01 14:30:24,975 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-01 14:30:24,976 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (attempt 1/3)
+2025-09-01 14:30:24,976 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:24,976 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:24,981 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:24,981 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-01 14:30:26,632 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 in 1.67s...
+2025-09-01 14:30:28,311 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (attempt 2/3)
+2025-09-01 14:30:28,312 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:28,312 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:28,320 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:28,320 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-01 14:30:29,647 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-01 14:30:29,648 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
+2025-09-01 14:30:29,720 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (Size: 696218 bytes)
+2025-09-01 14:30:29,998 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-09-01 14:30:29,999 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-01 14:30:29,999 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (attempt 1/3)
+2025-09-01 14:30:29,999 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:29,999 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:30,003 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:30,003 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-01 14:30:31,682 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 in 1.67s...
+2025-09-01 14:30:33,356 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (attempt 2/3)
+2025-09-01 14:30:33,357 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:33,357 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:33,361 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:33,361 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-01 14:30:34,482 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-01 14:30:34,483 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
+2025-09-01 14:30:34,546 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (Size: 645193 bytes)
+2025-09-01 14:30:34,678 - configurable_supplier_scraper - INFO - Found 19 new product URLs on page 3
+2025-09-01 14:30:34,679 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-01 14:30:34,679 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (attempt 1/3)
+2025-09-01 14:30:34,679 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:34,679 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:34,684 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:34,684 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-01 14:30:36,046 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 in 2.30s...
+2025-09-01 14:30:38,361 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (attempt 2/3)
+2025-09-01 14:30:38,361 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:38,362 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:38,369 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:38,369 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-01 14:30:40,706 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-01 14:30:40,707 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
+2025-09-01 14:30:40,759 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (Size: 397202 bytes)
+2025-09-01 14:30:40,876 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 4
+2025-09-01 14:30:40,876 - configurable_supplier_scraper - INFO - Collected 59 total product URLs across 4 pages
+2025-09-01 14:30:40,877 - PassiveExtractionWorkflow - INFO - PAGINATION[C1 wholesale-big-boys-toys-gadget]: pages=4 urls_page=20,20,19,0 total=59
+2025-09-01 14:30:40,877 - PassiveExtractionWorkflow - INFO - 🔗 DETAILED PRE-EXTRACTION FILTERING: Analyzing 59 collected URLs
+2025-09-01 14:30:40,885 - PassiveExtractionWorkflow - DEBUG - 🔗 UNIFIED FILTER: Loaded 10073 EANs and 10448 URLs from linking map
+2025-09-01 14:30:40,970 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10401 products in poundwholesale-co-uk_products_cache.json
+2025-09-01 14:30:41,026 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 10401 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-09-01 14:30:41,030 - PassiveExtractionWorkflow - INFO - 🔗 STEP 1 - LINKING MAP CHECK: 50 complete (skipped)
+2025-09-01 14:30:41,030 - PassiveExtractionWorkflow - INFO - 💾 STEP 2 - PRODUCT CACHE CHECK: 0 have supplier data; 9 need supplier extraction
+2025-09-01 14:30:41,031 - PassiveExtractionWorkflow - INFO - 🧮 Filter Invariant: in=59 == skip+amz_only+full=59 → ✅ VALID
+2025-09-01 14:30:41,031 - PassiveExtractionWorkflow - INFO - ✅ SKIP_ENTIRELY (50): ['https://www.poundwholesale.co.uk/my-traditional-black-white-draughts-set', 'https://www.poundwholesale.co.uk/moving-light-up-mini-robot-figure-25cm', 'https://www.poundwholesale.co.uk/drink-up-boys-vs-girls-battle-pong-game', 'https://www.poundwholesale.co.uk/hoot-foam-football-18cm-cdu-assorted-colours', 'https://www.poundwholesale.co.uk/my-classic-mini-bingo-games-set-cdu']...
+2025-09-01 14:30:41,032 - PassiveExtractionWorkflow - INFO - 📊 NEEDS_FULL_EXTRACTION (9): ['https://www.poundwholesale.co.uk/intex-hi-output-air-pump', 'https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone', 'https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook', 'https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook', 'https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17']...
+2025-09-01 14:30:41,032 - PassiveExtractionWorkflow - INFO - 📈 FILTERING EFFICIENCY: 50/59 = 84.7% already processed
+2025-09-01 14:30:41,033 - PassiveExtractionWorkflow - INFO - 💾 CACHE UTILIZATION: 0/59 = 0.0% have supplier data
+2025-09-01 14:30:41,033 - PassiveExtractionWorkflow - INFO - 📊 EXTRACTION NEEDED: 9/59 = 15.3% need fresh extraction
+2025-09-01 14:30:41,033 - PassiveExtractionWorkflow - INFO - 🚀 PROCEEDING WITH EXTRACTION: 9 products need full extraction
+2025-09-01 14:30:41,034 - PassiveExtractionWorkflow - INFO - 📝 EXTRACTION CONTRACT: Promising to extract exactly 9 products
+2025-09-01 14:30:41,034 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION: Processing 9 pre-approved URLs
+2025-09-01 14:30:41,034 - configurable_supplier_scraper - INFO - 🔍 Extracting product 1/9: https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-01 14:30:41,034 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/intex-hi-output-air-pump (attempt 1/3)
+2025-09-01 14:30:41,034 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:41,035 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:41,042 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:41,043 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-01 14:30:43,177 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/intex-hi-output-air-pump in 1.86s...
+2025-09-01 14:30:45,053 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/intex-hi-output-air-pump (attempt 2/3)
+2025-09-01 14:30:45,053 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:45,053 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:45,058 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:45,058 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-01 14:30:46,144 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-01 14:30:46,144 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
+2025-09-01 14:30:46,198 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/intex-hi-output-air-pump (Size: 416293 bytes)
+2025-09-01 14:30:46,455 - configurable_supplier_scraper - INFO - ✅ Extracted: Intex Hi-OutPUt Air Pump - £2.74
+2025-09-01 14:30:46,455 - configurable_supplier_scraper - INFO - 🔍 Extracting product 2/9: https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone
+2025-09-01 14:30:46,456 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone (attempt 1/3)
+2025-09-01 14:30:46,456 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:46,456 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:46,464 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:46,464 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone
+2025-09-01 14:30:48,570 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone in 2.33s...
+2025-09-01 14:30:50,913 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone (attempt 2/3)
+2025-09-01 14:30:50,913 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:50,913 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:50,920 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:50,920 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone
+2025-09-01 14:30:53,320 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone
+2025-09-01 14:30:53,320 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone
+2025-09-01 14:30:53,377 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/addplay-voice-blaster-megaphone (Size: 436005 bytes)
+2025-09-01 14:30:53,653 - configurable_supplier_scraper - INFO - ✅ Extracted: Addplay Voice Blaster Megaphone - £3.79
+2025-09-01 14:30:53,654 - configurable_supplier_scraper - INFO - 🔍 Extracting product 3/9: https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:30:53,654 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook (attempt 1/3)
+2025-09-01 14:30:53,654 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:53,655 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:53,659 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:53,659 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:30:55,770 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook in 2.48s...
+2025-09-01 14:30:58,249 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook (attempt 2/3)
+2025-09-01 14:30:58,250 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:58,250 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:58,258 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:58,259 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:30:59,420 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:30:59,421 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:30:59,500 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/medium-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook (Size: 479717 bytes)
+2025-09-01 14:30:59,806 - configurable_supplier_scraper - INFO - ✅ Extracted: Medium Pro Boxing Championship Punch Bag And Boxing Gloves With Hanging Hook - £4.33
+2025-09-01 14:30:59,806 - configurable_supplier_scraper - INFO - 🔍 Extracting product 4/9: https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:30:59,806 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook (attempt 1/3)
+2025-09-01 14:30:59,807 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:30:59,807 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:30:59,811 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:30:59,811 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:31:04,127 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook in 2.24s...
+2025-09-01 14:31:06,384 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook (attempt 2/3)
+2025-09-01 14:31:06,385 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:31:06,385 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:31:06,392 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:31:06,392 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:31:07,408 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:31:07,408 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook
+2025-09-01 14:31:07,932 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/small-pro-boxing-championship-punch-bag-and-boxing-gloves-with-hanging-hook (Size: 479201 bytes)
+2025-09-01 14:31:08,263 - configurable_supplier_scraper - INFO - ✅ Extracted: Small Pro Boxing Championship Punch Bag And Boxing Gloves With Hanging Hook - £3.53
+2025-09-01 14:31:08,263 - configurable_supplier_scraper - INFO - 🔍 Extracting product 5/9: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-01 14:31:08,264 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (attempt 1/3)
+2025-09-01 14:31:08,264 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:31:08,264 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:31:08,269 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:31:08,269 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-01 14:31:10,798 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 in 1.85s...
+2025-09-01 14:31:12,659 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (attempt 2/3)
+2025-09-01 14:31:12,659 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:31:12,660 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:31:12,668 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:31:12,669 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-01 14:31:13,796 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-01 14:31:13,796 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
+2025-09-01 14:31:13,883 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (Size: 616234 bytes)
+2025-09-01 14:31:14,217 - configurable_supplier_scraper - INFO - ✅ Extracted: MY Double-Sided Dartboard Set 17" - £4.35
+2025-09-01 14:31:14,218 - configurable_supplier_scraper - INFO - 🔍 Extracting product 6/9: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-01 14:31:14,218 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (attempt 1/3)
+2025-09-01 14:31:14,218 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:31:14,218 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:31:14,225 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:31:14,225 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-01 14:31:16,591 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft in 1.54s...
+2025-09-01 14:31:18,131 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (attempt 2/3)
+2025-09-01 14:31:18,131 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-09-01 14:31:18,132 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
+2025-09-01 14:31:18,139 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
+2025-09-01 14:31:18,140 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
+2025-09-01 14:31:18,976 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-09-01 14:31:18,978 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

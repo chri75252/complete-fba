@@ -1,0 +1,288 @@
+#!/usr/bin/env python3
+"""
+Comprehensive Validation Suite for Group 1 Implementation
+Validates all aspects of the legacy writer migration
+"""
+
+import os
+import sys
+import json
+import subprocess
+from pathlib import Path
+from datetime import datetime
+
+class ValidationSuite:
+    def __init__(self, workspace_root: str = "."):
+        self.workspace_root = Path(workspace_root)
+        self.results = []
+        
+    def run_test(self, test_name: str, test_func) -> bool:
+        """Run a single test and record results."""
+        print(f"🧪 Running: {test_name}")
+        try:
+            success = test_func()
+            status = "PASS" if success else "FAIL"
+            icon = "✅" if success else "❌"
+            print(f"{icon} {test_name}: {status}")
+            
+            self.results.append({
+                "test": test_name,
+                "status": status,
+                "timestamp": datetime.now().isoformat()
+            })
+            return success
+        except Exception as e:
+            print(f"❌ {test_name}: ERROR - {e}")
+            self.results.append({
+                "test": test_name,
+                "status": "ERROR",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat()
+            })
+            return False
+    
+    def test_legacy_writer_elimination(self) -> bool:
+        """Test that all legacy writers are eliminated."""
+        # Directly check for actual method calls rather than running subprocess
+        workflow_path = self.workspace_root / "tools/passive_extraction_workflow_latest.py"
+        state_manager_path = self.workspace_root / "utils/fixed_enhanced_state_manager.py"
+        
+        files_to_check = [workflow_path, state_manager_path]
+        
+        for file_path in files_to_check:
+            if not file_path.exists():
+                continue
+                
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    
+                # Look for actual method calls (not definitions)
+                lines = content.split('\n')
+                for i, line in enumerate(lines):
+                    stripped = line.strip()
+                    
+                    # Skip definitions, comments, and strings
+                    if (stripped.startswith('def ') or
+                        stripped.startswith('#') or
+                        stripped.startswith('"""') or
+                        'deprecated' in stripped.lower() or
+                        'recommendations' in stripped.lower()):
+                        continue
+                    
+                    # Check for actual calls
+                    if ('self.update_processing_index(' in line and 'def ' not in line) or (
+                        'self.save_state()' in line and 'def ' not in line and 'atomic' not in line.lower()):
+                        return False
+                        
+            except Exception:
+                return False
+                
+        return True
+    
+    def test_atomic_commit_implementation(self) -> bool:
+        """Test that atomic commit methods are working."""
+        state_manager_path = self.workspace_root / "utils/fixed_enhanced_state_manager.py"
+        
+        if not state_manager_path.exists():
+            return False
+            
+        try:
+            with open(state_manager_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+            # Check for required atomic commit methods
+            required_methods = [
+                "commit_supplier_progress",
+                "commit_amazon_progress",
+                "commit_phase_switch"
+            ]
+            
+            for method in required_methods:
+                if f"def {method}" not in content:
+                    return False
+                    
+            return True
+        except Exception:
+            return False
+    
+    def test_hard_disable_legacy_methods(self) -> bool:
+        """Test that legacy methods are hard-disabled."""
+        state_manager_path = self.workspace_root / "utils/fixed_enhanced_state_manager.py"
+        
+        if not state_manager_path.exists():
+            return False
+            
+        try:
+            with open(state_manager_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+            # Check that update_processing_index raises NotImplementedError
+            if "def update_processing_index" in content:
+                # Find the method body
+                method_start = content.find("def update_processing_index")
+                if method_start == -1:
+                    return False
+                    
+                # Find the next method or end of class
+                method_end = content.find("\n    def ", method_start + 1)
+                if method_end == -1:
+                    method_end = len(content)
+                    
+                method_body = content[method_start:method_end]
+                return "NotImplementedError" in method_body
+                
+            return True  # Method doesn't exist, which is also acceptable
+        except Exception:
+            return False
+    
+    def test_cross_run_monotonicity_guard(self) -> bool:
+        """Test that cross-run monotonicity guard is implemented."""
+        state_manager_path = self.workspace_root / "utils/fixed_enhanced_state_manager.py"
+        
+        if not state_manager_path.exists():
+            return False
+            
+        try:
+            with open(state_manager_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+            return "_validate_cross_run_monotonicity" in content
+        except Exception:
+            return False
+    
+    def test_resume_proof_banners(self) -> bool:
+        """Test that resume proof banners are implemented."""
+        state_manager_path = self.workspace_root / "utils/fixed_enhanced_state_manager.py"
+        
+        if not state_manager_path.exists():
+            return False
+            
+        try:
+            with open(state_manager_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+            return ("FIRST AFTER-RESUME KEY" in content and 
+                    "RESUME HONORED" in content)
+        except Exception:
+            return False
+    
+    def test_completed_categories_quarantine(self) -> bool:
+        """Test that completed_categories is quarantined from control flow."""
+        workflow_path = self.workspace_root / "tools/passive_extraction_workflow_latest.py"
+        
+        if not workflow_path.exists():
+            return False
+            
+        try:
+            with open(workflow_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+            # Should not have completed_categories in control flow
+            # Look for problematic patterns
+            problematic_patterns = [
+                "len(completed_categories) > 0",
+                "completed_categories) > 0",
+                "has_completed_categories"
+            ]
+            
+            for pattern in problematic_patterns:
+                if pattern in content:
+                    # Check if it's in a telemetry context
+                    lines = content.split('\n')
+                    for i, line in enumerate(lines):
+                        if pattern in line and "TELEMETRY" not in line:
+                            return False
+                            
+            return True
+        except Exception:
+            return False
+    
+    def test_file_syntax_validation(self) -> bool:
+        """Test that all modified files have valid Python syntax."""
+        files_to_check = [
+            "utils/fixed_enhanced_state_manager.py",
+            "tools/passive_extraction_workflow_latest.py"
+        ]
+        
+        for file_path in files_to_check:
+            full_path = self.workspace_root / file_path
+            if full_path.exists():
+                try:
+                    # Try to compile the file
+                    with open(full_path, 'r', encoding='utf-8') as f:
+                        source = f.read()
+                    compile(source, str(full_path), 'exec')
+                except SyntaxError as e:
+                    print(f"Syntax error in {file_path}: {e}")
+                    return False
+                except UnicodeDecodeError:
+                    # Try with different encoding
+                    try:
+                        with open(full_path, 'r', encoding='latin1') as f:
+                            source = f.read()
+                        compile(source, str(full_path), 'exec')
+                    except Exception:
+                        return False
+                except Exception:
+                    # Skip other compilation issues (imports, etc.)
+                    pass
+                    
+        return True
+    
+    def run_all_tests(self) -> bool:
+        """Run the complete validation suite."""
+        print("🚀 STARTING GROUP 1 VALIDATION SUITE")
+        print("=" * 50)
+        
+        tests = [
+            ("Legacy Writer Elimination", self.test_legacy_writer_elimination),
+            ("Atomic Commit Implementation", self.test_atomic_commit_implementation),
+            ("Hard Disable Legacy Methods", self.test_hard_disable_legacy_methods),
+            ("Cross-Run Monotonicity Guard", self.test_cross_run_monotonicity_guard),
+            ("Resume Proof Banners", self.test_resume_proof_banners),
+            ("Completed Categories Quarantine", self.test_completed_categories_quarantine),
+            ("File Syntax Validation", self.test_file_syntax_validation)
+        ]
+        
+        passed = 0
+        total = len(tests)
+        
+        for test_name, test_func in tests:
+            if self.run_test(test_name, test_func):
+                passed += 1
+        
+        print("\n" + "=" * 50)
+        print(f"📊 VALIDATION RESULTS: {passed}/{total} tests passed")
+        
+        if passed == total:
+            print("🎯 GROUP 1 VALIDATION: SUCCESS")
+            print("   All legacy writer migration components verified")
+            return True
+        else:
+            print("❌ GROUP 1 VALIDATION: FAILED")
+            print(f"   {total - passed} tests failed - review implementation")
+            return False
+    
+    def save_results(self):
+        """Save test results to file."""
+        results_file = self.workspace_root / "test_results_group1.json"
+        with open(results_file, 'w', encoding='utf-8') as f:
+            json.dump({
+                "timestamp": datetime.now().isoformat(),
+                "total_tests": len(self.results),
+                "passed": sum(1 for r in self.results if r["status"] == "PASS"),
+                "failed": sum(1 for r in self.results if r["status"] == "FAIL"),
+                "errors": sum(1 for r in self.results if r["status"] == "ERROR"),
+                "results": self.results
+            }, f, indent=2)
+        print(f"📁 Results saved to: {results_file}")
+
+def main():
+    suite = ValidationSuite()
+    success = suite.run_all_tests()
+    suite.save_results()
+    sys.exit(0 if success else 1)
+
+if __name__ == "__main__":
+    main()

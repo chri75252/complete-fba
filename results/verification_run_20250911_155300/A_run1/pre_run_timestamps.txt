@@ -1,0 +1,31 @@
+Category A - Run 1 (Amazon-only phase test) - Pre-run File Timestamps
+Recorded at: 2025-09-11 15:53:00 UTC
+
+KEY MONITORING FILES STATUS:
+
+Processing State File:
+- File: OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json
+- Last Updated: 2025-09-09T16:43:54.857688+00:00
+- Status: resumption_index=10451, total_products=10296
+- Current Phase: supplier extraction progress (products phase)
+
+Log Files Directory:
+- Latest logs in: logs/debug/run_custom_poundwholesale_*.log
+- Most recent logs appear to be from July 2025 (need to verify after run)
+
+Amazon Cache:
+- Directory: OUTPUTS/FBA_ANALYSIS/amazon_cache/
+- Contains multiple amazon_*.json files with ASIN/EAN mappings
+
+Linking Map:
+- File: OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json
+- Contains EAN-to-ASIN mappings
+
+Financial Reports:
+- Directory: OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/
+- Contains multiple timestamped CSV reports
+
+PRE-RUN STATE SUMMARY:
+- System appears to be in a state where supplier extraction completed (10297 products extracted)
+- Processing shows 10451 successful products but resumption_index suggests Amazon analysis phase may be pending
+- Ready to launch python -u run_custom_poundwholesale.py for Amazon-only phase test

@@ -1,363 +1,168 @@
-#!/usr/bin/env python3
-"""
-Smoke Test for Amazon FBA Agent System v3.5 Tier-2/Tier-3 Sync System
-
-This script performs basic validation of all sync system components
-to ensure the implementation is working correctly.
-
-Usage:
-    python scripts/smoke_test.py
-    python scripts/smoke_test.py --verbose
-"""
-
-import os
-import sys
-import subprocess
-import tempfile
-import shutil
-from pathlib import Path
-from datetime import datetime
-import argparse
-
-
-class SmokeTest:
-    def __init__(self, verbose=False):
-        self.verbose = verbose
-        self.project_root = Path(__file__).parent.parent.absolute()
-        self.test_results = []
-        self.passed = 0
-        self.failed = 0
-    
-    def log(self, message, level="info"):
-        if level == "error":
-            prefix = "‚ùå"
-        elif level == "success":
-            prefix = "‚úÖ"
-        elif level == "warning":
-            prefix = "‚ö†Ô∏è"
-        else:
-            prefix = "‚ÑπÔ∏è"
-        
-        print(f"{prefix} {message}")
-        
-        if self.verbose or level in ["error", "success"]:
-            self.test_results.append(f"{prefix} {message}")
-    
-    def run_command(self, cmd, cwd=None, timeout=30):
-        """Run command and return result"""
-        try:
-            result = subprocess.run(
-                cmd,
-                cwd=cwd or self.project_root,
-                capture_output=True,
-                text=True,
-                timeout=timeout
-            )
-            return result.returncode == 0, result.stdout, result.stderr
-        except subprocess.TimeoutExpired:
-            return False, "", "Command timed out"
-        except Exception as e:
-            return False, "", str(e)
-    
-    def test_file_exists(self, file_path, description):
-        """Test if a file exists"""
-        full_path = self.project_root / file_path
-        if full_path.exists():
-            self.log(f"{description}: Found", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"{description}: Missing {file_path}", "error")
-            self.failed += 1
-            return False
-    
-    def test_script_executable(self, script_path, description):
-        """Test if a script is executable and runs without errors"""
-        success, stdout, stderr = self.run_command([sys.executable, str(script_path), "--help"])
-        
-        if success:
-            self.log(f"{description}: Executable and responsive", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"{description}: Failed to run - {stderr[:100]}", "error")
-            self.failed += 1
-            return False
-    
-    def test_sync_script_functionality(self):
-        """Test sync script core functionality"""
-        self.log("Testing sync script functionality...")
-        
-        # Test check-only mode
-        success, stdout, stderr = self.run_command([
-            sys.executable, "tools/sync_claude_standards.py", "--check-only"
-        ])
-        
-        if success:
-            self.log("Sync script --check-only: Working", "success")
-            self.passed += 1
-        else:
-            # Check-only can return 1 if sync is needed, that's ok
-            # Script is working if it properly reports sync status (output to stdout)
-            if ("‚ùå Sync needed" in stdout or "‚úÖ All files are in sync" in stdout or 
-                "synced successfully" in stdout or "Files are in sync" in stdout or
-                "Sync needed for:" in stdout):
-                self.log("Sync script --check-only: Working (reports sync status)", "success")
-                self.passed += 1
-            else:
-                self.log(f"Sync script --check-only: Failed - {stderr[:100] if stderr else stdout[:100]}", "error")
-                self.failed += 1
-                return False
-        
-        # Test actual sync
-        success, stdout, stderr = self.run_command([
-            sys.executable, "tools/sync_claude_standards.py"
-        ])
-        
-        if success and "synced successfully" in stdout:
-            self.log("Sync script execution: Working", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"Sync script execution: Failed - {stderr[:100]}", "error")
-            self.failed += 1
-            return False
-    
-    def test_opportunity_detector(self):
-        """Test sync opportunity detector"""
-        self.log("Testing sync opportunity detector...")
-        
-        success, stdout, stderr = self.run_command([
-            sys.executable, "tools/sync_opportunity_detector.py", "--check"
-        ])
-        
-        # Either success or exit code 1 (sync needed) is acceptable
-        # Script is working if it can analyze and report sync opportunities (output to stdout)
-        if (success or "Sync needed: True" in stdout or "Sync needed: False" in stdout or
-            "Should prompt for sync:" in stdout or "Recent work activity detected" in stdout or 
-            "No compelling sync" in stdout or "Reason:" in stdout):
-            self.log("Sync opportunity detector: Working (analyzes opportunities)", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"Sync opportunity detector: Failed - {stderr[:100] if stderr else stdout[:100]}", "error")
-            self.failed += 1
-            return False
-    
-    def test_git_checkpoint_basic(self):
-        """Test git checkpoint helper basic functionality"""
-        self.log("Testing git checkpoint helper...")
-        
-        # Just test that it can parse arguments and show help
-        success, stdout, stderr = self.run_command([
-            sys.executable, "tools/git_checkpoint.py", "--help"
-        ])
-        
-        if success and "checkpoint" in stdout.lower():
-            self.log("Git checkpoint helper: Responsive", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"Git checkpoint helper: Failed - {stderr[:100]}", "error")
-            self.failed += 1
-            return False
-    
-    def test_security_checker_basic(self):
-        """Test security checker basic functionality"""
-        self.log("Testing security checker (basic)...")
-        
-        # Test help first
-        success, stdout, stderr = self.run_command([
-            sys.executable, "tools/security_checks.py", "--help"
-        ], timeout=10)
-        
-        if success and "security" in stdout.lower():
-            self.log("Security checker: Responsive", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"Security checker: Not responsive - {stderr[:100]}", "warning")
-            # Don't fail the entire test for this
-            return True
-    
-    def test_github_workflow_syntax(self):
-        """Test GitHub workflow file syntax"""
-        workflow_file = self.project_root / ".github/workflows/claude_sync_validate.yml"
-        
-        if not workflow_file.exists():
-            self.log("GitHub workflow: File missing", "error")
-            self.failed += 1
-            return False
-        
-        try:
-            import yaml
-            with open(workflow_file, 'r') as f:
-                workflow_data = yaml.safe_load(f)
-            
-            # Basic validation - handle 'on' being parsed as boolean True
-            actual_keys = list(workflow_data.keys())
-            required_keys = ['name', 'jobs']
-            has_on_key = 'on' in workflow_data or True in workflow_data
-            
-            for key in required_keys:
-                if key not in workflow_data:
-                    self.log(f"GitHub workflow: Missing key '{key}'", "error")
-                    self.failed += 1
-                    return False
-            
-            if not has_on_key:
-                self.log("GitHub workflow: Missing 'on' trigger configuration", "error")
-                self.failed += 1
-                return False
-            
-            self.log("GitHub workflow: Valid YAML syntax", "success")
-            self.passed += 1
-            return True
-            
-        except ImportError:
-            self.log("GitHub workflow: YAML parser not available (skipping validation)", "warning")
-            return True
-        except Exception as e:
-            self.log(f"GitHub workflow: Invalid YAML - {str(e)[:100]}", "error")
-            self.failed += 1
-            return False
-    
-    def test_environment_file(self):
-        """Test environment file structure"""
-        env_file = self.project_root / ".env"
-        
-        if not env_file.exists():
-            self.log("Environment file: Not found (this is normal)", "info")
-            return True
-        
-        try:
-            with open(env_file, 'r') as f:
-                content = f.read()
-            
-            # Check for required GitHub integration variables
-            required_vars = [
-                "GITHUB_TOKEN",
-                "GIT_USER_NAME", 
-                "GIT_USER_EMAIL",
-                "DEFAULT_BRANCH"
-            ]
-            
-            missing_vars = []
-            for var in required_vars:
-                if var not in content:
-                    missing_vars.append(var)
-            
-            if missing_vars:
-                self.log(f"Environment file: Missing variables - {', '.join(missing_vars)}", "warning")
-            else:
-                self.log("Environment file: Has GitHub integration variables", "success")
-                self.passed += 1
-            
-            return True
-            
-        except Exception as e:
-            self.log(f"Environment file: Read error - {str(e)}", "error")
-            self.failed += 1
-            return False
-    
-    def test_pre_commit_hook(self):
-        """Test pre-commit hook basic functionality"""
-        hook_file = self.project_root / ".githooks/pre-commit"
-        
-        if not hook_file.exists():
-            self.log("Pre-commit hook: File missing", "error")
-            self.failed += 1
-            return False
-        
-        # Test that it's executable and doesn't crash immediately
-        success, stdout, stderr = self.run_command(["bash", str(hook_file)], timeout=15)
-        
-        # Exit code 0 or 1 is ok (1 means sync needed)
-        if "Claude Standards" in stdout or "sync" in stderr.lower():
-            self.log("Pre-commit hook: Working", "success")
-            self.passed += 1
-            return True
-        else:
-            self.log(f"Pre-commit hook: Issues - {stderr[:100]}", "warning")
-            return True  # Don't fail test for hook issues
-    
-    def run_all_tests(self):
-        """Run all smoke tests"""
-        self.log("üöÄ Starting smoke test for Tier-2/Tier-3 sync system")
-        self.log("=" * 60)
-        
-        # File existence tests
-        critical_files = [
-            ("CLAUDE_STANDARDS.md", "Source of truth file"),
-            ("tools/sync_claude_standards.py", "Sync script"),
-            ("tools/sync_opportunity_detector.py", "Opportunity detector"),
-            ("tools/git_checkpoint.py", "Git checkpoint helper"),
-            ("tools/security_checks.py", "Security checker"),
-            (".github/workflows/claude_sync_validate.yml", "GitHub workflow"),
-            (".pre-commit-config.yaml", "Pre-commit config"),
-            (".githooks/pre-commit", "Pre-commit hook"),
-        ]
-        
-        for file_path, description in critical_files:
-            self.test_file_exists(file_path, description)
-        
-        # Functionality tests
-        self.test_sync_script_functionality()
-        self.test_opportunity_detector()
-        self.test_git_checkpoint_basic()
-        self.test_security_checker_basic()
-        self.test_github_workflow_syntax()
-        self.test_environment_file()
-        self.test_pre_commit_hook()
-        
-        # Summary
-        self.log("=" * 60)
-        total_tests = self.passed + self.failed
-        self.log(f"Tests completed: {total_tests} total, {self.passed} passed, {self.failed} failed")
-        
-        if self.failed == 0:
-            self.log("üéâ All smoke tests passed! System is ready for use.", "success")
-            return True
-        else:
-            self.log(f"‚ö†Ô∏è {self.failed} tests failed. Check issues above.", "error")
-            return False
-    
-    def save_report(self, filename):
-        """Save test report to file"""
-        report_path = self.project_root / "logs" / "debug" / filename
-        report_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        with open(report_path, 'w') as f:
-            f.write(f"Smoke Test Report - {datetime.now().isoformat()}\n")
-            f.write("=" * 60 + "\n\n")
-            f.write(f"Total tests: {self.passed + self.failed}\n")
-            f.write(f"Passed: {self.passed}\n")
-            f.write(f"Failed: {self.failed}\n\n")
-            f.write("Detailed Results:\n")
-            f.write("-" * 30 + "\n")
-            for result in self.test_results:
-                f.write(result + "\n")
-        
-        self.log(f"Report saved to: {report_path}")
-
-
-def main():
-    parser = argparse.ArgumentParser(description='Smoke test for sync system')
-    parser.add_argument('--verbose', '-v', action='store_true',
-                       help='Verbose output')
-    parser.add_argument('--save-report', 
-                       help='Save report to specified filename')
-    
-    args = parser.parse_args()
-    
-    tester = SmokeTest(verbose=args.verbose)
-    success = tester.run_all_tests()
-    
-    if args.save_report:
-        tester.save_report(args.save_report)
-    
-    sys.exit(0 if success else 1)
-
-
-if __name__ == "__main__":
-    main()
+{
+  "asin_from_details": "B0B1Z31WMP",
+  "title": "Miniml Hand Soap Wash Liquid 5L Refill - Cucumber & Aloe Vera Infused Hand, Skin & Body Wash Gel for Soft and Sensitive Skin Care - 100% Vegan & Cruelty Free",
+  "current_price": 26.97,
+  "original_price": 29.12,
+  "amazon_monthly_sales_badge": 100,
+  "main_image": "https://m.media-amazon.com/images/I/512ShtWEDtL._AC_SL1080_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31+0pCLUNUL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51WX-xnjqhL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51Xy1qkHvtL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41mKhe9frYL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41gINPnv1cL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/414-8j9Ca8L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51PKj+-zETL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0B1Z31WMP",
+    "Date First Available": "22 May 2022"
+  },
+  "date_first_available_from_details": "22 May 2022",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "ChristopherParker",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 645,
+  "availability_text": "Only 6 left in stock.",
+  "in_stock": true,
+  "features": [
+    "‚úÖ PERFECT FOR SENSITIVE HANDS: Easily wash dirt from your hands with a non toxic formula that's infused with aloe vera and cucumber. Our naturally derived all natural soap helps eliminate stubborn smells and leaves hands feeling soft, clean and fresh",
+    "‚úÖ CUCUMBER & ALOE VERA FRAGRANCE: Our cucumber and aloe vera extract hand soap has a subtle scent you'll love. Wash and sanitise your hands with a cruelty free hand wash liquid soap that's tested, approved, soft on skin and smells heavenly on your senses",
+    "‚úÖ ECO FRIENDLY & PURE: Our hand wash liquid soap is free from VOC‚Äôs, chlorine bleaches, solvents, lanoline, sulphates, parabens and phosphates. Our vegan soap refill is readily biodegradable, gentle on skin is effective in both hard and soft water too",
+    "‚úÖ ZERO WASTE: Our eco friendly and fully sustainable solutions go far beyond your purchase. Simply send us back your empty bottles for professional cleaning so that they can be reused again and again. We even have refill partners across the UK to help make the world a cleaner, greener place to live",
+    "‚úÖ PRODUCED IN THE UK: Manufactured by Miniml in The Yorkshire Dales. Proudly independent and family owned too"
+  ],
+  "description": "Product Description Try our 5 Litre Natural Hand Soap Cucumber &amp; Aloe Vera Bring luxury touches into your bathroom with this Cucumber &amp; Aloe Vera Hand Soap. This naturally derived, gel hand soap eliminates stubborn smells and leaves hands feeling soft and clean, even after multiple washes. What‚Äôs not to love? How to Use: Turn nozzle to unlock. Elbow grease not required. Can be used on hands and body. Product Features Powerful on dirt, grime &amp; stubborn smells Leaves hands soft &amp; loved Removes all the nasties Natural &amp; subtle cucumber &amp; aloe vera fragrance Free from: VOC‚Äôs, chlorine bleaches, solvents, lanoline, sulphates, parabens &amp; phosphates PLANT POWERED &amp; NATURAL Easily wash dirt from your hands with a non toxic formula infused with cucumber &amp; aloe vera. Gentle on hands and naturally removes all the nasties! FRESH SUBTLE SCENT Our cucumber and aloe vera extract hand soap has a subtle scent you'll love. Wash and sanitise your hands with a cruelty free hand wash liquid soap that's tested, approved, soft on skin and smells heavenly on your senses. SUSTAINABLE REFILLS Switch to a more sustainable hand soap that comes in a bulk buy option for added value. Whether it's at home or work, easily and conveniently top up your kitchen and bathroom soap dispenser with our 5 litre refill bottle. OUR VALUES Vegan &amp; Cruelty Free Because guinea pigs shouldn't be used as guinea pigs, we perform zero animal testing or use any animal derived ingredients. British Manufactured Manufactured by Miniml in The Yorkshire Dales. Proudly independent and family owned too. No Nasty Ingredients Free from: VOC‚Äôs, Chlorine Bleaches, Solvents, Lanoline, Sulphates (SLS/ SLES), Parabens, Phosphates and Optical Brighteners. Plant Based Formulas All our formulations are Vegan, Cruelty Free and Paraben Free. Buy our 5 litre refills and fill up your forever bottle to reuse again and again! Cucumber &amp; Aloe Vera Hand Soap Lime, Basil &amp; Mandarin Hand Soap Sweet Clementine Hand Soap French Vanilla Hand Soap French Vanilla Hand + Body Lotion Add To Basket Add To Basket Add To Basket Buying Options Buying Options Customer Reviews 4.3 out of 5 stars 645 4.3 out of 5 stars 645 4.5 out of 5 stars 197 4.4 out of 5 stars 87 5.0 out of 5 stars 1 Price ¬£26.97 ¬£ 26 . 97 ¬£26.11 ¬£ 26 . 11 ¬£23.34 ¬£ 23 . 34 ‚Äî no data ‚Äî no data Sensitive Skin Friendly ‚úì ‚úì ‚úì ‚úì ‚úì Natural Ingredients ‚úì ‚úì ‚úì ‚úì ‚úì Vegan ‚úì ‚úì ‚úì ‚úì ‚úì Cruelty Free ‚úì ‚úì ‚úì ‚úì ‚úì Made in the UK ‚úì ‚úì ‚úì ‚úì ‚úì Closed Loop System- Return Refill &amp; Reuse! ‚úì ‚úì ‚úì ‚úì ‚úì",
+  "specifications_table": {
+    "Additives": "‚ÄéAll Natural, Gluten Free, Vegan, Paraben Free, Silicone Free, Sodium Laureth Sulphate Free, Sulphate Free",
+    "Units": "‚Äé5000.0 millilitre",
+    "Brand": "‚ÄéMiniml",
+    "Format": "‚ÄéGel",
+    "Age Range Description": "‚ÄéAdult"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Miniml Hand Soap Wash Liquid 5L Refill - Cucumber & Aloe Vera Infused Hand, Skin & Body Wash Gel for Soft and Sensitive Skin Care - 100% Vegan & Cruelty Free",
+      "Sales Rank - Reference": "Beauty",
+      "Bought in past month": "100+",
+      "Reviews - Rating": 4.3,
+      "Reviews - Rating Count": 645.0,
+      "Last Price Change": "just now",
+      "Buy Box Seller": "Amazon",
+      "FBA Pick&Pack Fee": 5.19,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 4.35,
+      "Lowest FBM Seller": "ChristopherParker (72% positive over last 12 months)",
+      "Total Offer Count": "4",
+      "Tracking since": "2022/08/02",
+      "Listed since": "2022/05/22",
+      "Categories - Root": "Beauty",
+      "Categories - Sub": "Hand Wash",
+      "Categories - Tree": "Beauty ‚Ä∫ Bath & Body ‚Ä∫ Cleansers ‚Ä∫ Hand Wash",
+      "Website Display Group - Name": "Health and Beauty",
+      "ASIN": "B0B1Z31WMP",
+      "Product Codes - EAN": "5060588563545",
+      "Product Codes - PartNumber": "MIN297",
+      "Parent ASIN": "B0F7HN828J",
+      "Variation ASINs": "B0CLS9DSQV, B0B1Z31WMP, B0CL7SYTDM, B0BN4H1XQR, B0CLS9BWG3, B0DWG2MBT9, B0DWFZTCDP",
+      "Freq. Bought Together": "B0B1YK1JCD, B0B1XNCNTM",
+      "Type": "SKIN_CLEANING_AGENT",
+      "Manufacturer": "Miniml",
+      "Brand": "Miniml",
+      "Brand Store Name": "Miniml",
+      "Brand Store URL Name": "Miniml",
+      "Brand Store URL": "https://www.amazon.com/stores/Miniml/page/BDABBAE4-11C4-4E83-ACEF-EE23548C6264",
+      "Product Group": "Drugstore",
+      "Model": "FCC-MINI-HS3-HDPE-5L",
+      "Size": "5 l (Pack of 1)",
+      "Unit Details - Unit Value": "5000",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "Cucumber & Aloe Vera",
+      "Item Form": "Gel",
+      "Target Audience": "Unisex Adult",
+      "Recommended Uses": "Body",
+      "Product Benefit": "Cleansing, Conditioning, pH Balancing, Moisturizing, Anti-Drying",
+      "Binding": "Personal Care",
+      "Number of Items": "1",
+      "Release Date": "2017-07-20",
+      "Languages": "English",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/51PKj+-zETL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/f00f21e2-ee23-4750-a47c-53758d74c550/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm¬≥)": "28.2 x 18.7 x 13.0 cm (= 6,855 cm¬≥ )",
+      "Package - Weight (g)": "5,370",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm¬≥)": "18.0 x 13.0 x 28.0 cm (= 6,552 cm¬≥ )",
+      "Item - Model (g)": "5,000",
+      "Ingredients": "Aqua, Sodium Olefin Sulfonate, Sodium Chloride, Cocamide MIPA, Sorbitol, PEG-7 Glyceryl Cocoate, Sodium Lauryl Sulfoacetate, Polysorbate 20, Lauryl Betaine, Glycerine, Bis-(lsostearoyl/ Oleoyl isopropyl) Dimonium Methosulfate, Potassium Sorbate, Sodium Benzoate, Aloe Barbadensis, Parfum.",
+      "Active Ingredients": "Natural",
+      "Special Ingredients": "All Natural, Gluten Free, Vegan",
+      "Safety Warning": "Store closed and out of direct sunlight"
+    }
+  },
+  "eans_on_page": [
+    "5060588563545"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5060588563545",
+  "asin_extracted_from_page": "B0B1Z31WMP",
+  "asin_queried": "B0B1Z31WMP",
+  "asin": "B0B1Z31WMP",
+  "_search_method_used": "title"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ision_login_handler.LoginResultPòB  ZÅ3backup.format_fixes_backup_20250717_181444.tools.archive.utilities.web_scraper_implPôj  PpÅ_backup.format_fixes_backup_20250717_181444.tools.archive.utilities.system_monitor.SystemMonitor.l  üÅ Ç?backup.format_fixes_backup_20250717_181444.tools.archive.experimental_helpers.complete_vision_playwright_extraction.ExtractionResult.extraction_timestampPò  ôÅ"ÇCbackup.format_fixes_backup_20250717_181444.tools.archive.experimental_helpers.complete_vision_playwright_extraction.CompleteVisionPlaywrightExtractor.emailPóˆ  êuÅibackup.format_fixes_backup_20250717_181444.tools.archive.browser_manager_tools_version.BrowserManager.max_tabsP¢$  àÅÇbackup.format_fixes_backup_20250717_181444.tools.archive.browser_manager_langraph_version.PlaywrightBrowserManager.metricsPüÃ  ÅÅÇbackup.format_fixes_backup_20250717_181444.tools.archive.browser_manager_langraph_version.BrowserPoolMetrics.total_pages_createdPü„  ·pÅ_backup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._parse_priceP†º  ∑AÅbackup.format_fixes_backup_20250717_181444.test_method_fixP†Ö  §kÅUbackup.fixedamazonextractor_fix_20250720_190621.passive_extraction_workflow_latest_backup.parent_dirP°è  ÅÇbackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extractor2.PassiveExtractionWorkflow.results_summaryP®Ó  ÅÇbackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extractor2.PassiveExtractionWorkflow._save_api_call_logP©-  ÅÇbackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extractor2.PassiveExtractionWorkflow._is_battery_productP®Ú  øÅ	Çbackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extractor2.PassiveExtractionWorkflow._classify_urlP®ˆ  òÅÇ)backup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extractor2.FixedAmazonExtractor.search_by_ean_and_extract_dataP©   ˆÅ#ÇEbackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extraction_workflow_latestIcom.PassiveExtractionWorkflow.max_cache_age_hoursPô  ˚Å(ÇObackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extraction_workflow_latestIcom.PassiveExtractionWorkflow._process_product_elementPôR  ûÅ*ÇSbackup.format_fixes_backup_20250717_181444.tools.archive.legacy_scripts.passive_extraction_workflow_latestIcom.PassiveExtractionWorkflow._extract_supplier_productsPô  æÅ)ÇQbackup.format_fixes_backu{
+  "asin_from_details": "B0B1LJG3ZN",
+  "title": "S/S Kitchen Gadget, Pizza Cutter",
+  "current_price": 4.15,
+  "main_image": "https://m.media-amazon.com/images/I/51XFqeU4rBL._AC_SX466_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51XFqeU4rBL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0B1LJG3ZN",
+    "Item model number": "13160C",
+    "Date First Available": "17 May 2022"
+  },
+  "date_first_available_from_details": "17 May 2022",
+  "prime_eligible": false,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Pebble Eleven",
+  "sold_by_amazon": false,
+  "rating": 5.0,
+  "review_count": 1,
+  "availability_text": "Only 8 left in stock.",
+  "in_stock": true,
+  "features": [
+    "S/S kitchen Gadget, Pizza Cutter"
+  ],
+  "specifications_table": {
+    "Package Dimensions": "‚Äé26 x 10 x 4 cm; 80 g",
+    "Batteries required": "‚ÄéNo"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 2121288,
+      "main_cat_name": "Home & Kitchen",
+      "sub_cat_current_rank": 1033,
+      "sub_cat_name": "Pizza Cutters 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "S/S Kitchen Gadget, Pizza Cutter",
+      "Sales Rank - Reference": "Home & Kitchen",
+      "Sales Rank - Display Group": "kitchen_display_on_website",
+      "Reviews - Rating": 5.0,
+      "Reviews - Rating Count": 1.0,
+      "Last Price Change": "15 months ago",
+      "Buy Box Seller": "Pebble Eleven (94% p

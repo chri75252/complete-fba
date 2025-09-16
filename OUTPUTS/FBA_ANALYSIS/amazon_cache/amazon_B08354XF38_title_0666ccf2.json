@@ -92,23 +92,12 @@
       "Unit Details - Unit Type": "count",
       "Material": "Polypropylene",
       "Videos - Video Count": "1",
-      "Videos - Main Videos": "https://m.media-amazon.com/images/I/615WxH71WOL.jpg, Creator: Main, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/1752c16f-15eb-42a7-bab9-3c8121aee00a/default.jobtemplate.hls.m3u8",
-      "Package - Dimension (cm³)": "108.0 x 15.5 x 15.0 cm (= 25,110 cm³ )",
-      "Package - Weight (g)": "9,760",
-      "Package - Quantity": "1",
-      "One Time Coupon - Percentage": "5 %"
-    }
-  },
-  "eans_on_page": [
-    "6242281351813"
-  ],
-  "ean_on_page_source": "Keepa_Product_Details",
-  "ean_on_page": "6242281351813",
-  "sales_rank": 258,
-  "category": "Garden 29",
-  "sales_rank_source": "Keepa_SalesRankDetailsTable",
-  "estimated_monthly_sales_from_bsr": 1000,
-  "asin_extracted_from_page": "B08354XF38",
-  "asin_queried": "B08354XF38",
-  "asin": "B08354XF38"
-}
+      "Videos - Main Videos": "https://m.media-amazon.com/ima# Batch 2 Deduplication Implementation Status - Multi-Batch Stabilization Plan
+
+## Primary Goal/Purpose
+Implementation of **Batch 2** of a multi-batch stabilization plan for the Amazon FBA Agent System. The high-level goal of this batch is to **make the 2-step deduplication filter strict and consistent from end-to-end.** This eliminates the count mismatches between pre-filter "full" count and atomic save "new" count (e.g., "need 9 / add 1" mismatches).
+
+The solution creates a shared normalization utility and uses it at every stage: data ingress (scraper), pre-filtering, and final atomic save, ensuring consistent deduplication throughout the entire workflow.
+
+## Background Context
+**Previous Work**: Batch 1 successfully implemented 6 surgical patches for st

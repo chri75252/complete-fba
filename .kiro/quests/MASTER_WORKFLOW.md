@@ -135,821 +135,530 @@ Root Cause Analysis Tasks
 The following investigation must be performed to identify the source of the incorrect count:
 
 1. Configuration Source Analysis
-Examine: config/poundwholesale_categories.json
-Verify: Actual number of category URLs defined
-Count: Manual verification of entries vs reported count
-2. Category Discovery Logic
-Search Pattern: total_categories.*=.*len\(.*\)
-File Focus: tools/passive_extraction_workflow_latest.py
-Method: _run_hybrid_processing_mode()%20-%20Copy%20-%20Copy%20-%20POSTLONGRUNPREKIRO2%20beforecompletion-\tools\passive_extraction_workflow_latest.py#L4769-L4884) and category initialization
-3. State Manager Investigation
-File: utils/fixed_enhanced_state_manager.py
-Focus: update_progression_unified()%20-%20Copy%20-%20Copy%20-%20POSTLONGRUNPREKIRO2%20beforecompletion-\utils\fixed_enhanced_state_manager.py#L604-L660) and initialize_category_processing()%20-%20Copy%20-%20Copy%20-%20POSTLONGRUNPREKIRO2%20beforecompletion-\utils\fixed_enhanced_state_manager.py#L496-L511)
-Check: Where total_categories is set and from what source
-4. Config Loading Verification
-File: SystemConfigLoader.py
-Verify: Category list loading and counting logic
-Check: Any filtering or exclusion logic that might reduce count
-📋 DETAILED IMPLEME
-| **Category Manifests** | ❌ **MISSING** | 🔴 Critical | Method exists but not called consistently in workflow |
-| **Filter Invariant Logs** | ✅ **IMPLEMENTED** | ✅ **FIXED** | Filter transparency logging with invariant validation now active |
-| **Financial Report Triggers** | ❌ **MISSING** | 🔴 Critical | Logic exists but threshold monitoring not implemented |
-| **Category Summary Logs** | ❌ **MISSING** | 🟡 High | No comprehensive category completion metrics |
-| **Resumption Logic** | 🚨 **MIXED** | 🔴 Critical | Inconsistent use of `system_progression` vs `supplier_extraction_progress` |
-| **Deterministic Phases** | ⚠️ **PARTIAL** | 🟡 High | Still uses detection-based logic in some areas |
-
-### **🛠️ SPECIFIC IMPLEMENTATION ISSUES FOUND**
-
-1. **Lines 1891, 3741-3759** in `passive_extraction_workflow_latest.py`: Uses wrong resumption source
-2. **Lines 484-507** in `fixed_enhanced_state_manager.py`: Dual updates instead of canonical
-3. **Line 4442** in workflow: Manifest generation not called before filtering
-4. ~~**Lines 4454-4470**: Missing filter invariant validation~~ ✅ **FIXED: Lines 4385-4391** - Filter transparency logging implemented
-5. **Lines 4580-4590**: Financial trigger monitoring not implemented
-
-### **🎯 COMPLIANCE STATUS AGAINST SPECIFICATION**
-
-| Specification Requirement | Implementation Status | Compliance |
-|---------------------------|----------------------|-------------|
-| `system_progression` as single source of truth | Mixed implementation | 🔴 60% |
-| Atomic manifest generation before filtering | Not implemented | 🔴 0% |
-| Filter invariant validation and logging | ✅ **IMPLEMENTED** | ✅ **100%** |
-| Financial report threshold triggering | Not implemented | 🔴 0% |
-| Category summary diagnostic logging | Not implemented | 🔴 0% |
-| Deterministic phase transitions | Partially implemented | 🟡 70% |
-| Resume validation guards | Not implemented | 🔴 0% |
-| Hash index rebuild logging | Implemented | ✅ 100% |
-
----
-
-## 📊 **IMPLEMENTATION ROADMAP & PRIORITY FIXES**
-
-### **Phase 1: Critical Fixes (P0) - Must Complete First**
-- [ ] **Fix resumption logic** to use `system_progression` consistently across all resume operations
-- [✅] **~~Implement filter invariant validation~~** ✅ **COMPLETED** - Filter transparency logging with invariant validation now active
-- [ ] **Add category manifest generation** calls before all filtering operations
-
-### **Phase 2: Core Features (P1) - High Impact**
-- [ ] **Implement financial report triggering** with proper linking map count monitoring
-- [ ] **Add category summary logging** for comprehensive diagnostic visibility
-- [ ] **Complete deterministic phase implementation** removing all detection-based logic
-
-### **Phase 3: Robustness (P2) - System Hardening**
-- [ ] **Add resume validation guards** with integrity checking before resumption
-- [ ] **Ensure all critical saves are atomic** using Windows Save Guardian consistently
-- [ ] **Implement frozen denominator enforcement** with immutability guarantees
-
----
-
-## 🏗️ **SYSTEM ARCHITECTURE OVERVIEW**
-
-### **Processing Philosophy**
-- **Deterministic Resumption**: The system resumes from interruptions with 100% accuracy using absolute indexing and phase-aware state, with no heuristics.
-- **Stable Denominators**: Product counts for progress calculation are frozen at discovery and are immune to later changes, ensuring stable user-facing metrics.
-- **Robust Pipelines**: Data flows through a strict filtering and dispatching logic (LM skip → Cache skip → Queue compilation) to prevent misclassification of work.
-- **Atomic Persistence**: All critical data files (`processing_state`, `linking_map`, caches, manifests) are written atomically via Windows Save Guardian (WSG) with built-in telemetry.
-- **Transparent Observability**: Key operational metrics, such as filter invariants, manifest diffs, and hash index recaps, are logged to provide immediate insight into system health and data integrity.
-
-### **Data Flow Architecture**
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MASTER DATA FLOW ARCHITECTURE                │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  🌐 SUPPLIER WEBSITE                                            │
-│  └── Category URLs → Product URLs → Product Details             │
-│                         │                                       │
-│                         ▼                                       │
-│  🔍 INTELLIGENT FILTERING (O(1) Hash Lookups)                  │
-│  ├── Linking Map Check → Skip Complete Products                 │
-│  ├── Product Cache Check → Skip Supplier Extraction             │
-│  └── New Products → Full Processing Required                    │
-│                         │                                       │
-│                         ▼                                       │
-│  🏭 SUPPLIER PROCESSING (for new products)                      │
-│  ├── Extract: Title, Price, EAN, Description, Images            │
-│  ├── Save: Product Cache Files (Atomic)                         │
-│  └── Update: Processing State (Atomic)                          │
-│                         │                                       │
-│                         ▼                                       │
-│  🛒 AMAZON ANALYSIS QUEUE (Cached + New Products)               │
-│  ├── EAN Lookup → ASIN Resolution                               │
-│  ├── Title Fallback → Alternative Matching                      │
-│  ├── Extract: Price, Reviews, Rank, Availability                │
-│  └── Save: Linking Map Entries (Atomic Upsert)                  │
-│                         │                                       │
-│                         ▼                                       │
-│  💰 FINANCIAL ANALYSIS (Triggered every N entries)              │
-│  ├── Calculate: Profit, ROI, Fees, Shipping                     │
-│  ├── Generate: Financial Reports                                │
-│  └── Save: Analysis Results                                     │
-│                         │                                       │
-│                         ▼                                       │
-│  📊 PROGRESS TRACKING & RESUME                                  │
-│  ├── System State: Resume Points & Phase Tracking              │
-│  ├── User Progress: Real-time Calculation                       │
-│  └── Historical Data: Persistent File Storage                   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 📋 **DETAILED PROCESSING WORKFLOW**
-
-**🚨 WORKFLOW MODE CLARIFICATION**: This detailed workflow describes the **HYBRID PROCESSING MODE** implementation (`_run_hybrid_processing_mode()`) which is the primary and recommended workflow. The legacy regular workflow mode follows a different pattern and is not covered by this specification.
-
-**Configuration Requirement**: Ensure `hybrid_processing.enabled = true` in `system_config.json` for this workflow to be active.
-
-### **PHASE 1: CATEGORY INITIALIZATION**
-
-#### **Step 1.1 — Category Discovery & Canonical Seeding (Deterministic)**
-```
-INPUT: Supplier base URL (e.g., "https://www.poundwholesale.co.uk")
-ACTION: Discover and normalize all category URLs; seed state for fresh start or resume
-OUTPUT: Ordered list of category URLs + seeded system_progression
-```
-**Discovery Pipeline**
-1.  **Primary**: Site traversal/sitemap/category grid (configurable selectors).
-2.  **Secondary**: Known category index (cached list).
-3.  **Tertiary**: User-provided list (manual override).
-4.  **Quaternary**: Fallback seed (minimal safety set).
-
-**Normalization (single function, used everywhere)**
-*   Lowercase host, strip UTM/tracking params, normalize trailing slashes, sort query keys deterministically.
-*   The **same** `normalize_url(url)` is used for Manifest URLs, Linking-map supplier URLs, and Product-cache `url` fields to guarantee **hash set equality**.
-
-**State Seeding (fresh vs resume)**
-*   **Fresh start** (no/empty state):
-    ```json
-    {
-      "system_progression": {
-        "total_categories":  N,
-        "current_category_index": 0,
-        "current_product_index_in_category": 0,
-        "current_category_url": "<first_category_url>",
-        "current_phase": "supplier",
-        "total_products_in_current_category": 0
-      }
-    }
-    ```
-    Also **zero auxiliary cursors** (`last_processed_index`, `progress_index`, `resumption_index`) to avoid inherited offsets.
-*   **Resume** (state exists):
-    *   **Only** `system_progression` is authoritative.
-    *   If `system_progression` is missing but legacy state exists, derive it **once** and persist; thereafter `system_progression` is the single source of truth.
-    *   Never infer a resume point from completion lists or heuristic scans.
-
-**Absolute Category Indexing**
-All downstream calls (progress updates, resets, logs) use an **absolute** `category_index` derived from the resume point to prevent batch drift.
-```python
-start_index = state.system_progression.current_category_index
-for i in range(start_index, total_categories):
-    # i is the absolute_category_index
-```
-**Observability (startup)**
-```
-🚀 STARTUP: total_categories=N, resume_index=i, phase=SUPPLIER|AMAZON, url=<...>
-⚠️ Resume-aware invariants enabled (i>0)
-```
-
----
-
-#### **Step 1.2 — Category Manifest Population (Authoritative Bridge)**
-```
-INPUT: category_url
-ACTION: Crawl all pages; extract ALL product URLs for the category
-OUTPUT: Manifest file (atomic) + in-memory manifest map for the category
-```
-**Why this is P0-critical**: The manifest is the **bridge** from “discovered products” to the “filtering pipeline”. It must be written **before** any filtering or Amazon work.
-
-**Implementation**
-```python
-# After URL discovery into category_products:
-self.category_manifests[category_url] = [
-    p["url"] for p in category_products if p.get("url")
-]
-assert len(self.category_manifests[category_url]) == len(category_products)
-
-manifest_obj = {
-  "category_url": category_url,
-  "scraped_at": datetime.utcnow().isoformat() + "Z",
-  "product_urls": self.category_manifests[category_url],
-  "count": len(self.category_manifests[category_url]),
-  "supplier_name": self.supplier_slug,
-  "slug": slugify(category_url)[:48]
-}
-
-WindowsSaveGuardian.save_json_atomic(manifest_path, manifest_obj)
-self.log.info(f"📝 MANIFEST: {manifest_obj['count']} URLs → {manifest_path}")
-```
-**Manifest Diff Warnings (non-mutating)**: If a previous manifest exists, compute `prev_count → curr_count`. **Warn** on change, but **do not** mutate the frozen denominator.
-```
-⚠️ MANIFEST COUNT CHANGE: <category_url> changed from <prev> to <curr> URLs
-```
-
----
-
-#### **Step 1.3 — Discovery Denominator (Write-Once / Freeze Policy)**
-```
-INPUT: len(product_urls) from manifest
-ACTION: Record "discovered_total" only on first write for the category
-OUTPUT: Frozen denominator used for category progress %; never changed
-```
-**Policy & Rationale**: To keep progress stable against supplier-side changes, record the denominator the first time a category is successfully crawled and **freeze it**. On future runs, if manifest counts differ, log a **diff warning** for diagnostics only.
-
-**State update (first-time only)**
-```python
-if not state.has_denominator(category_url):
-    state.update_discovered_products_in_category(category_url, len_urls)
-    state.update_progression_unified(
-        # ... update total_products_in_current_category
-    )
-    state.save_state(preserve_interruption_state=True)
-```
-**Log**
-```
-🔍 REAL-TIME DISCOVERY: Category <slug> discovered <len_urls> products (denominator frozen)
-```
-
----
-
-#### **Step 1.4 — Hash Index Recap After Linking-Map Writes**
-After any `linking_map.json` save/reload, rebuild the in-memory sets (`lm_url_set`, `lm_ean_set`, `lm_asin_set`) and emit timing and counts. This proves the skip engine’s inputs match persisted data exactly.
-```
-🔥 HASH INDEX BUILT: 8618 EANs, 8878 URLs, 5944 ASINs in 0.23s
-```
-
----
-
-### **PHASE 2: INTELLIGENT URL FILTERING (LM → Cache → Extract)**
-
-#### **Step 2.1 — Primary Skip: Linking Map (O(1), LM-only)**
-```
-INPUT: product_urls (from manifest)
-ACTION: Build normalized hash of linking_map supplier URLs; skip completed products
-OUTPUT: skip_entirely[], remaining[]
-```
-**Key rule**: The “already processed” decision uses **only** the **linking map** (persistent, cross-session truth). Do **not** consult `processing_state`.
-
-**Implementation**
-```python
-lm_url_set = { normalize_url(e.get("supplier_url","")) for e in linking_map if e.get("supplier_url") }
-
-skip_entirely, remaining = [], []
-for url in product_urls:
-    u = normalize_url(url)
-    if u in lm_url_set: skip_entirely.append(url)
-    else:               remaining.append(url)
-```
-**Log**
-```
-🔗 Linking-map check: <len(skip_entirely)> already complete
-```
-
----
-
-#### **Step 2.2 — Secondary Split: Product Cache (Amazon-only vs Full Extraction)**
-```
-INPUT: remaining[] from Step 2.1
-ACTION: Identify which URLs already have supplier data cached
-OUTPUT: needs_amazon_only[]  and  needs_full_extraction[]
-```
-**Implementation**
-```python
-cache_url_set = { normalize_url(p.get("url","")) for p in cached_products if p.get("url") }
-
-needs_amazon_only, needs_full_extraction = [], []
-for url in remaining:
-    u = normalize_url(url)
-    if u in cache_url_set:
-        needs_amazon_only.append(url)
-    else:
-        needs_full_extraction.append(url)
-```
-**Log**
-```
-💾 Product-cache check: <len(needs_amazon_only)> cached with supplier data
-```
-
----
-
-#### **Step 2.3 — Filter Invariant & Transparency (✅ IMPLEMENTED)**
-A critical invariant is logged to make routing bugs immediately visible. If the equality fails, an error and diagnostic snapshot are emitted, but the process does not halt.
-
-**Enhanced Logging Format (Recently Implemented)**:
-```
-🔗 Linking-map check: <len(skip_entirely)> complete (skipped)
-💾 Product-cache check: <len(needs_amazon_only)> have supplier data; <len(needs_full_extraction)> need supplier extraction
-🧮 Filter Invariant: in=<N> == skip+amz_only+full=<Total>
-FILTER[C{abs_idx} <slug>]: in=N skip=A needs_amz=B needs_full=C
-```
-
-**Implementation Details**:
-```python
-# Enhanced filter transparency logging (Lines 4385-4391)
-skip_entirely = filtered["skip_entirely"]
-needs_amazon_only = filtered["needs_amazon_only"]
-needs_full_extraction = filtered["needs_full_extraction"]
-
-calc_total = (len(skip_entirely) + len(needs_amazon_only) + len(needs_full_extraction))
-self.log.info(f"🔗 Linking-map check: {len(skip_entirely)} complete (skipped)")
-self.log.info(f"💾 Product-cache check: {len(needs_amazon_only)} have supplier data; {len(needs_full_extraction)} need supplier extraction")
-self.log.info(f"🧮 Filter Invariant: in={len(urls)} == skip+amz_only+full={calc_total}")
-```
-
----
-
-#### **Step 2.4 — “No-Work” Category Completion (Non-Sticky)**
-If `needs_amazon_only` and `needs_full_extraction` are both empty, the category is marked as complete for this session.
-
-**Non-sticky semantics**: This completion marker is **never** used to compute resumes. Only `system_progression` drives resume logic, avoiding the “permanently skipped category” class of bugs.
-
----
-
-### **PHASE 3: SUPPLIER DATA EXTRACTION (ONLY for `needs_full_extraction`)**
-
-#### **Step 3.1 — Browser Extraction & Cache Persistence**
-```
-INPUT: needs_full_extraction[]
-ACTION: Navigate → parse → validate → persist; per-product state updates and periodic cache saves
-OUTPUT: Updated cached_products; progress persisted atomically
-```
-**Extraction targets**: Title, price (wholesale), EAN/Barcode, images, description, brand, category tags, pack size/variants.
-
-**Authentication Tiers**:
-1.  Reuse valid session.
-2.  Re-authenticate with stored credentials.
-3.  Manual recovery hook (optional).
-4.  Fallback: continue without price (flag `missing_price=True`).
-
-**Per-product save frequency**: To prevent data loss on long runs, the product cache is saved atomically via WSG at a configurable frequency (e.g., every N products).
-```python
-freq = self.system_config.get("supplier_cache_control", {}).get("update_frequency_products", 1)
-if (new_products_added % freq) == 0:
-    WindowsSaveGuardian.save_json_atomic(cache_file_path, self.cached_products)
-```
-**State hygiene**: After **each** product is processed, `current_product_index_in_category` is updated and the state is saved immediately.
-
----
-
-#### **Step 3.2 — Post-Extraction Sanity & Next-Phase Prep**
-A summary is emitted to confirm the number of newly extracted products.
-```
-SUPPLIER DONE[C{abs_idx} <slug>]: newly_extracted=R, cache_total=Z
-```
-Crucially, items from `needs_amazon_only` are **not** routed through this phase, preventing them from being mislabeled as "already processed."
-
----
-
-### **PHASE 4: AMAZON ANALYSIS QUEUE COMPILATION (Separate Dispatcher)**
-
-#### **Step 4.1 — Build the Amazon Queue (Strict Separation)**
-```
-INPUT:
-  - needs_amazon_only[]           # From Step 2.2
-  - newly_extracted_success_urls  # From Step 3.1
-ACTION: Normalize, combine, and deduplicate
-OUTPUT: amazon_queue[] for PHASE 5
-```
-**Why a separate dispatcher**: This strict separation prevents items that only need Amazon analysis from ever entering the supplier loop, which was a root cause of incorrect "skipping" logs. It ensures a clean, auditable hand-off.
-
-**Compilation**
-```python
-amazon_queue = []
-amazon_queue.extend(needs_amazon_only)
-amazon_queue.extend(newly_extracted_success_urls)
-amazon_queue = list(sorted({ normalize_url(u) for u in amazon_queue })) # Deterministic order
-```
-**State advance**: The system state is updated to reflect the phase change and the product index is reset for the Amazon pass.
-```python
-state.update_progression_unified(current_phase="amazon_analysis", current_product_index_in_category=0)
-state.save_state(preserve_interruption_state=True)
-```
-**Log**
-```
-AMAZON QUEUE[C{abs_idx} <slug>]: total=T cached=C newly_extracted=E
-```
-
----
-
-### **PHASE 5: AMAZON PRODUCT ANALYSIS (QUEUE-DRIVEN, RESUME-SAFE)**
-
-#### **Step 5.0 — Dispatcher & Resume Hygiene**
-On resume, if `current_phase == "amazon_analysis"`, the system rebuilds the **exact same `amazon_queue`** (using a deterministic sort) and seeks to `current_product_index_in_category` to continue work. The queue is never reordered mid-run.
-
----
-
-#### **Step 5.1 — Fast Path: Cached Amazon Result by EAN/ASIN**
-Before live lookup, the system attempts to load a cached Amazon result from disk using the EAN or a known ASIN as the key.
-`OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_{ASIN}_{EAN}.json`
-
----
-
-#### **Step 5.2 — Live Lookup: EAN First, Title Fallback**
-*   **EAN search (preferred)**: An exact EAN query is made. If multiple results are returned, the best is selected based on brand and pack size match. Confidence is `high`.
-*   **Title fallback**: If EAN fails, a robust heuristic search is performed using the normalized title and brand. Results are scored based on token overlap, price plausibility, and other signals. Confidence is `medium` or `low`.
-*   **No match**: A "no-match" entry is created in the linking map for auditability.
-
-**Logs**
-```
-🔎 AMAZON LOOKUP (EAN): 5033849048631 → ASIN=B07D3GVZZL (conf=high)
-🔎 AMAZON LOOKUP (TITLE): "tiara necklace beauty set" → ASIN=B0... (conf=medium)
-❌ AMAZON NO-MATCH: reason="No confident match by EAN or title"
-```
-
----
-
-#### **Step 5.3 — Amazon Data Harvest (Detail Extraction)**
-Once an ASIN is resolved, detailed data is extracted, including pricing, competition (seller count), demand signals (BSR, reviews), fulfillment details (FBA fees), and availability.
-
----
-
-#### **Step 5.4 — Linking Map Entry Creation (Idempotent Merge)**
-A canonical entry is created or updated in `linking_map.json`.
-**Merge Policy**: The `supplier_url` is the primary key. If an entry exists, it is updated in-place (upsert); new entries are appended. This prevents duplicate entries. The `match_method` and `confidence` are only ever upgraded, never downgraded.
-
-**Write Discipline**: The linking map is saved atomically via WSG, and the in-memory hash indexes are immediately rebuilt and recapped in the logs.
-```
-🔗 LM UPSERT: url=<...>, asin=B07D..., method=ean, conf=high (new|updated)
-🔥 HASH INDEX BUILT: 8619 EANs, 8879 URLs, 5945 ASINs in 0.21s
-```
-
----
-
-#### **Step 5.5 — Per-Item Progress & Invariants**
-After each item in the Amazon queue is processed, `current_product_index_in_category` is incremented and the state is saved immediately.
-```
-🧮 Amazon Invariant: processed={i+1} of {len(amazon_queue)} (ok)
-```
-
----
-
-### **PHASE 6: CATEGORY COMPLETION & TRANSITION**
-
-#### **Step 6.1 — Category Completion Criteria**
-A category is considered complete when the supplier work is done and the Amazon queue for that category is fully processed. The state is updated and a log is emitted.
-```
-✅ CATEGORY COMPLETE[C{abs_idx}]: <slug>
-```
-
----
-
-#### **Step 6.2 — Category Metrics Summary (Diagnostic, Non-Mutating)**
-At the end of a category, a single diagnostic block is logged to provide a full-funnel view for auditors. This summary **does not** mutate any state, especially not the frozen denominator.
-```
-📊 CATEGORY SUMMARY[C{abs_idx} <slug>]
-  discovered (frozen) : 60
-  skipped (LM)        : 47
-  amazon_only (cache) : 12
-  full_extraction     : 1
-  supplier_extracted  : 1
-  amazon_analyzed     : 13
-  lm_entries_added    : 1  (updates: 0)
-  duration            : 01:23
-```
-
----
-
-#### **Step 6.3 — Transition to Next Category (Absolute Indexing)**
-The state is advanced to the next category, resetting the per-category product index and phase back to "supplier".
-```python
-state.update_progression_unified(
-    current_category_index=abs_idx + 1,
-    current_product_index_in_category=0,
-    current_phase="supplier",
-    current_category_url=get_next_category_url(abs_idx + 1)
-)
-state.save_state(preserve_interruption_state=True)
-```
-**Log**
-```
-➡️ NEXT CATEGORY: index={abs_idx+1}/{total_categories} url=<next_url or END>
-```
-
----
-
-## 🔄 **SYSTEM RESUMPTION MECHANISM**
-
-### **Resume Decision Matrix (No Heuristics)**
-*   **Fresh Start** when:
-    *   The processing state file is absent, unreadable, or a minimal seed.
-    *   An explicit `force_fresh_start` flag is set in the config.
-*   **Resume** in all other cases, strictly from `system_progression`.
-
-### **Resume Logic by Phase**
-*   **Supplier Phase (`current_phase == "supplier"`)**: Continues supplier extraction from `current_product_index_in_category`.
-*   **Amazon Phase (`current_phase == "amazon_analysis"`)**: Rebuilds the deterministic `amazon_queue` and seeks to `current_product_index_in_category` to continue analysis.
-
-**🚨 CRITICAL IMPLEMENTATION ISSUE**: 🚨 **MIXED IMPLEMENTATION** - Inconsistent use of `system_progression` vs `supplier_extraction_progress`
-
-**🔴 PROBLEMATIC CODE LOCATIONS**:
-1. **Line 1891** in `passive_extraction_workflow_latest.py`:
-   ```python
-   # ❌ WRONG: Using supplier_extraction_progress
-   start_category = self.state_manager.state_data.get(
-       "supplier_extraction_progress", {}
-   ).get("current_category_index", 0)
-   ```
-
-2. **Lines 3741-3759**: Resume calculations use wrong structure
-3. **Lines 484-507** in `fixed_enhanced_state_manager.py`: Dual updates instead of canonical updates
-
-**✅ CORRECT IMPLEMENTATION PATTERN**:
-```python
-def _get_resume_point(self):
-    """Get canonical resume point from system_progression ONLY"""
-    sp = self.state_manager.state_data.get("system_progression", {})
-    
-    current_phase = sp.get("current_phase", "supplier")
-    current_category_index = sp.get("current_category_index", 0)
-    current_product_index = sp.get("current_product_index_in_category", 0)
-    
-    # Use phase-specific resumption indices when available
-    if current_phase == "supplier":
-        resume_index = sp.get("supplier_extraction_resumption_index", current_product_index)
-    elif current_phase == "amazon_analysis":
-        resume_index = sp.get("amazon_analysis_resumption_index", current_product_index)
-    else:
-        resume_index = current_product_index
-    
-    return {
-        "phase": current_phase,
-        "category_index": current_category_index,
-        "product_index": resume_index,
-        "category_url": sp.get("current_category_url", "")
-    }
-```
-
-**🛠️ REQUIRED FIXES**:
-- **Files to Modify**: 
-  - `tools/passive_extraction_workflow_latest.py` (Lines: 1891, 3741-3759, 3803-3822)
-  - `utils/fixed_enhanced_state_manager.py` (Lines: 484-507, 1106-1134)
-- **Action**: Replace all resumption logic to use `system_progression` as single source of truth
-
-### **Resume Validation (Hard Guards)**
-Before resuming, a validation function checks the integrity of the `system_progression` object (e.g., indices are in bounds, phase is valid, URL matches index). If validation fails, the system falls back to a fresh start with an explicit warning.
-```
-RESUME: phase=amazon_analysis cat_idx=50/119 prod_idx=12/60 url=<...> ✅ validated
-```
-
----
-
-## 📊 **PROGRESS TRACKING SYSTEM**
-
-### **Canonical State & Counters**
-*   **`system_progression`** is the **only** source of resume truth.
-*   **`global_counters`** reflect **this session** only and are used for informational display.
-*   Historical truth (e.g., total products ever processed) is derived from the files themselves (`linking_map.json`, caches).
-
-### **User Progress (Derived on Demand)**
-Progress percentages are always calculated on-demand from the canonical state and the frozen denominators. They are not stored, preventing state drift.
-```python
-overall_pct = global_counters["total_categories_completed"] / system_progression["total_categories"]
-category_pct = system_progression["current_product_index_in_category"] / max(1, system_progression["total_products_in_current_category"])
-```
-**Log**
-```
-PROGRESS: categories 50/119 (42%) | C50 12/60 (20%) phase=amazon_analysis
-```
-
----
-
-## 🔧 **DATA MANAGEMENT & PERSISTENCE**
-
-### **Windows Save Guardian (WSG) Usage**
-All critical saves (`processing_state.json`, `linking_map.json`, manifests, caches) use **WSG** with **telemetry** and an **anti-truncation guard**. This involves writing to a temporary file and then performing an atomic rename.
-
-**Telemetry Log**: Every save attempt is logged to `OUTPUTS/DIAGNOSTICS/save_telemetry.log` with its strategy, status, time, and size.
-
-### **Save Cadence (Discipline)**
-State is saved immediately after:
-*   Every `update_progression_unified(...)` call.
-*   Writing a discovery denominator.
-*   Each `linking_map.json` write.
-*   Marking a category complete and transitioning to the next.
-
----
-
-## ⚡ **HASH OPTIMIZATION SYSTEM**
-
-### **Indexes (Built from Files, Not State)**
-For O(1) lookups, in-memory hash sets are built directly from the persisted files, ensuring they are always in sync with the source of truth.
-*   **From `linking_map.json`**: `lm_urls`, `lm_eans`, `lm_asins`
-*   **From `cached_products`**: `cache_urls`, `cache_eans`
-
-**Rebuild Triggers**: Indexes are rebuilt on startup, after every `linking_map.json` write, and at the start of a category if caches may have changed.
-
----
-
-## 💰 **FINANCIAL ANALYSIS & REPORTING**
-
-### **Trigger**
-A financial report is generated whenever the number of new entries in `linking_map.json` since the last report exceeds a configurable threshold (e.g., 50).
-
-**🚨 IMPLEMENTATION STATUS**: ❌ **MISSING** - Logic exists but threshold monitoring not implemented in workflow.
-
-**🛠️ REQUIRED IMPLEMENTATION**:
-```python
-# After linking map updates in chunked processing:
-current_linking_map_count = len(self.linking_map)
-financial_batch_size = self.config_loader.get_financial_batch_size()
-
-if current_linking_map_count > 0 and current_linking_map_count % financial_batch_size == 0:
-    self.log.info(f"🚨 FINANCIAL REPORT TRIGGER: Reached {current_linking_map_count} entries (threshold: {financial_batch_size})")
-    try:
-        from tools.FBA_Financial_calculator import run_calculations
-        financial_results = run_calculations(supplier_name)
-        if financial_results and financial_results.get('statistics', {}).get('output_file'):
-            self.log.info(f"✅ Financial report generated: {financial_results['statistics']['output_file']}")
-    except Exception as e:
-        self.log.error(f"❌ Financial report generation failed: {e}")
-```
-
-**🛠️ REQUIRED FIX**: 
-- **File**: `tools/passive_extraction_workflow_latest.py`
-- **Location**: Lines 4580-4590 (after linking map saves in chunked processing)
-- **Action**: Add financial report triggering mechanism with proper threshold monitoring
-
-### **Inputs & Calculations**
-Using data from the linking map, the system computes per-item `gross_profit`, `profit_margin %`, and `roi %`, accounting for a full breakdown of FBA fees, referral fees, shipping, and VAT.
-
-### **Output & Storage**
-Reports are saved as timestamped JSON files to `OUTPUTS/FBA_ANALYSIS/financial_reports/`.
-```
-💰 FINANCIAL REPORT TRIGGER: 150 entries (threshold: 50)
-📊 Analyzed 150 products → 89 profitable (59.3%)
-📋 Saved: OUTPUTS/FBA_ANALYSIS/financial_reports/financial_report_1692367800.json
-```
-
----
-
-## 🧪 **INVARIANTS, VALIDATION & DIAGNOSTICS**
-
-### **Core Invariants**
-1.  **Filter Accounting**: `in == skip_entirely + needs_amazon_only + needs_full_extraction`.
-2.  **Resume Safety**: `validate_resume_point(...)` must pass before processing.
-3.  **LM Uniqueness**: No two entries may have the same normalized `supplier_url`.
-4.  **Denominator Immutability**: A category's discovered count, once set, never changes.
-
-### **Severity Rules**
-*   **Fresh start**: Violations are treated as **CRITICAL**.
-*   **Resume**: Mismatches between session and lifetime counters are downgraded to **WARNING**, as some drift is expected. An invalid resume point remains **CRITICAL**.
-
----
-
-## 🧩 **SYSTEM CONFIGURATION**
-
-The system is controlled by a master `config/system_config.json` file.
-
-**🚨 CRITICAL CONFIGURATION**: Ensure hybrid processing is enabled to use the workflow described in this specification:
-
-```json
-{
-  "hybrid_processing": {
-    "enabled": true,
-    "processing_modes": {
-      "chunked": {
-        "enabled": true,
-        "chunk_size_categories": 1
-      },
-      "balanced": {
-        "enabled": false
-      },
-      "sequential": {
-        "enabled": false
-      }
+Examine: c{
+  "asin_from_details": "B09DQ8T3ZZ",
+  "title": "Spear Jackson Heavy Duty Sink and Drain Unblocker Gel - Powerful Formula- Indoor and Outdoor, 5 l (Pack of 1)",
+  "current_price": 20.99,
+  "amazon_monthly_sales_badge": 800,
+  "main_image": "https://m.media-amazon.com/images/I/61V6bIrKnXL._AC_SL1460_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41drVqbESNL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51TJLcBUBeL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51KNh8KVkEL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/I/41DffRuNV3L._AC_SR38,50_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B09DQ8T3ZZ",
+    "Date First Available": "16 April 2021"
+  },
+  "date_first_available_from_details": "16 April 2021",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Assured Products Limited",
+  "sold_by_amazon": false,
+  "rating": 4.1,
+  "review_count": 723,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "SPEAR & JACKSON CLEANING PRODUCTS: Since 1760 Spear and Jackson has been selling hand, garden, contractors, agricultural, landscaping and professional tools from its base in the city of Sheffield. Their range of cleaning products are made to target tough stains, grease, grim and fat. Their Heavy Duty Outdoor Drain Unblocker Gel is designed to clear any deposits that are blocking your sink, leaving it draining smoothly",
+    "SINK UNBLOCKER LIQUID GEL: Spear and Jackson's Heavy Duty Sink And Drain Unblocker comes in gel form and is designed to dissolve the fat, food, hair or soap residue build up that's blocking your sink. Their heavy duty sink and drain unblocker gel will instantly clear and dissolve the unwanted blockage, and with the sink freshener element of the gel, your sink will be look and smell brand new",
+    "BATHROOM & KITCHEN SINK UNBLOCKER: With no drain snake require, this product really couldn't be any easier to use. The gel will dissolve any build up that is causing a blockage in your sink or drain in 3 hours. Ideal for the kitchen or bathroom sink, however this Heavy Duty Sink & Drain Unblocker works on exterior drains just as well. In comparison to other drain cleaners and unblockers on the market, this product has a powerful formulation that achieves results in rapid speed",
+    "BATHROOM CLEANING PRODUCTS: Spear and Jackson's fast acting, powerful and effective sink and drain unblocker liquid is perfectly safe to use on all pipe types. For the best results, pour the heavy duty drain unblocker down the plughole, leave for a minimum of 3 hours (preferably overnight) and finish off by flushing the drain with hot water for at least 2 minutes to completely free any blockages - it's really that easy!",
+    "SPEAR & JACKSON: With over 250 years experience and continuous innovation, Spear and Jackson have built an enviable reputation with their market leading products that offer high quality performance tools to suit a wide range of needs. Whether you're looking to unblock your sink drain or a concentrated mould, algae and moss spray then shop Spear and Jackson range of versatile, effective and long lasting cleaning products"
+  ],
+  "description": "Product description Sink &amp; Drain Unblocker Gel quickly clears drains and plug holes, dissolving hair, soap, grease and food deposits, the common causes of blockages even through standing water. Regular use maintains free running and keeps drains fresh. Contents: 1 x 5L Drain Unblocker. Directions Pour the heavy duty drain unblocker down the plughole, leave for a minimum of 3 hours (preferably overnight), then finish off by flushing the drain with hot water for at least 2 minutes. Safety Warning Keep away from the reach of kids. Legal Disclaimer Note: The colour of the bottle may vary See more",
+  "specifications_table": {
+    "Units": "‎5000.0 millilitre",
+    "Brand": "‎Spear & Jackson",
+    "Manufacturer": "‎Assured Products Limited",
+    "Country of origin": "‎United Kingdom"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 3494,
+      "main_cat_name": "Grocery 47 drops / month",
+      "sub_cat_current_rank": 22,
+      "sub_cat_name": "Drain Openers 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Spear Jackson Heavy Duty Sink and Drain Unblocker Gel - Powerful Formula- Indoor and Outdoor, 5 l (Pack of 1)",
+      "Sales Rank - Reference": "Grocery",
+      "Sales Rank - Display Group": "grocery_display_on_website",
+      "Bought in past month": "800+",
+      "Reviews - Rating": 4.1,
+      "Reviews - Rating Count": 723.0,
+      "Last Price Change": "13 days ago",
+      "Buy Box Seller": "Assured Products Limited (86% positive over last 12 months)",
+      "Lowest FBM Seller": "Assured Products Limited (86% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2021/09/01",
+      "Listed since": "2021/04/16",
+      "Categories - Root": "Grocery",
+      "Categories - Sub": "Drain Openers",
+      "Categories - Tree": "Grocery › Home Care & Cleaning › Household Cleaners › Drain Openers",
+      "Website Display Group - Name": "Grocery",
+      "ASIN": "B09DQ8T3ZZ",
+      "Product Codes - EAN": "5060744384106",
+      "Type": "DRAIN_OPENER_SUBSTANCE",
+      "Manufacturer": "Assured Products Limited",
+      "Brand": "Spear & Jackson",
+      "Brand Store Name": "Spear & Jackson",
+      "Brand Store URL Name": "SpearJackson",
+      "Brand Store URL": "https://www.amazon.com/stores/SpearJackson/page/65ACE97A-B00B-48FC-B40D-6AC185CF94CB",
+      "Product Group": "Grocery",
+      "Color": "5 l (Pack of 1)",
+      "Size": "5 l (Pack of 1)",
+      "Unit Details - Unit Value": "5000",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "Unscented",
+      "Product Benefit": "Dissolves various types of blockages and freshens sinks",
+      "Number of Items": "1",
+      "Safety Warning": "Keep away from the reach of kids.",
+      "Hazardous Materials": "Proper Shipping Name: United Nations Regulatory Id: Regulatory Packing Group: CORROSIVE LIQUID, N.O.S., CORROSIVE LIQUID, N.O.S. (CONTAINS SODIUM HYDROXIDE, SODIUM HYPOCHLORITE)UN1760II(more values available, copy cell to get all)"
     }
   },
-  "system": {
-    "processing_mode": "hybrid",
-    "resume_validation_enabled": true,
-    "force_fresh_start": false
+  "eans_on_page": [
+    "5060744384106"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5060744384106",
+  "sales_rank": 3494,
+  "category": "Grocery 47",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 200,
+  "asin_extracted_from_page": "B09DQ8T3ZZ",
+  "asin_queried": "B09DQ8T3ZZ",
+  "asin": "B09DQ8T3ZZ",
+  "_search_method_used": "title"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {
+  "asin_from_details": "B09ZV2DX8S",
+  "title": "Egg Slicer, Heavy Duty Metal Egg Slicer Cutter for Boiled Eggs Dishwasher Safe, Manual Eggs Slicer Cutting Wire Made of Stainless Steel for Kitchen",
+  "current_price": 9.99,
+  "original_price": 12.99,
+  "amazon_monthly_sales_badge": 600,
+  "main_image": "https://m.media-amazon.com/images/I/81dpZDcAQKL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51cnB1XuBQL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51BrZ-VRbxL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/5180jPbXAuL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51Yhj7N8W+L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/517vXuu2afL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51CjhawizuL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/91XVEXaMfDL._SL1500_PKplay-button-mb-image-grid-small_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "SD E-commerce",
+  "sold_by_amazon": false,
+  "rating": 4.7,
+  "review_count": 701,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Metal Egg Slicer: This egg slicer evenly cuts hard boiled eggs into slices and wedges, helping you garnish your salads and sandwiches with hard boiled eggs in seconds. This egg slicer slices eggs easier and safer than a knife, making food preparation easier.",
+    "Multipurpose Egg Slicer This 2-in-1 egg slicer not only works with hard-boiled eggs, it also works well with strawberries, mushrooms, kiwi and other soft fruits and is the perfect addition to any fruit salad. No mess. No mush, no sharp knives, it's a versatile addition to any home cook's arsenal.",
+    "Durable Material Each egg slicer cutting wire is made of food grade stainless steel, sharp and rustproof. The bottom of the egg slicer is made of ABS plastic which is galvanized, making it durable and sturdy.",
+    "Easy to Clean and Use: This egg slicer is easy to use, just put the boiled egg on the base, put the cutting wire, and you're done! The smooth bottom of the egg slicer is easy to clean manually and is dishwasher safe. This egg slicer will not spend most of your time cleaning."
+  ],
+  "description": "Product Description If you love hard boiled eggs but can't cut them, you need an egg slicer in your arsenal of kitchen gadgets. With this versatile egg slicer you can quickly and easily prepare beautiful dishes. This egg slicer quickly and evenly slices peeled, hard-boiled eggs with sharp precision, easier and safer to use than a knife. To use the egg slicer, simply place an egg in the base, choose a cutting plate and press down over the food to be sliced. which has sharp wires that do the cutting, with one gentle motion you're done. Easy handling: Step 1: Peel the hard-boiled eggs. Step 2: Place the shelled eggs in the center of the cutting board. Step 3: Press the edge of the egg slicer surface firmly over the plate with your thumbs. Repeat these steps for several more eggs at a time. Stainless Steel Cutting Wires These egg slicer cutting wires are made of stainless steel, make it sharp and anti-rust. It cut hard boiled eggs evenly and help you add hard boiled egg toppings to your salads and sandwiches in seconds. Made of Durable Metal The egg slicer's whole body is made of cast aluminum. Dishwasher Safe This egg slicer is designed to be easy to clean and dishwasher safe, saving you time cleaning up after meal prep.",
+  "specifications_table": {
+    "Brand Name": "Thimmamma",
+    "Recommended Uses For Product": "Egg",
+    "Manufacturer": "Thimmamma",
+    "UPC": "774882114123",
+    "Customer Reviews": "4.7 4.7 out of 5 stars (701) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.7 out of 5 stars",
+    "ASIN": "B09ZV2DX8S",
+    "Item Type Name": "Boiled Egg Slicer",
+    "Included Components": "Egg Slicer",
+    "Item height": "3 centimetres"
   },
-  "supplier_cache_control": {
-    "update_frequency_products": 2,
-    "dedupe_on": ["url", "ean"]
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
   },
-  "financial_analysis": {
-    "report_generation_threshold": 50,
-    "profitability_threshold": 0.15
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 4717,
+      "main_cat_name": "Home & Kitchen 30 drops / month",
+      "sub_cat_current_rank": 2,
+      "sub_cat_name": "Egg Cutters 5"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Egg Slicer, Heavy Duty Metal Egg Slicer Cutter for Boiled Eggs Dishwasher Safe, Manual Eggs Slicer Cutting Wire Made of Stainless Steel for Kitchen",
+      "Sales Rank - Reference": "Home & Kitchen",
+      "Sales Rank - Display Group": "kitchen_display_on_website",
+      "Bought in past month": "600+",
+      "Reviews - Rating": 4.7,
+      "Reviews - Rating Count": 701.0,
+      "Last Price Change": "2 days ago",
+      "Buy Box Seller": "SD E-commerce (97% positive over last 12 months)",
+      "Lowest FBA Seller": "SD E-commerce (97% positive over last 12 months) George Savage Store (99% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.42,
+      "Referral Fee %": "15.02 %",
+      "Referral Fee based on current Buy Box price": 1.5,
+      "Total Offer Count": "2",
+      "Tracking since": "2022/05/16",
+      "Listed since": "2022/05/09",
+      "Categories - Root": "Home & Kitchen",
+      "Categories - Sub": "Egg Cutters",
+      "Categories - Tree": "Home & Kitchen › Cooking & Dining › Kitchen Tools & Gadgets › Peeling, Grating & Slicing Tools › Mandolines & Slicers › Egg Cutters",
+      "Website Display Group - Name": "Kitchen",
+      "ASIN": "B09ZV2DX8S",
+      "Product Codes - UPC": "774882114123",
+      "Product Codes - EAN": "0774882114123",
+      "Product Codes - PartNumber": "Egg Slicers 1pcs",
+      "Parent ASIN": "B0B8JY2QNW",
+      "Variation ASINs": "B0CHF13CXP, B0C58MG3VF, B09ZV2DX8S",
+      "Type": "FOOD_SLICER",
+      "Manufacturer": "Thimmamma",
+      "Brand": "Thimmamma",
+      "Brand Store Name": "Thimmamma",
+      "Brand Store URL Name": "Thimmamma",
+      "Brand Store URL": "https://www.amazon.com/stores/Thimmamma/page/AC3F8EBB-608C-474A-A2B0-13D72A180669",
+      "Product Group": "Kitchen",
+      "Model": "Egg Slicers 1pcs",
+      "Color": "Silver",
+      "Size": "13.5 x 8 cm",
+      "Style": "egg slicer",
+      "Material": "Metal",
+      "Recommended Uses": "Egg",
+      "Languages": "English",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/91XVEXaMfDL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/5032e9c6-5890-49e8-9861-5faa6caf6694/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "14.0 x 8.7 x 3.7 cm (= 451 cm³ )",
+      "Package - Weight (g)": "160",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "13.5 x 8.0 x 3.0 cm (= 324 cm³ )",
+      "Item - Model (g)": "150"
+    }
   },
-  "performance": {
-    "hash_optimization_enabled": true,
-    "browser_restart_interval_hours": 2.5
+  "eans_on_page": [
+    "0774882114123"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0774882114123",
+  "sales_rank": 4717,
+  "category": "Home & Kitchen 30",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 100,
+  "asin_extracted_from_page": "B09ZV2DX8S",
+  "asin_queried": "B09ZV2DX8S",
+  "asin": "B09ZV2DX8S",
+  "_search_method_used": "title"
+}                                                                                                                                                         {
+  "asin_from_details": "B00M377JTS",
+  "title": "TML Rectangular Bowl 11L Glitter Red",
+  "current_price": 6.38,
+  "main_image": "https://m.media-amazon.com/images/I/51K8AvseecL._AC_SL1024_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31LMZhJ1QbL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/21YESCvh-rL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31fdsxkBC6L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "FINCHLEY ENTERPRISE",
+  "sold_by_amazon": false,
+  "rating": 3.7,
+  "review_count": 43,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Durable"
+  ],
+  "specifications_table": {
+    "Brand Name": "TML",
+    "Global Trade Identification Number": "05022092002255",
+    "Customer Reviews": "3.7 3.7 out of 5 stars (43) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 3.7 out of 5 stars",
+    "ASIN": "B00M377JTS",
+    "Unit Count": "1.0 count"
   },
-  "windows_save_guardian": {
-    "telemetry_path": "OUTPUTS/DIAGNOSTICS/save_telemetry.log",
-    "min_entries_guard": 1000
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
   },
-  "logging": {
-    "log_level": "INFO",
-    "emit_filter_invariants": true,
-    "emit_manifest_diff_warnings": true,
-    "emit_hash_index_recaps": true
-  }
-}
-```
-
----
-
-## 🔐 **CROSS-PHASE GUARANTEES & RULES**
-
-### **Do-Not-Do List (Codified)**
-*   ❌ **Do not** compute “already processed” from `processing_state` or ad-hoc lists. Use `linking_map.json` only.
-*   ❌ **Do not** re-seed or mutate denominators after the first write.
-*   ❌ **Do not** infer resume points from completion flags or file scans. Use `system_progression` only.
-*   ❌ **Do not** intermingle Amazon-only items in the supplier extraction loop.
-*   ❌ **Do not** overwrite a fresh `system_progression` object with data from legacy state fields.
-
-### **Final Spec Clarifications**
-1.  **Source of Truth for Duplicates**: All duplicate/skip decisions **must** read from `linking_map` and product cache hash sets. This avoids misclassifying items due to stale state.
-2.  **Cache Save Cadence**: Per-product cache additions respect `update_frequency_products` and are always saved atomically.
-3.  **Non-Sticky Completion**: "No-work" categories are marked complete **only for diagnostics**; the flag is **never** consulted for resume decisions.
-
----
-
-## 🧪 **IMPLEMENTATION VALIDATION & TESTING**
-
-### **Critical Test Cases for Implementation Gaps**
-
-1. **Resumption Logic Validation**:
-   - [ ] Verify all resume operations use `system_progression.current_category_index`
-   - [ ] Test phase-specific resumption indices are respected
-   - [ ] Ensure no code reads from `supplier_extraction_progress` for resume decisions
-
-2. **Filter Invariant Testing**: ✅ **COMPLETED**
-   - [✅] Verify filter accounting: `input_count == skip + amazon + full`
-   - [✅] Test error detection when filter logic has bugs
-   - [✅] Validate non-halting behavior on invariant violations
-   - **Implementation**: Enhanced logging with proper invariant validation (Lines 4385-4391)
-
-3. **Category Manifest Validation**:
-   - [ ] Confirm manifest generation **before** filtering operations
-   - [ ] Test atomic manifest saves using Windows Save Guardian
-   - [ ] Verify manifest diff warnings on count changes
-
-4. **Financial Trigger Testing**:
-   - [ ] Test threshold-based financial report triggering
-   - [ ] Validate linking map count monitoring accuracy
-   - [ ] Ensure financial calculations run at correct intervals
-
-### **Performance Validation Requirements**
-
-- **O(1) Hash Lookups**: Verify filter operations complete in constant time
-- **Atomic Saves**: Confirm all critical saves use Windows Save Guardian
-- **Memory Management**: Test system handles large category processing without leaks
-- **Resume Accuracy**: Verify 100% accurate resumption after interruptions
-
-### **Compliance Monitoring**
-
-```bash
-# Validation commands for implementation verification
-grep -r "supplier_extraction_progress.*current_category_index" tools/  # Should return 0 results
-grep -r "system_progression.*current_category_index" tools/           # Should show consistent usage
-grep -r "Filter Invariant" logs/                                    # Should show invariant logging
-grep -r "FINANCIAL REPORT TRIGGER" logs/                            # Should show trigger events
-```
-
----
-
-## 🏁 **CONCLUSION**
-
-This specification defines a production-ready system with deterministic resumption, stable progress metrics, robust data pipelines, and transparent observability. The architecture is designed to be resilient against common failure modes like data corruption and state drift, providing a reliable foundation for automated FBA product sourcing.
-
-### **📊 CURRENT IMPLEMENTATION STATUS**
-
-**✅ Strengths**: The core system architecture is solid with proper filtering logic, hash optimization, and atomic persistence mechanisms in place. **Recent improvements have enhanced filter transparency logging and specification compliance.**
-
-**🚨 Critical Gaps**: Five major implementation gaps remain that prevent full compliance with this specification:
-1. Inconsistent resumption logic using wrong data sources
-2. Missing category manifest generation in workflow  
-3. ~~Absent filter invariant validation and logging~~ ✅ **COMPLETED** - Enhanced filter transparency implemented
-4. No automated financial report triggering
-5. Missing comprehensive category summary logging
-6. Partial deterministic phase implementation
-
-**🆕 Recent Progress (August 23, 2025)**:
-- ✅ **Filter Transparency Logging**: Enhanced format with specification compliance
-- ✅ **Invariant Validation**: Proper filter accounting verification implemented
-- ✅ **Category Completion Safety**: Additional redundant checks for reliability
-- ✅ **Code Maintainability**: Variable extraction improves debugging and readability
-
-### **🔄 NEXT STEPS**
-
-**Immediate Actions Required**:
-1. **Fix resumption logic** to use `system_progression` exclusively (P0)
-2. ~~**Implement filter invariant validation** with error detection (P0)~~ ✅ **COMPLETED**
-3. **Add category manifest calls** before all filtering operations (P0)
-4. **Implement financial report triggering** with threshold monitoring (P1)
-5. **Add comprehensive category summary logging** (P1)
-
-**Implementation Timeline**: 15-20 hours estimated for remaining compliance items (reduced from 20-28 hours due to completed filter work)
-
-**Success Criteria**: System passes all validation test cases and achieves 100% specification compliance
-
----
-
-**Document Status**: Updated with comprehensive implementation analysis
-**Last Analysis**: August 23, 2025  
-**Next Review**: After P0 fixes implementation
-
----
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 1345459,
+      "main_cat_name": "Home & Kitchen",
+      "sub_cat_current_rank": 1030,
+      "sub_cat_name": "Dessert Bowls 6"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "TML Rectangular Bowl 11L Glitter Red",
+      "Sales Rank - Reference": "Home & Kitchen",
+      "Sales Rank - Display Group": "kitchen_display_on_website",
+      "Reviews - Rating": 3.7,
+      "Reviews - Rating Count": 43.0,
+      "Last Price Change": "5 days ago",
+      "Buy Box Seller": "FINCHLEY ENTERPRISE (86% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 5.16,
+      "Referral Fee %": "15.05 %",
+      "Referral Fee based on current Buy Box price": 0.96,
+      "Lowest FBM Seller": "FINCHLEY ENTERPRISE (86% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2017/03/28",
+      "Listed since": "2014/08/28",
+      "Categories - Root": "Home & Kitchen",
+      "Categories - Sub": "Dessert Bowls",
+      "Categories - Tree": "Home & Kitchen › Cooking & Dining › Tableware › Dishware & Serving Pieces › Dinnerware › Bowls › Dessert Bowls",
+      "Website Display Group - Name": "Kitchen",
+      "ASIN": "B00M377JTS",
+      "Product Codes - EAN": "5022092002255",
+      "Product Codes - PartNumber": "307655",
+      "Type": "BUCKET",
+      "Brand": "TML",
+      "Product Group": "Home",
+      "Model": "307655",
+      "Color": "Red",
+      "Size": "11L",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Pattern": "Solid",
+      "Style": "Modern",
+      "Binding": "Kitchen & Home",
+      "Package - Dimension (cm³)": "37.2 x 30.6 x 13.4 cm (= 15,253 cm³ )",
+      "Package - Weight (g)": "300",
+      "Package - Quantity": "1",
+      "Item - Model (g)": "300"
+    }
+  },
+  "eans_on_page": [
+    "5022092002255"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5022092002255",
+  "sales_rank": 1345459,
+  "category": "Home & Kitchen",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 5,
+  "asin_extracted_from_page": "B00M377JTS",
+  "asin_queried": "B00M377JTS",
+  "asin": "B00M377JTS",
+  "_search_method_used": "EAN"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {
+  "asin_from_details": "B09CDVYZVP",
+  "title": "Cutacut Kitchen Scissors Stainless Steel Sharp Blades with TPR Grip - Multipurpose Kitchen Scissors Heavy Duty for Meat, Chicken, Fish, Vegetables, and Herbs – Bottle Opener. (Red)",
+  "current_price": 19.99,
+  "original_price": 39.99,
+  "amazon_monthly_sales_badge": 100,
+  "main_image": "https://m.media-amazon.com/images/I/6146R00C5UL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41sVcSUnW8L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51zPR2JenXL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51m+qopZW2L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/510wLXyZcjL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41FGrdu24fL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51vYOH7xNxL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51-8t5TU9NL._SL1500_PKplay-button-mb-image-grid-small_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "cut a cut",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 1318,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Ergonomic Design: Our perfectly designed meat scissor is extra smooth and comfortable for your hand. It won’t hurt you while using for a long time and will not leave any marks on your hand. It's also suitable for left and right hand",
+    "Premium Quality: This scissors kitchen is made of stainless steel, with a perfect size of 21.5 cm. Our scissor is very fast while cutting, and our non-loosing strongly jointed pairs of blades make this one of the best kitchen tools",
+    "Additional Features: Kitchen scissors dishwasher safe is rust-free with high-speed micro-serrated and water-resistant blades. We have added a cover to protect it against dirt for the blade’s safety. A careful inspection and testing make sure that you get high quality",
+    "Built-in Opener: Our meat scissor kitchen scissor has a serrated section in the middle of the grip handle, which helps you open bottles and jars quickly. Even cracking nuts won’t be an issue with our additional feature",
+    "Multiple Use: Cutacut poultry shears are perfect for different use, not only in the kitchen for cutting vegetables, herbs, or meat. You can also use it for gardening, opening sealed jars or bottles, and cracking any nuts"
+  ],
+  "description": "Product Description Multipurpose: You can use our 5 in 1 Scissor for various things like, chicken, vegetables, herbs etc Fish Scraper: scrap your fish skin without using slippery knives or chopping board Bottle Opener: Opens Bottle very easily and safely with our Bottle Blade Nut Cracker: A Nut cracker is included in the center of our Scissor Blades Cover: Blades cover is also available which will keep the scissor free from dirt and rust Gardening shears: Easily prunes plants and cuts small branches",
+  "specifications_table": {
+    "Brand": "CUTACUT",
+    "UPC": "195893099634",
+    "Customer Reviews": "4.6 4.6 out of 5 stars (1,318) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.6 out of 5 stars",
+    "ASIN": "B09CDVYZVP",
+    "Item Type Name": "Cutacut Kitchen Scissors Stainless Steel Sharp Blades with TPR Grip - Multipurpose Kitchen Scissors Heavy Duty for Meat, Chicken, Fish, Vegetables, and Herbs – Bottle Opener.",
+    "Included Components": "no",
+    "Item height": "1 centimetres",
+    "Manufacturer": "cutacut",
+    "Unit Count": "1.0 count"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 23728,
+      "main_cat_name": "Home & Kitchen 14 drops / month",
+      "sub_cat_current_rank": 29,
+      "sub_cat_name": "Kitchen Scissors 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Cutacut Kitchen Scissors Stainless Steel Sharp Blades with TPR Grip - Multipurpose Kitchen Scissors Heavy Duty for Meat, Chicken, Fish, Vegetables, and Herbs – Bottle Opener. (Red)",
+      "Sales Rank - Reference": "Home & Kitchen",
+      "Sales Rank - Display Group": "kitchen_display_on_website",
+      "Bought in past month": "100+",
+      "Reviews - Rating": 4.6,
+      "Reviews - Rating Count": 1.0,
+      "Last Price Change": "51 days ago",
+      "Buy Box Seller": "cut a cut (94% positive over last 12 months)",
+      "Lowest FBA Seller": "cut a cut (94% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.1,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 3.0,
+      "Total Offer Count": "1",
+      "Tracking since": "2022/04/04",
+      "Listed since": "2021/08/11",
+      "Categories - Root": "Home & Kitchen",
+      "Categories - Sub": "Kitchen Scissors",
+      "Categories - Tree": "Home & Kitchen › Cooking & Dining › Kitchen Tools & Gadgets › Kitchen Scissors",
+      "Website Display Group - Name": "Home Improvement",
+      "ASIN": "B09CDVYZVP",
+      "Product Codes - UPC": "195893099634",
+      "Product Codes - EAN": "0195893099634",
+      "Product Codes - PartNumber": "1",
+      "Parent ASIN": "B0C37T9KL3",
+      "Variation ASINs": "B09CDVYZVP",
+      "Type": "SCISSORS",
+      "Manufacturer": "cutacut",
+      "Brand": "CUTACUT",
+      "Product Group": "Home Improvement",
+      "Model": "kitchen Scissor Red",
+      "Color": "Red",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Style": "RED",
+      "Material": "Stainless Steel",
+      "Number of Items": "1",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/51-8t5TU9NL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/fc21fa98-78a6-4b55-86e4-2116a07274cf/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "22.0 x 10.0 x 1.9 cm (= 418 cm³ )",
+      "Package - Weight (g)": "150",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "20.0 x 9.0 x 1.0 cm (= 180 cm³ )",
+      "Included Components": "no"
+    }
+  },
+  "eans_on_page": [
+    "0195893099634"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0195893099634",
+  "sales_rank": 23728,
+  "category": "Home & Kitchen 14",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 20,
+  "asin_extracted_from_page": "B09CDVYZVP",
+  "asin_queried": "B09CDVYZVP",
+  "asin": "B09CDVYZVP",
+  "_search_method_used": "title"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {
+  "asin_from_details": "B095X1L2DY",
+  "title": "HTS Motor & Cartridge Compatible with BAXI NETA TEC Motor & Cartridge 720064401 & 720448601",
+  "current_price": 48.0,
+  "main_image": "https://m.media-amazon.com/images/I/51TaEsSIApS._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31wBR8zJ45S._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31FS6+kdwrS._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/3135-42KaLS._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B095X1L2DY",
+    "Date First Available": "26 May 2021"
+  },
+  "date_first_available_from_details": "26 May 2021",
+  "prime_eligible": false,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "National Boiler Spares",
+  "sold_by_amazon": false,
+  "rating": 5.0,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Perfect Compatibility: Specifically designed to replace BAXI Neta Tec Motor & Cartridge models 720064401 and 720448601, ensuring a precise fit and reliable performance.",
+    "Efficient Heating System Component: Optimizes the operation of your boiler’s motor and cartridge, ensuring consistent heating and hot water delivery.",
+    "Durable Construction: Made from high-quality materials for long-lasting durability and resistance to wear, even in demanding heating systems.",
+    "Enhanced Performance: Designed to improve the efficiency of the heating process, reducing energy consumption while maintaining system reliability.",
+    "Easy Installation: Engineered for simple, hassle-free replacement, minimizing downtime and making it easier to restore your boiler’s performance.",
+    "12-Month Warranty: Comes with a comprehensive 12-month warranty, providing peace of mind and ensuring the product’s reliability and quality."
+  ],
+  "description": "HTS Motor &amp; Cartridge (Compatible with BAXI Neta Tec Motor &amp; Cartridge 720064401 &amp; 720448601) The HTS Motor &amp; Cartridge is a high-quality replacement designed for BAXI Neta Tec boilers, offering seamless integration and efficient operation. This motor and cartridge assembly ensures reliable performance and optimal heating system functionality, keeping your BAXI boiler running smoothly for years.",
+  "specifications_table": {
+    "Manufacturer": "‎HTS",
+    "Part Number": "‎720064401 720448601",
+    "Item model number": "‎720064401 720448601",
+    "Colour": "‎Black",
+    "Material": "‎Plastic",
+    "Item Package Quantity": "‎1"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 635023,
+      "main_cat_name": "DIY & Tools 0.3 drops / month",
+      "sub_cat_current_rank": 0,
+      "sub_cat_name": "-1 0"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "HTS Motor & Cartridge Compatible with BAXI NETA TEC Motor & Cartridge 720064401 & 720448601",
+      "Sales Rank - Reference": "DIY & Tools",
+      "Sales Rank - Display Group": "home_improvement_display_on_website",
+      "Last Price Change": "50 days ago",
+      "Buy Box Seller": "National Boiler Spares (91% positive over last 12 months)",
+      "Lowest FBM Seller": "National Boiler Spares (91% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2021/07/02",
+      "Listed since": "2021/05/26",
+      "Categories - Root": "DIY & Tools",
+      "Categories - Sub": "Accessories",
+      "Categories - Tree": "DIY & Tools › Building Supplies › Heating & Cooling › Central Heating Systems & Accessories › Accessories",
+      "Website Display Group - Name": "Home Improvement",
+      "ASIN": "B095X1L2DY",
+      "Product Codes - EAN": "5056511804250",
+      "Product Codes - PartNumber": "720064401 720448601",
+      "Freq. Bought Together": "B00GRR2LS4, B0CQ2WZ272",
+      "Type": "BUILDING_MATERIAL",
+      "Manufacturer": "HTS",
+      "Brand": "HTS",
+      "Brand Store Name": "HTS",
+      "Brand Store URL Name": "NationalBoilerSpares",
+      "Brand Store URL": "https://www.amazon.com/stores/NationalBoilerSpares/page/7ACACF07-B562-4FBC-9149-4BC293A3DDF9",
+      "Product Group": "Home Improvement",
+      "Model": "720064401 720448601",
+      "Color": "Black",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Material": "Plastic",
+      "Number of Items": "1",
+      "Package - Quantity": "1"
+    }
+  },
+  "eans_on_page": [
+    "5056511804250"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5056511804250",
+  "sales_rank": 635023,
+  "category": "DIY & Tools 0.3",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 5,
+  "asin_extracted_from_page": "B095X1L2DY",
+  "asin_queried": "B095X1L2DY",
+  "asin": "B095X1L2DY",
+  "_search_method_used": "EAN"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

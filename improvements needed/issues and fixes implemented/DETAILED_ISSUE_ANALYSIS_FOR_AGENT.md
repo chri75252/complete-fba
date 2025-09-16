@@ -1,212 +1,133 @@
-# CRITICAL SYSTEM WORKFLOW ISSUE - DETAILED ANALYSIS FOR AGENT
-
-## SYSTEM OVERVIEW
-
-This is an Amazon FBA Agent System that processes supplier products through a multi-stage workflow:
-1. **Supplier Extraction**: Scrapes product data from supplier websites
-2. **Amazon Analysis**: Searches for products on Amazon and extracts pricing/data
-3. **FBA Financial Analysis**: Calculates profitability and ROI
-
-The system operates in **HYBRID PROCESSING MODE** where it processes categories sequentially (chunk_size=1) to ensure proper category-by-category workflow and accurate progress tracking.
-
-## KEY FILES AND COMPONENTS
-
-### Primary Workflow File
-- **`tools/passive_extraction_workflow_latest.py`** - Main orchestrator class `PassiveExtractionWorkflow`
-  - `_run_hybrid_processing_mode()` (line ~1860) - Hybrid processing entry point
-  - `_extract_supplier_products()` (line ~3449) - Product extraction method
-  - Contains shared accumulator logic that's causing the issue
-
-### Supplier Scraper
-- **`tools/configurable_supplier_scraper.py`** - Handles actual product scraping
-  - `scrape_products_from_url()` (line ~429) - Main scraping method
-  - Receives `product_accumulator` parameter for real-time product accumulation
-  - Line 608: Logs "🔄 REAL-TIME: Added product X to shared accumulator (total: Y)"
-
-### State Management
-- **`utils/fixed_enhanced_state_manager.py`** - Handles processing state and progress tracking
-- **`.kiro/specs/system-workflow-optimization/`** - Contains requirements, design, and tasks for this optimization
-
-## THE CRITICAL ISSUE
-
-### Problem Description
-The system is designed to process categories individually in hybrid mode, but instead it's processing **190+ mixed cached products from multiple categories** instead of moving to the next category after completing the current one.
-
-### Expected Behavior
-1. Process Halloween category (76 products discovered)
-2. Check linking map - if products already processed, move to next category
-3. If products need processing, process ONLY those products from Halloween category
-4. Move to next category URL
-
-### Actual Behavior
-1. Process Halloween category (76 products discovered)
-2. System loads ALL cached products (8335 total)
-3. Filters to 184 unprocessed products from ALL categories (not just Halloween)
-4. Adds 1 new Halloween product to existing 184 products = 189 total
-5. Processes all 189 mixed products instead of moving to next category
-
-### Log Evidence
-```
-2025-08-08 07:26:54,272 - PassiveExtractionWorkflow - INFO - 🔍 HYBRID MODE CHECK: Flag exists=False, Value=False, Is Hybrid=False
-2025-08-08 07:26:54,273 - PassiveExtractionWorkflow - INFO - 🔄 NORMAL MODE: Using shared accumulator for category
-2025-08-08 07:26:54,273 - configurable_supplier_scraper - INFO - 🔍 SCRAPER DEBUG: product_accumulator=List with 184 items
-```
-
-
-
-## ATTEMPTED SOLUTIONS (ALL FAILED)
-
-### Attempt 1: Hybrid Mode Flag Logic
-**Location**: `tools/passive_extraction_workflow_latest.py` lines 3680-3700
-**Implementation**: 
-```python
-# Don't use shared accumulator - process category products separately
-if hasattr(self, '_hybrid_processing_mode') and self._hybrid_processing_mode:
-    # Process this category individually for hybrid mode
-    products = await self.supplier_scraper.scrape_products_from_url(
-        category_url,
-        max_products_per_category,
-        product_accumulator=None  # No shared accumulator in hybrid mode
-    )
-    # Add to all_products for state tracking only
-    all_products.extend(products)
-else:
-    # Normal mode: use shared accumulator for batch processing
-    products = await self.supplier_scraper.scrape_products_from_url(
-        category_url,
-        max_products_per_category,
-        product_accumulator=all_products  # Share the list for real-time cache saves
-    )
-```
-**Result**: FAILED - System still used shared accumulator with 184 items
-
-### Attempt 2: Cache Loading Prevention in Hybrid Mode
-**Location**: `tools/passive_extraction_workflow_latest.py` lines 3450-3520
-**Implementation**:
-```python
-# 🚨 CRITICAL FIX: In hybrid mode, skip ALL cache loading logic
-if hasattr(self, '_hybrid_processing_mode') and self._hybrid_processing_mode:
-    self.log.info("🔄 HYBRID MODE: Skipping cache loading - forcing fresh extraction for each category")
-    all_products = []
-else:
-    # Original cache loading logic
-    actual_cache_file, cache_count = self._find_actual_supplier_cache_file(supplier_name)
-```
-**Result**: FAILED - System still loaded cached products and used shared accumulator
-
-### Attempt 3: Shared Accumulator Override
-**Location**: `tools/passive_extraction_workflow_latest.py` line 3638
-**Implementation**:
-```python
-# 🚨 CRITICAL FIX: In hybrid mode, ALWAYS start with empty accumulator
-if hasattr(self, '_hybrid_processing_mode') and self._hybrid_processing_mode:
-    # In hybrid mode, NEVER use cached products as base - always start fresh
-    self._current_all_products = []
-    self.log.info("🔄 HYBRID MODE: FORCED empty accumulator - no shared products across categories")
-    # Override all_products to be empty to prevent any cached product processing
-    all_products = []
-else:
-    # Store as instance variable for progress callback access
-    self._current_all_products = all_products
-```
-**Result**: FAILED - System still processed 184 cached products
-
-### Attempt 4: Category-Specific Filtering Logic
-**Location**: `tools/passive_extraction_workflow_latest.py` lines 3480-3520
-**Implementation**:
-```python
-# 🚨 CRITICAL FIX: In hybrid mode, check if we should process current category or move to next
-if hasattr(self, '_hybrid_processing_mode') and self._hybrid_processing_mode:
-    self.log.info(f"🔄 HYBRID MODE: Checking if current category needs processing")
-    
-    # Check if current category URLs are already fully processed
-    chunk_category_urls = set(category_urls)
-    
-    # First check linking map to see if products from these categories are fully processed
-    fully_processed_count = 0
-    if hasattr(self, 'linking_map') and self.linking_map:
-        for entry in self.linking_map:
-            if entry.get('supplier_url', '') in chunk_category_urls:
-                fully_processed_count += 1
-    
-    # If most products from current categories are already processed, move to next category
-    if fully_processed_count > 0:
-        self.log.info(f"✅ CATEGORY COMPLETE: Current categories already processed, moving to next category")
-        return []  # Return empty to move to next category
-```
-**Result**: FAILED - System still processed mixed products from multiple categories
-
-### Attempt 5: Force Fresh Extraction in Hybrid Mode
-**Location**: `tools/passive_extraction_workflow_latest.py` lines 3480-3520
-**Implementation**:
-```python
-# 🚨 CRITICAL FIX: In hybrid mode, NEVER return cached products - always extract fresh
-if hasattr(self, '_hybrid_processing_mode') and self._hybrid_processing_mode:
-    self.log.info(f"🔄 HYBRID MODE: Forcing fresh extraction for category-by-category processing")
-    self.log.info(f"🔄 HYBRID MODE: Skipping cache return to ensure proper category isolation")
-    # Fall through to fresh extraction
-```
-**Result**: FAILED - System still used shared accumulator
-
-### Attempt 6: Debug Flag Verification and Explicit Setting
-**Location**: Multiple locations with debug logging
-**Implementation**:
-```python
-# In _run_hybrid_processing_mode method
-self._hybrid_processing_mode = True
-self.log.info(f"🔍 HYBRID MODE FLAG SET: {hasattr(self, '_hybrid_processing_mode')} = {getattr(self, '_hybrid_processing_mode', False)}")
-
-# Before extraction call
-self._hybrid_processing_mode = True
-self.log.info(f"🔍 PRE-EXTRACTION FLAG CHECK: {hasattr(self, '_hybrid_processing_mode')} = {getattr(self, '_hybrid_processing_mode', False)}")
-
-# In extraction method
-is_hybrid_mode = hasattr(self, '_hybrid_processing_mode') and self._hybrid_processing_mode
-self.log.info(f"🔍 HYBRID MODE CHECK: Flag exists={hasattr(self, '_hybrid_processing_mode')}, Value={getattr(self, '_hybrid_processing_mode', False)}, Is Hybrid={is_hybrid_mode}")
-```
-**Result**: DISCOVERED - Debug logs show flag is FALSE when it should be TRUE, system uses "NORMAL MODE" instead of "HYBRID MODE"
-
-### Attempt 7: Enhanced State Manager Modifications
-**Location**: `utils/fixed_enhanced_state_manager.py`
-**Implementation**: Modified state manager to handle hybrid processing mode with separate metrics and category-specific tracking
-**Result**: FAILED - State manager changes didn't affect the core accumulator issue
-
-### Attempt 8: Supplier Scraper Debug Logging
-**Location**: `tools/configurable_supplier_scraper.py` line 429
-**Implementation**:
-```python
-# 🚨 CRITICAL DEBUG: Log accumulator status
-accumulator_size = len(product_accumulator) if product_accumulator is not None else 0
-log.info(f"🔍 SCRAPER DEBUG: product_accumulator={'None' if product_accumulator is None else f'List with {accumulator_size} items'}")
-```
-**Result**: CONFIRMED - Scraper receives accumulator with 184 items instead of None in hybrid mode
-
-## CURRENT STATUS
-
-The latest debug output shows:
-- `_hybrid_processing_mode` flag is **FALSE** when it should be **TRUE**
-- System uses "NORMAL MODE" instead of "HYBRID MODE"
-- Shared accumulator contains 184 items from previous runs
-- System processes mixed products instead of category-specific products
-
-## CRITICAL CODE LOCATIONS
-
-1. **Flag Setting**: `tools/passive_extraction_workflow_latest.py` line ~1870 (`_run_hybrid_processing_mode` method)
-2. **Flag Check**: `tools/passive_extraction_workflow_latest.py` line ~3680 (`_extract_supplier_products` method)
-3. **Accumulator Logic**: `tools/passive_extraction_workflow_latest.py` line ~3638 (shared accumulator assignment)
-4. **Scraper Call**: `tools/passive_extraction_workflow_latest.py` line ~3695 (where accumulator is passed to scraper)
-5. **Scraper Accumulator Use**: `tools/configurable_supplier_scraper.py` line 608 (where products are added to accumulator)
-
-## SUCCESS CRITERIA
-
-The fix is successful when:
-- Log shows "🔄 HYBRID MODE: Using NO shared accumulator" instead of "🔄 NORMAL MODE"
-- System processes only current category's products (not 190+ mixed)
-- System moves to next category after completing current one
-- Category progression shows correct X/76 instead of X/1
-- No "🔄 REAL-TIME: Added product X to shared accumulator (total: 189)" messages
-- Scraper debug shows "product_accumulator=None" in hybrid mode
-
-## URGENCY
-
-This is a **CRITICAL PRODUCTION ISSUE** that has been attempted 5+ times. The system is currently unusable because it processes the wrong products and doesn't progress through categories correctly. This affects the entire workflow and prevents proper category-by-category processing.
+{
+  "asin_from_details": "B0042D92WS",
+  "title": "Marvin's Magic - Kids Magic Set - With Wand, Card Tricks and More - Kids Toys, Games, Family Games for Age 6, 7, 8, 9, 10+ - Box of 225 Magic Tricks",
+  "current_price": 20.99,
+  "amazon_monthly_sales_badge": 300,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/91drV1JU5KL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61bKnf+WIrL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61H5tmQ+4EL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/510S6itfbFL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51LxbVWynML._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51E4WnR0lvL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/510HxZCaZrL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/91fNkYt8isL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "9 Sept. 2010"
+  },
+  "date_first_available_from_details": "9 Sept. 2010",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": true,
+  "seller_info_text": "Marvin's Magic",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 6950,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "225 EASY TO PERFORM TRICKS: Watch your little magician's face light up when they receive Marvins Magic Deluxe Edition! Providing hours of endless mystical fun and enabling you to perform a complete magic show with 225 amazing tricks to perform to family and friends! The box features all of Marvin’s most ingenious props including Marvin’s Mystical Magic Cards, Mind Reading Canisters, Magic Theatre, Magic Wand and more.",
+    "A TIMELESS BOX PACKED FULL OF TRICKS: This timeless magic complete box set makes a fantastic present for any budding magicians wanting to develop social interaction skills. Children will have a fantastic time mastering each magic trick, step by step, until it's showtime! The magic tricks allow your child to wow friends and family and build confidence. For that special performance, Marvin's Magic's Deluxe Edition magic set has you covered",
+    "IDEAL GIFTS FOR KIDS: The perfect magic set for children 6 years old + and includes high quality, child friendly props that have been designed for young hands. Looking for the ultimate magic tricks for children? This magician set is a wonderful option for gifts for boys or girls and is fantastic for all skill levels, no prior magic experience is needed. Ideal for beginners or budding young magicians!",
+    "COMPLETE WITH EASY TO UNDERSTAND & CLEARLY ILLUSTRATED BOOKLET: Follow the kid friendly step by step instructions in the booklet provided or download the Marvin’s Magic App for exclusive videos on many of these tricks and more. This is the ultimate magic set to inspire and entertain young magicians. The box has enough tricks and props for hours of fun, allowing budding illusionists to learn and wide range of magic skills that will astonish friends and family.",
+    "FANTASTIC VALUE BOX OF MAGIC TRICKS AND ILLUSIONS: This amazing childrens magic set is packed with 225 tricks that can be mastered in minutes. Designed for children aged 6 or above, this special Deluxe Edition Marvin’s Amazing Magic toy set will enable your little magician to perform for friends and family professional magic tricks. This timeless box of easy magic tricks really is fantastic having won an Independent Toy Award"
+  ],
+  "description": "From the brand Marvin's Magic Collection Marvin's magic sets combine fun and learning with simple, yet amazing tricks and illusions as easy to learn as 1,2,3! Previous page Best Magic Sets for Kids Visit the store A Magical Heritage In 1987, Marvin’s Magic launched their first professional magic made easy range within Hamleys of Regent Street in central London. The mastermind behind Marvin’s Magic is Marvin Berglas – first class magician and entrepreneur who grew up in one of the most famous and respected magical families. Loyal Following Marvin’s fan base enjoy adding to their repertoire and learning the next trick. Exclusive Innovations Every Marvin's Magic set comes with a host of additional features. This includes video instructions via Marvin's Magic app, Marvin's Magic Academy - a free magic trick each week, and Augmented Reality to enhance your props inside your set. Officially Recommended Marvin's Magic have created the first and only tricks and magic sets ever to receive the official recommendation for the world-famous Magic Circle, which promote excellence in magic. Next page",
+  "specifications_table": {
+    "Product Dimensions": "‎33 x 53.5 x 6 cm; 317.51 g",
+    "Manufacturer recommended age": "‎6 - 18 years",
+    "Item model number": "‎MME225",
+    "Educational Objective(s)": "‎Spacial Awareness",
+    "Language:": "‎Spanish",
+    "Number of Game Players": "‎1",
+    "Number of pieces": "‎111",
+    "Assembly Required": "‎No",
+    "Batteries Required?": "‎No",
+    "Batteries included?": "‎No",
+    "tech_spec_battery_description_toys": "‎No batteries required",
+    "Material Type(s)": "‎Plastic",
+    "Material Composition": "‎Card & plastic",
+    "Remote Control Included?": "‎No",
+    "Colour": "‎Black/Silver",
+    "ASIN": "‎B0042D92WS"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 1874,
+      "main_cat_name": "Toys & Games 35 drops / month",
+      "sub_cat_current_rank": 3,
+      "sub_cat_name": "Magic Tricks 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Marvin's Magic - Kids Magic Set - With Wand, Card Tricks and More - Kids Toys, Games, Family Games for Age 6, 7, 8, 9, 10+ - Box of 225 Magic Tricks",
+      "Sales Rank - Reference": "Toys & Games",
+      "Sales Rank - Display Group": "toy_display_on_website",
+      "Bought in past month": "300+",
+      "Reviews - Rating": 4.3,
+      "Reviews - Rating Count": 6.0,
+      "Last Price Change": "2 hours ago",
+      "Buy Box Seller": "Marvin's Magic (99% positive over last 12 months)",
+      "Lowest FBA Seller": "Marvin's Magic (99% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 3.26,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 3.15,
+      "Lowest FBM Seller": "SundayElectronics(Orders Dispatch within 24 Hours) (65% positive over last 12 months)",
+      "Buy Box Used Seller": "Amazon Resale",
+      "Buy Box Used: Condition": "Used - Like New",
+      "Total Offer Count": "5",
+      "Tracking since": "2014/11/25",
+      "Listed since": "2010/09/09",
+      "Categories - Root": "Toys & Games",
+      "Categories - Sub": "Magic Kits & Accessories",
+      "Categories - Tree": "Toys & Games › Novelty & Gag Toys › Magic Supplies › Magic Kits & Accessories",
+      "Website Display Group - Name": "Toy",
+      "ASIN": "B0042D92WS",
+      "Product Codes - UPC": "808446010184, 808446011129, 808446004497",
+      "Product Codes - EAN": "0808446004497, 0808446011129, 0808446010184",
+      "Product Codes - PartNumber": "MME 225/B",
+      "Parent ASIN": "B0BFBSCZSN",
+      "Variation ASINs": "B000068PAE, B0042D92WS",
+      "Freq. Bought Together": "B0BN48YHT1, B005HTJ1E0",
+      "Type": "TOYS_AND_GAMES",
+      "Manufacturer": "Marvin's Magic",
+      "Brand": "Marvin's Magic",
+      "Brand Store Name": "Marvin's Magic",
+      "Brand Store URL Name": "MarvinsMagic",
+      "Brand Store URL": "https://www.amazon.com/stores/MarvinsMagic/page/8AFD27B1-6AD9-4229-A5C8-3C5AB9ABDBF3",
+      "Product Group": "Toy",
+      "Model": "MME225",
+      "Color": "Black/Silver",
+      "Size": "40 x 5.4 x 26.5 centimeters",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "1",
+      "Style": "Marvin's Box of Tricks 225- Amazon Small",
+      "Material": "Plastic",
+      "Target Audience": "Unisex Children",
+      "Edition": "225 Magic Tricks",
+      "Binding": "Toy",
+      "Languages": "Spanish",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "https://m.media-amazon.com/images/I/91fNkYt8isL.jpg, Creator: Main, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/d5bd5ad1-89c7-4e97-88db-1eb514709e8b/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "41.1 x 27.0 x 5.8 cm (= 6,436 cm³ )",
+      "Package - Weight (g)": "531",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "33.0 x 53.5 x 6.0 cm (= 10,593 cm³ )",
+      "Item - Model (g)": "318",
+      "Included Components": "all props and instructions",
+      "Safety Warning": "None Applicable"
+    }
+  },
+  "sales_rank": 1874,
+  "category": "Toys & Games 35",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 150,
+  "asin_extracted_from_page": "B0042D92WS",
+  "asin_queried": "B0042D92WS",
+  "asin": "B0042D92WS"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        

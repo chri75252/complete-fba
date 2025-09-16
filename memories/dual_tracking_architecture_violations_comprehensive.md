@@ -1,139 +1,44 @@
-# DUAL TRACKING ARCHITECTURE VIOLATIONS - COMPREHENSIVE FIX REQUIRED
-
-## 🚨 ROOT CAUSE: ARCHITECTURAL VIOLATION
-
-The system is designed with **dual tracking architecture** per docs/PROGRESS_TRACKING_AUDIT_REPORT.md:
-
-### CORRECT ARCHITECTURE:
-1. **system_progression**: Canonical source for resumption (system internal tracking)
-2. **supplier_extraction_progress**: Legacy compatibility only (user display derived)
-3. **update_progression_unified()**: Atomic updates to both sections
-
-### CURRENT VIOLATIONS:
-The workflow is calling `update_supplier_extraction_progress()` directly instead of `update_progression_unified()`, violating the dual tracking architecture.
-
-## 🔍 ALL VIOLATION LOCATIONS IDENTIFIED
-
-**File**: `tools/passive_extraction_workflow_latest.py`
-
-### Violation 1: Line ~4630
-```python
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    correct_index, len(category_urls_to_scrape), category_url=expected_url
-)
-```
-
-### Violation 2: Line ~4640  
-```python
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    selected_index, len(category_urls_to_scrape), category_url=selected_category_url
-)
-```
-
-### Violation 3: Line ~4650
-```python
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    category_index, len(category_urls), category_url=category_url
-)
-```
-
-### Violation 4: Line ~6890
-```python
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    category_index=next_category_index,
-    total_categories=len(category_urls_to_scrape),
-    category_url=next_category_url,
-    extraction_phase='supplier'
-)
-```
-
-### Violation 5: Line ~6900 (duplicate)
-```python  
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    category_index=next_category_index,
-    total_categories=len(category_urls_to_scrape),
-    category_url=next_category_url, 
-    extraction_phase='supplier'
-)
-```
-
-### Violation 6: Line ~6910 (duplicate)
-```python
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    category_index=next_category_index,
-    total_categories=len(category_urls_to_scrape),
-    category_url=next_category_url,
-    extraction_phase='supplier'  
-)
-```
-
-### Violation 7: Line 7170 (THE CRITICAL ONE)
-```python
-# VIOLATION:
-self.state_manager.update_supplier_extraction_progress(
-    category_index=batch_num,
-    total_categories=len(category_urls_to_scrape),  # Just fixed this line
-    subcategory_index=i,
-    total_subcategories=len(batch_products),
-    batch_number=batch_num,
-    total_batches=total_batches,
-)
-```
-
-## 🔧 COMPREHENSIVE FIX STRATEGY
-
-### Replace ALL occurrences with update_progression_unified():
-
-**BEFORE (ALL VIOLATIONS)**:
-```python
-self.state_manager.update_supplier_extraction_progress(
-    category_index=X,
-    total_categories=Y,
-    # ... other params
-)
-```
-
-**AFTER (CORRECT ARCHITECTURE)**:
-```python
-self.state_manager.update_progression_unified(
-    current_category_index=X,
-    total_categories=Y,
-    # ... other params mapped to correct names
-)
-```
-
-## 📋 PARAMETER MAPPING
-```python
-# update_supplier_extraction_progress → update_progression_unified
-category_index → current_category_index
-total_categories → total_categories (same)
-subcategory_index → current_product_index_in_category  
-total_subcategories → total_products_in_current_category
-category_url → current_category_url
-extraction_phase → current_phase
-```
-
-## 🎯 WHY THIS FIXES THE BUG
-
-1. **Atomic Updates**: update_progression_unified() updates BOTH system_progression AND supplier_extraction_progress atomically
-2. **Canonical Source**: system_progression becomes the single source of truth for resumption
-3. **Proper Values**: Uses correct total_categories consistently across both sections
-4. **Dual Tracking**: Maintains proper separation between system internal tracking vs user display
-5. **Mathematical Consistency**: Prevents state corruption where total_categories=1 instead of 233
-
-## 🏗️ ARCHITECTURAL COMPLIANCE
-
-After this fix:
-- ✅ system_progression: Used for resumption (system internal tracking)
-- ✅ supplier_extraction_progress: Updated atomically (legacy compatibility) 
-- ✅ User progress: Calculated on-demand from system_progression
-- ✅ Single source of truth: system_progression is canonical
-- ✅ No more state drift: Atomic updates prevent inconsistencies
-
-This comprehensive fix addresses the architectural violation the user identified and ensures proper dual tracking implementation.
+{
+  "asin_from_details": "B019W17SY8",
+  "title": "L’Oréal Paris Magic Retouch Instant Root Concealer Spray, Quick Grey Coverage, Easy Application, Shade: Dark Blonde, 75ml",
+  "current_price": 6.63,
+  "original_price": 9.99,
+  "main_image": "https://m.media-amazon.com/images/I/71IvQQ4YMWL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41onKqjjKoL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51Y2y1dkGWL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/61F-r5IjlyL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "28 Dec. 2015",
+    "Is discontinued by manufacturer\n                                    ‏\n                                    :\n                                    ‎": "No",
+    "Product Dimensions\n                                    ‏\n                                    :\n                                    ‎": "4 x 4 x 13 cm; 70 g",
+    "Manufacturer\n                                    ‏\n                                    :\n                                    ‎": "L'Oréal",
+    "ASIN\n                                    ‏\n                                    :\n                                    ‎": "B019W17SY8",
+    "Item model number\n                                    ‏\n                                    :\n                                    ‎": "108154343",
+    "Delivery information": ": We cannot deliver certain products outside mainland UK ( Details). We will only be able to confirm if this product can be delivered to your chosen address when you enter your delivery address at checkout.",
+    "Customer reviews": "4.3 4.3 out of 5 stars (37,784) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); });",
+    "Is discontinued by manufacturer\n                                    ‏": "‎ No",
+    "Product Dimensions\n                                    ‏": "‎ 4 x 4 x 13 cm; 70 g",
+    "Manufacturer\n                                    ‏": "‎ L'Oréal",
+    "ASIN\n                                    ‏": "‎ B019W17SY8",
+    "Item model number\n                                    ‏": "‎ 108154343"
+  },
+  "date_first_available_from_details": "28 Dec. 2015",
+  "manufacturer_from_details": "‎ L'Oréal",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 37784,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Instantly conceals roots with a natural-looking Dark Blonde shade for seamless coverage",
+    "Ideal for quick touch-ups between colourings, covering visible scalp and fuller looking hair",
+    "Simple spray application with pinpoint micro-diffuser for targeted root coverage that blends flawlessly",
+    "Lightweight, temporary formula lasts until washed out with shampoo; compact size for travel-friendly touch-ups",
+    "Contents: 1 x L’Oréal Paris Magic Retouch Instant Root Concealer Spray, Shade: Dark Blonde, 75ml",
+    "Perfectly matches and blends with leading shades, even salon colour"
+  ],
+  "description": "Product Description Achieve quick and natural roots coverage with L’Oréal Paris Magic Retouch Instant Root Concealer Spray in Dark Blonde. Ideal for last-minute touch-ups, covering scalp and more voluminous looking hair. This travel-friendly 75ml spray blends flawlessly with your natural or salon hair colour. Its pinpoint micro-diffuser targets roots precisely, and the lightweight formula washes out with shampoo, ensuring reliable roots coverage that won’t weigh hair down. Suitable for both permanent and semi-permanent dye users, Magic Retouch is the world’s top root concealer, offering a quick solution for maintaining a perfect look between hair treatment

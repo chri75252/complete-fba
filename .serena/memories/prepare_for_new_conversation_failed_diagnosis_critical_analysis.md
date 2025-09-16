@@ -1,93 +1,94 @@
-# Prepare for New Conversation - Failed Diagnosis & Critical Analysis
-
-## **CRITICAL LESSON LEARNED: My Diagnosis Was INCORRECT**
-
-### **What I Claimed to Fix**
-I confidently stated that the per-product cache saves weren't working because of a "product flow break" and identified 3 critical fixes needed:
-1. ✅ Add `product_accumulator` parameter to workflow scraper call
-2. ✅ Modify `configurable_supplier_scraper.py` to support `product_accumulator`  
-3. ✅ Un-gate cache initialization from `if chunk_products:` condition
-
-### **Embarrassing Discovery**
-**ALL 3 FIXES WERE ALREADY IMPLEMENTED** in the current system:
-- **Fix 1**: Lines 3823-3834 - `products_acc` accumulator and `📦 EXTRACTOR RETURN` logging already implemented
-- **Fix 2**: Lines 429, 605-606, 631-632 - `product_accumulator` parameter fully supported in scraper
-- **Fix 3**: Lines 4437-4459 - Cache initialization already runs unconditionally with `🧪 CACHE FREQUENCY` logging
-
-### **This Means My Root Cause Analysis Was WRONG**
-
-## **What Actually Happened in Investigation**
-
-### **Evidence I Found**
-- ✅ **Product extraction works**: Scraper logs show successful extraction
-- ❌ **Surgical fix diagnostic logs missing**: None of `📦 EXTRACTOR RETURN`, `🧪 CACHE FREQUENCY`, `💾 CACHE SAVE (per-` in recent runs
-- ❌ **Cache files not updating**: User confirmed "the product cache file didn't update!!"
-
-### **My Incorrect Conclusion**
-I concluded the surgical fix code wasn't being executed due to product flow break, but if all 3 fixes were already implemented, then **the real issue is elsewhere**.
-
-### **Alternative Root Causes (That I Should Have Investigated)**
-1. **Different Script Running**: System might be using a different version of the workflow file
-2. **Configuration Issues**: System config might not be enabling the right workflow mode
-3. **Logic Errors**: The surgical fix logic itself has bugs despite being "implemented"
-4. **Path Issues**: Workflow taking different execution paths that bypass surgical fix
-5. **Implementation Issues**: Code is present but has logical errors preventing execution
-
-## **Critical Failure in My Approach**
-
-### **What I Should Have Done**
-1. **Verify which file is actually running** during execution
-2. **Trace actual execution path** through logs to see which code sections execute
-3. **Check if diagnostic logs appear** in ANY recent runs to confirm code execution
-4. **Investigate logic errors** in the surgical fix implementation
-5. **Verify system configuration** matches expected workflow mode
-
-### **What I Did Wrong**
-1. **Made assumptions** about which code was running without verification
-2. **Focused on architectural issues** instead of implementation bugs
-3. **Didn't trace actual execution flow** from logs
-4. **Claimed fixes were needed** without confirming they were missing
-
-## **Real Status After This Session**
-
-### **Still Not Fixed**
-- ❌ Per-product cache saves still not working
-- ❌ `update_frequency_products: 1` still not honored
-- ❌ Cache files still not updating per product
-
-### **False Progress Made**
-- ❌ "Fixed" things that were already implemented
-- ❌ Didn't identify the real root cause
-- ❌ User still needs to test a system that likely won't work
-
-## **For Next Conversation**
-
-### **Real Investigation Needed**
-1. **VERIFY EXECUTION PATH**: Use logs to trace which exact code sections execute during runs
-2. **CONFIRM FILE USAGE**: Ensure the system is using the file I think it's using
-3. **DEBUG LOGIC ERRORS**: If diagnostic logs don't appear, the surgical fix logic has bugs
-4. **TEST CONFIGURATION**: Verify hybrid processing mode and other config settings
-5. **TRACE MESSAGE FLOW**: Follow why `📦 EXTRACTOR RETURN` and `🧪 CACHE FREQUENCY` don't appear
-
-### **Critical Questions to Answer**
-- Why do the diagnostic messages NOT appear in logs if the code is implemented?
-- Is the system running a different workflow file?
-- Are there logic errors in the surgical fix preventing execution?
-- Is the system configuration preventing the workflow from reaching the surgical fix?
-
-## **Files with "Implemented" Surgical Fix**
-- `/tools/passive_extraction_workflow_latest.py` - Contains all 3 "fixes" I identified
-- `/tools/configurable_supplier_scraper.py` - Already supports `product_accumulator`
-
-## **Key Realization**
-The per-product cache save problem is **NOT** a product flow architecture issue. It's likely:
-- Logic bugs in the implemented code
-- Configuration issues
-- Wrong file being executed
-- Or execution path bypassing the surgical fix
-
-**My diagnosis was wrong. The real root cause investigation needs to start fresh with actual execution tracing, not architectural assumptions.**
-
----
-
-**STATUS**: Per-product cache saves still broken despite "complete" surgical fix implementation. Need fundamental re-investigation of actual execution flow and logic errors.
+{
+  "asin_from_details": "B0D73H8YGT",
+  "title": "G.W.S® LED Filament Bulb, S14 B22 Bayonet, LED Pear Bulb, 4W Dimmable Warm White 2700K, Amber Glass",
+  "current_price": 4.2,
+  "original_price": 16.99,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/416hmU1WA3L._AC_SL1000_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/318NgdEFv2L._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41mfTp3UXJL._AC_SR38,50_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/31ZU3p0-rdL._AC_SR38,50_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0D73H8YGT",
+    "Date First Available": "4 Jan. 2023"
+  },
+  "date_first_available_from_details": "4 Jan. 2023",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "G.W.S. LED Wholesale Ltd.",
+  "sold_by_amazon": false,
+  "rating": 5.0,
+  "review_count": 1,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "G.W.S LED Filament Bulb, S14 B22 Bayonet, LED Pear Bulb, 4W Dimmable Warm White 2700K, Amber Glass",
+    "Product type: LIGHT_BULB",
+    "Brand: G.W.S",
+    "Size: Pack of 1"
+  ],
+  "description": "Product Description Vintage Style The vintage filament LED bulb is widely used to create home atmosphere and look great in any exposed light socket such as sconces or socket pendants. Faithfully recreated from historic designs of old-style light bulbs. Specification Light Colour: Warm White/Day White Colour Temperature: 2700K/6400K Base: B22 Wattage: 4W Input Voltage: 160-240V Beam Angle: 360 Degrees Power Factor: 0.8 Lifespan: 50000 Hours Dimension: 45(D)x85(H)mm Energy Saving Save on your electricity bills and do your part for the environment. Long Lasting Performance Extremely long lifespan of 50,000 hours, reduces re-Lamp frequency. B22 Base Suitable for B22 base of any pendant lamps, wall lamps, chandeliers etc. Dimmable Compatible with most of LED dimmers, make it easy to adjust the brightness depending on the desired ambiance. Add an inviting glow and perfect mood to any space.",
+  "specifications_table": {
+    "Brand": "‎G.W.S",
+    "Manufacturer": "‎G.W.S LED",
+    "Number of Items": "‎1",
+    "Colour": "‎Amber Glass-warm White(2700k)",
+    "Shape": "‎Pear",
+    "Material": "‎Glass",
+    "Voltage": "‎230 Volts",
+    "Power and Plug Description:": "‎Corded Electric",
+    "Type of Bulb": "‎LED",
+    "EU Energy Efficiency Label": "‎E",
+    "Luminous Flux": "‎480 Lumen",
+    "Wattage": "‎4 Watts",
+    "Bulb Features": "‎Dimmable",
+    "Colour Temperature": "‎2700 Kelvin",
+    "Guaranteed software updates until": "‎unknown"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 17436,
+      "main_cat_name": "Lighting 1.3 drops / month",
+      "sub_cat_current_rank": 2719,
+      "sub_cat_name": "LED Bulbs 2"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "G.W.S® LED Filament Bulb, S14 B22 Bayonet, LED Pear Bulb, 4W Dimmable Warm White 2700K, Amber Glass",
+      "Sales Rank - Reference": "Lighting",
+      "Sales Rank - Display Group": "lighting_display_on_website",
+      "Reviews - Rating": 5.0,
+      "Reviews - Rating Count": 1.0,
+      "Last Price Change": "7 months ago",
+      "Buy Box Seller": "G.W.S. LED Wholesale Ltd. (83% positive over last 12 months)",
+      "Lowest FBM Seller": "G.W.S. LED Wholesale Ltd. (83% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2024/10/05",
+      "Listed since": "2023/01/04",
+      "Categories - Root": "Lighting",
+      "Categories - Sub": "LED Bulbs",
+      "Categories - Tree": "Lighting › Light Bulbs › LED Bulbs",
+      "Website Display Group - Name": "Lighting",
+      "ASIN": "B0D73H8YGT",
+      "Product Codes - EAN": "5060996266120",
+      "Parent ASIN": "B0D73H4QZ4",
+      "Variation ASINs": "B0D73GTFT6, B0D7MMNYDJ, B0D73H8YGT, B0D7MLCXKF, B0D7MM8MVX, B0D73DN22V, B0D7MJWTZ8, B0D7MLRSYS, B0D7MHKG9L",
+      "Freq. Bought Together": "B01N65AJ3N, B06XR1N2T8",
+      "Type": "LIGHT_BULB",
+      "Manufacturer": "G.W.S LED",
+      "Brand": "G.W.S",
+      "Brand Store Name": "G.W.S",
+      "Brand Store URL Name": "GWS",
+      "Brand Store URL": "https://www.amazon.com/stores/GWS/page/D586E779-70DD-4E97-A29E-8FFFF99F3A80",
+      "Product Group": "Kitchen",
+      "Color": "Amber Glass-warm White(2700k)",
+      "Size": "Pack of 1",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Mater

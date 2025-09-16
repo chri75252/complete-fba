@@ -1,100 +1,75 @@
-# CRITICAL: Complete Workflow System Failure - Full Investigation Required
-
-## User-Reported Critical Issues (Initial Observations)
-1. **No products getting added to product cache** - Core cache write mechanism failing
-2. **System starting at wrong URL** - Resume logic broken, not respecting existing state
-3. **Reprocessing products already in linking map and product cache** - Deduplication completely broken
-
-## My Previous Failed Analysis 
-**What I wrongly focused on:**
-- Invariant violation masking (lines 740-747 in fixed_enhanced_state_manager.py)
-- Counter overflow resets (lines 1121-1139 in enhanced_state_components.py)
-
-**Why this was wrong:**
-- These were SYMPTOMS of deeper workflow failures, not root causes
-- Counter overflows happen BECAUSE the workflow processes same products multiple times
-- Invariant violations occur BECAUSE the core save/resume/dedupe logic is broken
-- I fixed error masking instead of fixing the actual broken workflow
-
-## Critical Systems That Need Full Investigation
-
-### 1. Product Cache Write System
-**Current Evidence**: Products not being saved to cache during processing
-**Need to investigate:**
-- Where/how products are supposed to be saved to product cache file
-- If save method exists and is being called
-- If save operations are failing silently
-- File write permissions and paths
-
-### 2. URL Resume Logic  
-**Current Evidence**: System starting at wrong URL despite existing state
-**Need to investigate:**
-- How system determines which URL to start processing from
-- Resume logic that should read existing processing state
-- Gap detection between URLs already processed vs URLs to process
-- State file loading and interpretation
-
-### 3. Deduplication System
-**Current Evidence**: Reprocessing products already in linking map and cache
-**Need to investigate:**
-- Linking map check logic before processing products
-- Product cache lookup logic before extraction
-- Hash-based deduplication system integration
-- EAN/URL matching for existing products
-
-### 4. State Management Integration
-**Current Evidence**: State corruption leading to counter overflows
-**Need to investigate:**
-- How processing state gets updated during workflow
-- Coordination between different cache/state files
-- Atomic save operations and consistency
-- Recovery from incomplete processing
-
-## Investigation Strategy Required
-
-### Phase 1: Log Analysis (Comprehensive)
-- Go through latest run log line by line
-- Identify every error, warning, and unexpected behavior
-- Map each issue to specific system components
-- Build complete failure taxonomy
-
-### Phase 2: Workflow Tracing
-- Trace actual execution path through the code
-- Identify where expected behaviors diverge from actual behaviors
-- Find specific methods/lines where failures occur
-- Document exact root causes for each issue
-
-### Phase 3: Systematic Repair
-- Fix core workflow issues (cache writes, resume logic, deduplication)
-- Address state management coordination problems  
-- Verify end-to-end processing pipeline works correctly
-- Test with actual system runs
-
-## File System State (Current Understanding)
-- **Processing State**: Contains mathematical impossibilities (860/4 counters)
-- **Product Cache**: Not being updated during processing runs
-- **Linking Map**: May contain products but system not checking properly
-- **Logs**: Contain evidence of all system failures
-
-## Expected Root Causes (Hypotheses)
-1. **Cache write method missing or broken** - Products extracted but never saved
-2. **State loading logic broken** - System not reading existing progress correctly
-3. **Deduplication checks bypassed** - Hash/EAN/URL matching not working
-4. **File coordination issues** - Multiple files not staying synchronized
-5. **Error handling masking failures** - Silent failures hiding real problems
-
-## Investigation Tools Needed
-- Line-by-line log analysis to identify ALL failure points
-- Code tracing through workflow execution paths
-- File system verification of actual cache/state contents
-- Method-level debugging of save/load/check operations
-
-## Success Criteria for Real Fix
-1. Products successfully saved to product cache during processing
-2. System resumes from correct URL based on existing state  
-3. Already-processed products skipped via deduplication
-4. State files remain mathematically consistent
-5. End-to-end processing pipeline works without reprocessing
-
-## Urgency Level: CRITICAL
-The system is fundamentally broken at the workflow level. My previous fixes addressed error symptoms, not the core processing failures that make the system unusable.
+{
+  "asin_from_details": "B01A425KQW",
+  "title": "SPORTBIT Ball Pump with 5 Needles - Push & Pull Inflating System - Great for All Sports Balls - Football Ball Air Pump, Volleyball Pump, Basketball Inflator - Goes with Needles Set",
+  "current_price": 10.99,
+  "original_price": 14.99,
+  "main_image": "https://m.media-amazon.com/images/I/61DIfEiFsaL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41TIPC2516L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/514Lm53B8pL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41V8jB8nicL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41G7koGKX-L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51hZeU-uIkL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51Wgz1QB5XL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51snjwkh-sL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "AC Global Distribution",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 23072,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Ball Pump with Ergonomic Design – Made for your comfort with a soft mold that fits perfectly in your hand. Works best as exercise ball pump, volleyball pump, basketball pump, or soccer ball air pump.",
+    "Push-Pull Air Delivery System – Inflates when you push and when you pull, the best of soccer and exercise ball pumps.",
+    "Needles Don’t Bend - Our unique soft needle plug system prevents the needles from bending. This SportBit ball air pump is easy to use."
+  ],
+  "specifications_table": {
+    "Brand Name": "SPORTBIT",
+    "Manufacturer": "SPORTBIT",
+    "UPC": "643690594338 860009195905",
+    "Customer Reviews": "4.3 4.3 out of 5 stars (23,072) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.3 out of 5 stars",
+    "ASIN": "B01A425KQW",
+    "Item Type Name": "Frame Mounted Ball Pump",
+    "Included Components": "needles for inflation",
+    "Item height": "2.16 inches",
+    "Unit Count": "1.0 count"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 521,
+      "main_cat_name": "Sports & Outdoors 43 drops / month",
+      "sub_cat_current_rank": 1,
+      "sub_cat_name": "Exercise Ball Accessories 4"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "SPORTBIT Ball Pump with 5 Needles - Push & Pull Inflating System - Great for All Sports Balls - Football Ball Air Pump, Volleyball Pump, Basketball Inflator - Goes with Needles Set",
+      "Sales Rank - Reference": "Sports & Outdoors",
+      "Sales Rank - Display Group": "sports_display_on_website",
+      "Bought in past month": "1,000+",
+      "Reviews - Rating": 4.3,
+      "Reviews - Rating Count": 23.0,
+      "Last Price Change": "31 days ago",
+      "Buy Box Seller": "AC Global Distribution (100% positive over last 12 months)",
+      "Lowest FBA Seller": "AC Global Distribution (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.72,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 1.65,
+      "Total Offer Count": "1",
+      "Tracking since": "2018/03/25",
+      "Listed since": "2016/01/03",
+      "Categories - Root": "Sports & Outdoors",
+      "Categories - Sub": "Exercise Ball Accessories",
+      "Categories - Tree": "Sports & Outdoors › Fitness › Accessories › Exercise Balls & Accessories › Exercise Ball Accessories",
+      "Website Display Group - Name": "Sports",
+      "ASIN": "B01A425KQW",
+      "Product Codes - UPC": "643690594338, 860009195905",
+      "Product Codes - EAN": "0643690594338,

@@ -40,6 +40,9 @@ except ImportError:
     get_page_for_url = None
     BROWSER_MANAGER_AVAILABLE = False
 
+# Import normalization utilities for Batch 2 deduplication fixes
+from utils.normalization import normalize_url, normalize_ean
+
 # Load environment variables
 from dotenv import load_dotenv
 
@@ -670,7 +673,8 @@ class ConfigurableSupplierScraper:
                         "title": title,
                         "price": price,
                         "url": product_url,
-                        "ean": ean,
+                        "normalized_url": normalize_url(product_url),
+                        "ean": normalize_ean(ean),
                         "sku": sku,
                         "availability": availability,
                         "image_url": image_url,
@@ -1023,7 +1027,8 @@ class ConfigurableSupplierScraper:
                         "title": title,
                         "price": price,
                         "url": product_url,
-                        "ean": ean,
+                        "normalized_url": normalize_url(product_url),
+                        "ean": normalize_ean(ean),
                         "sku": sku,
                         "availability": availability,
                         "image_url": image_url,
@@ -1238,7 +1243,7 @@ class ConfigurableSupplierScraper:
 
                 # Extract product data
                 soup = BeautifulSoup(product_html, "html.parser")
-                product = await self._extract_product_data_from_soup(soup, product_url)
+                product = await self._extract_product_data_from_soup(soup, product_url, category_url)
 
                 if product:
                     products.append(product)
@@ -1293,7 +1298,7 @@ class ConfigurableSupplierScraper:
         )
         return products
 
-    async def _extract_product_data_from_soup(self, soup: BeautifulSoup, product_url: str) -> Dict:
+    async def _extract_product_data_from_soup(self, soup: BeautifulSoup, product_url: str, category_url: Optional[str] = None) -> Dict:
         """Extract product data from BeautifulSoup object."""
         try:
             title = self._extract_text_by_selector(
@@ -1315,10 +1320,12 @@ class ConfigurableSupplierScraper:
                 "title": title,
                 "price": price,
                 "url": product_url,
-                "ean": ean,
+                "normalized_url": normalize_url(product_url),
+                "ean": normalize_ean(ean),
                 "sku": sku,
                 "availability": availability,
                 "image_url": image_url,
+                "source_url": category_url,  # ✅ add the category context as the source
                 "scraped_at": datetime.now().isoformat(),
             }
         except Exception as e:

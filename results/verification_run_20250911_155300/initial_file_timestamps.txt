@@ -1,0 +1,72 @@
+=== INITIAL FILE TIMESTAMPS ===
+Verification Run: verification_run_20250911_155300
+Created: 2025-09-11 15:53:00
+
+KEY FILES TO TRACK:
+
+1. CACHED PRODUCTS:
+   - OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+     Status: EXISTS
+     Note: Primary supplier product cache file
+
+   - OUTPUTS\cached_products\poundwholesale-co-uk_products_cache1 - Copy.json
+     Status: EXISTS
+     Note: Backup copy of cache file
+
+   - OUTPUTS\cached_products\BEFORE RNUpoundwholesale-co-uk_products_cache.json
+     Status: EXISTS
+     Note: Historical backup
+
+2. PROCESSING STATES:
+   - OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+     Status: EXISTS
+     Note: Current processing state tracker
+
+   - OUTPUTS\CACHE\processing_states\test_supplier_processing_state.json
+     Status: EXISTS
+     Note: Test processing state
+
+   - OUTPUTS\CACHE\processing_states\1strun.json
+     Status: EXISTS
+     Note: First run state
+
+   - OUTPUTS\CACHE\processing_states\2ndrun.json
+     Status: EXISTS
+     Note: Second run state
+
+3. LINKING MAPS:
+   - OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+     Status: EXISTS
+     Note: Primary EAN-to-ASIN mapping file
+
+   - OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map2.json
+     Status: EXISTS
+     Note: Secondary linking map
+
+   - OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map_test.json
+     Status: EXISTS
+     Note: Test linking map
+
+   - OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map-upload.json
+     Status: EXISTS
+     Note: Upload version of linking map
+
+4. LOG FILES:
+   To be tracked during test runs for new log files created
+
+5. FINANCIAL REPORTS:
+   To be tracked during test runs for new financial reports
+
+VERIFICATION NOTES:
+- All key files exist at baseline
+- Timestamps will be compared after each test run
+- New files created during testing will be documented
+- File size changes will be tracked
+- Modification timestamps will be compared
+
+USAGE:
+This baseline will be compared against file states after each test run:
+- A_run1: First scenario A test
+- A_run2: Second scenario A test  
+- B_run1: First scenario B test
+- B_run2: Second scenario B test

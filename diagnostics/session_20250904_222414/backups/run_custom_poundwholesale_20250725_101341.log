@@ -1,0 +1,246 @@
+2025-07-25 10:13:41,636 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250725_101341.log
+2025-07-25 10:13:41,637 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250725_101341.log
+2025-07-25 10:13:41,638 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-25 10:13:41,638 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-07-25 10:13:41,642 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-07-25 10:13:42,202 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-25 10:13:42,361 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-07-25 10:13:42,362 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-25 10:13:42,362 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:13:42,362 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:13:42,362 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-25 10:13:42,363 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-25 10:13:42,363 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-25 10:13:47,578 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-25 10:13:47,666 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-25 10:13:47,666 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-25 10:13:47,667 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS'
+2025-07-25 10:13:47,667 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products'
+2025-07-25 10:13:47,668 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products
+2025-07-25 10:13:47,668 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-07-25 10:13:47,669 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-07-25 10:13:47,669 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-25 10:13:47,669 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\amazon_data
+2025-07-25 10:13:47,670 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-25 10:13:47,670 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\system_config.json
+2025-07-25 10:13:47,671 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-25 10:13:47,671 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-25 10:13:47,671 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-25 10:13:47,671 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-25 10:13:47,671 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-25 10:13:47,672 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-25 10:13:47,672 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-25 10:13:47,672 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-25 10:13:47,672 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS
+2025-07-25 10:13:47,673 - PassiveExtractionWorkflow - INFO - 📚 No reference supplier cache found - starting fresh
+2025-07-25 10:13:47,673 - PassiveExtractionWorkflow - INFO - 📚 No reference linking map found - starting fresh
+2025-07-25 10:13:47,673 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-25 10:13:47,674 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-25 10:13:47,674 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250725_101347
+2025-07-25 10:13:47,675 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-25 10:13:47,675 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-25 10:13:47,675 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-07-25 10:13:47,676 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-25 10:13:47,676 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 20
+2025-07-25 10:13:47,677 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-25 10:13:47,677 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-25 10:13:47,677 - utils.enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resuming from index 0
+2025-07-25 10:13:47,677 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-25 10:13:47,678 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-07-25 10:13:47,678 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-25 10:13:47,678 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at any path (tried 2 patterns) - Creating new map
+2025-07-25 10:13:47,678 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 0
+2025-07-25 10:13:47,690 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 10:13:47,691 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: AMAZON_ANALYSIS (supplier cache: 2387 products, no linking map)
+2025-07-25 10:13:47,693 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-25 10:13:47,693 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at any path (tried 2 patterns) - Creating new map
+2025-07-25 10:13:47,693 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-25 10:13:47,693 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-25 10:13:47,694 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 185 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\poundwholesale_categories.json
+2025-07-25 10:13:47,694 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-07-25 10:13:47,694 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 185 predefined categories (infinite mode)
+2025-07-25 10:13:47,695 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-25 10:13:47,695 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-25 10:13:47,695 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-25 10:13:47,696 - PassiveExtractionWorkflow - INFO -    process_existing_gap_first: True
+2025-07-25 10:13:47,696 - PassiveExtractionWorkflow - INFO - 🔍 HYBRID PROCESSING: Processing existing product gap first...
+2025-07-25 10:13:47,706 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 10:13:47,708 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING: Found 2387 products to process (supplier: 2387, linking map: 0)
+2025-07-25 10:13:47,725 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING: Identified 2387 unprocessed products for Amazon analysis
+2025-07-25 10:13:47,726 - PassiveExtractionWorkflow - ERROR - ❌ GAP PROCESSING ERROR: cannot access local variable 'total_batches' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\tools\passive_extraction_workflow_latest.py", line 3782, in _process_existing_product_gap
+    total_batches=total_batches,
+                  ^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'total_batches' where it is not associated with a value
+2025-07-25 10:13:47,733 - PassiveExtractionWorkflow - INFO - 📋 GAP PROCESSING: No gap found or no profitable products from gap
+2025-07-25 10:13:47,733 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-07-25 10:13:47,733 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-07-25 10:13:47,742 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 10:13:47,754 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Need to extract remaining products for chunk (120/1000 expected)
+2025-07-25 10:13:47,764 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 10:13:47,765 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-07-25 10:13:47,765 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-07-25 10:13:47,765 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-07-25 10:13:47,776 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2387 products in poundwholesale-co-uk_products_cache.json
+2025-07-25 10:13:47,803 - PassiveExtractionWorkflow - INFO - ✅ RESUMPTION: Loaded 2387 existing products from cache file: poundwholesale-co-uk_products_cache.json
+2025-07-25 10:13:47,803 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-07-25 10:13:47,804 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION: Starting from batch 1/1 (resume_extraction: False)
+2025-07-25 10:13:47,804 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-07-25 10:13:47,805 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-07-25 10:13:49,648 - utils.browser_manager - DEBUG - 🪟 Found 27 Chrome processes, total memory: 2902.4MB
+2025-07-25 10:13:49,648 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 2902.4 MB
+2025-07-25 10:13:49,648 - utils.browser_manager - INFO - 📊 Browser memory usage: 2902.0MB > 2048MB threshold (monitoring only - restart disabled)
+2025-07-25 10:13:50,603 - utils.browser_manager - DEBUG - 🪟 Found 27 Chrome processes, total memory: 2902.1MB
+2025-07-25 10:13:50,603 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 2902.1 MB
+2025-07-25 10:13:52,402 - utils.browser_manager - DEBUG - 🪟 Windows: 27 Chrome processes, 2899MB total
+2025-07-25 10:13:52,403 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:13:52,403 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:13:57,522 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-25 10:13:57,558 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-25 10:13:57,558 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-07-25 10:13:57,560 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-07-25 10:13:57,560 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:13:57,560 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care with memory management
+2025-07-25 10:13:58,509 - utils.browser_manager - DEBUG - 🪟 Found 27 Chrome processes, total memory: 2943.7MB
+2025-07-25 10:13:58,510 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 2943.7 MB
+2025-07-25 10:14:00,722 - utils.browser_manager - DEBUG - 🪟 Windows: 27 Chrome processes, 2943MB total
+2025-07-25 10:14:00,723 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=2943MB, Python=141MB, System=54.5%
+2025-07-25 10:14:00,723 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:00,724 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:00,724 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:00,726 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-07-25 10:14:00,727 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-07-25 10:14:00,727 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:00,727 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:00,728 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care (attempt 1/3)
+2025-07-25 10:14:00,728 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:00,728 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:00,729 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:02,162 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care in 1.96s...
+2025-07-25 10:14:04,124 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care (attempt 2/3)
+2025-07-25 10:14:04,125 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:04,125 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:04,126 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:05,256 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:05,257 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care
+2025-07-25 10:14:05,722 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care (Size: 635760 bytes)
+2025-07-25 10:14:06,163 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-07-25 10:14:06,164 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2
+2025-07-25 10:14:06,164 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2 (attempt 1/3)
+2025-07-25 10:14:06,165 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:06,165 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:06,166 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2
+2025-07-25 10:14:07,670 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2 in 2.26s...
+2025-07-25 10:14:09,944 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2 (attempt 2/3)
+2025-07-25 10:14:09,945 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:09,945 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:09,946 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2
+2025-07-25 10:14:11,171 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2
+2025-07-25 10:14:11,172 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2
+2025-07-25 10:14:11,294 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=2 (Size: 661602 bytes)
+2025-07-25 10:14:11,695 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-07-25 10:14:11,696 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3
+2025-07-25 10:14:11,696 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3 (attempt 1/3)
+2025-07-25 10:14:11,696 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:11,696 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:11,696 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3
+2025-07-25 10:14:13,161 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3 in 2.05s...
+2025-07-25 10:14:15,210 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3 (attempt 2/3)
+2025-07-25 10:14:15,210 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:15,210 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:15,211 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3
+2025-07-25 10:14:17,204 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3
+2025-07-25 10:14:17,205 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3
+2025-07-25 10:14:17,326 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=3 (Size: 644791 bytes)
+2025-07-25 10:14:17,676 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-07-25 10:14:17,677 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4
+2025-07-25 10:14:17,677 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4 (attempt 1/3)
+2025-07-25 10:14:17,677 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:17,678 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:17,679 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4
+2025-07-25 10:14:19,132 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4 in 1.74s...
+2025-07-25 10:14:20,890 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4 (attempt 2/3)
+2025-07-25 10:14:20,890 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:20,891 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:20,892 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4
+2025-07-25 10:14:23,395 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4
+2025-07-25 10:14:23,396 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4
+2025-07-25 10:14:23,501 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=4 (Size: 630033 bytes)
+2025-07-25 10:14:23,856 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-07-25 10:14:23,856 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5
+2025-07-25 10:14:23,857 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5 (attempt 1/3)
+2025-07-25 10:14:23,857 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:23,857 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:23,858 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5
+2025-07-25 10:14:25,369 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5 in 2.50s...
+2025-07-25 10:14:27,870 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5 (attempt 2/3)
+2025-07-25 10:14:27,870 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:27,871 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:27,871 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5
+2025-07-25 10:14:30,019 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5
+2025-07-25 10:14:30,020 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5
+2025-07-25 10:14:30,139 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=5 (Size: 638125 bytes)
+2025-07-25 10:14:30,373 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-07-25 10:14:30,373 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6
+2025-07-25 10:14:30,373 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6 (attempt 1/3)
+2025-07-25 10:14:30,373 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:30,374 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:30,374 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6
+2025-07-25 10:14:31,810 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6 in 2.17s...
+2025-07-25 10:14:33,985 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6 (attempt 2/3)
+2025-07-25 10:14:33,985 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:33,987 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:33,987 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6
+2025-07-25 10:14:36,214 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6
+2025-07-25 10:14:36,214 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6
+2025-07-25 10:14:36,320 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=6 (Size: 643982 bytes)
+2025-07-25 10:14:36,526 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 6
+2025-07-25 10:14:36,527 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7
+2025-07-25 10:14:36,528 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7 (attempt 1/3)
+2025-07-25 10:14:36,528 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:36,529 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:36,529 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7
+2025-07-25 10:14:37,954 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7 in 2.28s...
+2025-07-25 10:14:40,241 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7 (attempt 2/3)
+2025-07-25 10:14:40,241 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:40,241 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:40,241 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7
+2025-07-25 10:14:41,686 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7
+2025-07-25 10:14:41,687 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7
+2025-07-25 10:14:41,772 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=7 (Size: 501274 bytes)
+2025-07-25 10:14:42,060 - configurable_supplier_scraper - INFO - Found 10 new product URLs on page 7
+2025-07-25 10:14:42,060 - configurable_supplier_scraper - INFO - Processing page 8: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8
+2025-07-25 10:14:42,060 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8 (attempt 1/3)
+2025-07-25 10:14:42,060 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:42,061 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:42,061 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8
+2025-07-25 10:14:43,349 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8 in 2.42s...
+2025-07-25 10:14:45,776 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8 (attempt 2/3)
+2025-07-25 10:14:45,777 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:45,778 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:45,778 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8
+2025-07-25 10:14:47,988 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8
+2025-07-25 10:14:47,988 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8
+2025-07-25 10:14:48,059 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care?p=8 (Size: 333542 bytes)
+2025-07-25 10:14:48,205 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 8
+2025-07-25 10:14:48,206 - configurable_supplier_scraper - INFO - Collected 130 total product URLs across 8 pages
+2025-07-25 10:14:48,206 - configurable_supplier_scraper - INFO - Found 130 total product URLs across all pages
+2025-07-25 10:14:48,209 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-07-25 10:14:48,235 - utils.url_cache_filter - INFO - ✅ Loaded 2387 URLs from poundwholesale.co.uk cache
+2025-07-25 10:14:48,236 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 2387 (+2387 new)
+2025-07-25 10:14:48,237 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 2387 cached URLs for efficiency filtering
+2025-07-25 10:14:48,238 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 1 new URLs, 129 already cached
+2025-07-25 10:14:48,238 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 1 new URLs need processing, 129 already cached
+2025-07-25 10:14:48,239 - configurable_supplier_scraper - INFO - Visiting product page 1/1: https://www.poundwholesale.co.uk/refresh-microfibre-hair-drying-towel-wrap
+2025-07-25 10:14:48,240 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/refresh-microfibre-hair-drying-towel-wrap (attempt 1/3)
+2025-07-25 10:14:48,240 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:48,241 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:48,242 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/refresh-microfibre-hair-drying-towel-wrap
+2025-07-25 10:14:49,731 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/refresh-microfibre-hair-drying-towel-wrap in 1.72s...
+2025-07-25 10:14:51,454 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/refresh-microfibre-hair-drying-towel-wrap (attempt 2/3)
+2025-07-25 10:14:51,454 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-25 10:14:51,455 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-25 10:14:51,455 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/refresh-microfibre-hair-drying-towel-wrap
+2025-07-25 10:14:52,450 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-25 10:14:52,452 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

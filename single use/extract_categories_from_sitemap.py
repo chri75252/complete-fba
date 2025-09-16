@@ -1,287 +1,149 @@
-#!/usr/bin/env python3
-"""
-Extract Category URLs from Sitemap Script
-Extracts actual category URLs from poundwholesale.co.uk sitemap and tests pagination
-"""
-
-import requests
-import xml.etree.ElementTree as ET
-import json
-import re
-from datetime import datetime
-from urllib.parse import urlparse, urljoin
-import asyncio
-from playwright.async_api import async_playwright
-
-class SitemapCategoryExtractor:
-    def __init__(self):
-        self.base_url = "https://www.poundwholesale.co.uk"
-        self.sitemap_url = "https://www.poundwholesale.co.uk/sitemap.xml"
-        self.categories = []
-        
-    def extract_categories_from_sitemap(self):
-        """Extract category URLs from sitemap.xml"""
-        print("üîç Fetching sitemap.xml...")
-        
-        try:
-            response = requests.get(self.sitemap_url, timeout=30)
-            response.raise_for_status()
-            
-            # Parse XML
-            root = ET.fromstring(response.content)
-            
-            # Define namespace
-            namespace = {'sitemap': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
-            
-            # Extract all URLs
-            urls = []
-            for url_elem in root.findall('sitemap:url', namespace):
-                loc_elem = url_elem.find('sitemap:loc', namespace)
-                if loc_elem is not None:
-                    urls.append(loc_elem.text)
-            
-            print(f"üìã Found {len(urls)} total URLs in sitemap")
-            
-            # Filter for category URLs (exclude product URLs)
-            category_patterns = [
-                r'^https://www\.poundwholesale\.co\.uk/[a-zA-Z-]+$',  # Main categories like /toys, /diy
-                r'^https://www\.poundwholesale\.co\.uk/[a-zA-Z-]+/[a-zA-Z-]+$',  # Subcategories like /toys/wholesale-boys-toys
-                r'^https://www\.poundwholesale\.co\.uk/wholesale-[a-zA-Z-]+$',  # Wholesale categories
-            ]
-            
-            # Exclude product URLs and other non-category URLs
-            exclude_patterns = [
-                r'\.html$',  # Product pages end with .html
-                r'/[a-zA-Z0-9-]+-\d+',  # Products with numbers
-                r'/media/',  # Media files
-                r'/customer/',  # Customer pages
-                r'/checkout/',  # Checkout pages
-                r'/search/',  # Search pages
-                r'/cms/',  # CMS pages
-            ]
-            
-            categories = []
-            for url in urls:
-                # Check if URL matches category patterns
-                is_category = any(re.match(pattern, url) for pattern in category_patterns)
-                
-                # Check if URL should be excluded
-                is_excluded = any(re.search(pattern, url) for pattern in exclude_patterns)
-                
-                if is_category and not is_excluded:
-                    # Extract category name from URL
-                    path = urlparse(url).path.strip('/')
-                    category_name = path.replace('/', ' > ').replace('-', ' ').title()
-                    
-                    categories.append({
-                        "name": category_name,
-                        "url": url,
-                        "path": path,
-                        "level": path.count('/') + 1
-                    })
-            
-            # Sort by level (main categories first, then subcategories)
-            categories.sort(key=lambda x: (x['level'], x['name']))
-            
-            print(f"‚úÖ Extracted {len(categories)} category URLs")
-            
-            # Display categories by level
-            main_categories = [c for c in categories if c['level'] == 1]
-            subcategories = [c for c in categories if c['level'] > 1]
-            
-            print(f"\nüìã MAIN CATEGORIES ({len(main_categories)}):")
-            for cat in main_categories:
-                print(f"  ‚Ä¢ {cat['name']}: {cat['url']}")
-            
-            print(f"\nüìã SUBCATEGORIES ({len(subcategories)}):")
-            for cat in subcategories[:20]:  # Show first 20 subcategories
-                print(f"  ‚Ä¢ {cat['name']}: {cat['url']}")
-            
-            if len(subcategories) > 20:
-                print(f"  ... and {len(subcategories) - 20} more subcategories")
-            
-            self.categories = categories
-            return categories
-            
-        except Exception as e:
-            print(f"‚ùå Error extracting categories: {e}")
-            return []
-    
-    async def test_category_pagination(self, category_url, max_pages=3):
-        """Test pagination pattern ?p= for a category"""
-        print(f"\nüîç Testing pagination for: {category_url}")
-        
-        try:
-            playwright = await async_playwright().start()
-            browser = await playwright.chromium.connect_over_cdp("http://localhost:9222")
-            
-            if browser.contexts:
-                context = browser.contexts[0]
-            else:
-                context = await browser.new_context()
-            
-            if context.pages:
-                page = context.pages[0]
-            else:
-                page = await context.new_page()
-            
-            pagination_results = []
-            
-            for page_num in range(1, max_pages + 1):
-                # Construct paginated URL
-                separator = "&" if "?" in category_url else "?"
-                test_url = f"{category_url}{separator}p={page_num}"
-                
-                print(f"  üìÑ Testing page {page_num}: {test_url}")
-                
-                try:
-                    await page.goto(test_url)
-                    await page.wait_for_load_state('domcontentloaded')
-                    await page.wait_for_timeout(2000)
-                    
-                    # Check for products
-                    product_elements = await page.query_selector_all(".product-item, li.product-item")
-                    products_found = len(product_elements)
-                    
-                    # Check for toolbar with product count
-                    toolbar_text = ""
-                    try:
-                        toolbar_element = await page.query_selector("#toolbar-amount")
-                        if toolbar_element:
-                            toolbar_text = await toolbar_element.inner_text()
-                    except:
-                        pass
-                    
-                    # Check if page actually exists (not 404 or empty)
-                    page_title = await page.title()
-                    is_valid_page = products_found > 0 and "404" not in page_title.lower()
-                    
-                    result = {
-                        "page": page_num,
-                        "url": test_url,
-                        "products_found": products_found,
-                        "toolbar_text": toolbar_text.strip(),
-                        "page_title": page_title,
-                        "is_valid": is_valid_page
-                    }
-                    
-                    pagination_results.append(result)
-                    
-                    if is_valid_page:
-                        print(f"    ‚úÖ Page {page_num}: {products_found} products found")
-                        if toolbar_text:
-                            print(f"    üìä Toolbar: {toolbar_text}")
-                    else:
-                        print(f"    ‚ùå Page {page_num}: No products or invalid page")
-                        if page_num > 1:
-                            break  # Stop testing if we hit an invalid page
-                    
-                except Exception as e:
-                    print(f"    ‚ùå Error testing page {page_num}: {e}")
-                    pagination_results.append({
-                        "page": page_num,
-                        "url": test_url,
-                        "error": str(e),
-                        "is_valid": False
-                    })
-                    break
-            
-            await browser.close()
-            return pagination_results
-            
-        except Exception as e:
-            print(f"‚ùå Error testing pagination: {e}")
-            return []
-    
-    async def test_multiple_categories(self, num_categories=5):
-        """Test pagination for multiple categories"""
-        print(f"\nüß™ Testing pagination for {num_categories} categories...")
-        
-        # Select a mix of main categories and subcategories
-        main_cats = [c for c in self.categories if c['level'] == 1]
-        sub_cats = [c for c in self.categories if c['level'] > 1]
-        
-        test_categories = main_cats[:3] + sub_cats[:2]  # 3 main + 2 sub
-        
-        all_results = {}
-        
-        for category in test_categories:
-            print(f"\n{'='*60}")
-            print(f"Testing: {category['name']}")
-            print(f"URL: {category['url']}")
-            
-            pagination_results = await self.test_category_pagination(category['url'], max_pages=3)
-            all_results[category['name']] = {
-                "category": category,
-                "pagination_results": pagination_results
-            }
-        
-        return all_results
-    
-    def generate_report(self, categories, pagination_results):
-        """Generate comprehensive report"""
-        report = {
-            "extraction_timestamp": datetime.now().isoformat(),
-            "sitemap_url": self.sitemap_url,
-            "total_categories_found": len(categories),
-            "categories": categories,
-            "pagination_test_results": pagination_results,
-            "summary": {
-                "main_categories": len([c for c in categories if c['level'] == 1]),
-                "subcategories": len([c for c in categories if c['level'] > 1]),
-                "tested_categories": len(pagination_results),
-                "categories_with_pagination": len([r for r in pagination_results.values() 
-                                                 if any(p.get('is_valid', False) for p in r['pagination_results'])])
-            }
-        }
-        
-        # Save report
-        report_file = f"sitemap_categories_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        with open(report_file, 'w') as f:
-            json.dump(report, indent=2, fp=f)
-        
-        print(f"\nüìä FINAL REPORT")
-        print("="*60)
-        print(f"üìÖ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"üìã Total Categories: {report['summary']['total_categories_found']}")
-        print(f"üè† Main Categories: {report['summary']['main_categories']}")
-        print(f"üìÇ Subcategories: {report['summary']['subcategories']}")
-        print(f"üß™ Tested Categories: {report['summary']['tested_categories']}")
-        print(f"üìÑ Categories with Pagination: {report['summary']['categories_with_pagination']}")
-        print(f"üìÅ Report saved to: {report_file}")
-        
-        # Display pagination test summary
-        print(f"\nüìÑ PAGINATION TEST SUMMARY:")
-        for cat_name, results in pagination_results.items():
-            valid_pages = [p for p in results['pagination_results'] if p.get('is_valid', False)]
-            print(f"  ‚Ä¢ {cat_name}: {len(valid_pages)} valid pages")
-            for page_result in valid_pages[:2]:  # Show first 2 pages
-                if page_result.get('toolbar_text'):
-                    print(f"    - Page {page_result['page']}: {page_result['toolbar_text']}")
-        
-        return report
-
-async def main():
-    """Main execution function"""
-    extractor = SitemapCategoryExtractor()
-    
-    # Step 1: Extract categories from sitemap
-    print("üöÄ Starting sitemap category extraction...")
-    categories = extractor.extract_categories_from_sitemap()
-    
-    if not categories:
-        print("‚ùå No categories extracted. Exiting.")
-        return
-    
-    # Step 2: Test pagination for selected categories
-    pagination_results = await extractor.test_multiple_categories(num_categories=5)
-    
-    # Step 3: Generate comprehensive report
-    report = extractor.generate_report(categories, pagination_results)
-    
-    print("\n‚úÖ Sitemap category extraction and pagination testing complete!")
-    print(f"üìã Found {len(categories)} categories ready for AI selection")
-    print(f"üìÑ Pagination pattern ?p= confirmed working")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+{
+  "asin_from_details": "B00XJKGQKG",
+  "title": "BRUT Attraction Totale Aftershave",
+  "current_price": 6.12,
+  "main_image": "https://m.media-amazon.com/images/I/51yga2gHJqL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31Cr9bMnMsL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31Bivog6gHL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31N-3iY6WaL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51nh3J0SwOL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41bO3xUyykL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/61gx3TT1jlL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "1 Dec. 2015",
+    "Is discontinued by manufacturer\n                                    ‚Äè\n                                    :\n                                    ‚Äé": "No",
+    "Product Dimensions\n                                    ‚Äè\n                                    :\n                                    ‚Äé": "3.2 x 9.7 x 12.3 cm; 260 g",
+    "Manufacturer\n                                    ‚Äè\n                                    :\n                                    ‚Äé": "CRMA4",
+    "ASIN\n                                    ‚Äè\n                                    :\n                                    ‚Äé": "B00XJKGQKG",
+    "Item model number\n                                    ‚Äè\n                                    :\n                                    ‚Äé": "835-9416",
+    "Delivery information": ": We cannot deliver certain products outside mainland UK ( Details). We will only be able to confirm if this product can be delivered to your chosen address when you enter your delivery address at checkout.",
+    "Customer reviews": "4.3 4.3 out of 5 stars (523) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); });",
+    "Is discontinued by manufacturer\n                                    ‚Äè": "‚Äé No",
+    "Product Dimensions\n                                    ‚Äè": "‚Äé 3.2 x 9.7 x 12.3 cm; 260 g",
+    "Manufacturer\n                                    ‚Äè": "‚Äé CRMA4",
+    "ASIN\n                                    ‚Äè": "‚Äé B00XJKGQKG",
+    "Item model number\n                                    ‚Äè": "‚Äé 835-9416"
+  },
+  "date_first_available_from_details": "1 Dec. 2015",
+  "manufacturer_from_details": "‚Äé CRMA4",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Deals For You UK",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 523,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "BRUT Attraction Totale Aftershave 100ml.",
+    "SENSUAL fragrance of Paris",
+    "A sensual woody fragrance enriched with a blend of citrus fruits notes and white musk.",
+    "The electrifying charisma of a confident man",
+    "100ml Bottle"
+  ],
+  "description": "Product Description The Essence of Man is what lies at the very core of every man. Brut brand value personifies the aspiration in the relentless pursuit of the identity of man, which is fueled by the essence. Brut products are customized for men who are passionate in sophistication, energetic in life, confident in attitude and modern in style. The Brut man exemplifies the identity, quality and individuality of a man, with a scent of European luxury. - Attraction Totale is the SENSUAL fragrance of Paris. The electrifying charisma of a confident man. Ingredients Alchohol Denat, Aqua,parfum,PEG-40 Hydrogenated Castor oil, Ethlhexyl Methoxycinnamate, Butyl Methoxydibenzoylmethane, Ethylhexyl Salicylate, Alpha-Isomethyl Ionone, Benzyl Alchohol, Benzyl Benzoate, Benzyl Salicylate, Butylpheny Methlpropional, Citral, Citronellol, Coumarin, Eugenol, Evernia Furfuracea, Geraniol, Hexyl Cinnamal, Hydroxycitronellal, Hydroxyisohexyl 3 ‚Äì Cyclohexene Carboxaldehyde, Isoeugenol, limonene, linalool. Safety Warning FOR EXTERNAL USE ONLY Box Contains 1 X 100ml Bottle See more",
+  "specifications_table": {
+    "Manufacturer": "‚ÄéCRMA4",
+    "Package dimensions": "‚Äé12.2 x 8.4 x 2.4 centimetres",
+    "Package Weight": "‚Äé0.26 Kilograms",
+    "Item dimensions L x W x H": "‚Äé32 x 97 x 123 millimetres",
+    "Item weight": "‚Äé260 Grams",
+    "Brand": "‚ÄéBRUT",
+    "Colour": "‚ÄéWhite",
+    "Volume": "‚Äé100 Millilitres",
+    "Scent": "‚Äécitrus",
+    "Special features": "‚ÄéSensitive Skin",
+    "Target audience": "‚ÄéMen",
+    "Item model number": "‚Äé835-9416",
+    "Product Dimensions": "‚Äé3.2 x 9.7 x 12.3 cm; 260 g",
+    "ASIN": "‚ÄéB00XJKGQKG"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 13994,
+      "main_cat_name": "Health & Personal Care 16 drops / month",
+      "sub_cat_current_rank": 29,
+      "sub_cat_name": "Aftershave Lotions & Fluids 4"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "BRUT Attraction Totale Aftershave",
+      "Sales Rank - Reference": "Health & Personal Care",
+      "Sales Rank - Display Group": "health_and_beauty_display_on_website",
+      "Bought in past month": "100+",
+      "Reviews - Rating": 4.3,
+      "Reviews - Rating Count": 523.0,
+      "Last Price Change": "1 minute ago",
+      "Buy Box Seller": "Deals For You UK (99% positive over last 12 months)",
+      "Lowest FBA Seller": "Deals For You UK (99% positive over last 12 months) IZORA (75% positive over last 12 months) TopKnotch Product (100% positive over last 12 months) Good Stuff Distribution (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.97,
+      "Referral Fee %": "8.01 %",
+      "Referral Fee based on current Buy Box price": 0.49,
+      "Lowest FBM Seller": "Essentialsinstock (89% positive over last 12 months)",
+      "Total Offer Count": "7",
+      "Tracking since": "2016/12/13",
+      "Listed since": "2015/12/01",
+      "Categories - Root": "Health & Personal Care",
+      "Categories - Sub": "Lotions & Fluids",
+      "Categories - Tree": "Health & Personal Care ‚Ä∫ Shaving & Hair Removal ‚Ä∫ Post-Treatments ‚Ä∫ Aftershaves ‚Ä∫ Lotions & Fluids",
+      "Website Display Group - Name": "Beauty",
+      "ASIN": "B00XJKGQKG",
+      "Product Codes - EAN": "8712561803847",
+      "Product Codes - PartNumber": "835-9416",
+      "Freq. Bought Together": "B01KXQ5TCY",
+      "Type": "BEAUTY",
+      "Manufacturer": "CRMA4",
+      "Brand": "BRUT",
+      "Product Group": "Beauty",
+      "Model": "835-9416",
+      "Color": "White",
+      "Size": "100 ml (Pack of 1)",
+      "Unit Details - Unit Value": "100",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "citrus",
+      "Style": "Modern",
+      "Target Audience": "Unisex Adult",
+      "Binding": "Personal Care",
+      "Number of Items": "1",
+      "Release Date": "2022-01-01",
+      "Languages": "English: Manual",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/61gx3TT1jlL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/3efbe385-8e1f-4671-a8cc-9534d752831a/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm¬≥)": "12.2 x 8.4 x 2.4 cm (= 246 cm¬≥ )",
+      "Package - Weight (g)": "260",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm¬≥)": "3.2 x 9.7 x 12.3 cm (= 382 cm¬≥ )",
+      "Item - Model (g)": "260",
+      "Ingredients": "Alchohol Denat, Aqua,parfum,PEG-40 Hydrogenated Castor oil, Ethlhexyl Methoxycinnamate, Butyl Methoxydibenzoylmethane, Ethylhexyl Salicylate, Alpha-Isomethyl Ionone, Benzyl Alchohol, Benzyl Benzoate, Benzyl Salicylate, Butylpheny Methlpropional, Citral, Citronellol, Coumarin, Eugenol, Evernia Furfuracea, Geraniol, Hexyl Cinnamal, Hydroxycitronellal, Hydroxyisohexyl 3 ‚Äì Cyclohexene Carboxaldehyde, Isoeugenol, limonene, linalool.",
+      "Safety Warning": "FOR EXTERNAL USE ONLY",
+      "Hazardous Materials": "Proper Shipping Name: United Nations Regulatory Id: Regulatory Packing Group: PERFUMERY PRODUCTSUN1266II(more values available, copy cell to get all)"
+    }
+  },
+  "eans_on_page": [
+    "8712561803847"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "8712561803847",
+  "sales_rank": 13994,
+  "category": "Health & Personal Care 16",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 20,
+  "asin_extracted_from_page": "B00XJKGQKG",
+  "asin_queried": "B00XJKGQKG",
+  "asin": "B00XJKGQKG",
+  "_search_method_used": "EAN_cached"
+}                                                                                                                                                                                                                                                                                                                  ackup.format_fixes_backup_20250717_181444.test_financial_report.output_dirP£ÍÅÇbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._extract_product_details_amazonP†ørÅcbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._extract_priceP†∏wÅmbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._extract_keepa_dataP†≤sÅebackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._extract_imagesP†≈uÅibackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._extract_all_dataP† |Åwbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._estimate_sales_from_bsrP†ΩÅ}backup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._calculate_title_similarityP†µÅ Åbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._ai_extract_field_from_imageP†¥Å}backup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._ai_extract_field_from_htmlP†≥ÅÇbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._ai_diagnose_navigation_failureP†±ÅÇbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor._ai_diagnose_extraction_failureP†¬lÅWbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractor.__init__P†ØcÅEbackup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractor.AmazonExtractorP†ªSÅ%backup.format_fixes_backup_20250717_181444.tools.amazon_playwright_extractorP†∆TÅ'backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator.logPéF]Å9backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator._linking_mapPéIXÅ/backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator._configPéBYÅ1backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator.VAT_RATEPéClÅWbackup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator.SUPPLIER_PRICES_INCLUDE_VATPéEZÅ3backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator.SHIP_COSTPéHZÅ3backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator.PREP_COSTPéD[Å5backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_calculator.OUTPUT_DIRPéAYÅ1backup.format_fixes_backup_20250717_181444.tools.FBA_Financial_ca{
+  "asin_from_details": "B00X41ZTAI",
+  "title": "SELF ADHESIVE ALUMINIUM FOIL TAPE SILVER ELECTRIC HEAT REFLECTOR PIPE REPAIR 10m x 50mm",
+  "current_price": 5.29,
+  "original_price": 5.65,
+  "main_image": "https://m.media-amazon.com/images/I/61ol0HcOYqL._SL1145_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41

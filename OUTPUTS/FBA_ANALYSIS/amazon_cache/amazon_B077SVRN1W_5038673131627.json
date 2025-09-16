@@ -97,21 +97,19 @@
       "Package - Weight (g)": "360",
       "Package - Quantity": "1",
       "Item - Dimension (cm³)": "24.6 x 0.2 x 2.3 cm (= 11 cm³ )",
-      "Item - Model (g)": "96",
-      "One Time Coupon - Percentage": "10 %"
-    }
-  },
-  "eans_on_page": [
-    "0712804868747"
-  ],
-  "ean_on_page_source": "Keepa_Product_Details",
-  "ean_on_page": "0712804868747",
-  "sales_rank": 668656,
-  "category": "Home & Kitchen 2.3",
-  "sales_rank_source": "Keepa_SalesRankDetailsTable",
-  "estimated_monthly_sales_from_bsr": 5,
-  "asin_extracted_from_page": "B077SVRN1W",
-  "asin_queried": "B077SVRN1W",
-  "asin": "B077SVRN1W",
-  "_search_method_used": "EAN_cached"
-}
+      "Item - Model (g)": "96"ionCREATE TABLE chat_session
+(
+    session_id  varchar(64) primary key,
+    user_id   VARCHAR(64) not null ,
+    user_name varchar(64),
+    session_title varchar(256) not null ,
+    project_id  varchar(64) not null ,
+    project_uri varchar(512),
+    project_name varchar(64),
+    gmt_create INTEGER,
+    gmt_modified INTEGER,
+    org_id   VARCHAR(64) default '',
+    session_type VARCHAR(64) DEFAULT '',
+    mode VARCHAR(64) DEFAULT '',
+    version VARCHAR(64) DEFAULT ''
+)7K% indexsqlite_au

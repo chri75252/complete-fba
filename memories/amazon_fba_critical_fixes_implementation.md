@@ -1,54 +1,33 @@
-# Amazon FBA System - Critical Fixes Implementation Plan
-
-## 🚨 IMMEDIATE PRIORITY: Dual Tracking Architecture Fix
-
-### **Problem Identified**
-8 locations in `tools/passive_extraction_workflow_latest.py` use wrong state update method:
-- Using: `update_supplier_extraction_progress()` (WRONG)
-- Should use: `update_progression_unified()` (CORRECT)
-
-### **Impact**
-- Breaks state synchronization between `system_progression` and `supplier_extraction_progress` 
-- Causes resume functionality failures
-- Leads to processing interruptions
-
-### **Surgical Implementation Required**
-
-**File**: `tools/passive_extraction_workflow_latest.py`
-**8 locations to fix:**
-
-1. Line 1380-1382: Auto-recovery category URL correction
-2. Line 1404-1405: Auto-recovery category selection sync  
-3. Line 3829-3831: Current category processing update
-4. Line 3889: Wrong method variant `update_supplier_extraction_progress_new()`
-5. Line 4679-4680: Next category progression logic #1
-6. Line 4698-4699: Next category progression logic #2
-7. Line 4752-4753: Next category progression logic #3
-8. Line 7168-7170: Amazon analysis phase
-
-**Parameter Mapping Pattern:**
-```python
-# BEFORE (WRONG):
-self.state_manager.update_supplier_extraction_progress(
-    category_index, total_categories, category_url=url
-)
-
-# AFTER (CORRECT):
-self.state_manager.update_progression_unified(
-    current_category_index=category_index,
-    total_categories=total_categories,
-    current_category_url=url
-)
-```
-
-### **System Behavior Rules**
-- NEVER delete cache files - system uses "reverse gap processing"
-- linking_map.json is resume data source (8818 entries)
-- total_categories MUST equal 233 (corruption indicator if ≠ 233)
-- `system_progression` section is canonical source for resumption
-
-### **Implementation Steps**
-1. Create backup before changes
-2. Replace all 8 method calls with parameter mapping
-3. Test state synchronization
-4. Verify resume functionality works
+{
+  "asin_from_details": "B0B39DSSSM",
+  "title": "18” Stiff Broom Outdoor Heavy Duty with Wooden Handle Natural Bassine Hard Bristle Yard Brush Factory Warehouse Floors Commercial and Industrial Broom Strong Wooden Brush (Pack of 1)",
+  "current_price": 12.99,
+  "original_price": 13.99,
+  "main_image": "https://m.media-amazon.com/images/I/71pRCp7tXNL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51snBPT5yjL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/619IuRqOFaL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41daj6E2jiL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51+6X5KbeAL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41dvqKvYl6L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41aZgr-ZGlL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/91srtJ7zLOL._SL1500_PKplay-button-mb-image-grid-small_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0B39DSSSM",
+    "Date First Available": "6 Jun. 2022"
+  },
+  "date_first_available_from_details": "6 Jun. 2022",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "247traders",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 985,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "[ Wide Broom with Wooden Handle ] Stiff Bassine Bristles sweeping brush outdoor with natural bassine fill which can withstand the toughest jobs for outdoor cleaning and is a perfect outside brush for sweeping on all hard grounds and garden.",
+    "[ Wet and Dry Usage ] This outdoor stiff hard bristle broom head is suitable for wet and dry surfaces. Stiff Garden Broom for outdoor heads are made from high-quality wood to avoid mould build-up and can be used for a long time.",
+    "[ MultiPurpose Cleaning Stiff Bristles Broom ] Outdoor Yard Brush the hard bristle clea

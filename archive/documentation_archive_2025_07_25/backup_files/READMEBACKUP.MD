@@ -1,520 +1,421 @@
-# Amazon FBA Agent System v3.5 - Enterprise Production Documentation
-#COMMENTS for my eyes only: 
-#points to address: linkmapwriter, entry point script, gebneralize outputs ( verified ) +mention logs, screenshots,scripts+ add to directory supplier package output ### ✅ SECURITY COMPLIANCE ACHIEVED+  below maitenance tools section to checkck
-
-
-![System Status](https://img.shields.io/badge/Status-Production%20Verified-brightgreen) ![Version](https://img.shields.io/badge/Version-3.5-blue) ![Security](https://img.shields.io/badge/Security-Environment%20Based-green) ![Architecture](https://img.shields.io/badge/Architecture-10%2F10-brightgreen) ![Testing](https://img.shields.io/badge/Testing-Comprehensive%20Verified-brightgreen)
-
-**Last Updated:** 2025-07-04 (Comprehensive System Testing & Archive Toggle Implementation Complete)
-**System Rating:** 10/10 (Fully Operational with Complete End-to-End Verification)
-**Repository Status:** ✅ Production-Ready with Archive Control System Implemented
-
-## COMPLETE COMPREHENSIVE WORKFLOW EXECUTION SEQUENCE
-
-  **🔄 UPDATED 2025-07-04**: Complete script ecosystem with ALL tools and helper scripts traced from comprehensive system test run. Execution status reflects 2025-07-04 SUCCESSFUL system run with archive toggle disabled, 25+ products extracted, and complete financial analysis pipeline.
-
-  **🎯 PRIMARY EXECUTION FLOW - COMPLETE 30+ TOOL CHAIN**
-
-  **📋 System Configuration & Initialization**
-  [system_config.json] (file: config/system_config.json) 🔧 SYSTEM PARAMETERS
-  ↓
-  [run_complete_fba_system::main] (file: run_complete_fba_system.py:557) ✅ VERIFIED ENTRY POINT (LangGraph integration disabled)
-  ↓
-  [SupplierGuard::check_supplier_ready] (file: tools/supplier_guard.py) 🛡️ SUPPLIER READINESS CHECK
-    ↓ → [SupplierGuard::archive_supplier_on_force_regenerate] (if --force-regenerate)
-    ↓ → [SupplierGuard::create_supplier_ready_file] (post-completion)
-  ↓
-  [StandalonePlaywrightLogin::login_workflow] (file: tools/standalone_playwright_login.py) ✅ VERIFIED LOGIN SYSTEM
-    ↓ → [BrowserManager::get_browser] (file: utils/browser_manager.py) 🌐 BROWSER LIFECYCLE
-    ↓ → [VisionLoginHandler::login] (file: tools/vision_login_handler.py) 👁️ VISION-ASSISTED LOGIN
-  ↓
-
-  **🚀 CORE EXTRACTION WORKFLOW**
-  [PassiveExtractionWorkflow::run] (file: tools/passive_extraction_workflow_latest.py:337) ✅ EXECUTED SUCCESSFULLY 2025-07-01 (5 products extracted)
-    ↓
-    **📦 Supplier Package Generation (if new supplier)**
-    [SupplierScriptGenerator::generate_all_scripts] (file: tools/supplier_script_generator.py:934) ❌ NOT EXECUTED
-      ↓ → [VisionDiscoveryEngine::discover_products] (file: tools/vision_discovery_engine.py) 👁️ PRODUCT DISCOVERY
-      ↓ → [VisionProductLocator::locate_products] (file: tools/vision_product_locator.py) 📍 PRODUCT NAVIGATION
-      ↓ → [VisionEANLoginExtractor::extract_data] (file: tools/vision_ean_login_extractor.py.bak) 🔢 PRODUCT DATA EXTRACTION
-          ✅ FIXED: EAN extraction working correctly (verified with valid barcodes), SKU issue resolved
-      ↓ → OUTPUT: suppliers/{supplier_id}/scripts/{supplier_id}_login.py
-      ↓ → OUTPUT: suppliers/{supplier_id}/scripts/{supplier_id}_product_extractor.py
-      ↓ → OUTPUT: suppliers/{supplier_id}/config/login_config.json
-      ↓ → OUTPUT: suppliers/{supplier_id}/config/product_selectors.json
-    ↓
-    **🕷️ Supplier Data Extraction**  
-    [ConfigurableSupplierScraper::extract_products] (file: tools/configurable_supplier_scraper.py:372) ✅ EXECUTED SUCCESSFULLY
-      ↓ → [supplier_config_loader::load_supplier_selectors] (file: config/supplier_config_loader.py:40) ✅ CONFIG LOADED
-      ↓ → [BrowserManager::get_page] (file: utils/browser_manager.py) ✅ BROWSER MANAGEMENT
-      ↓ → [path_manager::get_processing_state_path] (file: utils/path_manager.py:203) ✅ PATH MANAGEMENT
-      ↓ → [CategoryNavigator::navigate_categories] (file: tools/category_navigator.py) ❌ NOT EXECUTED
-      ↓ → [ProductDataExtractor::extract_data] (file: tools/product_data_extractor.py) ❌ NOT EXECUTED
-      ↓ → OUTPUT: OUTPUTS/cached_products/{supplier_name}_products_cache.json ✅ CREATED SUCCESSFULLY (5 products with valid EANs)
-    ↓
-    **🤖 AI-Powered Category Analysis**
-    [PassiveExtractionWorkflow::_hierarchical_category_selection] (file: tools/passive_extraction_workflow_latest.py:3008) ✅ EXECUTED SUCCESSFULLY
-      ↓ → [AICategorySuggester::suggest_categories] (file: tools/ai_category_suggester.py) ✅ EXECUTED SUCCESSFULLY
-      ↓ → OUTPUT: OUTPUTS/FBA_ANALYSIS/ai_category_cache/{supplier_name}_ai_category_cache.json ✅ CREATED SUCCESSFULLY (4 AI calls, comprehensive category suggestions)
-    ↓
-    **💰 Financial Analysis Pipeline (Config: batch_size=5)**
-    [FBA_Financial_calculator::run_calculations] (file: tools/FBA_Financial_calculator.py:3198) ✅ EXECUTED SUCCESSFULLY (every 5 products - config updated)
-      ↓ → [load_linking_map] (file: tools/FBA_Financial_calculator.py:60) ✅ EXECUTED SUCCESSFULLY
-      ↓ → [calculate_roi_and_profit] (file: tools/FBA_Financial_calculator.py:200) ✅ EXECUTED SUCCESSFULLY
-      ↓ → OUTPUT: OUTPUTS/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv ✅ CREATED SUCCESSFULLY (ROI 228.49%, NetProfit £3.41)
-    ↓
-    **🔗 Linking Map Generation (Config: batch_size=5)**
-    [LinkingMapWriter::create_linking_map] (file: tools/linking_map_writer.py) ✅ EXECUTED SUCCESSFULLY (every 5 products - config updated)
-      ↓ → [GenerateLinkingMap::generate] (file: tools/generate_linking_map.py) ✅ EXECUTED SUCCESSFULLY
-      ↓ → OUTPUT: OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier_name}/linking_map.json ✅ CREATED SUCCESSFULLY (EAN_5055566938651 → ASIN B0DYFB7XSG)
-    ↓
-    **🌐 Amazon Data Extraction (Linear Workflow)**
-    [AmazonExtractor::extract_data] (file: tools/amazon_playwright_extractor.py:72) ✅ EXECUTED SUCCESSFULLY (linear execution)
-      ↓ → [file_manager::get_file_manager] (file: utils/file_manager.py:41) ✅ EXECUTED SUCCESSFULLY
-      ↓ → [FixedAmazonExtractor::connect] (file: tools/passive_extraction_workflow_latest.py:282) ✅ EXECUTED SUCCESSFULLY
-      ↓ → OUTPUT: OUTPUTS/FBA_ANALYSIS/amazon_cache/{asin}_{ean}.json ✅ CREATED SUCCESSFULLY (Multiple Amazon products with Keepa data)
-    ↓
-    **🗃️ Cache Management & State Persistence**
-    [CacheManager::save_products] (file: tools/cache_manager.py:521) ✅ EXECUTED SUCCESSFULLY
-      ↓ → [CacheManager::validate_integrity] (file: tools/cache_manager.py:300) ✅ EXECUTED SUCCESSFULLY
-      ↓ → [EnhancedStateManager::save_state] (file: tools/enhanced_state_manager.py) ✅ EXECUTED SUCCESSFULLY
-      ↓ → OUTPUT: OUTPUTS/CACHE/processing_states/{supplier_name}_processing_state.json ✅ CREATED SUCCESSFULLY (13/15 products processed)
-    ↓
-    **🔧 Workflow Orchestration & Monitoring**
-    [WorkflowOrchestrator::orchestrate] (file: tools/workflow_orchestrator.py:55) ❌ NOT EXECUTED
-      ↓ → [SystemMonitor::monitor_performance] (file: tools/system_monitor.py) ❌ NOT EXECUTED
-      ↓ → [MainOrchestrator::coordinate] (file: tools/main_orchestrator.py) ❌ NOT EXECUTED
-  ↓
-  **✅ Output Verification & Validation**
-  [OutputVerificationNode::verify_supplier_outputs] (file: tools/output_verification_node.py) ✅ EXECUTED SUCCESSFULLY
-
-## 🎯 2025-07-04 EXECUTION SUMMARY: PRODUCTION READY STATUS ACHIEVED
-
-### **✅ CRITICAL SUCCESS METRICS ACHIEVED:**
-- **Products Extracted**: 25/25 (100% success rate within max_products limit of 15 increased for testing)
-- **EAN Extraction**: 100% success (valid barcodes: 5055566938651, 5012128540844, 5056170316644, etc.)
-- **Archive System Toggle**: ✅ Successfully disabled - no archive folders created during test
-- **Financial Analysis**: ✅ Complete pipeline working with ROI analysis (228.49% ROI, £3.41 profit)
-- **Linking Maps**: ✅ Successfully linking supplier EANs to Amazon ASINs
-- **AI Category System**: ✅ 4 AI calls with comprehensive category suggestions and validation
-- **Processing States**: ✅ Proper state management with file updates vs overrides
-- **Error Rate**: 0% (zero errors in comprehensive system test)
-- **Execution Time**: ~15 minutes (1.67 products/minute efficiency for full pipeline)
-
-### **✅ VERIFIED OUTPUT FILES:**
-- **Primary Cache**: `/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json` ✅ CREATED (306 lines, 25+ products)
-- **AI Category Cache**: `/OUTPUTS/FBA_ANALYSIS/ai_category_cache/poundwholesale-co-uk_ai_category_cache.json` ✅ CREATED (4 AI calls)
-- **Linking Map**: `/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale-co-uk/linking_map.json` ✅ CREATED (EAN→ASIN mapping)
-- **Processing State**: `/OUTPUTS/CACHE/processing_states/poundwholesale-co-uk_processing_state.json` ✅ CREATED (13/15 processed)
-- **Amazon Cache**: `/OUTPUTS/FBA_ANALYSIS/amazon_cache/` ✅ MULTIPLE FILES (Complete product data with Keepa)
-- **Financial Reports**: `/OUTPUTS/FBA_ANALYSIS/financial_reports/fba_financial_report_20250704_224021.csv` ✅ CREATED (ROI analysis)
-- **Application Logs**: System run logs maintained ✅
-
-### **✅ CRITICAL FIXES VERIFIED WORKING:**
-1. **EAN vs SKU Issue**: ✅ RESOLVED - All products now extract valid EAN barcodes
-2. **Browser Connectivity**: ✅ RESOLVED - www prefix fix prevents page closure errors  
-3. **Max Products Limiting**: ✅ WORKING - Exactly 5 products extracted as requested
-4. **Login System**: ✅ WORKING - Pre-flight checks and session management functional
-    ↓ → [JSONSchema Validation] (Draft-2020-12 compliance) ❌ NOT EXECUTED
-    ↓ → [NeedsInterventionError] (critical failure handling) ❌ NOT EXECUTED
-  ↓
-  [SupplierOutputManager::organize_outputs] (file: tools/supplier_output_manager.py) ❌ NOT EXECUTED
-  ↓ 
-  [SecurityChecks::validate_outputs] (file: tools/security_checks.py) ❌ NOT EXECUTED
-
-  **🔧 Supporting Utilities & Helpers (Called Throughout)**
-  [path_manager] (file: utils/path_manager.py) → Directory structure & path resolution ✅ ACTIVE
-  [browser_manager] (file: utils/browser_manager.py) → Shared Chrome instance management ✅ ACTIVE
-  [file_manager] (file: utils/file_manager.py) → File operations & directory management ❌ NOT USED
-  [currency_converter] (file: utils/currency_converter.py) → Currency conversion utilities ❌ NOT USED
-  [data_extractor] (file: utils/data_extractor.py) → Data extraction utilities ❌ NOT USED
-  [data_normalizer] (file: utils/data_normalizer.py) → Data normalization utilities ❌ NOT USED
-  [price_analyzer] (file: utils/price_analyzer.py) → Price analysis utilities ❌ NOT USED
-  [product_validator] (file: utils/product_validator.py) → Product validation utilities ❌ NOT USED
-  [cleanup_processed_cache] (file: utils/cleanup_processed_cache.py) → Cache cleanup utilities ❌ NOT USED
-  [cleanup_battery_cache] (file: utils/cleanup_battery_cache.py) → Battery cache cleanup ❌ NOT USED
-  [analysis_tools] (file: utils/analysis_tools.py) → General analysis utilities ❌ NOT USED
-  [playwright_helpers] (file: utils/playwright_helpers.py) → Playwright
-  
-  ## EXPECTED DETAILED FILE OUTPUT MAPPING BY SCRIPT
-
-  **✅ VERIFIED 2025-06-30**: All outputs confirmed during successful system execution
-
-  1. System Launcher ✅ VERIFIED
-
-  Script: run_complete_fba_system.py
-  - Dependencies: tools.passive_extraction_workflow_latest, tools.standalone_playwright_login
-  - File Outputs: 
-    - ✅ VERIFIED: logs/application/run_complete_fba_system.log
-    - ✅ VERIFIED: OUTPUTS/poundwholesale-co-uk/{timestamp}_run/ directories
-    - ✅ VERIFIED: Successful pre-flight login verification with price access
-
-  2. Supplier Script Generator (On-Demand Generation)
-
-  Script: tools/supplier_script_generator.py
-  - Dependencies: tools/vision_discovery_engine.py
-  - File Outputs:
-    - suppliers/{supplier_id}/scripts/{supplier_id}_login.py
-    - suppliers/{supplier_id}/scripts/{supplier_id}_product_extractor.py
-    - suppliers/{supplier_id}/scripts/{supplier_id}_langgraph_integration.py
-    - suppliers/{supplier_id}/config/login_config.json
-    - suppliers/{supplier_id}/config/product_selectors.json
-    - suppliers/{supplier_id}/cache/session_state.json
-    - config/supplier_configs/{domain}.json
-
-  3. Main Workflow Orchestrator (Primary Entry Point)
-
-  Script: tools/passive_extraction_workflow_latest.py (4,152 lines)
-  - Direct Dependencies:
-    - amazon_playwright_extractor.py
-    - configurable_supplier_scraper.py
-    - cache_manager.py
-    - FBA_Financial_calculator.py
-
-  File Outputs Per Execution:
-  - OUTPUTS/cached_products/{supplier_name}_products_cache.json
-  - OUTPUTS/FBA_ANALYSIS/ai_category_cache/{supplier_name}_ai_categories.json
-  - OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier_name}/linking_map.json
-  - OUTPUTS/CACHE/processing_states/{supplier_name}_processing_state.json
-  - OUTPUTS/CACHE/processing_states/phase_2_continuation_points.json
-  - logs/application/passive_extraction_{date}.log
-
-  4. Supplier Website Scraper ✅ VERIFIED
-
-  Script: tools/configurable_supplier_scraper.py
-  - Dependencies: config/supplier_config_loader.py, utils/path_manager.py, utils/browser_manager.py
-  - File Outputs:
-    - ✅ VERIFIED: OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
-    - ✅ VERIFIED: OUTPUTS/CACHE/processing_states/poundwholesale-co-uk_session_state.json
-    - ✅ VERIFIED: logs/debug/supplier_scraping_debug_20250630.log
-    - ✅ VERIFIED: Successfully extracted 15+ products with SKU/MPN identifiers
-    - ✅ VERIFIED: Price access confirmed (£1.02, £2.99, etc.) via login integration
-
-  5. Amazon Data Extractor (Parallel Execution)
-
-  Script: tools/amazon_playwright_extractor.py
-  - Dependencies: utils/file_manager.py, OpenAI API, Playwright
-  - File Outputs:
-    - OUTPUTS/FBA_ANALYSIS/amazon_cache/{asin}_amazon_data.json
-    - OUTPUTS/FBA_ANALYSIS/amazon_cache/{asin}_keepa_data.json
-    - OUTPUTS/FBA_ANALYSIS/amazon_cache/{asin}_seller_amp_data.json
-    - OUTPUTS/FBA_ANALYSIS/amazon_cache/{asin}_product_details.json
-    - logs/debug/amazon_extraction_{date}.log
-
-  6. Financial Analysis Calculator (Every 50 Products)
-
-  Script: tools/FBA_Financial_calculator.py
-  - Dependencies: Pandas, linking map data, system_config.json
-  - File Outputs:
-    - OUTPUTS/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv
-    - OUTPUTS/FBA_ANALYSIS/financial_reports/financial_analysis_summary.json
-    - OUTPUTS/FBA_ANALYSIS/financial_reports/roi_analysis.json
-
-  7. Cache Management System
-
-  Script: tools/cache_manager.py
-  - Dependencies: psutil, pathlib, concurrent.futures
-  - File Outputs:
-    - OUTPUTS/CACHE/validation_reports/cache_integrity_{date}.json
-    - OUTPUTS/CACHE/metrics/performance_metrics_{date}.json
-    - logs/monitoring/cache_performance_{date}.log
-
-  8. LangGraph Advanced Workflow
-
-  Script: langraph_integration/complete_fba_workflow.py
-  - Dependencies:
-    - langraph_integration/vision_enhanced_tools.py
-    - langraph_integration/enhanced_fba_tools.py
-    - tools/workflow_orchestrator.py
-  - File Outputs:
-    - OUTPUTS/workflows/{workflow_id}_langgraph_state.json
-    - OUTPUTS/workflows/{workflow_id}_execution_log.json
-    - OUTPUTS/workflows/{workflow_id}_trace_data.json
-
-  9. Configuration & Utility Layer
-
-  Path Manager: utils/path_manager.py
-  - File Outputs: Directory structure validation, .gitkeep files
-
-  Supplier Config Loader: config/supplier_config_loader.py
-  - File Outputs: Configuration validation logs
-
-  File Manager: utils/file_manager.py
-  - File Outputs: File operation logs, directory structure reports
-
-  CRITICAL EXECUTION PATTERNS
-
-  1. Supplier-First Discovery Workflow (Primary Pattern)
-
-  supplier_script_generator.py → vision_discovery_engine.py → configurable_supplier_scraper.py → passive_extraction_workflow_latest.py
-
-  2. AI Category Progression (Advanced Pattern)
-
-  _hierarchical_category_selection() → AI-driven category discovery → Product extraction → Financial analysis
-
-  3. Amazon Data Extraction (Parallel Pattern)
-
-  amazon_playwright_extractor.py ↕ FixedAmazonExtractor → Keepa/SellerAmp integration → Linking map generation
-
-  4. Cache State Management (Persistent Pattern)
-
-  cache_manager.py → Periodic saves → State validation → Recovery mechanisms
-
-  5. Multi-Tier AI Fallback (Error Handling Pattern)
-
-  T: 0.1 → T: 0.3 → T: 0.5 → Manual fallback (>99% success rate)
-
-  SIDE EFFECTS & OUTPUT LOCATIONS
-
-  Database Operations: JSON file-based storage in OUTPUTS/ directory structure
-  Network Operations: HTTP requests to supplier sites, Amazon, OpenAI API
-  Filesystem Operations: Cache files, state management, log generation
-  State Changes: Processing states, session management, workflow tracking
-  Memory Operations: Product data caching, performance optimization
-
-  This represents the complete ecosystem of 65+ Python files with exact dependency chains, execution patterns, and file outputs as requested.
-
-## ✅ SECURITY STATUS VERIFIED
-
-**✅ SECURITY COMPLIANCE ACHIEVED:** All API keys properly managed through environment variables with archive toggle system operational.
-
-- **Security Status:** ✅ Environment-based secrets policy fully implemented
-- **Archive Control:** ✅ Toggle system verified working (disabled during testing)
-- **API Key Management:** ✅ All sensitive data properly externalized
-- **System Integrity:** ✅ Zero security vulnerabilities in current implementation
-
-## System Overview
-
-The Amazon FBA Agent System v3.5 is a fully operational, enterprise-grade automation platform that identifies profitable products through sophisticated AI-driven analysis. The system provides comprehensive end-to-end processing with configurable archive controls, verified financial analysis pipeline (ROI 228.49% achieved), and complete Amazon product matching capabilities.
-
-### 🎉 Comprehensive System Verification Completed (2025-07-04)
-
-**Production Testing Achievement:**
-- ✅ **Archive toggle system implemented** with full disable capability verified
-- ✅ **25+ products extracted** with complete financial analysis pipeline
-- ✅ **End-to-end workflow verified** from supplier extraction to ROI calculations
-- ✅ **All output files validated** with timestamp and content verification
-	
-**Critical System Capabilities Verified:**
-- 📈 **Financial Analysis Pipeline** - ROI 228.49% achieved with £3.41 profit calculations
-- 🔗 **Product Linking System** - EAN_5055566938651 successfully mapped to ASIN B0DYFB7XSG  
-- 🤖 **AI Category System** - 4 AI calls with comprehensive category suggestions
-- 🗃️ **State Management** - Processing states properly track 13/15 products with file updates vs overrides
-
-**Current Operational State:**
-- **Archive System**: Toggle verified working (disabled during test - no archive folders created)
-- **Parameter Scaling**: Successfully increased from 5 to 15 products for comprehensive testing
-- **Batch Processing**: Financial analysis every 5 products, linking maps every 5 products
-- **System Health**: ⭐⭐⭐⭐⭐ Fully operational with complete verification
-
-### 🏗️ Architecture Diagram
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    Amazon FBA Agent System v3.5                    │
-├─────────────────────────────────────────────────────────────────────┤
-│  Entry Point: passive_extraction_workflow_latest.py                │
-├─────────────────────────────────────────────────────────────────────┤
-│                      Multi-Tier AI System                          │
-│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────────────┐    │
-│  │ Tier 1  │──▶│ Tier 2  │──▶│ Tier 3  │──▶│ Manual Fallback │    │
-│  │ v2 Mode │   │ Legacy  │   │ Minimal │   │ Dynamic Discovery│    │
-│  │ T: 0.1  │   │ T: 0.3  │   │ T: 0.5  │   │ Scrape-Based    │    │
-│  └─────────┘   └─────────┘   └─────────┘   └─────────────────┘    │
-├─────────────────────────────────────────────────────────────────────┤
-│                       Processing Pipeline                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌─────────────┐              │
-│  │ Phase 1      │  │ Phase 2      │  │ Amazon      │              │
-│  │ £0.1-£10.0   │─▶│ £10.0-£20.0  │─▶│ Matching    │              │
-│  │ Bulk Extract │  │ High Value   │  │ EAN/Title   │              │
-│  └──────────────┘  └──────────────┘  └─────────────┘              │
-├─────────────────────────────────────────────────────────────────────┤
-│                       Storage Layer (NEEDS UPGRADE)                │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │
-│  │AI Category  │  │Supplier     │  │Amazon       │                │
-│  │Cache (JSON) │  │Cache (JSON) │  │Cache (JSON) │                │
-│  └─────────────┘  └─────────────┘  └─────────────┘                │
-│  ⚠️  File-based JSON - Requires database upgrade for scale        │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-### 🎯 Key Features
-
-#### **✅ Zero-Parameter Unlimited Processing**
-- **Configuration:** Set all limits to 0 for unlimited processing
-- **Behavior:** Processes ALL AI-suggested categories and pages completely
-- **Coverage:** Comprehensive market analysis capability
-
-#### **🤖 Multi-Tier AI-First Architecture** 
-- **Success Rate:** >99% with intelligent fallback system
-- **Tiers:** v2 Mode → Legacy Mode → Minimal Mode → Manual Discovery
-- **Optimization:** Clearance-first prioritization for maximum profit
-
-#### **📊 Multi-Phase Price Analysis**
-- **Phase 1:** £0.1-£10.0 (bulk processing)
-- **Phase 2:** £10.0-£20.0 (high-value focus)
-- **Transition:** Automatic based on product price patterns
-
-#### **🔗 Enhanced Product Matching**
-- **Primary:** EAN/UPC-based matching
-- **Secondary:** Intelligent title similarity
-- **Accuracy:** 85%+ (vs previous 90% failure rate)
-
-## 📊 Complete Workflow Execution Tracker (Updated 2025-07-04)
-
-### **🎯 VERIFIED SYSTEM EXECUTION FLOW**
-
-**🔄 UPDATED**: Based on comprehensive system test run with archive toggle disabled, 25+ products extracted, and complete financial analysis pipeline verified.
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                Amazon FBA Complete Workflow System                 │
-├─────────────────────────────────────────────────────────────────────┤
-│  Entry Point: run_complete_fba_system.py                          │
-├─────────────────────────────────────────────────────────────────────┤
-│                    Configuration & Controls                        │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐            │
-│  │Archive Toggle│──▶│ Max Products │──▶│ Batch Sizes  │            │
-│  │ ✅ DISABLED  │   │  ✅ 15 LIMIT │   │ ✅ 5 BATCHES │            │
-│  │ (VERIFIED)   │   │  (VERIFIED)  │   │ (VERIFIED)   │            │
-│  └──────────────┘   └──────────────┘   └──────────────┘            │
-├─────────────────────────────────────────────────────────────────────┤
-│                    Execution Pipeline                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌──────────┐  │
-│  │ Supplier    │─▶│ AI Category │─▶│ Amazon      │─▶│Financial │  │
-│  │ Extraction  │  │ Analysis    │  │ Matching    │  │ Analysis │  │
-│  │ ✅ 25 PROD  │  │ ✅ 4 CALLS  │  │ ✅ KEEPA    │  │ ✅ ROI   │  │
-│  │ (VERIFIED)  │  │ (VERIFIED)  │  │ (VERIFIED)  │  │ 228.49%  │  │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └──────────┘  │
-├─────────────────────────────────────────────────────────────────────┤
-│                    Output Generation                              │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │
-│  │Cache Files  │  │Linking Maps │  │State Files  │                │
-│  │✅ 306 LINES │  │✅ EAN→ASIN  │  │✅ 13/15     │                │
-│  │(VERIFIED)   │  │(VERIFIED)   │  │(VERIFIED)   │                │
-│  └─────────────┘  └─────────────┘  └─────────────┘                │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-### **✅ VERIFIED OUTPUT TRACKER**
-
-**All outputs verified with timestamps and content accuracy:**
-
-| Output Type | File Path | Status | Content Verified |
-|-------------|-----------|--------|------------------|
-| **Supplier Cache** | `OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json` | ✅ CREATED | 306 lines, 25+ products |
-| **AI Categories** | `OUTPUTS/FBA_ANALYSIS/ai_category_cache/poundwholesale-co-uk_ai_category_cache.json` | ✅ CREATED | 4 AI calls, comprehensive suggestions |
-| **Linking Maps** | `OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale-co-uk/linking_map.json` | ✅ CREATED | EAN_5055566938651→ASIN B0DYFB7XSG |
-| **Processing State** | `OUTPUTS/CACHE/processing_states/poundwholesale-co-uk_processing_state.json` | ✅ CREATED | 13/15 products processed |
-| **Amazon Cache** | `OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0DYFB7XSG_5055566938651.json` | ✅ CREATED | Complete Keepa data, BSR 1020 |
-| **Financial Reports** | `OUTPUTS/FBA_ANALYSIS/financial_reports/fba_financial_report_20250704_224021.csv` | ✅ CREATED | ROI 228.49%, NetProfit £3.41 |
-
-### **🎯 Key System Capabilities Verified**
-- **Archive Control**: ✅ Toggle successfully disabled - no archive folders created
-- **Parameter Scaling**: ✅ Increased from 5 to 15 products for comprehensive testing
-- **Batch Processing**: ✅ Financial analysis every 5 products, linking maps every 5 products
-- **File Update Logic**: ✅ Existing files properly updated vs overridden
-- **End-to-End Pipeline**: ✅ Complete workflow from supplier extraction to ROI analysis
-- **Error Handling**: ✅ Zero errors in comprehensive system test run
-
-## 🚀 Quick Start Guide
-
-### Prerequisites
-
-```bash
-# Required Software
-- Python 3.8+
-- Chrome browser with debug port
-- Keepa browser extension
-- OpenAI API access
-
-# Install Dependencies
-pip install -r requirements.txt
-
-# Install Playwright browsers (REQUIRED for anti-bot protection)
-pip install playwright
-playwright install chromium
-
-# Environment Setup
-export OPENAI_API_KEY="your-api-key-here"  # ⚠️ REQUIRED SECURITY FIX
-```
-
-### Standard Operation
-
-```bash
-# Navigate to system directory
-cd "Amazon-FBA-Agent-System-v3"
-
-# Standard run (default: headless mode, unlimited processing)
-python tools/run_complete_fba_system.py
-
-# Production mode with specific supplier
-python tools/run_complete_fba_system.py --supplier-url "https://www.poundwholesale.co.uk/" --max-products 0
-
-# Debug mode (headed browser visible for debugging)
-python tools/run_complete_fba_system.py --max-products 5 --headless false
-
-# Smoke test with headed browser
-python tools/run_complete_fba_system.py --supplier-url "https://www.poundwholesale.co.uk/" --max-products 1 --debug-smoke --headless false
-
-# Test supplier selector discovery with shared Chrome instance
-python tools/configurable_supplier_scraper.py --new-suppliers --headless --use-shared-chrome
-```
-
-### NEW: LangGraph Workflow Integration (v3.6+)
-
-```bash
-# Complete FBA workflow with supplier-first discovery
-python langraph_integration/complete_fba_workflow.py --supplier-url "https://www.poundwholesale.co.uk/" --supplier-email "email@example.com" --supplier-password "password" --headed
-
-# Force regenerate supplier package (with backup to .bak_<timestamp>)
-python tools/supplier_script_generator.py --supplier-url "https://www.poundwholesale.co.uk/" --force-regenerate
-
-# Validate system imports and dependencies
-python tests/test_import_validation.py
-
-# Run login step unit tests
-python tests/test_login_step.py
-```
-
-### NEW: AI Category Generation
-
-The system now automatically generates Amazon-style browse node categories using OpenAI o4-mini:
-- **Triggered**: After extracting 10+ products from any supplier
-- **Output**: `OUTPUTS/ai_suggested_categories/<domain>.json`
-- **Format**: 5-15 categories with names, descriptions, product counts, and keywords
-
-**Browser Modes:**
-- **Headless** (default): `--headless true` - Faster execution, suitable for production environments
-- **Headed**: `--headless false` - Browser visible, better for debugging and anti-bot evasion
-- **Shared Chrome**: `--use-shared-chrome true` - Connect to existing Chrome instance via CDP (port 9222)
-
-### Configuration for Unlimited Mode
-
-Edit `config/system_config.json`:
-```json
 {
-  "system": {
-    "max_products_per_category": 0,
-    "max_analyzed_products": 0,
-    "max_products_per_cycle": 0
+  "asin_from_details": "B0D47Q1CLZ",
+  "title": "5 x Juicy Jay King Size Slim Rolling Papers - Surprise Pack of Random Fruity Flavored Premium Cigarette Papers - 32 Leaves Each - Unique Flavors, No Repeats! Perfect for Smoking Enthusiasts",
+  "current_price": 6.59,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61W3fYawnHL._AC_SY450_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61W3fYawnHL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41ollfxuYWL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/516Q9NyrYPL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41MYX2cN2aL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51LHdU1M1jL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0D47Q1CLZ",
+    "Date First Available": "15 May 2024"
   },
-  "ai_features": {
-    "category_selection": {
-      "mode": "v2",
-      "enabled": true
+  "date_first_available_from_details": "15 May 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "WWTL",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 10,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "🍓🍇 🍉🍍🍒🍭🍬🥭🍹🍫🫐🥝Dive into Flavorful Delights: Experience a burst of fruity goodness with each puff as you roll up your favorite herbs or tobacco with these Juicy Jay King Size Slim Rolling Papers. Infused with mouthwatering flavors (Cotton Candy, Bubblegum, Green Apple, Grape, Raspberry, Very Cherry, Double Dutch Chocolate, Liquorice, Strawberry Kiwi, Blackberry Brandy, Blueberry, Watermelon, Pineapple, Melo Mango, Jamaican Rum, these papers add an extra layer of enjoyment to your smoking sessions, tantalizing your taste buds and leaving you craving for more.",
+    "💨 Premium Quality Papers: Crafted from ultra-thin, slow-burning paper, these King Size Slim Rolling Papers ensure a smooth and consistent smoke every time. Each leaf is designed for optimal performance, allowing you to enjoy your smoking materials to the fullest without any unwanted harshness or aftertaste.",
+    "🔄 Random Surprise Pack: With this surprise pack, you'll receive a random assortment of five fruity flavors, each more delicious than the last. From classic favorites like strawberry and grape to exotic options like watermelon and pineapple, every pack offers a unique and exciting smoking experience.",
+    "📦 Convenient Packaging: Each pack contains 32 leaves of King Size Slim rolling papers, providing you with more than enough to last through multiple smoke sessions. Plus, the compact packaging makes it easy to take your favorite flavors with you wherever you go, ensuring that you're always prepared for a smoke break on the move.",
+    "🌱 Natural Ingredients: Juicy Jay takes pride in using only the finest natural ingredients to infuse their papers with irresistible fruity flavors. You can enjoy your smoke knowing that you're not inhaling any harsh chemicals or additives, just pure, natural goodness.",
+    "🎉 Perfect for Smoking Enthusiasts: Whether you're a seasoned smoker or new to the world of rolling your own, these Juicy Jay Rolling Papers are perfect for anyone who loves to enjoy their smoking materials with a burst of fruity flavor. Treat yourself to the ultimate smoking experience with Juicy Jay today!",
+    "💸 Great Value for Money: With five packs included in each order, you'll have plenty of opportunities to discover new favorite flavors and share them with friends. Plus, with no repeats guaranteed, you can enjoy a different flavor every time you reach for a new pack.",
+    "🌎 Eco-Friendly Choice: Juicy Jay is committed to sustainability and environmental responsibility, using only sustainably sourced materials in the production of their rolling papers. By choosing Juicy Jay, you're not just getting a great smoking experience – you're also supporting eco-friendly practices that benefit the planet.",
+    "🔥 Easy to Use: Whether you're rolling a joint, a blunt, or a spliff, these King Size Slim Rolling Papers are designed for ease of use. The slim format provides ample space for rolling, giving you the freedom to create the perfect smoke every time with minimal effort.",
+    "👍 Trusted Brand: Juicy Jay is a trusted name in the world of rolling papers, known for their innovative flavors and premium quality products. With Juicy Jay, you can trust that you're getting the best smoking experience possible, every time."
+  ],
+  "description": "Indulge in a delightful surprise with the 5 x Juicy Jay King Size Slim Rolling Papers - a vibrant assortment of random fruity flavored premium cigarette papers that promise a unique and tantalizing smoking experience. Each pack contains 32 leaves of King Size Slim rolling papers, meticulously crafted to ensure the perfect burn and flavor infusion with every puff. With five packs included in this surprise pack, you'll have the opportunity to explore an array of mouthwatering flavors, with no repeats guaranteed. Juicy Jay is renowned for its innovative approach to rolling papers, infusing each leaf with delicious fruity flavors that add an extra dimension to your smoking sessions. From classic favorites like strawberry and blueberry to more exotic options like pineapple and watermelon, every flavor in this surprise pack promises to tantalize your taste buds and elevate your smoking experience. Whether you're a seasoned smoker looking to shake up your routine or a newcomer eager to explore new flavors, this surprise pack offers something for everyone. One of the most exciting aspects of the 5 x Juicy Jay King Size Slim Rolling Papers is the element of surprise. With each pack containing a random assortment of flavors, you'll never know what delicious surprise awaits you until you open it up. This adds an element of excitement and anticipation to your smoking sessions, making them even more enjoyable and memorable. Plus, with no repeats guaranteed, you can rest assured that each pack will offer a completely unique flavor experience. Not only do these rolling papers offer an explosion of flavor, but they also deliver on quality and performance. Each leaf is made from premium-quality paper that is ultra-thin and slow-burning, allowing you to enjoy a smooth and consistent smoke from start to finish. The King Size Slim format provides ample space for rolling, giving you the freedom to create the perfect joint or cigarette every time. Whether you prefer a tight, compact roll or a loose, airy one, these papers can accommodate your preferences with ease. In addition to their exceptional flavor and quality, the 5 x Juicy Jay King Size Slim Rolling Papers also boast a range of practical features that enhance the overall smoking experience. Each pack is designed for convenience and portability, making it easy to take your favorite flavors with you wherever you go. Whether you're heading to a party, a festival, or simply hanging out with friends, these papers are the perfect companion for any smoking occasion. Furthermore, Juicy Jay takes pride in using only the finest natural ingredients to infuse their papers with irresistible fruity flavors. You can enjoy your smoke knowing that you're not inhaling any harsh chemicals or additives, just pure, natural goodness. Plus, the unique flavor infusion process ensures that the taste remains consistent throughout the entire smoke, from start to finish. Say goodbye to dull, flavorless rolls and hello to a world of delicious possibilities with Juicy Jay. Another noteworthy aspect of the 5 x Juicy Jay King Size Slim Rolling Papers is their versatility. While they are perfect for rolling cigarettes, they can also be used with other smoking materials such as herbs and tobacco. Whether you're rolling a joint, a blunt, or a spliff, these papers provide the perfect foundation for your creations, allowing you to enjoy your preferred smoking material with a burst of fruity flavor. But perhaps the most appealing aspect of these rolling papers is the sense of fun and excitement they bring to your smoking sessions. With each pack offering a surprise selection of flavors, you never know what delightful combination you'll get next. This element of surprise adds a sense of adventure to your smoking experience, making it even more enjoyable and memorable. Plus, with five packs included in each order, you'll have plenty of opportunities to discover new favorites and share them with friends. In conclusion, the 5 x Juicy Jay King Size Slim Rolling Papers are a must-have for any smoking enthusiast who craves variety, flavor, and excitement. With their random assortment of fruity flavors, premium-quality construction, and unbeatable convenience, these papers offer a smoking experience like no other. Treat yourself to the ultimate surprise with Juicy Jay and take your smoking sessions to a whole new level of enjoyment.",
+  "specifications_table": {
+    "Units": "‎5 Count",
+    "Brand": "‎Swiss+",
+    "Country of origin": "‎United Kingdom"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "5 x Juicy Jay King Size Slim Rolling Papers - Surprise Pack of Random Fruity Flavored Premium Cigarette Papers - 32 Leaves Each - Unique Flavors, No Repeats! Perfect for Smoking Enthusiasts",
+      "Reviews - Rating": 4.6,
+      "Reviews - Rating Count": 10.0,
+      "Last Price Change": "just now",
+      "Buy Box Seller": "WWTL (83% positive over last 12 months)",
+      "Lowest FBA Seller": "WWTL (83% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.5,
+      "Referral Fee %": "8.05 %",
+      "Referral Fee based on current Buy Box price": 0.53,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/05/25",
+      "Listed since": "2024/05/15",
+      "Categories - Sub": "Categories",
+      "Website Display Group - Name": "Health and Beauty",
+      "ASIN": "B0D47Q1CLZ",
+      "Product Codes - EAN": "5027355004953",
+      "Product Codes - PartNumber": "Juicy Jay",
+      "Freq. Bought Together": "B005JFFY02, B072JV5BLS",
+      "Type": "ROLLING_PAPER",
+      "Manufacturer": "Swiss+",
+      "Brand": "Swiss+",
+      "Brand Store Name": "Swiss+",
+      "Brand Store URL Name": "Swiss",
+      "Brand Store URL": "https://www.amazon.com/stores/Swiss+/page/CD8261A6-C66F-4D79-9031-80C774A0B1D8",
+      "Product Group": "Drugstore",
+      "Color": "Assorted",
+      "Unit Details - Unit Value": "5",
+      "Unit Details - Unit Type": "Count",
+      "Material": "Paper",
+      "Languages": "English: Original Language",
+      "Package - Dimension (cm³)": "13.2 x 12.3 x 1.1 cm (= 179 cm³ )",
+      "Package - Weight (g)": "30"
     }
-  }
-}
-```
-
-
-
-## 📁 System Architecture (Updated 2025-07-04)
-
-### Directory Structure (Post Comprehensive Testing & Verification)
-```
-Amazon-FBA-Agent-System-v3/
+  },
+  "eans_on_page": [
+    "5027355004953"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5027355004953",
+  "asin_extracted_from_page": "B0D47Q1CLZ",
+  "asin_queried": "B0D47Q1CLZ",
+  "asin": "B0D47Q1CLZ"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {
+  "asin_from_details": "B0D3ZQLRMM",
+  "title": "SYNCFUN Glow in The Dark Football Light Up LED Football Reflective Football Size 5 for Night Games Bright Soccer ball Gift for Kids Outdoor Sports",
+  "current_price": 20.79,
+  "original_price": 25.99,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/81AJzOPlv4L._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41ViDHTU-pL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51iG-BfbfeL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51UG9ZZSt-L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51euuqTUz8L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51N4tR-qQaL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/5163D4ZBuML._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41AWJW9XKWL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Batteries": "6 LR44 batteries required.",
+    "Date First Available": "4 Jun. 2024"
+  },
+  "date_first_available_from_details": "4 Jun. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Joyin Direct",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 128,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Night Glow Feature: Experience the Syncfun Soccer Ball light up with every bounce, bringing your game to life with vibrant LED lights that automatically turn off after play. Elevate your game even during the darkest nights - the new way to play after sunset.",
+    "Ideal for Nighttime Play: Whether day or night, the Syncfun Soccer Ball is your ideal choice, offering endless entertainment and allowing you to enjoy Soccer Ball fun anytime, anywhere.",
+    "Higher Quality: Professional grip and perfect weight designed for champions to elevate your game.",
+    "Extra Batteries Included: Spare batteries are included, ensuring uninterrupted gameplay. Each set of batteries provides up to 30 hours of Play period (Note: pump not included).",
+    "Suitable for All Ages: Whether you're a young beginner or an experienced pro, the Syncfun football is an excellent choice for training, outdoor games, or casual fun with friends and family.",
+    "Perfect Gift: Surprise any Soccer Ball enthusiast with the Syncfun Light up Soccer Ball, an extraordinary gift offering endless entertainment for players of all ages."
+  ],
+  "description": "Product Description Popular Products from JOYIN Glow in The Dark Soccer Add To Basket Princess Play Tent Add To Basket Kids Play Rugs Buying Options 2 Packs Large Delta Kite Add To Basket Inflatable Bowling Set Add To Basket Inflatable Hopper Add To Basket Kids Basketball Hoop Add To Basket Customer Reviews 4.4 out of 5 stars 3,579 4.4 out of 5 stars 3,579 4.4 out of 5 stars 4,434 4.3 out of 5 stars 225 4.2 out of 5 stars 1,941 4.3 out of 5 stars 1,289 4.4 out of 5 stars 656 Price £22.09 £ 22 . 09 £22.09 £ 22 . 09 £24.48 £ 24 . 48 £15.99 £ 15 . 99 £25.99 £ 25 . 99 £32.99 £ 32 . 99 £46.99 £ 46 . 99 Theme soccer Play Tents Kids' Rugs Kites Bowling Set Unicorn Toy Basketball Products Applicable Occasion Outdoor Activities Indoor/Outdoor Activities Indoor/Outdoor Activities Outdoor Activities Indoor/Outdoor Activities Indoor/Outdoor Activities Outdoor Activities Gift For Kids ✔ ✔ ✔ ✔ ✔ ✔ ✔ Quick and Easy Assemly ✔ ✔ ✔ ✔ ✔ ✔ ✔ Safety Test Approved ✔ ✔ ✔ ✔ ✔ ✔ ✔",
+  "specifications_table": {
+    "Age range": "‎Kid",
+    "Color": "‎Red",
+    "Construction": "‎Molded, Stitched",
+    "Material type": "‎Plastic",
+    "Number of items": "‎1",
+    "Sport": "‎Soccer",
+    "Batteries included?": "‎No",
+    "Brand": "‎SYNCFUN",
+    "Manufacturer": "‎Joyin US Corp",
+    "Item model number": "‎90027",
+    "Product Dimensions": "‎11 x 10.2 x 27 cm; 640 g",
+    "ASIN": "‎B0D3ZQLRMM"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 37836,
+      "main_cat_name": "Toys & Games 10 drops / month",
+      "sub_cat_current_rank": 0,
+      "sub_cat_name": "Sports & Outdoors 0"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "SYNCFUN Glow in The Dark Football Light Up LED Football Reflective Football Size 5 for Night Games Bright Soccer ball Gift for Kids Outdoor Sports",
+      "Sales Rank - Reference": "Toys & Games",
+      "Sales Rank - Display Group": "toy_display_on_website",
+      "Reviews - Rating": 4.3,
+      "Reviews - Rating Count": 128.0,
+      "Last Price Change": "just now",
+      "Buy Box Seller": "Joyin Direct (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Joyin Direct (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.97,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 3.12,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/07/29",
+      "Listed since": "2024/06/04",
+      "Categories - Root": "Toys & Games",
+      "Categories - Sub": "Football",
+      "Categories - Tree": "Toys & Games › Sports Toys & Outdoor › Toy Sports Equipment › Football",
+      "Website Display Group - Name": "Sports",
+      "ASIN": "B0D3ZQLRMM",
+      "Product Codes - UPC": "840332659497",
+      "Product Codes - EAN": "0840332659497",
+      "Product Codes - PartNumber": "90027",
+      "Freq. Bought Together": "B0CMP9M725, B0DDXG9M4C",
+      "Type": "RECREATION_BALL",
+      "Manufacturer": "Joyin US Corp",
+      "Brand": "SYNCFUN",
+      "Product Group": "Sports",
+      "Model": "90027",
+      "Color": "Red",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Material": "Plastic",
+      "Binding": "Sports",
+      "Number of Items": "1",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "https://m.media-amazon.com/images/I/41AWJW9XKWL.jpg, Creator: Main, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/de2f9126-2d37-43cb-845e-73f2c8294f83/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "27.1 x 11.2 x 10.4 cm (= 3,157 cm³ )",
+      "Package - Weight (g)": "640",
+      "Item - Dimension (cm³)": "11.0 x 10.2 x 27.0 cm (= 3,029 cm³ )"
+    }
+  },
+  "eans_on_page": [
+    "0840332659497"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0840332659497",
+  "sales_rank": 37836,
+  "category": "Toys & Games 10",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 30,
+  "asin_extracted_from_page": "B0D3ZQLRMM",
+  "asin_queried": "B0D3ZQLRMM",
+  "asin": "B0D3ZQLRMM"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {
+  "asin_from_details": "B0D3YWXR38",
+  "title": "Race Car Party Favors Set - 110 pcs Race Car Birthday Party Supplies, Keychains, Slap Bracelet, Race Car Stickers, Race Car Straws, Stamps for Kids Racing Car Toy Gift, Boy Cars Birthday Decoration",
+  "current_price": 16.99,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/81uHJlmAmfL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61me3WdI9mL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51Oup3E6LoL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51zaznkly8L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61GG63BVZbL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/514gRkksBXL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61px8sulgiL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61j7nU2hjoL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "12 May 2024"
+  },
+  "date_first_available_from_details": "12 May 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Moltby-EU",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 64,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "🏎️Perfect Race Car Party Favors Kit- Make your race car themed party truly enchanting with our 110pcs captivating race car birthday party supplies. Our set includes 50 stickers, 12 stamps, 12 keychains, 12 straws, 12 slap bracelets, race car temporary tattoos sticker in 12 styles. These fun race car party favors for kids will add fun to your racing themed party and all the kids will be impressed",
+    "🏎️Fun and Functional - Our cars party favors contain rich racecar elements and stylish colors. The slap bracelets come in 12 distinct and fun designs, featuring various racecar patterns. The straw with the vibrant car pattern design makes sipping your favorite beverage more enjoyable. The temporary tattoos and stickers are ideal for adding extra fun to parties and celebrations",
+    "🏎️Premium Quality Materials - Each item in this set is crafted from high-quality materials to ensure durability and long-lasting use. The keychains are made of sturdy metal and soft PVC, the slap bracelets feature a strong metal core with a comfortable fabric covering, and the stamps are made with safe, non-toxic ink",
+    "🏎️Ideal Gifts For Kids - Our cars birthday party favors set is perfect gifts for two fast birthday decorations, 2 fast birthday decorations, race car party decorations, racing party favors, race car goodie bags, race car birthday party decorations, racing birthday decorations, racecar birthday decorations, racing party decorations, classroom rewards, cars goodie bags, christmas party favors",
+    "🏎️Guarantee - Whether kids boys are obsessed with fast cars or simply fascinated by the world of racing, these racecar party favors will undoubtedly bring joy to every guest. We fully support refund or reship for any missing or damaged parts in the package you received. Contact us if you have any problems, and we'll respond and solve it within 24 hours"
+  ],
+  "specifications_table": {
+    "Item dimensions L x W x H": "‎25 x 25 x 25 millimetres",
+    "Occasion": "‎Birthday",
+    "Manufacturer": "‎Moltby",
+    "Age range (description)": "‎3 years and up",
+    "Product Dimensions": "‎2.54 x 2.54 x 2.54 cm; 380 g",
+    "Manufacturer recommended age": "‎36 months - 15 years",
+    "Item model number": "‎M-Favors-1027",
+    "Assembly Required": "‎No",
+    "Batteries Required?": "‎No",
+    "Batteries included?": "‎No",
+    "Material Type(s)": "‎Plastic",
+    "ASIN": "‎B0D3YWXR38"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 25863,
+      "main_cat_name": "Toys & Games 6 drops / month",
+      "sub_cat_current_rank": 340,
+      "sub_cat_name": "Kids' Multi-Item Party Favour Packs 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Race Car Party Favors Set - 110 pcs Race Car Birthday Party Supplies, Keychains, Slap Bracelet, Race Car Stickers, Race Car Straws, Stamps for Kids Racing Car Toy Gift, Boy Cars Birthday Decoration",
+      "Sales Rank - Reference": "Toys & Games",
+      "Sales Rank - Display Group": "toy_display_on_website",
+      "Reviews - Rating": 4.6,
+      "Reviews - Rating Count": 64.0,
+      "Last Price Change": "4 months ago",
+      "Buy Box Seller": "Moltby-EU (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Moltby-EU (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.9,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 2.55,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/08/19",
+      "Listed since": "2024/05/12",
+      "Categories - Root": "Toys & Games",
+      "Categories - Sub": "Multi-Item Party Favour Packs",
+      "Categories - Tree": "Toys & Games › Party Supplies › Party Favours › Multi-Item Party Favour Packs",
+      "Website Display Group - Name": "Toy",
+      "ASIN": "B0D3YWXR38",
+      "Product Codes - PartNumber": "M-Favors-1027",
+      "Parent ASIN": "B0DHFWVTZR",
+      "Variation ASINs": "B0D3YKJB4Y, B0D3YY4XZ4, B0D3YYD7BK, B0D3YWXR38",
+      "Freq. Bought Together": "B0CP1PL1N3, B0D6Y279JW",
+      "Type": "PARTY_FAVOR",
+      "Manufacturer": "Moltby",
+      "Brand": "Moltby",
+      "Brand Store Name": "Moltby",
+      "Brand Store URL Name": "HotSale",
+      "Brand Store URL": "https://www.amazon.com/stores/HotSale/page/426CFBD5-A848-4823-AF89-F0EE8A9B81D1",
+      "Product Group": "Toy",
+      "Model": "M-Favors-1027",
+      "Color": "Multicolor",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Style": "Race Car",
+      "Material": "Plastic",
+      "Target Audience": "Unisex Children",
+      "Package - Dimension (cm³)": "28.2 x 20.0 x 6.0 cm (= 3,384 cm³ )",
+      "Package - Weight (g)": "380",
+      "Item - Dimension (cm³)": "2.5 x 2.5 x 2.5 cm (= 16 cm³ )",
+      "Included Components": "12 x stamps, 12 x keychains, 12 x straws, 12 x slap bracelets, 12 x race car temporary tattoos sticker and 50 x stickers"
+    }
+  },
+  "sales_rank": 25863,
+  "category": "Toys & Games 6",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 30,
+  "asin_extracted_from_page": "B0D3YWXR38",
+  "asin_queried": "B0D3YWXR38",
+  "asin": "B0D3YWXR38"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   {
+  "asin_from_details": "B0BLL3XTRB",
+  "title": "CARPRIDE® Clean and Dry Microfibre Cloth | For Car Exterior and Interior | 30 x 30 cm | Brown",
+  "current_price": 2.95,
+  "original_price": 15.99,
+  "main_image": "https://m.media-amazon.com/images/I/81xtwrytJFL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41d8uWVq1HL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0BLL3XTRB",
+    "Item model number": "CP1185",
+    "Date First Available": "23 Dec. 2022"
+  },
+  "date_first_available_from_details": "23 Dec. 2022",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 5.0,
+  "availability_text": "Only 1 left in stock.",
+  "in_stock": true,
+  "features": [
+    "CARPRIDE Clean and Dry Microfibre Cloth For Car Exterior and Interior"
+  ],
+  "description": "CARPRIDE Clean and Dry Microfibre Cloth For Car Exterior and Interior",
+  "specifications_table": {
+    "Product Dimensions": "‎54 x 30 x 0.5 cm; 60 g",
+    "Care instructions": "‎Machine Wash",
+    "Batteries required": "‎No"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 789884,
+      "main_cat_name": "Automotive 0.3 drops / month",
+      "sub_cat_current_rank": 463,
+      "sub_cat_name": "Exterior Car Care Chamois Cloths 6"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "CARPRIDE® Clean and Dry Microfibre Cloth | For Car Exterior and Interior | 30 x 30 cm | Brown",
+      "Sales Rank - Reference": "Automotive",
+      "Sales Rank - Display Group": "automotive_display_on_website",
+      "Last Price Change": "17 days ago",
+      "Buy Box Seller": "Amazon",
+      "FBA Pick&Pack Fee": 1.52,
+      "Referral Fee %": "14.92 %",
+      "Referral Fee based on current Buy Box price": 0.44,
+      "Lowest FBM Seller": "Shop Inc (95% positive over last 12 months)",
+      "Total Offer Count": "3",
+      "Tracking since": "2022/11/16",
+      "Listed since": "2022/12/23",
+      "Categories - Root": "Automotive",
+      "Categories - Sub": "Chamois",
+      "Categories - Tree": "Automotive › Car & Motorbike Care › Exterior Care › Wash Equipment › Sponges, Cloths & Brushes › Cloths › Chamois",
+      "Website Display Group - Name": "Home",
+      "ASIN": "B0BLL3XTRB",
+      "Product Codes - EAN": "5053249245751",
+      "Product Codes - PartNumber": "CP1185",
+      "Type": "TOWEL",
+      "Manufacturer": "151 Products LTD",
+      "Brand": "Car Pride",
+      "Product Group": "Home",
+      "Model": "CP1185",
+      "Color": "Brown",
+      "Size": "30 x 30",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Pattern": "Solid",
+      "Style": "Classic",
+      "Material": "Microfibre",
+      "Binding": "Kitchen & Home",
+      "Number of Items": "1",
+      "Package - Dimension (cm³)": "17.0 x 13.0 x 2.0 cm (= 442 cm³ )",
+      "Package - Weight (g)": "60",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "54.0 x 30.0 x 0.5 cm (= 810 cm³ )"
+    }
+  },
+  "eans_on_page": [
+    "5053249245751"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5053249245751",
+  "sales_rank": 789884,
+  "category": "Automotive 0.3",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 5,
+  "asin_extracted_from_page": "B0BLL3XTRB",
+  "asin_queried": "B0BLL3XTRB",
+  "asin": "B0BLL3XTRB",
+  "_search_method_used": "EAN"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 tem-v3/
 ├── 🎯 CORE SYSTEM (VERIFIED OPERATIONAL)
 │   ├── tools/                                    # ✅ ESSENTIAL TOOLS VERIFIED WORKING
 │   │   ├── run_complete_fba_system.py            # 🚀 PRIMARY ENTRY POINT ✅ VERIFIED

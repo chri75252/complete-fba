@@ -1,296 +1,152 @@
-#!/usr/bin/env python3
-"""
-Simplified Browser Restart Test
-
-This test focuses specifically on testing the browser restart functionality
-by directly manipulating the browser manager's timestamp and testing the
-restart detection logic.
-"""
-
-import sys
-import os
-import asyncio
-import time
-import logging
-from datetime import datetime
-
-# Add the project root to Python path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from utils.browser_manager import BrowserManager
-
-class SimpleBrowserRestartTester:
-    """
-    Simplified test focusing on browser restart functionality
-    """
-    
-    def __init__(self):
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s'
-        )
-        self.log = logging.getLogger('RestartTester')
-        self.browser_manager = None
-        
-    async def setup_browser(self):
-        """Setup browser manager"""
-        try:
-            self.log.info("🔧 Setting up browser manager...")
-            self.browser_manager = BrowserManager.get_instance()
-            
-            # Try to launch browser
-            try:
-                await self.browser_manager.launch_browser(cdp_port=9222)
-                self.log.info("✅ Browser launched successfully")
-                return True
-            except Exception as launch_error:
-                self.log.warning(f"⚠️ Browser launch failed: {launch_error}")
-                # Continue with tests even if browser launch fails
-                return True
-                
-        except Exception as e:
-            self.log.error(f"❌ Browser setup failed: {e}")
-            return False
-    
-    def fake_browser_age(self, hours: float):
-        """Make browser appear older by manipulating timestamp"""
-        if not self.browser_manager:
-            self.log.error("❌ No browser manager available")
-            return None
-            
-        try:
-            # Store original timestamp
-            original_timestamp = self.browser_manager._last_restart
-            
-            # Calculate fake timestamp (hours ago)
-            fake_timestamp = time.time() - (hours * 3600)
-            
-            # Set fake timestamp
-            self.browser_manager._last_restart = fake_timestamp
-            
-            self.log.info(f"⏰ FAKED BROWSER AGE: {hours} hours")
-            self.log.info(f"   Original: {datetime.fromtimestamp(original_timestamp)}")
-            self.log.info(f"   Fake: {datetime.fromtimestamp(fake_timestamp)}")
-            
-            return original_timestamp
-            
-        except Exception as e:
-            self.log.error(f"❌ Failed to fake browser age: {e}")
-            return None
-    
-    async def test_restart_detection(self):
-        """Test browser restart detection logic"""
-        try:
-            self.log.info("\n🔍 TEST 1: Browser Restart Detection")
-            self.log.info("-" * 40)
-            
-            # Test 1: Normal condition (should NOT restart)
-            self.log.info("📊 Testing normal condition...")
-            should_restart_normal = await self.browser_manager.should_restart_browser()
-            self.log.info(f"   Result: should_restart = {should_restart_normal}")
-            
-            # Test 2: Fake old browser (should restart)
-            self.log.info("📊 Testing with fake 3-hour age...")
-            original_timestamp = self.fake_browser_age(3.0)
-            
-            should_restart_fake = await self.browser_manager.should_restart_browser()
-            self.log.info(f"   Result: should_restart = {should_restart_fake}")
-            
-            # Restore original timestamp
-            if original_timestamp:
-                self.browser_manager._last_restart = original_timestamp
-                self.log.info("🔄 Restored original timestamp")
-            
-            # Evaluate results
-            test_passed = (not should_restart_normal) and should_restart_fake
-            
-            if test_passed:
-                self.log.info("✅ TEST 1 PASSED: Restart detection working correctly")
-            else:
-                self.log.error("❌ TEST 1 FAILED: Restart detection not working")
-                self.log.error(f"   Expected: normal=False, fake=True")
-                self.log.error(f"   Actual: normal={should_restart_normal}, fake={should_restart_fake}")
-            
-            return test_passed
-            
-        except Exception as e:
-            self.log.error(f"❌ TEST 1 ERROR: {e}")
-            return False
-    
-    async def test_memory_monitoring(self):
-        """Test memory monitoring functionality"""
-        try:
-            self.log.info("\n🔍 TEST 2: Memory Monitoring")
-            self.log.info("-" * 40)
-            
-            # Get memory information
-            memory_info = await self.browser_manager.get_total_system_memory_usage()
-            
-            if memory_info:
-                self.log.info("📊 MEMORY REPORT:")
-                self.log.info(f"   🐍 Python: {memory_info.get('python_memory_mb', 0)}MB")
-                self.log.info(f"   🟢 Node.js: {memory_info.get('nodejs_memory_mb', 0)}MB")
-                self.log.info(f"   🌐 Chrome: {memory_info.get('chrome_memory_mb', 0)}MB")
-                self.log.info(f"   💾 System: {memory_info.get('memory_usage_percent', 0):.1f}%")
-                self.log.info(f"   🔍 Node.js processes: {memory_info.get('nodejs_processes_detected', 0)}")
-                
-                # Check if Node.js monitoring is working
-                nodejs_detected = memory_info.get('nodejs_processes_detected', 0) >= 0
-                
-                if nodejs_detected:
-                    self.log.info("✅ TEST 2 PASSED: Memory monitoring working (including Node.js)")
-                else:
-                    self.log.warning("⚠️ TEST 2 PARTIAL: Memory monitoring working but Node.js detection unclear")
-                
-                return True
-            else:
-                self.log.error("❌ TEST 2 FAILED: No memory information returned")
-                return False
-                
-        except Exception as e:
-            self.log.error(f"❌ TEST 2 ERROR: {e}")
-            return False
-    
-    async def test_restart_interval_config(self):
-        """Test restart interval configuration"""
-        try:
-            self.log.info("\n🔍 TEST 3: Restart Interval Configuration")
-            self.log.info("-" * 40)
-            
-            # Check restart interval
-            restart_hours = self.browser_manager._restart_interval_hours
-            self.log.info(f"📊 Configured restart interval: {restart_hours} hours")
-            
-            # Verify it's the expected value (2.5 hours)
-            expected_hours = 2.5
-            if restart_hours == expected_hours:
-                self.log.info(f"✅ TEST 3 PASSED: Restart interval correctly set to {expected_hours} hours")
-                return True
-            else:
-                self.log.error(f"❌ TEST 3 FAILED: Expected {expected_hours} hours, got {restart_hours} hours")
-                return False
-                
-        except Exception as e:
-            self.log.error(f"❌ TEST 3 ERROR: {e}")
-            return False
-    
-    async def test_time_calculation(self):
-        """Test time calculation logic"""
-        try:
-            self.log.info("\n🔍 TEST 4: Time Calculation Logic")
-            self.log.info("-" * 40)
-            
-            # Get current time info
-            current_time = time.time()
-            last_restart = self.browser_manager._last_restart
-            time_since_restart = current_time - last_restart
-            hours_since_restart = time_since_restart / 3600
-            
-            self.log.info(f"📊 Current time: {datetime.fromtimestamp(current_time)}")
-            self.log.info(f"📊 Last restart: {datetime.fromtimestamp(last_restart)}")
-            self.log.info(f"📊 Hours since restart: {hours_since_restart:.2f}")
-            
-            # Test with fake old timestamp
-            self.log.info("📊 Testing with fake 4-hour age...")
-            original_timestamp = self.fake_browser_age(4.0)
-            
-            # Recalculate
-            fake_time_since = current_time - self.browser_manager._last_restart
-            fake_hours_since = fake_time_since / 3600
-            
-            self.log.info(f"📊 Fake hours since restart: {fake_hours_since:.2f}")
-            
-            # Check if restart would be triggered
-            should_restart = fake_hours_since > self.browser_manager._restart_interval_hours
-            self.log.info(f"📊 Should restart (4h > 2.5h): {should_restart}")
-            
-            # Restore timestamp
-            if original_timestamp:
-                self.browser_manager._last_restart = original_timestamp
-            
-            if should_restart and fake_hours_since > 3.5:  # Should be around 4 hours
-                self.log.info("✅ TEST 4 PASSED: Time calculation logic working correctly")
-                return True
-            else:
-                self.log.error("❌ TEST 4 FAILED: Time calculation logic not working")
-                return False
-                
-        except Exception as e:
-            self.log.error(f"❌ TEST 4 ERROR: {e}")
-            return False
-    
-    async def run_all_tests(self):
-        """Run all browser restart tests"""
-        try:
-            self.log.info("🚀 BROWSER RESTART FUNCTIONALITY TEST")
-            self.log.info("=" * 50)
-            self.log.info("Testing browser restart without waiting 2.5 hours...")
-            
-            # Setup
-            if not await self.setup_browser():
-                self.log.error("❌ SETUP FAILED - Cannot continue")
-                return False
-            
-            # Run tests
-            tests = [
-                ("Restart Detection", self.test_restart_detection),
-                ("Memory Monitoring", self.test_memory_monitoring),
-                ("Restart Interval Config", self.test_restart_interval_config),
-                ("Time Calculation Logic", self.test_time_calculation)
-            ]
-            
-            passed = 0
-            total = len(tests)
-            
-            for test_name, test_func in tests:
-                try:
-                    success = await test_func()
-                    if success:
-                        passed += 1
-                    await asyncio.sleep(1)  # Small delay between tests
-                except Exception as e:
-                    self.log.error(f"💥 {test_name} crashed: {e}")
-            
-            # Results
-            self.log.info("\n" + "=" * 50)
-            self.log.info("🎯 FINAL RESULTS")
-            self.log.info("=" * 50)
-            
-            success_rate = (passed / total) * 100
-            self.log.info(f"📊 Tests Passed: {passed}/{total} ({success_rate:.1f}%)")
-            
-            if passed == total:
-                self.log.info("🎉 ALL TESTS PASSED!")
-                self.log.info("✅ Browser restart functionality is working correctly")
-                self.log.info("✅ Time-based restart will trigger every 2.5 hours")
-                self.log.info("✅ Memory monitoring includes Python and Node.js processes")
-                return True
-            else:
-                self.log.warning(f"⚠️ {total - passed} tests failed")
-                self.log.warning("Some browser restart functionality may need attention")
-                return False
-                
-        except Exception as e:
-            self.log.error(f"💥 TEST SUITE CRASHED: {e}")
-            return False
-
-async def main():
-    """Main test execution"""
-    print("🔧 Simplified Browser Restart Test")
-    print("=" * 40)
-    print("Testing browser restart functionality...")
-    print()
-    
-    tester = SimpleBrowserRestartTester()
-    success = await tester.run_all_tests()
-    
-    print("\n" + "=" * 40)
-    if success:
-        print("🎉 SUCCESS: Browser restart is working!")
-        print("The system will restart browser every 2.5 hours.")
-    else:
-        print("❌ ISSUES: Some functionality needs attention.")
-    print("=" * 40)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+{
+  "asin_from_details": "B0B1YZK8K3",
+  "title": "Miniml Antibacterial Hand Wash Soap 5L Refill - Natural Clementine Scented Eco Hand and Body Washing Liquid Gel for Soft and Sensitive Friendly Skin Care - 100% Vegan & Cruelty Free",
+  "current_price": 23.38,
+  "original_price": 26.95,
+  "main_image": "https://m.media-amazon.com/images/I/51KnDWSjQGL._AC_SL1081_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31By6aII7aL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51FP08ufymL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41Pc9uRIdAL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51Nfi+x2-gL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51aO4uceCyL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/414-8j9Ca8L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51nB+Ahw7RL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "22 May 2022",
+    "Product Dimensions\n                                    ‏\n                                    :\n                                    ‎": "18 x 13 x 28 cm; 5 kg",
+    "Manufacturer\n                                    ‏\n                                    :\n                                    ‎": "Miniml",
+    "ASIN\n                                    ‏\n                                    :\n                                    ‎": "B0B1YZK8K3",
+    "Item model number\n                                    ‏\n                                    :\n                                    ‎": "FCC-MINI-HS-HDPE-5L",
+    "Country of origin\n                                    ‏\n                                    :\n                                    ‎": "United Kingdom",
+    "Customer reviews": "4.5 4.5 out of 5 stars (197) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); });",
+    "Product Dimensions\n                                    ‏": "‎ 18 x 13 x 28 cm; 5 kg",
+    "Manufacturer\n                                    ‏": "‎ Miniml",
+    "ASIN\n                                    ‏": "‎ B0B1YZK8K3",
+    "Item model number\n                                    ‏": "‎ FCC-MINI-HS-HDPE-5L",
+    "Country of origin\n                                    ‏": "‎ United Kingdom"
+  },
+  "date_first_available_from_details": "22 May 2022",
+  "manufacturer_from_details": "‎ Miniml",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 4.5,
+  "review_count": 197,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "✅ PERFECT FOR SENSITIVE HANDS: Easily wash dirt from your hands with a non toxic formula infused with citrus extracts. Our naturally derived, gel hand soap eliminates stubborn smells and leaves hands feeling soft and clean, even after multiple washes",
+    "✅ SMELLS AMAZING: Delight your senses with our sweet clementine citrus fragrance that has zero nasties. Wash and sanitise your hands with an antibacterial hand gel that's tested and approved, soft on skin and heavenly on your sense of smell",
+    "✅ ECO FRIENDLY & PURE: Our hand wash liquid soap is free from VOC’s, chlorine bleaches, solvents, lanoline, sulphates, parabens and phosphates. Our vegan soap refill is readily biodegradable, gentle on skin is effective in both hard and soft water too",
+    "✅ ZERO WASTE: Our eco friendly and fully sustainable solutions go far beyond your purchase. Simply send us back your empty bottles for professional cleaning so that they can be reused again and again. We even have refill partners across the UK to help make the world a cleaner, greener place to live",
+    "✅ PRODUCED IN THE UK: Manufactured by Miniml in The Yorkshire Dales. Proudly independent and family owned too"
+  ],
+  "description": "Product Description Try our 5 Litre Natural Hand Soap Sweet Clementine Scented Gentle on hands and naturally removes all the nasties. How to Use: Turn nozzle to unlock. Elbow grease not required. Can be used on hands and body. Product Features Powerful on dirt, grim &amp; stubborn smells Leaves hands soft &amp; loved Removes all the nasties Tested &amp; approved to EN 1276 Natural &amp; subtle clementine fragrance Safe for septic tanks if used as directed PLANT POWERED &amp; NATURAL Easily wash dirt from your hands with a non toxic formula infused with citrus extracts, perfect for sensitive skin. SWEET FRAGRANCE Infused with citrus extracts, this naturally derived, gel hand soap eliminates stubborn smells and leaves hands feeling soft and clean, even after multiple washes. ZERO WASTE Use our 5 litre products to refill your hand soap dispensers. You can also send us back your empty bottles for professional cleaning so that they can be reused again and again. OUR VALUES Vegan &amp; Cruelty Free Because guinea pigs shouldn't be used as guinea pigs, we perform zero animal testing or use any animal derived ingredients. British Manufactured Manufactured by Miniml in The Yorkshire Dales. Proudly independent and family owned too. No Nasty Ingredients Free from: VOC’s, Chlorine Bleaches, Solvents, Lanoline, Sulphates (SLS/ SLES), Parabens, Phosphates and Optical Brighteners. Plant Based Formulas All our formulations are Vegan, Cruelty Free and Paraben Free. Check out our closed loop product system! Sweet Clementine Hand Soap Cucumber &amp; Aloe Vera Hand Soap Lime, Basil &amp; Mandarin Hand Soap French Vanilla Hand Soap French Vanilla Hand + Body Lotion Add To Basket Add To Basket Add To Basket Buying Options Buying Options Customer Reviews 4.5 out of 5 stars 197 4.3 out of 5 stars 643 4.3 out of 5 stars 643 4.4 out of 5 stars 87 5.0 out of 5 stars 1 Price £23.38 £ 23 . 38 £26.60 £ 26 . 60 £26.39 £ 26 . 39 — no data — no data Sensitive Skin Friendly ✓ ✓ ✓ ✓ ✓ Natural Ingredients ✓ ✓ ✓ ✓ ✓ Vegan ✓ ✓ ✓ ✓ ✓ Cruelty Free ✓ ✓ ✓ ✓ ✓ Made in the UK ✓ ✓ ✓ ✓ ✓ Closed Loop System- Return Refill &amp; Reuse! ✓ ✓ ✓ ✓ ✓",
+  "specifications_table": {
+    "Manufacturer": "‎Miniml",
+    "Package dimensions": "‎28.2 x 18.5 x 13 centimetres",
+    "Package Weight": "‎5.29 Kilograms",
+    "Item dimensions L x W x H": "‎18 x 13 x 28 centimetres",
+    "Item weight": "‎5 Kilograms",
+    "Brand": "‎Miniml",
+    "Format": "‎Gel",
+    "Volume": "‎5 Litres",
+    "Scent": "‎Clementine",
+    "Skin type": "‎All, Combination, Sensitive, Dry",
+    "Special features": "‎Not Tested On Animals, Scented, Hypoallergenic, Natural Ingredients",
+    "Speciality": "‎Vegan",
+    "Item model number": "‎FCC-MINI-HS-HDPE-5L",
+    "Product Dimensions": "‎18 x 13 x 28 cm; 5 kg",
+    "ASIN": "‎B0B1YZK8K3"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 1210,
+      "main_cat_name": "66009885031 0",
+      "sub_cat_current_rank": 1210,
+      "sub_cat_name": "9000000000000000 41 drops / month"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Miniml Antibacterial Hand Wash Soap 5L Refill - Natural Clementine Scented Eco Hand and Body Washing Liquid Gel for Soft and Sensitive Friendly Skin Care - 100% Vegan & Cruelty Free",
+      "Sales Rank - Reference": "Climate Pledge Friendly",
+      "Sales Rank - Display Group": "climate_product_display_on_website",
+      "Bought in past month": "1,000+",
+      "Reviews - Rating": 4.5,
+      "Reviews - Rating Count": 197.0,
+      "Last Price Change": "just now",
+      "Buy Box Seller": "Amazon",
+      "FBA Pick&Pack Fee": 5.19,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 3.51,
+      "Lowest FBM Seller": "RWSsupplies (90% positive over last 12 months)",
+      "Total Offer Count": "3",
+      "Tracking since": "2022/08/02",
+      "Listed since": "2022/05/22",
+      "Categories - Root": "Beauty",
+      "Categories - Sub": "Hand Wash",
+      "Categories - Tree": "Beauty › Bath & Body › Cleansers › Hand Wash",
+      "Website Display Group - Name": "Health and Beauty",
+      "ASIN": "B0B1YZK8K3",
+      "Product Codes - EAN": "5060588562036",
+      "Product Codes - PartNumber": "MIN115",
+      "Parent ASIN": "B0CP1MYR8W",
+      "Variation ASINs": "B0B1YZK8K3, B0CL7CZ13D",
+      "Freq. Bought Together": "B0BN4H1XQR, B0B1XNCNTM",
+      "Type": "SKIN_CLEANING_AGENT",
+      "Manufacturer": "Miniml",
+      "Brand": "Miniml",
+      "Brand Store Name": "Miniml",
+      "Brand Store URL Name": "Miniml",
+      "Brand Store URL": "https://www.amazon.com/stores/Miniml/page/BDABBAE4-11C4-4E83-ACEF-EE23548C6264",
+      "Product Group": "Drugstore",
+      "Model": "FCC-MINI-HS-HDPE-5L",
+      "Size": "5 l (Pack of 1)",
+      "Unit Details - Unit Value": "5000",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "Clementine",
+      "Item Form": "Gel",
+      "Target Audience": "Unisex Adult",
+      "Recommended Uses": "Sensitive Skin,Hand,Sensitive,Hand Washing,Body",
+      "Product Benefit": "Cleansing, Conditioning, pH Balancing, Moisturizing, Anti-Drying",
+      "Binding": "Personal Care",
+      "Number of Items": "1",
+      "Release Date": "2020-07-10",
+      "Languages": "English",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/51nB+Ahw7RL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/e113e5e6-2fe3-4ecf-9976-7d71c2489022/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "28.2 x 18.5 x 13.0 cm (= 6,782 cm³ )",
+      "Package - Weight (g)": "5,290",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "18.0 x 13.0 x 28.0 cm (= 6,552 cm³ )",
+      "Item - Model (g)": "5,000",
+      "Ingredients": "Aqua, Sodium Olefin Sulfonate, Sodium Chloride, Cocamide MIPA, Sorbitol, PEG-7 Glyceryl Cocoate, Sodium Lauryl Sulfoacetate, Polysorbate 20, Lauryl Betaine, Glycerine, Bis-(lsostearoyl/ Oleoyl isopropyl) Dimonium Methosulfate, Alcohol Denat, Lactic Acid, Potassium Sorbate, Sodium Benzoate, Aloe Barbadensis, Parfum.",
+      "Active Ingredients": "Natural",
+      "Special Ingredients": "All Natural, Gluten Free, Vegan",
+      "Safety Warning": "Keep out of reach of children. Read label before use."
+    }
+  },
+  "eans_on_page": [
+    "5060588562036"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5060588562036",
+  "sales_rank": 1210,
+  "category": "66009885031 0",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 100,
+  "asin_extracted_from_page": "B0B1YZK8K3",
+  "asin_queried": "B0B1YZK8K3",
+  "asin": "B0B1YZK8K3",
+  "_search_method_used": "title_cached"
+}                                                                                                                                                    oad":null}},"previous-promotions":{"key":"previous-promotions","enabled":true,"variant":null,"reason":{"code":"condition_match","condition_index":0,"description":"Matched condition set 1"},"metadata":{"id":145625,"version":5,"description":null,"payload":"[\n    { \n        \"name\": \"Vibe Code Thursday - 2025-06-12\",\n        \"idempotency_key\": \"sBElJsDo\"\n    },\n    { \n        \"name\": \"Vibe Code Thursday - 2025-06-05\",\n        \"idempotency_key\": \"c2PEbxjY\"\n    },\n    {\n        \"name\":{
+  "asin_from_details": "B09ZPQNQ91",
+  "title": "6 x PVC Insulation Tape 8m Multi colour pack Insulation Tape Rolls",
+  "current_price": 4.99,
+  "main_image": "https://m.media-amazon.com/images/I/61syETOnK7L.

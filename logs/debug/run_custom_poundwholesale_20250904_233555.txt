@@ -1,371 +1,1305 @@
-2025-09-04 23:35:55,818 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250904_233555.log
-2025-09-04 23:35:55,818 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250904_233555.log
-2025-09-04 23:35:55,819 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
-2025-09-04 23:35:55,820 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
-2025-09-04 23:35:55,824 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
-2025-09-04 23:35:56,442 - utils.browser_manager - INFO - 🔌 Connecting to existing Chrome debug instance on port 9222
-2025-09-04 23:35:56,442 - utils.browser_manager - INFO - 📜 Per troubleshooting docs: Using existing Chrome debug only
-2025-09-04 23:35:56,445 - utils.browser_manager - INFO - ✅ Chrome debug accessible on IPv6: Chrome/139.0.7258.155
-2025-09-04 23:35:56,445 - utils.browser_manager - INFO - 🔌 Connecting to existing Chrome debug instance...
-2025-09-04 23:35:56,447 - utils.browser_manager - DEBUG - 🌐 Using IPv6 endpoint for CDP connection
-2025-09-04 23:35:56,448 - utils.browser_manager - INFO - 🌐 Using endpoint: http://[::1]:9222
-2025-09-04 23:35:56,658 - utils.browser_manager - INFO - ✅ Successfully connected to existing Chrome debug instance
-2025-09-04 23:35:56,659 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
-2025-09-04 23:35:56,659 - utils.browser_manager - INFO - 🔍 Connected to existing Chrome: 139.0.7258.155
-2025-09-04 23:35:56,660 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:35:56,660 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:35:56,665 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:35:56,666 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
-2025-09-04 23:35:56,667 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
-2025-09-04 23:35:56,667 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
-2025-09-04 23:36:02,724 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
-2025-09-04 23:36:02,724 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
-2025-09-04 23:36:10,000 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
-2025-09-04 23:36:10,001 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
-2025-09-04 23:36:10,001 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
-2025-09-04 23:36:10,002 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
-2025-09-04 23:36:10,003 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
-2025-09-04 23:36:10,003 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
-2025-09-04 23:36:10,004 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
-2025-09-04 23:36:10,072 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:10,077 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 10392 products, 0 categories
-2025-09-04 23:36:10,077 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
-2025-09-04 23:36:10,156 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10392 actual products in cache (total entries: 10392)
-2025-09-04 23:36:10,259 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10534 processed products in linking map
-2025-09-04 23:36:10,441 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 177 categories
-2025-09-04 23:36:10,448 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 231 categories in config
-2025-09-04 23:36:10,454 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=10534 (reason: system_progression)
-2025-09-04 23:36:10,454 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=10534 (reason: system_progression)
-2025-09-04 23:36:10,462 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
-2025-09-04 23:36:10,463 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:36:10,463 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
-2025-09-04 23:36:10,463 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
-2025-09-04 23:36:10,464 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
-2025-09-04 23:36:10,464 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
-2025-09-04 23:36:10,464 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
-2025-09-04 23:36:10,465 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
-2025-09-04 23:36:10,465 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
-2025-09-04 23:36:10,466 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
-2025-09-04 23:36:10,466 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
-2025-09-04 23:36:10,467 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
-2025-09-04 23:36:10,467 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
-2025-09-04 23:36:10,467 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
-2025-09-04 23:36:10,468 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
-2025-09-04 23:36:10,468 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
-2025-09-04 23:36:10,468 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
-2025-09-04 23:36:10,468 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
-2025-09-04 23:36:10,469 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
-2025-09-04 23:36:10,469 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
-2025-09-04 23:36:10,470 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
-2025-09-04 23:36:10,470 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
-2025-09-04 23:36:10,471 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
-2025-09-04 23:36:10,471 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
-2025-09-04 23:36:10,472 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
-2025-09-04 23:36:10,472 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250904_233610
-2025-09-04 23:36:10,472 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
-2025-09-04 23:36:10,473 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
-2025-09-04 23:36:10,473 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
-2025-09-04 23:36:10,473 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
-2025-09-04 23:36:10,473 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
-2025-09-04 23:36:10,474 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
-2025-09-04 23:36:10,474 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
-2025-09-04 23:36:10,475 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 10534
-2025-09-04 23:36:10,481 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
-2025-09-04 23:36:10,482 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:36:10,489 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
-2025-09-04 23:36:10,491 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:36:10,491 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN TOTAL CATEGORIES set to 231 with hash 68634155
-2025-09-04 23:36:10,492 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=0 Legacy=92 drift=92
-2025-09-04 23:36:10,492 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=0 Legacy=16 drift=16
-2025-09-04 23:36:10,492 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=0/231 prod=0/0 phase=supplier
-2025-09-04 23:36:10,492 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN TOTAL CATEGORIES set to 231 (authoritative)
-2025-09-04 23:36:10,493 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
-2025-09-04 23:36:10,493 - PassiveExtractionWorkflow - INFO - ▶ RESUME supplier: category 1/231 (system_progression)
-2025-09-04 23:36:10,493 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
-2025-09-04 23:36:10,584 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10534 entries
-2025-09-04 23:36:10,708 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10070 EANs, 10450 URLs, 6584 ASINs in 0.123s
-2025-09-04 23:36:10,709 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10534 entries
-2025-09-04 23:36:10,709 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 10534
-2025-09-04 23:36:10,784 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:10,786 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 10534 > cache: 10392)
-2025-09-04 23:36:10,787 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
-2025-09-04 23:36:10,787 - PassiveExtractionWorkflow - INFO - 🔍 STATE CONTRADICTION CHECK DEBUG:
-2025-09-04 23:36:10,788 - PassiveExtractionWorkflow - INFO -    is_fresh_start: True
-2025-09-04 23:36:10,788 - PassiveExtractionWorkflow - INFO -    successful_products: 10534
-2025-09-04 23:36:10,788 - PassiveExtractionWorkflow - INFO -    system_progression.current_category_index: 0
-2025-09-04 23:36:10,788 - PassiveExtractionWorkflow - INFO -    supplier_extraction.current_category_index: 92
-2025-09-04 23:36:10,789 - PassiveExtractionWorkflow - INFO -    supplier_extraction.categories_completed: 173 categories
-2025-09-04 23:36:10,789 - PassiveExtractionWorkflow - INFO -    has_evidence_of_work: True
-2025-09-04 23:36:10,789 - PassiveExtractionWorkflow - WARNING - 🚨 STATE CONTRADICTION DETECTED - PREVENTING start_processing() CALL...
-2025-09-04 23:36:10,790 - PassiveExtractionWorkflow - WARNING -    Fresh start flag=True but evidence shows 10534 successful products
-2025-09-04 23:36:10,790 - PassiveExtractionWorkflow - WARNING -    and 173 completed categories
-2025-09-04 23:36:10,790 - PassiveExtractionWorkflow - INFO - ✅ State contradiction resolved - preserved existing progress
-2025-09-04 23:36:10,883 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10534 entries
-2025-09-04 23:36:11,010 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10070 EANs, 10450 URLs, 6584 ASINs in 0.126s
-2025-09-04 23:36:11,010 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10534 entries
-2025-09-04 23:36:11,011 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
-2025-09-04 23:36:11,011 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
-2025-09-04 23:36:11,012 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
-2025-09-04 23:36:11,013 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
-2025-09-04 23:36:11,013 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 231 predefined categories (infinite mode)
-2025-09-04 23:36:11,015 - PassiveExtractionWorkflow - INFO - 🔍 INSTRUMENTATION: Dumped 231 categories, hash=68634155
-2025-09-04 23:36:11,016 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
-2025-09-04 23:36:11,016 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
-2025-09-04 23:36:11,017 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
-2025-09-04 23:36:11,017 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
-2025-09-04 23:36:11,018 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
-2025-09-04 23:36:11,078 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:11,081 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
-2025-09-04 23:36:11,081 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
-2025-09-04 23:36:11,082 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
-2025-09-04 23:36:11,142 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:11,260 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10392 total → 5 unprocessed (10450 already in linking map)
-2025-09-04 23:36:11,261 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
-2025-09-04 23:36:11,261 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
-2025-09-04 23:36:11,262 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
-2025-09-04 23:36:11,262 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
-2025-09-04 23:36:11,263 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:11,263 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:11,271 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:11,272 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
-2025-09-04 23:36:13,537 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
-2025-09-04 23:36:13,614 - utils.browser_manager - DEBUG - Brought page to front after navigation to https://www.poundwholesale.co.uk
-2025-09-04 23:36:17,987 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
-2025-09-04 23:36:17,987 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
-2025-09-04 23:36:22,309 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
-2025-09-04 23:36:22,310 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
-2025-09-04 23:36:22,310 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
-2025-09-04 23:36:22,315 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:36:22,317 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:36:22,317 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=0/pending
-2025-09-04 23:36:22,324 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:36:22,325 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:36:22,326 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=0/pending
-2025-09-04 23:36:22,327 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
-2025-09-04 23:36:22,327 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:22,328 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:22,328 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:22,328 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (attempt 1/3)
-2025-09-04 23:36:22,329 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:22,329 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:22,335 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:22,335 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:24,695 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets in 1.83s...
-2025-09-04 23:36:26,532 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (attempt 2/3)
-2025-09-04 23:36:26,533 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:26,533 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:26,537 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:26,538 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:29,104 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:29,105 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets
-2025-09-04 23:36:29,182 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets (Size: 687159 bytes)
-2025-09-04 23:36:29,313 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\suppliers\poundwholesale-co-uk\config\product_selectors.json
-2025-09-04 23:36:29,357 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
-2025-09-04 23:36:29,358 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
-2025-09-04 23:36:29,359 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (attempt 1/3)
-2025-09-04 23:36:29,359 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:29,360 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:29,365 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:29,365 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
-2025-09-04 23:36:31,581 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 in 1.78s...
-2025-09-04 23:36:33,362 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (attempt 2/3)
-2025-09-04 23:36:33,363 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:33,364 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:33,374 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:33,375 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
-2025-09-04 23:36:35,669 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
-2025-09-04 23:36:35,670 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2
-2025-09-04 23:36:35,959 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=2 (Size: 696498 bytes)
-2025-09-04 23:36:36,131 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
-2025-09-04 23:36:36,131 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
-2025-09-04 23:36:36,132 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (attempt 1/3)
-2025-09-04 23:36:36,132 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:36,133 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:36,137 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:36,138 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
-2025-09-04 23:36:38,386 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 in 2.25s...
-2025-09-04 23:36:40,645 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (attempt 2/3)
-2025-09-04 23:36:40,646 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:40,646 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:40,650 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:40,650 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
-2025-09-04 23:36:42,623 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
-2025-09-04 23:36:42,623 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3
-2025-09-04 23:36:42,707 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=3 (Size: 645487 bytes)
-2025-09-04 23:36:42,839 - configurable_supplier_scraper - INFO - Found 19 new product URLs on page 3
-2025-09-04 23:36:42,839 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
-2025-09-04 23:36:42,840 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (attempt 1/3)
-2025-09-04 23:36:42,840 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:42,840 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:42,845 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:42,845 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
-2025-09-04 23:36:44,665 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 in 1.93s...
-2025-09-04 23:36:46,602 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (attempt 2/3)
-2025-09-04 23:36:46,603 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:46,603 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:46,607 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:46,608 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
-2025-09-04 23:36:48,724 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
-2025-09-04 23:36:48,724 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4
-2025-09-04 23:36:48,775 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets?p=4 (Size: 397591 bytes)
-2025-09-04 23:36:48,854 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 4
-2025-09-04 23:36:48,855 - configurable_supplier_scraper - INFO - Collected 59 total product URLs across 4 pages
-2025-09-04 23:36:48,855 - PassiveExtractionWorkflow - INFO - PAGINATION[C2 wholesale-big-boys-toys-gadget]: pages=4 urls_page=20,20,19,0 total=59
-2025-09-04 23:36:48,855 - PassiveExtractionWorkflow - INFO - 🔗 DETAILED PRE-EXTRACTION FILTERING: Analyzing 59 collected URLs
-2025-09-04 23:36:48,859 - PassiveExtractionWorkflow - DEBUG - 🔗 UNIFIED FILTER: Loaded 10070 EANs and 10450 URLs from linking map
-2025-09-04 23:36:48,925 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:48,991 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 10392 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:48,995 - PassiveExtractionWorkflow - INFO - 🔗 STEP 1 - LINKING MAP CHECK: 55 complete (skipped)
-2025-09-04 23:36:48,996 - PassiveExtractionWorkflow - INFO - 💾 STEP 2 - PRODUCT CACHE CHECK: 1 have supplier data; 3 need supplier extraction
-2025-09-04 23:36:48,996 - PassiveExtractionWorkflow - INFO - 🧮 Filter Invariant: in=59 == skip=55 + amazon_only=1 + full=3
-2025-09-04 23:36:48,996 - PassiveExtractionWorkflow - INFO - ✅ SKIP_ENTIRELY (55): ['https://www.poundwholesale.co.uk/9-x-1-2-dart-board-with-2-darts-30cm-x-27cm', 'https://www.poundwholesale.co.uk/hoot-summer-throw-little-missile-17cm-x-6cm', 'https://www.poundwholesale.co.uk/my-pro-size-7-basketball', 'https://www.poundwholesale.co.uk/rattlers-the-powerful-magnets', 'https://www.poundwholesale.co.uk/hoot-football-training-set-9pc']...
-2025-09-04 23:36:48,997 - PassiveExtractionWorkflow - INFO - 🚀 NEEDS_AMAZON_ONLY (1): ['https://www.poundwholesale.co.uk/rail-racing-115pc-metal-car-play-set']
-2025-09-04 23:36:48,997 - PassiveExtractionWorkflow - INFO - 📊 NEEDS_FULL_EXTRACTION (3): ['https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17', 'https://www.poundwholesale.co.uk/intex-hi-output-air-pump', 'https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft']
-2025-09-04 23:36:48,998 - PassiveExtractionWorkflow - INFO - 📈 FILTERING EFFICIENCY: 55/59 = 93.2% already processed
-2025-09-04 23:36:48,998 - PassiveExtractionWorkflow - INFO - 💾 CACHE UTILIZATION: 1/59 = 1.7% have supplier data
-2025-09-04 23:36:48,999 - PassiveExtractionWorkflow - INFO - 📊 EXTRACTION NEEDED: 3/59 = 5.1% need fresh extraction
-2025-09-04 23:36:48,999 - PassiveExtractionWorkflow - INFO - 🚀 PROCEEDING WITH EXTRACTION: 3 products need full extraction
-2025-09-04 23:36:49,000 - PassiveExtractionWorkflow - INFO - 📝 EXTRACTION CONTRACT: Promising to extract exactly 3 products
-2025-09-04 23:36:49,000 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION: Processing 3 pre-approved URLs
-2025-09-04 23:36:49,000 - configurable_supplier_scraper - INFO - 🔍 Extracting product 1/3: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
-2025-09-04 23:36:49,001 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (attempt 1/3)
-2025-09-04 23:36:49,001 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:49,001 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:49,006 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:49,006 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
-2025-09-04 23:36:51,460 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 in 1.90s...
-2025-09-04 23:36:53,363 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (attempt 2/3)
-2025-09-04 23:36:53,363 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:53,364 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:53,369 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:53,369 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
-2025-09-04 23:36:54,906 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
-2025-09-04 23:36:54,906 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17
-2025-09-04 23:36:54,989 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/my-double-sided-dartboard-set-17 (Size: 616539 bytes)
-2025-09-04 23:36:55,181 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=1 Legacy=92 drift=91
-2025-09-04 23:36:55,182 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=6 Legacy=16 drift=10
-2025-09-04 23:36:55,182 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=1/231 prod=6/0 phase=supplier
-2025-09-04 23:36:55,182 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 6/3
-2025-09-04 23:36:55,183 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 6 processed (total in cache: 6)
-2025-09-04 23:36:55,183 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 6
-2025-09-04 23:36:55,183 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 6, frequency=1, enabled=True
-2025-09-04 23:36:55,184 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=6, modulo=0
-2025-09-04 23:36:55,184 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:55,185 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
-2025-09-04 23:36:55,185 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:55,185 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
-2025-09-04 23:36:55,186 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 6 products to cache...
-2025-09-04 23:36:55,186 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:36:55,248 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC: Loaded 10392 existing products for deduplication
-2025-09-04 23:36:55,254 - PassiveExtractionWorkflow - INFO - 🔄 ATOMIC DEDUPLICATION: Skipped 5 URL duplicates and 1 EAN duplicates.
-2025-09-04 23:36:55,255 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC RESULT: 10392 existing + 0 new = 10392 total
-2025-09-04 23:36:55,256 - PassiveExtractionWorkflow - INFO - 🔍 DEDUP SUMMARY: 0 new; skipped re-scan
-2025-09-04 23:36:55,259 - PassiveExtractionWorkflow - INFO - 💾 ATOMIC PERIODIC SAVE: Saved 6 products (0 new) to cache (every 1 products)
-2025-09-04 23:36:55,265 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:36:55,266 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:36:55,267 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=6/pending
-2025-09-04 23:36:55,267 - PassiveExtractionWorkflow - DEBUG - 🔄 ATOMIC STATE: State synchronized with cache after saving 0 new products
-2025-09-04 23:36:55,267 - configurable_supplier_scraper - INFO - ✅ Extracted: MY Double-Sided Dartboard Set 17" - £4.35
-2025-09-04 23:36:55,268 - configurable_supplier_scraper - INFO - 🔍 Extracting product 2/3: https://www.poundwholesale.co.uk/intex-hi-output-air-pump
-2025-09-04 23:36:55,268 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/intex-hi-output-air-pump (attempt 1/3)
-2025-09-04 23:36:55,268 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:55,269 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:55,273 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:55,274 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
-2025-09-04 23:36:57,401 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/intex-hi-output-air-pump in 1.62s...
-2025-09-04 23:36:59,033 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/intex-hi-output-air-pump (attempt 2/3)
-2025-09-04 23:36:59,033 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:36:59,034 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:36:59,038 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:36:59,038 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
-2025-09-04 23:37:00,824 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/intex-hi-output-air-pump
-2025-09-04 23:37:00,825 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/intex-hi-output-air-pump
-2025-09-04 23:37:00,899 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/intex-hi-output-air-pump (Size: 416679 bytes)
-2025-09-04 23:37:01,045 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=1 Legacy=92 drift=91
-2025-09-04 23:37:01,046 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=7 Legacy=16 drift=9
-2025-09-04 23:37:01,046 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=1/231 prod=7/0 phase=supplier
-2025-09-04 23:37:01,046 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 7/3
-2025-09-04 23:37:01,047 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 7 processed (total in cache: 7)
-2025-09-04 23:37:01,047 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 7
-2025-09-04 23:37:01,048 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 7, frequency=1, enabled=True
-2025-09-04 23:37:01,048 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=7, modulo=0
-2025-09-04 23:37:01,049 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:01,049 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
-2025-09-04 23:37:01,049 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:01,050 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
-2025-09-04 23:37:01,050 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 7 products to cache...
-2025-09-04 23:37:01,050 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:01,114 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC: Loaded 10392 existing products for deduplication
-2025-09-04 23:37:01,120 - PassiveExtractionWorkflow - INFO - 🔄 ATOMIC DEDUPLICATION: Skipped 5 URL duplicates and 2 EAN duplicates.
-2025-09-04 23:37:01,121 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC RESULT: 10392 existing + 0 new = 10392 total
-2025-09-04 23:37:01,122 - PassiveExtractionWorkflow - INFO - 🔍 DEDUP SUMMARY: 0 new; skipped re-scan
-2025-09-04 23:37:01,125 - PassiveExtractionWorkflow - INFO - 💾 ATOMIC PERIODIC SAVE: Saved 7 products (0 new) to cache (every 1 products)
-2025-09-04 23:37:01,132 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:37:01,133 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:37:01,134 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=7/pending
-2025-09-04 23:37:01,134 - PassiveExtractionWorkflow - DEBUG - 🔄 ATOMIC STATE: State synchronized with cache after saving 0 new products
-2025-09-04 23:37:01,135 - configurable_supplier_scraper - INFO - ✅ Extracted: Intex Hi-OutPUt Air Pump - £2.74
-2025-09-04 23:37:01,135 - configurable_supplier_scraper - INFO - 🔍 Extracting product 3/3: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
-2025-09-04 23:37:01,135 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (attempt 1/3)
-2025-09-04 23:37:01,136 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:37:01,136 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:37:01,141 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:37:01,141 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
-2025-09-04 23:37:03,536 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft in 1.98s...
-2025-09-04 23:37:05,520 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (attempt 2/3)
-2025-09-04 23:37:05,521 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:37:05,521 - utils.browser_manager - INFO - ♻️ Reusing existing page in persistent context.
-2025-09-04 23:37:05,525 - utils.browser_manager - DEBUG - Brought reused page to front for visibility
-2025-09-04 23:37:05,526 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
-2025-09-04 23:37:07,090 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
-2025-09-04 23:37:07,091 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft
-2025-09-04 23:37:07,164 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/fit2live-metal-rubber-skipping-rope-9ft (Size: 537518 bytes)
-2025-09-04 23:37:07,342 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ CATEGORY INDEX DRIFT: SystemProgression=1 Legacy=92 drift=91
-2025-09-04 23:37:07,343 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ PRODUCT INDEX DRIFT: SystemProgression=8 Legacy=16 drift=8
-2025-09-04 23:37:07,343 - utils.fixed_enhanced_state_manager - DEBUG - 📊 PROGRESSION UPDATE: cat=1/231 prod=8/0 phase=supplier
-2025-09-04 23:37:07,343 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 8/3
-2025-09-04 23:37:07,344 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 8 processed (total in cache: 8)
-2025-09-04 23:37:07,344 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 8
-2025-09-04 23:37:07,344 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 8, frequency=1, enabled=True
-2025-09-04 23:37:07,345 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=8, modulo=0
-2025-09-04 23:37:07,345 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:07,346 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
-2025-09-04 23:37:07,346 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:07,347 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
-2025-09-04 23:37:07,347 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 8 products to cache...
-2025-09-04 23:37:07,347 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:07,410 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC: Loaded 10392 existing products for deduplication
-2025-09-04 23:37:07,416 - PassiveExtractionWorkflow - INFO - 🔄 ATOMIC DEDUPLICATION: Skipped 5 URL duplicates and 3 EAN duplicates.
-2025-09-04 23:37:07,416 - PassiveExtractionWorkflow - INFO - 🔍 ATOMIC RESULT: 10392 existing + 0 new = 10392 total
-2025-09-04 23:37:07,417 - PassiveExtractionWorkflow - INFO - 🔍 DEDUP SUMMARY: 0 new; skipped re-scan
-2025-09-04 23:37:07,420 - PassiveExtractionWorkflow - INFO - 💾 ATOMIC PERIODIC SAVE: Saved 8 products (0 new) to cache (every 1 products)
-2025-09-04 23:37:07,425 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:37:07,427 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:37:07,427 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=8/pending
-2025-09-04 23:37:07,427 - PassiveExtractionWorkflow - DEBUG - 🔄 ATOMIC STATE: State synchronized with cache after saving 0 new products
-2025-09-04 23:37:07,428 - configurable_supplier_scraper - INFO - ✅ Extracted: Fit2Live Metal & Rubber Skipping Rope 9ft - £0.92
-2025-09-04 23:37:07,428 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION COMPLETE: 3 products extracted from 3 URLs
-2025-09-04 23:37:07,428 - PassiveExtractionWorkflow - INFO - 📝 EXTRACTION CONTRACT VERIFICATION:
-2025-09-04 23:37:07,428 - PassiveExtractionWorkflow - INFO -    Promised: 3 products
-2025-09-04 23:37:07,429 - PassiveExtractionWorkflow - INFO -    Delivered: 3 products
-2025-09-04 23:37:07,429 - PassiveExtractionWorkflow - INFO -    Contract: ✅ FULFILLED
-2025-09-04 23:37:07,429 - PassiveExtractionWorkflow - INFO - 📋 ADDING TO AMAZON ANALYSIS: 1 products have supplier data and need Amazon analysis
-2025-09-04 23:37:07,489 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:37:07,564 - PassiveExtractionWorkflow - INFO - 📋 CACHE LOAD: Found 1 cached products for 1 URLs
-2025-09-04 23:37:07,568 - PassiveExtractionWorkflow - INFO - ✅ Added 1 cached products to Amazon analysis queue
-2025-09-04 23:37:07,568 - utils.fixed_enhanced_state_manager - INFO - 🔍 REAL-TIME DISCOVERY: Category https://www.poundwholesale.co.uk/toys/wholesale-bi... discovered 59 products (was 17)
-2025-09-04 23:37:07,577 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:37:07,579 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:37:07,579 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=8/pending
-2025-09-04 23:37:07,579 - utils.fixed_enhanced_state_manager - INFO - ✅ REAL-TIME UPDATE: Category total updated to 59 products
-2025-09-04 23:37:07,586 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:37:07,587 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:37:07,588 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=8/59
-2025-09-04 23:37:07,588 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Set to 59 products for category https://www.poundwholesale.co.uk/toys/wholesale-bi...
-2025-09-04 23:37:07,595 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
-2025-09-04 23:37:07,596 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
-2025-09-04 23:37:07,597 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/231 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=8/59
-2025-09-04 23:37:07,597 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets → 59 products (snapshot taken)
+{
+  "schema_version": "1.2_THREAD_SAFE",
+  "created_at": "2025-09-06T19:29:01.212948+00:00",
+  "last_updated": "2025-09-06T19:29:01.929114+00:00",
+  "supplier_name": "poundwholesale.co.uk",
+  "last_processed_index": 0,
+  "resumption_index": 10492,
+  "progress_index": 0,
+  "session_products_processed": 0,
+  "total_products": 10349,
+  "processing_status": "initialized",
+  "is_fresh_start": true,
+  "category_performance": {},
+  "error_log": [],
+  "successful_products": 10492,
+  "profitable_products": 0,
+  "total_profit_found": 0.0,
+  "processing_statistics": {
+    "start_time": null,
+    "end_time": null,
+    "total_runtime_seconds": 0,
+    "average_time_per_product": 0,
+    "products_per_hour": 0
+  },
+  "metadata": {
+    "version": "3.8+_THREAD_SAFE",
+    "config_hash": "",
+    "runtime_settings": {},
+    "system_info": {},
+    "fix_applied": "legacy_writer_migration_20250906",
+    "thread_safety": "enabled",
+    "atomic_operations": "enabled"
+  },
+  "supplier_extraction_progress": {
+    "current_category_index": 92,
+    "total_categories": 231,
+    "current_subcategory_index": 0,
+    "pages_scraped_in_session": 0,
+    "current_product_index_in_category": 16,
+    "total_products_in_current_category": 17,
+    "discovered_products_in_current_category": 0,
+    "current_category_url": "https://www.poundwholesale.co.uk/toys/wholesale-branded-toys",
+    "current_batch_number": 0,
+    "total_batches": 0,
+    "extraction_phase": "fresh_categories",
+    "last_completed_category": "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools/saw-cutting",
+    "categories_completed": [
+      "https://www.poundwholesale.co.uk/homeware/wholesale-home-accessories",
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-birthday-party-accessories",
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-gifts-toys",
+      "https://www.poundwholesale.co.uk/toys/wholesale-slime-squish-toys",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-electronic-accessories",
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-cycling",
+      "https://www.poundwholesale.co.uk/toys/remote-control-toys",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/cars-trucks-racing-sets",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-batteries",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-ring-binders-folders",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-notebooks-notepads",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths",
+      "https://www.poundwholesale.co.uk/toys/wholesale-dolls-soft-toys",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-baking",
+      "https://www.poundwholesale.co.uk/pound-lines/stationery-pound-lines",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-office-supplies",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-pens-pencils-markers",
+      "https://www.poundwholesale.co.uk/diy/fasteners-assortments",
+      "https://www.poundwholesale.co.uk/diy/wholesale-glue-adhesives-tape",
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-christmas",
+      "https://www.poundwholesale.co.uk/diy/wholesale-sealants-paints",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/laundry",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating",
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-camping",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-tapes-glues-luggage-tags",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-postal-supplies",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/dehumidifiers",
+      "https://www.poundwholesale.co.uk/diy/work-gloves",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-art-crafts",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-shoe-care",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/bathroom-cleaners",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners",
+      "https://www.poundwholesale.co.uk/toys/wholesale-games-activity-toys",
+      "https://www.poundwholesale.co.uk/toys/wholesale-kids-art-craft-music-toys",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-phone-tablet-accessories",
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-partyware",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-hand-wash-sanitisers",
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-gift-wrap-bags",
+      "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/surface-preparation",
+      "https://www.poundwholesale.co.uk/toys/wholesale-outdoor-toys",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/kitchen-cleaners",
+      "https://www.poundwholesale.co.uk/pound-lines/homeware-pound-lines",
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-travel-supplies",
+      "https://www.poundwholesale.co.uk/homeware/wholesale-home-fragrance-candles-accessories",
+      "https://www.poundwholesale.co.uk/toys/wholesale-pocket-money-toys",
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-bird-feeders",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-perfume-fragrances",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-first-aid-medical",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/action-figures",
+      "https://www.poundwholesale.co.uk/wholesale-garden/pest-killers-deterrents",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-mugs",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-skin-care",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/diy-building-construction",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-art-crafts/colouring-activity-books",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-infant-toys",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-accessories",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/window-glass-cleaners",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/bins-accessories",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-storage-boxes-containers",
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/cleaning-air-fresheners",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/de-icer-scrapers-winter",
+      "https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers",
+      "https://www.poundwholesale.co.uk/wholesale-garden/garden-tools",
+      "https://www.poundwholesale.co.uk/homeware/wholesale-bathroom-accessories",
+      "https://www.poundwholesale.co.uk/homeware/wholesale-pest-control",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-chopping-boards-graters",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-plastic-disposable",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/brooms-mops-brushes",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-hand-nail",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies",
+      "https://www.poundwholesale.co.uk/wholesale-garden/twine-ties",
+      "https://www.poundwholesale.co.uk/wholesale-garden/planting-growing",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-weaning-feeding",
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-smoking",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-bingo-supplies",
+      "https://www.poundwholesale.co.uk/diy/wholesale-home-security",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-cooking",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-toiletries",
+      "https://www.poundwholesale.co.uk/wholesale-garden/garden-wear",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-dental",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-household-bags/food-freezer-bags",
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-pet-toys-treats",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/floor-carpet-cleaners",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes",
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-halloween",
+      "https://www.poundwholesale.co.uk/wholesale-garden/hoses-watering-accessories",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-lighting-light-bulbs",
+      "https://www.poundwholesale.co.uk/wholesale-garden/shed-garage",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-torches",
+      "https://www.poundwholesale.co.uk/pound-lines/health-beauty-personal-care-pound-lines",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-crockery-dinnerware",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-foot-care",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-foil",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-shaving-hair-removal",
+      "https://www.poundwholesale.co.uk/kitchenware/drink-bottles-flasks",
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-optical",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-electric-fans",
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-pet-beds",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear",
+      "https://www.poundwholesale.co.uk/wholesale-garden/decorative-novelty-items",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-small-kitchen-appliances",
+      "https://www.poundwholesale.co.uk/kitchenware/food-drink",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/car-bulbs-fuses",
+      "https://www.poundwholesale.co.uk/homeware/wholesale-photo-frames",
+      "https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys",
+      "https://www.poundwholesale.co.uk/pet-supplies/pet-bowls",
+      "https://www.poundwholesale.co.uk/health-beauty/hayfever",
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog",
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat",
+      "https://www.poundwholesale.co.uk/electrical/wholesale-computer-accessories",
+      "https://www.poundwholesale.co.uk/clothing/wholesale-socks-footwear",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-stationery-back-to-school",
+      "https://www.poundwholesale.co.uk/toys/wholesale-display-box-toys",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-measuring-levels",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-hobby-precision",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-miscellaneous",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-security-hardware",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-pliers-wrenches",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-torches-lighting",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-striking-tools",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-woodworking",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-building-saws",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-screwdrivers",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-automotive",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-plumbing-engineering",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-power-tool-accessories",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-painting-decorating",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays",
+      "https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol",
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-tapes-glues",
+      "https://www.poundwholesale.co.uk/pound-lines/cleaning-pound-lines",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-household-bags/carrier-bags",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-household-bags/bin-liners-refuse-sacks",
+      "https://www.poundwholesale.co.uk/toys/wholesale-money-tins",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-shower",
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-sports-gym-fitness",
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-summer",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/animals",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/beauty-fashion",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/kitchen-cooking",
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/firefighters",
+      "https://www.poundwholesale.co.uk/clothing/hats-gloves",
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-plastic-disposable/wholesale-cutlery",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-dummies-soothers",
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-teethers-comforters",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/mechanics-tools",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/pumps-compressors",
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/car-driving-accessories",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/paint-brushes",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/paint-rollers-trays",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/filling-scraping",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/decorating-tools",
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/dust-sheets-protectors",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/household-gloves",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/sinks-drains",
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage",
+      "https://www.poundwholesale.co.uk/homeware/wholesale-sewing-knitting-supplies",
+      "https://www.poundwholesale.co.uk/diy/wholesale-marksman-tools",
+      "https://www.poundwholesale.co.uk/clothing/wholesale-umbrellas",
+      "https://www.poundwholesale.co.uk/stationery/wholesale-photography",
+      "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools/hammers",
+      "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools/saw-cutting"
+    ],
+    "products_extracted_total": 0,
+    "last_updated": "2025-09-06T19:29:01.585797+00:00"
+  },
+  "gap_processing": {
+    "phase": "not_started",
+    "gap_products_total": 0,
+    "gap_products_processed": 0,
+    "gap_start_time": null,
+    "gap_end_time": null,
+    "gap_profitable_found": 0,
+    "gap_last_processed_url": "",
+    "category_completion_status": {
+      "https://www.poundwholesale.co.uk/homeware/wholesale-home-accessories": {
+        "extracted": 183,
+        "processed": 183,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-birthday-party-accessories": {
+        "extracted": 35,
+        "processed": 35,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-gifts-toys": {
+        "extracted": 64,
+        "processed": 64,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-slime-squish-toys": {
+        "extracted": 108,
+        "processed": 108,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-electronic-accessories": {
+        "extracted": 147,
+        "processed": 147,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-cycling": {
+        "extracted": 51,
+        "processed": 51,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/remote-control-toys": {
+        "extracted": 25,
+        "processed": 25,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/cars-trucks-racing-sets": {
+        "extracted": 130,
+        "processed": 130,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-batteries": {
+        "extracted": 45,
+        "processed": 45,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-ring-binders-folders": {
+        "extracted": 8,
+        "processed": 8,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-notebooks-notepads": {
+        "extracted": 79,
+        "processed": 79,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/sponges-scourers-cloths": {
+        "extracted": 200,
+        "processed": 200,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-dolls-soft-toys": {
+        "extracted": 86,
+        "processed": 86,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-baking": {
+        "extracted": 116,
+        "processed": 116,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pound-lines/stationery-pound-lines": {
+        "extracted": 445,
+        "processed": 445,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-office-supplies": {
+        "extracted": 82,
+        "processed": 82,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-pens-pencils-markers": {
+        "extracted": 195,
+        "processed": 195,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/fasteners-assortments": {
+        "extracted": 116,
+        "processed": 116,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-glue-adhesives-tape": {
+        "extracted": 159,
+        "processed": 159,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-christmas": {
+        "extracted": 416,
+        "processed": 416,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-sealants-paints": {
+        "extracted": 96,
+        "processed": 96,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/laundry": {
+        "extracted": 145,
+        "processed": 145,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating": {
+        "extracted": 293,
+        "processed": 293,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-camping": {
+        "extracted": 103,
+        "processed": 103,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-tapes-glues-luggage-tags": {
+        "extracted": 11,
+        "processed": 11,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-postal-supplies": {
+        "extracted": 24,
+        "processed": 24,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/dehumidifiers": {
+        "extracted": 12,
+        "processed": 12,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/work-gloves": {
+        "extracted": 90,
+        "processed": 90,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care": {
+        "extracted": 172,
+        "processed": 172,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-art-crafts": {
+        "extracted": 100,
+        "processed": 100,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-shoe-care": {
+        "extracted": 34,
+        "processed": 34,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/bathroom-cleaners": {
+        "extracted": 48,
+        "processed": 48,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners": {
+        "extracted": 94,
+        "processed": 94,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-games-activity-toys": {
+        "extracted": 241,
+        "processed": 241,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-kids-art-craft-music-toys": {
+        "extracted": 50,
+        "processed": 50,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-phone-tablet-accessories": {
+        "extracted": 72,
+        "processed": 72,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-partyware": {
+        "extracted": 298,
+        "processed": 298,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-hand-wash-sanitisers": {
+        "extracted": 30,
+        "processed": 30,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/party-gift/wholesale-gift-wrap-bags": {
+        "extracted": 75,
+        "processed": 75,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools": {
+        "extracted": 444,
+        "processed": 444,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/surface-preparation": {
+        "extracted": 18,
+        "processed": 18,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-outdoor-toys": {
+        "extracted": 92,
+        "processed": 92,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/kitchen-cleaners": {
+        "extracted": 38,
+        "processed": 38,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pound-lines/homeware-pound-lines": {
+        "extracted": 59,
+        "processed": 59,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-travel-supplies": {
+        "extracted": 62,
+        "processed": 62,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/homeware/wholesale-home-fragrance-candles-accessories": {
+        "extracted": 240,
+        "processed": 240,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-pocket-money-toys": {
+        "extracted": 57,
+        "processed": 57,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-bird-feeders": {
+        "extracted": 3,
+        "processed": 3,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-perfume-fragrances": {
+        "extracted": 45,
+        "processed": 45,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-first-aid-medical": {
+        "extracted": 162,
+        "processed": 162,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/action-figures": {
+        "extracted": 30,
+        "processed": 30,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/pest-killers-deterrents": {
+        "extracted": 46,
+        "processed": 46,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-mugs": {
+        "extracted": 21,
+        "processed": 21,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-kitchen-utensils-cutlery": {
+        "extracted": 220,
+        "processed": 219,
+        "completion_pct": 99.54545454545455,
+        "status": "PARTIALLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-skin-care": {
+        "extracted": 199,
+        "processed": 199,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/diy-building-construction": {
+        "extracted": 14,
+        "processed": 14,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-art-crafts/colouring-activity-books": {
+        "extracted": 15,
+        "processed": 15,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-infant-toys": {
+        "extracted": 48,
+        "processed": 48,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-accessories": {
+        "extracted": 38,
+        "processed": 38,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/window-glass-cleaners": {
+        "extracted": 11,
+        "processed": 11,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/bins-accessories": {
+        "extracted": 17,
+        "processed": 17,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-storage-boxes-containers": {
+        "extracted": 71,
+        "processed": 71,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-winter-essentials": {
+        "extracted": 87,
+        "processed": 87,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/cleaning-air-fresheners": {
+        "extracted": 64,
+        "processed": 64,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/de-icer-scrapers-winter": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers": {
+        "extracted": 7,
+        "processed": 7,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/garden-tools": {
+        "extracted": 117,
+        "processed": 117,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/homeware/wholesale-bathroom-accessories": {
+        "extracted": 45,
+        "processed": 45,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/homeware/wholesale-pest-control": {
+        "extracted": 14,
+        "processed": 14,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-chopping-boards-graters": {
+        "extracted": 39,
+        "processed": 39,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-plastic-disposable": {
+        "extracted": 22,
+        "processed": 22,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/brooms-mops-brushes": {
+        "extracted": 92,
+        "processed": 92,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-hand-nail": {
+        "extracted": 42,
+        "processed": 42,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-hair-care": {
+        "extracted": 91,
+        "processed": 91,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies": {
+        "extracted": 39,
+        "processed": 39,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/twine-ties": {
+        "extracted": 20,
+        "processed": 20,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/planting-growing": {
+        "extracted": 48,
+        "processed": 48,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-weaning-feeding": {
+        "extracted": 21,
+        "processed": 21,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-smoking": {
+        "extracted": 15,
+        "processed": 15,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-bingo-supplies": {
+        "extracted": 3,
+        "processed": 3,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-home-security": {
+        "extracted": 177,
+        "processed": 177,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-cooking": {
+        "extracted": 139,
+        "processed": 139,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-toiletries": {
+        "extracted": 38,
+        "processed": 38,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/garden-wear": {
+        "extracted": 16,
+        "processed": 16,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-dental": {
+        "extracted": 36,
+        "processed": 36,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-household-bags/food-freezer-bags": {
+        "extracted": 38,
+        "processed": 38,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-pet-walking-grooming": {
+        "extracted": 73,
+        "processed": 72,
+        "completion_pct": 98.63013698630137,
+        "status": "PARTIALLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-pet-toys-treats": {
+        "extracted": 502,
+        "processed": 502,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/floor-carpet-cleaners": {
+        "extracted": 25,
+        "processed": 25,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes": {
+        "extracted": 8,
+        "processed": 8,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-halloween": {
+        "extracted": 76,
+        "processed": 76,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/hoses-watering-accessories": {
+        "extracted": 75,
+        "processed": 75,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools": {
+        "extracted": 44,
+        "processed": 44,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-lighting-light-bulbs": {
+        "extracted": 133,
+        "processed": 133,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/shed-garage": {
+        "extracted": 15,
+        "processed": 15,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-torches": {
+        "extracted": 8,
+        "processed": 8,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pound-lines/health-beauty-personal-care-pound-lines": {
+        "extracted": 39,
+        "processed": 39,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-crockery-dinnerware": {
+        "extracted": 18,
+        "processed": 18,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-foot-care": {
+        "extracted": 24,
+        "processed": 24,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-foil": {
+        "extracted": 53,
+        "processed": 53,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-shaving-hair-removal": {
+        "extracted": 18,
+        "processed": 18,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-branded-toys": {
+        "extracted": 17,
+        "processed": 16,
+        "completion_pct": 94.11764705882352,
+        "status": "PARTIALLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/drink-bottles-flasks": {
+        "extracted": 26,
+        "processed": 26,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/wholesale-optical": {
+        "extracted": 16,
+        "processed": 16,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-electric-fans": {
+        "extracted": 28,
+        "processed": 28,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-pet-beds": {
+        "extracted": 23,
+        "processed": 23,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-blankets-bibs-babywear": {
+        "extracted": 31,
+        "processed": 31,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-garden/decorative-novelty-items": {
+        "extracted": 35,
+        "processed": 35,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-small-kitchen-appliances": {
+        "extracted": 36,
+        "processed": 36,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/food-drink": {
+        "extracted": 11,
+        "processed": 11,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/car-bulbs-fuses": {
+        "extracted": 10,
+        "processed": 10,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/homeware/wholesale-photo-frames": {
+        "extracted": 42,
+        "processed": 42,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-battery-operated-toys": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/pet-bowls": {
+        "extracted": 44,
+        "processed": 44,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/health-beauty/hayfever": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog": {
+        "extracted": 39,
+        "processed": 39,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat": {
+        "extracted": 8,
+        "processed": 8,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/electrical/wholesale-computer-accessories": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/clothing/wholesale-socks-footwear": {
+        "extracted": 36,
+        "processed": 36,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-stationery-back-to-school": {
+        "extracted": 3,
+        "processed": 3,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-display-box-toys": {
+        "extracted": 12,
+        "processed": 12,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-measuring-levels": {
+        "extracted": 2,
+        "processed": 2,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-hobby-precision": {
+        "extracted": 5,
+        "processed": 5,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-miscellaneous": {
+        "extracted": 18,
+        "processed": 18,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-security-hardware": {
+        "extracted": 16,
+        "processed": 16,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-pliers-wrenches": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-torches-lighting": {
+        "extracted": 2,
+        "processed": 2,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-striking-tools": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-woodworking": {
+        "extracted": 9,
+        "processed": 9,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-building-saws": {
+        "extracted": 2,
+        "processed": 2,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-screwdrivers": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-automotive": {
+        "extracted": 4,
+        "processed": 4,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-plumbing-engineering": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-power-tool-accessories": {
+        "extracted": 27,
+        "processed": 27,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-painting-decorating": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays": {
+        "extracted": 13,
+        "processed": 13,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-dekton-tools/dekton-tapes-glues": {
+        "extracted": 4,
+        "processed": 4,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/pound-lines/cleaning-pound-lines": {
+        "extracted": 13,
+        "processed": 13,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-household-bags/carrier-bags": {
+        "extracted": 11,
+        "processed": 11,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-household-bags/bin-liners-refuse-sacks": {
+        "extracted": 42,
+        "processed": 42,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-money-tins": {
+        "extracted": 4,
+        "processed": 4,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-shower": {
+        "extracted": 16,
+        "processed": 16,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/leisure-hobbies/wholesale-sports-gym-fitness": {
+        "extracted": 33,
+        "processed": 33,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/seasonal/wholesale-summer": {
+        "extracted": 86,
+        "processed": 86,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military": {
+        "extracted": 87,
+        "processed": 87,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/animals": {
+        "extracted": 35,
+        "processed": 35,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/beauty-fashion": {
+        "extracted": 11,
+        "processed": 11,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/kitchen-cooking": {
+        "extracted": 10,
+        "processed": 10,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/firefighters": {
+        "extracted": 2,
+        "processed": 2,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/clothing/hats-gloves": {
+        "extracted": 11,
+        "processed": 11,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-plastic-disposable/wholesale-cutlery": {
+        "extracted": 2,
+        "processed": 2,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-dummies-soothers": {
+        "extracted": 5,
+        "processed": 5,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/baby-supplies/wholesale-teethers-comforters": {
+        "extracted": 4,
+        "processed": 4,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/mechanics-tools": {
+        "extracted": 5,
+        "processed": 5,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/pumps-compressors": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-car-care/car-driving-accessories": {
+        "extracted": 8,
+        "processed": 8,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/paint-brushes": {
+        "extracted": 22,
+        "processed": 22,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/paint-rollers-trays": {
+        "extracted": 29,
+        "processed": 29,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/filling-scraping": {
+        "extracted": 6,
+        "processed": 6,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/decorating-tools": {
+        "extracted": 17,
+        "processed": 17,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating/dust-sheets-protectors": {
+        "extracted": 3,
+        "processed": 3,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/household-gloves": {
+        "extracted": 20,
+        "processed": 20,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/sinks-drains": {
+        "extracted": 19,
+        "processed": 19,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage": {
+        "extracted": 46,
+        "processed": 46,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/homeware/wholesale-sewing-knitting-supplies": {
+        "extracted": 24,
+        "processed": 24,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-marksman-tools": {
+        "extracted": 93,
+        "processed": 93,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/clothing/wholesale-umbrellas": {
+        "extracted": 3,
+        "processed": 3,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-sprays-chemicals": {
+        "extracted": 141,
+        "processed": 135,
+        "completion_pct": 95.74468085106383,
+        "status": "PARTIALLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/stationery/wholesale-photography": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools/hammers": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/diy/wholesale-hand-tools/saw-cutting": {
+        "extracted": 1,
+        "processed": 1,
+        "completion_pct": 100.0,
+        "status": "FULLY_PROCESSED"
+      },
+      "https://www.poundwholesale.co.uk/kitchenware/wholesale-food-preparation": {
+        "extracted": 26,
+        "processed": 7,
+        "completion_pct": 26.923076923076923,
+        "status": "PARTIALLY_PROCESSED"
+      }
+    },
+    "reverse_gap_detected": false,
+    "startup_analysis_completed": true
+  },
+  "system_progression": {
+    "current_phase": "supplier",
+    "current_category_index": 0,
+    "current_category_url": "",
+    "total_categories": 231,
+    "current_product_index_in_category": 0,
+    "total_products_in_current_category": 0,
+    "supplier_extraction_resumption_index": 0,
+    "amazon_analysis_resumption_index": 0,
+    "frozen_totals_committed": true,
+    "previous_safe_state": {
+      "category_index": 0,
+      "product_index": 0,
+      "resumption_index": 10492,
+      "last_validated": "2025-09-06T19:29:01.928380+00:00"
+    },
+    "last_phase": "supplier"
+  },
+  "user_display_metrics": {
+    "total_products": 0,
+    "successful_products": 0,
+    "progress_count": 0,
+    "session_products_processed": 0
+  },
+  "runtime_settings": {
+    "supplier_cache_count": 10349,
+    "total_categories": 231,
+    "max_products_to_process": 10349,
+    "supplier_config_hash": "d58f2ecc5bf56cd7bdb95eee547cb3664cfdffe370599e4b083464881beb270f"
+  },
+  "resume_reason": "system_progression"
+}                                                                                                                                                                                                                                                                                                                                                        5-09-04 23:37:07,597 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets → 59 products (snapshot taken)
 2025-09-04 23:37:07,599 - PassiveExtractionWorkflow - INFO - 📊 AUTHORITATIVE COUNT: 231 categories from config file
 2025-09-04 23:37:07,600 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets: Found 59 products across 4 pages.
 2025-09-04 23:37:07,600 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 3 raw products extracted, 9 total products accumulated
@@ -769,23 +1703,16 @@ Call log:
 2025-09-04 23:38:58,334 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10072 EANs, 10452 URLs, 6586 ASINs in 0.104s
 2025-09-04 23:38:58,335 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 10536 entries
 2025-09-04 23:38:58,338 - PassiveExtractionWorkflow - INFO - ✅ Chunk processing: Final linking map save completed
-2025-09-04 23:38:58,339 - PassiveExtractionWorkflow - INFO - --- Chunk Processing with Main Workflow Logic Finished ---
-2025-09-04 23:38:58,339 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 2: categories 2-2
-2025-09-04 23:38:58,401 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:38:58,463 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CACHE MISS: No cached products found for chunk categories: ['https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/disney']
-2025-09-04 23:38:58,464 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories
-2025-09-04 23:38:58,465 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
-2025-09-04 23:38:58,465 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
-2025-09-04 23:38:58,525 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10392 products in poundwholesale-co-uk_products_cache.json
-2025-09-04 23:38:58,593 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 10392 total → 3 unprocessed (10452 already in linking map)
-2025-09-04 23:38:58,594 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 100.0% products skipped (already processed)
-2025-09-04 23:38:58,595 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
-2025-09-04 23:38:58,596 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
-2025-09-04 23:38:58,596 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
-2025-09-04 23:38:58,597 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
-2025-09-04 23:38:58,598 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
-2025-09-04 23:38:58,603 - utils.browser_manager - DEBUG - Brought cached page to front for https://www.poundwholesale.co.uk
-2025-09-04 23:39:03,456 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
-2025-09-04 23:39:03,457 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
-2025-09-04 23:39:07,287 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
-2025-09-04 23:39:07,289 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
+2025-09-04 23:38:58,339 - PassiveExtractionWorkflow - INFO - --- Chunk Processing with Main Workflow Logic Finished ---ion_20250722/tools/cache_manager.pyT�/backup/format_fixes_backup_20250717_181444/tools/comprehensive_toggle_analysis.pyO�%backup/surgical_implementation_20250722/tools/archive/utilities/keepa_api.py3oolder version/good/tools/config_usage_analyzer.pyM�!backup/format_fixes_backup_20250717_181444/tools/product_data_extractor.py_�Ebackup/archive_toggle_test_20250705/OUTPUTS/cached_products/safe_cached_products_analyzer.pyS�-backup/surgical_implementation_20250722/tools/temp_integrated_workflow_runner.pyp���   SQLite format 3   @   "�  
+�  
+�   ;   -                                             "� .r�   � ��
++	@�n�7�C�n�Q�                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              c-�indexidx_stageworkspace_recordCREATE UNIQUE INDEX idx_stage
+    ON workspace_record (stage)e'#�indexidx_file_pathfile_recordCREATE UNIQUE INDEX idx_file_path
+    ON file_record (file_path)Y1{indexidx_edge_file_pathedgeCREATE INDEX idx_edge_file_path
+    ON edge (file_path)Y1{indexidx_edge_target_idedgeCREATE INDEX idx_edge_target_id
+    ON edge (target_id)Y1{indexidx_edge_source_idedgeCREATE INDEX idx_edge_source_id
+    ON edge (source_id)xE�#indexidx_node_segmentation_field4nodeCREATE INDEX idx_node_segmentation_field4
+    ON node (segmentation_field4)xE�#indexidx_node_segmentation_field3nodeCREATE INDEX idx_node_segmentation_field3
+    ON node (segmentation_field3)x
+E�#indexidx_node_segmentation_field2nodeCREATE INDEX idx_node_segmentation_field2
+    ON node (segmentation_field2)x	E�#indexidx_node_segmentation_field1nodeCREATE INDEX idx_node_se

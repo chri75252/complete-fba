@@ -1,350 +1,152 @@
-# COMPLETE AMAZON FBA SYSTEM ARCHITECTURE - IMPLEMENTATION GUIDE
-
-## 🎯 SYSTEM OVERVIEW & BEHAVIOR
-
-### Core Principle: Dual Tracking Architecture with Single Source of Truth
-The Amazon FBA Agent System uses a sophisticated dual tracking architecture where:
-1. **System Internal Tracking**: Canonical source for resumption and processing logic
-2. **User Display Tracking**: Calculated on-demand from system data, never persisted
-
-### Reverse Gap Processing Architecture
-The system implements reverse gap processing where:
-1. **Startup**: Acts as if cache files are clear, starts from first URL category 0
-2. **Analysis Phase**: Uses existing cache files (linking map, product cache) for intelligent skipping
-3. **Processing Logic**: Extracts URLs for products without info, processes products needing Amazon data
-4. **Resume Logic**: Uses linking map analysis to determine actual resume point (e.g., category 95)
-
-## 🏗️ STATE MANAGEMENT ARCHITECTURE
-
-### Primary State Sections (processing_state.json)
-
-#### 1. system_progression (CANONICAL SOURCE)
-```json
 {
-  "system_progression": {
-    "current_category_index": 5,           // Resume at category 5 (0-based)
-    "total_categories": 233,               // Total categories from config (NEVER changes)
-    "current_product_index_in_category": 10, // Resume at product 10 within category
-    "total_products_in_current_category": 100, // Products in current category
-    "current_phase": "supplier",           // "supplier" or "amazon" phase
-    "current_category_url": "https://...", // Exact category URL being processed
-    "phase_start_time": "ISO8601"          // When current phase started
-  }
-}
-```
-
-#### 2. global_counters (SESSION TOTALS)
-```json
-{
-  "global_counters": {
-    "total_products_discovered": 2500,    // Products found in THIS session/run
-    "total_products_processed": 1250,     // Products processed in THIS session/run
-    "total_categories_completed": 4       // Categories completed in THIS session/run
-  }
-}
-```
-
-#### 3. supplier_extraction_progress (LEGACY COMPATIBILITY)
-```json
-{
-  "supplier_extraction_progress": {
-    "current_category_index": 5,          // Mirrors system_progression
-    "total_categories": 233,              // Mirrors system_progression
-    "products_extracted_total": 1250      // Session total (mirrors global_counters)
-  }
-}
-```
-
-#### 4. processed_products (TO BE REMOVED)
-**CRITICAL**: This section will be completely removed and replaced with direct linking map hash lookup.
-
-### Separate File Data (Historical/Persistent)
-
-#### linking_map.json (SINGLE SOURCE OF TRUTH FOR PROCESSED PRODUCTS)
-```json
-[
-  {
-    "supplier_ean": "5055441449104",
-    "amazon_asin": "B0DH8C367V", 
-    "supplier_url": "https://supplier.com/product1",
-    "match_method": "ean|title|none",
-    "confidence_score": 0.95
-  }
-]
-```
-
-#### Product Cache Files (SUPPLIER DATA PERSISTENCE)
-- Location: `OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json`
-- Contains: Raw supplier product data with URLs, prices, titles, EANs
-- Usage: Hash optimization for 240x performance improvement
-
-## 🔄 STATE UPDATE ARCHITECTURE
-
-### Correct Update Method: update_progression_unified()
-**CRITICAL**: ALL state updates must use this method, NEVER update_supplier_extraction_progress() directly.
-
-```python
-def update_progression_unified(self, **kwargs) -> None:
-    """
-    Atomically updates BOTH system_progression AND supplier_extraction_progress.
-    Maintains proper dual tracking architecture.
-    """
-    # Updates system_progression (canonical source)
-    # Updates supplier_extraction_progress (legacy compatibility)
-    # Performs mathematical validation
-    # Prevents state drift
-```
-
-### Parameter Mapping for Correct Usage
-```python
-# OLD (WRONG) - Direct legacy method call:
-self.state_manager.update_supplier_extraction_progress(
-    category_index=X,                    # WRONG parameter name
-    total_categories=Y
-)
-
-# NEW (CORRECT) - Unified atomic method:
-self.state_manager.update_progression_unified(
-    current_category_index=X,            # CORRECT parameter name
-    total_categories=Y,                  # Always 233 for poundwholesale
-    current_phase="supplier|amazon",
-    current_category_url="https://..."
-)
-```
-
-## 🎯 RESUME LOGIC ARCHITECTURE
-
-### Resume Point Calculation
-1. **Load State**: Read processing_state.json
-2. **Analyze Linking Map**: Determine processed categories from existing entries
-3. **Calculate Resume**: Use system_progression section as canonical source
-4. **Validate Bounds**: Ensure current_category_index < total_categories
-5. **Resume Processing**: Continue from calculated position
-
-### Resume Data Sources (Priority Order)
-1. **system_progression**: Primary source for resume point
-2. **Linking map analysis**: Secondary validation/reconstruction
-3. **Product cache analysis**: Tertiary fallback
-
-## 🔍 PROCESSED PRODUCTS DETECTION ARCHITECTURE
-
-### Current Implementation (TO BE REMOVED)
-```python
-# REMOVE THIS PATTERN:
-processed_urls_set = {
-    normalize_url(url) for url in self.state_manager.state_data.get("processed_products", {}).keys()
-}
-```
-
-### New Implementation (CORRECT)
-```python
-# USE THIS PATTERN:
-def is_product_processed(self, product_url: str) -> bool:
-    """
-    Direct O(1) hash lookup against linking map.
-    Single source of truth for processed products.
-    """
-    normalized_url = normalize_url(product_url)
-    return normalized_url in self.linking_map_hash_index
-```
-
-## 🏭 WORKFLOW PROCESSING PHASES
-
-### Phase 1: Reverse Gap Processing Setup
-1. **Load Config**: Read 233 categories from poundwholesale_categories.json
-2. **Initialize State**: Set total_categories=233 in system_progression
-3. **Start Position**: Begin at category 0 (reverse gap processing)
-4. **Cache Analysis**: Analyze existing linking map (8818 entries) for smart skipping
-
-### Phase 2: Supplier Extraction
-1. **Category Processing**: Extract products from each category URL
-2. **Cache Integration**: Use existing product cache for deduplication
-3. **Progress Updates**: Use update_progression_unified() for state consistency
-4. **Gap Detection**: Skip categories/products already in cache
-
-### Phase 3: Amazon Analysis
-1. **Queue Building**: Identify products needing Amazon data extraction
-2. **Batch Processing**: Process products in configurable batch sizes
-3. **Linking Map Updates**: Add new supplier→Amazon mappings
-4. **Progress Tracking**: Maintain current_phase="amazon" in system_progression
-
-### Phase 4: Financial Analysis
-1. **Profitability Calculation**: Analyze Amazon data for ROI
-2. **Report Generation**: Create financial reports for profitable products
-3. **State Completion**: Mark categories as completed in global_counters
-
-## 🔧 IMPLEMENTATION REQUIREMENTS
-
-### Files Requiring Modification
-
-#### 1. tools/passive_extraction_workflow_latest.py
-**Critical Changes Required**:
-- Replace ALL 7 instances of `update_supplier_extraction_progress()` with `update_progression_unified()`
-- Remove dependency on processed_products section
-- Use only linking map hash lookup for processed product detection
-
-#### 2. utils/fixed_enhanced_state_manager.py
-**Critical Changes Required**:
-- Remove URL extraction from processed_products section
-- Implement direct linking map hash lookup methods
-- Ensure update_progression_unified() is used consistently
-
-#### 3. utils/url_filter.py (if exists)
-**Critical Changes Required**:
-- Remove processed_products hash extraction
-- Use only linking map for O(1) processed product detection
-
-### State File Structure Changes
-
-#### Remove Completely:
-```json
-{
-  "processed_products": {
-    // REMOVE ENTIRE SECTION - thousands of URLs causing bloat
-  }
-}
-```
-
-#### Preserve and Enhance:
-```json
-{
-  "system_progression": {
-    // CANONICAL SOURCE - enhanced with proper updates
-    "total_categories": 233  // ALWAYS 233, never batch count
+  "asin_from_details": "B0B1JJTPRN",
+  "title": "Imperial Leather Pampering Bath Soak, Mallow and Rose Milk, Rich and Creamy Bubble Bath, Gentle Skin Care, Bulk Buy, Pack of 4 x 500 ml",
+  "current_price": 5.36,
+  "main_image": "https://m.media-amazon.com/images/I/71Hh3N2+CnL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51+pG-3I0TL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41h5TSZrlhL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/518CSYivC4L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/5128J736QTL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51l3N+c678L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51l3N+c678L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41BCn502RcL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "17 May 2022",
+    "Package Dimensions\n                                    ‏\n                                    :\n                                    ‎": "25.9 x 20.9 x 6.4 cm; 2.2 kg",
+    "Manufacturer\n                                    ‏\n                                    :\n                                    ‎": "PZ Cussons (UK) Ltd",
+    "ASIN\n                                    ‏\n                                    :\n                                    ‎": "B0B1JJTPRN",
+    "Item model number\n                                    ‏\n                                    :\n                                    ‎": "100110875",
+    "Customer reviews": "4.7 4.7 out of 5 stars (3,592) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); });",
+    "Package Dimensions\n                                    ‏": "‎ 25.9 x 20.9 x 6.4 cm; 2.2 kg",
+    "Manufacturer\n                                    ‏": "‎ PZ Cussons (UK) Ltd",
+    "ASIN\n                                    ‏": "‎ B0B1JJTPRN",
+    "Item model number\n                                    ‏": "‎ 100110875"
   },
-  "global_counters": {
-    // SESSION TOTALS - current run only
+  "date_first_available_from_details": "17 May 2022",
+  "dimensions_from_details": "‎ 25.9 x 20.9 x 6.4 cm; 2.2 kg",
+  "manufacturer_from_details": "‎ PZ Cussons (UK) Ltd",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 4.7,
+  "review_count": 3592,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "BUBBLE BATH: Enter a blissful world with our pampering Marshmallow & Rose Milk bath soak - wash your troubles away",
+    "PAMPERING FRAGRANCE: Pamper yourself with this bath soak bursting with Marshmallow & Rose Milk Fragrance - loosen up your body & wind down your mind",
+    "FORMULATION: Bursting with luxurious bubbles, this indulgent bath soak is designed to leave your skin beautifully soft - the perfect addition to any bathtub",
+    "SKIN CARE: Imperial Leather bath soak is dermatologically tested & suitable for all skin types - gentle body wash made for self care",
+    "BULK BUY: These 4 x bottles of bath soak is a great bulk buy for the whole family - beauty products you can trust"
+  ],
+  "description": "Product Description IMPERIAL LEATHER BATH 500ml - PAMPERING SOAK (PACK OF 4) With over 100 years of expertise in hand crafting luxury fragrances, choose Imperial Leather for best in class fragrance bloom and sumptuous lather. Loosen up your body and pamper yourself in our richest, creamiest lather ever with our Pampering Marshmallow and Rose Milk Bath Soak. Enter a blissful world and wrap yourself in endless clouds of lather enriched with our signature oil blend for a touch of extravagance and timeless quality. Bursting with luxurious bubbles, this indulgent bath soak is designed to leave your skin beautifully soft, loosen up your body and wind down your mind . The perfect addition to any bathtub, this Marshmallow and Rose Milk Bath Soak makes the perfect gift for someone special. These 4 x bottles of bath soak is a great bulk buy for the whole family, add this to your beauty products regime. Ingredients Aqua, Sodium Laureth Sulfate, Cocamidopropyl Betaine, Parfum, Sodium Benzoate, Tetrasodium Glutamate Diacetate, Lactic Acid, Glycol Distearate, Glyceryl Oleate, Hydroxypropyl Methylcellulose, PEG-200 Hydrogenated Glyceryl Palmate, PEG-7 Glyceryl Cocoate, Polyquaternium-7, PEG-6 Caprylic/Capric Glycerides, Diethylamino Hydroxybenzoyl Hexyl Benzoate, Ethylhexyl Methoxycinnamate, Sodium Chloride, CI 14700. Directions 1. Fill bathtub with warm water. 2. Pour desired amount of bath soak into the water. 3. Agitate water to help disperse the bath soak and create bubbles. 4. Immerse body in the bath and enjoy the soothing effects. 5. After bathing, drain the tub and clean as needed. 6. Store the remaining product in a cool, dry place. Safety Warning As with all cleansers, if the product gets into eyes, rinse well with water. May Cause Staining. See more",
+  "specifications_table": {
+    "Unit count": "‎2000.0 millilitre",
+    "Number of items": "‎4",
+    "Item form": "‎Liquid",
+    "Skin type": "‎All",
+    "Special ingredients": "‎Parfum, CI 14700",
+    "Item weight": "‎2.2 Kilograms",
+    "Variety": "‎Bath Soak",
+    "Bathwater Additive Type": "‎Bubble Bath",
+    "Colour": "‎White",
+    "Manufacturer": "‎PZ Cussons (UK) Ltd",
+    "Package dimensions": "‎25.9 x 20.9 x 6.4 centimetres",
+    "Package Weight": "‎2.21 Kilograms",
+    "Item model number": "‎100110875",
+    "Package Dimensions": "‎25.9 x 20.9 x 6.4 cm; 2.2 kg",
+    "ASIN": "‎B0B1JJTPRN"
   },
-  "supplier_extraction_progress": {
-    // LEGACY COMPATIBILITY - updated atomically
-  }
-}
-```
-
-## 🎯 USER PROGRESS CALCULATION (ON-DEMAND)
-
-### Real-Time Calculations
-```python
-def calculate_user_progress(self):
-    """
-    Calculate user progress from system state.
-    NEVER persisted - always calculated on-demand.
-    """
-    sp = self.state_data.get("system_progression", {})
-    gc = self.state_data.get("global_counters", {})
-    
-    # Overall progress
-    overall = (gc.get("total_categories_completed", 0) / sp.get("total_categories", 1)) * 100
-    
-    # Current category progress  
-    current = (sp.get("current_product_index_in_category", 0) / 
-               sp.get("total_products_in_current_category", 1)) * 100
-    
-    return {
-        "overall_completion": f"{overall:.1f}%",
-        "current_category_progress": f"{current:.1f}%",
-        "current_phase": sp.get("current_phase", "unknown"),
-        "session_totals": gc
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 228,
+      "main_cat_name": "Beauty 59 drops / month",
+      "sub_cat_current_rank": 1,
+      "sub_cat_name": "Bubble Bath 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Imperial Leather Pampering Bath Soak, Mallow and Rose Milk, Rich and Creamy Bubble Bath, Gentle Skin Care, Bulk Buy, Pack of 4 x 500 ml",
+      "Sales Rank - Reference": "Beauty",
+      "Sales Rank - Display Group": "beauty_display_on_website",
+      "Bought in past month": "2,000+",
+      "Reviews - Rating": 4.7,
+      "Reviews - Rating Count": 3.0,
+      "Last Price Change": "19 hours ago",
+      "Buy Box Seller": "Amazon",
+      "FBA Pick&Pack Fee": 5.1,
+      "Referral Fee %": "8.02 %",
+      "Referral Fee based on current Buy Box price": 0.43,
+      "Lowest FBM Seller": "VitaPoint (94% positive over last 12 months)",
+      "Total Offer Count": "5",
+      "Tracking since": "2022/06/19",
+      "Listed since": "2022/05/17",
+      "Categories - Root": "Beauty",
+      "Categories - Sub": "Bubble Bath",
+      "Categories - Tree": "Beauty › Bath & Body › Bath Additives › Bubble Bath",
+      "Website Display Group - Name": "Beauty",
+      "ASIN": "B0B1JJTPRN",
+      "Product Codes - EAN": "5000101509889",
+      "Product Codes - PartNumber": "100110875",
+      "Parent ASIN": "B0DPK5BY7C",
+      "Variation ASINs": "B0B1JHVJHN, B0B1JJTPRN, B0C5434JF8, B0D3ZK434V, B0B1JGD6NB, B0B1JL8TCC, B0B1JHB425",
+      "Freq. Bought Together": "B0151I64QO, B07S7JM1NW",
+      "Type": "BATHWATER_ADDITIVE",
+      "Manufacturer": "PZ Cussons (UK) Ltd",
+      "Brand": "Imperial Leather",
+      "Brand Store Name": "Imperial Leather",
+      "Brand Store URL Name": "ImperialLeather",
+      "Brand Store URL": "https://www.amazon.com/stores/ImperialLeather/page/F038228C-ABAA-4422-B37E-76DB3F6A9271",
+      "Product Group": "Beauty",
+      "Model": "100110875",
+      "Color": "White",
+      "Size": "500 ml (Pack of 4)",
+      "Unit Details - Unit Value": "2000",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "Mallow and Rose Milk",
+      "Item Form": "Liquid",
+      "Style": "Mallow and Rose Milk",
+      "Recommended Uses": "Relaxation, Skin Conditioning",
+      "Product Benefit": "Softening",
+      "Binding": "Personal Care",
+      "Number of Items": "4",
+      "Release Date": "2022-05-16",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/41BCn502RcL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/b7597151-fc5a-4cc9-8ac0-95742ea8ae1f/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "25.9 x 20.9 x 6.4 cm (= 3,464 cm³ )",
+      "Package - Weight (g)": "2,210",
+      "Package - Quantity": "20",
+      "Item - Model (g)": "2,200",
+      "Ingredients": "Aqua, Sodium Laureth Sulfate, Cocamidopropyl Betaine, Parfum, Sodium Benzoate, Tetrasodium Glutamate Diacetate, Lactic Acid, Glycol Distearate, Glyceryl Oleate, Hydroxypropyl Methylcellulose, PEG-200 Hydrogenated Glyceryl Palmate, PEG-7 Glyceryl Cocoate, Polyquaternium-7, PEG-6 Caprylic/Capric Glycerides, Diethylamino Hydroxybenzoyl Hexyl Benzoate, Ethylhexyl Methoxycinnamate, Sodium Chloride, CI 14700.",
+      "Special Ingredients": "Parfum, CI 14700",
+      "Safety Warning": "As with all cleansers, if the product gets into eyes, rinse well with water. May Cause Staining.",
+      "One Time Coupon - Subscribe & Save %": "10 %"
     }
-```
-
-### Historical Context (Separate Files)
-```python
-def get_historical_context(self):
-    """
-    Get historical data from separate files.
-    NOT from processing state file.
-    """
-    return {
-        "total_cache_entries": len(self.load_product_cache()),
-        "total_linking_entries": len(self.load_linking_map()),
-        "historical_categories": self.analyze_linking_map_categories()
-    }
-```
-
-## 🚀 PERFORMANCE OPTIMIZATION
-
-### Hash Optimization (Already Implemented)
-- **240x Performance Improvement**: Through hash-based lookup
-- **O(1) Complexity**: Direct hash lookup against linking map
-- **Memory Efficiency**: No large processed_products in memory
-
-### State File Optimization (To Be Implemented)
-- **Size Reduction**: Remove thousands of URLs from processed_products
-- **Load Time**: Faster state file loading
-- **Memory Usage**: Eliminate large dictionaries
-
-## 🔒 ERROR HANDLING & VALIDATION
-
-### Mathematical Consistency Validation
-```python
-def validate_state_consistency(self):
-    """
-    Validate mathematical impossibilities.
-    Prevent state corruption.
-    """
-    sp = self.state_data.get("system_progression", {})
-    
-    # Critical bounds checking
-    if sp.get("current_category_index", 0) >= sp.get("total_categories", 1):
-        raise RuntimeError("CRITICAL: current_category_index >= total_categories")
-    
-    # Ensure total_categories is always 233 for poundwholesale
-    if sp.get("total_categories") != 233:
-        raise RuntimeError(f"CRITICAL: total_categories={sp.get('total_categories')} != 233")
-```
-
-### Atomic Operations
-```python
-def atomic_state_update(self, **kwargs):
-    """
-    Atomic updates to prevent partial writes.
-    All related fields updated together or none at all.
-    """
-    try:
-        # Begin transaction
-        self.validate_update_parameters(**kwargs)
-        self.update_system_progression(**kwargs)
-        self.update_supplier_extraction_progress(**kwargs)
-        self.save_state_atomically()
-        # Commit transaction
-    except Exception as e:
-        # Rollback on failure
-        self.restore_previous_state()
-        raise
-```
-
-## 🎯 SUCCESS CRITERIA
-
-### System Behavior Validation
-1. **State Consistency**: system_progression always has total_categories=233
-2. **Dual Tracking**: Both sections updated atomically via update_progression_unified()
-3. **Resume Accuracy**: System resumes at correct category based on linking map analysis
-4. **Performance**: O(1) processed product detection via linking map hash lookup
-5. **File Size**: Dramatically reduced processing state file size
-6. **User Progress**: Calculated on-demand, never persisted separately
-
-### Architectural Compliance
-1. **Single Source of Truth**: system_progression is canonical
-2. **Reverse Gap Processing**: Starts at category 0, uses cache for smart skipping
-3. **Session vs Historical**: Clear separation between current run and persistent data
-4. **Method Usage**: ONLY update_progression_unified() for state updates
-5. **Processed Products**: ONLY linking map hash lookup, no processed_products section
-
-## 🚨 CRITICAL IMPLEMENTATION NOTES
-
-### Never Do These:
-- ❌ Call update_supplier_extraction_progress() directly
-- ❌ Update only one state section without the other
-- ❌ Use processed_products section for lookup
-- ❌ Set total_categories to batch count instead of 233
-- ❌ Persist user progress separately from system state
-
-### Always Do These:
-- ✅ Use update_progression_unified() for ALL state updates
-- ✅ Maintain total_categories=233 consistently
-- ✅ Use linking map hash lookup for processed products
-- ✅ Calculate user progress on-demand
-- ✅ Validate mathematical bounds before updates
-
-This comprehensive guide ensures the system behaves exactly as designed with proper dual tracking, efficient processing, and architectural compliance.
+  },
+  "eans_on_page": [
+    "5000101509889"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5000101509889",
+  "sales_rank": 228,
+  "category": "Beauty 59",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 1000,
+  "asin_extracted_from_page": "B0B1JJTPRN",
+  "asin_queried": "B0B1JJTPRN",
+  "asin": "B0B1JJTPRN",
+  "_search_method_used": "title"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           22.tools.legacy_utils.currency_converter.CurrencyConverter.__init__ �(�p�]backup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerTool.name �4gw�kbackup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerTool.description �4hw�kbackup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerTool.args_schema �4ip�]backup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerTool._run �4j{�sbackup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerInput.supplier_price �4c|�ubackup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerInput.product_details �4fq�_backup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerInput.asin �4ey�obackup.surgical_implementation_20250722.tools.legacy_utils.analysis_tools.ProfitabilityAnalyzerInput.amazon_price �4ds�cbackup.surgical_implementation_20250722.tools.legacy_utils.currency_converter.CurrencyConverter.rates_cache �(�o�[backup.surgical_implementation_20250722.tools.legacy_utils.currency_converter.CurrencyConverter.convert �(�m�Wbackup.surgical_implementation_20250722.tools.legacy_utils.currency_converter.CurrencyConverter.close �)q�_backup.surgical_implementation_20250722.tools.legacy_utils.currency_converter.CurrencyConverter.cache_ttl �(�q�_backup.surgical_implementation_20250722.tools.legacy_util{
+  "asin_from_details": "B09ZHVJJPM",
+  "title": "Ecoseao Acrylic Display Case with Mirror, Clear Acrylic Organizer Box Assemble Countertop Dustproof Protection Showcase for Action Figures, Collectibles, Home Storage (35cmx25cmx15cm)",
+  "current_price": 26.99,
+  "original_price": 51.8,
+  "main_image": "https://m.media-amazon.com/images/I/51hQIiVJ+HL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31

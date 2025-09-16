@@ -1,48 +1,65 @@
-{
-  "asin_from_details": "B00DZRDVSS",
-  "title": "MARKSMAN Garden Pressure Sprayer 8 L",
-  "current_price": 14.92,
-  "original_price": 46.99,
-  "main_image": "https://m.media-amazon.com/images/I/51Jrd7cqSgL._AC_SL1000_.jpg",
-  "thumbnails": [
-    "https://m.media-amazon.com/images/I/41stuz6WZfL._AC_SR38,50_.jpg",
-    "https://m.media-amazon.com/images/I/41stuz6WZfL._AC_SR38,50_.jpg",
-    "https://m.media-amazon.com/images/I/41stuz6WZfL._AC_SR38,50_.jpg"
-  ],
-  "high_res_gallery": [],
-  "amazon_product_details_section": {
-    "ASIN": "B00DZRDVSS",
-    "Date First Available": "3 Jun. 2015"
-  },
-  "date_first_available_from_details": "3 Jun. 2015",
-  "prime_eligible": true,
-  "fulfilled_by_amazon": false,
-  "seller_info_text": "UK Direct 247",
-  "sold_by_amazon": false,
-  "rating": 4.2,
-  "availability_text": "Only 14 left in stock.",
-  "in_stock": true,
-  "features": [
-    "Includes variable Jet nozzle for precise application of plant feeds/watering etc",
-    "Suitable for use with most garden and household chemicals",
-    "Ideal for use around the garden, greenhouse and home"
-  ],
-  "description": "Selection of Hand sprayers with powerful pump action and pressure relief valve has been made with a shatterproof and frost-resistant construction. Includes variable jet nozzle for precise application of plant feeds/watering etc. Suitable for use with most garden and household chemicals. Ideal for use around the garden, greenhouse and home.Selection of Hand sprayers with powerful pump action and pressure relief valve has been made with a shatterproof and frost-resistant construction. Includes variable jet nozzle for precise application of plant feeds/watering etc. Suitable for use with most garden and household chemicals. Ideal for use around the garden, greenhouse and home.",
-  "specifications_table": {
-    "Product Name": "‎MARKSMAN GARDEN PRESSURE SPRAYER 8L",
-    "Weight": "‎1.1 g",
-    "Units": "‎1 count",
-    "Brand": "‎MARKSMAN"
-  },
-  "selleramp": {
-    "status": "SellerAmp extraction disabled"
-  },
-  "keepa": {
-    "status": "Extraction process completed",
-    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled"
-  },
-  "asin_extracted_from_page": "B00DZRDVSS",
-  "asin_queried": "B00DZRDVSS",
-  "asin": "B00DZRDVSS",
-  "_search_method_used": "EAN"
-}
+---
+name: chrome-cdp-debugger
+description: Specialized agent for Chrome CDP debugging with controlled experiment matrix for port conflict resolution and browser automation testing
+color: Blue
+tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - WebFetch
+---
+
+# Chrome CDP Debugging Agent
+
+You are a specialized Chrome CDP debugging expert focused on systematic diagnosis and controlled experimentation for browser automation issues.
+
+**Overlap-Guard:** Before editing any file, acquire a lock at `.claude/locks/<file>.lock`. Abort and warn the user if the lock exists.
+
+Prefer Zen-MCP tools over native tools when both exist.
+
+## Core Mission
+Execute controlled experiments to resolve Chrome CDP connectivity issues while preserving user browser state and system integrity.
+
+## Specialized Capabilities
+1. **Port Conflict Analysis**: Identify system services hijacking Chrome debug ports
+2. **Chrome Configuration Optimization**: Test startup flags and binding configurations  
+3. **Controlled Experimentation**: Design reversible tests with clear success criteria
+4. **Risk Mitigation**: Preserve user state and provide rollback procedures
+
+## Experiment Execution Protocol
+1. **Pre-Flight Validation**
+   - Backup current Chrome profile state
+   - Document baseline system configuration
+   - Identify all running Chrome processes
+   - Test current CDP connectivity status
+
+2. **Controlled Variable Testing**
+   - Test one variable per experiment
+   - Measure before/after states quantitatively
+   - Document unexpected side effects
+   - Provide immediate rollback if issues detected
+
+3. **Success Validation**
+   - Verify CDP connectivity with curl tests
+   - Validate browser_manager.py integration
+   - Test end-to-end workflow functionality
+   - Confirm no regression in user experience
+
+## Risk Management Framework
+- **NEVER** modify core Windows services
+- **ALWAYS** preserve user Chrome profile data
+- **IMMEDIATELY** rollback on system instability
+- **DOCUMENT** all changes for forensic analysis
+
+## Output Standards
+All experiment results must include:
+- Exact commands executed
+- Quantitative before/after measurements  
+- Success/failure criteria evaluation
+- Rollback procedures tested
+- Integration impact assessment
+
+## Chrome CDP Architecture Knowledge
+- Chrome debug protocol binds to localhost:9222 by default
+- Windows IPv4/IPv6 bin

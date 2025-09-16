@@ -1,0 +1,1211 @@
+2025-08-23 08:12:53,211 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250823_081253.log
+2025-08-23 08:12:53,211 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250823_081253.log
+2025-08-23 08:12:53,211 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-08-23 08:12:53,212 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-08-23 08:12:53,216 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-08-23 08:12:53,820 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-08-23 08:12:54,099 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-08-23 08:12:54,099 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-08-23 08:12:54,099 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:12:54,100 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:12:54,100 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-08-23 08:12:54,101 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-08-23 08:12:54,101 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-08-23 08:13:12,136 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:13:15,690 - tools.standalone_playwright_login - WARNING - ⚠️ No clear price elements found - price access unclear
+2025-08-23 08:13:15,707 - tools.supplier_authentication_service - INFO - ❌ Login form detected - not authenticated
+2025-08-23 08:13:15,707 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-08-23 08:13:15,708 - tools.supplier_authentication_service - INFO - 🔧 Using standalone playwright authentication
+2025-08-23 08:13:15,708 - tools.standalone_playwright_login - INFO - 🔗 Connecting to shared Chrome instance...
+2025-08-23 08:13:16,533 - tools.standalone_playwright_login - INFO - ✅ Connected to shared Chrome instance at http://localhost:9222
+2025-08-23 08:13:16,533 - tools.standalone_playwright_login - DEBUG - Using existing browser context
+2025-08-23 08:13:16,534 - tools.standalone_playwright_login - DEBUG - Using existing page
+2025-08-23 08:13:16,539 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-08-23 08:13:20,068 - tools.standalone_playwright_login - INFO - ❌ No login indicators found - need to log in
+2025-08-23 08:13:20,068 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-08-23 08:13:20,068 - tools.standalone_playwright_login - INFO - 📍 Navigating to login page: https://www.poundwholesale.co.uk/customer/account/login/
+2025-08-23 08:13:23,256 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="login[username]"]
+2025-08-23 08:13:23,681 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input[name="login[password]"]
+2025-08-23 08:13:26,676 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button[type="submit"]
+2025-08-23 08:13:26,676 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-08-23 08:13:29,866 - tools.standalone_playwright_login - INFO - ✅ Login success confirmed by indicator: text=Log out
+2025-08-23 08:13:29,866 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:13:34,662 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-23 08:13:34,663 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 14.6s)
+2025-08-23 08:13:34,675 - tools.standalone_playwright_login - DEBUG - Disconnected from shared Chrome browser
+2025-08-23 08:13:34,690 - tools.standalone_playwright_login - DEBUG - Playwright stopped
+2025-08-23 08:13:34,691 - tools.supplier_authentication_service - INFO - ✅ Standalone authentication successful: playwright_selectors
+2025-08-23 08:13:34,691 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2025-08-23 08:13:34,692 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2025-08-23 08:13:34,692 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2025-08-23 08:13:34,692 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-08-23 08:13:34,693 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-08-23 08:13:34,761 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9939 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:13:34,765 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 9939 products, 0 categories
+2025-08-23 08:13:34,765 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-08-23 08:13:34,894 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 9939 actual products in cache (total entries: 9939)
+2025-08-23 08:13:34,972 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 9149 processed products in linking map
+2025-08-23 08:13:35,122 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 165 categories
+2025-08-23 08:13:35,126 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 231 categories in config
+2025-08-23 08:13:35,131 - utils.fixed_enhanced_state_manager - INFO - ✅ Normal startup - resumption_index = 9149
+2025-08-23 08:13:35,131 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=9149 (reason: normal_startup)
+2025-08-23 08:13:35,138 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (24 entries) saved successfully
+2025-08-23 08:13:35,139 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:13:35,139 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-08-23 08:13:35,139 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-08-23 08:13:35,140 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-08-23 08:13:35,140 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-08-23 08:13:35,140 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-08-23 08:13:35,141 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-08-23 08:13:35,141 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2025-08-23 08:13:35,141 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-08-23 08:13:35,141 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-08-23 08:13:35,142 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-08-23 08:13:35,142 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-08-23 08:13:35,142 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-08-23 08:13:35,142 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-08-23 08:13:35,142 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-08-23 08:13:35,143 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-08-23 08:13:35,143 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-08-23 08:13:35,143 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-08-23 08:13:35,144 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-08-23 08:13:35,144 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-08-23 08:13:35,145 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-08-23 08:13:35,145 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2025-08-23 08:13:35,145 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-08-23 08:13:35,145 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-08-23 08:13:35,146 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250823_081335
+2025-08-23 08:13:35,146 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-08-23 08:13:35,146 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-08-23 08:13:35,146 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-08-23 08:13:35,146 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-08-23 08:13:35,147 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-08-23 08:13:35,147 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-08-23 08:13:35,147 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-08-23 08:13:35,148 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 9149
+2025-08-23 08:13:35,148 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-08-23 08:13:35,148 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 9149
+2025-08-23 08:13:35,149 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-08-23 08:13:35,217 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 9149 entries
+2025-08-23 08:13:35,312 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8804 EANs, 9065 URLs, 6000 ASINs in 0.095s
+2025-08-23 08:13:35,313 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 9149 entries
+2025-08-23 08:13:35,313 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 9149
+2025-08-23 08:13:35,375 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9939 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:13:35,378 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: GAP_PROCESSING (normal gap - cache: 9939 > linking map: 9149)
+2025-08-23 08:13:35,378 - PassiveExtractionWorkflow - INFO - 📊 GAP SIZE: 790 products need Amazon analysis first
+2025-08-23 08:13:35,378 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-08-23 08:13:35,448 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 9149 entries
+2025-08-23 08:13:35,535 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 8804 EANs, 9065 URLs, 6000 ASINs in 0.087s
+2025-08-23 08:13:35,536 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 9149 entries
+2025-08-23 08:13:35,536 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-08-23 08:13:35,537 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-08-23 08:13:35,537 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 231 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-08-23 08:13:35,538 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-08-23 08:13:35,538 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 231 predefined categories (infinite mode)
+2025-08-23 08:13:35,538 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-08-23 08:13:35,538 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-08-23 08:13:35,539 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-08-23 08:13:35,539 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-08-23 08:13:35,539 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-08-23 08:13:35,601 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9939 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:13:35,603 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-08-23 08:13:35,603 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-23 08:13:35,603 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-23 08:13:35,658 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9939 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:13:35,723 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9939 total → 1055 unprocessed (9065 already in linking map)
+2025-08-23 08:13:35,723 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 89.4% products skipped (already processed)
+2025-08-23 08:13:35,723 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-23 08:13:35,724 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-23 08:13:35,724 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-23 08:13:35,724 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:13:35,725 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:13:35,725 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-08-23 08:13:37,346 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-08-23 08:13:41,837 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-23 08:13:41,837 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:13:46,427 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-23 08:13:46,428 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-23 08:13:46,428 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-23 08:13:46,433 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:13:46,434 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:13:46,434 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=0/pending
+2025-08-23 08:13:46,434 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-08-23 08:13:46,435 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:46,447 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage with memory management
+2025-08-23 08:13:48,083 - utils.browser_manager - DEBUG - 🪟 Found 44 Chrome processes, total memory: 5347.4MB
+2025-08-23 08:13:48,084 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5347.4 MB
+2025-08-23 08:13:49,624 - utils.browser_manager - DEBUG - 🪟 Windows: 44 Chrome processes, 5348MB total
+2025-08-23 08:13:49,624 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=5347MB, Python=160MB, System=68.5%
+2025-08-23 08:13:49,625 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:49,625 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:13:49,625 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:13:49,626 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-08-23 08:13:49,626 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-23 08:13:49,626 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:49,626 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:49,627 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage (attempt 1/3)
+2025-08-23 08:13:49,627 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:13:49,627 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:13:49,627 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:51,832 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage in 2.13s...
+2025-08-23 08:13:53,973 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage (attempt 2/3)
+2025-08-23 08:13:53,973 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:13:53,973 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:13:53,973 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:56,438 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:56,438 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:13:56,525 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage (Size: 694296 bytes)
+2025-08-23 08:13:56,668 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-23 08:13:56,668 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-08-23 08:13:56,669 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 (attempt 1/3)
+2025-08-23 08:13:56,669 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:13:56,670 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:13:56,670 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-08-23 08:13:58,860 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 in 1.90s...
+2025-08-23 08:14:00,762 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 (attempt 2/3)
+2025-08-23 08:14:00,763 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:00,763 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:00,764 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-08-23 08:14:02,089 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-08-23 08:14:02,090 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2
+2025-08-23 08:14:02,179 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=2 (Size: 692908 bytes)
+2025-08-23 08:14:02,325 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-23 08:14:02,325 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-08-23 08:14:02,325 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 (attempt 1/3)
+2025-08-23 08:14:02,326 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:02,326 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:02,326 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-08-23 08:14:05,643 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 in 2.06s...
+2025-08-23 08:14:07,715 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 (attempt 2/3)
+2025-08-23 08:14:07,715 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:07,716 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:07,716 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-08-23 08:14:09,963 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-08-23 08:14:09,964 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3
+2025-08-23 08:14:10,055 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=3 (Size: 654437 bytes)
+2025-08-23 08:14:10,203 - configurable_supplier_scraper - INFO - Found 17 new product URLs on page 3
+2025-08-23 08:14:10,203 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-08-23 08:14:10,204 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 (attempt 1/3)
+2025-08-23 08:14:10,204 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:10,204 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:10,204 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-08-23 08:14:11,913 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 in 2.19s...
+2025-08-23 08:14:14,118 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 (attempt 2/3)
+2025-08-23 08:14:14,118 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:14,119 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:14,119 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-08-23 08:14:16,211 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-08-23 08:14:16,212 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4
+2025-08-23 08:14:16,265 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage?p=4 (Size: 403454 bytes)
+2025-08-23 08:14:16,344 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 4
+2025-08-23 08:14:16,345 - configurable_supplier_scraper - INFO - Collected 57 total product URLs across 4 pages
+2025-08-23 08:14:16,345 - configurable_supplier_scraper - INFO - Found 57 total product URLs across all pages
+2025-08-23 08:14:16,346 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-08-23 08:14:16,434 - utils.url_cache_filter - INFO - ✅ Loaded 9939 URLs from poundwholesale.co.uk cache
+2025-08-23 08:14:16,434 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 9939 (+9939 new)
+2025-08-23 08:14:16,436 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 9939 cached URLs for efficiency filtering
+2025-08-23 08:14:16,436 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 1 new URLs, 56 already cached
+2025-08-23 08:14:16,437 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 1 new URLs need processing, 56 already cached
+2025-08-23 08:14:16,437 - configurable_supplier_scraper - INFO - Visiting product page 1/1: https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:16,437 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/square-bowl-7ltr-silver (attempt 1/3)
+2025-08-23 08:14:16,438 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:16,438 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:16,438 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:19,251 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/square-bowl-7ltr-silver in 2.44s...
+2025-08-23 08:14:21,701 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/square-bowl-7ltr-silver (attempt 2/3)
+2025-08-23 08:14:21,701 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:21,702 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:21,702 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:23,703 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:23,703 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:23,796 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/square-bowl-7ltr-silver (Size: 720580 bytes)
+2025-08-23 08:14:23,977 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 1 to shared accumulator (total: 1056)
+2025-08-23 08:14:23,978 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Square Bowl Silver 7l - £0.92 (EAN: 5022092001340)
+2025-08-23 08:14:23,978 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:23,979 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/square-bowl-7ltr-silver
+2025-08-23 08:14:23,984 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:23,985 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:23,985 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=1/pending
+2025-08-23 08:14:23,986 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1056/1
+2025-08-23 08:14:23,986 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1056 processed (total in cache: 1056)
+2025-08-23 08:14:23,986 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1056
+2025-08-23 08:14:23,986 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1056, frequency=2, enabled=True
+2025-08-23 08:14:23,987 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1056, modulo=0
+2025-08-23 08:14:23,987 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:23,988 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-23 08:14:23,988 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:23,988 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-08-23 08:14:23,988 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 1056 products to cache...
+2025-08-23 08:14:23,989 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:24,046 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9939 existing products for deduplication
+2025-08-23 08:14:24,051 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 1055 URL duplicates and 0 EAN duplicates.
+2025-08-23 08:14:24,051 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:24,194 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9940 products (1 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5931994 bytes)
+2025-08-23 08:14:24,196 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 1056 products to cache (every 2 products)
+2025-08-23 08:14:24,202 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:24,203 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:24,204 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=1/pending
+2025-08-23 08:14:24,972 - utils.browser_manager - DEBUG - 🪟 Found 43 Chrome processes, total memory: 5338.3MB
+2025-08-23 08:14:24,972 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5338.3 MB
+2025-08-23 08:14:26,636 - utils.browser_manager - DEBUG - 🪟 Windows: 43 Chrome processes, 5343MB total
+2025-08-23 08:14:26,637 - configurable_supplier_scraper - INFO - 🧠 Post-scraping Memory: Chrome=5338MB, Python=198MB, System=68.6%
+2025-08-23 08:14:26,637 - configurable_supplier_scraper - INFO - Successfully extracted 1 products from https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage
+2025-08-23 08:14:26,637 - PassiveExtractionWorkflow - INFO - PAGINATION[C1 bowls-storage]: pages=4 urls_page=20,20,17,0 total=57
+2025-08-23 08:14:26,638 - utils.fixed_enhanced_state_manager - INFO - 🔍 REAL-TIME DISCOVERY: Category https://www.poundwholesale.co.uk/wholesale-cleanin... discovered 57 products (was 46)
+2025-08-23 08:14:26,643 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:26,644 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:26,644 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=1/pending
+2025-08-23 08:14:26,644 - utils.fixed_enhanced_state_manager - INFO - ✅ REAL-TIME UPDATE: Category total updated to 57 products
+2025-08-23 08:14:26,649 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:26,650 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:26,650 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=1/57
+2025-08-23 08:14:26,650 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Set to 57 products for category https://www.poundwholesale.co.uk/wholesale-cleanin...
+2025-08-23 08:14:26,655 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:26,656 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:26,656 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=0/1 url=https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage prod_idx=1/57
+2025-08-23 08:14:26,657 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage → 57 products (snapshot taken)
+2025-08-23 08:14:26,661 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-wholesale-cleaning-.json (6 entries) saved successfully
+2025-08-23 08:14:26,662 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 57 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-wholesale-cleaning-.json
+2025-08-23 08:14:26,663 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C1 https-www-poundwholesale-co-uk-wholesale-cleaning-]: overwritten=true prev=57 curr=57
+2025-08-23 08:14:26,663 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage: Found 57 products across 4 pages.
+2025-08-23 08:14:26,663 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 1 raw products extracted, 1056 total products accumulated
+2025-08-23 08:14:26,663 - PassiveExtractionWorkflow - INFO - 🔄 STATE UPDATE: Updated category https://www.poundwholesale.co.uk/wholesale-cleaning/bowls-storage with 57 discovered products
+2025-08-23 08:14:26,664 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 1056 total products extracted so far
+2025-08-23 08:14:26,738 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 8804 processed EANs and 9065 processed URLs from linking map
+2025-08-23 08:14:26,738 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-08-23 08:14:26,738 - PassiveExtractionWorkflow - INFO - 🔍 Building product cache hash indexes for duplicate prevention...
+2025-08-23 08:14:26,802 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:26,863 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 9940 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:26,869 - PassiveExtractionWorkflow - INFO - ✅ Product cache indexes built:
+2025-08-23 08:14:26,870 - PassiveExtractionWorkflow - INFO -    📊 URL Index: 9940 entries
+2025-08-23 08:14:26,870 - PassiveExtractionWorkflow - INFO -    📊 EAN Index: 9604 entries
+2025-08-23 08:14:26,872 - PassiveExtractionWorkflow - INFO - 🔍 FILTER SUMMARY: in=1056 skip=1056 needs_extraction=0
+2025-08-23 08:14:26,875 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 1056 total cached products → 0 unprocessed products
+2025-08-23 08:14:26,876 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 1056 already processed products
+2025-08-23 08:14:26,878 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 2: categories 2-2
+2025-08-23 08:14:26,947 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:27,018 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION DETECTED: Found 7 cached products but resuming from index 9149
+2025-08-23 08:14:27,018 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category
+2025-08-23 08:14:27,018 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-23 08:14:27,019 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-23 08:14:27,078 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:27,146 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9940 total → 1056 unprocessed (9065 already in linking map)
+2025-08-23 08:14:27,147 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 89.4% products skipped (already processed)
+2025-08-23 08:14:27,147 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-23 08:14:27,147 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-23 08:14:27,147 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-23 08:14:27,148 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:27,148 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-23 08:14:31,513 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-23 08:14:31,514 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:14:36,193 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-23 08:14:36,193 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-23 08:14:36,193 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-23 08:14:36,199 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:36,200 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:36,201 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers prod_idx=0/pending
+2025-08-23 08:14:36,201 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 2/1)
+2025-08-23 08:14:36,201 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:36,202 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers with memory management
+2025-08-23 08:14:36,979 - utils.browser_manager - DEBUG - 🪟 Found 43 Chrome processes, total memory: 5347.6MB
+2025-08-23 08:14:36,980 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5347.6 MB
+2025-08-23 08:14:38,571 - utils.browser_manager - DEBUG - 🪟 Windows: 43 Chrome processes, 5346MB total
+2025-08-23 08:14:38,572 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=5347MB, Python=206MB, System=68.9%
+2025-08-23 08:14:38,572 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:38,572 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:38,572 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:38,572 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-23 08:14:38,573 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:38,573 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:38,573 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers (attempt 1/3)
+2025-08-23 08:14:38,573 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:38,574 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:38,574 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:40,760 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers in 1.73s...
+2025-08-23 08:14:42,492 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers (attempt 2/3)
+2025-08-23 08:14:42,493 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:42,493 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:42,493 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:43,761 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:43,762 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers
+2025-08-23 08:14:44,535 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers (Size: 690602 bytes)
+2025-08-23 08:14:44,675 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-23 08:14:44,675 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-08-23 08:14:44,675 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2 (attempt 1/3)
+2025-08-23 08:14:44,676 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:44,676 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:44,676 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-08-23 08:14:46,554 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2 in 2.44s...
+2025-08-23 08:14:48,998 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2 (attempt 2/3)
+2025-08-23 08:14:48,999 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:48,999 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:49,000 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-08-23 08:14:50,593 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-08-23 08:14:50,593 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2
+2025-08-23 08:14:50,680 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=2 (Size: 473189 bytes)
+2025-08-23 08:14:50,779 - configurable_supplier_scraper - INFO - Found 5 new product URLs on page 2
+2025-08-23 08:14:50,779 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3
+2025-08-23 08:14:50,779 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3 (attempt 1/3)
+2025-08-23 08:14:50,780 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:50,780 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:50,780 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3
+2025-08-23 08:14:52,455 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3 in 2.27s...
+2025-08-23 08:14:54,725 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3 (attempt 2/3)
+2025-08-23 08:14:54,726 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:54,726 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:14:54,727 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3
+2025-08-23 08:14:57,289 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3
+2025-08-23 08:14:57,290 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3
+2025-08-23 08:14:57,358 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers?p=3 (Size: 393739 bytes)
+2025-08-23 08:14:57,430 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 3
+2025-08-23 08:14:57,431 - configurable_supplier_scraper - INFO - Collected 25 total product URLs across 3 pages
+2025-08-23 08:14:57,431 - configurable_supplier_scraper - INFO - Found 25 total product URLs across all pages
+2025-08-23 08:14:57,431 - utils.url_cache_filter - DEBUG - 🔄 URLs already loaded for poundwholesale.co.uk: 9940 URLs
+2025-08-23 08:14:57,432 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 9940 cached URLs for efficiency filtering
+2025-08-23 08:14:57,432 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 25 already cached
+2025-08-23 08:14:57,432 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 25 already cached
+2025-08-23 08:14:57,432 - configurable_supplier_scraper - INFO - 🎯 All URLs are already cached - no new products to scrape!
+2025-08-23 08:14:57,432 - PassiveExtractionWorkflow - INFO - PAGINATION[C2 wholesale-artificial-flowers]: pages=3 urls_page=20,5,0 total=25
+2025-08-23 08:14:57,438 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:57,439 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:57,439 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers prod_idx=0/25
+2025-08-23 08:14:57,439 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Set to 25 products for category https://www.poundwholesale.co.uk/homeware/wholesal...
+2025-08-23 08:14:57,444 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:14:57,445 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:14:57,445 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers prod_idx=0/25
+2025-08-23 08:14:57,446 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers → 25 products (snapshot taken)
+2025-08-23 08:14:57,449 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-homeware-wholesale-.json (6 entries) saved successfully
+2025-08-23 08:14:57,450 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 25 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-homeware-wholesale-.json
+2025-08-23 08:14:57,451 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C2 https-www-poundwholesale-co-uk-homeware-wholesale-]: overwritten=true prev=41 curr=25
+2025-08-23 08:14:57,451 - PassiveExtractionWorkflow - WARNING - MANIFEST COUNT CHANGE: https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers changed from 41 to 25 URLs
+2025-08-23 08:14:57,451 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/homeware/wholesale-artificial-flowers: Found 25 products across 3 pages.
+2025-08-23 08:14:57,452 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 0 raw products extracted, 1056 total products accumulated
+2025-08-23 08:14:57,452 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 1056 total products extracted so far
+2025-08-23 08:14:57,529 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 8804 processed EANs and 9065 processed URLs from linking map
+2025-08-23 08:14:57,530 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-08-23 08:14:57,531 - PassiveExtractionWorkflow - INFO - 🔍 FILTER SUMMARY: in=1056 skip=1056 needs_extraction=0
+2025-08-23 08:14:57,534 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 1056 total cached products → 0 unprocessed products
+2025-08-23 08:14:57,535 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 1056 already processed products
+2025-08-23 08:14:57,539 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 3: categories 3-3
+2025-08-23 08:14:57,598 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:57,657 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION DETECTED: Found 1 cached products but resuming from index 9149
+2025-08-23 08:14:57,658 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category
+2025-08-23 08:14:57,658 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-23 08:14:57,658 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-23 08:14:57,718 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:14:57,781 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9940 total → 1056 unprocessed (9065 already in linking map)
+2025-08-23 08:14:57,781 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 89.4% products skipped (already processed)
+2025-08-23 08:14:57,782 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-23 08:14:57,782 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-23 08:14:57,782 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-23 08:14:57,783 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:14:57,783 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-23 08:15:02,142 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-23 08:15:02,142 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:15:06,810 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-23 08:15:06,810 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-23 08:15:06,811 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-23 08:15:06,816 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:15:06,817 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:15:06,817 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=2/1 url=https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol prod_idx=0/pending
+2025-08-23 08:15:06,818 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 3/1)
+2025-08-23 08:15:06,818 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:06,818 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol with memory management
+2025-08-23 08:15:07,623 - utils.browser_manager - DEBUG - 🪟 Found 45 Chrome processes, total memory: 5579.1MB
+2025-08-23 08:15:07,623 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5579.1 MB
+2025-08-23 08:15:09,201 - utils.browser_manager - DEBUG - 🪟 Windows: 44 Chrome processes, 5535MB total
+2025-08-23 08:15:09,202 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=5579MB, Python=214MB, System=69.1%
+2025-08-23 08:15:09,202 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:09,202 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:09,202 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:09,203 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-23 08:15:09,203 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:09,203 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:09,204 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol (attempt 1/3)
+2025-08-23 08:15:09,204 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:09,204 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:09,205 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:11,180 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol in 2.08s...
+2025-08-23 08:15:13,259 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol (attempt 2/3)
+2025-08-23 08:15:13,260 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:13,260 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:13,260 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:15,520 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:15,520 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol
+2025-08-23 08:15:15,584 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol (Size: 466890 bytes)
+2025-08-23 08:15:15,673 - configurable_supplier_scraper - INFO - Found 5 new product URLs on page 1
+2025-08-23 08:15:15,673 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2
+2025-08-23 08:15:15,674 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2 (attempt 1/3)
+2025-08-23 08:15:15,674 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:15,674 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:15,674 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2
+2025-08-23 08:15:17,333 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2 in 2.21s...
+2025-08-23 08:15:19,561 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2 (attempt 2/3)
+2025-08-23 08:15:19,562 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:19,562 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:19,563 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2
+2025-08-23 08:15:21,758 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2
+2025-08-23 08:15:21,758 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2
+2025-08-23 08:15:21,824 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol?p=2 (Size: 393182 bytes)
+2025-08-23 08:15:21,903 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 2
+2025-08-23 08:15:21,903 - configurable_supplier_scraper - INFO - Collected 5 total product URLs across 2 pages
+2025-08-23 08:15:21,904 - configurable_supplier_scraper - INFO - Found 5 total product URLs across all pages
+2025-08-23 08:15:21,904 - utils.url_cache_filter - DEBUG - 🔄 URLs already loaded for poundwholesale.co.uk: 9940 URLs
+2025-08-23 08:15:21,904 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 9940 cached URLs for efficiency filtering
+2025-08-23 08:15:21,905 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 5 already cached
+2025-08-23 08:15:21,905 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 5 already cached
+2025-08-23 08:15:21,905 - configurable_supplier_scraper - INFO - 🎯 All URLs are already cached - no new products to scrape!
+2025-08-23 08:15:21,906 - PassiveExtractionWorkflow - INFO - PAGINATION[C3 paw-patrol]: pages=2 urls_page=5,0 total=5
+2025-08-23 08:15:21,911 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:15:21,912 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:15:21,912 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=2/1 url=https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol prod_idx=0/5
+2025-08-23 08:15:21,912 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Set to 5 products for category https://www.poundwholesale.co.uk/toys/wholesale-br...
+2025-08-23 08:15:21,918 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:15:21,919 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:15:21,920 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=2/1 url=https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol prod_idx=0/5
+2025-08-23 08:15:21,920 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol → 5 products (snapshot taken)
+2025-08-23 08:15:21,923 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-toys-wholesale-bran.json (6 entries) saved successfully
+2025-08-23 08:15:21,924 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 5 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-toys-wholesale-bran.json
+2025-08-23 08:15:21,924 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C3 https-www-poundwholesale-co-uk-toys-wholesale-bran]: overwritten=true prev=17 curr=5
+2025-08-23 08:15:21,925 - PassiveExtractionWorkflow - WARNING - MANIFEST COUNT CHANGE: https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol changed from 17 to 5 URLs
+2025-08-23 08:15:21,925 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/toys/wholesale-branded-toys/paw-patrol: Found 5 products across 2 pages.
+2025-08-23 08:15:21,925 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 0 raw products extracted, 1056 total products accumulated
+2025-08-23 08:15:21,926 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 1056 total products extracted so far
+2025-08-23 08:15:22,009 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 8804 processed EANs and 9065 processed URLs from linking map
+2025-08-23 08:15:22,010 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-08-23 08:15:22,011 - PassiveExtractionWorkflow - INFO - 🔍 FILTER SUMMARY: in=1056 skip=1056 needs_extraction=0
+2025-08-23 08:15:22,014 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 1056 total cached products → 0 unprocessed products
+2025-08-23 08:15:22,014 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 1056 already processed products
+2025-08-23 08:15:22,014 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 4: categories 4-4
+2025-08-23 08:15:22,073 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:15:22,134 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION DETECTED: Found 40 cached products but resuming from index 9149
+2025-08-23 08:15:22,135 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category
+2025-08-23 08:15:22,135 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-23 08:15:22,135 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-23 08:15:22,201 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:15:22,364 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9940 total → 1056 unprocessed (9065 already in linking map)
+2025-08-23 08:15:22,364 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 89.4% products skipped (already processed)
+2025-08-23 08:15:22,365 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-23 08:15:22,365 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-23 08:15:22,365 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-23 08:15:22,366 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:22,366 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-23 08:15:26,905 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-23 08:15:26,906 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:15:31,481 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-23 08:15:31,482 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-23 08:15:31,482 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-23 08:15:31,487 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:15:31,488 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:15:31,488 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=0/pending
+2025-08-23 08:15:31,489 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 4/1)
+2025-08-23 08:15:31,489 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:31,489 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog with memory management
+2025-08-23 08:15:32,318 - utils.browser_manager - DEBUG - 🪟 Found 43 Chrome processes, total memory: 5351.2MB
+2025-08-23 08:15:32,318 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5351.2 MB
+2025-08-23 08:15:33,925 - utils.browser_manager - DEBUG - 🪟 Windows: 43 Chrome processes, 5350MB total
+2025-08-23 08:15:33,926 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=5351MB, Python=227MB, System=69.8%
+2025-08-23 08:15:33,926 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:33,926 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:33,926 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:33,927 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-23 08:15:33,927 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:33,927 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:33,927 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog (attempt 1/3)
+2025-08-23 08:15:33,927 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:33,928 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:33,928 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:35,585 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog in 2.25s...
+2025-08-23 08:15:37,843 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog (attempt 2/3)
+2025-08-23 08:15:37,844 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:37,844 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:37,844 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:39,796 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:39,796 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:15:39,885 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog (Size: 702881 bytes)
+2025-08-23 08:15:40,048 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-23 08:15:40,048 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2
+2025-08-23 08:15:40,049 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2 (attempt 1/3)
+2025-08-23 08:15:40,049 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:40,049 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:40,049 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2
+2025-08-23 08:15:41,581 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2 in 2.41s...
+2025-08-23 08:15:43,995 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2 (attempt 2/3)
+2025-08-23 08:15:43,996 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:43,996 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:43,996 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2
+2025-08-23 08:15:46,514 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2
+2025-08-23 08:15:46,515 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2
+2025-08-23 08:15:46,621 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=2 (Size: 704169 bytes)
+2025-08-23 08:15:46,772 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-23 08:15:46,773 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3
+2025-08-23 08:15:46,773 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3 (attempt 1/3)
+2025-08-23 08:15:46,773 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:46,774 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:46,774 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3
+2025-08-23 08:15:48,310 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3 in 1.63s...
+2025-08-23 08:15:49,951 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3 (attempt 2/3)
+2025-08-23 08:15:49,952 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:49,952 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:49,952 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3
+2025-08-23 08:15:51,101 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3
+2025-08-23 08:15:51,102 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3
+2025-08-23 08:15:51,203 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=3 (Size: 699727 bytes)
+2025-08-23 08:15:51,348 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-08-23 08:15:51,349 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4
+2025-08-23 08:15:51,349 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4 (attempt 1/3)
+2025-08-23 08:15:51,349 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:51,350 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:51,350 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4
+2025-08-23 08:15:53,021 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4 in 2.08s...
+2025-08-23 08:15:55,108 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4 (attempt 2/3)
+2025-08-23 08:15:55,108 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:55,108 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:55,109 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4
+2025-08-23 08:15:56,659 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4
+2025-08-23 08:15:56,659 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4
+2025-08-23 08:15:56,770 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=4 (Size: 704727 bytes)
+2025-08-23 08:15:56,928 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-08-23 08:15:56,929 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5
+2025-08-23 08:15:56,929 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5 (attempt 1/3)
+2025-08-23 08:15:56,929 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:56,930 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:56,930 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5
+2025-08-23 08:15:58,325 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5 in 1.57s...
+2025-08-23 08:15:59,905 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5 (attempt 2/3)
+2025-08-23 08:15:59,906 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:15:59,906 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:15:59,906 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5
+2025-08-23 08:16:02,735 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5
+2025-08-23 08:16:02,736 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5
+2025-08-23 08:16:02,825 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=5 (Size: 702761 bytes)
+2025-08-23 08:16:02,991 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-08-23 08:16:02,992 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6
+2025-08-23 08:16:02,992 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6 (attempt 1/3)
+2025-08-23 08:16:02,992 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:02,993 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:02,993 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6
+2025-08-23 08:16:04,634 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6 in 2.37s...
+2025-08-23 08:16:07,008 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6 (attempt 2/3)
+2025-08-23 08:16:07,008 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:07,008 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:07,009 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6
+2025-08-23 08:16:09,098 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6
+2025-08-23 08:16:09,098 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6
+2025-08-23 08:16:09,185 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=6 (Size: 707660 bytes)
+2025-08-23 08:16:09,341 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 6
+2025-08-23 08:16:09,342 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7
+2025-08-23 08:16:09,342 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7 (attempt 1/3)
+2025-08-23 08:16:09,343 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:09,343 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:09,343 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7
+2025-08-23 08:16:10,929 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7 in 2.27s...
+2025-08-23 08:16:13,199 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7 (attempt 2/3)
+2025-08-23 08:16:13,200 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:13,200 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:13,200 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7
+2025-08-23 08:16:15,459 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7
+2025-08-23 08:16:15,459 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7
+2025-08-23 08:16:15,550 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=7 (Size: 726292 bytes)
+2025-08-23 08:16:15,707 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 7
+2025-08-23 08:16:15,707 - configurable_supplier_scraper - INFO - Processing page 8: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8
+2025-08-23 08:16:15,707 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8 (attempt 1/3)
+2025-08-23 08:16:15,708 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:15,708 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:15,708 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8
+2025-08-23 08:16:17,315 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8 in 2.26s...
+2025-08-23 08:16:19,581 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8 (attempt 2/3)
+2025-08-23 08:16:19,581 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:19,581 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:19,582 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8
+2025-08-23 08:16:22,557 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8
+2025-08-23 08:16:22,558 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8
+2025-08-23 08:16:22,654 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=8 (Size: 697745 bytes)
+2025-08-23 08:16:22,798 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 8
+2025-08-23 08:16:22,799 - configurable_supplier_scraper - INFO - Processing page 9: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9
+2025-08-23 08:16:22,799 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9 (attempt 1/3)
+2025-08-23 08:16:22,799 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:22,800 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:22,800 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9
+2025-08-23 08:16:24,482 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9 in 1.92s...
+2025-08-23 08:16:26,419 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9 (attempt 2/3)
+2025-08-23 08:16:26,420 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:26,420 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:26,420 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9
+2025-08-23 08:16:28,892 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9
+2025-08-23 08:16:28,893 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9
+2025-08-23 08:16:29,011 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=9 (Size: 697505 bytes)
+2025-08-23 08:16:29,171 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 9
+2025-08-23 08:16:29,171 - configurable_supplier_scraper - INFO - Processing page 10: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10
+2025-08-23 08:16:29,172 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10 (attempt 1/3)
+2025-08-23 08:16:29,172 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:29,172 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:29,172 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10
+2025-08-23 08:16:30,781 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10 in 2.23s...
+2025-08-23 08:16:33,014 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10 (attempt 2/3)
+2025-08-23 08:16:33,014 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:33,015 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:33,015 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10
+2025-08-23 08:16:34,980 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10
+2025-08-23 08:16:34,980 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10
+2025-08-23 08:16:35,062 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=10 (Size: 696932 bytes)
+2025-08-23 08:16:35,220 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 10
+2025-08-23 08:16:35,221 - configurable_supplier_scraper - INFO - Processing page 11: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11
+2025-08-23 08:16:35,221 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11 (attempt 1/3)
+2025-08-23 08:16:35,221 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:35,222 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:35,222 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11
+2025-08-23 08:16:36,758 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11 in 2.32s...
+2025-08-23 08:16:39,077 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11 (attempt 2/3)
+2025-08-23 08:16:39,078 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:39,078 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:39,078 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11
+2025-08-23 08:16:40,236 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11
+2025-08-23 08:16:40,237 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11
+2025-08-23 08:16:40,325 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=11 (Size: 703633 bytes)
+2025-08-23 08:16:40,598 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 11
+2025-08-23 08:16:40,598 - configurable_supplier_scraper - INFO - Processing page 12: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12
+2025-08-23 08:16:40,599 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12 (attempt 1/3)
+2025-08-23 08:16:40,599 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:40,599 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:40,600 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12
+2025-08-23 08:16:42,287 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12 in 1.61s...
+2025-08-23 08:16:43,902 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12 (attempt 2/3)
+2025-08-23 08:16:43,902 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:43,902 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:43,903 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12
+2025-08-23 08:16:45,378 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12
+2025-08-23 08:16:45,379 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12
+2025-08-23 08:16:45,482 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=12 (Size: 700440 bytes)
+2025-08-23 08:16:45,627 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 12
+2025-08-23 08:16:45,627 - configurable_supplier_scraper - INFO - Processing page 13: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13
+2025-08-23 08:16:45,627 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13 (attempt 1/3)
+2025-08-23 08:16:45,627 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:45,628 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:45,628 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13
+2025-08-23 08:16:47,319 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13 in 2.27s...
+2025-08-23 08:16:49,596 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13 (attempt 2/3)
+2025-08-23 08:16:49,596 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:49,597 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:49,597 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13
+2025-08-23 08:16:51,132 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13
+2025-08-23 08:16:51,133 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13
+2025-08-23 08:16:51,240 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=13 (Size: 704642 bytes)
+2025-08-23 08:16:51,396 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 13
+2025-08-23 08:16:51,397 - configurable_supplier_scraper - INFO - Processing page 14: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14
+2025-08-23 08:16:51,397 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14 (attempt 1/3)
+2025-08-23 08:16:51,397 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:51,397 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:51,398 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14
+2025-08-23 08:16:52,908 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14 in 1.89s...
+2025-08-23 08:16:54,802 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14 (attempt 2/3)
+2025-08-23 08:16:54,802 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:54,803 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:54,803 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14
+2025-08-23 08:16:56,670 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14
+2025-08-23 08:16:56,670 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14
+2025-08-23 08:16:56,760 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=14 (Size: 701206 bytes)
+2025-08-23 08:16:56,929 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 14
+2025-08-23 08:16:56,929 - configurable_supplier_scraper - INFO - Processing page 15: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15
+2025-08-23 08:16:56,930 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15 (attempt 1/3)
+2025-08-23 08:16:56,930 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:16:56,930 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:16:56,930 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15
+2025-08-23 08:16:58,503 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15 in 2.25s...
+2025-08-23 08:17:00,773 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15 (attempt 2/3)
+2025-08-23 08:17:00,774 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:00,774 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:00,774 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15
+2025-08-23 08:17:03,445 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15
+2025-08-23 08:17:03,445 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15
+2025-08-23 08:17:03,548 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=15 (Size: 703764 bytes)
+2025-08-23 08:17:03,696 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 15
+2025-08-23 08:17:03,696 - configurable_supplier_scraper - INFO - Processing page 16: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16
+2025-08-23 08:17:03,697 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16 (attempt 1/3)
+2025-08-23 08:17:03,697 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:03,697 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:03,697 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16
+2025-08-23 08:17:05,256 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16 in 1.81s...
+2025-08-23 08:17:07,074 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16 (attempt 2/3)
+2025-08-23 08:17:07,074 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:07,075 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:07,075 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16
+2025-08-23 08:17:08,684 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16
+2025-08-23 08:17:08,684 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16
+2025-08-23 08:17:08,773 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=16 (Size: 707172 bytes)
+2025-08-23 08:17:08,931 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 16
+2025-08-23 08:17:08,932 - configurable_supplier_scraper - INFO - Processing page 17: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17
+2025-08-23 08:17:08,932 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17 (attempt 1/3)
+2025-08-23 08:17:08,932 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:08,933 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:08,933 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17
+2025-08-23 08:17:10,605 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17 in 1.80s...
+2025-08-23 08:17:12,409 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17 (attempt 2/3)
+2025-08-23 08:17:12,409 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:12,409 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:12,410 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17
+2025-08-23 08:17:13,935 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17
+2025-08-23 08:17:13,935 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17
+2025-08-23 08:17:14,017 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=17 (Size: 708745 bytes)
+2025-08-23 08:17:14,165 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 17
+2025-08-23 08:17:14,165 - configurable_supplier_scraper - INFO - Processing page 18: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18
+2025-08-23 08:17:14,166 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18 (attempt 1/3)
+2025-08-23 08:17:14,166 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:14,166 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:14,167 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18
+2025-08-23 08:17:15,814 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18 in 1.96s...
+2025-08-23 08:17:17,793 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18 (attempt 2/3)
+2025-08-23 08:17:17,793 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:17,794 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:17,794 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18
+2025-08-23 08:17:20,421 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18
+2025-08-23 08:17:20,421 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18
+2025-08-23 08:17:20,513 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=18 (Size: 710627 bytes)
+2025-08-23 08:17:20,678 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 18
+2025-08-23 08:17:20,678 - configurable_supplier_scraper - INFO - Processing page 19: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19
+2025-08-23 08:17:20,679 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19 (attempt 1/3)
+2025-08-23 08:17:20,679 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:20,679 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:20,680 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19
+2025-08-23 08:17:22,303 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19 in 2.27s...
+2025-08-23 08:17:24,581 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19 (attempt 2/3)
+2025-08-23 08:17:24,582 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:24,583 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:24,583 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19
+2025-08-23 08:17:25,904 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19
+2025-08-23 08:17:25,904 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19
+2025-08-23 08:17:26,027 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=19 (Size: 702559 bytes)
+2025-08-23 08:17:26,172 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 19
+2025-08-23 08:17:26,172 - configurable_supplier_scraper - INFO - Processing page 20: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20
+2025-08-23 08:17:26,172 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20 (attempt 1/3)
+2025-08-23 08:17:26,173 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:26,173 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:26,173 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20
+2025-08-23 08:17:27,800 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20 in 2.06s...
+2025-08-23 08:17:29,870 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20 (attempt 2/3)
+2025-08-23 08:17:29,870 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:29,871 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:29,871 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20
+2025-08-23 08:17:31,366 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20
+2025-08-23 08:17:31,366 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20
+2025-08-23 08:17:31,454 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=20 (Size: 705078 bytes)
+2025-08-23 08:17:31,616 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 20
+2025-08-23 08:17:31,616 - configurable_supplier_scraper - INFO - Processing page 21: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21
+2025-08-23 08:17:31,617 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21 (attempt 1/3)
+2025-08-23 08:17:31,617 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:31,617 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:31,617 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21
+2025-08-23 08:17:33,154 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21 in 1.94s...
+2025-08-23 08:17:35,102 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21 (attempt 2/3)
+2025-08-23 08:17:35,102 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:35,103 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:35,103 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21
+2025-08-23 08:17:38,101 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21
+2025-08-23 08:17:38,102 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21
+2025-08-23 08:17:38,220 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=21 (Size: 707614 bytes)
+2025-08-23 08:17:38,516 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 21
+2025-08-23 08:17:38,516 - configurable_supplier_scraper - INFO - Processing page 22: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22
+2025-08-23 08:17:38,516 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22 (attempt 1/3)
+2025-08-23 08:17:38,516 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:38,517 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:38,517 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22
+2025-08-23 08:17:40,044 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22 in 1.86s...
+2025-08-23 08:17:41,911 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22 (attempt 2/3)
+2025-08-23 08:17:41,912 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:41,912 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:41,912 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22
+2025-08-23 08:17:44,305 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22
+2025-08-23 08:17:44,305 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22
+2025-08-23 08:17:44,402 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=22 (Size: 705655 bytes)
+2025-08-23 08:17:44,554 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 22
+2025-08-23 08:17:44,554 - configurable_supplier_scraper - INFO - Processing page 23: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23
+2025-08-23 08:17:44,554 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23 (attempt 1/3)
+2025-08-23 08:17:44,555 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:44,555 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:44,555 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23
+2025-08-23 08:17:46,214 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23 in 1.59s...
+2025-08-23 08:17:47,805 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23 (attempt 2/3)
+2025-08-23 08:17:47,805 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:47,805 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:47,805 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23
+2025-08-23 08:17:49,902 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23
+2025-08-23 08:17:49,902 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23
+2025-08-23 08:17:49,980 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=23 (Size: 698730 bytes)
+2025-08-23 08:17:50,146 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 23
+2025-08-23 08:17:50,147 - configurable_supplier_scraper - INFO - Processing page 24: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24
+2025-08-23 08:17:50,147 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24 (attempt 1/3)
+2025-08-23 08:17:50,147 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:50,147 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:50,147 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24
+2025-08-23 08:17:51,682 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24 in 1.58s...
+2025-08-23 08:17:53,266 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24 (attempt 2/3)
+2025-08-23 08:17:53,266 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:53,266 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:53,267 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24
+2025-08-23 08:17:54,530 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24
+2025-08-23 08:17:54,530 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24
+2025-08-23 08:17:54,610 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=24 (Size: 700536 bytes)
+2025-08-23 08:17:54,754 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 24
+2025-08-23 08:17:54,754 - configurable_supplier_scraper - INFO - Processing page 25: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25
+2025-08-23 08:17:54,755 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25 (attempt 1/3)
+2025-08-23 08:17:54,755 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:54,755 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:54,755 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25
+2025-08-23 08:17:56,458 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25 in 2.24s...
+2025-08-23 08:17:58,714 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25 (attempt 2/3)
+2025-08-23 08:17:58,714 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:17:58,714 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:17:58,715 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25
+2025-08-23 08:18:01,231 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25
+2025-08-23 08:18:01,231 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25
+2025-08-23 08:18:01,341 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=25 (Size: 700191 bytes)
+2025-08-23 08:18:01,489 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 25
+2025-08-23 08:18:01,489 - configurable_supplier_scraper - INFO - Processing page 26: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26
+2025-08-23 08:18:01,490 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26 (attempt 1/3)
+2025-08-23 08:18:01,490 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:01,490 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:01,490 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26
+2025-08-23 08:18:03,316 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26 in 1.93s...
+2025-08-23 08:18:05,263 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26 (attempt 2/3)
+2025-08-23 08:18:05,264 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:05,264 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:05,264 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26
+2025-08-23 08:18:07,642 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26
+2025-08-23 08:18:07,642 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26
+2025-08-23 08:18:07,734 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=26 (Size: 699589 bytes)
+2025-08-23 08:18:07,896 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 26
+2025-08-23 08:18:07,897 - configurable_supplier_scraper - INFO - Processing page 27: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27
+2025-08-23 08:18:07,897 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27 (attempt 1/3)
+2025-08-23 08:18:07,897 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:07,898 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:07,898 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27
+2025-08-23 08:18:09,379 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27 in 1.99s...
+2025-08-23 08:18:11,380 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27 (attempt 2/3)
+2025-08-23 08:18:11,380 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:11,380 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:11,381 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27
+2025-08-23 08:18:12,764 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27
+2025-08-23 08:18:12,764 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27
+2025-08-23 08:18:12,863 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=27 (Size: 691838 bytes)
+2025-08-23 08:18:13,011 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 27
+2025-08-23 08:18:13,011 - configurable_supplier_scraper - INFO - Processing page 28: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28
+2025-08-23 08:18:13,011 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28 (attempt 1/3)
+2025-08-23 08:18:13,012 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:13,012 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:13,012 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28
+2025-08-23 08:18:14,596 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28 in 1.90s...
+2025-08-23 08:18:16,506 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28 (attempt 2/3)
+2025-08-23 08:18:16,507 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:16,507 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:16,507 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28
+2025-08-23 08:18:19,274 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28
+2025-08-23 08:18:19,275 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28
+2025-08-23 08:18:19,373 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=28 (Size: 699967 bytes)
+2025-08-23 08:18:19,530 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 28
+2025-08-23 08:18:19,531 - configurable_supplier_scraper - INFO - Processing page 29: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29
+2025-08-23 08:18:19,531 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29 (attempt 1/3)
+2025-08-23 08:18:19,531 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:19,532 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:19,532 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29
+2025-08-23 08:18:21,197 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29 in 2.00s...
+2025-08-23 08:18:23,211 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29 (attempt 2/3)
+2025-08-23 08:18:23,212 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:23,212 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:23,212 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29
+2025-08-23 08:18:24,514 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29
+2025-08-23 08:18:24,515 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29
+2025-08-23 08:18:24,635 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=29 (Size: 707022 bytes)
+2025-08-23 08:18:24,799 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 29
+2025-08-23 08:18:24,799 - configurable_supplier_scraper - INFO - Processing page 30: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30
+2025-08-23 08:18:24,799 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30 (attempt 1/3)
+2025-08-23 08:18:24,800 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:24,800 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:24,800 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30
+2025-08-23 08:18:26,391 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30 in 1.66s...
+2025-08-23 08:18:28,054 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30 (attempt 2/3)
+2025-08-23 08:18:28,054 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:28,055 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:28,055 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30
+2025-08-23 08:18:30,585 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30
+2025-08-23 08:18:30,585 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30
+2025-08-23 08:18:30,668 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=30 (Size: 656175 bytes)
+2025-08-23 08:18:30,806 - configurable_supplier_scraper - INFO - Found 17 new product URLs on page 30
+2025-08-23 08:18:30,806 - configurable_supplier_scraper - INFO - Processing page 31: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31
+2025-08-23 08:18:30,807 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31 (attempt 1/3)
+2025-08-23 08:18:30,807 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:30,807 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:30,808 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31
+2025-08-23 08:18:32,235 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31 in 2.29s...
+2025-08-23 08:18:34,530 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31 (attempt 2/3)
+2025-08-23 08:18:34,530 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:34,530 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:34,530 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31
+2025-08-23 08:18:36,096 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31
+2025-08-23 08:18:36,096 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31
+2025-08-23 08:18:36,154 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog?p=31 (Size: 393309 bytes)
+2025-08-23 08:18:36,229 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 31
+2025-08-23 08:18:36,230 - configurable_supplier_scraper - INFO - Collected 597 total product URLs across 31 pages
+2025-08-23 08:18:36,230 - configurable_supplier_scraper - INFO - Found 597 total product URLs across all pages
+2025-08-23 08:18:36,230 - utils.url_cache_filter - DEBUG - 🔄 URLs already loaded for poundwholesale.co.uk: 9940 URLs
+2025-08-23 08:18:36,230 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 9940 cached URLs for efficiency filtering
+2025-08-23 08:18:36,231 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 5 new URLs, 592 already cached
+2025-08-23 08:18:36,231 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 5 new URLs need processing, 592 already cached
+2025-08-23 08:18:36,231 - configurable_supplier_scraper - INFO - Visiting product page 1/5: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:36,231 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml (attempt 1/3)
+2025-08-23 08:18:36,231 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:36,232 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:36,232 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:37,990 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml in 2.18s...
+2025-08-23 08:18:40,166 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml (attempt 2/3)
+2025-08-23 08:18:40,167 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:40,167 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:40,167 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:42,649 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:42,649 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:42,756 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml (Size: 735051 bytes)
+2025-08-23 08:18:43,080 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 1 to shared accumulator (total: 1057)
+2025-08-23 08:18:43,081 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Dr J's Just 4 Dogs 2-In-1 Lemon Drizzle Conditioning Shampoo 500ml - £0.87 (EAN: 5025416230044)
+2025-08-23 08:18:43,081 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:43,081 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-lemon-drizzle-conditioning-shampoo-500ml
+2025-08-23 08:18:43,087 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:18:43,088 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:18:43,088 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=1/pending
+2025-08-23 08:18:43,089 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1057/5
+2025-08-23 08:18:43,089 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1057 processed (total in cache: 1057)
+2025-08-23 08:18:43,089 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1057
+2025-08-23 08:18:43,089 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1057, frequency=2, enabled=True
+2025-08-23 08:18:43,090 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1057, modulo=1
+2025-08-23 08:18:43,095 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:18:43,096 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:18:43,096 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=1/pending
+2025-08-23 08:18:43,096 - configurable_supplier_scraper - INFO - Visiting product page 2/5: https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:43,097 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm (attempt 1/3)
+2025-08-23 08:18:43,097 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:43,097 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:43,098 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:44,683 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm in 2.25s...
+2025-08-23 08:18:46,934 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm (attempt 2/3)
+2025-08-23 08:18:46,935 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:46,935 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:46,935 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:48,102 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:48,102 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:48,196 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm (Size: 730565 bytes)
+2025-08-23 08:18:48,385 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 2 to shared accumulator (total: 1058)
+2025-08-23 08:18:48,386 - configurable_supplier_scraper - INFO - ✅ Extracted product 2: Love Of Pets Fragranced Doggy Bags 80 Pack 32cm X 36cm - £0.38 (EAN: 5045737400025)
+2025-08-23 08:18:48,386 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:48,386 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/love-of-pets-fragranced-doggy-bags-80-pack-32cm-x-36cm
+2025-08-23 08:18:48,392 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:18:48,394 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:18:48,394 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=2/pending
+2025-08-23 08:18:48,394 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1058/5
+2025-08-23 08:18:48,395 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1058 processed (total in cache: 1058)
+2025-08-23 08:18:48,395 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1058
+2025-08-23 08:18:48,395 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1058, frequency=2, enabled=True
+2025-08-23 08:18:48,395 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1058, modulo=0
+2025-08-23 08:18:48,395 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:18:48,396 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-23 08:18:48,396 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-23 08:18:48,396 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-08-23 08:18:48,397 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 1058 products to cache...
+2025-08-23 08:18:48,397 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:18:48,453 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9940 existing products for deduplication
+2025-08-23 08:18:48,457 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 1056 URL duplicates and 2 EAN duplicates.
+2025-08-23 08:18:48,458 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:18:48,608 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9940 products (0 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5931994 bytes)
+2025-08-23 08:18:48,611 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 1058 products to cache (every 2 products)
+2025-08-23 08:18:48,617 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:18:48,618 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:18:48,618 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=2/pending
+2025-08-23 08:18:48,619 - configurable_supplier_scraper - INFO - Visiting product page 3/5: https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:48,619 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/ (attempt 1/3)
+2025-08-23 08:18:48,620 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:48,620 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:48,620 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:50,237 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/ in 1.71s...
+2025-08-23 08:18:51,956 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/ (attempt 2/3)
+2025-08-23 08:18:51,957 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:51,958 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:51,958 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:54,502 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:54,503 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:54,596 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/ (Size: 744055 bytes)
+2025-08-23 08:18:54,779 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 3 to shared accumulator (total: 1059)
+2025-08-23 08:18:54,780 - configurable_supplier_scraper - INFO - ✅ Extracted product 3: Smart Choice TPRTreat Dispensing Animal Dog Toy 12cm Assorted Colours - £0.77 (EAN: 5052516125154)
+2025-08-23 08:18:54,780 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:54,780 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/catalog/product/view/id/19622/s/smart-choice-tpr-treat-dispensing-animal-dog-toy-12cm-assorted-colours/category/142/
+2025-08-23 08:18:54,785 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:18:54,786 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:18:54,787 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=3/pending
+2025-08-23 08:18:54,787 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1059/5
+2025-08-23 08:18:54,787 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1059 processed (total in cache: 1059)
+2025-08-23 08:18:54,788 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1059
+2025-08-23 08:18:54,788 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1059, frequency=2, enabled=True
+2025-08-23 08:18:54,788 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1059, modulo=1
+2025-08-23 08:18:54,794 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:18:54,795 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:18:54,795 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=3/pending
+2025-08-23 08:18:54,795 - configurable_supplier_scraper - INFO - Visiting product page 4/5: https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm
+2025-08-23 08:18:54,796 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm (attempt 1/3)
+2025-08-23 08:18:54,796 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:54,796 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:54,796 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm
+2025-08-23 08:18:56,461 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm in 1.97s...
+2025-08-23 08:18:58,439 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm (attempt 2/3)
+2025-08-23 08:18:58,439 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:18:58,440 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:18:58,440 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm
+2025-08-23 08:19:00,731 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm
+2025-08-23 08:19:00,732 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm
+2025-08-23 08:19:00,818 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/sweet-dreams-heritage-pet-bed-large-71cm-x-58cm-x-23cm (Size: 736515 bytes)
+2025-08-23 08:19:01,014 - configurable_supplier_scraper - INFO - 🛑 PRICE FILTER: Excluding 'Sweet Dreams Heritage Pet Bed Large 71cm X 58cm X 23cm' - £20.44 > £20.0 limit
+2025-08-23 08:19:01,020 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:01,021 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:01,021 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=4/pending
+2025-08-23 08:19:01,021 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1059/5
+2025-08-23 08:19:01,022 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1059 processed (total in cache: 1059)
+2025-08-23 08:19:01,022 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1059
+2025-08-23 08:19:01,022 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1059, frequency=2, enabled=True
+2025-08-23 08:19:01,022 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1059, modulo=1
+2025-08-23 08:19:01,027 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:01,028 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:01,029 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=4/pending
+2025-08-23 08:19:01,029 - configurable_supplier_scraper - INFO - Visiting product page 5/5: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:01,029 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml (attempt 1/3)
+2025-08-23 08:19:01,030 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:01,030 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:01,030 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:02,638 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml in 2.30s...
+2025-08-23 08:19:04,940 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml (attempt 2/3)
+2025-08-23 08:19:04,940 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:04,941 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:04,941 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:07,279 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:07,280 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:07,365 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml (Size: 731825 bytes)
+2025-08-23 08:19:07,607 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 5 to shared accumulator (total: 1060)
+2025-08-23 08:19:07,608 - configurable_supplier_scraper - INFO - ✅ Extracted product 5: Dr J's Just 4 Dogs 2-In-1 Soothing Shampoo 500ml - £0.92 (EAN: 5025416230044)
+2025-08-23 08:19:07,608 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:07,608 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/dr-j-s-just-4-dogs-2-in-1-soothing-shampoo-500ml
+2025-08-23 08:19:07,614 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:07,615 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:07,615 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=5/pending
+2025-08-23 08:19:07,616 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 1060/5
+2025-08-23 08:19:07,616 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 1060 processed (total in cache: 1060)
+2025-08-23 08:19:07,616 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 1060
+2025-08-23 08:19:07,616 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 1060, frequency=2, enabled=True
+2025-08-23 08:19:07,617 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=1060, modulo=0
+2025-08-23 08:19:07,617 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:19:07,618 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path is absolute: True
+2025-08-23 08:19:07,618 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json
+2025-08-23 08:19:07,618 - PassiveExtractionWorkflow - INFO - ✅ Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-08-23 08:19:07,618 - PassiveExtractionWorkflow - INFO - 💾 CACHE SAVE: Starting save of 1060 products to cache...
+2025-08-23 08:19:07,619 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:19:07,680 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Loaded 9940 existing products for deduplication
+2025-08-23 08:19:07,688 - PassiveExtractionWorkflow - INFO - 🔄 DEDUPLICATION: Skipped 1056 URL duplicates and 4 EAN duplicates.
+2025-08-23 08:19:07,688 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Attempting to save to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-08-23 08:19:07,868 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved 9940 products (0 new) to cache: poundwholesale-co-uk_products_cache.json (size: 5931994 bytes)
+2025-08-23 08:19:07,871 - PassiveExtractionWorkflow - INFO - 💾 PERIODIC CACHE SAVE: Saved 1060 products to cache (every 2 products)
+2025-08-23 08:19:07,877 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:07,878 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:07,878 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=5/pending
+2025-08-23 08:19:08,694 - utils.browser_manager - DEBUG - 🪟 Found 44 Chrome processes, total memory: 5441.8MB
+2025-08-23 08:19:08,695 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5441.8 MB
+2025-08-23 08:19:10,283 - utils.browser_manager - DEBUG - 🪟 Windows: 44 Chrome processes, 5441MB total
+2025-08-23 08:19:10,283 - configurable_supplier_scraper - INFO - 🧠 Post-scraping Memory: Chrome=5441MB, Python=252MB, System=67.2%
+2025-08-23 08:19:10,284 - configurable_supplier_scraper - INFO - Successfully extracted 4 products from https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog
+2025-08-23 08:19:10,284 - PassiveExtractionWorkflow - INFO - PAGINATION[C4 wholesale-dog]: pages=31 urls_page=20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,17,0 total=597
+2025-08-23 08:19:10,285 - utils.fixed_enhanced_state_manager - INFO - 🔍 REAL-TIME DISCOVERY: Category https://www.poundwholesale.co.uk/pet-supplies/whol... discovered 597 products (was 5)
+2025-08-23 08:19:10,291 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:10,292 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:10,292 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=5/pending
+2025-08-23 08:19:10,293 - utils.fixed_enhanced_state_manager - INFO - ✅ REAL-TIME UPDATE: Category total updated to 597 products
+2025-08-23 08:19:10,298 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:10,299 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:10,299 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=5/597
+2025-08-23 08:19:10,300 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Set to 597 products for category https://www.poundwholesale.co.uk/pet-supplies/whol...
+2025-08-23 08:19:10,305 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:10,306 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:10,306 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=3/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog prod_idx=5/597
+2025-08-23 08:19:10,306 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog → 597 products (snapshot taken)
+2025-08-23 08:19:10,316 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: https-www-poundwholesale-co-uk-pet-supplies-wholes.json (6 entries) saved successfully
+2025-08-23 08:19:10,317 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST: 597 URLs → OUTPUTS\manifests\poundwholesale.co.uk\https-www-poundwholesale-co-uk-pet-supplies-wholes.json
+2025-08-23 08:19:10,318 - PassiveExtractionWorkflow - INFO - MANIFEST UPDATE[C4 https-www-poundwholesale-co-uk-pet-supplies-wholes]: overwritten=true prev=527 curr=597
+2025-08-23 08:19:10,318 - PassiveExtractionWorkflow - WARNING - MANIFEST COUNT CHANGE: https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog changed from 527 to 597 URLs
+2025-08-23 08:19:10,318 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog: Found 597 products across 31 pages.
+2025-08-23 08:19:10,318 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 4 raw products extracted, 1060 total products accumulated
+2025-08-23 08:19:10,319 - PassiveExtractionWorkflow - INFO - 🔄 STATE UPDATE: Updated category https://www.poundwholesale.co.uk/pet-supplies/wholesale-dog with 597 discovered products
+2025-08-23 08:19:10,319 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 1060 total products extracted so far
+2025-08-23 08:19:10,390 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 8804 processed EANs and 9065 processed URLs from linking map
+2025-08-23 08:19:10,390 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-08-23 08:19:10,391 - PassiveExtractionWorkflow - DEBUG - 🔄 Linking map hit (EAN): Smart Choice TPRTreat Dispensing Animal Dog Toy 12cm Assorted Colours - skipping extraction
+2025-08-23 08:19:10,391 - PassiveExtractionWorkflow - INFO - 🔍 FILTER SUMMARY: in=1060 skip=1060 needs_extraction=0
+2025-08-23 08:19:10,394 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 1060 total cached products → 0 unprocessed products
+2025-08-23 08:19:10,394 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 1060 already processed products
+2025-08-23 08:19:10,394 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 5: categories 5-5
+2025-08-23 08:19:10,450 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:19:10,510 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION DETECTED: Found 8 cached products but resuming from index 9149
+2025-08-23 08:19:10,510 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category
+2025-08-23 08:19:10,510 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-08-23 08:19:10,511 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-08-23 08:19:10,575 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 9940 products in poundwholesale-co-uk_products_cache.json
+2025-08-23 08:19:10,639 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 9940 total → 1056 unprocessed (9065 already in linking map)
+2025-08-23 08:19:10,639 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 89.4% products skipped (already processed)
+2025-08-23 08:19:10,640 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-08-23 08:19:10,640 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-08-23 08:19:10,640 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-08-23 08:19:10,641 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:10,641 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.poundwholesale.co.uk
+2025-08-23 08:19:15,404 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-08-23 08:19:15,404 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-08-23 08:19:19,737 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £1.02
+2025-08-23 08:19:19,738 - tools.supplier_authentication_service - INFO - ✅ Already logged in! Price access verified: True
+2025-08-23 08:19:19,738 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-08-23 08:19:19,743 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (26 entries) saved successfully
+2025-08-23 08:19:19,744 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-08-23 08:19:19,745 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=4/1 url=https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat prod_idx=0/pending
+2025-08-23 08:19:19,745 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 5/1)
+2025-08-23 08:19:19,746 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:19,746 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat with memory management
+2025-08-23 08:19:20,526 - utils.browser_manager - DEBUG - 🪟 Found 44 Chrome processes, total memory: 5455.5MB
+2025-08-23 08:19:20,527 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5455.5 MB
+2025-08-23 08:19:22,097 - utils.browser_manager - DEBUG - 🪟 Windows: 44 Chrome processes, 5454MB total
+2025-08-23 08:19:22,098 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=5455MB, Python=252MB, System=67.9%
+2025-08-23 08:19:22,098 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:22,098 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:22,099 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:22,099 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-08-23 08:19:22,099 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:22,099 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:22,099 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat (attempt 1/3)
+2025-08-23 08:19:22,100 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:22,100 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:22,100 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:24,226 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat in 2.10s...
+2025-08-23 08:19:26,326 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat (attempt 2/3)
+2025-08-23 08:19:26,327 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:26,327 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:26,327 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:29,053 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:29,054 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat
+2025-08-23 08:19:29,155 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat (Size: 694317 bytes)
+2025-08-23 08:19:29,351 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-08-23 08:19:29,351 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2
+2025-08-23 08:19:29,352 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2 (attempt 1/3)
+2025-08-23 08:19:29,352 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:29,352 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:29,353 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2
+2025-08-23 08:19:31,632 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2 in 1.77s...
+2025-08-23 08:19:33,399 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2 (attempt 2/3)
+2025-08-23 08:19:33,399 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:33,400 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:33,400 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2
+2025-08-23 08:19:34,944 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2
+2025-08-23 08:19:34,945 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2
+2025-08-23 08:19:35,033 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=2 (Size: 697704 bytes)
+2025-08-23 08:19:35,185 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-08-23 08:19:35,185 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=3
+2025-08-23 08:19:35,186 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=3 (attempt 1/3)
+2025-08-23 08:19:35,186 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-23 08:19:35,186 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-08-23 08:19:35,186 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/pet-supplies/wholesale-cat?p=3

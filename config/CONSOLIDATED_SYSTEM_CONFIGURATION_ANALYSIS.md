@@ -1,346 +1,147 @@
-# Amazon FBA Agent System v32 - Consolidated Configuration Analysis
-
-**Version**: 3.5.0  
-**Analysis Date**: 2025-07-16  
-**System**: Production Environment - Exhaustive Mode  
-**Consolidated From**: system-config-toggle-v2.md, evidence_backed_toggle_analysis_report.md, comprehensive_toggle_analysis_report.md, comprehensive_toggle_analysis_report_corrected.md
-
----
-
-## 🎯 CRITICAL SYSTEM TOGGLES - EVIDENCE-BACKED ANALYSIS
-
-### **1. CORE SYSTEM SETTINGS**
-
-#### `max_products: 999999999`
-**Purpose**: Removes artificial product extraction limits for exhaustive processing  
-**System Impact**: 
-- **File**: `tools/passive_extraction_workflow_latest.py:2540-2560`
-- **Behavior**: Allows processing of ALL products in ALL categories without arbitrary cutoffs
-- **Evidence**: System log shows `max_products_to_process: 999999999` 
-- **Previous Finding**: Standard configs typically limit to 15-1000 products
-- **Justification**: Exhaustive mode requires unlimited processing for complete market analysis
-
-#### `max_products_per_category: 999999999`
-**Purpose**: Removes per-category product limits  
-**System Impact**:
-- **File**: `tools/configurable_supplier_scraper.py:180-200`
-- **Code**: `max_products_per_category = self.system_config.get("system", {}).get("max_products_per_category", 999999)`
-- **Behavior**: Processes every product within each category, not just samples
-- **Critical**: Prevents premature category switching in exhaustive mode
-- **Previous Issue**: Limited configs (4-10 products) caused incomplete category analysis
-- **Evidence**: Cache shows unlimited product extraction per category
-
-#### `max_products_per_cycle: 100`
-**Purpose**: Controls memory management during Amazon analysis cycles  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:2580-2600`
-- **Behavior**: Processes 100 products before memory cleanup/garbage collection
-- **Memory Protection**: Prevents memory bloat during long-running exhaustive extractions
-- **Previous Setting**: 3-4 products (too conservative for exhaustive mode)
-- **Optimal Value**: Balance between performance and stability
-
-#### `supplier_extraction_batch_size: 20`
-**Purpose**: Controls concurrent supplier page processing - how many pages for the max_category per page ( e.g: 3 max per category and max batch = 3, then 1 product from each page, if =1 then 3 prodict from 1 page) 
-**System Impact**:
-- **File**: `tools/configurable_supplier_scraper.py:150-170`
-- **Code**: `batch_size = self.system_config.get("system", {}).get("supplier_extraction_batch_size", 3)`
-- **Behavior**: Scrapes 20 supplier pages simultaneously
-- **Performance**: Optimized for poundwholesale.co.uk rate limits
-- **Previous Testing**: Higher values (50+) caused authentication failures
-- **Evidence**: System processes categories in batches of 20
-
-#### `reuse_browser: true`
-**Purpose**: Maintains browser session across operations  
-**System Impact**:
-- **File**: `tools/browser_manager.py:45-80`
-- **Performance Benefit**: 10x faster than creating new browser instances
-- **Authentication**: Preserves login state for extended extractions
-- **Memory**: Requires monitoring for long-running sessions
-- **Critical**: Essential for 24-72 hour exhaustive runs
-
-#### `max_tabs: 3`
-**Purpose**: Controls concurrent browser tab usage  
-**System Impact**:
-- **File**: `tools/browser_manager.py:90-120`
-- **Resource Management**: Prevents browser memory exhaustion
-- **Optimal**: Balances concurrency with stability for supplier sites
-
----
-
-### **2. PROCESSING LIMITS CONFIGURATION**
-
-#### `max_price_gbp: 20.0` & `min_price_gbp: 0.01`
-**Purpose**: Price filtering for target market segment  
-**System Impact**:
-- **File**: `tools/configurable_supplier_scraper.py:220-240`
-- **Business Logic**: Focuses on low-competition, quick-turn products
-- **ROI Optimization**: £20 limit targets higher margin opportunities
-- **Integration**: Used in supplier filtering and financial calculations
-- **Evidence**: System log shows price range filtering applied
-
-#### `price_midpoint_gbp: 10.0`
-**Purpose**: Statistical analysis reference point  
-**System Impact**:
-- **File**: `tools/FBA_Financial_calculator.py:160-180`
-- **Analytics**: Used for profit distribution analysis
-- **Reporting**: Separates "low" vs "high" priced products in reports
-
----
-
-### **3. SUPPLIER CACHE CONTROL - DATA PROTECTION (FIXED)**
-
-#### `update_frequency_products: 10` (CRITICAL FIX IMPLEMENTED)
-**Purpose**: Saves cache every 10 products during extraction  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:2658-2706` (Fixed implementation)
-- **Data Protection**: Maximum data loss reduced from entire categories to 10 products
-- **Previous Issue**: Only saved after complete categories, causing major data loss
-- **Fix Details**: Implemented shared state between scraper and workflow
-- **Code Evidence**: `if self.product_count % cache_frequency == 0: self._save_cache_with_validation()`
-- **Evidence**: System log shows `💾 CACHE SAVE: Starting save of N products to cache...`
-
-#### `force_update_on_interruption: true`
-**Purpose**: Ensures cache save when system is interrupted  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:2720-2750`
-- **Recovery**: Enables precise resumption from interruption point
-- **Signal Handling**: Captures CTRL+C and system shutdowns
-- **Critical**: Essential for exhaustive mode reliability
-
-**Where Data is Saved - VERIFIED:**
-- **Location**: `OUTPUTS/cached_products/{supplier_name}_products_cache.json`
-- **Evidence**: File `poundwholesale-co-uk_products_cache.json` created with real product data
-- **Content**: JSON array with EAN, price, URL, availability, scraped timestamps
-
----
-
-### **4. SUPPLIER EXTRACTION PROGRESS - RECOVERY SYSTEM**
-
-#### `recovery_mode: "product_resume"`
-**Purpose**: Enables granular recovery at product level  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:2800-2850`
-- **Granularity**: Resumes from exact product within category/subcategory
-- **Previous Options**: `category_resume`, `subcategory_resume` (less precise)
-- **State File**: `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json`
-- **Evidence**: Tracks `current_category_index`, `current_subcategory_index`, `current_product_index`
-- **Configuration Rule**: **SINGLE VALUE ONLY** - Choose one mode, not multiple
-
-#### `batch_save_frequency: 10`
-**Purpose**: Saves processing state every 10 products  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:2760-2790`
-- **Recovery Precision**: Limits maximum position loss to 10 products
-- **Performance**: Balanced to avoid excessive I/O while maintaining recovery precision
-
-**Evidence from Processing State File:**
-```json
 {
-  "supplier_extraction_progress": {
-    "current_category_index": 2,
-    "current_subcategory_index": 2,
-    "current_product_index_in_category": 0,
-    "current_product_url": "https://www.poundwholesale.co.uk/..."
-  }
-}
-```
-
----
-
-### **5. HYBRID PROCESSING - MEMORY MANAGEMENT**
-
-#### `switch_to_amazon_after_categories: 1`
-**Purpose**: Switches to Amazon analysis after processing 1 category  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:3200-3250`
-- **Memory Management**: Prevents memory accumulation during long extractions
-- **Live Analysis**: Enables real-time financial analysis instead of batch processing
-- **Previous Setting**: 50 categories caused memory issues in exhaustive mode
-- **Optimal**: 1 category ensures immediate analysis and memory cleanup
-
-#### `chunk_size_categories: 1`
-**Purpose**: Processes categories individually for memory control  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:3100-3150`
-- **Memory Protection**: Clears cache between category chunks
-- **Exhaustive Mode**: Essential for processing all 276 categories
-- **Previous Issue**: Larger chunks (10+) caused memory overflow
-
-**BATCHES vs CHUNKS - CLARIFIED:**
-- **BATCHES**: Memory management during supplier scraping (groups categories)
-- **CHUNKS**: Workflow control (when to switch between supplier/Amazon phases)
-- **Evidence**: 327 batch-related code integrations, 73 chunk-related integrations
-
----
-
-### **6. BATCH SYNCHRONIZATION - PERFORMANCE OPTIMIZATION**
-
-#### `enabled: false`
-**Purpose**: Disables automatic batch size synchronization  
-**System Impact**:
-- **File**: `tools/passive_extraction_workflow_latest.py:2400-2450`
-- **Flexibility**: Allows independent optimization of different batch sizes
-- **Performance**: Prevents forced synchronization that may not be optimal
-- **Manual Control**: Enables fine-tuning for specific operations
-- **Evidence**: System log shows `⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected` when enabled
-
----
-
-## 🔧 ADDITIONAL CONFIGURATION SECTIONS - INTEGRATION STATUS
-
-### **Performance Settings** - ✅ INTEGRATED
-- **`max_concurrent_requests: 8`**: Controls API call concurrency
-- **`request_timeout_seconds: 45`**: Prevents hanging requests
-- **Integration**: Used throughout scraper components
-- **Importance**: HIGH - Prevents rate limiting and timeouts
-
-### **Cache Management** - ✅ INTEGRATED
-- **`enabled: true`**: Enables all caching mechanisms
-- **`ttl_hours: 48`**: Cache validity period
-- **Integration**: Used in supplier scraper, Amazon data, linking maps
-- **Importance**: HIGH - Essential for performance and recovery
-
-### **Monitoring** - ✅ INTEGRATED
-- **`enabled: true`**: Enables system monitoring
-- **`log_level: "INFO"`**: Controls logging verbosity
-- **Integration**: Used throughout all components
-- **Importance**: MEDIUM - Important for debugging and optimization
-
-### **Chrome Browser Control** - ✅ INTEGRATED
-- **`headless: false`**: Keeps browser visible for debugging
-- **`extensions: ["Keepa", "SellerAmp"]`**: Required for data extraction
-- **Integration**: Used in browser manager and Amazon scraper
-- **Importance**: HIGH - Essential for Amazon data extraction
-
-### **Analysis Criteria** - ❌ NOT INTEGRATED (Uses Environment Variables)
-- **`min_roi_percent: 15.0`**: Uses `MIN_ROI_PERCENT` env var instead
-- **`min_rating: 3.0`**: Uses `MIN_RATING` env var instead
-- **Code Evidence**: `MIN_ROI_PERCENT = float(os.getenv("MIN_ROI_PERCENT", "35.0"))`
-- **Integration**: Environment variables override config toggles
-- **Importance**: HIGH - Drives business decision logic (via env vars)
-
-### **Amazon Marketplace Settings** - ✅ INTEGRATED
-- **`marketplace: "amazon.co.uk"`**: UK marketplace targeting
-- **`vat_rate: 0.2`**: 20% UK VAT rate
-- **Integration**: Used in financial calculator, fee calculations
-- **Importance**: HIGH - Critical for accurate financial analysis
-
-### **Authentication** - ✅ INTEGRATED
-- **`enabled: true`**: Enables supplier authentication
-- **`startup_verification: true`**: Verifies login at startup
-- **Integration**: Used in supplier scraper authentication
-- **Importance**: HIGH - Essential for supplier access
-
-### **AI Features** - ❌ NOT INTEGRATED (Disabled by Design)
-- **`category_selection.enabled: false`**: AI category selection disabled
-- **`product_matching: enabled`**: Uses AI for product matching
-- **Integration Status**: Uses predefined categories from `poundwholesale_categories.json`
-- **Importance**: LOW - System uses deterministic approach
-
-### **Integrations** - ⚠️ MIXED STATUS
-- **`keepa.enabled: true`**: Keepa integration active (HIGH IMPORTANCE)
-- **`openai.enabled: false`**: OpenAI disabled (LOW IMPORTANCE - disabled)
-- **Integration**: Keepa essential for Amazon data, OpenAI currently unused
-
----
-
-## 📊 TOGGLE EXCLUSION ANALYSIS - EXHAUSTIVE MODE
-
-### **Toggles That May EXCLUDE Products in Finite Mode:**
-
-#### **1. Product Limits (RESOLVED in Exhaustive Mode)**
-- **Previous**: `max_products: 15` → **Current**: `999999999`
-- **Previous**: `max_products_per_category: 4` → **Current**: `999999999`
-- **Impact**: Removed 99.9% exclusion rate
-- **Evidence**: System can now process all 276 categories completely
-
-#### **2. Price Filters (Intentional Exclusion)**
-- **Current**: `min_price_gbp: 0.01`, `max_price_gbp: 20.0`
-- **Business Logic**: Targets profitable £0.01-£20 segment
-- **Evidence**: System excludes products outside price range
-- **Recommendation**: Keep current settings for ROI optimization
-
-#### **3. Batch Synchronization (Disabled)**
-- **Current**: `batch_synchronization.enabled: false`
-- **Risk**: When enabled, forces equal product counts per category
-- **Solution**: Disabled to allow natural distribution
-- **Evidence**: System processes categories independently
-
-### **Duplicate Toggles Identified:**
-1. **`processing_limits.max_products_per_category`** - ❌ NOT USED
-2. **`system.max_products_per_category`** - ✅ FUNCTIONAL (takes precedence)
-3. **`hybrid_processing.chunked.*`** vs **`processing_modes.chunked.*`** - Redundant sections
-
----
-
-## 📈 EXHAUSTIVE MODE CONFIGURATION VALIDATION
-
-**Based on current system_config.json:**
-
-### **✅ VERIFIED WORKING CONFIGURATIONS:**
-- Product-level cache saves (`update_frequency_products: 10`)
-- Product-level recovery (`recovery_mode: "product_resume"`)
-- Memory management (hybrid processing with `chunk_size: 1`)
-- Price filtering (`min/max_price_gbp`)
-- Browser session reuse (`reuse_browser: true`)
-- Keepa data extraction (extensions enabled)
-
-### **⚠️ REQUIRES MONITORING:**
-- Long-term memory usage with `reuse_browser: true`
-- Authentication stability with batch processing
-- Cache file growth with unlimited product extraction
-
-### **❌ KNOWN LIMITATIONS:**
-- AI category selection not implemented (uses predefined categories)
-- OpenAI integration dormant
-- Analysis thresholds use environment variables instead of config
-
----
-
-## 🎯 RECOMMENDATIONS FOR PRODUCTION USE
-
-### **Immediate Actions:**
-1. Monitor cache file sizes during exhaustive runs
-2. Implement cache rotation for files >2GB
-3. Add memory usage alerts for browser sessions
-4. Validate authentication token refresh intervals
-
-### **Performance Optimization:**
-1. Consider increasing `max_tabs` to 5 for faster scraping (test first)
-2. Implement dynamic `update_frequency_products` based on processing speed
-3. Add intelligent browser restart based on memory usage
-
-### **Data Protection:**
-1. Implement automatic backups every 1000 products
-2. Add cache integrity validation on startup
-3. Implement state checkpoint compression for large extractions
-
-### **Configuration Cleanup:**
-1. Remove duplicate toggle `processing_limits.max_products_per_category`
-2. Consolidate hybrid processing toggles (remove redundant sections)
-3. Migrate analysis thresholds from environment variables to config
-4. Add schema validation for configuration integrity
-
----
-
-## 📋 EXPECTED EXHAUSTIVE MODE RESULTS
-
-**System Capacity:**
-- **Categories**: All 276 categories (100% coverage)
-- **Products**: 15,000-100,000+ products expected
-- **Runtime**: 24-72 hours for complete processing
-- **Data Loss Risk**: Maximum 10 products (cache frequency)
-- **Memory Management**: Chunked processing prevents crashes
-
-**Output Files:**
-- **Supplier Cache**: `OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json`
-- **Amazon Data**: `OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_{ASIN}_{EAN}.json`
-- **Financial Reports**: `OUTPUTS/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv`
-- **Processing State**: `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json`
-
----
-
-**Document Status**: Consolidated analysis from 4 previous reports with exhaustive mode validation  
-**Last Updated**: 2025-07-16  
-**Evidence Type**: Live system testing, code analysis, file verification  
-**Configuration Status**: Production-ready exhaustive mode configuration
+  "asin_from_details": "B0113Y45WK",
+  "title": "Gresorth 6pcs Lifelike Artificial Red Apple Faux Fake Apples Fruit for Home Party House Kitchen Cabinet Christmas Decoration",
+  "current_price": 14.99,
+  "main_image": "https://m.media-amazon.com/images/I/71LK3vT3gjL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41yip0Tn5YL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41UVo8UvAxL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51CPhGXrJvL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41wmyWNnG+L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41+Jq1YR2yL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51XllssrtfL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/515URi2e4fL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Gresorth UK",
+  "sold_by_amazon": false,
+  "rating": 4.4,
+  "review_count": 186,
+  "availability_text": "Only 3 left in stock.",
+  "in_stock": true,
+  "features": [
+    "8 cm size apple, made by foam. Nature color and classical shape make it very fit for outdoor garden farmhouse table decoration.",
+    "6 pcs top quality apples in the package. Artificial fruit vegetable inner was made of eco-friendly process plastic foam, then with several times surface process to get a hard and thicken skin, it is removeable if you want to do some DIY or crafts on the fruit or vegetable. Foam inner is white and paintable.",
+    "Assorted size and muti-color choice makes these fake fruit is perfect for decorations, standing outside for porch or stack on the table or kitchen, all home party Holidays like Thanksgiving, Christmas also wedding is a good choice. Lifelike simulated shape and nice touch, Keep it away from kids under 3.",
+    "All fruit & vegetable from Gresorth factory are safe packed into a box, we try to make sure all fake plant ornaments is perfect.",
+    "With a nice touch and best quality, these artificial fruit & vegetable also can be using for home kitchen hotel restaurant decoration, wedding, farmhouse, garden, shop market store show, learning tools, photography props"
+  ],
+  "description": "Product Description Previous page Next page 1 HOME DECOR 2 PARTY DECOR 3 SHOP DECOR 4 PHOTOGRAPHY PROPS The video showcases the product in use. The video guides you through product setup. The video compares multiple products. The video shows the product being unpacked. Video Player is loading. Click to play video Play Mute Current Time&nbsp; 0:00 / Duration&nbsp; 0:15 Loaded : 40.04% 0:00 Stream Type&nbsp; LIVE Seek to live, currently behind live LIVE Remaining Time&nbsp; - 0:15 &nbsp; 1x Playback Rate Chapters Chapters Descriptions descriptions off , selected Captions captions off , selected English (Automated) Audio Track default , selected Fullscreen This is a modal window. 1 Merchant video Previous page 6 PCS Artificial Red Apple Gresorth 6pcs Lifelike Artificial Red Apple Faux Fake Apples Fruit Home House Kitchen Cabinet Decoration Learn More 8 PCS Artificial Green Lemon Gresorth 8pcs Artificial Lifelike Simulation Green Lemon Decoration Fake Fruit House Kitchen Party Decorative Props Learn More 60 PCS Artificial MINI Pepper Gresorth 60pcs Artificial MINI Pepper Chili Fake Vegetable Model Food Toy for Home Kitchen Party Christmas Decoration Learn More 3 PCS Artificial Orange Branch Gresorth Indoor Decoration Lifelike Artificial Orange Fake Plastic Fruit Branch Realistic Foam Stem Ornament Festival Restaurant 3pcs Learn More 3 PCS Large Artificial Artichoke Gresorth 3 Pcs Large Artificial Artichoke Decoration Fake Vegetable Display Faux Realistic Fruit Ornament Garden Kitchen Party Thanksgiving - Green Learn More 2 Pack Artificial Plant Potted Gresorth 2 Pack Artificial Ivy Plant Potted Decoration Fake Peperomia Watermelon Vine Hanging Ornament Realistic Landscape for Shelf Livingroom Wedding Learn More Next page Other Apple Decorations In Our Store Artificial Apple Add To Basket Artificial Apple Add To Basket Artificial Apple Add To Basket Apple Size Combination Add To Basket MINI Pink Apple Add To Basket Fake Apple Bouquet Add To Basket Artificial Large Apple Add To Basket Customer Reviews 4.4 out of 5 stars 186 4.6 out of 5 stars 323 4.2 out of 5 stars 129 4.3 out of 5 stars 21 3.5 out of 5 stars 43 4.5 out of 5 stars 29 4.1 out of 5 stars 34 Price £14.99 £ 14 . 99 £14.99 £ 14 . 99 £14.99 £ 14 . 99 £19.99 £ 19 . 99 £12.99 £ 12 . 99 £19.79 £ 19 . 79 £17.99 £ 17 . 99 Quantity 6 6 6 15 30 3 1 Color Red Green Gold Red Pink Green &amp; Pink Red Material Plastic Plastic Plastic Plastic Plastic Plastic Plastic Usage Decoration Decoration Decoration Decoration Decoration Decoration Decoration Lifelike ✔ ✔ ✔ ✔ ✔ ✔ ✔",
+  "specifications_table": {
+    "Brand Name": "Gresorth",
+    "Plant or Animal Product Type": "plant",
+    "Recommended Uses For Product": "Indoor",
+    "Specific Uses For Product": "Home Decor",
+    "Indoor Outdoor Usage": "Indoor",
+    "Container Type": "Bottle",
+    "Number of Items": "6",
+    "Room Type": "Dining Room, Kitchen",
+    "Included Components": "Basket",
+    "Manufacturer": "Gresorth",
+    "UPC": "709803212794",
+    "Customer Reviews": "4.4 4.4 out of 5 stars (186) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.4 out of 5 stars",
+    "ASIN": "B0113Y45WK",
+    "Item height": "7 centimetres"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Gresorth 6pcs Lifelike Artificial Red Apple Faux Fake Apples Fruit for Home Party House Kitchen Cabinet Christmas Decoration",
+      "Reviews - Rating": 4.4,
+      "Reviews - Rating Count": 186.0,
+      "Last Price Change": "1 minute ago",
+      "Buy Box Seller": "Gresorth UK (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Gresorth UK (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.97,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 2.25,
+      "Total Offer Count": "1",
+      "Tracking since": "2016/12/28",
+      "Listed since": "2015/07/06",
+      "Categories - Root": "Home & Kitchen",
+      "Categories - Sub": "Categories",
+      "Website Display Group - Name": "Kitchen",
+      "ASIN": "B0113Y45WK",
+      "Product Codes - UPC": "709803212794",
+      "Product Codes - EAN": "0709803212794",
+      "Product Codes - PartNumber": "Fruit-100",
+      "Freq. Bought Together": "B0113Y49XU, B074QL6NXR",
+      "Type": "ARTIFICIAL_PLANT",
+      "Manufacturer": "Gresorth",
+      "Brand": "Gresorth",
+      "Brand Store Name": "Gresorth",
+      "Brand Store URL Name": "GresorthDecoration",
+      "Brand Store URL": "https://www.amazon.com/stores/GresorthDecoration/page/897A6DB4-85E8-4ACB-9CE9-C3A555A3DBBE",
+      "Product Group": "Home",
+      "Model": "Fruit-100",
+      "Color": "Red",
+      "Unit Details - Unit Value": "6",
+      "Unit Details - Unit Type": "count",
+      "Material": "Plastic",
+      "Recommended Uses": "Indoor",
+      "Specific Uses": "Home Decor",
+      "Binding": "Kitchen & Home",
+      "Number of Items": "6",
+      "Languages": "English: Ingredients; German: Ingredients; French: Ingredients; Spanish: Ingredients; Italian: Ingredients; Polish: Ingredients; Swedish: Ingredients; Dutch: Ingredients",
+      "Package - Dimension (cm³)": "22.8 x 16.3 x 8.7 cm (= 3,233 cm³ )",
+      "Package - Weight (g)": "200",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "8.0 x 8.0 x 7.0 cm (= 448 cm³ )",
+      "Item - Model (g)": "200",
+      "Included Components": "Basket",
+      "Safety Warning": "This artificial plant contains materials that may cause harm if ingested by young children. Keep away from children under 3 years old."
+    }
+  },
+  "eans_on_page": [
+    "0709803212794"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0709803212794",
+  "asin_extracted_from_page": "B0113Y45WK",
+  "asin_queried": "B0113Y45WK",
+  "asin": "B0113Y45WK",
+  "_search_method_used": "title"
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {
+  "asin_from_details": "B010NBY998",
+  "title": "Status 2-Way Non-Fused Adaptor - White (Pack of 2)",
+  "main_image": "https://m.media-amazon.com/images/I/41KAIaFrV1L._AC_SY450_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41KAIaFrV1L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 3.0,
+  "review_count": 1,
+  "availability_text": "P.when(\"A\", \"load\").execute(\"aod-assets-loaded\", function(A){\n        function logAssetsNotLoaded() {\n            if (window.ueLogError) {\n                var customError = { message: 'Failed to load AOD assets for WDG: home_improvement_display_on_website, Device: web' };\n                var additionalInfo = {\n                    logLevel : 'ERROR',\n                    attribution : 'aod_assets_not_loaded'\n                };\n                ueLogError (customError, additionalInfo);\n            }\n            if (window.ue && window.ue.count) {\n                window.ue.count(\"aod-assets-not-loaded\", 1);\n            }\n        }\n\n        function verifyAssetsLoaded() {\n            var assetsLoadedPageState = A.state('aod:assetsLoaded');\n            var logAssetsNotLoadedState = A.state('aod:logAssetsNotLoaded');\n\n            if((assetsLoadedPageState == null || !assetsLoadedPageState.isAodAssetsLoaded)\n                && (logAssetsNotLoadedState == null || !logAssetsNotLoadedState.isAodAssetsNotLoadedLogged)) {\n                A.state('aod:logAssetsNotLoaded', {isAodAssetsNotLoadedLogged: true});\n                logAssetsNotLoaded();\n            }\n        }\n\n        setTimeout(verifyAssetsLoaded, 50000)\n    });",
+  "in_stock": false,
+  "features": [
+    "2 socket outlet",
+    "Non-fused",
+    "Sleeved pins",
+    "Maximum load of 13A 220V~250V 50Hz"
+  ],
+  "description": "Product Description 2-Way Non-fused Adapter White 2 pack, two socket outlet, non-fused, sleeved pins, maximum load of 13 A 220 V to 250 V 50 Hz, BS1363-3, available in other colours. Ideal for saving space without having lots of extension leads and cables around the home. Box Contains 1 x 2 way Non-fused Adaptor White 2 pk",
+  "specifications_table": {
+    "Brand Name": "Status",
+    "Model Number": "S2WA2PKX3",
+    "Global Trade Identification Number": "05022822180239",
+    "Customer Reviews": "3.0 3.0 out of 5 stars (1) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 3.0 out of 5 stars",
+    "ASIN": "B010NBY998",
+    "Item Type Name": "2 way Non-fused Adaptor White Status 2 pk",
+    "Box Contents": "bulb",
+    "Item height": "10 centimetres",
+    "Manufacturer": "Status",
+    "Unit Count": "1.0 count"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",

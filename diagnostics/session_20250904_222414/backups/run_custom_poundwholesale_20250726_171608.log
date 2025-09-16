@@ -1,0 +1,729 @@
+2025-07-26 17:16:08,052 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250726_171608.log
+2025-07-26 17:16:08,053 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250726_171608.log
+2025-07-26 17:16:08,054 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-26 17:16:08,055 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-07-26 17:16:08,059 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-07-26 17:16:08,687 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-26 17:16:08,783 - utils.browser_manager - INFO - 📄 Using existing context with 1 pages
+2025-07-26 17:16:08,784 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-26 17:16:08,785 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:08,785 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:08,785 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-26 17:16:08,786 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-26 17:16:08,787 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-26 17:16:13,581 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-26 17:16:13,662 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-26 17:16:13,664 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-26 17:16:13,665 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS'
+2025-07-26 17:16:13,666 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products'
+2025-07-26 17:16:13,667 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products
+2025-07-26 17:16:13,668 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-07-26 17:16:13,670 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-07-26 17:16:13,671 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-26 17:16:13,673 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\amazon_data
+2025-07-26 17:16:13,673 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-26 17:16:13,674 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\system_config.json
+2025-07-26 17:16:13,675 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-26 17:16:13,676 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-26 17:16:13,676 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-26 17:16:13,677 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-26 17:16:13,677 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-26 17:16:13,678 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-26 17:16:13,678 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-26 17:16:13,679 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-26 17:16:13,679 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS
+2025-07-26 17:16:13,680 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-26 17:16:13,681 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-26 17:16:13,681 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250726_171613
+2025-07-26 17:16:13,682 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-26 17:16:13,682 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-26 17:16:13,683 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-07-26 17:16:13,683 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-26 17:16:13,683 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-07-26 17:16:13,684 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-26 17:16:13,684 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-26 17:16:13,686 - utils.enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resuming from index 246
+2025-07-26 17:16:13,687 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-26 17:16:13,688 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 246
+2025-07-26 17:16:13,688 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-26 17:16:13,719 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 3577 entries
+2025-07-26 17:16:13,720 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 3577
+2025-07-26 17:16:13,736 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2423 products in poundwholesale-co-uk_products_cache.json
+2025-07-26 17:16:13,738 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: COMPLETED (supplier: 2423, linking map: 3577)
+2025-07-26 17:16:13,741 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-26 17:16:13,773 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 3577 entries
+2025-07-26 17:16:13,775 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-26 17:16:13,775 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-26 17:16:13,776 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 181 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\poundwholesale_categories.json
+2025-07-26 17:16:13,777 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-07-26 17:16:13,777 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 181 predefined categories (infinite mode)
+2025-07-26 17:16:13,779 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-26 17:16:13,780 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-26 17:16:13,780 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-26 17:16:13,781 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-07-26 17:16:13,781 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-07-26 17:16:13,799 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2423 products in poundwholesale-co-uk_products_cache.json
+2025-07-26 17:16:13,817 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Need to extract remaining products for chunk (8/1000 expected)
+2025-07-26 17:16:13,834 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2423 products in poundwholesale-co-uk_products_cache.json
+2025-07-26 17:16:13,850 - PassiveExtractionWorkflow - INFO - 🔄 RESUMPTION DETECTED: Found 8 cached products but resuming from index 246
+2025-07-26 17:16:13,851 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing supplier extraction to complete interrupted category
+2025-07-26 17:16:13,852 - PassiveExtractionWorkflow - INFO - 🔄 CHUNK CACHE MISS: No cached products found for chunk categories: ['https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes']
+2025-07-26 17:16:13,853 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION NEEDED: Continuing with supplier extraction for new categories
+2025-07-26 17:16:13,853 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-07-26 17:16:13,853 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-07-26 17:16:13,870 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 2423 products in poundwholesale-co-uk_products_cache.json
+2025-07-26 17:16:13,885 - PassiveExtractionWorkflow - INFO - ✅ RESUMPTION: Loaded 2423 existing products from cache file: poundwholesale-co-uk_products_cache.json
+2025-07-26 17:16:13,886 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-07-26 17:16:13,887 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-07-26 17:16:13,887 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-07-26 17:16:13,888 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:13,889 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:13,889 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-07-26 17:16:15,241 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-07-26 17:16:19,809 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-26 17:16:19,863 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-26 17:16:19,864 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-26 17:16:19,865 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-07-26 17:16:19,868 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-07-26 17:16:19,869 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:19,870 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes with memory management
+2025-07-26 17:16:21,434 - utils.browser_manager - DEBUG - 🪟 Found 39 Chrome processes, total memory: 5000.1MB
+2025-07-26 17:16:21,435 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 5000.1 MB
+2025-07-26 17:16:22,848 - utils.browser_manager - DEBUG - 🪟 Windows: 39 Chrome processes, 4995MB total
+2025-07-26 17:16:22,849 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=5000MB, Python=145MB, System=66.7%
+2025-07-26 17:16:22,850 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:22,851 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:22,852 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:22,853 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-07-26 17:16:22,854 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-07-26 17:16:22,854 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:22,855 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:22,856 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes (attempt 1/3)
+2025-07-26 17:16:22,856 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:22,856 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:22,857 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:24,084 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes in 1.53s...
+2025-07-26 17:16:25,618 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes (attempt 2/3)
+2025-07-26 17:16:25,619 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:25,620 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:25,621 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:28,202 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:28,203 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes
+2025-07-26 17:16:28,329 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes (Size: 461397 bytes)
+2025-07-26 17:16:28,459 - configurable_supplier_scraper - INFO - Found 8 new product URLs on page 1
+2025-07-26 17:16:28,460 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2
+2025-07-26 17:16:28,461 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2 (attempt 1/3)
+2025-07-26 17:16:28,461 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:28,462 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:28,462 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2
+2025-07-26 17:16:29,748 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2 in 2.20s...
+2025-07-26 17:16:31,952 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2 (attempt 2/3)
+2025-07-26 17:16:31,953 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:31,953 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:31,953 - configurable_supplier_scraper - INFO - 🔧 Using passed BrowserManager page for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2
+2025-07-26 17:16:33,859 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2
+2025-07-26 17:16:33,860 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2
+2025-07-26 17:16:33,921 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2 (Size: 327952 bytes)
+2025-07-26 17:16:34,000 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 2
+2025-07-26 17:16:34,001 - configurable_supplier_scraper - INFO - Collected 8 total product URLs across 2 pages
+2025-07-26 17:16:34,002 - configurable_supplier_scraper - INFO - Found 8 total product URLs across all pages
+2025-07-26 17:16:34,003 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-07-26 17:16:34,019 - utils.url_cache_filter - INFO - ✅ Loaded 2335 URLs from poundwholesale.co.uk cache
+2025-07-26 17:16:34,020 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 2335 (+2335 new)
+2025-07-26 17:16:34,021 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 2335 cached URLs for efficiency filtering
+2025-07-26 17:16:34,022 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 0 new URLs, 8 already cached
+2025-07-26 17:16:34,022 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 0 new URLs need processing, 8 already cached
+2025-07-26 17:16:34,023 - configurable_supplier_scraper - INFO - 🎯 All URLs are already cached - no new products to scrape!
+2025-07-26 17:16:34,023 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 0 raw products extracted, 2423 total products accumulated
+2025-07-26 17:16:34,024 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 2423 total products extracted so far
+2025-07-26 17:16:34,025 - PassiveExtractionWorkflow - INFO - 🔍 Processing 2335 products with main workflow logic
+2025-07-26 17:16:34,026 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 1/2335: '12 Cup Muffin Flower Tray' ---
+2025-07-26 17:16:34,033 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/12-cup-muffin-flower-tray. Skipping.
+2025-07-26 17:16:34,033 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 2/2335: '151 87 Piece Picture Hanging Kit' ---
+2025-07-26 17:16:34,040 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-87-piece-picture-hanging-kit. Skipping.
+2025-07-26 17:16:34,041 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 3/2335: '151 Assorted Plastic Protectors' ---
+2025-07-26 17:16:34,047 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-assorted-plastic-protectors. Skipping.
+2025-07-26 17:16:34,047 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 4/2335: '151 Assorted Sandpaper Sheets 10 Pack' ---
+2025-07-26 17:16:34,054 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/assorted-sandpaper-12pk. Skipping.
+2025-07-26 17:16:34,055 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 5/2335: '151 Decorators Safety Scraper' ---
+2025-07-26 17:16:34,061 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-decorators-safety-scraper. Skipping.
+2025-07-26 17:16:34,061 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 6/2335: '151 General Purpose Polythene Dust Sheets 3.6m X 2.7m 2pc' ---
+2025-07-26 17:16:34,068 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/polythene-dust-sheets-2pk. Skipping.
+2025-07-26 17:16:34,068 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 7/2335: '151 Gorilla Filler Plasterboard & Drywall Mesh Tape 50m' ---
+2025-07-26 17:16:34,074 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-gorilla-filler-plasterboard-drywall-mesh-tape-50m. Skipping.
+2025-07-26 17:16:34,075 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 8/2335: '151 Gorilla Filler Plasterboard Wall Patch 10cm 2 Pack' ---
+2025-07-26 17:16:34,081 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-gorilla-filler-plasterboard-wall-patch-10cm-2-pack. Skipping.
+2025-07-26 17:16:34,082 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 9/2335: '151 Masking Tape 24mm X 40m' ---
+2025-07-26 17:16:34,088 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-masking-tape-24mm-x-40m. Skipping.
+2025-07-26 17:16:34,089 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 10/2335: '151 Masking Tape 48mm X 20m' ---
+2025-07-26 17:16:34,095 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-masking-tape-48mm-x-20m. Skipping.
+2025-07-26 17:16:34,096 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 11/2335: '151 Masonry Brush 13cm X 4cm' ---
+2025-07-26 17:16:34,102 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/masonry-paint-brush. Skipping.
+2025-07-26 17:16:34,103 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 12/2335: '151 Mini Roller & Tray Set 5pc' ---
+2025-07-26 17:16:34,114 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-mini-roller-tray-set-5pc. Skipping.
+2025-07-26 17:16:34,114 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 13/2335: '151 Multipurpose Storage Hooks 2 Pack' ---
+2025-07-26 17:16:34,121 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-multipurpose-storage-hooks-2-pack. Skipping.
+2025-07-26 17:16:34,121 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 14/2335: '151 Paint Brush Set 5pc' ---
+2025-07-26 17:16:34,128 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/5pk-paint-brushes. Skipping.
+2025-07-26 17:16:34,129 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 15/2335: '151 Plasterboard & Drywall Tape 48mm X 20m' ---
+2025-07-26 17:16:34,136 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-plasterboard-drywall-tape-48mm-x-20m. Skipping.
+2025-07-26 17:16:34,137 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 16/2335: '151 Products Essentials Bundle (34 Products)' ---
+2025-07-26 17:16:34,145 - PassiveExtractionWorkflow - INFO - No EAN. Using title search.
+2025-07-26 17:16:34,146 - tools.passive_extraction_workflow_latest - INFO - Connecting to Chrome browser on debug port 9222 (FixedAmazonExtractor)
+2025-07-26 17:16:34,873 - tools.passive_extraction_workflow_latest - INFO - Successfully connected to Chrome on port 9222 (FixedAmazonExtractor)
+2025-07-26 17:16:34,874 - tools.passive_extraction_workflow_latest - INFO - Found 1 existing pages (FixedAmazonExtractor)
+2025-07-26 17:16:34,875 - tools.passive_extraction_workflow_latest - INFO - Using existing page: https://www.poundwholesale.co.uk/baby-supplies/wholesale-baby-changing-wipes?p=2 (FixedAmazonExtractor)
+2025-07-26 17:16:34,881 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: '151 Products Essentials Bundle (34 Products)'
+2025-07-26 17:16:34,882 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-26 17:16:34,883 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:34,883 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-26 17:16:34,884 - utils.browser_manager - INFO - 📄 Navigating to https://www.amazon.co.uk
+2025-07-26 17:16:36,085 - utils.browser_manager - INFO - ✅ Page ready for https://www.amazon.co.uk
+2025-07-26 17:16:36,085 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: 151 Products Essentials Bundle (34 Products)
+2025-07-26 17:16:40,733 - tools.passive_extraction_workflow_latest - INFO - Title search found 25 elements using selector: div.s-search-results > div[data-asin]
+2025-07-26 17:16:40,829 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CRRVVWQ4 title extracted using selector 'h2': BIC 4 Colours Special Collection of 15 Ball Pens M...
+2025-07-26 17:16:41,553 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DLWYHKY2 title extracted using selector 'h2': BIC Cristal Original Ballpoint Pens with Fine Poin...
+2025-07-26 17:16:41,640 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DS8GYCF7 title extracted using selector 'h2': SUPERFINDINGS 12PCS Metal Pen Storage Box Tinplate...
+2025-07-26 17:16:41,722 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B07QV22LHQ title extracted using selector 'h2': Globe Packaging Roll of Large Bubble Wrap 1000mm x...
+2025-07-26 17:16:41,820 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B09NPWGX67 title extracted using selector 'h2': Minkissy Kraft Box Containers Empty Lip Gloss Boxe...
+2025-07-26 17:16:41,913 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0FGTVW5ZM title extracted using selector 'h2': Gift boxes, mixed products, purchasing pallets,bla...
+2025-07-26 17:16:41,981 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DS2YH5RB title extracted using selector 'h2': STOBOK 5pcs Premium Tinplate Pen Box Metal Pen Con...
+2025-07-26 17:16:42,053 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0FGTYLNCW title extracted using selector 'h2': Gift Boxes, Mixed Products, Purchasing Pallets,Bla...
+2025-07-26 17:16:42,133 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B083FLJK69 title extracted using selector 'h2': NUOBESTY 5Pcs File Boxes Plastic Archives Cases wi...
+2025-07-26 17:16:42,143 - tools.passive_extraction_workflow_latest - INFO - Title search found 9 results for '151 Products Essentials Bundle (34 Products)'
+2025-07-26 17:16:42,144 - PassiveExtractionWorkflow - INFO - 🔍 PRODUCT VALIDATION: Evaluating 9 Amazon results for '151 Products Essentials Bundle (34 Products)'
+2025-07-26 17:16:42,145 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '151 Products Essentials Bundle (34 Products)' vs 'BIC 4 Colours Special Collection of 15 Ball Pens Medium Points (1.00 mm) and Wide Point (1.6 mm) - Assorted Ink Colours, Box of 15' = 0.00 (very_low, 10.0%)
+2025-07-26 17:16:42,146 - PassiveExtractionWorkflow - INFO - 📊 Result 1: ASIN B0CRRVVWQ4 - Confidence: 0.100 (very_low) - Overlap: 0.000 - 'BIC 4 Colours Special Collection of 15 Ball Pens Medium Poin...'
+2025-07-26 17:16:42,147 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '151 Products Essentials Bundle (34 Products)' vs 'BIC Cristal Original Ballpoint Pens with Fine Point, 1.0mm in Assorted Colours, Pack of 10 & 2 X Tipp-Ex Mini Pocket Mouse Correction Tape Roller 5mm x 5m for Quick Corrections' = 0.00 (very_low, 10.0%)
+2025-07-26 17:16:42,148 - PassiveExtractionWorkflow - INFO - 📊 Result 2: ASIN B0DLWYHKY2 - Confidence: 0.100 (very_low) - Overlap: 0.000 - 'BIC Cristal Original Ballpoint Pens with Fine Point, 1.0mm i...'
+2025-07-26 17:16:42,148 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '151 Products Essentials Bundle (34 Products)' vs 'SUPERFINDINGS 12PCS Metal Pen Storage Box Tinplate Boxes with Sponge 17.8x3.7cm Metal Pencil Boxes Pen Gift Boxes Empty Collection Case Set for Pen Pencil Gift' = 0.00 (very_low, 10.0%)
+2025-07-26 17:16:42,149 - PassiveExtractionWorkflow - INFO - 📊 Result 3: ASIN B0DS8GYCF7 - Confidence: 0.100 (very_low) - Overlap: 0.000 - 'SUPERFINDINGS 12PCS Metal Pen Storage Box Tinplate Boxes wit...'
+2025-07-26 17:16:42,149 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '151 Products Essentials Bundle (34 Products)' vs 'Globe Packaging Roll of Large Bubble Wrap 1000mm x 50m - LARGE Air Bubbles for Packing or Moving House' = 0.00 (very_low, 10.0%)
+2025-07-26 17:16:42,150 - PassiveExtractionWorkflow - INFO - 📊 Result 4: ASIN B07QV22LHQ - Confidence: 0.100 (very_low) - Overlap: 0.000 - 'Globe Packaging Roll of Large Bubble Wrap 1000mm x 50m - LAR...'
+2025-07-26 17:16:42,150 - PassiveExtractionWorkflow - DEBUG - 🔍 MATCH VALIDATION: '151 Products Essentials Bundle (34 Products)' vs 'Minkissy Kraft Box Containers Empty Lip Gloss Boxes 50 Pcs Lipsticks Paper Box DIY Lipstick Boxes Packaging Makeup Organzier Tube Storage Makeup Lipstick Makeup' = 0.00 (very_low, 10.0%)
+2025-07-26 17:16:42,151 - PassiveExtractionWorkflow - INFO - 📊 Result 5: ASIN B09NPWGX67 - Confidence: 0.100 (very_low) - Overlap: 0.000 - 'Minkissy Kraft Box Containers Empty Lip Gloss Boxes 50 Pcs L...'
+2025-07-26 17:16:42,152 - PassiveExtractionWorkflow - WARNING - 🚨 NO CONFIDENT MATCH: All Amazon results below 50.0% confidence threshold for '151 Products Essentials Bundle (34 Products)'. Skipping to prevent irrational matches.
+2025-07-26 17:16:42,155 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 3577 entries for supplier poundwholesale.co.uk
+2025-07-26 17:16:42,156 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 3577, sample: {'supplier_ean': '5038673311289', 'amazon_asin': 'B00A1G6U2A', 'supplier_title': '1.5V Button Cell Battery 40pc', 'amazon_title': '100 X Assorted Button Cell Batteries Watches,Games...', 'supplier_price': 0.78, 'amazon_price': 0.25, 'match_method': 'EAN', 'confidence': 'high', 'created_at': '2025-07-25T19:28:23.519753', 'supplier_url': 'https://www.poundwholesale.co.uk/1-5v-button-cell-...'}
+2025-07-26 17:16:42,157 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-26 17:16:42,157 - PassiveExtractionWorkflow - INFO - ✅ Directory created: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk
+2025-07-26 17:16:42,158 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Temporary file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json.tmp
+2025-07-26 17:16:42,158 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Writing linking map data to temporary file...
+2025-07-26 17:16:42,215 - PassiveExtractionWorkflow - INFO - ✅ Temporary file written successfully: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json.tmp
+2025-07-26 17:16:42,216 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Moving temporary file to final location...
+2025-07-26 17:16:42,218 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 3577 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-26 17:16:42,219 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 1983780 bytes
+2025-07-26 17:16:42,220 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 16 (linking_map_batch_size: 1)
+2025-07-26 17:16:42,220 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 17/2335: '151 Pva Glue 150ml' ---
+2025-07-26 17:16:42,227 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-pva-glue-150ml. Skipping.
+2025-07-26 17:16:42,227 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 18/2335: '151 Self-Adhesive White Plastic Hooks 12 Pack' ---
+2025-07-26 17:16:42,236 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-self-adhesive-white-plastic-hooks-12-pack. Skipping.
+2025-07-26 17:16:42,237 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 19/2335: '151 Shed & Fence Brush 10cm X 4cm' ---
+2025-07-26 17:16:42,243 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/shed-fence-brush. Skipping.
+2025-07-26 17:16:42,244 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 20/2335: '151 Tile & Grout Revival Pen White' ---
+2025-07-26 17:16:42,252 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-tile-grout-revival-pen. Skipping.
+2025-07-26 17:16:42,253 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 21/2335: '151 Trigger Spray Sugar Soap 750ml' ---
+2025-07-26 17:16:42,259 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/sugar-soap. Skipping.
+2025-07-26 17:16:42,260 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 22/2335: '151 Turpentine Substitute 750ml' ---
+2025-07-26 17:16:42,267 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-turpentine-substitute-750ml. Skipping.
+2025-07-26 17:16:42,268 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 23/2335: '151 Wallpaper Paste Brush 13cm X 4cm' ---
+2025-07-26 17:16:42,275 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/wallpaper-paste-brush. Skipping.
+2025-07-26 17:16:42,276 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 24/2335: '151 Wet Or Dry Sandpaper 8 Pack' ---
+2025-07-26 17:16:42,284 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/wet-or-dry-sandpaper-16pk. Skipping.
+2025-07-26 17:16:42,285 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 25/2335: '151 White Furniture Touch Up Pen 7ml CDU' ---
+2025-07-26 17:16:42,298 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-white-furniture-touch-up-pen-7ml-cdu. Skipping.
+2025-07-26 17:16:42,299 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 26/2335: '151 White Spirit 750ml' ---
+2025-07-26 17:16:42,306 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/151-white-spirit-750ml. Skipping.
+2025-07-26 17:16:42,306 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 27/2335: '3-Play Comfort Pocket Napkin Tissues 10 Pack' ---
+2025-07-26 17:16:42,313 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/3-play-comfort-pocket-napkin-tissues-10-pack. Skipping.
+2025-07-26 17:16:42,314 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 28/2335: '3m 9001 Particulate Respirator Noseclip Mouth Masks' ---
+2025-07-26 17:16:42,321 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/3m-9001-particulate-respirator-noseclip-mouth-masks. Skipping.
+2025-07-26 17:16:42,321 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 29/2335: '4 Layer Filtration Face Mask' ---
+2025-07-26 17:16:42,328 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/5-layer-filtration-face-mask. Skipping.
+2025-07-26 17:16:42,329 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 30/2335: '5 Star Office Whiteboard Wipes 100 Pack' ---
+2025-07-26 17:16:42,336 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/5-star-office-whiteboard-wipes-100-pack. Skipping.
+2025-07-26 17:16:42,337 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 31/2335: '70 Puzzle 80GSM Word Search Book Assorted' ---
+2025-07-26 17:16:42,343 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/70-puzzle-80gsm-word-search-book-assorted. Skipping.
+2025-07-26 17:16:42,343 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 32/2335: 'A3 80GSM White Paper Sketch Pad 30 Sheets Assorted' ---
+2025-07-26 17:16:42,350 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/a3-80gsm-white-paper-sketch-pad-30-sheets-assorted. Skipping.
+2025-07-26 17:16:42,351 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 33/2335: 'Adult Colouring (No Vat) World Of Art 2 Designs' ---
+2025-07-26 17:16:42,359 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/adult-colouring-no-vat-world-of-art-2-designs. Skipping.
+2025-07-26 17:16:42,360 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 34/2335: 'Air Wick Jasmine Bloom & Freesia Reed Diffuser 42ml' ---
+2025-07-26 17:16:42,367 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/air-wick-jasmine-bloom-freesia-reed-diffuser-42ml. Skipping.
+2025-07-26 17:16:42,368 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 35/2335: 'Aira Air Freshener Beads 150g Assorted' ---
+2025-07-26 17:16:42,374 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aira-air-freshener-beads-150g-assorted. Skipping.
+2025-07-26 17:16:42,375 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 36/2335: 'Aira Assorted Fragrance Mini Gel Air Freshener 3 Pack' ---
+2025-07-26 17:16:42,382 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aira-assorted-fragrance-mini-gel-air-freshener-3-pack. Skipping.
+2025-07-26 17:16:42,383 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 37/2335: 'Aira Incense Sticks & Holder 40 Pack Assorted Fragrances' ---
+2025-07-26 17:16:42,389 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aira-incense-sticks-holder-40-pack-assorted-fragrances. Skipping.
+2025-07-26 17:16:42,390 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 38/2335: 'ALEX Rub A Dub Magnetic Boats Bath Toy 3 Pack' ---
+2025-07-26 17:16:42,396 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alex-rub-a-dub-magnetic-boats-bath-toy-3-pack. Skipping.
+2025-07-26 17:16:42,396 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 39/2335: 'Alien Invasion Alien Birth Egg CDU Assorted' ---
+2025-07-26 17:16:42,403 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alien-invasion-alien-birth-egg-cdu-assorted. Skipping.
+2025-07-26 17:16:42,403 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 40/2335: 'Alien Invasion Alien Ufo Ooze Pods CDU Assorted Colours' ---
+2025-07-26 17:16:42,410 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alien-invasion-alien-ufo-ooze-pods-cdu-assorted-colours. Skipping.
+2025-07-26 17:16:42,411 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 41/2335: 'Alya Bubble Gum Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,417 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-bubble-gum-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,418 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 42/2335: 'Alya Bubble Gum Home Fragrance Air Freshener 300ml' ---
+2025-07-26 17:16:42,424 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-bubble-gum-home-fragrance-air-freshener-300ml. Skipping.
+2025-07-26 17:16:42,425 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 43/2335: 'Alya Coffee Latte Home Fragrance Air Freshener 300ml' ---
+2025-07-26 17:16:42,431 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-coffee-latte-home-fragrance-air-freshener-300ml. Skipping.
+2025-07-26 17:16:42,432 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 44/2335: 'Alya Coffee Latte Reed Diffuser 100ml' ---
+2025-07-26 17:16:42,438 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-coffee-latte-reed-diffuser-100ml. Skipping.
+2025-07-26 17:16:42,439 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 45/2335: 'Alya Cool Linen Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,445 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-cool-linen-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,446 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 46/2335: 'Alya Exotic Leaves Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,452 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-exotic-leaves-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,453 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 47/2335: 'Alya Exotic Leaves Home Fragrance Air Freshener 300ml' ---
+2025-07-26 17:16:42,459 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-exotic-leaves-home-fragrance-air-freshener-300ml. Skipping.
+2025-07-26 17:16:42,459 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 48/2335: 'Alya Fresh Vibes Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,466 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-fresh-vibes-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,466 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 49/2335: 'Alya Lavender Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,473 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-lavender-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,473 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 50/2335: 'Alya Lavender Garden Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,480 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-lavender-garden-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,481 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 51/2335: 'Alya Lilly Of The Valley Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,488 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-lilly-of-the-valley-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,489 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 52/2335: 'Alya Magnolia & Cherry Blossom Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,496 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-magnolia-cherry-blossom-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,497 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 53/2335: 'Alya Marine Waves Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,505 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-marine-waves-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,506 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 54/2335: 'Alya Rose Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,513 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-rose-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,513 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 55/2335: 'Alya Soft Wave Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,520 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-soft-wave-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,521 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 56/2335: 'Alya Spring Blossom Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,527 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-spring-blossom-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,528 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 57/2335: 'Alya Summer Flowers Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,534 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-summer-flowers-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,535 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 58/2335: 'Alya Sweet Splash Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,541 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-sweet-splash-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,542 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 59/2335: 'Alya Tropic Breeze Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,548 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-tropic-breeze-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,549 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 60/2335: 'Alya Vanilla Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,555 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-vanilla-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,556 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 61/2335: 'Alya Vanilla Home Fragrance Air Freshener 300ml' ---
+2025-07-26 17:16:42,563 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-vanilla-home-fragrance-air-freshener-300ml. Skipping.
+2025-07-26 17:16:42,563 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 62/2335: 'Alya Violet Bomb Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,569 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-violet-bomb-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,570 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 63/2335: 'Alya Violet Bomb Home Fragrance Air Freshener 300ml' ---
+2025-07-26 17:16:42,577 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-violet-bomb-home-fragrance-air-freshener-300ml. Skipping.
+2025-07-26 17:16:42,577 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 64/2335: 'Alya Woody Oriental Air Freshener Automatic Spray 250ml' ---
+2025-07-26 17:16:42,584 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/alya-woody-oriental-air-freshener-automatic-spray-250ml. Skipping.
+2025-07-26 17:16:42,585 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 65/2335: 'Amazing 4-in-1 Bouncing Putty 50g CDU' ---
+2025-07-26 17:16:42,591 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/amazing-4-in-1-bouncing-putty-50g-cdu. Skipping.
+2025-07-26 17:16:42,592 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 66/2335: 'Ant Glue Traps 3 Pack' ---
+2025-07-26 17:16:42,598 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/ant-glue-traps-3-pack. Skipping.
+2025-07-26 17:16:42,599 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 67/2335: 'Anti-Bacterial Hand Wash Orange 5l' ---
+2025-07-26 17:16:42,606 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/anti-bacterial-hand-wash-orange-5l. Skipping.
+2025-07-26 17:16:42,606 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 68/2335: 'Antibacterial Cleaning Wipes 60 Pack' ---
+2025-07-26 17:16:42,614 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/antibacterial-cleaning-wipes-60-pack. Skipping.
+2025-07-26 17:16:42,614 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 69/2335: 'Apollo Cerbera Bread Knife 20cm' ---
+2025-07-26 17:16:42,621 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/cerbera-bread-knife-20cm. Skipping.
+2025-07-26 17:16:42,622 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 70/2335: 'Aqua Cellulose Facial Cleansing Sponge 2pc' ---
+2025-07-26 17:16:42,628 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-cellulose-facial-cleansing-sponge-2pc. Skipping.
+2025-07-26 17:16:42,629 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 71/2335: 'Aqua Cellulose Massage Sponge Assorted Colours' ---
+2025-07-26 17:16:42,635 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-cellulose-massage-sponge-assorted-colours. Skipping.
+2025-07-26 17:16:42,636 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 72/2335: 'Aqua Extra Sensitive Hypoallergenic Massage Sponge' ---
+2025-07-26 17:16:42,643 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-extra-sensitive-hypoallergenic-massage-sponge. Skipping.
+2025-07-26 17:16:42,644 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 73/2335: 'Aqua Foam Soap Holder Massage Sponge Mitt' ---
+2025-07-26 17:16:42,650 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-foam-soap-holder-massage-sponge-mitt. Skipping.
+2025-07-26 17:16:42,651 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 74/2335: 'Aqua Hypoallergenic Sensitive Gentle Massage Mitt' ---
+2025-07-26 17:16:42,658 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-hypoallergenic-sensitive-gentle-massage-mitt. Skipping.
+2025-07-26 17:16:42,658 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 75/2335: 'Aqua Kids Hypoallergenic Gentle Massage Bath Mitt' ---
+2025-07-26 17:16:42,665 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-kids-hypoallergenic-gentle-massage-bath-mitt. Skipping.
+2025-07-26 17:16:42,665 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 76/2335: 'Aqua Kids Printed Gentle Bath Massage Sponge Assorted' ---
+2025-07-26 17:16:42,672 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-kids-printed-gentle-bath-massage-sponge-assorted. Skipping.
+2025-07-26 17:16:42,673 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 77/2335: 'Aqua Natural Bristle Wooden Massage Brush' ---
+2025-07-26 17:16:42,680 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-natural-bristle-wooden-massage-brush. Skipping.
+2025-07-26 17:16:42,681 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 78/2335: 'Aqua Natural Cellulose Sisal Massage Mitt' ---
+2025-07-26 17:16:42,688 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aqua-natural-cellulose-sisal-massage-mitt. Skipping.
+2025-07-26 17:16:42,689 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 79/2335: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 100ml' ---
+2025-07-26 17:16:42,696 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aquathree-70-alcohol-antibacterial-hand-sanitiser-moisturiser-gel-100ml. Skipping.
+2025-07-26 17:16:42,696 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 80/2335: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 1l' ---
+2025-07-26 17:16:42,703 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aquathree-70-alcohol-antibacterial-hand-sanitiser-moisturiser-gel-1l. Skipping.
+2025-07-26 17:16:42,703 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 81/2335: 'Aquathree 70% Alcohol Antibacterial Hand Sanitiser Gel 500ml' ---
+2025-07-26 17:16:42,711 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/aquathree-70-alcohol-antibacterial-hand-sanitiser-moisturiser-gel-500ml. Skipping.
+2025-07-26 17:16:42,712 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 82/2335: 'Artbox 12 Jumbo Paints With Palette' ---
+2025-07-26 17:16:42,719 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/12-jumbo-paints-with-palette. Skipping.
+2025-07-26 17:16:42,719 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 83/2335: 'Artbox 15 Poster Paints & Brushes' ---
+2025-07-26 17:16:42,726 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/15-poster-paints-and-brushes. Skipping.
+2025-07-26 17:16:42,727 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 84/2335: 'Artbox 80GSM Dot-To-Dot Colouring Book Assorted' ---
+2025-07-26 17:16:42,734 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-80gsm-dot-to-dot-colouring-book-assorted. Skipping.
+2025-07-26 17:16:42,735 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 85/2335: 'Artbox A4 Assorted Colour Glitter Card 8 Sheets' ---
+2025-07-26 17:16:42,741 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-a4-assorted-colour-glitter-card-8-sheets. Skipping.
+2025-07-26 17:16:42,742 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 86/2335: 'Artbox A4 Metallic Boards 8 Pack' ---
+2025-07-26 17:16:42,749 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/metallic-boards-8-pack. Skipping.
+2025-07-26 17:16:42,750 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 87/2335: 'Artbox A5 Assorted Colour Craft Card 30 Sheets' ---
+2025-07-26 17:16:42,758 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-a5-assorted-colour-craft-card-30-sheets. Skipping.
+2025-07-26 17:16:42,759 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 88/2335: 'Artbox Activity Fun Play Book Assorted' ---
+2025-07-26 17:16:42,765 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-activity-fun-play-book-assorted. Skipping.
+2025-07-26 17:16:42,766 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 89/2335: 'Artbox Assorted Colour Craft Tissue Paper 12 Sheets' ---
+2025-07-26 17:16:42,773 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-assorted-colour-craft-tissue-paper-12-sheets. Skipping.
+2025-07-26 17:16:42,774 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 90/2335: 'Artbox Assorted Colour Fine Tip Fibre Colouring Pens 8 Pack' ---
+2025-07-26 17:16:42,780 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-assorted-colour-fine-tip-fibre-colouring-pens-8-pack. Skipping.
+2025-07-26 17:16:42,781 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 91/2335: 'Artbox Assorted Colour Play Dough 12pc' ---
+2025-07-26 17:16:42,788 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-assorted-colour-play-dough-12pc. Skipping.
+2025-07-26 17:16:42,789 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 92/2335: 'Artbox Assorted Colours Fibre Tip Colouring Pens 16 Pack' ---
+2025-07-26 17:16:42,795 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-assorted-colours-fibre-tip-colouring-pens-16-pack. Skipping.
+2025-07-26 17:16:42,796 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 93/2335: 'Artbox Assorted Fun Stampers 26 Pack' ---
+2025-07-26 17:16:42,803 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-assorted-fun-stampers-26-pack. Skipping.
+2025-07-26 17:16:42,804 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 94/2335: 'Artbox Assorted Premium Paint Brushes 5 Pack' ---
+2025-07-26 17:16:42,811 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-assorted-premium-paint-brushes-5-pack. Skipping.
+2025-07-26 17:16:42,811 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 95/2335: 'Artbox Carry Activity Pad Assorted' ---
+2025-07-26 17:16:42,818 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-carry-activity-pad-assorted. Skipping.
+2025-07-26 17:16:42,818 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 96/2335: 'Artbox Colour Your Own Magnets 10 Pack Assorted' ---
+2025-07-26 17:16:42,826 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-colour-your-own-magnets-10-pack-assorted. Skipping.
+2025-07-26 17:16:42,827 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 97/2335: 'Artbox Craft Paint Pots Assorted Colours 6 Pack' ---
+2025-07-26 17:16:42,834 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/6-craft-paint-pots. Skipping.
+2025-07-26 17:16:42,835 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 98/2335: 'Artbox Glue Sticks 8g 6 Pack' ---
+2025-07-26 17:16:42,841 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-glue-sticks-8g-6-pack. Skipping.
+2025-07-26 17:16:42,842 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 99/2335: 'Artbox Junior Paint By Numbers Set Assorted' ---
+2025-07-26 17:16:42,849 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/paint-by-numbers-junior-3-designs. Skipping.
+2025-07-26 17:16:42,850 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 100/2335: 'Artbox Magic Sand Set 1kg' ---
+2025-07-26 17:16:42,856 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-magic-sand-set-1kg. Skipping.
+2025-07-26 17:16:42,857 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 101/2335: 'Artbox Metallic Colour Glitter Pots 16G 9 Pack' ---
+2025-07-26 17:16:42,864 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/12-glitter-pots. Skipping.
+2025-07-26 17:16:42,865 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 102/2335: 'Artbox Mixed Craft Essentials Pack' ---
+2025-07-26 17:16:42,872 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-mixed-craft-essentials-pack. Skipping.
+2025-07-26 17:16:42,873 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 103/2335: 'Artbox Modelling Clay Assorted Colours 6 Strips' ---
+2025-07-26 17:16:42,880 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-modelling-clay-assorted-colours-6-strips. Skipping.
+2025-07-26 17:16:42,881 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 104/2335: 'Artbox Neon Finger Paint Pots 6 Pack' ---
+2025-07-26 17:16:42,887 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/6-neon-finger-paint-pots. Skipping.
+2025-07-26 17:16:42,888 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 105/2335: 'Artbox Safe-Tip Scissors 2 Pack' ---
+2025-07-26 17:16:42,895 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-safe-tip-scissors-2-pack. Skipping.
+2025-07-26 17:16:42,895 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 106/2335: 'Artbox Twist Action Glue Sticks 36g 2 Pack' ---
+2025-07-26 17:16:42,902 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/2-by-36grm-twist-action-glue-sticks. Skipping.
+2025-07-26 17:16:42,903 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 107/2335: 'Artbox Unicorns & Mermaids Travel Colouring Set Assorted' ---
+2025-07-26 17:16:42,910 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/artbox-unicorns-mermaids-travel-colouring-set-assorted. Skipping.
+2025-07-26 17:16:42,910 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 108/2335: 'Assorted Metallic Temporary Gold Tattoos' ---
+2025-07-26 17:16:42,918 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/assorted-metallic-temporary-gold-tattoos. Skipping.
+2025-07-26 17:16:42,919 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 109/2335: 'Assorted Round Paper Doyley Table Covers 24 Pack' ---
+2025-07-26 17:16:42,926 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/assorted-round-paper-doyley-table-covers-24-pack. Skipping.
+2025-07-26 17:16:42,927 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 110/2335: 'Astonish 4-In-1 Germ Clear Disinfectant Spray 750ml' ---
+2025-07-26 17:16:42,933 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-4-in-1-germ-clear-disinfectant-spray-750ml. Skipping.
+2025-07-26 17:16:42,934 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 111/2335: 'Astonish Antibacterial Surface Cleanser Spray 750ml' ---
+2025-07-26 17:16:42,941 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-antibacterial-surface-cleanser-spray-750ml. Skipping.
+2025-07-26 17:16:42,941 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 112/2335: 'Astonish Bathroom Cleaner Spray 750ml' ---
+2025-07-26 17:16:42,948 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-bathroom-cleaner-spray-750ml. Skipping.
+2025-07-26 17:16:42,949 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 113/2335: 'Astonish Daily Shower Shine Spray 750ml' ---
+2025-07-26 17:16:42,956 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-daily-shower-shine-spray-750ml. Skipping.
+2025-07-26 17:16:42,956 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 114/2335: 'Astonish Fabric Refresher Spray 750ml' ---
+2025-07-26 17:16:42,963 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-fabric-refresher-spray-750ml. Skipping.
+2025-07-26 17:16:42,963 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 115/2335: 'Astonish Mould & Mildew Blaster Spray 750ml' ---
+2025-07-26 17:16:42,970 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-mould-mildew-blaster-spray-750ml. Skipping.
+2025-07-26 17:16:42,971 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 116/2335: 'Astonish Multi-Purpose Cleaner With Bleach Spray 750ml' ---
+2025-07-26 17:16:42,978 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/astonish-multi-purpose-cleaner-with-bleach-spray-750ml. Skipping.
+2025-07-26 17:16:42,979 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 117/2335: 'Auto Extreme Professional Black Alloy Wheel Spray Paint 400ml' ---
+2025-07-26 17:16:42,986 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-black-alloy-wheel-spray-paint-400ml. Skipping.
+2025-07-26 17:16:42,987 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 118/2335: 'Auto Extreme Professional Black Satin Spray Paint 400ml' ---
+2025-07-26 17:16:42,993 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-black-satin-spray-paint-400ml. Skipping.
+2025-07-26 17:16:42,994 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 119/2335: 'Auto Extreme Professional Blue Gloss Spray Paint 400ml' ---
+2025-07-26 17:16:43,001 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-blue-gloss-spray-paint-400ml. Skipping.
+2025-07-26 17:16:43,001 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 120/2335: 'Auto Extreme Professional Chrome Effect Spray Paint 400ml' ---
+2025-07-26 17:16:43,008 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-chrome-effect-spray-paint-400ml. Skipping.
+2025-07-26 17:16:43,009 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 121/2335: 'Auto Extreme Professional Clear Lacquer Spray 400ml' ---
+2025-07-26 17:16:43,017 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-clear-lacquer-spray-400ml. Skipping.
+2025-07-26 17:16:43,017 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 122/2335: 'Auto Extreme Professional Gun Metal Grey Alloy Wheel Spray Paint 400ml' ---
+2025-07-26 17:16:43,026 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-gun-metal-grey-alloy-wheel-spray-paint-400ml. Skipping.
+2025-07-26 17:16:43,026 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 123/2335: 'Auto Extreme Professional Petrol-Resistant Lacquer Clear Spray 400ml' ---
+2025-07-26 17:16:43,034 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-petrol-resistant-lacquer-clear-spray-400ml. Skipping.
+2025-07-26 17:16:43,034 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 124/2335: 'Auto Extreme Professional White Gloss Spray Paint 400ml' ---
+2025-07-26 17:16:43,042 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-white-gloss-spray-paint-400ml. Skipping.
+2025-07-26 17:16:43,042 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 125/2335: 'Auto Extreme Professional Yellow Gloss Spray Paint 400ml' ---
+2025-07-26 17:16:43,051 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-professional-yellow-gloss-spray-paint-400ml. Skipping.
+2025-07-26 17:16:43,051 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 126/2335: 'Auto Extreme Red Primer Spray Paint 250ml' ---
+2025-07-26 17:16:43,058 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/mean-machine-auto-spray-red-primer-250ml. Skipping.
+2025-07-26 17:16:43,059 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 127/2335: 'Auto Extreme Silver Wheel Spray Paint 250ml' ---
+2025-07-26 17:16:43,065 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-silver-wheel-spray-paint-250ml. Skipping.
+2025-07-26 17:16:43,066 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 128/2335: 'Auto Extreme Tropical Mist In-Car Fragrance Air Freshener Spray 100ml' ---
+2025-07-26 17:16:43,072 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/auto-extreme-tropical-mist-in-car-fragrance-air-freshener-spray-100ml. Skipping.
+2025-07-26 17:16:43,073 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 129/2335: 'Axe Africa 3-in-1 Shower Gel 250ml' ---
+2025-07-26 17:16:43,081 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/axe-africa-3-in-1-shower-gel-250ml. Skipping.
+2025-07-26 17:16:43,082 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 130/2335: 'Axe Sport Blast 3-in-1 Shower Gel 250ml' ---
+2025-07-26 17:16:43,089 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/axe-sport-blast-3-in-1-shower-gel-250ml. Skipping.
+2025-07-26 17:16:43,089 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 131/2335: 'Axe XL Excite 3-in-1 Shower Gel 400ml' ---
+2025-07-26 17:16:43,096 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/axe-xl-excite-3-in-1-shower-gel-400ml. Skipping.
+2025-07-26 17:16:43,097 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 132/2335: 'Bager Luna Small Cake Server Dome 33cm X 11.5cm Assorted Colours' ---
+2025-07-26 17:16:43,105 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bager-luna-small-cake-server-dome-33cm-x-11-5cm-assorted-colours. Skipping.
+2025-07-26 17:16:43,106 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 133/2335: 'Baking Cake Cases Petit 100 Pieces' ---
+2025-07-26 17:16:43,112 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/baking-cake-cases-petit-100-pieces. Skipping.
+2025-07-26 17:16:43,113 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 134/2335: 'Baking Round Cake Board 20cm' ---
+2025-07-26 17:16:43,120 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/cake-board-round-20cm. Skipping.
+2025-07-26 17:16:43,121 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 135/2335: 'Baking Round Cake Board 25cm X 1.2cm' ---
+2025-07-26 17:16:43,127 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/baking-round-cake-board-25cm-x-1-2cm. Skipping.
+2025-07-26 17:16:43,128 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 136/2335: 'Baking Round Cake Board 30cm X 1.1cm' ---
+2025-07-26 17:16:43,134 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/baking-round-cake-board-30cm-x-1-1cm. Skipping.
+2025-07-26 17:16:43,135 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 137/2335: 'Baking Square Cake Board 25cm X 1.2cm' ---
+2025-07-26 17:16:43,142 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/baking-square-cake-board-25cm-x-1-2cm. Skipping.
+2025-07-26 17:16:43,143 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 138/2335: 'Baking Square Cake Board 30cm X 1.2cm' ---
+2025-07-26 17:16:43,149 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/baking-square-cake-board-30cm-x-1-2cm. Skipping.
+2025-07-26 17:16:43,150 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 139/2335: 'Bamboo Neon Fishing Net 110cm X 20cm Assorted Colours' ---
+2025-07-26 17:16:43,157 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bamboo-neon-fishing-net-110cm-x-20cm-assorted-colours. Skipping.
+2025-07-26 17:16:43,158 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 140/2335: 'Bamboo Square Head Fishing Net Large 153cm' ---
+2025-07-26 17:16:43,164 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bamboo-square-head-fishing-net-large-153cm. Skipping.
+2025-07-26 17:16:43,165 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 141/2335: 'Bamboo Square Head Fishing Net Medium 142cm' ---
+2025-07-26 17:16:43,172 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bamboo-square-head-fishing-net-medium-142cm. Skipping.
+2025-07-26 17:16:43,172 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 142/2335: 'BBQ Assorted Colour Plastic Serving Baskets 4 Pack CDU' ---
+2025-07-26 17:16:43,179 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bbq-assorted-colour-plastic-serving-baskets-4-pack-cdu. Skipping.
+2025-07-26 17:16:43,180 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 143/2335: 'BBQ Burger Boxes 4 Pack' ---
+2025-07-26 17:16:43,187 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bbq-burger-boxes-4-pack. Skipping.
+2025-07-26 17:16:43,188 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 144/2335: 'BBQ Cardboard Fries Trays 6 Pack' ---
+2025-07-26 17:16:43,194 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bbq-cardboard-fries-trays-6-pack. Skipping.
+2025-07-26 17:16:43,195 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 145/2335: 'BBQ Hot Dog Trays 4 Pack' ---
+2025-07-26 17:16:43,201 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bbq-hot-dog-trays-4-pack. Skipping.
+2025-07-26 17:16:43,202 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 146/2335: 'BBQ Hot Dog Trays 4 Pack 21cm CDU' ---
+2025-07-26 17:16:43,209 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bbq-hot-dog-trays-4-pack-21cm-cdu. Skipping.
+2025-07-26 17:16:43,210 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 147/2335: 'Beat It Ant Glue Traps 3 Pack CDU' ---
+2025-07-26 17:16:43,216 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beat-it-ant-glue-traps-3-pack-cdu. Skipping.
+2025-07-26 17:16:43,217 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 148/2335: 'Beauties Skincare Coconut Hydrating Foot Pack' ---
+2025-07-26 17:16:43,223 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beauties-skincare-coconut-hydrating-foot-pack. Skipping.
+2025-07-26 17:16:43,224 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 149/2335: 'Beauty Essentials 6pc Cleansing & Exfoliating Pack' ---
+2025-07-26 17:16:43,230 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beauty-essentials-6pc-cleansing-exfoliating-pack. Skipping.
+2025-07-26 17:16:43,231 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 150/2335: 'Beauty Essentials Infusion + Exfoliating Bath Sponge' ---
+2025-07-26 17:16:43,238 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beauty-essentials-infusion-exfoliating-bath-sponge. Skipping.
+2025-07-26 17:16:43,239 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 151/2335: 'Beech Wood Garlic Masher Large' ---
+2025-07-26 17:16:43,246 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beech-wood-garlic-masher-large. Skipping.
+2025-07-26 17:16:43,247 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 152/2335: 'Beech Wood Meat Hammer Large' ---
+2025-07-26 17:16:43,254 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beech-wood-meat-hammer-large. Skipping.
+2025-07-26 17:16:43,254 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 153/2335: 'Beech Wood Mini Rolling Pin With Handles' ---
+2025-07-26 17:16:43,261 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beech-wood-mini-rolling-pin-with-handles. Skipping.
+2025-07-26 17:16:43,261 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 154/2335: 'Beech Wood Rolling Pin 20cm' ---
+2025-07-26 17:16:43,268 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/beech-wood-rolling-pin-20cm. Skipping.
+2025-07-26 17:16:43,268 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 155/2335: 'Bello Assorted Colour Paper Umbrella Straws 30 Pack' ---
+2025-07-26 17:16:43,275 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-paper-umbrella-straws-30-pack. Skipping.
+2025-07-26 17:16:43,276 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 156/2335: 'Bello Assorted Colour Plastic Kids Tumblers 200ml 8 Pack' ---
+2025-07-26 17:16:43,282 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-plastic-kids-tumblers-200ml-8-pack. Skipping.
+2025-07-26 17:16:43,283 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 157/2335: 'Bello Assorted Colour Plastic Ribbed Picnic Bowls 15cm 4 Pack' ---
+2025-07-26 17:16:43,290 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-plastic-ribbed-picnic-bowls-15cm-4-pack. Skipping.
+2025-07-26 17:16:43,291 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 158/2335: 'Bello Assorted Colour Plastic Ribbed Picnic Plates 22.6cm 4 Pack' ---
+2025-07-26 17:16:43,297 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-plastic-ribbed-picnic-plates-22-6cm-4-pack. Skipping.
+2025-07-26 17:16:43,298 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 159/2335: 'Bello Assorted Colour PP Chip & Dip Bowl 15cm 2 Pack' ---
+2025-07-26 17:16:43,306 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-pp-chip-dip-bowl-15cm-2-pack. Skipping.
+2025-07-26 17:16:43,307 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 160/2335: 'Bello Assorted Colour Reusable Bottle Chillers 4 Pack' ---
+2025-07-26 17:16:43,315 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-reusable-bottle-chillers-4-pack. Skipping.
+2025-07-26 17:16:43,316 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 161/2335: 'Bello Assorted Colours Reusable Ice Cubes 15 Pack' ---
+2025-07-26 17:16:43,325 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colours-reusable-ice-cubes-15-pack. Skipping.
+2025-07-26 17:16:43,326 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 162/2335: 'Bello Beer Glass 600ml' ---
+2025-07-26 17:16:43,334 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-beer-glass-600ml. Skipping.
+2025-07-26 17:16:43,334 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 163/2335: 'Bello Beer Ice Bucket 33cm X 23cm X 14cm Assorted Colours' ---
+2025-07-26 17:16:43,343 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-beer-ice-bucket-33cm-x-23cm-x-14cm-assorted-colours. Skipping.
+2025-07-26 17:16:43,344 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 164/2335: 'Bello Biodegradable Paper Straws 50 Pack' ---
+2025-07-26 17:16:43,352 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-biodegradable-paper-straws-50-pack. Skipping.
+2025-07-26 17:16:43,353 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 165/2335: 'Bello Biodegradable Paper Straws 50 Pack Assorted Colours' ---
+2025-07-26 17:16:43,364 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-biodegradable-paper-straws-50-pack-assorted-colours. Skipping.
+2025-07-26 17:16:43,365 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 166/2335: 'Bello Biodegradable Wooden Cutlery 15pc' ---
+2025-07-26 17:16:43,372 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-biodegradable-wooden-cutlery-15pc. Skipping.
+2025-07-26 17:16:43,373 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 167/2335: 'Bello Bottle Cooler Gel Bag' ---
+2025-07-26 17:16:43,380 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-bottle-cooler-gel-bag. Skipping.
+2025-07-26 17:16:43,381 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 168/2335: 'Bello Clear Balloon Gin Glass 600ml' ---
+2025-07-26 17:16:43,388 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-clear-balloon-gin-glass-600ml. Skipping.
+2025-07-26 17:16:43,389 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 169/2335: 'Bello Cocktail Shaker Kit' ---
+2025-07-26 17:16:43,395 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-cocktail-shaker-kit. Skipping.
+2025-07-26 17:16:43,396 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 170/2335: 'Bello Collapsible Drinks Dispenser 3.3l Assorted Colours' ---
+2025-07-26 17:16:43,403 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-collapsible-drinks-dispenser-3-3l-assorted-colours. Skipping.
+2025-07-26 17:16:43,404 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 171/2335: 'Bello Crazy Straw Party Tumblers 650ml Assorted' ---
+2025-07-26 17:16:43,412 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-crazy-straw-party-tumblers-650ml-assorted. Skipping.
+2025-07-26 17:16:43,412 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 172/2335: 'Bello Cut Out Floral Paper Napkins 20 Pack' ---
+2025-07-26 17:16:43,420 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-cut-out-floral-paper-napkins-20-pack. Skipping.
+2025-07-26 17:16:43,421 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 173/2335: 'Bello Dimple Large Plate 27cm' ---
+2025-07-26 17:16:43,428 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-dimple-large-plate-27cm. Skipping.
+2025-07-26 17:16:43,429 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 174/2335: 'Bello Dimple Salad Bowl 25.5cm X 13cm' ---
+2025-07-26 17:16:43,436 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-dimple-salad-bowl-25-5cm-x-13cm. Skipping.
+2025-07-26 17:16:43,436 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 175/2335: 'Bello Dimple Small Bowl 14cm' ---
+2025-07-26 17:16:43,444 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-dimple-small-bowl-14cm. Skipping.
+2025-07-26 17:16:43,444 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 176/2335: 'Bello Dimple Tall Tumbler 15cm X 9cm' ---
+2025-07-26 17:16:43,452 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-dimple-tall-tumbler-15cm-x-9cm. Skipping.
+2025-07-26 17:16:43,452 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 177/2335: 'Bello Disco Mirrorball Tumbler With Straw' ---
+2025-07-26 17:16:43,459 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-disco-mirrorball-tumbler-with-straw. Skipping.
+2025-07-26 17:16:43,460 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 178/2335: 'Bello Double Wall Tumbler With Straw 500ml Assorted Colours' ---
+2025-07-26 17:16:43,468 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-double-wall-tumbler-with-straw-500ml-assorted-colours. Skipping.
+2025-07-26 17:16:43,469 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 179/2335: 'Bello Easy Fit Insect Window Screen 150cm X 130cm' ---
+2025-07-26 17:16:43,477 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-easy-fit-insect-window-screen-150cm-x-130cm. Skipping.
+2025-07-26 17:16:43,478 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 180/2335: 'Bello Elegant Swirl Dinner Plate 27cm X 3.5cm' ---
+2025-07-26 17:16:43,485 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-elegant-swirl-ps-dinner-plate-27cm-x-3-5cm. Skipping.
+2025-07-26 17:16:43,486 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 181/2335: 'Bello Elegant Swirl Pitcher With Lid 2l' ---
+2025-07-26 17:16:43,494 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-elegant-swirl-pitcher-with-lid-2l. Skipping.
+2025-07-26 17:16:43,494 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 182/2335: 'Bello Elegant Swirl Salad Bowl 4l' ---
+2025-07-26 17:16:43,502 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-elegant-swirl-salad-bowl-4l. Skipping.
+2025-07-26 17:16:43,503 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 183/2335: 'Bello Floral & Fruit Paper Tablecloth 180cm X 120cm' ---
+2025-07-26 17:16:43,511 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-floral-fruit-paper-tablecloth-180cm-x-120cm. Skipping.
+2025-07-26 17:16:43,512 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 184/2335: 'Bello Folding Wine Bottle 750ml' ---
+2025-07-26 17:16:43,518 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-folding-wine-bottle-750ml. Skipping.
+2025-07-26 17:16:43,519 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 185/2335: 'Bello Fruit & Floral Scalloped Paper Plate 10 Pack Assorted' ---
+2025-07-26 17:16:43,526 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-fruit-floral-scalloped-paper-plate-10-pack-assorted. Skipping.
+2025-07-26 17:16:43,527 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 186/2335: 'Bello Fruit Cooler Pack Assorted' ---
+2025-07-26 17:16:43,534 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-fruit-cooler-pack-assorted. Skipping.
+2025-07-26 17:16:43,534 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 187/2335: 'Bello Hula Bottle Shirt Assorted' ---
+2025-07-26 17:16:43,541 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-hula-bottle-shirt-assorted. Skipping.
+2025-07-26 17:16:43,542 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 188/2335: 'Bello Hula Bottle Skirt Assorted Colours' ---
+2025-07-26 17:16:43,548 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-hula-bottle-skirt-assorted-colours. Skipping.
+2025-07-26 17:16:43,549 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 189/2335: 'Bello Ice Bucket 33cm X 23cm X 14cm Assorted Colours' ---
+2025-07-26 17:16:43,557 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-ice-bucket-33cm-x-23cm-x-14cm-assorted-colours. Skipping.
+2025-07-26 17:16:43,557 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 190/2335: 'Bello Ice Bucket 47cm X 33cm X 20cm 3 Assorted Colours' ---
+2025-07-26 17:16:43,564 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-ice-bucket-47cm-x-33cm-x-20cm-3-assorted-colours. Skipping.
+2025-07-26 17:16:43,565 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 191/2335: 'Bello Ice Bucket With Handles 47cm X 33cm X 20cm Assorted Colours' ---
+2025-07-26 17:16:43,571 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-ice-bucket-with-handles-47cm-x-33cm-x-20cm-assorted-colours. Skipping.
+2025-07-26 17:16:43,572 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 192/2335: 'Bello Ice Cube Bags 12 Pack' ---
+2025-07-26 17:16:43,578 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-ice-cube-bags-12-pack. Skipping.
+2025-07-26 17:16:43,579 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 193/2335: 'Bello Juicee Fruit Coaster 9cm 4 Pack' ---
+2025-07-26 17:16:43,586 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-juicee-fruit-coaster-9cm-4-pack. Skipping.
+2025-07-26 17:16:43,587 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 194/2335: 'Bello Jumbo Beer Glass 1000ml' ---
+2025-07-26 17:16:43,594 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-jumbo-beer-class-1000ml. Skipping.
+2025-07-26 17:16:43,595 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 195/2335: 'Bello Lidded PP Pitcher 2.25l Assorted Colours' ---
+2025-07-26 17:16:43,602 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-lidded-pp-pitcher-2-25l-assorted-colours. Skipping.
+2025-07-26 17:16:43,603 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 196/2335: 'Bello Multicoloured Fly Doorway Curtain 200cm X 90cm' ---
+2025-07-26 17:16:43,610 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-multicoloured-fly-doorway-curtain-200cm-x-90cm. Skipping.
+2025-07-26 17:16:43,611 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 197/2335: 'Bello Plastic Aloha Summer Party Cup 300ml 4 Pack Assorted' ---
+2025-07-26 17:16:43,618 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-aloha-summer-party-cup-300ml-4-pack-assorted. Skipping.
+2025-07-26 17:16:43,619 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 198/2335: 'Bello Plastic Dimple Champagne Glass 220ml' ---
+2025-07-26 17:16:43,624 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-dimple-champagne-glass-220ml. Skipping.
+2025-07-26 17:16:43,625 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 199/2335: 'Bello Plastic Dimple Lidded Pitcher 2l' ---
+2025-07-26 17:16:43,632 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-dimple-lidded-pitcher-2l. Skipping.
+2025-07-26 17:16:43,633 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 200/2335: 'Bello Plastic Dimple Wine Goblet 400ml' ---
+2025-07-26 17:16:43,641 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-dimple-wine-goblet-400ml. Skipping.
+2025-07-26 17:16:43,641 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 201/2335: 'Bello Plastic Drinking Jar With Straw 450ml Assorted' ---
+2025-07-26 17:16:43,649 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-drinking-jar-with-straw-450ml-assorted. Skipping.
+2025-07-26 17:16:43,650 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 202/2335: 'Bello Plastic Fruit Printed Picnic Tumbler Assorted' ---
+2025-07-26 17:16:43,658 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-fruit-printed-picnic-tumbler-assorted. Skipping.
+2025-07-26 17:16:43,659 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 203/2335: 'Bello Plastic Glass Effect Large Bowl 2800ml' ---
+2025-07-26 17:16:43,666 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-large-bowl-2800ml. Skipping.
+2025-07-26 17:16:43,666 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 204/2335: 'Bello Plastic Glass Effect Pitcher 1700ml' ---
+2025-07-26 17:16:43,674 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-pitcher-1700ml. Skipping.
+2025-07-26 17:16:43,674 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 205/2335: 'Bello Plastic Glass Effect Small Bowl 700ml' ---
+2025-07-26 17:16:43,682 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-small-bowl-700ml. Skipping.
+2025-07-26 17:16:43,683 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 206/2335: 'Bello Plastic Glass Effect Wine Goblet 350ml' ---
+2025-07-26 17:16:43,692 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-glass-effect-wine-goblet-350ml. Skipping.
+2025-07-26 17:16:43,693 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 207/2335: 'Bello Plastic Grey Glitter Plate 26.5cm' ---
+2025-07-26 17:16:43,701 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-grey-glitter-plate-26-5cm. Skipping.
+2025-07-26 17:16:43,702 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 208/2335: 'Bello Plastic Grey Glitter Salad Bowl 25cm' ---
+2025-07-26 17:16:43,710 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-grey-glitter-salad-bowl-25cm. Skipping.
+2025-07-26 17:16:43,710 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 209/2335: 'Bello Plastic Kids Animals Crazy Straw Tumbler 400ml' ---
+2025-07-26 17:16:43,718 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-kids-animals-crazy-straw-tumbler-400ml. Skipping.
+2025-07-26 17:16:43,719 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 210/2335: 'Bello Plastic Margarita Cocktail Glass' ---
+2025-07-26 17:16:43,727 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-margarita-cocktail-glass. Skipping.
+2025-07-26 17:16:43,728 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 211/2335: 'Bello Plastic Picnic Tumbler 14oz 4 Pack Assorted Colours' ---
+2025-07-26 17:16:43,736 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-picnic-tumbler-14oz-4-pack-assorted-colours. Skipping.
+2025-07-26 17:16:43,737 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 212/2335: 'Bello Plastic Pink Aztec Large Plate 25cm' ---
+2025-07-26 17:16:43,744 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-pink-aztec-large-plate-25cm. Skipping.
+2025-07-26 17:16:43,744 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 213/2335: 'Bello Plastic Pitcher With Tumblers Set 1.6l' ---
+2025-07-26 17:16:43,751 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-pitcher-with-tumblers-set-1-6l. Skipping.
+2025-07-26 17:16:43,752 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 214/2335: 'Bello Plastic Printed Gin Glass 600ml Assorted Colours' ---
+2025-07-26 17:16:43,759 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-printed-gin-glass-600ml-assorted-colours. Skipping.
+2025-07-26 17:16:43,759 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 215/2335: 'Bello Plastic Retro Tumbler 400ml' ---
+2025-07-26 17:16:43,766 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-retro-tumbler-400ml. Skipping.
+2025-07-26 17:16:43,767 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 216/2335: 'Bello Plastic Stacking Wine Goblets 4 Pack' ---
+2025-07-26 17:16:43,773 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-stacking-wine-goblets-4-pack. Skipping.
+2025-07-26 17:16:43,774 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 217/2335: 'Bello Plastic Straight Champagne Glass 175ml' ---
+2025-07-26 17:16:43,781 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-straight-champagne-glass-175ml. Skipping.
+2025-07-26 17:16:43,782 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 218/2335: 'Bello Plastic Summer Bottles With Straw 525ml Assorted' ---
+2025-07-26 17:16:43,790 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-summer-bottles-with-straw-525ml-assorted. Skipping.
+2025-07-26 17:16:43,791 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 219/2335: 'Bello Plastic Summer Picnic Bowls 18cm 4 Pack Assorted Colours' ---
+2025-07-26 17:16:43,798 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-summer-picnic-bowls-18cm-4-pack-assorted-colours. Skipping.
+2025-07-26 17:16:43,799 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 220/2335: 'Bello Plastic Summer Picnic Kids Plates 23cm 4 Pack Assorted Colours' ---
+2025-07-26 17:16:43,805 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-assorted-colour-plastic-summer-picnic-kids-plates-23cm-4-pack. Skipping.
+2025-07-26 17:16:43,806 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 221/2335: 'Bello Plastic Teal Honeycomb Pitcher 2l' ---
+2025-07-26 17:16:43,812 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-pitcher-2l. Skipping.
+2025-07-26 17:16:43,813 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 222/2335: 'Bello Plastic Teal Honeycomb Plate 26.5cm' ---
+2025-07-26 17:16:43,819 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-plate-26-5cm. Skipping.
+2025-07-26 17:16:43,820 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 223/2335: 'Bello Plastic Teal Honeycomb Small Bowl 700ml' ---
+2025-07-26 17:16:43,826 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-small-bowl-700ml. Skipping.
+2025-07-26 17:16:43,827 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 224/2335: 'Bello Plastic Teal Honeycomb Tall Tumbler 600ml' ---
+2025-07-26 17:16:43,836 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-tall-tumbler-600ml. Skipping.
+2025-07-26 17:16:43,837 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 225/2335: 'Bello Plastic Teal Honeycomb Wine Goblet 400ml' ---
+2025-07-26 17:16:43,847 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-plastic-teal-honeycomb-wine-goblet-400ml. Skipping.
+2025-07-26 17:16:43,848 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 226/2335: 'Bello PP Assorted Colour Fly Swatters 43cm 3 Pack' ---
+2025-07-26 17:16:43,857 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-pp-assorted-colour-fly-swatters-43cm-3-pack. Skipping.
+2025-07-26 17:16:43,858 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 227/2335: 'Bello Scallop Edge Checked Paper Napkins 20 Pack Assorted Colours' ---
+2025-07-26 17:16:43,868 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-scallop-edge-checked-paper-napkins-20-pack-assorted-colours. Skipping.
+2025-07-26 17:16:43,869 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 228/2335: 'Bello Stripe Lolly Paper Bowl 13cm 8 Pack' ---
+2025-07-26 17:16:43,878 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-lolly-paper-bowl-13cm-8-pack. Skipping.
+2025-07-26 17:16:43,879 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 229/2335: 'Bello Stripe Lolly Paper Plates 23cm 6 Pack' ---
+2025-07-26 17:16:43,888 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-lolly-paper-plates-23cm-6-pack. Skipping.
+2025-07-26 17:16:43,889 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 230/2335: 'Bello Stripe Lolly Paper Tumbler 16oz 4 Pack' ---
+2025-07-26 17:16:43,898 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-lolly-paper-tumbler-16oz-4-pack. Skipping.
+2025-07-26 17:16:43,899 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 231/2335: 'Bello Stripe Lolly Paper Tumblers 8oz 12 Pack' ---
+2025-07-26 17:16:43,907 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-lolly-paper-tumblers-8oz-12-pack. Skipping.
+2025-07-26 17:16:43,908 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 232/2335: 'Bello Stripe Paper Disposable Bowl 13cm 8 Pack' ---
+2025-07-26 17:16:43,914 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-paper-disposable-bowl-13cm-8-pack. Skipping.
+2025-07-26 17:16:43,915 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 233/2335: 'Bello Stripe Paper Plates 23cm 6 Pack' ---
+2025-07-26 17:16:43,922 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-paper-plates-23cm-6-pack. Skipping.
+2025-07-26 17:16:43,923 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 234/2335: 'Bello Stripe Paper Tumbler 8oz 12 Pack' ---
+2025-07-26 17:16:43,929 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-stripe-paper-tumbler-8oz-12-pack. Skipping.
+2025-07-26 17:16:43,929 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 235/2335: 'Bello Striped Paper Tumbler 12oz 10 Pack Assorted Colours' ---
+2025-07-26 17:16:43,937 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-striped-paper-tumbler-12oz-10-pack-assorted-colours. Skipping.
+2025-07-26 17:16:43,938 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 236/2335: 'Bello Striped Scalloped Paper Plate 22cm 10 Pack Assorted Colours' ---
+2025-07-26 17:16:43,944 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-striped-scalloped-paper-plate-22cm-10-pack-assorted-colours. Skipping.
+2025-07-26 17:16:43,945 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 237/2335: 'Bello Tall Elegant Swirl Plastic Tumbler 600ml' ---
+2025-07-26 17:16:43,952 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-tall-elegant-swirl-plastic-tumbler-600ml. Skipping.
+2025-07-26 17:16:43,953 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 238/2335: 'Bello White Plastic Cutlery Set 8pc' ---
+2025-07-26 17:16:43,959 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bello-white-plastic-cutlery-set-8pc. Skipping.
+2025-07-26 17:16:43,959 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 239/2335: 'Belux Natural Ocean Breeze Liquid Hand Soap 500ml Pallet Deal' ---
+2025-07-26 17:16:43,966 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/belux-natural-ocean-breeze-liquid-hand-soap-500ml-pallet-deal. Skipping.
+2025-07-26 17:16:43,967 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 240/2335: 'Bettina Animal Body Puffs Assorted' ---
+2025-07-26 17:16:43,973 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bettina-animal-body-puffs-assorted-designs. Skipping.
+2025-07-26 17:16:43,973 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 241/2335: 'Bettina Aqua Bath & Shower Brush 47cm' ---
+2025-07-26 17:16:43,980 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bettina-bath-and-shower-brush-aqua. Skipping.
+2025-07-26 17:16:43,981 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 242/2335: 'Bettina Assorted Bath & Shower Sponges 4 Pack' ---
+2025-07-26 17:16:43,987 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bettina-multipack-bath-shower-sponges. Skipping.
+2025-07-26 17:16:43,987 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 243/2335: 'Bettina Assorted Colour Face Cleansing Sponges 6 Pack' ---
+2025-07-26 17:16:43,993 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/bettina-face-cleansing-sponges-assorted-6pc. Skipping.
+2025-07-26 17:16:43,994 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 244/2335: 'Bettina Assorted Colour Massage Sponges 3 Pack' ---
+2025-07-26 17:16:44,000 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/3pk-massage-sponges. Skipping.
+2025-07-26 17:16:44,001 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 245/2335: 'Bettina Assorted Colours Bath Sponges 4 Pack' ---
+2025-07-26 17:16:44,007 - PassiveExtractionWorkflow - INFO - Product already processed: https://www.poundwholesale.co.uk/5pc-bath-sponges. Skipping.
+2025-07-26 17:16:44,008 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 246/2335: 'Bettina Assorted Microfibre Car Rags Bag' ---
+2025-07-26 17:16:44,015 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5052578047708
+2025-07-26 17:16:44,032 - PassiveExtractionWorkflow - INFO - 📋 Found cached Amazon data for EAN 5052578047708 in file: amazon_B09D7HXXXT_5052578047708.json (fast search)
+2025-07-26 17:16:44,033 - PassiveExtractionWorkflow - WARNING - ⚠️ Cached data for EAN 5052578047708 missing price fields. Triggering fresh scraping.
+2025-07-26 17:16:44,034 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5052578047708 for supplier product: 'Bettina Assorted Microfibre Car Rags Bag' (FixedAmazonExtractor)
+2025-07-26 17:16:44,034 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-26 17:16:44,035 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-26 17:16:44,035 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-26 17:16:44,036 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5052578047708
+2025-07-26 17:16:46,918 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5052578047708...
+2025-07-26 17:16:47,266 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-26 17:16:49,315 - tools.passive_extraction_workflow_latest - INFO - Found 8 search result elements using selector: div.s-result-item[data-asin]:not([data-asin=''])
+2025-07-26 17:16:49,316 - tools.passive_extraction_workflow_latest - INFO - Processing 8 search result elements for EAN 5052578047708
+2025-07-26 17:16:49,328 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN B0B4H4YPY7
+2025-07-26 17:16:49,338 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0B4H4YPY7 HTML structure sample: <div role="listitem" data-asin="B0B4H4YPY7" data-index="3" data-uuid="59f3cfa5-35f9-4901-a144-28b0353f4ed8" id="59f3cfa5-35f9-4901-a144-28b0353f4ed8" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="7" data-cel-widget="search_result_0"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-3" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sear...
+2025-07-26 17:16:49,339 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0B4H4YPY7: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,340 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0B4H4YPY7: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,361 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0B4H4YPY7 (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,376 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 2: ASIN B0DFW3PP68
+2025-07-26 17:16:49,383 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DFW3PP68 HTML structure sample: <div role="listitem" data-asin="B0DFW3PP68" data-index="4" data-uuid="07c26508-14e5-4501-bb65-a111ce367255" id="07c26508-14e5-4501-bb65-a111ce367255" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="10" data-cel-widget="search_result_1"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-4" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sea...
+2025-07-26 17:16:49,385 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0DFW3PP68: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,386 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0DFW3PP68: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,407 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0DFW3PP68 (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,414 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 3: ASIN B0BQHFBJ3C
+2025-07-26 17:16:49,422 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BQHFBJ3C HTML structure sample: <div role="listitem" data-asin="B0BQHFBJ3C" data-index="5" data-uuid="26613425-e83a-4a9a-ab58-5a9c636ed404" id="26613425-e83a-4a9a-ab58-5a9c636ed404" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="13" data-cel-widget="search_result_2"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-5" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sea...
+2025-07-26 17:16:49,423 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0BQHFBJ3C: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,423 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0BQHFBJ3C: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,438 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0BQHFBJ3C (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,448 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 4: ASIN B0B5QGZHR8
+2025-07-26 17:16:49,449 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0B5QGZHR8: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,449 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0B5QGZHR8: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,466 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0B5QGZHR8 (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,476 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 5: ASIN B0DJ2ZJYMJ
+2025-07-26 17:16:49,477 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0DJ2ZJYMJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,477 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0DJ2ZJYMJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,491 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0DJ2ZJYMJ (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,498 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 6: ASIN B08731LFQD
+2025-07-26 17:16:49,499 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B08731LFQD: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,499 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B08731LFQD: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,514 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B08731LFQD (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,522 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 7: ASIN B093F9FW6K
+2025-07-26 17:16:49,522 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B093F9FW6K: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,523 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B093F9FW6K: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,536 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B093F9FW6K (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,546 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 8: ASIN B08WJGDGLB
+2025-07-26 17:16:49,546 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B08WJGDGLB: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,546 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B08WJGDGLB: 'ElementHandle' object has no attribute 'locator'
+2025-07-26 17:16:49,560 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B08WJGDGLB (detected by ad-specific class: 'AdHolder')
+2025-07-26 17:16:49,561 - tools.passive_extraction_workflow_latest - WARNING - EAN 5052578047708 returned no organic results - skipping
+2025-07-26 17:16:49,562 - tools.passive_extraction_workflow_latest - WARNING - No Amazon results or error for EAN '5052578047708'. Details: no_organic_results
+2025-07-26 17:16:49,562 - tools.passive_extraction_workflow_latest - INFO - Falling back to title search for supplier product: 'Bettina Assorted Microfibre Car Rags Bag'
+2025-07-26 17:16:49,563 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'Bettina Assorted Microfibre Car Rags Bag'
+2025-07-26 17:16:49,563 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: Bettina Assorted Microfibre Car Rags Bag
+2025-07-26 17:16:50,546 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-26 17:16:50,549 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

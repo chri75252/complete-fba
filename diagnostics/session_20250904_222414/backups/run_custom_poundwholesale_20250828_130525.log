@@ -1,0 +1,60 @@
+2025-08-28 13:05:25,914 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250828_130525.log
+2025-08-28 13:05:25,915 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250828_130525.log
+2025-08-28 13:05:25,915 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-08-28 13:05:25,916 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-08-28 13:05:25,916 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-08-28 13:05:26,619 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222 (headless: False)
+2025-08-28 13:05:32,375 - utils.browser_manager - ERROR - ❌ Chrome debug port 9222 connection timed out
+2025-08-28 13:05:32,375 - utils.browser_manager - WARNING - ⚠️ Chrome debug port 9222 verification failed - attempting direct connection anyway
+2025-08-28 13:05:32,375 - utils.browser_manager - INFO - 🔄 Proceeding with CDP connection attempts despite verification failure
+2025-08-28 13:05:32,375 - utils.browser_manager - INFO - 🔄 CDP connection attempt 1/3
+2025-08-28 13:05:34,126 - utils.browser_manager - WARNING - ⚠️ CDP connection attempt 1 failed: BrowserType.connect_over_cdp: socket hang up
+Call log:
+  - <ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-08-28 13:05:34,127 - utils.browser_manager - INFO - 🔄 Will retry CDP connection in 2 seconds...
+2025-08-28 13:05:34,127 - utils.browser_manager - INFO - 🔄 CDP connection attempt 2/3
+2025-08-28 13:05:38,143 - utils.browser_manager - WARNING - ⚠️ CDP connection attempt 2 failed: BrowserType.connect_over_cdp: read ECONNRESET
+Call log:
+  - <ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-08-28 13:05:38,143 - utils.browser_manager - INFO - 🔄 Will retry CDP connection in 4 seconds...
+2025-08-28 13:05:38,144 - utils.browser_manager - INFO - 🔄 CDP connection attempt 3/3
+2025-08-28 13:05:46,734 - utils.browser_manager - WARNING - ⚠️ CDP connection attempt 3 failed: BrowserType.connect_over_cdp: socket hang up
+Call log:
+  - <ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-08-28 13:05:46,734 - utils.browser_manager - ERROR - ❌ Failed to connect to Chrome after 3 attempts
+2025-08-28 13:05:46,735 - utils.browser_manager - INFO - 🔄 Attempting browser restart approach (as per system report)
+2025-08-28 13:05:46,735 - utils.browser_manager - ERROR - 🔧 Chrome Debug Connection Troubleshooting Steps:
+2025-08-28 13:05:46,735 - utils.browser_manager - ERROR - 1️⃣ Close all Chrome instances:
+2025-08-28 13:05:46,736 - utils.browser_manager - ERROR -    - taskkill /f /im chrome.exe
+2025-08-28 13:05:46,736 - utils.browser_manager - ERROR -    - taskkill /f /im chromedriver.exe
+2025-08-28 13:05:46,736 - utils.browser_manager - ERROR - 2️⃣ Verify port is free:
+2025-08-28 13:05:46,736 - utils.browser_manager - ERROR -    - netstat -an | findstr :9222
+2025-08-28 13:05:46,737 - utils.browser_manager - ERROR - 3️⃣ Start Chrome with proper debug flags:
+2025-08-28 13:05:46,737 - utils.browser_manager - ERROR -    - "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\ChromeDebugProfile"
+2025-08-28 13:05:46,737 - utils.browser_manager - ERROR - 4️⃣ Verify Chrome debug port responds:
+2025-08-28 13:05:46,738 - utils.browser_manager - ERROR -    - curl http://localhost:9222/json/version
+2025-08-28 13:05:46,738 - utils.browser_manager - ERROR - 5️⃣ If Chrome version incompatible with Playwright:
+2025-08-28 13:05:46,738 - utils.browser_manager - ERROR -    - pip install --upgrade playwright
+2025-08-28 13:05:46,739 - utils.browser_manager - ERROR -    - playwright install chromium
+2025-08-28 13:05:46,869 - utils.browser_manager - ERROR - ℹ️ Chrome processes detected - may need to restart with debug flags
+2025-08-28 13:05:46,869 - utils.browser_manager - INFO - 🔄 Attempting restart-based connection (proven approach)
+2025-08-28 13:05:54,359 - utils.browser_manager - WARNING - ⚠️ Restart-based connection failed: BrowserType.connect_over_cdp: socket hang up
+Call log:
+  - <ws preparing> retrieving websocket url from http://localhost:9222
+
+2025-08-28 13:05:54,359 - utils.browser_manager - WARNING - ⚠️ Chrome profile connection failed - falling back to bundled browser
+2025-08-28 13:05:54,360 - utils.browser_manager - WARNING - ⚠️ User's Chrome profile sync may not be available in fallback mode
+2025-08-28 13:05:54,360 - utils.browser_manager - INFO - 🔄 Falling back to Playwright's bundled Chromium (headless: False)
+2025-08-28 13:05:54,578 - utils.browser_manager - INFO - ✅ Successfully launched Playwright's bundled Chromium (headless: False)
+2025-08-28 13:05:54,596 - utils.browser_manager - INFO - 📄 Created new browser context
+2025-08-28 13:05:54,596 - utils.browser_manager - INFO - ✅ Browser ready (headless: False)
+2025-08-28 13:05:54,596 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-08-28 13:05:54,781 - utils.browser_manager - INFO - 📄 Created new page in context.
+2025-08-28 13:05:54,782 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-08-28 13:05:54,782 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-08-28 13:05:54,783 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-08-28 13:06:02,686 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-08-28 13:06:02,691 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

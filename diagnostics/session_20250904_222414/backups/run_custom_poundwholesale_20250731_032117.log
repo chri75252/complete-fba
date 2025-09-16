@@ -1,0 +1,717 @@
+2025-07-31 03:21:17,196 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250731_032117.log
+2025-07-31 03:21:17,196 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\logs\debug\run_custom_poundwholesale_20250731_032117.log
+2025-07-31 03:21:17,197 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-31 03:21:17,198 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-07-31 03:21:17,202 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized with health management
+2025-07-31 03:21:17,823 - utils.browser_manager - INFO - 🔌 Connecting to persistent Chrome on debug port 9222
+2025-07-31 03:21:18,514 - utils.browser_manager - INFO - 📄 Using existing context with 4 pages
+2025-07-31 03:21:18,514 - utils.browser_manager - INFO - ✅ Connected to persistent Chrome successfully
+2025-07-31 03:21:18,514 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:18,514 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:18,515 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-31 03:21:18,515 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-31 03:21:18,515 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-31 03:21:24,971 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-31 03:21:25,027 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-31 03:21:25,027 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-31 03:21:25,028 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS'
+2025-07-31 03:21:25,028 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products'
+2025-07-31 03:21:25,028 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\cached_products
+2025-07-31 03:21:25,029 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-07-31 03:21:25,029 - amazon_playwright_extractor - WARNING - ⚠️ BrowserCircuitBreaker not available - health management disabled
+2025-07-31 03:21:25,029 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-31 03:21:25,030 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\amazon_data
+2025-07-31 03:21:25,030 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-31 03:21:25,030 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\system_config.json
+2025-07-31 03:21:25,031 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-31 03:21:25,031 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-31 03:21:25,031 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-31 03:21:25,031 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-31 03:21:25,032 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-31 03:21:25,032 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-31 03:21:25,032 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-31 03:21:25,032 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-07-31 03:21:25,032 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-07-31 03:21:25,032 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-07-31 03:21:25,033 - utils.sentinel_monitor - INFO - ✅ SENTINEL MONITOR: Initialized for supplier 'poundwholesale.co.uk'
+2025-07-31 03:21:25,034 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-07-31 03:21:25,034 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-07-31 03:21:25,035 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS
+2025-07-31 03:21:25,035 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-31 03:21:25,035 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-31 03:21:25,035 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250731_032125
+2025-07-31 03:21:25,035 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-31 03:21:25,036 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-07-31 03:21:25,036 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-07-31 03:21:25,036 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-07-31 03:21:25,036 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-07-31 03:21:25,036 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-07-31 03:21:25,037 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-07-31 03:21:25,037 - utils.fixed_enhanced_state_manager - INFO - No existing state file found for poundwholesale.co.uk, starting fresh
+2025-07-31 03:21:25,037 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-31 03:21:25,037 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-07-31 03:21:25,037 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-07-31 03:21:25,084 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 4738 entries
+2025-07-31 03:21:25,091 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 4416 EANs, 4496 URLs, 3342 ASINs in 0.006s
+2025-07-31 03:21:25,091 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 4738 entries
+2025-07-31 03:21:25,092 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 4738
+2025-07-31 03:21:25,143 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 3778 products in poundwholesale-co-uk_products_cache.json
+2025-07-31 03:21:25,146 - utils.sentinel_monitor - WARNING - ⚠️ WARNING: supplier_cache_vs_linking_map divergence 25.4% (session: 4738, global: 3778)
+2025-07-31 03:21:25,147 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 4738 > cache: 3778)
+2025-07-31 03:21:25,148 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-07-31 03:21:25,148 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-07-31 03:21:25,249 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 4738 entries
+2025-07-31 03:21:25,253 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 4416 EANs, 4496 URLs, 3342 ASINs in 0.004s
+2025-07-31 03:21:25,253 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 4738 entries
+2025-07-31 03:21:25,254 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-31 03:21:25,254 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-31 03:21:25,255 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 181 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\config\poundwholesale_categories.json
+2025-07-31 03:21:25,255 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-07-31 03:21:25,256 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 181 predefined categories (infinite mode)
+2025-07-31 03:21:25,257 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-31 03:21:25,258 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-31 03:21:25,258 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-31 03:21:25,259 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-07-31 03:21:25,259 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-07-31 03:21:25,311 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 3778 products in poundwholesale-co-uk_products_cache.json
+2025-07-31 03:21:25,368 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Need to extract remaining products for chunk (36/1000 expected)
+2025-07-31 03:21:25,435 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 3778 products in poundwholesale-co-uk_products_cache.json
+2025-07-31 03:21:25,439 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-07-31 03:21:25,439 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-07-31 03:21:25,440 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-07-31 03:21:25,499 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 3778 products in poundwholesale-co-uk_products_cache.json
+2025-07-31 03:21:25,533 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING APPLIED: 3778 total → 4 unprocessed (4496 already in linking map)
+2025-07-31 03:21:25,533 - PassiveExtractionWorkflow - INFO - 📊 EFFICIENCY GAIN: 99.9% products skipped (already processed)
+2025-07-31 03:21:25,534 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-07-31 03:21:25,534 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-07-31 03:21:25,534 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-07-31 03:21:25,535 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:25,536 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:25,536 - utils.browser_manager - INFO - 📄 Navigating to https://www.poundwholesale.co.uk
+2025-07-31 03:21:27,127 - utils.browser_manager - INFO - ✅ Page ready for https://www.poundwholesale.co.uk
+2025-07-31 03:21:31,830 - tools.supplier_authentication_service - INFO - ✅ Authentication indicator found: 'logout'
+2025-07-31 03:21:31,884 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-07-31 03:21:31,884 - tools.supplier_authentication_service - INFO - ✅ Session already authenticated - skipping login
+2025-07-31 03:21:31,885 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-07-31 03:21:31,885 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-07-31 03:21:31,885 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:31,885 - configurable_supplier_scraper - INFO - Starting enhanced scraping from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies with memory management
+2025-07-31 03:21:34,358 - utils.browser_manager - DEBUG - 🪟 Found 50 Chrome processes, total memory: 6331.2MB
+2025-07-31 03:21:34,359 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 6331.2 MB
+2025-07-31 03:21:36,780 - utils.browser_manager - DEBUG - 🪟 Windows: 50 Chrome processes, 6331MB total
+2025-07-31 03:21:36,781 - configurable_supplier_scraper - INFO - 🧠 Pre-scraping Memory: Chrome=6331MB, Python=149MB, System=79.0%
+2025-07-31 03:21:36,781 - configurable_supplier_scraper - INFO - Setting page limiter for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:36,782 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:36,782 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:36,788 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-07-31 03:21:36,788 - configurable_supplier_scraper - INFO - No page limiter configuration found for www.poundwholesale.co.uk
+2025-07-31 03:21:36,788 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:36,789 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:36,789 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies (attempt 1/3)
+2025-07-31 03:21:36,789 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:36,790 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:36,790 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:38,870 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies in 2.36s...
+2025-07-31 03:21:41,237 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies (attempt 2/3)
+2025-07-31 03:21:41,238 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:41,239 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:41,239 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:43,312 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:43,312 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:21:43,423 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies (Size: 656515 bytes)
+2025-07-31 03:21:43,699 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-07-31 03:21:43,699 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2
+2025-07-31 03:21:43,700 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2 (attempt 1/3)
+2025-07-31 03:21:43,700 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:43,700 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:43,701 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2
+2025-07-31 03:21:45,738 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2 in 1.64s...
+2025-07-31 03:21:47,380 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2 (attempt 2/3)
+2025-07-31 03:21:47,380 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:47,381 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:47,381 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2
+2025-07-31 03:21:50,043 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2
+2025-07-31 03:21:50,043 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2
+2025-07-31 03:21:50,144 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=2 (Size: 648256 bytes)
+2025-07-31 03:21:50,492 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-07-31 03:21:50,493 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3
+2025-07-31 03:21:50,493 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3 (attempt 1/3)
+2025-07-31 03:21:50,493 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:50,493 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:50,493 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3
+2025-07-31 03:21:52,519 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3 in 1.92s...
+2025-07-31 03:21:54,451 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3 (attempt 2/3)
+2025-07-31 03:21:54,451 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:54,451 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:54,452 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3
+2025-07-31 03:21:57,208 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3
+2025-07-31 03:21:57,208 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3
+2025-07-31 03:21:57,346 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=3 (Size: 656844 bytes)
+2025-07-31 03:21:57,538 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-07-31 03:21:57,538 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4
+2025-07-31 03:21:57,539 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4 (attempt 1/3)
+2025-07-31 03:21:57,539 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:21:57,539 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:21:57,540 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4
+2025-07-31 03:21:59,605 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4 in 1.97s...
+2025-07-31 03:22:01,582 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4 (attempt 2/3)
+2025-07-31 03:22:01,583 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:01,583 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:01,584 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4
+2025-07-31 03:22:04,534 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4
+2025-07-31 03:22:04,535 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4
+2025-07-31 03:22:04,657 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=4 (Size: 636969 bytes)
+2025-07-31 03:22:04,850 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-07-31 03:22:04,850 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5
+2025-07-31 03:22:04,851 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5 (attempt 1/3)
+2025-07-31 03:22:04,851 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:04,852 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:04,852 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5
+2025-07-31 03:22:07,276 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5 in 1.76s...
+2025-07-31 03:22:09,052 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5 (attempt 2/3)
+2025-07-31 03:22:09,052 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:09,054 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:09,055 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5
+2025-07-31 03:22:10,345 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5
+2025-07-31 03:22:10,345 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5
+2025-07-31 03:22:10,450 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=5 (Size: 643290 bytes)
+2025-07-31 03:22:10,785 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-07-31 03:22:10,785 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6
+2025-07-31 03:22:10,785 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6 (attempt 1/3)
+2025-07-31 03:22:10,786 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:10,786 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:10,786 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6
+2025-07-31 03:22:12,599 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6 in 1.77s...
+2025-07-31 03:22:14,379 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6 (attempt 2/3)
+2025-07-31 03:22:14,379 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:14,379 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:14,380 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6
+2025-07-31 03:22:16,736 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6
+2025-07-31 03:22:16,738 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6
+2025-07-31 03:22:16,813 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=6 (Size: 423021 bytes)
+2025-07-31 03:22:16,949 - configurable_supplier_scraper - INFO - Found 5 new product URLs on page 6
+2025-07-31 03:22:16,949 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7
+2025-07-31 03:22:16,950 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7 (attempt 1/3)
+2025-07-31 03:22:16,951 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:16,951 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:16,952 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7
+2025-07-31 03:22:22,189 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7 in 1.80s...
+2025-07-31 03:22:24,016 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7 (attempt 2/3)
+2025-07-31 03:22:24,018 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:24,022 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:24,023 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7
+2025-07-31 03:22:26,687 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7
+2025-07-31 03:22:26,688 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7
+2025-07-31 03:22:26,951 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies?p=7 (Size: 333154 bytes)
+2025-07-31 03:22:27,074 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 7
+2025-07-31 03:22:27,074 - configurable_supplier_scraper - INFO - Collected 105 total product URLs across 7 pages
+2025-07-31 03:22:27,075 - configurable_supplier_scraper - INFO - Found 105 total product URLs across all pages
+2025-07-31 03:22:27,077 - utils.url_cache_filter - INFO - 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2025-07-31 03:22:27,120 - utils.url_cache_filter - INFO - ✅ Loaded 3778 URLs from poundwholesale.co.uk cache
+2025-07-31 03:22:27,120 - utils.url_cache_filter - INFO - 📊 Total cached URLs: 3778 (+3778 new)
+2025-07-31 03:22:27,122 - configurable_supplier_scraper - INFO - 🚀 URL Cache: Loaded 3778 cached URLs for efficiency filtering
+2025-07-31 03:22:27,122 - utils.url_cache_filter - INFO - 🔍 URL Filter Results: 1 new URLs, 104 already cached
+2025-07-31 03:22:27,123 - configurable_supplier_scraper - INFO - ✅ URL Pre-filtering: 1 new URLs need processing, 104 already cached
+2025-07-31 03:22:27,123 - configurable_supplier_scraper - INFO - Visiting product page 1/1: https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:27,123 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads (attempt 1/3)
+2025-07-31 03:22:27,124 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:27,124 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:27,124 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:30,529 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads in 1.87s...
+2025-07-31 03:22:32,413 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads (attempt 2/3)
+2025-07-31 03:22:32,413 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:32,413 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:32,414 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:33,872 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:33,873 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:34,038 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads (Size: 665699 bytes)
+2025-07-31 03:22:34,264 - configurable_supplier_scraper - INFO - 🔄 REAL-TIME: Added product 1 to shared accumulator (total: 5)
+2025-07-31 03:22:34,264 - configurable_supplier_scraper - INFO - ✅ Extracted product 1: Cotton Tree 100% Cotton Round Wool Pads 80 Pads - £0.74 (EAN: 5053249257693)
+2025-07-31 03:22:34,264 - utils.url_cache_filter - DEBUG - ➕ Added new URL to cache: https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:34,264 - configurable_supplier_scraper - DEBUG - 🔄 Updated URL cache with new product: https://www.poundwholesale.co.uk/100-cotton-round-wool-pads-twin-pack-120-pads
+2025-07-31 03:22:34,265 - PassiveExtractionWorkflow - INFO - 🔍 SUPPLIER STATE UPDATE: Index updated to 5/1
+2025-07-31 03:22:34,265 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS: Product 5 processed (total in cache: 5)
+2025-07-31 03:22:34,265 - PassiveExtractionWorkflow - INFO - 🔄 SUPPLIER EXTRACTION: Processing product 5
+2025-07-31 03:22:34,265 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: Product 5, frequency=2, enabled=True
+2025-07-31 03:22:34,266 - PassiveExtractionWorkflow - INFO - 🔍 CACHE CHECK: List length=5, modulo=1
+2025-07-31 03:22:34,274 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (23 entries) saved successfully
+2025-07-31 03:22:34,275 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-07-31 03:22:35,353 - utils.browser_manager - DEBUG - 🪟 Found 50 Chrome processes, total memory: 6147.6MB
+2025-07-31 03:22:35,353 - utils.browser_manager - DEBUG - 🧠 Chrome memory usage: 6147.6 MB
+2025-07-31 03:22:37,825 - utils.browser_manager - DEBUG - 🪟 Windows: 50 Chrome processes, 6159MB total
+2025-07-31 03:22:37,825 - configurable_supplier_scraper - INFO - 🧠 Post-scraping Memory: Chrome=6147MB, Python=195MB, System=74.5%
+2025-07-31 03:22:37,826 - configurable_supplier_scraper - INFO - Successfully extracted 1 products from https://www.poundwholesale.co.uk/health-beauty/wholesale-makeup-supplies
+2025-07-31 03:22:37,826 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 1 raw products extracted, 5 total products accumulated
+2025-07-31 03:22:37,826 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 5 total products extracted so far
+2025-07-31 03:22:37,881 - PassiveExtractionWorkflow - INFO - 🔍 HASH LOOKUP: Loaded 4416 processed EANs and 4496 processed URLs from linking map
+2025-07-31 03:22:37,882 - PassiveExtractionWorkflow - INFO - 🔍 LINKING MAP: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:22:37,882 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING RESULTS:
+2025-07-31 03:22:37,882 - PassiveExtractionWorkflow - INFO -   📊 Total input products: 5
+2025-07-31 03:22:37,883 - PassiveExtractionWorkflow - INFO -   📊 Processed EANs in linking map: 4416
+2025-07-31 03:22:37,884 - PassiveExtractionWorkflow - INFO -   📊 Processed URLs in linking map: 4496
+2025-07-31 03:22:37,884 - PassiveExtractionWorkflow - INFO -   📊 Skipped by EAN: 1
+2025-07-31 03:22:37,884 - PassiveExtractionWorkflow - INFO -   📊 Skipped by URL: 0
+2025-07-31 03:22:37,885 - PassiveExtractionWorkflow - INFO -   📊 Included missing EAN: 0
+2025-07-31 03:22:37,886 - PassiveExtractionWorkflow - INFO -   📊 Total processed (filtered out): 1
+2025-07-31 03:22:37,886 - PassiveExtractionWorkflow - INFO -   📊 Unprocessed (to analyze): 4
+2025-07-31 03:22:37,887 - PassiveExtractionWorkflow - INFO -   📊 Efficiency gain: 1/5 = 20.0% reduction
+2025-07-31 03:22:37,889 - PassiveExtractionWorkflow - INFO - 🔍 GAP PROCESSING FILTER: 5 total cached products → 4 unprocessed products
+2025-07-31 03:22:37,890 - PassiveExtractionWorkflow - INFO - 🔍 FILTERING EFFICIENCY: Removed 1 already processed products
+2025-07-31 03:22:37,892 - PassiveExtractionWorkflow - INFO - 🔍 Processing 4 products with main workflow logic
+2025-07-31 03:22:37,892 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 1/4: 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours' ---
+2025-07-31 03:22:37,893 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302109196
+2025-07-31 03:22:37,945 - tools.passive_extraction_workflow_latest - INFO - 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2025-07-31 03:22:37,945 - tools.passive_extraction_workflow_latest - INFO - ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2025-07-31 03:22:37,945 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5015302109196 for supplier product: 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours' (FixedAmazonExtractor)
+2025-07-31 03:22:37,945 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-31 03:22:37,946 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:37,946 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-31 03:22:37,947 - utils.browser_manager - INFO - 📄 Navigating to https://www.amazon.co.uk
+2025-07-31 03:22:39,627 - utils.browser_manager - INFO - ✅ Page ready for https://www.amazon.co.uk
+2025-07-31 03:22:39,627 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5015302109196
+2025-07-31 03:22:42,517 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5015302109196...
+2025-07-31 03:22:43,506 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-31 03:22:45,565 - tools.passive_extraction_workflow_latest - INFO - Found 8 search result elements using selector: div.s-result-item[data-asin]:not([data-asin=''])
+2025-07-31 03:22:45,565 - tools.passive_extraction_workflow_latest - INFO - Processing 8 search result elements for EAN 5015302109196
+2025-07-31 03:22:45,585 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN B0948XJ26J
+2025-07-31 03:22:45,608 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0948XJ26J HTML structure sample: <div role="listitem" data-asin="B0948XJ26J" data-index="3" data-uuid="bb1a758b-4c3b-4616-b29b-5c608f1df034" id="bb1a758b-4c3b-4616-b29b-5c608f1df034" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="7" data-cel-widget="search_result_0"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-3" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sear...
+2025-07-31 03:22:45,608 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0948XJ26J: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,609 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0948XJ26J: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,643 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0948XJ26J (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,673 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 2: ASIN B0DQBX6LNK
+2025-07-31 03:22:45,680 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DQBX6LNK HTML structure sample: <div role="listitem" data-asin="B0DQBX6LNK" data-index="4" data-uuid="2c2494f7-6072-4904-80b0-ad71dcc0f8bc" id="2c2494f7-6072-4904-80b0-ad71dcc0f8bc" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="10" data-cel-widget="search_result_1"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-4" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sea...
+2025-07-31 03:22:45,681 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0DQBX6LNK: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,681 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0DQBX6LNK: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,703 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0DQBX6LNK (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,714 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 3: ASIN B0DR2XPCLB
+2025-07-31 03:22:45,723 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0DR2XPCLB HTML structure sample: <div role="listitem" data-asin="B0DR2XPCLB" data-index="5" data-uuid="3aca68db-a4fb-4fd4-b607-7915465f025c" id="3aca68db-a4fb-4fd4-b607-7915465f025c" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="13" data-cel-widget="search_result_2"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-5" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=sea...
+2025-07-31 03:22:45,724 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0DR2XPCLB: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,724 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0DR2XPCLB: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,742 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0DR2XPCLB (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,757 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 4: ASIN B0CG4HHZFB
+2025-07-31 03:22:45,757 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0CG4HHZFB: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,758 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0CG4HHZFB: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,776 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0CG4HHZFB (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,786 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 5: ASIN B0BXCJMM98
+2025-07-31 03:22:45,786 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0BXCJMM98: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,786 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0BXCJMM98: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,801 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0BXCJMM98 (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,811 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 6: ASIN B0D6QSMT83
+2025-07-31 03:22:45,811 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0D6QSMT83: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,811 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0D6QSMT83: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,826 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0D6QSMT83 (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,835 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 7: ASIN B0DBZK5YVR
+2025-07-31 03:22:45,836 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0DBZK5YVR: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,836 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0DBZK5YVR: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,852 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B0DBZK5YVR (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,865 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 8: ASIN B08FBJRB1V
+2025-07-31 03:22:45,866 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B08FBJRB1V: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,866 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B08FBJRB1V: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:45,884 - tools.passive_extraction_workflow_latest - INFO - Skipping sponsored result: ASIN B08FBJRB1V (detected by ad-specific class: 'AdHolder')
+2025-07-31 03:22:45,884 - tools.passive_extraction_workflow_latest - WARNING - EAN 5015302109196 returned no organic results - skipping
+2025-07-31 03:22:45,884 - tools.passive_extraction_workflow_latest - WARNING - No Amazon results or error for EAN '5015302109196'. Details: no_organic_results
+2025-07-31 03:22:45,885 - tools.passive_extraction_workflow_latest - INFO - Falling back to title search for supplier product: 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'
+2025-07-31 03:22:45,885 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'
+2025-07-31 03:22:45,885 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours
+2025-07-31 03:22:49,110 - tools.passive_extraction_workflow_latest - INFO - Title search found 1 elements using selector: div.s-search-results > div[data-asin]
+2025-07-31 03:22:49,119 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'
+2025-07-31 03:22:49,119 - tools.passive_extraction_workflow_latest - WARNING - Both EAN '5015302109196' and title 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours' searches failed
+2025-07-31 03:22:49,119 - PassiveExtractionWorkflow - INFO - ❌ EAN search failed for 5015302109196. Will fall back to title search.
+2025-07-31 03:22:49,119 - PassiveExtractionWorkflow - INFO - EAN search failed. Falling back to title search.
+2025-07-31 03:22:49,120 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by title using search bar: 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'
+2025-07-31 03:22:49,120 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_title, getting one from BrowserManager.
+2025-07-31 03:22:49,120 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:49,120 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-31 03:22:49,121 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for title: First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours
+2025-07-31 03:22:52,754 - tools.passive_extraction_workflow_latest - INFO - Title search found 1 elements using selector: div.s-search-results > div[data-asin]
+2025-07-31 03:22:52,762 - tools.passive_extraction_workflow_latest - WARNING - No valid ASINs found for title 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'
+2025-07-31 03:22:52,762 - PassiveExtractionWorkflow - WARNING - No Amazon results for title 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'. Skipping.
+2025-07-31 03:22:52,763 - PassiveExtractionWorkflow - WARNING - Could not retrieve Amazon data for 'First Steps Long Handle Baby Weaning Spoons 18cm 4 Pack Assorted Colours'. Creating no-match linking entry.
+2025-07-31 03:22:52,763 - PassiveExtractionWorkflow - DEBUG - ✅ Added entry to hash indexes: 5015302109196
+2025-07-31 03:22:52,763 - PassiveExtractionWorkflow - DEBUG - 🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 5015302109196, URL: https://www.poundwholesale.co.uk/first-steps-long-handle-baby-weaning-spoons-18cm-4-pack-assorted-colours
+2025-07-31 03:22:52,764 - PassiveExtractionWorkflow - INFO - ✅ Added NO-MATCH linking entry for chunk product: 5015302109196 → NO MATCH
+2025-07-31 03:22:52,767 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (23 entries) saved successfully
+2025-07-31 03:22:52,768 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-07-31 03:22:52,768 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 4739 entries for supplier poundwholesale.co.uk
+2025-07-31 03:22:52,820 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 4739, sample: {'supplier_ean': '5038673311289', 'amazon_asin': 'B00A1G6U2A', 'supplier_title': '1.5V Button Cell Battery 40pc', 'amazon_title': '100 X Assorted Button Cell Batteries Watches,Games...', 'supplier_price': 0.78, 'amazon_price': 0.25, 'match_method': 'EAN', 'confidence': 'high', 'created_at': '2025-07-25T19:28:23.519753', 'supplier_url': 'https://www.poundwholesale.co.uk/1-5v-button-cell-...'}
+2025-07-31 03:22:52,821 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:22:52,822 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 4739 entries using atomic strategy...
+2025-07-31 03:22:52,998 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (4739 entries) saved successfully
+2025-07-31 03:22:52,999 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 4739 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:22:53,000 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 2625043 bytes
+2025-07-31 03:22:53,003 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 4417 EANs, 4497 URLs, 3342 ASINs in 0.003s
+2025-07-31 03:22:53,004 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 4739 entries
+2025-07-31 03:22:53,005 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 1 (linking_map_batch_size: 1)
+2025-07-31 03:22:53,006 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 2/4: 'First Steps Baby Food Storage Pots & Spoon 3pc Assorted Colours' ---
+2025-07-31 03:22:53,006 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302109141
+2025-07-31 03:22:53,024 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5015302109141 for supplier product: 'First Steps Baby Food Storage Pots & Spoon 3pc Assorted Colours' (FixedAmazonExtractor)
+2025-07-31 03:22:53,030 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-31 03:22:53,031 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:22:53,031 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-31 03:22:53,031 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5015302109141
+2025-07-31 03:22:55,823 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5015302109141...
+2025-07-31 03:22:56,134 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-31 03:22:58,172 - tools.passive_extraction_workflow_latest - INFO - Found 5 search result elements using selector: div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored-product'])
+2025-07-31 03:22:58,173 - tools.passive_extraction_workflow_latest - INFO - Processing 5 search result elements for EAN 5015302109141
+2025-07-31 03:22:58,184 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN B07WZRM6WK
+2025-07-31 03:22:58,216 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B07WZRM6WK HTML structure sample: <div data-asin="B07WZRM6WK" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:0" data-cel-widget="search_result_17"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-31 03:22:58,217 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B07WZRM6WK: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,217 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B07WZRM6WK: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,235 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B07WZRM6WK: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,311 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B07WZRM6WK title extracted using selector 'h2': BEZGAR TB141 Remote Control Cars - 1:14 Scale RC C...
+2025-07-31 03:22:58,311 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B07WZRM6WK - BEZGAR TB141 Remote Control Cars - 1:14 Scale RC Car, 2WD 20...
+2025-07-31 03:22:58,330 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 2: ASIN B0CS392QD8
+2025-07-31 03:22:58,337 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CS392QD8 HTML structure sample: <div data-asin="B0CS392QD8" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:1" data-cel-widget="search_result_18"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-31 03:22:58,337 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0CS392QD8: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,337 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0CS392QD8: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,353 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0CS392QD8: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,425 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CS392QD8 title extracted using selector 'h2': RIAARIO 1:18 All Terrain RC Car Age 8+, 36 KPH Hig...
+2025-07-31 03:22:58,425 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0CS392QD8 - RIAARIO 1:18 All Terrain RC Car Age 8+, 36 KPH High Speed Re...
+2025-07-31 03:22:58,433 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 3: ASIN B088WP4TQF
+2025-07-31 03:22:58,441 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B088WP4TQF HTML structure sample: <div data-asin="B088WP4TQF" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:2" data-cel-widget="search_result_19"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-31 03:22:58,442 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B088WP4TQF: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,442 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B088WP4TQF: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,456 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B088WP4TQF: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,554 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B088WP4TQF title extracted using selector 'h2': Mostop Remote Control Crawler High Speed Tank Off-...
+2025-07-31 03:22:58,555 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B088WP4TQF - Mostop Remote Control Crawler High Speed Tank Off-Road 4WD R...
+2025-07-31 03:22:58,562 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 4: ASIN B0F1TR3PTJ
+2025-07-31 03:22:58,562 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0F1TR3PTJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,563 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0F1TR3PTJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,577 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0F1TR3PTJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,685 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0F1TR3PTJ title extracted using selector 'h2': BORSTOYPRO 1:16 Fast RC Car, 40KM/H High Speed Rem...
+2025-07-31 03:22:58,686 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0F1TR3PTJ - BORSTOYPRO 1:16 Fast RC Car, 40KM/H High Speed Remote Contro...
+2025-07-31 03:22:58,696 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 5: ASIN B08V55BV21
+2025-07-31 03:22:58,696 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B08V55BV21: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,696 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B08V55BV21: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,711 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B08V55BV21: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:22:58,800 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08V55BV21 title extracted using selector 'h2': DEERC RC Cars Remote Control Car 1:14 Off Road Mon...
+2025-07-31 03:22:58,800 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B08V55BV21 - DEERC RC Cars Remote Control Car 1:14 Off Road Monster Truck...
+2025-07-31 03:22:58,800 - tools.passive_extraction_workflow_latest - INFO - Found 5 organic results, stopping search to improve performance.
+2025-07-31 03:22:58,800 - tools.passive_extraction_workflow_latest - INFO - Multiple organic results (5) found for EAN 5015302109141. Using first organic result (most relevant): ASIN B07WZRM6WK
+2025-07-31 03:22:58,801 - tools.passive_extraction_workflow_latest - INFO - FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking
+2025-07-31 03:22:58,801 - tools.passive_extraction_workflow_latest - INFO - EAN search selected ASIN B07WZRM6WK for 5015302109141
+2025-07-31 03:22:58,801 - tools.passive_extraction_workflow_latest - INFO - Single ASIN B07WZRM6WK found for EAN 5015302109141.
+2025-07-31 03:22:58,801 - tools.passive_extraction_workflow_latest - INFO - Proceeding with ASIN: B07WZRM6WK for EAN: 5015302109141
+2025-07-31 03:22:58,802 - amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B07WZRM6WK. Getting a new one from BrowserManager.
+2025-07-31 03:22:58,802 - amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5015302109141&ref=nb_sb_noss
+2025-07-31 03:23:02,514 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-07-31 03:23:03,822 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-07-31 03:23:04,829 - amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2025-07-31 03:23:07,844 - amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2025-07-31 03:23:07,844 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-07-31 03:23:07,929 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-07-31 03:23:07,929 - amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2025-07-31 03:23:12,943 - amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2025-07-31 03:23:19,953 - amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B07WZRM6WK
+2025-07-31 03:23:19,953 - amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2025-07-31 03:23:20,040 - amazon_playwright_extractor - INFO - Title found: 'BEZGAR TB141 Remote Control Cars - 1:14 Scale RC Car, 2WD 20KM/H All-Terrains Toy Off Road Vehicle Monster Truck with Two Rechargeable Batteries for Boys Kids Adults and Girls, Red' via #productTitle
+2025-07-31 03:23:20,040 - amazon_playwright_extractor - INFO - Extracting price details...
+2025-07-31 03:23:20,097 - amazon_playwright_extractor - INFO - Current price: 39.99 via #corePrice_feature_div .a-offscreen
+2025-07-31 03:23:20,186 - amazon_playwright_extractor - INFO - Original price: 42.99 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2025-07-31 03:23:20,221 - amazon_playwright_extractor - INFO - Amazon sales badge found: 50 in container div#socialProofingAsinFaceout_feature_div
+2025-07-31 03:23:20,221 - amazon_playwright_extractor - INFO - Extracting image URLs...
+2025-07-31 03:23:20,283 - amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/81EGa3K40uL._AC_SL1500_.jpg via #landingImage
+2025-07-31 03:23:20,402 - amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2025-07-31 03:23:20,409 - amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2025-07-31 03:23:21,085 - amazon_playwright_extractor - INFO - Extracting sales rank information...
+2025-07-31 03:23:21,354 - amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2025-07-31 03:23:21,389 - amazon_playwright_extractor - INFO - Rating: 4.2 via #acrPopover[title*='out of 5 stars']
+2025-07-31 03:23:21,413 - amazon_playwright_extractor - INFO - Review count: 3636 via #acrCustomerReviewText
+2025-07-31 03:23:21,413 - amazon_playwright_extractor - INFO - Extracting stock information...
+2025-07-31 03:23:21,472 - amazon_playwright_extractor - INFO - Availability text: 'Only 6 left in stock.' via #availability span.a-color-price
+2025-07-31 03:23:21,473 - amazon_playwright_extractor - INFO - Extracting features/bullets...
+2025-07-31 03:23:21,792 - amazon_playwright_extractor - INFO - Found 5 features.
+2025-07-31 03:23:21,793 - amazon_playwright_extractor - INFO - Extracting product description...
+2025-07-31 03:23:21,863 - amazon_playwright_extractor - INFO - Description found using selector: #aplus_feature_div
+2025-07-31 03:23:21,864 - amazon_playwright_extractor - INFO - Extracting product specifications table...
+2025-07-31 03:23:22,435 - amazon_playwright_extractor - INFO - Specifications table parsed using selector: #productDetails_techSpec_section_1
+2025-07-31 03:23:22,436 - amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2025-07-31 03:23:22,436 - amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2025-07-31 03:23:22,436 - amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2025-07-31 03:23:22,436 - amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2025-07-31 03:23:25,455 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2025-07-31 03:23:28,468 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2025-07-31 03:23:28,537 - amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2025-07-31 03:23:28,671 - amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2025-07-31 03:23:28,671 - amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2025-07-31 03:23:28,737 - amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2025-07-31 03:23:28,737 - amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2025-07-31 03:23:31,034 - amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2025-07-31 03:23:31,073 - amazon_playwright_extractor - INFO - ✅ Product-Details wrapper appeared on attempt 1
+2025-07-31 03:23:31,141 - amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2025-07-31 03:23:31,201 - amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2025-07-31 03:23:32,256 - amazon_playwright_extractor - INFO - ✅ Primary attempt successful: 169 rows found
+2025-07-31 03:23:32,274 - amazon_playwright_extractor - INFO - Processing 169 rows in Keepa Product Details AG Grid.
+2025-07-31 03:23:34,415 - amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 4.73' in Keepa AG Grid.
+2025-07-31 03:23:34,549 - amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 6.00' in Keepa AG Grid.
+2025-07-31 03:23:39,435 - amazon_playwright_extractor - INFO - ✅ Successfully parsed 48 items from Keepa Product Details AG Grid.
+2025-07-31 03:23:39,435 - amazon_playwright_extractor - INFO - ASIN B07WZRM6WK: Attempting to extract EANs from Keepa product_details_tab_data.
+2025-07-31 03:23:39,435 - amazon_playwright_extractor - WARNING - ASIN B07WZRM6WK: Could not find EAN in Keepa product_details_tab_data.
+2025-07-31 03:23:39,435 - amazon_playwright_extractor - INFO - ASIN B07WZRM6WK: BSR not found or invalid from page. Attempting fallback from Keepa.
+2025-07-31 03:23:39,435 - amazon_playwright_extractor - INFO - ASIN B07WZRM6WK: BSR 19810 in 'Toys & Games 22' from Keepa SalesRankDetailsTable.
+2025-07-31 03:23:39,436 - tools.passive_extraction_workflow_latest - INFO - Successfully extracted data for ASIN B07WZRM6WK (EAN on page: N/A)
+2025-07-31 03:23:39,436 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5015302109141. Using EAN result without title fallback.
+2025-07-31 03:23:39,439 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: amazon_B07WZRM6WK_5015302109141.json (31 entries) saved successfully
+2025-07-31 03:23:39,440 - PassiveExtractionWorkflow - INFO - 💾 Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B07WZRM6WK_5015302109141.json
+2025-07-31 03:23:39,441 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map type: <class 'list'>, size: 4739 entries
+2025-07-31 03:23:39,441 - PassiveExtractionWorkflow - DEBUG - ✅ Added entry to hash indexes: 5015302109141
+2025-07-31 03:23:39,441 - PassiveExtractionWorkflow - DEBUG - 🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 5015302109141, URL: https://www.poundwholesale.co.uk/first-steps-baby-food-storage-pots-spoon-3pc-assorted-colours
+2025-07-31 03:23:39,442 - PassiveExtractionWorkflow - INFO - 💡 FINANCIAL REPORT TRIGGER: Next trigger at 4750 linking map entries (current: 4740, trigger frequency: 50)
+2025-07-31 03:23:39,442 - PassiveExtractionWorkflow - INFO - ❌ Not profitable product: First Steps Baby Food Storage Pots & Spoon 3pc Assorted Colours
+2025-07-31 03:23:39,446 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (23 entries) saved successfully
+2025-07-31 03:23:39,449 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-07-31 03:23:39,450 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 4740 entries for supplier poundwholesale.co.uk
+2025-07-31 03:23:39,529 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 4740, sample: {'supplier_ean': '5038673311289', 'amazon_asin': 'B00A1G6U2A', 'supplier_title': '1.5V Button Cell Battery 40pc', 'amazon_title': '100 X Assorted Button Cell Batteries Watches,Games...', 'supplier_price': 0.78, 'amazon_price': 0.25, 'match_method': 'EAN', 'confidence': 'high', 'created_at': '2025-07-25T19:28:23.519753', 'supplier_url': 'https://www.poundwholesale.co.uk/1-5v-button-cell-...'}
+2025-07-31 03:23:39,529 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:23:39,529 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 4740 entries using atomic strategy...
+2025-07-31 03:23:39,653 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (4740 entries) saved successfully
+2025-07-31 03:23:39,654 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 4740 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:23:39,655 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 2625700 bytes
+2025-07-31 03:23:39,657 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 4418 EANs, 4498 URLs, 3343 ASINs in 0.002s
+2025-07-31 03:23:39,657 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 4740 entries
+2025-07-31 03:23:39,659 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 2 (linking_map_batch_size: 1)
+2025-07-31 03:23:39,659 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 3/4: 'First Steps Baby Food Freezer Cubes 8 Pack' ---
+2025-07-31 03:23:39,660 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302106799
+2025-07-31 03:23:39,677 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5015302106799 for supplier product: 'First Steps Baby Food Freezer Cubes 8 Pack' (FixedAmazonExtractor)
+2025-07-31 03:23:39,677 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-31 03:23:39,678 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:23:39,679 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-31 03:23:39,679 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5015302106799
+2025-07-31 03:23:43,068 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5015302106799...
+2025-07-31 03:23:43,361 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-31 03:23:45,402 - tools.passive_extraction_workflow_latest - INFO - Found 5 search result elements using selector: div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored-product'])
+2025-07-31 03:23:45,402 - tools.passive_extraction_workflow_latest - INFO - Processing 5 search result elements for EAN 5015302106799
+2025-07-31 03:23:45,414 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN B08CY3F21W
+2025-07-31 03:23:45,420 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08CY3F21W HTML structure sample: <div role="listitem" data-asin="B08CY3F21W" data-index="2" data-uuid="3a8cf80d-d1e9-4315-8cbf-75edd1cd8edf" id="3a8cf80d-d1e9-4315-8cbf-75edd1cd8edf" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="5" data-cel-widget="search_result_1"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-2" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=search-result...
+2025-07-31 03:23:45,420 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B08CY3F21W: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,420 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B08CY3F21W: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,441 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B08CY3F21W: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,544 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B08CY3F21W title extracted using selector 'h2': First Steps 8 Baby Food Freezer Cubes Tray 70ml PO...
+2025-07-31 03:23:45,545 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B08CY3F21W - First Steps 8 Baby Food Freezer Cubes Tray 70ml POTS BPA Fre...
+2025-07-31 03:23:45,556 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 2: ASIN B0BC2BZRBW
+2025-07-31 03:23:45,563 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BC2BZRBW HTML structure sample: <div data-asin="B0BC2BZRBW" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:0" data-cel-widget="search_result_19"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-31 03:23:45,563 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0BC2BZRBW: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,563 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0BC2BZRBW: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,581 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0BC2BZRBW: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,683 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BC2BZRBW title extracted using selector 'h2': OKOOKO 41Pcs Felt Story Board Set, 43x29inch Solar...
+2025-07-31 03:23:45,683 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0BC2BZRBW - OKOOKO 41Pcs Felt Story Board Set, 43x29inch Solar System Fe...
+2025-07-31 03:23:45,694 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 3: ASIN B0BXFJ24Y6
+2025-07-31 03:23:45,704 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BXFJ24Y6 HTML structure sample: <div data-asin="B0BXFJ24Y6" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item sg-col-4-of-16 sg-col sg-col-4-of-8 sg-col-4-of-20" data-uuid="s-searchgrid-carousel:1" data-cel-widget="search_result_20"><div class="sg-col-inner">
+                
+                
+                  
+
+
+<div data-component-type="s-impression-logger" data-component-props="{&quot;percentageShownToFire&quot;:&quot;50&quot;,&quot;batchable&quot;:true,&quot;requiredElementSelector&quot;:&quot;.s-image:visible&quot;,&quot;url&quot;:&quot;https://unagi-eu.amazon.com/1/events/com.amazon.eel.SponsoredProducts...
+2025-07-31 03:23:45,704 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0BXFJ24Y6: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,705 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0BXFJ24Y6: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,723 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0BXFJ24Y6: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,794 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BXFJ24Y6 title extracted using selector 'h2': King Cole Christmas Super Chunky Crochet Yarn, Woo...
+2025-07-31 03:23:45,795 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0BXFJ24Y6 - King Cole Christmas Super Chunky Crochet Yarn, Wool Acrylic ...
+2025-07-31 03:23:45,803 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 4: ASIN B0BJ79GM9L
+2025-07-31 03:23:45,804 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0BJ79GM9L: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,804 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0BJ79GM9L: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,823 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0BJ79GM9L: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,896 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0BJ79GM9L title extracted using selector 'h2': Crochet Knitting Yarn 4 x 100g Crochet Yarn Wool 8...
+2025-07-31 03:23:45,896 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0BJ79GM9L - Crochet Knitting Yarn 4 x 100g Crochet Yarn Wool 8 Strands o...
+2025-07-31 03:23:45,903 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 5: ASIN B0CW9BVRSJ
+2025-07-31 03:23:45,904 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B0CW9BVRSJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,904 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B0CW9BVRSJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:45,929 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B0CW9BVRSJ: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:23:46,010 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B0CW9BVRSJ title extracted using selector 'h2': Feleph 260 Pieces Masonry Bricks Set Multicolored ...
+2025-07-31 03:23:46,011 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B0CW9BVRSJ - Feleph 260 Pieces Masonry Bricks Set Multicolored Building B...
+2025-07-31 03:23:46,011 - tools.passive_extraction_workflow_latest - INFO - Found 5 organic results, stopping search to improve performance.
+2025-07-31 03:23:46,012 - tools.passive_extraction_workflow_latest - INFO - Multiple organic results (5) found for EAN 5015302106799. Using first organic result (most relevant): ASIN B08CY3F21W
+2025-07-31 03:23:46,012 - tools.passive_extraction_workflow_latest - INFO - FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking
+2025-07-31 03:23:46,013 - tools.passive_extraction_workflow_latest - INFO - EAN search selected ASIN B08CY3F21W for 5015302106799
+2025-07-31 03:23:46,013 - tools.passive_extraction_workflow_latest - INFO - Single ASIN B08CY3F21W found for EAN 5015302106799.
+2025-07-31 03:23:46,013 - tools.passive_extraction_workflow_latest - INFO - Proceeding with ASIN: B08CY3F21W for EAN: 5015302106799
+2025-07-31 03:23:46,014 - amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B08CY3F21W. Getting a new one from BrowserManager.
+2025-07-31 03:23:46,014 - amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5015302106799&ref=nb_sb_noss
+2025-07-31 03:23:48,852 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-07-31 03:23:49,446 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-07-31 03:23:50,460 - amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2025-07-31 03:23:53,476 - amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2025-07-31 03:23:53,477 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-07-31 03:23:53,588 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-07-31 03:23:53,589 - amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2025-07-31 03:23:58,604 - amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2025-07-31 03:24:05,615 - amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B08CY3F21W
+2025-07-31 03:24:05,616 - amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2025-07-31 03:24:05,671 - amazon_playwright_extractor - INFO - Title found: 'First Steps 8 Baby Food Freezer Cubes Tray 70ml POTS BPA Free' via #productTitle
+2025-07-31 03:24:05,671 - amazon_playwright_extractor - INFO - Extracting price details...
+2025-07-31 03:24:05,700 - amazon_playwright_extractor - INFO - Current price: 6.54 via #corePrice_feature_div .a-offscreen
+2025-07-31 03:24:05,762 - amazon_playwright_extractor - INFO - Original price: 6.79 via .basisPrice span.a-text-price span.a-offscreen
+2025-07-31 03:24:05,805 - amazon_playwright_extractor - INFO - Amazon sales badge found: 50 in container div#socialProofingAsinFaceout_feature_div
+2025-07-31 03:24:05,806 - amazon_playwright_extractor - INFO - Extracting image URLs...
+2025-07-31 03:24:05,854 - amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/51KKAg6iskL._AC_SL1200_.jpg via #landingImage
+2025-07-31 03:24:05,900 - amazon_playwright_extractor - INFO - Found 1 thumbnails.
+2025-07-31 03:24:05,915 - amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2025-07-31 03:24:06,211 - amazon_playwright_extractor - INFO - Extracting sales rank information...
+2025-07-31 03:24:06,523 - amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2025-07-31 03:24:06,595 - amazon_playwright_extractor - INFO - Rating: 4.3 via i[class*='a-icon-star'] span.a-icon-alt
+2025-07-31 03:24:06,644 - amazon_playwright_extractor - INFO - Extracting stock information...
+2025-07-31 03:24:06,666 - amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2025-07-31 03:24:06,666 - amazon_playwright_extractor - INFO - Extracting features/bullets...
+2025-07-31 03:24:06,691 - amazon_playwright_extractor - INFO - Extracting product description...
+2025-07-31 03:24:06,711 - amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2025-07-31 03:24:06,711 - amazon_playwright_extractor - INFO - Extracting product specifications table...
+2025-07-31 03:24:06,881 - amazon_playwright_extractor - INFO - Specifications table parsed using selector: #productDetails_techSpec_section_1
+2025-07-31 03:24:06,881 - amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2025-07-31 03:24:06,881 - amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2025-07-31 03:24:06,881 - amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2025-07-31 03:24:06,882 - amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2025-07-31 03:24:09,890 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2025-07-31 03:24:12,905 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2025-07-31 03:24:12,964 - amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2025-07-31 03:24:13,061 - amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2025-07-31 03:24:13,062 - amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2025-07-31 03:24:13,095 - amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2025-07-31 03:24:13,095 - amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2025-07-31 03:24:15,240 - amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2025-07-31 03:24:19,840 - amazon_playwright_extractor - INFO - ✅ Product-Details wrapper appeared on attempt 1
+2025-07-31 03:24:19,856 - amazon_playwright_extractor - WARNING - Product-Details tab visible, but inner grid still not ready – extending wait with retry logic.
+2025-07-31 03:24:19,856 - amazon_playwright_extractor - INFO - Grid attempt 1/3: Waiting 15000ms for grid container...
+2025-07-31 03:24:20,073 - amazon_playwright_extractor - INFO - ✅ Grid became visible after attempt 1 – continuing.
+2025-07-31 03:24:20,104 - amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2025-07-31 03:24:20,166 - amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2025-07-31 03:24:21,221 - amazon_playwright_extractor - INFO - ✅ Primary attempt successful: 91 rows found
+2025-07-31 03:24:21,241 - amazon_playwright_extractor - INFO - Processing 91 rows in Keepa Product Details AG Grid.
+2025-07-31 03:24:22,431 - amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.64' in Keepa AG Grid.
+2025-07-31 03:24:22,571 - amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.52' in Keepa AG Grid.
+2025-07-31 03:24:24,384 - amazon_playwright_extractor - INFO - ✅ Successfully parsed 27 items from Keepa Product Details AG Grid.
+2025-07-31 03:24:24,384 - amazon_playwright_extractor - INFO - ASIN B08CY3F21W: Attempting to extract EANs from Keepa product_details_tab_data.
+2025-07-31 03:24:24,385 - amazon_playwright_extractor - INFO - ASIN B08CY3F21W: EAN '5015302106799' found in Keepa details via key 'Product Codes - EAN'.
+2025-07-31 03:24:24,385 - amazon_playwright_extractor - INFO - ASIN B08CY3F21W: BSR not found or invalid from page. Attempting fallback from Keepa.
+2025-07-31 03:24:24,385 - amazon_playwright_extractor - INFO - ASIN B08CY3F21W: BSR 11162 in 'Baby Products 6' from Keepa SalesRankDetailsTable.
+2025-07-31 03:24:24,386 - tools.passive_extraction_workflow_latest - INFO - Successfully extracted data for ASIN B08CY3F21W (EAN on page: 5015302106799)
+2025-07-31 03:24:24,386 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5015302106799. Using EAN result without title fallback.
+2025-07-31 03:24:24,389 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: amazon_B08CY3F21W_5015302106799.json (32 entries) saved successfully
+2025-07-31 03:24:24,390 - PassiveExtractionWorkflow - INFO - 💾 Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B08CY3F21W_5015302106799.json
+2025-07-31 03:24:24,390 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map type: <class 'list'>, size: 4740 entries
+2025-07-31 03:24:24,390 - PassiveExtractionWorkflow - DEBUG - ✅ Added entry to hash indexes: 5015302106799
+2025-07-31 03:24:24,390 - PassiveExtractionWorkflow - DEBUG - 🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 5015302106799, URL: https://www.poundwholesale.co.uk/first-steps-baby-food-freezer-cubes-8-pack
+2025-07-31 03:24:24,391 - PassiveExtractionWorkflow - INFO - 💡 FINANCIAL REPORT TRIGGER: Next trigger at 4750 linking map entries (current: 4741, trigger frequency: 50)
+2025-07-31 03:24:24,391 - PassiveExtractionWorkflow - INFO - ❌ Not profitable product: First Steps Baby Food Freezer Cubes 8 Pack
+2025-07-31 03:24:24,395 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (23 entries) saved successfully
+2025-07-31 03:24:24,397 - utils.fixed_enhanced_state_manager - DEBUG - ✅ State saved successfully to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-07-31 03:24:24,397 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 4741 entries for supplier poundwholesale.co.uk
+2025-07-31 03:24:24,471 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 4741, sample: {'supplier_ean': '5038673311289', 'amazon_asin': 'B00A1G6U2A', 'supplier_title': '1.5V Button Cell Battery 40pc', 'amazon_title': '100 X Assorted Button Cell Batteries Watches,Games...', 'supplier_price': 0.78, 'amazon_price': 0.25, 'match_method': 'EAN', 'confidence': 'high', 'created_at': '2025-07-25T19:28:23.519753', 'supplier_url': 'https://www.poundwholesale.co.uk/1-5v-button-cell-...'}
+2025-07-31 03:24:24,471 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:24:24,472 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 4741 entries using atomic strategy...
+2025-07-31 03:24:24,612 - windows_save_guardian - INFO - ✅ ATOMIC SAVE: linking_map.json (4741 entries) saved successfully
+2025-07-31 03:24:24,613 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 4741 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json
+2025-07-31 03:24:24,614 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (3)\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with size 2626197 bytes
+2025-07-31 03:24:24,617 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 4419 EANs, 4499 URLs, 3344 ASINs in 0.003s
+2025-07-31 03:24:24,618 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 4741 entries
+2025-07-31 03:24:24,620 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 3 (linking_map_batch_size: 1)
+2025-07-31 03:24:24,620 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 4/4: 'First Steps Bottle & Teat Brush 3 Assorted Colours' ---
+2025-07-31 03:24:24,620 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5015302105747
+2025-07-31 03:24:24,656 - tools.passive_extraction_workflow_latest - INFO - Searching Amazon by EAN: 5015302105747 for supplier product: 'First Steps Bottle & Teat Brush 3 Assorted Colours' (FixedAmazonExtractor)
+2025-07-31 03:24:24,656 - tools.passive_extraction_workflow_latest - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2025-07-31 03:24:24,656 - utils.browser_manager - DEBUG - ✅ Browser connection healthy - version: healthy
+2025-07-31 03:24:24,657 - utils.browser_manager - INFO - ♻️ Reusing cached page for https://www.amazon.co.uk
+2025-07-31 03:24:24,657 - tools.passive_extraction_workflow_latest - INFO - Navigating to Amazon UK to search for EAN: 5015302105747
+2025-07-31 03:24:28,205 - tools.passive_extraction_workflow_latest - INFO - Waiting for search results page to load for EAN 5015302105747...
+2025-07-31 03:24:28,492 - tools.passive_extraction_workflow_latest - INFO - Found search results container with selector: div.s-search-results
+2025-07-31 03:24:30,527 - tools.passive_extraction_workflow_latest - INFO - Found 1 search result elements using selector: div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored-product'])
+2025-07-31 03:24:30,527 - tools.passive_extraction_workflow_latest - INFO - Processing 1 search result elements for EAN 5015302105747
+2025-07-31 03:24:30,536 - tools.passive_extraction_workflow_latest - DEBUG - Processing element 1: ASIN B094JVKC6G
+2025-07-31 03:24:30,543 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B094JVKC6G HTML structure sample: <div role="listitem" data-asin="B094JVKC6G" data-index="2" data-uuid="f4970405-41b0-4605-a42e-041259079a56" id="f4970405-41b0-4605-a42e-041259079a56" data-component-type="s-search-result" class="sg-col-4-of-4 sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-8 sg-col-4-of-20" data-component-id="5" data-cel-widget="search_result_1"><div class="sg-col-inner"><div cel_widget_id="MAIN-SEARCH_RESULTS-2" class="s-widget-container s-spacing-small s-widget-container-height-small celwidget slot=MAIN template=SEARCH_RESULTS widgetId=search-result...
+2025-07-31 03:24:30,543 - tools.passive_extraction_workflow_latest - DEBUG - Error checking sponsored badge for ASIN B094JVKC6G: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:24:30,543 - tools.passive_extraction_workflow_latest - DEBUG - Error checking aria-label for ASIN B094JVKC6G: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:24:30,562 - tools.passive_extraction_workflow_latest - DEBUG - Error checking text for ad indicators for ASIN B094JVKC6G: 'ElementHandle' object has no attribute 'locator'
+2025-07-31 03:24:30,641 - tools.passive_extraction_workflow_latest - DEBUG - ASIN B094JVKC6G title extracted using selector 'h2': RSW 2 in 1 Baby Bottle and Teat Brush, 2 Brushes i...
+2025-07-31 03:24:30,641 - tools.passive_extraction_workflow_latest - INFO - Found organic result: ASIN B094JVKC6G - RSW 2 in 1 Baby Bottle and Teat Brush, 2 Brushes in 1, Ideal...
+2025-07-31 03:24:30,641 - tools.passive_extraction_workflow_latest - INFO - Single organic result found for EAN 5015302105747: ASIN B094JVKC6G
+2025-07-31 03:24:30,642 - tools.passive_extraction_workflow_latest - INFO - EAN search selected ASIN B094JVKC6G for 5015302105747
+2025-07-31 03:24:30,642 - tools.passive_extraction_workflow_latest - INFO - Single ASIN B094JVKC6G found for EAN 5015302105747.
+2025-07-31 03:24:30,643 - tools.passive_extraction_workflow_latest - INFO - Proceeding with ASIN: B094JVKC6G for EAN: 5015302105747
+2025-07-31 03:24:30,643 - amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B094JVKC6G. Getting a new one from BrowserManager.
+2025-07-31 03:24:30,643 - amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5015302105747&ref=nb_sb_noss
+2025-07-31 03:24:33,565 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-07-31 03:24:34,095 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-07-31 03:24:35,109 - amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2025-07-31 03:24:38,118 - amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2025-07-31 03:24:38,118 - amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-07-31 03:24:38,200 - amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-07-31 03:24:38,201 - amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2025-07-31 03:24:43,208 - amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2025-07-31 03:24:50,209 - amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B094JVKC6G
+2025-07-31 03:24:50,209 - amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2025-07-31 03:24:50,268 - amazon_playwright_extractor - INFO - Title found: 'RSW 2 in 1 Baby Bottle and Teat Brush, 2 Brushes in 1, Ideal for Cleaning Training Cups, Wide Neck Bottles, Lids, Valves' via #productTitle
+2025-07-31 03:24:50,268 - amazon_playwright_extractor - INFO - Extracting price details...
+2025-07-31 03:24:50,301 - amazon_playwright_extractor - INFO - Current price: 3.99 via #corePrice_feature_div .a-offscreen
+2025-07-31 03:24:50,359 - amazon_playwright_extractor - INFO - Original price: 4.79 via .basisPrice span.a-text-price span.a-offscreen
+2025-07-31 03:24:50,406 - amazon_playwright_extractor - INFO - Amazon sales badge found: 700 in container div#socialProofingAsinFaceout_feature_div
+2025-07-31 03:24:50,406 - amazon_playwright_extractor - INFO - Extracting image URLs...
+2025-07-31 03:24:50,471 - amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/51IhZ6nfG-L._AC_SL1082_.jpg via #landingImage
+2025-07-31 03:24:50,541 - amazon_playwright_extractor - INFO - Found 1 thumbnails.
+2025-07-31 03:24:50,547 - amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2025-07-31 03:24:50,823 - amazon_playwright_extractor - INFO - Extracting sales rank information...
+2025-07-31 03:24:51,141 - amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2025-07-31 03:24:51,166 - amazon_playwright_extractor - INFO - Rating: 3.9 via #acrPopover[title*='out of 5 stars']
+2025-07-31 03:24:51,183 - amazon_playwright_extractor - INFO - Review count: 16 via #acrCustomerReviewText
+2025-07-31 03:24:51,183 - amazon_playwright_extractor - INFO - Extracting stock information...
+2025-07-31 03:24:51,207 - amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2025-07-31 03:24:51,207 - amazon_playwright_extractor - INFO - Extracting features/bullets...
+2025-07-31 03:24:51,287 - amazon_playwright_extractor - INFO - Found 1 features.
+2025-07-31 03:24:51,288 - amazon_playwright_extractor - INFO - Extracting product description...
+2025-07-31 03:24:51,415 - amazon_playwright_extractor - INFO - Extracting product specifications table...
+2025-07-31 03:24:51,730 - amazon_playwright_extractor - INFO - Specifications table parsed using selector: #productDetails_techSpec_section_1
+2025-07-31 03:24:51,731 - amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2025-07-31 03:24:51,731 - amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2025-07-31 03:24:51,732 - amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2025-07-31 03:24:51,732 - amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2025-07-31 03:24:54,752 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2025-07-31 03:24:57,771 - amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2025-07-31 03:24:57,857 - amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2025-07-31 03:24:57,973 - amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2025-07-31 03:24:57,974 - amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2025-07-31 03:24:58,004 - amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2025-07-31 03:24:58,004 - amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2025-07-31 03:25:00,137 - amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2025-07-31 03:25:00,645 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-07-31 03:25:00,647 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

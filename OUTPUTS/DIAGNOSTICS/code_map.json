@@ -210,122 +210,41 @@
       "primary_manager": {
         "file": "/utils/path_manager.py",
         "class": "PathManager",
-        "description": "Centralized path management following CLAUDE_STANDARDS.md"
-      },
-      "normalization_patterns": [
-        {
-          "pattern": "underscore_to_dot_conversion",
-          "example": "_co_uk -> .co.uk",
-          "usage": "Supplier name normalization for file paths",
-          "location": "passive_extraction_workflow_latest.py:2019-2027"
-        },
-        {
-          "pattern": "dot_to_underscore_conversion",
-          "example": ".co.uk -> _co_uk", 
-          "usage": "Fallback pattern for filename mismatches",
-          "location": "passive_extraction_workflow_latest.py:2028-2032"
-        }
-      ],
-      "path_functions": [
-        {
-          "function": "get_linking_map_path",
-          "purpose": "Standardized linking map file path generation",
-          "pattern": "OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier}/linking_map.json"
-        },
-        {
-          "function": "get_processing_state_path",
-          "purpose": "State file path generation",
-          "pattern": "OUTPUTS/CACHE/processing_states/{supplier}_state.json"
-        }
-      ]
-    }
-  },
-  "processed_urls_eans_construction": {
-    "primary_locations": [
-      {
-        "file": "/tools/passive_extraction_workflow_latest.py",
-        "line_range": "3404-3407", 
-        "context": "Gap processing filter - O(1) hash set construction",
-        "code": "processed_urls = {entry.get('supplier_url') for entry in self.linking_map if entry.get('supplier_url')}"
-      },
-      {
-        "file": "/tools/passive_extraction_workflow_latest.py",
-        "line_range": "1966-1974",
-        "context": "Match validation - checking product uniqueness",
-        "purpose": "Validates no duplicate URL processing"
-      },
-      {
-        "file": "/tools/passive_extraction_workflow_latest.py", 
-        "line_range": "6989-7037",
-        "context": "EAN validation in financial reporting",
-        "purpose": "EAN-based duplicate detection"
-      }
-    ],
-    "construction_patterns": [
-      {
-        "pattern": "set_comprehension",
-        "code": "{entry.get('field') for entry in self.linking_map if entry.get('field')}",
-        "purpose": "O(1) lookup performance",
-        "memory_complexity": "O(k) where k is unique items"
-      }
-    ]
-  },
-  "state_file_writers": {
-    "session_writers": [
-      {
-        "file": "/utils/enhanced_state_manager.py",
-        "method": "save_state",
-        "purpose": "Saves current session progress and statistics",
-        "frequency": "Periodic during processing"
-      }
-    ],
-    "global_writers": [
-      {
-        "file": "/tools/passive_extraction_workflow_latest.py", 
-        "method": "_save_linking_map",
-        "purpose": "Persists linking map for cross-session use",
-        "frequency": "After every N products (configurable batch size)"
-      }
-    ]
-  },
-  "call_graphs": {
-    "gap_processing_flow": [
-      "extract_products_from_supplier_categories",
-      "_find_actual_supplier_cache_file", 
-      "gap_processing_filter_logic (L3400-3430)",
-      "hash_set_construction (processed_urls/eans)",
-      "product_filtering_loop"
-    ],
-    "linking_map_lifecycle": [
-      "_load_linking_map",
-      "path_normalization_fallbacks",
-      "hash_optimizer.build_indexes",
-      "product_processing_loop",
-      "_save_linking_map", 
-      "wsl_compatible_save",
-      "hash_optimizer.rebuild_indexes"
-    ],
-    "state_persistence_flow": [
-      "EnhancedStateManager.load_state",
-      "processing_operations",
-      "periodic_state_updates",
-      "EnhancedStateManager.save_state"
-    ]
-  },
-  "performance_analysis": {
-    "critical_optimizations": [
-      {
-        "component": "Gap Processing Filter",
-        "optimization": "O(1) hash lookups vs O(n) linear search",
-        "impact": "3650x performance improvement",
-        "memory_cost": "Minimal - Python dict overhead"
-      },
-      {
-        "component": "Linking Map Operations", 
-        "optimization": "Hash index rebuilding after saves",
-        "impact": "Maintains O(1) lookup performance",
-        "cost": "O(n) rebuild time on saves"
-      }
-    ]
-  }
-}
+        "description": "Centralized path management following CLAUDE_STANDARDS{
+  "asin_from_details": "B006UCJ5NU",
+  "title": "WD-40 Specialist Penetrant Spray - Professional-Grade Lubrication for Mechanics and Industrial Applications - 400ml - Rust-Busting Formula",
+  "current_price": 6.99,
+  "original_price": 11.17,
+  "main_image": "https://m.media-amazon.com/images/I/61gRmO22SaL._SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31VVZAo7liL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/31Nv-LCYyZL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51gTE3r2kiL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/41M3ijkmerL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51jGCuVvskL._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/41Doashf92L._SX38_SY50_CR,0,0,38,50_.jpg",
+    "https://m.media-amazon.com/images/I/51gY3mhB1OL._SX35_SY46._CR0,0,35,46_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "rating": 4.8,
+  "review_count": 911,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Rapid Penetration: Quickly penetrates and frees stuck parts and components with ease, saving you time and effort",
+    "Rust Defense: Powered by high-grade penetrating oil and robust corrosion inhibitors, it effectively shields against rust, ensuring long-lasting durability",
+    "Tough on Rust: Eradicates rust, corrosion, and grime from metal surfaces, restoring them to their optimal condition",
+    "Versatile Utility: Perfectly suited for a wide array of applications, including automotive, marine, and industrial tasks, making it an indispensable tool",
+    "Precision Application: Equipped with a user-friendly spray can featuring a precision straw for pinpoint accuracy, making lubrication tasks precise and effortless"
+  ],
+  "description": "From the manufacturer WD-40 Multi-Use Spray 450ml: Wide and Narrow Spray for Maintenance, Rust Prot... WD-40 Specialist White Lithium Grease Spray 400ml - All-Weather Protection fo... WD-40 Specialist Silicone Spray Lubricant 400ml Can - Versatile All-Weather P... WD-40 Specialist Contact Cleaner Spray - Precision Electronic Cleaning Soluti... WD-40 Specialist Penetrant Spray - Professional-Grade Lubrication for Mechani... Add To Basket Add To Basket Add To Basket Add To Basket Add To Basket Customer Reviews 4.8 out of 5 stars 21,312 4.7 out of 5 stars 4,676 4.8 out of 5 stars 9,632 4.7 out of 5 stars 7,825 4.8 out of 5 stars 911 Price £5.80 £ 5 . 80 £6.59 £ 6 . 59 £6.99 £ 6 . 99 £6.49 £ 6 . 49 £6.99 £ 6 . 99 Best for Protecting cars from rust &amp; corrosion, lubrication at home, at work and on the go Water and heat resistant lubrication on heavy duty metal-to-metal Preventing parts from sticking and protecting against moisture Cleaning oil, dirt and dust from electrical components Water and heat resistant lubrication on heavy duty metal-to-metal Suggested use at home Door hinges, desk chair wheels and gardening tools Garage door tracks and hinges Window frames and sliding shower doors Gaming consoles and smoke alarms Rusted locks and outdoor taps Use on: Electrical contacts ✓ no data no data ✓ ✓ Use on: Metal ✓ ✓ ✓ no data ✓ Use on: Rubber ✓ no data ✓ Not intended for cleaning but some contact okay ✓ Use on: PVC ✓ no data ✓ no data ✓ Use on: Plastic ✓ no data ✓ Not intended for cleaning but some contact okay ✓ Use on: Wood ✓ no data ✓ no data no data Use on: Glass ✓ no data no data no data no data",
+  "specifications_table": {
+    "Brand Name": "WD-40 Specialist",
+    "Recommended Uses For Product": "Automotive, Marine, Industrial, Nuts, Bolts, Screws, Locks, Pipes, Taps",
+    "Specific Uses For Product": "Car,Wheel,Window",
+    "Item Form": "Aerosol, Liquid",
+    "Global Trade Identification Number": "05032227443488",
+    "Manufacturer": "WD-40 Company",
+    "UPC": "01
