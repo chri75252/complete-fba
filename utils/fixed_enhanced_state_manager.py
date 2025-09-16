@@ -25,6 +25,7 @@ import json
 import logging
 import os
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -44,6 +45,15 @@ except ImportError:
         from utils.path_manager import get_processing_state_path, path_manager
 
 log = logging.getLogger(__name__)
+
+
+@dataclass
+class ResumptionPointer:
+    """Lightweight representation of where category resume should start."""
+
+    phase: str = "supplier"
+    cat_idx: int = 0
+    prod_idx: int = 0
 
 
 class FixedEnhancedStateManager:
@@ -80,6 +90,7 @@ class FixedEnhancedStateManager:
             "created_at": datetime.now(timezone.utc).isoformat(),
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "supplier_name": self.supplier_name,
+            "is_fresh_start": True,
             # 🚨 CRITICAL FIX 1: Separate resumption from progress tracking
             "last_processed_index": 0,  # Legacy field for backward compatibility
             "resumption_index": 0,  # Where to resume after interruption
@@ -92,6 +103,7 @@ class FixedEnhancedStateManager:
             "successful_products": 0,
             "profitable_products": 0,
             "total_profit_found": 0.0,
+            "completed_categories": [],
             "processing_statistics": {
                 "start_time": None,
                 "end_time": None,
@@ -107,6 +119,7 @@ class FixedEnhancedStateManager:
                 "fix_applied": "processing_state_comprehensive_fix_20250730",
             },
             "processed_products": {},  # URL -> status mapping
+            "frozen_category_denominators": {},
             # 🚨 CRITICAL FIX 2: Fixed supplier extraction progress structure
             "supplier_extraction_progress": {
                 "current_category_index": 0,
@@ -136,6 +149,7 @@ class FixedEnhancedStateManager:
                 "category_completion_status": {},
                 "reverse_gap_detected": False,  # 🚨 NEW: Track reverse gap state
                 "startup_analysis_completed": False,  # 🚨 NEW: Track startup completion
+                "categories_completed": 0,
             },
             # ✅ NEW: Separated progression metrics for precise resumption
             "system_progression": {
@@ -147,6 +161,11 @@ class FixedEnhancedStateManager:
                 "total_products_in_current_category": 0,
                 "supplier_extraction_resumption_index": 0,
                 "amazon_analysis_resumption_index": 0,
+                "resumption_ptr": {
+                    "phase": "supplier",
+                    "cat_idx": 0,
+                    "prod_idx": 0,
+                },
             },
             # ✅ NEW: User-facing metrics (not used for resumption logic)
             "user_display_metrics": {
@@ -229,6 +248,22 @@ class FixedEnhancedStateManager:
             self.state_data["progress_index"] = 0
         if "session_products_processed" not in self.state_data:
             self.state_data["session_products_processed"] = 0
+        self.state_data.setdefault("is_fresh_start", True)
+        self.state_data.setdefault("completed_categories", [])
+        self.state_data.setdefault("frozen_category_denominators", {})
+
+        sp = self.state_data.setdefault("system_progression", {})
+        sp.setdefault(
+            "resumption_ptr",
+            {
+                "phase": sp.get("current_phase", "supplier"),
+                "cat_idx": sp.get("current_category_index", 0),
+                "prod_idx": sp.get("current_product_index_in_category", 0),
+            },
+        )
+
+        gp = self.state_data.setdefault("gap_processing", {})
+        gp.setdefault("categories_completed", len(self.state_data.get("completed_categories", [])))
 
     def perform_startup_analysis(self) -> Dict[str, Any]:
         """
@@ -243,6 +278,30 @@ class FixedEnhancedStateManager:
 
         # Calculate file-grounded totals
         file_grounded_data = self._calculate_file_grounded_totals()
+
+        # Determine whether this is a fresh run by inspecting existing artifacts
+        total_processed = file_grounded_data.get("processed_products") or 0
+        if total_processed == 0:
+            total_processed = max(total_processed, self._calculate_total_processed())
+
+        completed_from_file = [
+            url
+            for url, info in file_grounded_data.get("category_completion_status", {}).items()
+            if info.get("status") == "FULLY_PROCESSED"
+        ]
+
+        existing_completed = self.state_data.get("completed_categories", [])
+        if completed_from_file:
+            merged = list(dict.fromkeys(existing_completed + completed_from_file))
+        else:
+            merged = existing_completed
+        self.state_data["completed_categories"] = merged
+        self.state_data.setdefault("gap_processing", {})["categories_completed"] = len(merged)
+
+        if total_processed > 0 or merged or self._has_completed_categories():
+            self.state_data["is_fresh_start"] = False
+        else:
+            self.state_data["is_fresh_start"] = True
 
         # 🚨 REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
         if file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
@@ -291,7 +350,9 @@ class FixedEnhancedStateManager:
 
         # Update total products from file-grounded data
         self.state_data["total_products"] = file_grounded_data["total_products"]
-        self.state_data["successful_products"] = file_grounded_data["processed_products"]
+        self.state_data["successful_products"] = max(
+            self.state_data.get("successful_products", 0), total_processed
+        )
 
         # Update category completion status
         if file_grounded_data["category_completion_status"]:
@@ -302,6 +363,19 @@ class FixedEnhancedStateManager:
         # Update supplier extraction progress with file-grounded metrics
         current_category_analysis = self._calculate_current_category_metrics(file_grounded_data)
         self.state_data["supplier_extraction_progress"].update(current_category_analysis)
+
+        # Ensure the resume pointer is synchronized with analyzed data
+        sp = self.state_data.setdefault("system_progression", {})
+        rp = sp.setdefault("resumption_ptr", {})
+        rp["phase"] = rp.get("phase") or sp.get("current_phase", "supplier")
+        rp["cat_idx"] = max(
+            int(rp.get("cat_idx", 0) or 0),
+            current_category_analysis.get("current_category_index", 0),
+            len(self.state_data.get("completed_categories", [])),
+        )
+        rp["prod_idx"] = max(int(rp.get("prod_idx", 0) or 0), 0)
+        sp["resumption_ptr"] = rp
+        sp.setdefault("total_categories", current_category_analysis.get("total_categories", 0))
 
         # Mark startup analysis as completed
         self._startup_completed = True
@@ -518,6 +592,46 @@ class FixedEnhancedStateManager:
 
         self.update_discovered_products_in_category(category_url, actual_discovered, save=save)
 
+    def is_category_denominator_frozen(self, category_url: str) -> bool:
+        from utils.normalization import normalize_url
+
+        denominators = self.state_data.setdefault("frozen_category_denominators", {})
+        normalized = normalize_url(category_url)
+        return normalized in denominators
+
+    def set_frozen_denominator(
+        self, category_url: str, discovered_count: int, metadata: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        from utils.normalization import normalize_url
+
+        denominators = self.state_data.setdefault("frozen_category_denominators", {})
+        normalized = normalize_url(category_url)
+        if normalized in denominators:
+            return False
+
+        entry: Dict[str, Any] = {
+            "count": int(max(discovered_count, 0)),
+            "frozen_at": datetime.now(timezone.utc).isoformat(),
+            "original_url": category_url,
+        }
+        if metadata:
+            entry.update(metadata)
+
+        denominators[normalized] = entry
+        return True
+
+    def get_frozen_denominator(self, category_url: str) -> Optional[int]:
+        from utils.normalization import normalize_url
+
+        denominators = self.state_data.get("frozen_category_denominators", {})
+        normalized = normalize_url(category_url)
+        entry = denominators.get(normalized)
+        if isinstance(entry, dict):
+            return entry.get("count")
+        if isinstance(entry, (int, float)):
+            return int(entry)
+        return None
+
     def update_processing_progress(self, increment: int = 1, product_url: Optional[str] = None):
         """
         🚨 CRITICAL FIX 5: Update progress tracking AND resumption index for exact recovery
@@ -626,7 +740,119 @@ class FixedEnhancedStateManager:
 
         self.save_state_atomic()
 
-    def save_state(self, preserve_interruption_state: bool = True):
+    def get_resumption_ptr(self) -> ResumptionPointer:
+        sp = self.state_data.setdefault("system_progression", {})
+        rp = sp.setdefault("resumption_ptr", {})
+
+        phase = rp.get("phase") or sp.get("current_phase", "supplier")
+        try:
+            cat_idx = int(rp.get("cat_idx", sp.get("current_category_index", 0)) or 0)
+        except (TypeError, ValueError):
+            cat_idx = 0
+        try:
+            prod_idx = int(rp.get("prod_idx", sp.get("current_product_index_in_category", 0)) or 0)
+        except (TypeError, ValueError):
+            prod_idx = 0
+
+        return ResumptionPointer(phase=phase, cat_idx=max(cat_idx, 0), prod_idx=max(prod_idx, 0))
+
+    def commit_supplier_progress(
+        self,
+        cat_idx: int,
+        prod_idx: int,
+        total_cats: int,
+        cat_url: str,
+        total_prod_in_cat: int,
+        metadata: Optional[Dict[str, Any]] = None,
+    ):
+        sp = self.state_data.setdefault("system_progression", {})
+        safe_cat_idx = max(int(cat_idx), 0)
+        safe_prod_idx = max(int(prod_idx), 0)
+        total_cats = max(int(total_cats or 0), sp.get("total_categories", 0))
+        total_prod_in_cat = max(int(total_prod_in_cat or 0), 0)
+
+        sp.update(
+            {
+                "current_phase": "supplier",
+                "current_category_index": safe_cat_idx,
+                "current_category_url": cat_url,
+                "total_categories": total_cats,
+                "current_product_index_in_category": safe_prod_idx,
+                "total_products_in_current_category": total_prod_in_cat,
+            }
+        )
+
+        rp = sp.setdefault("resumption_ptr", {})
+        rp["phase"] = "supplier"
+        rp["cat_idx"] = safe_cat_idx
+        rp["prod_idx"] = safe_prod_idx + 1 if total_prod_in_cat else safe_prod_idx
+        sp["resumption_ptr"] = rp
+
+        sep = self.state_data.setdefault("supplier_extraction_progress", {})
+        sep.update(
+            {
+                "current_category_index": safe_cat_idx,
+                "current_category_url": cat_url,
+                "total_categories": total_cats,
+                "current_product_index_in_category": safe_prod_idx,
+                "total_products_in_current_category": total_prod_in_cat,
+            }
+        )
+
+        if total_prod_in_cat and not self.is_category_denominator_frozen(cat_url):
+            freeze_metadata = metadata or {}
+            self.set_frozen_denominator(cat_url, total_prod_in_cat, freeze_metadata)
+
+        self.save_state_atomic(context="supplier-commit")
+        log.info(
+            "✅ SUPPLIER PROGRESS COMMITTED: cat=%s, prod_idx=%s, total=%s",
+            safe_cat_idx,
+            safe_prod_idx,
+            total_prod_in_cat,
+        )
+
+    def commit_amazon_progress(
+        self,
+        cat_idx: int,
+        queue_idx: int,
+        total_cats: int,
+        cat_url: str,
+        queue_len: int,
+    ):
+        sp = self.state_data.setdefault("system_progression", {})
+        safe_cat_idx = max(int(cat_idx), 0)
+        safe_queue_idx = max(int(queue_idx), 0)
+        total_cats = max(int(total_cats or 0), sp.get("total_categories", 0))
+        queue_len = max(int(queue_len or 0), 0)
+
+        sp.update(
+            {
+                "current_phase": "amazon",
+                "current_category_index": safe_cat_idx,
+                "current_category_url": cat_url,
+                "total_categories": total_cats,
+                "current_product_index_in_category": safe_queue_idx,
+                "total_products_in_current_category": queue_len,
+            }
+        )
+
+        rp = sp.setdefault("resumption_ptr", {})
+        rp["phase"] = "amazon"
+        rp["cat_idx"] = safe_cat_idx
+        rp["prod_idx"] = min(safe_queue_idx + 1, max(queue_len, safe_queue_idx + 1))
+        sp["resumption_ptr"] = rp
+
+        self.save_state_atomic(context="amazon-commit")
+        log.info(
+            "✅ AMAZON PROGRESS COMMITTED: cat=%s, queue_idx=%s, queue_len=%s",
+            safe_cat_idx,
+            safe_queue_idx,
+            queue_len,
+        )
+
+    def save_state(
+        self, preserve_interruption_state: bool = True, context: Optional[str] = None
+    ):
         """
         🚨 CRITICAL FIX 6: Save state WITHOUT performing reverse gap detection
         Args:
@@ -665,6 +891,9 @@ class FixedEnhancedStateManager:
         except Exception as e:
             log.error(f"❌ Failed to save state: {e}")
 
+        if context:
+            log.debug("State save context: %s", context)
+
         sp = self.state_data.get("system_progression", {})
         sep = self.state_data.get("supplier_extraction_progress", {})
         phase = sp.get("current_phase", "unknown")
@@ -677,9 +906,41 @@ class FixedEnhancedStateManager:
         ccu = sp.get("current_category_url", "")
         log.info(f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}")
 
-    def save_state_atomic(self):
+    def save_state_atomic(self, context: Optional[str] = None):
         """Atomic save wrapper used by new progression methods"""
-        self.save_state(preserve_interruption_state=True)
+        self.save_state(preserve_interruption_state=True, context=context)
+
+    def _get_linking_map_path(self) -> Path:
+        supplier_domain = self.supplier_name.replace("-", ".")
+        return (
+            Path(__file__).parent.parent
+            / "OUTPUTS"
+            / "FBA_ANALYSIS"
+            / "linking_maps"
+            / supplier_domain
+            / "linking_map.json"
+        )
+
+    def _calculate_total_processed(self) -> int:
+        """Return the number of processed products based on the linking map."""
+        linking_path = self._get_linking_map_path()
+        try:
+            if linking_path.exists():
+                with open(linking_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if isinstance(data, list):
+                    return len(data)
+        except Exception as exc:
+            log.warning("Failed to calculate total processed from %s: %s", linking_path, exc)
+        return 0
+
+    def _has_completed_categories(self) -> bool:
+        if self.state_data.get("completed_categories"):
+            return True
+        sep_completed = self.state_data.get("supplier_extraction_progress", {}).get(
+            "categories_completed", []
+        )
+        return bool(sep_completed)
 
     def _calculate_file_grounded_totals(self) -> Dict[str, Any]:
         """
@@ -953,37 +1214,72 @@ class FixedEnhancedStateManager:
             log.error(f"Failed to calculate current category metrics: {e}")
             return {}
 
-    def mark_category_completed(self, category_url: str):
-        """Mark a category as completed - resumption_index now updates continuously"""
-        # Update category completion status
-        if (
-            "gap_processing" in self.state_data
-            and "category_completion_status" in self.state_data["gap_processing"]
-        ):
-            if category_url in self.state_data["gap_processing"]["category_completion_status"]:
-                self.state_data["gap_processing"]["category_completion_status"][category_url][
-                    "status"
-                ] = "FULLY_PROCESSED"
-                self.state_data["gap_processing"]["category_completion_status"][category_url][
-                    "completion_pct"
-                ] = 100.0
+    def mark_category_completed(
+        self, category_index: Union[int, str], category_url: Optional[str] = None
+    ):
+        """Mark a category as completed and advance resume pointers safely."""
 
-        # Add to completed categories
-        if (
-            category_url
-            not in self.state_data["supplier_extraction_progress"]["categories_completed"]
-        ):
-            self.state_data["supplier_extraction_progress"]["categories_completed"].append(
-                category_url
+        if category_url is None and isinstance(category_index, str):
+            category_url = category_index
+            category_index_int: Optional[int] = None
+        else:
+            category_index_int = (
+                int(category_index)
+                if category_index is not None and not isinstance(category_index, str)
+                else None
             )
 
-        # Update last completed category
-        self.state_data["supplier_extraction_progress"]["last_completed_category"] = category_url
+        if not category_url:
+            log.warning("mark_category_completed called without category_url context")
+            return
 
-        # Note: resumption_index now updates continuously via update_processing_progress()
-        # No need to update it here as it's always current
+        from utils.normalization import normalize_url
 
-        log.info(f"✅ Category marked as completed: {category_url[:50]}...")
+        normalized_url = normalize_url(category_url)
+
+        # Update category completion status structures
+        sep = self.state_data.setdefault("supplier_extraction_progress", {})
+        categories_completed = sep.setdefault("categories_completed", [])
+        if normalized_url not in {normalize_url(url) for url in categories_completed}:
+            categories_completed.append(category_url)
+
+        self.state_data.setdefault("completed_categories", [])
+        existing_completed = self.state_data["completed_categories"]
+        if normalized_url not in {normalize_url(url) for url in existing_completed}:
+            existing_completed.append(category_url)
+        self.state_data["completed_categories"] = existing_completed
+
+        sep["last_completed_category"] = category_url
+
+        gap_processing = self.state_data.setdefault("gap_processing", {})
+        gap_processing["categories_completed"] = len(existing_completed)
+        category_status = gap_processing.setdefault("category_completion_status", {})
+        if category_url in category_status:
+            category_status[category_url]["status"] = "FULLY_PROCESSED"
+            category_status[category_url]["completion_pct"] = 100.0
+
+        # Advance progression pointers while keeping resume index coherent
+        sp = self.state_data.setdefault("system_progression", {})
+        rp = sp.setdefault("resumption_ptr", {})
+
+        if category_index_int is not None:
+            if sp.get("current_category_index") == category_index_int:
+                sp["current_category_index"] = category_index_int + 1
+            rp["cat_idx"] = max(rp.get("cat_idx", 0), category_index_int + 1)
+        else:
+            rp["cat_idx"] = max(rp.get("cat_idx", 0), len(existing_completed))
+
+        rp["phase"] = rp.get("phase") or sp.get("current_phase", "supplier")
+        rp["prod_idx"] = 0
+        sp["resumption_ptr"] = rp
+        sp["current_product_index_in_category"] = 0
+
+        self.save_state_atomic(context="category-complete")
+        log.info(
+            "✅ Category marked as completed: %s (resume cat_idx=%s)",
+            category_url[:80],
+            rp.get("cat_idx", 0),
+        )
 
     def get_resumption_index(self) -> int:
         """Get the index from which to resume processing"""

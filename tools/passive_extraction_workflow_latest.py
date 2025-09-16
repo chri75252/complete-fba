@@ -69,6 +69,7 @@ import logging
 import os
 import re
 import shutil
+import hashlib
 
 # Import Windows Save Guardian for atomic persistence
 import sys
@@ -1504,6 +1505,29 @@ class PassiveExtractionWorkflow:
         self.log.info(f"✅ Output directory set to: {self.output_dir}")
 
         self._validate_initialization()
+
+    def _authoritative_total_categories(self) -> int:
+        """Return the best-known total category count for resume bookkeeping."""
+        try:
+            supplier_configs = self.full_config.get("supplier_configs", {})
+            supplier_block = supplier_configs.get(self.supplier_name, {})
+            urls = supplier_block.get("category_urls")
+            if isinstance(urls, list) and urls:
+                return len(urls)
+        except Exception as exc:
+            self.log.debug(
+                "Unable to determine category count from supplier config: %s", exc
+            )
+
+        workflow_urls = self.workflow_config.get("category_urls")
+        if isinstance(workflow_urls, list) and workflow_urls:
+            return len(workflow_urls)
+
+        full_urls = self.full_config.get("category_urls")
+        if isinstance(full_urls, list) and full_urls:
+            return len(full_urls)
+
+        return 0
 
     def _add_linking_map_entry_optimized(self, entry: Dict[str, Any]) -> None:
         """
@@ -4747,8 +4771,14 @@ Return ONLY valid JSON, no additional text."""
 
                 # Setup progress callback for individual product tracking
                 if hasattr(self.supplier_scraper, "set_progress_callback"):
+                    absolute_category_index = category_index - 1
                     self.supplier_scraper.set_progress_callback(
-                        self._create_product_progress_callback(category_url, progress_config)
+                        self._create_product_progress_callback(
+                            category_url,
+                            progress_config,
+                            absolute_category_index,
+                            len(category_urls),
+                        )
                     )
                 # Check if we've reached the overall product limit
                 if max_products_to_process and len(all_products) >= max_products_to_process:
@@ -4880,7 +4910,13 @@ Return ONLY valid JSON, no additional text."""
 
         return unprocessed_products
 
-    def _create_product_progress_callback(self, category_url: str, progress_config: Dict[str, Any]):
+    def _create_product_progress_callback(
+        self,
+        category_url: str,
+        progress_config: Dict[str, Any],
+        absolute_category_index: int,
+        total_categories: int,
+    ):
         """Create a progress callback for individual product extraction with proper caching"""
         # Initialize a simple counter if it doesn't exist
         if not hasattr(self, "_supplier_product_counter"):
@@ -4904,15 +4940,22 @@ Return ONLY valid JSON, no additional text."""
 
                 if hasattr(self, "state_manager") and self.state_manager:
                     try:
-                        # Update the main processing index during supplier extraction based on actual cache length
                         actual_cache_count = len(getattr(self, "_current_all_products", []))
-                        self.state_manager.update_processing_index(
-                            actual_cache_count, total_products
+                        safe_total = total_products or actual_cache_count
+                        safe_total = max(safe_total, 0)
+                        safe_index = max(product_index, 0)
+                        if safe_total:
+                            safe_index = min(safe_index, max(safe_total - 1, 0))
+
+                        self.state_manager.commit_supplier_progress(
+                            cat_idx=absolute_category_index,
+                            prod_idx=safe_index,
+                            total_cats=total_categories,
+                            cat_url=category_url,
+                            total_prod_in_cat=safe_total,
                         )
-                        if product_url:
-                            self.state_manager.update_supplier_extraction_progress_new(product_url)
                         self.log.info(
-                            f"🔍 SUPPLIER STATE UPDATE: Index updated to {actual_cache_count}/{total_products}"
+                            f"🔍 SUPPLIER STATE UPDATE: cat={absolute_category_index} prod_idx={safe_index}/{safe_total}"
                         )
                     except Exception as e:
                         self.log.error(f"❌ SUPPLIER STATE UPDATE FAILED: {e}")
@@ -5581,11 +5624,102 @@ Return ONLY valid JSON, no additional text."""
                             f"needs_full={len(filtered['needs_full_extraction'])}"
                         )
 
-                        # Build category-local processing queue
+                        state_mgr = getattr(self, "state_manager", None)
+                        absolute_cat_index = chunk_start + idx_offset
+                        needs_full = list(filtered.get("needs_full_extraction", []))
+                        needs_amazon = list(filtered.get("needs_amazon_only", []))
+                        manifest_urls = needs_full + needs_amazon
+                        discovered_count = len(manifest_urls)
+                        freeze_metadata: Dict[str, Any] = {}
+                        if manifest_urls:
+                            freeze_metadata["manifest_hash"] = hashlib.sha256(
+                                "|".join(sorted(manifest_urls)).encode("utf-8")
+                            ).hexdigest()
+
+                        if state_mgr and discovered_count:
+                            try:
+                                if not state_mgr.is_category_denominator_frozen(category_url):
+                                    state_mgr.set_frozen_denominator(
+                                        category_url, discovered_count, freeze_metadata
+                                    )
+                                    self.log.info(
+                                        f"🔒 SINGLE_POINT_FREEZE: {category_url} → {discovered_count} products"
+                                    )
+                                else:
+                                    frozen_total = state_mgr.get_frozen_denominator(category_url)
+                                    if frozen_total is not None:
+                                        discovered_count = frozen_total
+                                        self.log.info(
+                                            f"🔒 B.3_USING EXISTING FROZEN DENOMINATOR: {category_url} → {discovered_count} products"
+                                        )
+                            except Exception as freeze_error:
+                                self.log.warning(
+                                    f"⚠️ Unable to freeze denominator for {category_url}: {freeze_error}"
+                                )
+
+                        resume_ptr = None
+                        if state_mgr and hasattr(state_mgr, "get_resumption_ptr"):
+                            try:
+                                resume_ptr = state_mgr.get_resumption_ptr()
+                            except Exception as resume_error:
+                                self.log.warning(
+                                    f"⚠️ Unable to obtain resumption pointer: {resume_error}"
+                                )
+                        cat_ptr = resume_ptr.cat_idx if resume_ptr else 0
+                        prod_ptr = (
+                            resume_ptr.prod_idx
+                            if resume_ptr and resume_ptr.phase == "supplier"
+                            else 0
+                        )
+
+                        if resume_ptr and absolute_cat_index < cat_ptr:
+                            self.log.info(
+                                f"📋 Resume skip: category {absolute_cat_index} < {cat_ptr} (already processed)"
+                            )
+                            if state_mgr and hasattr(state_mgr, "mark_category_completed"):
+                                state_mgr.mark_category_completed(absolute_cat_index, category_url)
+                            continue
+
+                        if discovered_count == 0:
+                            self.log.info(
+                                f"📋 Resume skip: category {absolute_cat_index} has no actionable products"
+                            )
+                            if state_mgr and hasattr(state_mgr, "mark_category_completed"):
+                                state_mgr.mark_category_completed(absolute_cat_index, category_url)
+                            continue
+
+                        effective_full = needs_full
+                        effective_amazon = needs_amazon
+                        if resume_ptr and absolute_cat_index == cat_ptr and resume_ptr.phase == "supplier":
+                            prod_ptr = max(prod_ptr, 0)
+                            if prod_ptr >= len(needs_full) and prod_ptr >= len(needs_amazon):
+                                self.log.info(
+                                    f"📋 Resume skip: category {absolute_cat_index} == {cat_ptr} but queues empty after slice from {prod_ptr}"
+                                )
+                                if state_mgr and hasattr(state_mgr, "mark_category_completed"):
+                                    state_mgr.mark_category_completed(absolute_cat_index, category_url)
+                                continue
+                            effective_full = (
+                                needs_full[prod_ptr:] if prod_ptr < len(needs_full) else []
+                            )
+                            effective_amazon = (
+                                needs_amazon[prod_ptr:] if prod_ptr < len(needs_amazon) else []
+                            )
+                            self.log.info(
+                                f"📋 RESUME CATEGORY: category {absolute_cat_index} at resume point, full={len(effective_full)}, amazon={len(effective_amazon)}"
+                            )
+
+                        if not effective_full and not effective_amazon:
+                            self.log.info(
+                                f"📋 Resume skip: category {absolute_cat_index} has no work after filtering"
+                            )
+                            if state_mgr and hasattr(state_mgr, "mark_category_completed"):
+                                state_mgr.mark_category_completed(absolute_cat_index, category_url)
+                            continue
+
                         category_analysis_products: List[Dict[str, Any]] = []
 
-                        # Supplier phase: process needs_full_extraction URLs within this category
-                        for url in filtered["needs_full_extraction"]:
+                        for url in effective_full:
                             prod = next(
                                 (p for p in chunk_products if normalize_url(p.get("url")) == url),
                                 None,
@@ -5593,8 +5727,7 @@ Return ONLY valid JSON, no additional text."""
                             if prod:
                                 category_analysis_products.append(prod)
 
-                        # Amazon phase: process category-local to_amazon queue (needs_amazon_only + newly extracted)
-                        for url in filtered["needs_amazon_only"]:
+                        for url in effective_amazon:
                             prod = next(
                                 (p for p in cached_products if normalize_url(p.get("url")) == url),
                                 None,
@@ -5602,22 +5735,26 @@ Return ONLY valid JSON, no additional text."""
                             if prod:
                                 category_analysis_products.append(prod)
 
-                        # Process this category's products immediately (supplier → Amazon → complete)
                         if category_analysis_products:
                             self.log.info(
                                 f"🔄 Processing category {category_index}: {len(category_analysis_products)} products"
                             )
                             category_results = await self._process_chunk_with_main_workflow_logic(
-                                category_analysis_products, max_products_per_cycle
+                                category_analysis_products,
+                                max_products_per_cycle,
+                                category_index=absolute_cat_index,
+                                category_url=category_url,
                             )
                             profitable_results.extend(category_results)
-
-                            # Log category completion
+                            if state_mgr and hasattr(state_mgr, "mark_category_completed"):
+                                state_mgr.mark_category_completed(absolute_cat_index, category_url)
                             self.log.info(
                                 f"✅ Category {category_index} complete: {len(category_results)} profitable products found"
                             )
                         else:
                             self.log.info("Amazon skipped: nothing to analyze for category")
+                            if state_mgr and hasattr(state_mgr, "mark_category_completed"):
+                                state_mgr.mark_category_completed(absolute_cat_index, category_url)
 
                     # 🚨 CRITICAL FIX: Financial Report Triggering Mechanism - Monitor linking map count as TRIGGER
                     financial_batch_size = self.config_loader.get_financial_batch_size()
@@ -8686,7 +8823,11 @@ Return ONLY valid JSON, no additional text."""
     # Removed duplicate _load_linking_map method - using the one at line 1354
 
     async def _process_chunk_with_main_workflow_logic(
-        self, products: List[Dict[str, Any]], max_products_per_cycle: int
+        self,
+        products: List[Dict[str, Any]],
+        max_products_per_cycle: int,
+        category_index: Optional[int] = None,
+        category_url: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """Process products using the same detailed logic as main workflow (not simplified batch processing)"""
         profitable_results = []
@@ -8705,13 +8846,17 @@ Return ONLY valid JSON, no additional text."""
             p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
         ]
 
+        total_to_process = len(price_filtered_products)
+
         self.log.info(
-            f"🔍 Processing {len(price_filtered_products)} products with main workflow logic"
+            f"🔍 Processing {total_to_process} products with main workflow logic"
         )
 
         # Use the same logic as the main workflow
         batch_size = max_products_per_cycle
-        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
+        total_batches = (total_to_process + batch_size - 1) // batch_size
+
+        authoritative_total_cats = self._authoritative_total_categories()
 
         for batch_num in range(total_batches):
             start_idx = batch_num * batch_size
@@ -8722,8 +8867,27 @@ Return ONLY valid JSON, no additional text."""
             for i, product_data in enumerate(batch_products):
                 current_index = start_idx + i + 1
                 self.log.info(
-                    f"--- Processing supplier product {current_index}/{len(price_filtered_products)}: '{product_data.get('title')}' ---"
+                    f"--- Processing supplier product {current_index}/{total_to_process}: '{product_data.get('title')}' ---"
                 )
+
+                if (
+                    category_index is not None
+                    and hasattr(self, "state_manager")
+                    and self.state_manager
+                ):
+                    try:
+                        safe_queue_idx = max(current_index - 1, 0)
+                        self.state_manager.commit_amazon_progress(
+                            cat_idx=category_index,
+                            queue_idx=safe_queue_idx,
+                            total_cats=authoritative_total_cats,
+                            cat_url=category_url or product_data.get("source_url", ""),
+                            queue_len=total_to_process,
+                        )
+                    except Exception as commit_err:
+                        self.log.warning(
+                            f"⚠️ AMAZON PROGRESS COMMIT FAILED: {commit_err}"
+                        )
 
                 # 🚨 SURGICAL FIX: Update state manager with product index tracking (gap processing)
                 if hasattr(self, "state_manager") and self.state_manager:
