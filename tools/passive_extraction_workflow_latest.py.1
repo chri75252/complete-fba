@@ -66,7 +66,7 @@ import json
 import sys
 import argparse
 import glob  # Added for fast Amazon cache search optimization
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional, Tuple, Set, Union
 from collections import defaultdict
 import re
@@ -147,7 +147,7 @@ try:
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if parent_dir not in sys.path:
         sys.path.insert(0, parent_dir)
-    from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager as EnhancedStateManager, SimpleMetrics
+    from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager as EnhancedStateManager
 except ImportError:
     pass
 
@@ -1348,26 +1348,24 @@ class PassiveExtractionWorkflow:
         
         # dYs" CRITICAL FIX: Initialize state manager and perform startup analysis
         self.log = logging.getLogger(self.__class__.__name__)
+        self.metrics = Metrics()
         self._current_all_products = []
-
-        self.supplier_name = self.workflow_config.get("supplier_name")
-        if not self.supplier_name:
-            raise ValueError("workflow_config missing supplier_name")
-
-        self.state_manager = EnhancedStateManager(self.supplier_name)
-        self.metrics = getattr(self.state_manager, "metrics", None)
-        if self.metrics is None:
-            self.metrics = SimpleMetrics()
-            self.state_manager.metrics = self.metrics
+        self.state_manager = EnhancedStateManager(self.log, self.metrics)
+        
+        # INTEGRATION POINT: Call perform_startup_analysis here (fixes root cause 7 - incomplete startup)
+        self.state_manager.perform_startup_analysis()
 
         # 🚨 CRITICAL FIX: Initialize full scan tracking for RC-6
         self._last_full_scan_ts = 0
         self._full_scan_interval = 300  # 5 minutes default interval
 
+        self.log = logging.getLogger(self.__class__.__name__)
+
         # 🚨 IMPORT HYGIENE: Log module path to confirm correct workflow is running
         self.log.info(f"MODULE PATH: {__file__}")
 
         # Core components initialized here
+        self.supplier_name = self.workflow_config.get("supplier_name")
         self.full_config = self.config_loader.get_full_config()
         self.system_config = self.full_config.get("system", {})
 
@@ -1399,6 +1397,8 @@ class PassiveExtractionWorkflow:
             self.log.error(f"🚨 Output dir: {self.output_dir}")
             self.log.error(f"🚨 Supplier cache dir: {self.supplier_cache_dir}")
             raise
+        self.state_manager = EnhancedStateManager(self.supplier_name)
+
         # 🚨 FIX 3: Initialize state manager with accurate totals BEFORE startup analysis
         try:
             # Get total cache and category counts for proper initialization
@@ -1912,7 +1912,6 @@ class PassiveExtractionWorkflow:
 
         # Resolve categories and compute config hash
         category_urls = self._get_predefined_categories(self.supplier_name) or []
-        self._active_category_urls = category_urls
         cfg_hash = self.state_manager.compute_supplier_config_hash(category_urls)
 
         # Freeze total categories and mark frozen BEFORE any resume logic
@@ -1931,41 +1930,22 @@ class PassiveExtractionWorkflow:
         else:
             self.log.warning("⚠️ RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable")
 
-        self.log.info("Requesting authoritative resumption point from State Manager...")
-        # Read current phase and corresponding progress directly from system_progression
-        sp = self.state_manager.state_data.get("system_progression", {})
-        start_category_index = sp.get("persistent_category_index", 0)
-        resume_phase = sp.get("current_phase", "supplier")
-        
-        if resume_phase == "supplier":
-            product_resume_index = sp.get("supplier_products_completed", 0)
-        elif resume_phase == "amazon_analysis":
-            product_resume_index = sp.get("amazon_products_completed", 0)
-        else:
-            product_resume_index = 0
-        
-        self._start_category_index = start_category_index
-        self._resume_phase = resume_phase
-        self.log.info(
-            f"✅ RESUMPTION POINT CONFIRMED: Starting from category index {start_category_index} at product {product_resume_index} in phase '{resume_phase}'."
-        )
+        # Now it is safe to fetch the resume pointer and log it
+        rp = self.state_manager.get_resumption_ptr()
+        phase = getattr(rp, "phase", "supplier")
+        self._resume_ptr = rp  # expose to downstream supplier routines
+        self.log.info(f"[START_DISPATCH] phase={phase} cat={rp.cat_idx} prod={rp.prod_idx}")
 
         # Enhanced phase-aware gating logic
-        if resume_phase == "amazon_analysis":
+        if phase == "amazon_analysis":
             self.log.info("🔄 PHASE-AWARE GATING: Routing to Amazon analysis phase")
-            # Create resume pointer object for compatibility with _run_amazon_phase_from_resume
-            class ResumePtr:
-                def __init__(self, cat_idx, prod_idx, phase):
-                    self.cat_idx = cat_idx
-                    self.prod_idx = prod_idx
-                    self.phase = phase
-            
-            resume_ptr = ResumePtr(start_category_index, product_resume_index, resume_phase)
-            return await self._run_amazon_phase_from_resume(resume_ptr)
-        if resume_phase != "supplier":
-            self.log.info("🔄 PHASE-AWARE GATING: Defaulting to supplier extraction phase")
-        else:
+            return await self._run_amazon_phase_from_resume(rp)
+        elif phase == "supplier":
             self.log.info("🔄 PHASE-AWARE GATING: Routing to supplier extraction phase")
+            return await self._run_supplier_phase_from_resume(rp)
+        else:
+            self.log.info("🔄 PHASE-AWARE GATING: Defaulting to supplier extraction phase")
+            return await self._run_supplier_phase_from_resume(rp)
 
         # Emit early proof of existing frozen denominator (before supplier processing)
         sp = self.state_manager.state_data.get("system_progression", {}) or {}
@@ -1982,7 +1962,7 @@ class PassiveExtractionWorkflow:
             self.log.info(
                 f"🔒 B.3_USING EXISTING FROZEN DENOMINATOR: {nurl} → {int(existing or 0)} products"
             )
-        cat_idx, prod_idx = start_category_index, product_resume_index
+        cat_idx, prod_idx = rp
         # Defer PTR breadcrumbs to the state manager (it's gated on frozen totals).
         self.log.debug("PTR print suppressed at workflow; state manager will emit gated proofs")
 
@@ -2045,7 +2025,7 @@ class PassiveExtractionWorkflow:
             total_cats = sp.get("total_categories") or self._authoritative_total_categories()
             if self.system_config.get("resume", {}).get("banner_enabled", True):
                 self.log.info(
-                    f"▶ RESUME {sp.get('current_phase','supplier')}: category {sp.get('persistent_category_index',0)+1}/{total_cats} (system_progression)"
+                    f"▶ RESUME {sp.get('current_phase','supplier')}: category {sp.get('current_category_index',0)+1}/{total_cats} (system_progression)"
                 )
         except Exception:
             pass
@@ -2138,8 +2118,8 @@ class PassiveExtractionWorkflow:
         system_category = system_progression.get("current_category_index")
 
         # Supplier extraction tracking (more reliable for detecting actual work)
-        # Use the new system_progression structure instead of legacy resume pointer
-        supplier_category = start_category_index
+        # Do NOT read legacy subtree; rely on the canonical resume pointer
+        supplier_category = int(getattr(self._resume_ptr, "cat_idx", 0)) if hasattr(self, "_resume_ptr") else 0
         completed_categories = []
 
         # Enhanced evidence detection using authoritative sources only
@@ -2155,8 +2135,8 @@ class PassiveExtractionWorkflow:
         self.log.info("🔍 STATE CONTRADICTION CHECK DEBUG:")
         self.log.info(f"   is_fresh_start: {is_fresh_start_flag}")
         self.log.info(f"   successful_products: {successful_products}")
-        self.log.info(f"   system_progression.persistent_category_index: {system_category}")
-        self.log.info(f"   supplier_extraction.persistent_category_index: {supplier_category}")
+        self.log.info(f"   system_progression.current_category_index: {system_category}")
+        self.log.info(f"   supplier_extraction.current_category_index: {supplier_category}")
         # 🚨 TELEMETRY ONLY: completed_categories for logging purposes only
         self.log.info(
             f"   supplier_extraction.categories_completed: {len(completed_categories)} categories [TELEMETRY]"
@@ -4931,7 +4911,7 @@ Return ONLY valid JSON, no additional text."""
                         sp = self.state_manager.state_data.get("system_progression", {})
                         extraction_progress = sp  # Use system_progression data
                         products_extracted = sp.get(
-                            "supplier_products_completed", len(cached_products)
+                            "current_product_index_in_category", len(cached_products)
                         )
 
                         # 🚨 HYBRID MODE FIX: Check if current chunk categories are already in cache
@@ -4986,7 +4966,7 @@ Return ONLY valid JSON, no additional text."""
                         sp = self.state_manager.state_data.get("system_progression", {})
                         extraction_progress = sp  # Use system_progression data
                         products_extracted = sp.get(
-                            "supplier_products_completed", len(cached_products)
+                            "current_product_index_in_category", len(cached_products)
                         )
 
                         self.log.info(
@@ -5016,6 +4996,11 @@ Return ONLY valid JSON, no additional text."""
 
         # PHASE RESET FIX: Reset phase to supplier when starting supplier extraction
         self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=True)
+
+        # CATEGORY INDEX RESET FIX: Manually reset category index to 0 for supplier processing
+        sp = self.state_manager.state_data.setdefault("system_progression", {})
+        sp["current_category_index"] = 0
+        self.state_manager.save_state_atomic()
 
         self.log.info(f"🕷️ PERFORMING SUPPLIER SCRAPING from {len(category_urls)} categories")
         self.log.info(f"📦 Using supplier extraction batch size: {supplier_extraction_batch_size}")
@@ -5059,8 +5044,6 @@ Return ONLY valid JSON, no additional text."""
         cache_config = self.system_config.get("supplier_cache_control", {})
 
         # Initialize extraction progress tracking
-
-
         if progress_config.get("enabled", True):
             self.log.info(
                 f"📊 PROGRESS TRACKING: Extracting from {len(category_urls)} categories in {len(category_batches)} batches"
@@ -5083,133 +5066,28 @@ Return ONLY valid JSON, no additional text."""
             await self._trigger_authentication_check(f"category_batch_{batch_num}")
 
             for subcategory_index, category_url in enumerate(category_batch, 1):
-                # Absolute, zero-based category index within this run
-                absolute_cat_index = (
-                    (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
-                )
-                # Absolute, zero-based category index within this run
-                absolute_cat_index = (
-                    (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
-                )
-                self._current_absolute_cat_index = absolute_cat_index
-                self._current_category_url = category_url
-                if absolute_cat_index < getattr(self, "_start_category_index", 0):
-                    self.log.info(
-                        f"📋 SKIPPING category {absolute_cat_index} (before resume point {getattr(self, '_start_category_index', 0)})"
-                    )
-                    continue
-
-                # Check if we've reached the overall product limit
-                if max_products_to_process and len(all_products) >= max_products_to_process:
-                    self.log.info(
-                        f"🛑 STOPPING: Reached max_products_to_process limit of {max_products_to_process} products"
-                    )
-                    break
-
-                self.log.info(f"Scraping category: {category_url}")
-                # --- BEGIN: Category entry identity & URL set ---
-                sp = self.state_manager.state_data.setdefault("system_progression", {})
-                i = int(absolute_cat_index)
-                entered_url = normalize_url(category_url)
-                sp["current_category_url"] = entered_url
-
-                pci = int(sp.get("persistent_category_index", 0))
-                expected_url = normalize_url(category_urls[pci]) if 0 <= pci < len(category_urls) else None
-                if expected_url != entered_url:
-                    self.log.warning(
-                        f"⚠️ PCI/URL mismatch at entry: pci={pci} expected={expected_url} actual={entered_url} (aligning PCI to i={i})"
-                    )
-                    sp["persistent_category_index"] = i
-                    self.state_manager.save_state_atomic("align-pci-to-url")
-                # --- END ---
-
-                # 🚨 SURGICAL FIX: PRE-EXTRACTION URL COLLECTION AND FILTERING
-                # First, collect URLs without extracting product data
-                urls_for_manifest = await self._collect_urls_only(
-                    category_url, max_products_per_category
-                )
-
-                if not urls_for_manifest:
-                    self.log.warning(f"No product URLs found for {category_url}")
-                    # Handle empty category: reset category index to 0 and mark as completed
-                    self.log.info(f"🔄 EMPTY CATEGORY HANDLING: Category {absolute_cat_index} has no products, resetting index to 0")
-                    
-                    # Initialize category processing with 0 products
-                    if progress_config.get("enabled", True):
-                        self.state_manager.initialize_category_processing(
-                            category_index=absolute_cat_index,
-                            category_url=category_url,
-                            total_categories=self._authoritative_total_categories(),
+                # Update detailed progress tracking
+                if progress_config.get("enabled", True) and hasattr(self, "state_manager"):
+                    if self.system_config.get("pipeline_toggles", {}).get(
+                        "resume_abs_index_math", True
+                    ):
+                        resume_cat_idx = self.state_manager.state_data["system_progression"].get(
+                            "current_category_index", 0
                         )
-                    
-                    # Set frozen denominator to 0 for empty category
-                    self.state_manager.set_frozen_denominator(category_url, 0)
-                    self.log.info(f"🔒 FROZEN DENOMINATOR: Empty category {absolute_cat_index} → 0 products")
-                    
-                    # Mark frozen totals as committed to enable resume pointer calculation
-                    self.state_manager.mark_frozen_totals_committed()
-                    self.log.info(f"🔒 TOTALS COMMITTED: Resume pointers now enabled for empty category")
-                    
-                    # Mark category as completed since there's nothing to process
-                    self.state_manager.mark_category_completed(category_url)
-                    self.log.info(f"✅ EMPTY CATEGORY COMPLETED: Category {absolute_cat_index} marked as completed")
-                    
-                    continue
-
-                # --- START OF MANIFEST AND FREEZING LOGIC (MOVED BEFORE CATEGORY INIT) ---
-                self.log.info(f"Discovered {len(urls_for_manifest)} product URLs for category: {category_url}")
-
-                # 1. Generate and save the manifest atomically
-                manifest_urls = [url for url in urls_for_manifest if url]
-                
-                # Create manifest path using path_manager
-                category_slug = urlparse(category_url).path.strip('/').replace('/', '_') or 'root'
-                manifest_filename = f"{self.supplier_name}_{category_slug}_manifest.json"
-                manifest_path = path_manager.get_output_path("manifests", self.supplier_name, manifest_filename)
-                
-                manifest_obj = {
-                    "category_url": category_url,
-                    "scraped_at": datetime.now(timezone.utc).isoformat(),
-                    "product_urls": manifest_urls,
-                    "count": len(manifest_urls),
-                    "supplier_name": self.supplier_name,
-                }
-
-                # Use an atomic save operation if available, otherwise a standard one.
-                # Assuming an atomic saver exists on self.state_manager._atomic_writer or similar.
-                try:
-                    from utils.atomic_file_operations import save_json_atomic
-                    save_json_atomic(manifest_path, manifest_obj)
-                    self.log.info(f"📝 MANIFEST CREATED: Saved {len(manifest_urls)} URLs to {manifest_path.name}")
-                except Exception as e:
-                    self.log.error(f"Failed to save manifest for {category_url}: {e}")
-
-                # 2. Freeze the denominator if it's not already frozen
-                discovered_count = len(manifest_urls)
-                if not self.state_manager.is_category_denominator_frozen(category_url):
-                    self.state_manager.set_frozen_denominator(category_url, discovered_count)
-                    self.log.info(f"🔒 FROZEN DENOMINATOR: Category {absolute_cat_index} → {discovered_count} products (snapshot)")
-
-                # 3. Mark frozen totals as committed to enable resume pointer calculation
-                self.state_manager.mark_frozen_totals_committed()
-                self.log.info(f"🔒 TOTALS COMMITTED: Resume pointers now enabled")
-
-                # 4. Get the authoritative total for this category's progress
-                authoritative_total = self.state_manager.get_frozen_denominator(category_url)
-                if authoritative_total is None:
-                    self.log.error(f"FATAL: Could not retrieve a denominator for {category_url}. Using discovered count as fallback.")
-                    authoritative_total = discovered_count
-
-                # --- END OF MANIFEST AND FREEZING LOGIC ---
-
-                # Update detailed progress tracking AFTER denominators are frozen
-                if progress_config.get("enabled", True):
-                    category_index = absolute_cat_index + 1
+                        category_index = (
+                            resume_cat_idx
+                            + ((batch_num - 1) * supplier_extraction_batch_size)
+                            + subcategory_index
+                        )
+                    else:
+                        category_index = (
+                            batch_num - 1
+                        ) * supplier_extraction_batch_size + subcategory_index
                     # Initialize category tracking for precise resumption
                     # MD refs: comprehensive_legacy_processing_and_phase_detection_analysis_report.md §Category Indexing
-                    # Use the absolute index without off-by-one adjustment for proper state tracking
+                    # Store the true absolute index; no off-by-one subtraction.
                     self.state_manager.initialize_category_processing(
-                        category_index=absolute_cat_index,  # Use raw absolute index
+                        category_index=category_index,
                         category_url=category_url,
                         total_categories=self._authoritative_total_categories(),
                     )
@@ -5222,15 +5100,38 @@ Return ONLY valid JSON, no additional text."""
                             f"🔄 EXTRACTION PROGRESS: Processing subcategory {subcategory_index}/{len(category_batch)} in batch {batch_num} (Category {category_index}/{len(category_urls)})"
                         )
 
-                # Setup progress callback for individual product tracking AFTER denominators are frozen
+                # Setup progress callback for individual product tracking
                 if hasattr(self.supplier_scraper, "set_progress_callback"):
                     self.supplier_scraper.set_progress_callback(
                         self._create_product_progress_callback(category_url, progress_config)
                     )
+                # Check if we've reached the overall product limit
+                if max_products_to_process and len(all_products) >= max_products_to_process:
+                    self.log.info(
+                        f"🛑 STOPPING: Reached max_products_to_process limit of {max_products_to_process} products"
+                    )
+                    break
+
+                self.log.info(f"Scraping category: {category_url}")
+
+                # 🚨 SURGICAL FIX: PRE-EXTRACTION URL COLLECTION AND FILTERING
+                # First, collect URLs without extracting product data
+                urls_for_manifest = await self._collect_urls_only(
+                    category_url, max_products_per_category
+                )
+
+                if not urls_for_manifest:
+                    self.log.warning(f"No product URLs found for {category_url}")
+                    continue
 
                 # Generate category slug for logging
                 slug = self._generate_category_slug(category_url)
 
+                # Absolute, zero-based category index within this run
+                absolute_cat_index = (
+                    (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
+                )
+                # 1-based display index retained for existing logs
                 category_index = absolute_cat_index + 1
 
                 # Get pagination info from scraper
@@ -5380,26 +5281,6 @@ Return ONLY valid JSON, no additional text."""
                     f"skip={len(skip_entirely_urls)} + cached={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)}"
                 )
 
-                supplier_total = len(needs_full_extraction_urls)
-                amazon_total = len(needs_amazon_only_urls) + supplier_total
-                if supplier_total == 0 and amazon_total == 0:
-                    self.state_manager.mark_category_completed(category_url)
-                    self.log.info(f"➡️ SKIP-ADVANCE: category[{i}] has no work → next i={i + 1}")
-                    continue
-                # 🚨 CAPTURE METRICS: Persist denominators ONCE per category; do not overwrite on resume
-                sp = self.state_manager.state_data.setdefault("system_progression", {})
-                if not bool(sp.get("category_denominator_frozen", False)):
-                    sp["supplier_products_needing_extraction"] = len(needs_full_extraction_urls)
-                    sp["amazon_products_needing_analysis"] = len(needs_amazon_only_urls) + len(needs_full_extraction_urls)
-                    sp["supplier_products_completed"] = 0  # only for brand-new category
-                    sp["amazon_products_completed"] = 0    # only for brand-new category
-                    self.state_manager.save_state_atomic("denominators-set")
-                    self.log.info(
-                        f"📊 WORK DEFINED: supplier_extract={len(needs_full_extraction_urls)} amazon_analyze={len(needs_amazon_only_urls) + len(needs_full_extraction_urls)}"
-                    )
-                else:
-                    self.log.info("📊 WORK DEFINED (resume): denominators frozen → not overwriting totals or completed")
-
                 # 🚨 CONTRACT ENFORCEMENT: Fail fast if filtering contract is violated
                 if not filter_invariant_check:
                     self.log.error(f"🚨 FILTERING CONTRACT VIOLATION: Totals don't match!")
@@ -5446,27 +5327,11 @@ Return ONLY valid JSON, no additional text."""
 
                 # 🚨 CRITICAL FIX: Only extract products that need full extraction
                 if needs_full_extraction_urls:
-                    # Resume gating: read current progress from system_progression
-                    sp = self.state_manager.state_data.get("system_progression", {})
-                    cat_ptr = sp.get("persistent_category_index", 0)
-                    current_phase = sp.get("current_phase", "supplier")
-                    
-                    if current_phase == "supplier":
-                        prod_ptr = sp.get("supplier_products_completed", 0)
-                    elif current_phase == "amazon_analysis":
-                        prod_ptr = sp.get("amazon_products_completed", 0)
-                    else:
-                        prod_ptr = 0
-
-                    saved_supplier_offset = int(prod_ptr) if isinstance(prod_ptr, (int, float)) else int(prod_ptr or 0)
-                    clamped_supplier_offset = min(max(saved_supplier_offset, 0), len(needs_full_extraction_urls))
-                    if saved_supplier_offset != clamped_supplier_offset:
-                        self.log.warning(
-                            f"🔧 Clamp supplier offset: saved={saved_supplier_offset} → start={clamped_supplier_offset} (len={len(needs_full_extraction_urls)})"
-                        )
-                        if absolute_cat_index == cat_ptr:
-                            prod_ptr = clamped_supplier_offset
-                            sp["supplier_products_completed"] = clamped_supplier_offset
+                    # Resume gating: skip categories below resume pointer
+                    try:
+                        cat_ptr, prod_ptr = self.state_manager.get_resumption_ptr()
+                    except Exception:
+                        cat_ptr, prod_ptr = 0, 0
 
                     # 🚨 IMPROVED RESUME LOGIC: More sophisticated resume check to prevent race conditions
                     # Only skip if:
@@ -5674,17 +5539,7 @@ Return ONLY valid JSON, no additional text."""
                 # 🚨 COMPREHENSIVE RESUME STATE VALIDATION
                 # Log detailed resume state information for debugging
                 try:
-                    sp = self.state_manager.state_data.get("system_progression", {})
-                    cat_ptr = sp.get("persistent_category_index", 0)
-                    current_phase = sp.get("current_phase", "supplier")
-                    
-                    if current_phase == "supplier":
-                        prod_ptr = sp.get("supplier_products_completed", 0)
-                    elif current_phase == "amazon_analysis":
-                        prod_ptr = sp.get("amazon_products_completed", 0)
-                    else:
-                        prod_ptr = 0
-                        
+                    cat_ptr, prod_ptr = self.state_manager.get_resumption_ptr()
                     self.log.info(
                         f"📊 DETAILED RESUME STATE: current_cat={absolute_cat_index}, "
                         f"resume_cat={cat_ptr}, resume_prod={prod_ptr}, "
@@ -5743,27 +5598,17 @@ Return ONLY valid JSON, no additional text."""
                         self.state_manager.emit_first_after_resume_if_needed("supplier")
                         self.state_manager.enter_runtime_phase()
 
-                        # Clamp supplier pointer to frozen denominator using new structure
-                        sp = self.state_manager.state_data.get("system_progression", {})
-                        current_phase = sp.get("current_phase", "supplier")
+                        # Clamp supplier pointer to frozen denominator
+                        ptr = self.state_manager.get_resumption_ptr()
                         frozen_total = self.state_manager.get_frozen_denominator(category_url) or discovered_count
-                        
-                        if current_phase == "supplier":
-                            supplier_completed = int(sp.get("supplier_products_completed", 0))
-                            frozen_total_int = int(frozen_total) if frozen_total is not None else 0
-                            start_idx = min(max(supplier_completed, 0), frozen_total_int)
-
-                            if supplier_completed < 0:
-                                self.log.warning(
-                                    f"RESUME_CLAMP phase=supplier reason=negative saved={supplier_completed}→{start_idx} frozen={frozen_total_int}"
-                                )
-                            elif supplier_completed > frozen_total_int:
-                                self.log.warning(
-                                    f"RESUME_CLAMP phase=supplier reason=exceeds_denominator saved={supplier_completed}→{start_idx} frozen={frozen_total_int}"
-                                )
-
-                            if (supplier_completed < 0 or supplier_completed > frozen_total_int) and hasattr(self.state_manager, "metrics"):
-                                self.state_manager.metrics.inc("resume_clamps_total", phase="supplier", cat=sp.get('persistent_category_index', 0))
+                        start_idx = min(ptr.prod_idx, frozen_total)
+                        if ptr.prod_idx > frozen_total:
+                            self.log.warning(
+                                f"RESUME_CLAMP phase=supplier cat={ptr.cat_idx} ptr={ptr.prod_idx}->{start_idx} frozen={frozen_total}"
+                            )
+                            self.state_manager.metrics.inc(
+                                "resume_clamps_total", phase="supplier", cat=ptr.cat_idx
+                            )
 
                         self.log.info(
                             f"🧬 LINEAGE: manifest={self._config_manifest_hash()} cat_url={normalize_url(category_url)} total={discovered_count}"
@@ -5811,15 +5656,10 @@ Return ONLY valid JSON, no additional text."""
                         sp.update(
                             {
                                 "total_categories": total_categories,
-                                "persistent_category_index": category_index,
+                                "current_category_index": category_index,
                                 "current_category_url": category_url,
-                                "original_category_url": category_url,
-                                "category_denominator_frozen": False,
-                                "category_freeze_timestamp": None,
-                                "supplier_products_needing_extraction": len(urls_for_manifest),
-                                "supplier_products_completed": 0,
-                                "amazon_products_needing_analysis": len(urls_for_manifest),
-                                "amazon_products_completed": 0,
+                                "total_products_in_current_category": len(urls_for_manifest),
+                                "current_product_index_in_category": 0,
                             }
                         )
 
@@ -5910,93 +5750,95 @@ Return ONLY valid JSON, no additional text."""
             product_url: str,
             product_data: dict = None,
         ):
-            absolute_idx = getattr(self, "_current_absolute_cat_index", absolute_cat_index)
-            category_url_local = getattr(self, "_current_category_url", category_url)
-            active_categories = getattr(self, "_active_category_urls", [])
-            total_cats = len(active_categories) or self._authoritative_total_categories() or 1
-
-            if absolute_idx == -1:
-                self.log.error("FATAL: _current_absolute_cat_index not set; cannot commit progress.")
-                return
-
-            total_products_int = int(total_products) if isinstance(total_products, int) else 0
-
-            # Get the authoritative total from the state manager
-            category_url_normalized = getattr(self, '_current_category_url', category_url)
-            authoritative_total = self.state_manager.get_frozen_denominator(category_url_normalized)
-            if authoritative_total is None:
-                self.log.warning(f"Could not find frozen denominator for {category_url_normalized}. Falling back to dynamic total.")
-                authoritative_total = total_products_int
-            else:
-                authoritative_total = int(authoritative_total)
-
             if operation_type == "supplier_extraction":
-                prod_idx_commit = max(0, int(start_offset) + int(product_index) - 1)
-                self.state_manager.commit_supplier_progress(
-                    cat_idx=int(absolute_idx),
-                    prod_idx=prod_idx_commit,
-                    total_cats=int(total_cats),
-                    cat_url=category_url_local,
-                    total_prod_in_cat=authoritative_total,
-                )
-            elif operation_type == "amazon_analysis":
-                queue_idx_commit = max(0, int(product_index))
-                self.state_manager.commit_amazon_progress(
-                    cat_idx=int(absolute_idx),
-                    queue_idx=queue_idx_commit,
-                    total_cats=int(total_cats),
-                    cat_url=category_url_local,
-                    queue_len=authoritative_total,
-                )
-
-            if operation_type == "supplier_extraction":
-                supplier_state = self.state_manager.state_data.get("system_progression", {})
-                supplier_completed = int(supplier_state.get("supplier_products_completed", prod_idx_commit) or 0)
-                supplier_display = supplier_completed + 1
-                if isinstance(authoritative_total, int) and authoritative_total > 0:
-                    supplier_display = min(supplier_display, authoritative_total)
-                    denom_display = authoritative_total
+                # 🚨 FIX: Update counter based on actual cache length, not callback attempts
+                if hasattr(self, "_current_all_products") and product_data:
+                    # Only increment counter when product is actually added to cache
+                    self._supplier_product_counter = len(self._current_all_products)
                 else:
-                    denom_display = supplier_display
+                    # Fallback increment if cache not available
+                    self._supplier_product_counter += 1
 
-                self._supplier_product_counter = supplier_display
+                if hasattr(self, "state_manager") and self.state_manager:
+                    try:
+                        # 🚨 MIGRATION: Replace legacy writer with atomic commit
+                        actual_cache_count = len(getattr(self, "_current_all_products", []))
+                        
+                        # Calculate category-relative index and use single category-relative writer
+                        cat_abs_idx = int(absolute_cat_index)
+                        cat_rel_idx = int(start_offset) + int(product_index) - 1  # Convert to 0-based index
+                        
+                        # Get category total from the frozen denominator
+                        sp = self.state_manager.state_data.get("system_progression", {})
+                        cat_total = sp.get("total_products_in_current_category", 0)
 
-                try:
-                    from utils.normalization import normalize_url
-                    frozen_url = normalize_url(category_url_local)
-                except Exception:
-                    frozen_url = category_url_local
-                self.log.info(f"[DENOM_FROZEN] url={frozen_url} total={denom_display} (LOCKED)")
+                        # Optional read-only banner for frozen denominator
+                        try:
+                            from utils.normalization import normalize_url
+                            nurl = normalize_url(category_url)
+                        except Exception:
+                            nurl = category_url
+                        self.log.info(f"[DENOM_FROZEN] url={nurl} total={int(cat_total) if cat_total else 0} (LOCKED)")
+                        
+                        # Clamp for safety
+                        cat_rel_idx = max(0, min(cat_rel_idx, cat_total - 1)) if cat_total > 0 else cat_rel_idx
+                        
+                        # ATOMIC COMMIT: Single writer approach
+                        if hasattr(self.state_manager, "commit_supplier_progress"):
+                            try:
+                                self.state_manager.commit_supplier_progress(
+                                    cat_idx=cat_abs_idx,
+                                    prod_idx=cat_rel_idx,
+                                    total_cats=self.state_manager._authoritative_total_categories(),
+                                    cat_url=category_url,
+                                    total_prod_in_cat=cat_total,
+                                )
+                            except Exception:
+                                pass
+                        
+                        # If we are resuming within a category, acknowledge on first processed item
+                        if int(start_offset) > 0 and int(product_index) == 1:
+                            self.log.info(
+                                f"✅ RESUME HONORED: cat={absolute_cat_index} prod={start_offset} key={product_url}"
+                            )
+                        display_idx = actual_cache_count
+                        if isinstance(total_products, int) and display_idx > total_products:
+                            self.log.warning(f"[INDEX_CLAMP] display_idx={display_idx}->{total_products} reason=exceeds_denominator")
+                            display_idx = total_products
+                        self.log.info(
+                            f"🔍 SUPPLIER STATE UPDATE: Index updated to {display_idx}/{total_products}"
+                        )
+                    except Exception as e:
+                        self.log.error(f"❌ SUPPLIER STATE UPDATE FAILED: {e}")
 
-                if supplier_completed + 1 > denom_display:
-                    self.log.warning(
-                        f"[INDEX_CLAMP] display_idx={supplier_completed + 1}->{denom_display} reason=exceeds_denominator"
-                    )
-
-                self.log.info(
-                    f"?? SUPPLIER STATE UPDATE: Index updated to {supplier_display}/{denom_display}"
-                )
-
+                # 🚨 DEFINITIVE FIX: Products are now added by scraper directly to shared list
+                # Progress callback only needs to track progress and trigger cache saves
                 if product_data and hasattr(self, "_current_all_products"):
                     self.log.info(
-                        f"?? PROGRESS: Product {supplier_display} processed (total in cache: {len(self._current_all_products)})"
+                        f"📊 PROGRESS: Product {self._supplier_product_counter} processed (total in cache: {len(self._current_all_products)})"
                     )
 
+                # Simple index-based logging (matching Amazon analysis style)
                 if progress_config.get("progress_display", {}).get("show_product_progress", True):
                     self.log.info(
-                        f"?? SUPPLIER EXTRACTION: Processing product {supplier_display}"
+                        f"🔄 SUPPLIER EXTRACTION: Processing product {self._supplier_product_counter}"
                     )
 
+                # 🚨 NEW: Per-product cache saving logic (now works because list is populated)
                 cache_config = self.system_config.get("supplier_cache_control", {})
-                update_frequency = cache_config.get("update_frequency_products", 1)
+                update_frequency = cache_config.get(
+                    "update_frequency_products", 1
+                )  # Use config value
 
+                # Debug logging for cache save logic
                 self.log.info(
-                    f"?? CACHE CHECK: Product {supplier_display}, frequency={update_frequency}, enabled={cache_config.get('enabled', True)}"
+                    f"🔍 CACHE CHECK: Product {self._supplier_product_counter}, frequency={update_frequency}, enabled={cache_config.get('enabled', True)}"
                 )
                 self.log.info(
-                    f"?? CACHE CHECK: List length={len(getattr(self, '_current_all_products', []))}, modulo={supplier_display % update_frequency}"
+                    f"🔍 CACHE CHECK: List length={len(getattr(self, '_current_all_products', []))}, modulo={self._supplier_product_counter % update_frequency}"
                 )
 
+                # Skip redundant saves when nothing new was added
                 current_count = len(getattr(self, "_current_all_products", []))
                 last_count = getattr(self, "_last_cache_count", None)
                 if last_count is not None and current_count == last_count:
@@ -6009,11 +5851,13 @@ Return ONLY valid JSON, no additional text."""
                     and len(self._current_all_products) > 0
                     and self._supplier_product_counter % update_frequency == 0
                 ):
+                    # Use centralized path management for consistent cache file construction
                     cache_filename = f"{self.supplier_name.replace('.', '-')}_products_cache.json"
                     cache_file_path = str(
                         path_manager.get_output_path("cached_products", cache_filename)
                     )
 
+                    # 🚨 ATOMIC FIX 7: Save current products to cache atomically
                     new_count = self._save_products_to_cache(
                         self._current_all_products, cache_file_path
                     )
@@ -6021,18 +5865,38 @@ Return ONLY valid JSON, no additional text."""
                         f"💾 ATOMIC PERIODIC SAVE: Saved {len(self._current_all_products)} products ({new_count} new) to cache (every {update_frequency} products)"
                     )
 
+                    # 🚨 RC-6 FIX: Update last full scan timestamp
                     if new_count > 0:
                         self._last_full_scan_ts = time.time()
 
+                    # Track last cache count to avoid redundant saves
                     self._last_cache_count = current_count
 
-            elif operation_type == "amazon_analysis":
-                if progress_config.get("progress_display", {}).get("show_amazon_progress", True):
-                    self.log.info(
-                        f"🔄 AMAZON ANALYSIS: Processing queue index {product_index}/{authoritative_total}"
-                    )
+                    # 🚨 MIGRATION: Remove direct save_state() calls - state managed by atomic commits only
+                    if (
+                        hasattr(self, "state_manager") and new_count >= 0
+                    ):  # new_count >= 0 indicates successful save
+                        # Do NOT read legacy subtree; rely on the canonical resume pointer
+                        progress = {}
+                        # Use actual cache length from successful save
+                        progress["products_extracted_total"] = len(self._current_all_products)
+                        progress["current_product_url"] = product_url
+                        progress["extraction_phase"] = "products"
+                        progress["last_cache_save_count"] = new_count  # Track incremental saves
+                        # NOTE: State will be saved via atomic commits during main processing
+                        self.log.debug(
+                            f"🔄 ATOMIC STATE: State synchronized with cache after saving {new_count} new products"
+                        )
 
-        return progress_callback
+                # 🚨 MIGRATION: Remove direct save_state() calls - lightweight state update only
+                elif hasattr(self, "state_manager"):
+                    # Do NOT read legacy subtree; rely on the canonical resume pointer
+                    progress = {}
+                    # Lightweight state update without cache write
+                    progress["current_product_url"] = product_url
+                    progress["extraction_phase"] = "products"
+                    # NOTE: State persistence handled by atomic commits during main processing
+
         return progress_callback
 
     def _check_amazon_cache_by_asin(
@@ -6922,7 +6786,7 @@ Return ONLY valid JSON, no additional text."""
                             )
                         
                         # Mark category as complete in state manager
-                        self.state_manager.mark_category_completed(category_url)
+                        self.state_manager.mark_category_complete(category_index, category_url)
                         
                         # Save state after each category
                         self.state_manager.save_state(preserve_interruption_state=True)
@@ -7067,24 +6931,23 @@ Return ONLY valid JSON, no additional text."""
             # 🚨 CRITICAL: Validate required fields exist
             required_fields = [
                 "current_phase",
-                "persistent_category_index",
-                "supplier_products_completed",
-                "supplier_products_needing_extraction",
+                "current_category_index",
+                "current_product_index_in_category",
             ]
             for field in required_fields:
                 if field not in sp:
                     errors.append(f"Missing required field: {field}")
 
             # 🚨 CRITICAL: Validate field types and bounds
-            current_category_index = sp.get("persistent_category_index", -1)
-            current_product_index = sp.get("supplier_products_completed", -1)
+            current_category_index = sp.get("current_category_index", -1)
+            current_product_index = sp.get("current_product_index_in_category", -1)
             total_categories = sp.get("total_categories", 0)
-            total_products = sp.get("supplier_products_needing_extraction", 0)
+            total_products = sp.get("total_products_in_current_category", 0)
 
             # Validate category bounds
             if current_category_index < 0:
                 errors.append(
-                    f"Invalid persistent_category_index: {current_category_index} (must be >= 0)"
+                    f"Invalid current_category_index: {current_category_index} (must be >= 0)"
                 )
             elif total_categories > 0 and current_category_index >= total_categories:
                 errors.append(
@@ -7094,7 +6957,7 @@ Return ONLY valid JSON, no additional text."""
             # Validate product bounds
             if current_product_index < 0:
                 errors.append(
-                    f"Invalid supplier_products_completed: {current_product_index} (must be >= 0)"
+                    f"Invalid current_product_index_in_category: {current_product_index} (must be >= 0)"
                 )
             elif total_products > 0 and current_product_index > total_products:
                 errors.append(
@@ -7438,17 +7301,6 @@ Return ONLY valid JSON, no additional text."""
             self.log.warning(f"[SAFETY] category_queue_enforced removed_non_category={rc} removed_not_allowed={rk}")
         products = filtered
         total = len(products)
-
-        sp = self.state_manager.state_data.get("system_progression", {})
-        saved_amazon_offset = int(sp.get("amazon_products_completed", 0)) if isinstance(sp.get("amazon_products_completed", 0), (int, float)) else int(sp.get("amazon_products_completed", 0) or 0)
-        clamped_amazon_offset = min(max(saved_amazon_offset, 0), total)
-        if saved_amazon_offset != clamped_amazon_offset:
-            self.log.warning(
-                f"🔧 Clamp amazon offset: saved={saved_amazon_offset} → start={clamped_amazon_offset} (len={total})"
-            )
-            prod_offset = clamped_amazon_offset
-            sp["amazon_products_completed"] = clamped_amazon_offset
-
         batch_size = int(self.system_config.get("amazon_batch_size", 0)) or int(self.system_config.get("max_products_per_cycle", 10)) or 10
         start_batch = prod_offset // max(1, batch_size)
         first_offset = prod_offset %  max(1, batch_size)
@@ -7514,28 +7366,15 @@ Return ONLY valid JSON, no additional text."""
         if hasattr(self.state_manager, "emit_first_after_resume_if_needed"):
             self.state_manager.emit_first_after_resume_if_needed("amazon_analysis")
         
-        # Clamp Amazon pointer to queue length using new system_progression structure
-        sp = self.state_manager.state_data.get("system_progression", {})
-        current_phase = sp.get("current_phase", "supplier")
-        
-        if current_phase == "amazon_analysis":
-            amazon_completed = int(sp.get("amazon_products_completed", 0))
-            total_len = len(price_filtered_products)
-            start_amz = min(max(amazon_completed, 0), total_len)
-
-            if amazon_completed < 0:
-                self.log.warning(
-                    f"RESUME_CLAMP phase=amazon_analysis reason=negative saved={amazon_completed}→{start_amz} queue={total_len}"
-                )
-            elif amazon_completed > total_len:
-                self.log.warning(
-                    f"RESUME_CLAMP phase=amazon_analysis reason=exceeds_queue saved={amazon_completed}→{start_amz} queue={total_len}"
-                )
-
-            if (amazon_completed < 0 or amazon_completed > total_len) and hasattr(self.state_manager, "metrics"):
-                self.state_manager.metrics.inc("resume_clamps_total", phase="amazon_analysis", cat=sp.get('persistent_category_index', 0))
-        else:
-            start_amz = 0
+        # Clamp Amazon pointer to queue length
+        if hasattr(self.state_manager, "get_resumption_ptr"):
+            aptr = self.state_manager.get_resumption_ptr()
+            start_amz = min(aptr.prod_idx if aptr.phase == "amazon_analysis" else 0,
+                           len(price_filtered_products))
+            if aptr.phase == "amazon_analysis" and aptr.prod_idx > len(price_filtered_products):
+                self.log.warning(f"RESUME_CLAMP phase=amazon_analysis cat={aptr.cat_idx} ptr={aptr.prod_idx}->{start_amz} queue={len(price_filtered_products)}")
+                if hasattr(self.state_manager, "metrics"):
+                    self.state_manager.metrics.inc("resume_clamps_total", phase="amazon_analysis", cat=aptr.cat_idx)
 
         self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
 
@@ -10773,8 +10612,8 @@ Return ONLY valid JSON, no additional text."""
                             progress_data = self.state_manager.state_data.setdefault(
                                 "supplier_extraction_progress", {}
                             )
-                            progress_data["supplier_products_completed"] = current_index
-                            progress_data["supplier_products_needing_extraction"] = len(
+                            progress_data["current_product_index_in_category"] = current_index
+                            progress_data["total_products_in_current_category"] = len(
                                 price_filtered_products
                             )
 
@@ -11232,7 +11071,7 @@ Return ONLY valid JSON, no additional text."""
                 # 🚨 CRITICAL FIX: Use system_progression as canonical source
                 sp = self.state_manager.state_data.get("system_progression", {})
                 extraction_progress = sp  # Use system_progression data
-                products_extracted = sp.get("supplier_products_completed", 0)
+                products_extracted = sp.get("current_product_index_in_category", 0)
 
                 # Get the target from runtime settings
                 metadata = self.state_manager.state_data.get("metadata", {})

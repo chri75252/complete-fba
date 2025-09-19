@@ -352,45 +352,37 @@ class FixedEnhancedStateManager:
         self._validate_cross_run_monotonicity()
 
     def _validate_cross_run_monotonicity(self) -> None:
-        """Validate that resumption indices never decrease between runs (prevents 4→1 rollbacks)."""
-        sp = self.state_data.get("system_progression", {})
-        
-        # Get current indices
-        current_cat_idx = sp.get("current_category_index", 0)
-        current_prod_idx = sp.get("current_product_index_in_category", 0)
-        current_resumption = self.state_data.get("resumption_index", 0)
-        
-        # Get stored previous run values (persistent across sessions)
-        last_known_cat = self.state_data.get("_last_known_category_index", 0)
-        last_known_prod = self.state_data.get("_last_known_product_index", 0)
-        last_known_resumption = self.state_data.get("_last_known_resumption_index", 0)
-        
-        # Check for regression
+        """
+        Ensures resumption pointer never decreases between runs by comparing
+        the loaded state's pointers against a persisted "high-water mark".
+        This prevents regressions like an index rolling back from 8 to 7 across restarts.
+        """
+        sp = self.state_data.setdefault("system_progression", {})
+
+        # Get current resumption pointer from the authoritative location
+        resumption_ptr = sp.get("resumption_ptr", {})
+        current_cat_idx = resumption_ptr.get("cat_idx", 0)
+        current_prod_idx = resumption_ptr.get("prod_idx", 0)
+
+        # Get the stored high-water mark from the last successful run
+        high_water_mark = self.state_data.get("_high_water_mark", {})
+        last_known_cat = high_water_mark.get("cat_idx", 0)
+        last_known_prod = high_water_mark.get("prod_idx", 0)
+
+        # Check for and correct any regression
         regression_detected = False
-        
         if current_cat_idx < last_known_cat:
-            log.error(f"🚨 CROSS-RUN REGRESSION: Category index {current_cat_idx} < previous {last_known_cat}")
+            self.log.error(f"🚨 CROSS-RUN REGRESSION: Category index {current_cat_idx} < previous high-water mark {last_known_cat}.")
+            sp.setdefault("resumption_ptr", {})["cat_idx"] = last_known_cat
             regression_detected = True
-            
+
         if current_cat_idx == last_known_cat and current_prod_idx < last_known_prod:
-            log.error(f"🚨 CROSS-RUN REGRESSION: Product index {current_prod_idx} < previous {last_known_prod}")
+            self.log.error(f"🚨 CROSS-RUN REGRESSION: Product index {current_prod_idx} < previous high-water mark {last_known_prod}.")
+            sp.setdefault("resumption_ptr", {})["prod_idx"] = last_known_prod
             regression_detected = True
-            
-        if current_resumption < last_known_resumption:
-            log.error(f"🚨 CROSS-RUN REGRESSION: Resumption index {current_resumption} < previous {last_known_resumption}")
-            regression_detected = True
-            
+
         if regression_detected:
-            log.warning("🔧 CORRECTING CROSS-RUN REGRESSION: Restoring previous indices")
-            # Restore to safe previous values
-            sp["current_category_index"] = max(current_cat_idx, last_known_cat)
-            sp["current_product_index_in_category"] = max(current_prod_idx, last_known_prod)
-            self.state_data["resumption_index"] = max(current_resumption, last_known_resumption)
-            
-        # Update stored values for next run
-        self.state_data["_last_known_category_index"] = sp.get("current_category_index", 0)
-        self.state_data["_last_known_product_index"] = sp.get("current_product_index_in_category", 0)
-        self.state_data["_last_known_resumption_index"] = self.state_data.get("resumption_index", 0)
+            self.log.warning(f"🔧 CORRECTED CROSS-RUN REGRESSION: Restored pointer to previous high-water mark to ensure monotonicity.")
 
     def perform_startup_analysis(self) -> Dict[str, Any]:
         """
@@ -523,60 +515,6 @@ class FixedEnhancedStateManager:
 
         log.info("✅ Cache rebuild forced - resumption_index reset to 0")
     
-    def _validate_cross_run_monotonicity(self):
-        """
-        🚨 CROSS-RUN MONOTONICITY GUARD: Ensures resumption pointer never decreases between runs
-        
-        This guard prevents non-monotonic resumption pointer regression that was observed
-        in the rejection feedback (8→7 regression across runs). It validates that the
-        loaded resumption pointer is not behind any previously recorded maximum.
-        """
-        current_resumption_index = self.state_data.get("resumption_index", 0)
-        
-        # Get resumption pointer from system_progression if available
-        sp = self.state_data.get("system_progression", {})
-        resumption_ptr = sp.get("resumption_ptr", {})
-        loaded_prod_idx = resumption_ptr.get("prod_idx", 0)
-        
-        # Check for cross-run regression
-        if loaded_prod_idx > 0 and current_resumption_index < loaded_prod_idx:
-            log.error(
-                f"🚨 CROSS-RUN MONOTONICITY VIOLATION: "
-                f"Loaded resumption_index ({current_resumption_index}) < "
-                f"previous resumption_ptr.prod_idx ({loaded_prod_idx}) - "
-                f"This violates monotonicity invariant!"
-            )
-            
-            # Corrective action: Use the higher value to maintain monotonicity
-            corrected_index = max(current_resumption_index, loaded_prod_idx)
-            self.state_data["resumption_index"] = corrected_index
-            
-            # Log the correction and mark for attention
-            log.warning(
-                f"🔧 MONOTONICITY REPAIR: Corrected resumption_index to {corrected_index} "
-                f"to maintain cross-run monotonicity invariant"
-            )
-            
-            # Add violation tracking for audit purposes
-            self.state_data.setdefault("monotonicity_violations", []).append({
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "violation_type": "cross_run_regression", 
-                "loaded_index": current_resumption_index,
-                "previous_max": loaded_prod_idx,
-                "corrected_to": corrected_index,
-                "violation_evidence": f"{loaded_prod_idx}→{current_resumption_index} regression detected"
-            })
-            
-            log.info(
-                f"✅ MONOTONICITY GUARD: Resumption pointer validated and corrected. "
-                f"Cross-run invariant maintained: {corrected_index} >= {loaded_prod_idx}"
-            )
-        else:
-            log.info(
-                f"✅ MONOTONICITY GUARD: Cross-run validation passed. "
-                f"resumption_index={current_resumption_index} >= previous_max={loaded_prod_idx}"
-            )
-
     def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
         """
         🚨 STATE VALIDATION: Validate state consistency and repair issues
@@ -727,7 +665,10 @@ class FixedEnhancedStateManager:
         sp["current_category_url"] = nurl
         # Track frozen denominators per category URL (normalized) to prevent drift across runs
         frozen_categories = self.state_data.setdefault("frozen_category_denominators", {})
-        frozen_categories[nurl] = int(discovered_count)
+        frozen_categories[nurl] = {
+            "count": int(discovered_count),
+            "frozen_at": datetime.now(timezone.utc).isoformat(),
+        }
 
         if manifest_urls:
             sp["current_manifest_hash"] = self.canonical_manifest_hash(manifest_urls)
@@ -752,54 +693,48 @@ class FixedEnhancedStateManager:
         frozen_categories = self.state_data.get("frozen_category_denominators", {})
         if nurl in frozen_categories:
             try:
-                return int(frozen_categories[nurl])
+                frozen_data = frozen_categories[nurl]
+                if isinstance(frozen_data, dict):
+                    return int(frozen_data.get("count", 0)) or None
+                else:
+                    # Handle legacy format (direct integer)
+                    return int(frozen_data) or None
             except Exception:
                 return None
         return None
 
     def set_resumption_ptr(self, phase: str, cat_idx: int, prod_idx_next: int) -> None:
         """
-        Set phase-aware resumption pointer with NEXT-item semantics.
-        Includes monotonicity validation to prevent backward moves.
+        Atomically sets the phase-aware resumption pointer. Includes monotonicity
+        validation to prevent backward moves and updates the high-water mark.
+        The prod_idx_next argument is the index of the NEXT item to be processed.
         """
         sp = self.state_data.setdefault("system_progression", {})
-        current_ptr = sp.get("resumption_ptr", {"phase": "supplier", "cat_idx": 0, "prod_idx": 0})
-        
-        # Monotonicity validation
-        if (cat_idx < current_ptr.get("cat_idx", 0) or 
+        current_ptr = sp.get("resumption_ptr", {"cat_idx": 0, "prod_idx": 0})
+
+        if (cat_idx < current_ptr.get("cat_idx", 0) or
             (cat_idx == current_ptr.get("cat_idx", 0) and prod_idx_next < current_ptr.get("prod_idx", 0))):
-            log.error(f"❌ BACKWARD MOVE REJECTED: current={current_ptr} -> attempted={{'phase': '{phase}', 'cat_idx': {cat_idx}, 'prod_idx': {prod_idx_next}}}")
+            self.log.error(f"❌ MONOTONIC VIOLATION REJECTED: Attempted backward move from {current_ptr} to cat={cat_idx},prod={prod_idx_next}.")
             return
-        
+
         sp["resumption_ptr"] = {"phase": phase, "cat_idx": cat_idx, "prod_idx": prod_idx_next}
-        log.debug(f"📍 RESUMPTION PTR: {phase} cat={cat_idx} prod={prod_idx_next} (NEXT to process)")
+        self.log.debug(f"📍 RESUMPTION PTR SET: phase={phase} cat={cat_idx} prod_next={prod_idx_next}")
+
+        self.state_data["_high_water_mark"] = {"cat_idx": cat_idx, "prod_idx": prod_idx_next}
 
     def get_resumption_ptr(self) -> ResumptionPtr:
-        """Canonical pointer; legacy subtree is intentionally ignored."""
+        """
+        Canonical getter for the resumption pointer. This is the ONLY method
+        the workflow should call to determine where to resume processing.
+        It reads exclusively from system_progression.
+        """
         sp = self.state_data.get("system_progression", {})
-        phase = sp.get("current_phase") or sp.get("phase") or "supplier"
-        ptr = sp.get("resumption_ptr")
-        if isinstance(ptr, dict):
-            cat_idx = int(ptr.get("cat_idx", 0))
-            prod_idx = int(ptr.get("prod_idx", 0))
-            # 🚨 FIX: Ensure the resumption pointer is within valid bounds
-            total_cats = self._authoritative_total_categories()
-            if total_cats > 0 and cat_idx >= total_cats:
-                log.warning(
-                    f"⚠️ RESUME PTR CLAMP: cat_idx {cat_idx} >= total_cats {total_cats}, clamping to {total_cats - 1}"
-                )
-                cat_idx = max(0, total_cats - 1)
-            return ResumptionPtr(phase, cat_idx, prod_idx)
-        # Synthesize from current_* only; do not consult legacy snapshots
-        cat_idx = int(sp.get("current_category_index", 0) or 0)
-        prod_idx = int(sp.get("current_product_index_in_category", 0) or 0)
-        # 🚨 FIX: Ensure the synthesized pointer is within valid bounds
-        total_cats = self._authoritative_total_categories()
-        if total_cats > 0 and cat_idx >= total_cats:
-            log.warning(
-                f"⚠️ SYNTHESIZED PTR CLAMP: cat_idx {cat_idx} >= total_cats {total_cats}, clamping to {total_cats - 1}"
-            )
-            cat_idx = max(0, total_cats - 1)
+        ptr = sp.get("resumption_ptr", {})
+
+        phase = str(ptr.get("phase", "supplier"))
+        cat_idx = int(ptr.get("cat_idx", 0))
+        prod_idx = int(ptr.get("prod_idx", 0))
+
         return ResumptionPtr(phase, cat_idx, prod_idx)
 
     def get_current_category_info(self) -> Dict[str, Any]:
@@ -1257,57 +1192,51 @@ class FixedEnhancedStateManager:
                 self._perform_supplier_commit(cat_idx, prod_idx, total_cats, cat_url, total_prod_in_cat)
         else:
             self._perform_supplier_commit(cat_idx, prod_idx, total_cats, cat_url, total_prod_in_cat)
-    
+
     def _perform_supplier_commit(self, cat_idx: int, prod_idx: int, total_cats: int, cat_url: str, total_prod_in_cat: int):
         """Internal supplier commit implementation."""
         sp = self.state_data.setdefault("system_progression", {})
 
-        # 🔒 CRITICAL: Per-category denominator freeze at category entry (normalized URL)
+        # Per-category denominator freeze logic (remains the same)
         try:
             nurl = normalize_url(cat_url)
         except Exception:
             nurl = cat_url
-        current_cat_url = sp.get("current_category_url")
-        current_total_prod = sp.get("total_products_in_current_category", 0)
+        recorded_total = int(sp.get("total_products_in_current_category", 0) or 0)
+        freeze_needed = sp.get("current_category_url") != nurl
+        if not freeze_needed and total_prod_in_cat is not None:
+            try:
+                incoming_total = int(total_prod_in_cat)
+            except Exception:
+                incoming_total = recorded_total
+            if incoming_total and incoming_total != recorded_total:
+                freeze_needed = True
+        if not freeze_needed and recorded_total == 0 and total_prod_in_cat is not None:
+            freeze_needed = True
 
-        if current_cat_url != nurl or current_total_prod == 0:
-            # NEW CATEGORY ENTRY: Freeze denominator immediately
-            sp["current_category_url"] = nurl
-            sp["total_products_in_current_category"] = int(total_prod_in_cat)
+        if freeze_needed:
+            try:
+                frozen_total = int(total_prod_in_cat) if total_prod_in_cat is not None else recorded_total
+            except Exception:
+                frozen_total = recorded_total
+            sp["total_products_in_current_category"] = max(0, frozen_total)
             sp["category_denominator_frozen"] = True
             sp["category_freeze_timestamp"] = datetime.now(timezone.utc).isoformat()
-
-            self.log.info(f"🔒 PER-CATEGORY FREEZE: {nurl} → {total_prod_in_cat} products")
-            
-            # Emit first-after-resume banner once per phase
             self.emit_first_after_resume_once("supplier")
-        
-        # Validate against frozen denominator
-        frozen_total = sp.get("total_products_in_current_category", total_prod_in_cat)
-        if prod_idx > frozen_total:
-            if hasattr(self, '_log') and self._log:
-                self._log.warning(f"⚠️ BOUNDS CLAMP: prod_idx={prod_idx} > frozen_total={frozen_total}, clamping to {frozen_total}")
-            prod_idx = min(prod_idx, frozen_total)
-        
+            self.log.info(f"🔒 DENOMINATOR FROZEN: {nurl} -> {sp['total_products_in_current_category']} products")
+
         # Apply atomic state updates
         sp["current_phase"] = "supplier"
         sp["current_category_index"] = int(cat_idx)
         sp["total_categories"] = int(total_cats)
-        try:
-            nurl = normalize_url(cat_url)
-        except Exception:
-            nurl = str(cat_url)
         sp["current_category_url"] = nurl
-        sp["current_product_index_in_category"] = int(prod_idx)           # ✅ category-relative (last completed)
-        
-        # 🚨 IMPROVED: Set resumption pointer with detailed logging
+        sp["current_product_index_in_category"] = int(prod_idx)
+
+        # CRITICAL: Set the resumption pointer for the NEXT product
         next_prod_idx = int(prod_idx) + 1
-        self.log.info(
-            f"📍 SETTING RESUMPTION PTR: cat={cat_idx}, current_prod={prod_idx}, next_prod={next_prod_idx}"
-        )
-        self.set_resumption_ptr(int(cat_idx), next_prod_idx)           # Store NEXT to process
-        log.debug(f"💾 SUPPLIER COMMIT: About to call save_debounced (breadcrumb before potential hang)")
-        self.save_debounced("supplier")
+        self.set_resumption_ptr(phase="supplier", cat_idx=int(cat_idx), prod_idx_next=next_prod_idx)
+
+        self.save_debounced("supplier-commit")
         self.emit_resume_honored_once("supplier", "SUPPLIER")
 
     def commit_amazon_progress(self, *, cat_idx: int, queue_idx: int,
@@ -1402,67 +1331,10 @@ class FixedEnhancedStateManager:
     
     # === DEPRECATED LEGACY WRITER METHODS ===
     
-    def update_processing_index(self, current_index: int, total_products: int):
-        """
-        ❌ DEPRECATED AND DISABLED.
-        
-        This method is banned due to state corruption issues. Use phase-specific
-        atomic commit methods instead:
-        - commit_supplier_progress() for supplier extraction phase
-        - commit_amazon_progress() for Amazon analysis phase
-        """
-        raise NotImplementedError(
-            "update_processing_index() is deprecated and must not be used. "
-            "Use commit_supplier_progress() or commit_amazon_progress() instead."
-        )
-    
     def _authoritative_total_categories(self) -> int:
         """Get authoritative total categories count."""
         sp = self.state_data.get("system_progression", {})
         return sp.get("total_categories", 0)
-    
-    def _validate_cross_run_monotonicity(self) -> None:
-        """Validate that resumption indices never decrease between runs (prevents 4→1 rollbacks)."""
-        sp = self.state_data.get("system_progression", {})
-        
-        # Get current indices
-        current_cat_idx = sp.get("current_category_index", 0)
-        current_prod_idx = sp.get("current_product_index_in_category", 0)
-        current_resumption_idx = self.state_data.get("resumption_index", 0)
-        
-        # Get stored previous safe values
-        prev_safe = sp.get("previous_safe_state", {})
-        prev_cat_idx = prev_safe.get("category_index", 0)
-        prev_prod_idx = prev_safe.get("product_index", 0)
-        prev_resumption_idx = prev_safe.get("resumption_index", 0)
-        
-        # Check for backward progression and correct if found
-        corrected = False
-        
-        if current_cat_idx < prev_cat_idx:
-            log.warning(f"🚨 REGRESSION DETECTED: category_index {current_cat_idx} < previous {prev_cat_idx}, correcting...")
-            sp["current_category_index"] = prev_cat_idx
-            corrected = True
-            
-        if current_resumption_idx < prev_resumption_idx:
-            log.warning(f"🚨 REGRESSION DETECTED: resumption_index {current_resumption_idx} < previous {prev_resumption_idx}, correcting...")
-            self.state_data["resumption_index"] = prev_resumption_idx
-            corrected = True
-            
-        # Update safe state checkpoint
-        sp["previous_safe_state"] = {
-            "category_index": max(current_cat_idx, prev_cat_idx),
-            "product_index": current_prod_idx,
-            "resumption_index": max(current_resumption_idx, prev_resumption_idx),
-            "last_validated": datetime.now(timezone.utc).isoformat()
-        }
-        
-        if corrected:
-            log.info("✅ MONOTONICITY: Corrected regressive indices to prevent data corruption")
-        else:
-            log.debug("✅ MONOTONICITY: Validated - no regressions detected")
-    
-    # === STATE VALIDATION AND CONSISTENCY CHECKS ===
     
     def validate_state_integrity(self) -> Tuple[bool, List[str], Dict[str, Any]]:
         """
@@ -1518,7 +1390,7 @@ class FixedEnhancedStateManager:
         # Generate recommendations based on issues found
         if "impossible_index_states" in validation_report["corruption_patterns"]:
             validation_report["recommendations"].append(
-                "Replace all update_processing_index() calls with phase-specific atomic commits"
+                "Replace all legacy index updates with phase-specific atomic commits"
             )
         
         if "phase_semantic_mixing" in validation_report["corruption_patterns"]:
@@ -1835,58 +1707,6 @@ class FixedEnhancedStateManager:
             )
         
         return repairs
-
-    def set_resumption_ptr(self, cat_idx: int, prod_idx: int) -> None:
-        """Set monotonic resumption pointer with validation and logging."""
-        sp = self.state_data.setdefault("system_progression", {})
-        prev = sp.get("resumption_ptr", {"cat_idx": 0, "prod_idx": 0})
-        prev_cat = int(prev.get("cat_idx", 0))
-        prev_prod = int(prev.get("prod_idx", 0))
-        inc_cat = int(cat_idx)
-        inc_prod = int(prod_idx)
-        
-        # Get total categories for bounds checking
-        total_cats = self._authoritative_total_categories()
-        
-        # 🚨 FIX: Ensure the resumption pointer is within valid bounds
-        if total_cats > 0 and inc_cat >= total_cats:
-            log.warning(
-                f"⚠️ SET RESUME PTR CLAMP: cat_idx {inc_cat} >= total_cats {total_cats}, clamping to {total_cats - 1}"
-            )
-            inc_cat = max(0, total_cats - 1)
-        
-        # 🔒 MONOTONIC ASSERTION: Validate pointer never goes backward
-        if inc_cat < prev_cat:
-            log.error(
-                f"🚨 MONOTONIC VIOLATION: Attempted backward category move from "
-                f"cat={prev_cat} to cat={inc_cat}. Refusing to regress."
-            )
-            return
-        
-        if inc_cat == prev_cat:
-            if inc_prod <= prev_prod:
-                if inc_prod < prev_prod:
-                    log.error(
-                        f"🚨 MONOTONIC VIOLATION: Attempted backward product move from "
-                        f"cat={prev_cat},prod={prev_prod} to cat={inc_cat},prod={inc_prod}. Refusing to regress."
-                    )
-                return  # Same or backward, skip update
-            # Forward movement within same category
-            sp["resumption_ptr"] = {
-                "cat_idx": prev_cat, 
-                "prod_idx": inc_prod,
-                "last_updated": datetime.now(timezone.utc).isoformat()
-            }
-            log.info(f"✅ MONOTONIC UPDATE: resumption_ptr advanced to cat={prev_cat},prod={inc_prod}")
-        else:
-            # New category - forward movement
-            sp["resumption_ptr"] = {
-                "cat_idx": inc_cat, 
-                "prod_idx": inc_prod,
-                "last_updated": datetime.now(timezone.utc).isoformat()
-            }
-            log.info(f"✅ MONOTONIC UPDATE: resumption_ptr advanced to cat={inc_cat},prod={inc_prod}")
-
 
     def update_progression_unified(
         self,
@@ -2444,20 +2264,6 @@ class FixedEnhancedStateManager:
 
     # === WORKFLOW COMPATIBILITY METHODS ===
     # These methods provide compatibility with the existing workflow
-
-    def update_processing_index(self, current_index: int, total_products: int):
-        """
-        ❌ DEPRECATED AND DISABLED.
-        
-        This method is banned due to state corruption issues. Use phase-specific
-        atomic commit methods instead:
-        - commit_supplier_progress() for supplier extraction phase
-        - commit_amazon_progress() for Amazon analysis phase
-        """
-        raise NotImplementedError(
-            "update_processing_index() is deprecated and must not be used. "
-            "Use commit_supplier_progress() or commit_amazon_progress() instead."
-        )
 
     def start_processing(self, config_hash: str, runtime_settings: Dict[str, Any]):
         """Start processing session"""
