@@ -5017,6 +5017,13 @@ Return ONLY valid JSON, no additional text."""
         # PHASE RESET FIX: Reset phase to supplier when starting supplier extraction
         self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=True)
 
+        # Startup visibility: surface when frozen totals have never been committed
+        sp_startup = self.state_manager.state_data.get("system_progression", {})
+        if not bool(sp_startup.get("frozen_totals_committed")):
+            self.log.warning(
+                "⚠️ STARTUP SEQUENCE: frozen_totals_committed is False or missing — initial freeze will occur on the first valid commit."
+            )
+
         self.log.info(f"🕷️ PERFORMING SUPPLIER SCRAPING from {len(category_urls)} categories")
         self.log.info(f"📦 Using supplier extraction batch size: {supplier_extraction_batch_size}")
 
@@ -5082,15 +5089,18 @@ Return ONLY valid JSON, no additional text."""
             # This ensures authentication is verified before each new category batch processing
             await self._trigger_authentication_check(f"category_batch_{batch_num}")
 
+            if not hasattr(self, "_category_index_map"):
+                self._category_index_map = {
+                    normalize_url(url): index for index, url in enumerate(category_urls)
+                }
+
             for subcategory_index, category_url in enumerate(category_batch, 1):
-                # Absolute, zero-based category index within this run
-                absolute_cat_index = (
+                entered_url = normalize_url(category_url)
+
+                fallback_index = (
                     (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
                 )
-                # Absolute, zero-based category index within this run
-                absolute_cat_index = (
-                    (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
-                )
+                absolute_cat_index = self._category_index_map.get(entered_url, fallback_index)
                 self._current_absolute_cat_index = absolute_cat_index
                 self._current_category_url = category_url
                 if absolute_cat_index < getattr(self, "_start_category_index", 0):
@@ -5109,18 +5119,19 @@ Return ONLY valid JSON, no additional text."""
                 self.log.info(f"Scraping category: {category_url}")
                 # --- BEGIN: Category entry identity & URL set ---
                 sp = self.state_manager.state_data.setdefault("system_progression", {})
-                i = int(absolute_cat_index)
-                entered_url = normalize_url(category_url)
                 sp["current_category_url"] = entered_url
-
-                pci = int(sp.get("persistent_category_index", 0))
-                expected_url = normalize_url(category_urls[pci]) if 0 <= pci < len(category_urls) else None
+                # Hard-align PCI to the absolute index for determinism across runs/batches
+                sp["persistent_category_index"] = int(absolute_cat_index)
+                self.state_manager.save_state_atomic("align-pci-to-absolute")
+                # Guard: URL of PCI must match the entered URL
+                try:
+                    expected_url = normalize_url(category_urls[sp["persistent_category_index"]])
+                except Exception:
+                    expected_url = category_urls[sp["persistent_category_index"]]
                 if expected_url != entered_url:
-                    self.log.warning(
-                        f"⚠️ PCI/URL mismatch at entry: pci={pci} expected={expected_url} actual={entered_url} (aligning PCI to i={i})"
+                    self.log.error(
+                        f"🚨 PCI/URL mismatch after align: pci={sp['persistent_category_index']} expected={expected_url} actual={entered_url}"
                     )
-                    sp["persistent_category_index"] = i
-                    self.state_manager.save_state_atomic("align-pci-to-url")
                 # --- END ---
 
                 # 🚨 SURGICAL FIX: PRE-EXTRACTION URL COLLECTION AND FILTERING
@@ -5551,12 +5562,14 @@ Return ONLY valid JSON, no additional text."""
                         # Defer PTR breadcrumbs to the state manager (it's gated on frozen totals).
                         self.log.debug("PTR print suppressed at workflow; state manager will emit gated proofs")
                         work_urls = needs_full_extraction_urls[start_offset:]
+                        remaining = len(work_urls)
                         self.log.info(
-                            f"📋 RESUME SLICE: Starting from index {start_offset}, processing {len(work_urls)} remaining products"
+                            f"🪜 Supplier resume slice: start={start_offset} total={len(needs_full_extraction_urls)} → remaining={remaining}"
                         )
                     else:
+                        remaining = len(work_urls)
                         self.log.info(
-                            f"📋 FULL CATEGORY PROCESSING: Processing all {len(needs_full_extraction_urls)} products"
+                            f"🪜 Supplier resume slice: start=0 total={len(needs_full_extraction_urls)} → remaining={remaining}"
                         )
 
                     # Freeze per-category denominator
@@ -5806,22 +5819,12 @@ Return ONLY valid JSON, no additional text."""
                         # Load total categories directly from config as authoritative source
                         total_categories = self._get_authoritative_category_count(category_urls)
 
-                        # Update system progression with accurate totals
+                        # Update non-destructive metadata for the active category
                         sp = self.state_manager.state_data.setdefault("system_progression", {})
-                        sp.update(
-                            {
-                                "total_categories": total_categories,
-                                "persistent_category_index": category_index,
-                                "current_category_url": category_url,
-                                "original_category_url": category_url,
-                                "category_denominator_frozen": False,
-                                "category_freeze_timestamp": None,
-                                "supplier_products_needing_extraction": len(urls_for_manifest),
-                                "supplier_products_completed": 0,
-                                "amazon_products_needing_analysis": len(urls_for_manifest),
-                                "amazon_products_completed": 0,
-                            }
-                        )
+                        sp["total_categories"] = total_categories
+                        sp["persistent_category_index"] = int(absolute_cat_index)
+                        sp["current_category_url"] = normalize_url(category_url)
+                        sp["original_category_url"] = category_url
 
                 self.category_manifests[category_url] = urls_for_manifest
                 self.log.info(
@@ -7446,8 +7449,13 @@ Return ONLY valid JSON, no additional text."""
             self.log.warning(
                 f"🔧 Clamp amazon offset: saved={saved_amazon_offset} → start={clamped_amazon_offset} (len={total})"
             )
-            prod_offset = clamped_amazon_offset
-            sp["amazon_products_completed"] = clamped_amazon_offset
+        prod_offset = clamped_amazon_offset
+        sp["amazon_products_completed"] = clamped_amazon_offset
+
+        remaining = max(total - prod_offset, 0)
+        self.log.info(
+            f"🪜 Amazon resume slice: start={prod_offset} total={total} → remaining={remaining}"
+        )
 
         batch_size = int(self.system_config.get("amazon_batch_size", 0)) or int(self.system_config.get("max_products_per_cycle", 10)) or 10
         start_batch = prod_offset // max(1, batch_size)

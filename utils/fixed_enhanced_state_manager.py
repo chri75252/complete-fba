@@ -151,7 +151,7 @@ class FixedEnhancedStateManager:
         manifest, config hash, etc.) has completed. After this point, NO save
         path may call file-grounded recomputation.
         """
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         self._validate_and_clamp_resume_ptr(sp)
         self._startup_completed = True
         log.debug("STATE: entered runtime phase")
@@ -302,15 +302,18 @@ class FixedEnhancedStateManager:
 
     def _migrate_legacy_state(self, legacy_data: Dict[str, Any]):
         """Migrate legacy state format to fixed enhanced format"""
-        # 🚨 CRITICAL FIX: Properly migrate legacy index to resumption_index
         legacy_index = legacy_data.get("last_processed_index", 0)
+        # Merge legacy payload into the initialized structure first so we have
+        # access to every historical field before normalising.
+        self._merge_state_data(legacy_data)
+
+        # Preserve legacy headline metrics while marking the migration
         self.state_data["last_processed_index"] = legacy_index
         self.state_data["resumption_index"] = legacy_index
         self.state_data["progress_index"] = 0  # Always start fresh progress
         self.state_data["processing_status"] = "migrated_from_legacy"
 
-        # Migrate other legacy fields if they exist
-        # Legacy subtree removed; no legacy-specific migration beyond indices
+        # Finalise by emitting a migration breadcrumb with the recovered pointer
         log.info(f"Successfully migrated legacy state format - resumption index: {legacy_index}")
 
     def _merge_state_data(self, loaded_data: Dict[str, Any]):
@@ -328,6 +331,91 @@ class FixedEnhancedStateManager:
         self.state_data = deep_merge(self.state_data, loaded_data)
         self.state_data["last_updated"] = datetime.now(timezone.utc).isoformat()
 
+        # Normalise legacy system_progression snapshots into the canonical schema
+        self._synchronise_legacy_progression()
+        self._ensure_system_progression_defaults()
+
+    def _synchronise_legacy_progression(self) -> None:
+        """Hydrate canonical progression fields from legacy state keys."""
+
+        sp = self.state_data.get("system_progression")
+        if not isinstance(sp, dict):
+            sp = {}
+            self.state_data["system_progression"] = sp
+
+        resumption_ptr = sp.get("resumption_ptr")
+        if not isinstance(resumption_ptr, dict):
+            resumption_ptr = {}
+
+        def _best_int(candidates: List[Any]) -> Optional[int]:
+            best: Optional[int] = None
+            for candidate in candidates:
+                try:
+                    value = int(candidate)
+                except (TypeError, ValueError):
+                    continue
+                if best is None or value > best:
+                    best = value
+            return best
+
+        # Category pointer alignment
+        cat_idx = _best_int(
+            [
+                sp.get("persistent_category_index"),
+                resumption_ptr.get("cat_idx"),
+                sp.get("current_category_index"),
+            ]
+        )
+        if cat_idx is not None:
+            sp["persistent_category_index"] = cat_idx
+
+        # Supplier completion counters (prefer highest known value)
+        supplier_completed = _best_int(
+            [
+                sp.get("supplier_products_completed"),
+                sp.get("supplier_extraction_resumption_index"),
+                resumption_ptr.get("prod_idx"),
+                sp.get("current_product_index_in_category"),
+            ]
+        )
+        if supplier_completed is not None:
+            sp["supplier_products_completed"] = supplier_completed
+
+        supplier_total = _best_int(
+            [
+                sp.get("supplier_products_needing_extraction"),
+                sp.get("total_products_in_current_category"),
+            ]
+        )
+        if supplier_total is not None:
+            sp["supplier_products_needing_extraction"] = supplier_total
+
+        # Amazon queue pointers (if legacy indices exist)
+        amazon_completed = _best_int(
+            [sp.get("amazon_products_completed"), sp.get("amazon_analysis_resumption_index")]
+        )
+        if amazon_completed is not None:
+            sp["amazon_products_completed"] = amazon_completed
+
+        # Carry forward any known queue length for visibility only
+        amazon_total = _best_int([sp.get("amazon_products_needing_analysis")])
+        if amazon_total is not None:
+            sp["amazon_products_needing_analysis"] = amazon_total
+
+        # Normalise category URL if available
+        url_candidate = sp.get("current_category_url") or sp.get("original_category_url")
+        if url_candidate:
+            try:
+                sp["current_category_url"] = normalize_url(url_candidate)
+            except Exception:
+                sp["current_category_url"] = str(url_candidate)
+
+        # Legacy snapshots that carried totals imply the denominator was frozen
+        if not bool(sp.get("category_denominator_frozen")) and int(
+            sp.get("supplier_products_needing_extraction", 0)
+        ) > 0:
+            sp["category_denominator_frozen"] = True
+
         # 🚨 CRITICAL FIX: Ensure new fields exist even in merged data
         if "progress_index" not in self.state_data:
             self.state_data["progress_index"] = 0
@@ -343,7 +431,7 @@ class FixedEnhancedStateManager:
         the loaded state against a persisted "high-water mark".
         This prevents regressions like an index rolling back from 8 to 7 across restarts.
         """
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
 
         # Get current progress from the new structure
         current_cat_idx = sp.get("persistent_category_index", 0)
@@ -701,13 +789,17 @@ class FixedEnhancedStateManager:
             self.log.warning(f"🔒 FREEZE_GUARD_VIOLATION: Attempted re-freeze of {category_url}")
             return False
 
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         try:
             nurl = normalize_url(category_url)
         except Exception:
             nurl = category_url
         sp["supplier_products_needing_extraction"] = int(discovered_count)
         sp["current_category_url"] = nurl
+        sp.setdefault("supplier_products_completed", 0)
+        sp.setdefault("amazon_products_completed", 0)
+        sp.setdefault("amazon_products_needing_analysis", 0)
+        sp["category_denominator_frozen"] = True
 
         if manifest_urls:
             sp["current_manifest_hash"] = self.canonical_manifest_hash(manifest_urls)
@@ -770,7 +862,7 @@ class FixedEnhancedStateManager:
         """
         # Update progress counters
         # 🚨 CRITICAL FIX: Update ONLY system_progression as single source of truth
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0)) + int(increment)
 
         self.state_data["session_products_processed"] += increment
@@ -792,7 +884,7 @@ class FixedEnhancedStateManager:
 
         normalized_category_url = normalize_url(category_url)
 
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         sp.update(
             {
                 "current_phase": "supplier",
@@ -812,7 +904,7 @@ class FixedEnhancedStateManager:
 
     def update_supplier_progress_new(self, product_url: str, increment: int = 1):
         """Update progress during supplier extraction phase"""
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         sp["current_phase"] = "supplier"
         sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0)) + int(increment)
 
@@ -832,7 +924,7 @@ class FixedEnhancedStateManager:
 
     def update_amazon_analysis_progress_new(self, product_url: str, increment: int = 1):
         """Update progress during Amazon analysis phase"""
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         sp["current_phase"] = "amazon_analysis"
         sp["amazon_products_completed"] = (
             sp.get("amazon_products_completed", 0) + increment
@@ -1000,9 +1092,14 @@ class FixedEnhancedStateManager:
             log.debug("RESUME PTR suppressed: frozen_totals_committed=False")
             return
 
-        if int(tpc or 0) == 0:
-            log.debug("RESUME PTR suppressed: category_denominator_unfrozen")
-            return
+        if phase == "amazon_analysis":
+            if int(tpc or 0) == 0:
+                log.debug("RESUME PTR suppressed: category_denominator_unfrozen (amazon)")
+                return
+        else:
+            if int(tpc or 0) == 0:
+                log.debug("RESUME PTR suppressed: category_denominator_unfrozen (supplier)")
+                return
 
         if tc > 0 and tpc > 0:
             log.info(f"RESUME PTR: phase={phase} cat_idx={cci}/{tc} url={ccu} prod_idx={cpi}/{tpc}")
@@ -1071,10 +1168,52 @@ class FixedEnhancedStateManager:
         joined = "".join(sorted(category_urls or []))
         return hashlib.sha256(joined.encode("utf-8")).hexdigest()
 
+    def _ensure_system_progression_defaults(self) -> Dict[str, Any]:
+        """Ensure canonical resume fields exist and use consistent types."""
+        sp = self.state_data.setdefault("system_progression", {})
+        defaults: Dict[str, Any] = {
+            "current_phase": "supplier",
+            "persistent_category_index": 0,
+            "current_category_url": "",
+            "total_categories": 0,
+            "category_denominator_frozen": False,
+            "category_freeze_timestamp": None,
+            "supplier_products_needing_extraction": 0,
+            "supplier_products_completed": 0,
+            "amazon_products_needing_analysis": 0,
+            "amazon_products_completed": 0,
+            "frozen_totals_committed": False,
+        }
+
+        for key, default in defaults.items():
+            value = sp.get(key)
+            if value is None:
+                sp[key] = default
+            elif key in ("current_phase", "current_category_url"):
+                sp[key] = str(value or "")
+
+        for key in (
+            "persistent_category_index",
+            "supplier_products_needing_extraction",
+            "supplier_products_completed",
+            "amazon_products_needing_analysis",
+            "amazon_products_completed",
+            "total_categories",
+        ):
+            try:
+                sp[key] = int(sp.get(key, defaults[key]))
+            except Exception:
+                sp[key] = defaults[key]
+
+        for key in ("category_denominator_frozen", "frozen_totals_committed"):
+            sp[key] = bool(sp.get(key, defaults[key]))
+
+        return sp
+
     def save(self, note: str = "") -> None:
         """Atomically save state with optional note."""
         st = self.state_data
-        sp = st.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         sp["_writer_session_uuid"] = self._writer_session_uuid
         sp["_writer_seq"] = sp.get("_writer_seq", 0) + 1
         sp["_writer_note"] = note
@@ -1235,7 +1374,7 @@ class FixedEnhancedStateManager:
 
     def _perform_supplier_commit(self, cat_idx: int, prod_idx: int, total_cats: int, cat_url: str, total_prod_in_cat: int):
         """Internal supplier commit implementation."""
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
 
         # Per-category denominator freeze logic (remains the same)
         try:
@@ -1310,7 +1449,7 @@ class FixedEnhancedStateManager:
 
     def _perform_amazon_commit(self, cat_idx: int, queue_idx: int, total_cats: int, cat_url: str, queue_len: int):
         """Internal Amazon commit implementation."""
-        sp = self.state_data.setdefault("system_progression", {})
+        sp = self._ensure_system_progression_defaults()
         # Clamp to queue bounds
         if queue_len is not None and queue_len >= 0:
             if queue_idx < 0:
@@ -1354,11 +1493,15 @@ class FixedEnhancedStateManager:
         old = sp.get("current_phase", "supplier")
         sp["current_phase"] = str(new_phase)
         if reset_index:
-            # Reset progress counters for new phase
+            # Reset progress counters for new phase only when no progress has been recorded yet
             if new_phase == "supplier":
-                sp["supplier_products_completed"] = 0
+                if sp.get("supplier_products_completed") in (None, 0) or not bool(
+                    sp.get("category_denominator_frozen", False)
+                ):
+                    sp["supplier_products_completed"] = 0
             elif new_phase == "amazon_analysis":
-                sp["amazon_products_completed"] = 0
+                if sp.get("amazon_products_completed") in (None, 0):
+                    sp["amazon_products_completed"] = 0
         self.log.info(f"🔄 PHASE TRANSITION: {old} → {new_phase}")
         self.save_state_atomic()
         self.log_resume_proof_after_commit("PHASE_SWITCH")
@@ -2291,6 +2434,8 @@ class FixedEnhancedStateManager:
                 sp["persistent_category_index"] = int(sp.get("persistent_category_index", 0)) + 1
                 sp["supplier_products_completed"] = 0
                 sp["supplier_products_needing_extraction"] = 0
+                sp["amazon_products_completed"] = 0
+                sp["amazon_products_needing_analysis"] = 0
                 sp["category_denominator_frozen"] = False
                 sp["current_category_url"] = ""
                 self.save_state_atomic("category-complete")
