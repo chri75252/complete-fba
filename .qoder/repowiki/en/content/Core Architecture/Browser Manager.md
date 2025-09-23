@@ -1,0 +1,242 @@
+# Browser Manager
+
+<cite>
+**Referenced Files in This Document**   
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py)
+- [config/system_config.json](file://config/system_config.json)
+- [tools/configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py)
+</cite>
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Core Components](#core-components)
+3. [Architecture Overview](#architecture-overview)
+4. [Detailed Component Analysis](#detailed-component-analysis)
+5. [Dependency Analysis](#dependency-analysis)
+6. [Performance Considerations](#performance-considerations)
+7. [Troubleshooting Guide](#troubleshooting-guide)
+8. [Conclusion](#conclusion)
+
+## Introduction
+The BrowserManager component provides centralized browser lifecycle management for the Amazon FBA Agent System. As a singleton, it ensures only one browser instance is shared across all components, enabling efficient resource utilization and consistent state management. The component integrates with Chrome's DevTools Protocol (CDP) to manage browser instances with support for both IPv4 and IPv6 connections. It features proactive memory management through configurable thresholds and cleanup routines, ensuring system stability during long-running operations. Key consumers include the ConfigurableSupplierScraper and FixedAmazonExtractor components, which rely on BrowserManager for browser access during web scraping operations.
+
+## Core Components
+
+The BrowserManager is implemented as a singleton class that wraps a Selenium-based browser manager, providing a unified interface for browser operations across the system. It ensures thread-safe access to a single browser instance and handles initialization, configuration, and cleanup of the Chrome browser with CDP integration.
+
+**Section sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L168-L175)
+
+## Architecture Overview
+
+```mermaid
+classDiagram
+class BrowserManager {
++_instance : BrowserManager
++get_instance() : BrowserManager
+}
+class SeleniumBrowserManager {
+-driver : WebDriver
+-headless : bool
+-stealth_mode : bool
+-log : Logger
++launch_browser(cdp_port) : bool
++get_page(url, timeout) : bool
++navigate_to(url, timeout) : bool
++click(selector, timeout) : bool
++fill(selector, text, timeout) : bool
++text_content(selector, timeout) : str
++get_attribute(selector, attribute, timeout) : str
++wait_for_selector(selector, timeout) : bool
++close() : void
++memory_check_with_cleanup() : bool
++force_memory_cleanup() : void
++get_total_system_memory_usage() : dict
+}
+BrowserManager --> SeleniumBrowserManager : "uses"
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L1-L175)
+
+## Detailed Component Analysis
+
+### BrowserManager Analysis
+
+The BrowserManager component implements the Singleton pattern to ensure only one browser instance is shared across the entire system. This prevents resource conflicts and ensures consistent browser state across different components.
+
+#### Singleton Pattern Implementation
+```mermaid
+classDiagram
+class BrowserManager {
+-_instance : BrowserManager
++get_instance() : BrowserManager
+}
+class SeleniumBrowserManager {
++__init__(headless, stealth_mode)
++launch_browser(cdp_port)
++close()
+}
+BrowserManager --> SeleniumBrowserManager : "creates"
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L168-L175)
+
+#### Browser Lifecycle Management
+```mermaid
+sequenceDiagram
+participant Client
+participant BrowserManager
+participant SeleniumBrowserManager
+participant Chrome
+Client->>BrowserManager : get_instance()
+BrowserManager->>BrowserManager : Check _instance
+alt Instance not created
+BrowserManager->>SeleniumBrowserManager : Create new instance
+SeleniumBrowserManager->>Chrome : launch_browser()
+Chrome-->>SeleniumBrowserManager : Browser launched
+SeleniumBrowserManager-->>BrowserManager : Return instance
+end
+BrowserManager-->>Client : Return singleton instance
+Client->>SeleniumBrowserManager : launch_browser(cdp_port)
+SeleniumBrowserManager->>Chrome : Initialize with CDP
+Chrome-->>SeleniumBrowserManager : Ready
+SeleniumBrowserManager-->>Client : Success
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L50-L150)
+
+### Key Methods Analysis
+
+#### launch_browser() Method
+The launch_browser method initializes Chrome with CDP support, configuring it with optimal settings for the scraping environment. It supports both headless and headed modes, with stealth configurations to avoid bot detection.
+
+```mermaid
+flowchart TD
+Start([launch_browser]) --> HeadlessCheck{"headless mode?"}
+HeadlessCheck --> |Yes| AddHeadlessArgs["Add --headless=new, --no-sandbox, etc."]
+HeadlessCheck --> |No| SkipHeadless
+SkipHeadless --> AntiDetection["Add anti-detection arguments"]
+AddHeadlessArgs --> AntiDetection
+AntiDetection --> CDPCheck{"cdp_port specified?"}
+CDPCheck --> |Yes| AddCDPArg["Add --remote-debugging-port"]
+CDPCheck --> |No| SkipCDP
+SkipCDP --> DriverCreation["Create WebDriver instance"]
+AddCDPArg --> DriverCreation
+DriverCreation --> StealthCheck{"stealth_mode enabled?"}
+StealthCheck --> |Yes| UseUndetectedChrome["Use undetected_chromedriver"]
+StealthCheck --> |No| UseStandardChrome["Use standard ChromeDriver"]
+UseUndetectedChrome --> ExecuteStealthScripts
+UseStandardChrome --> ExecuteStealthScripts
+ExecuteStealthScripts["Execute stealth scripts<br/>- navigator.webdriver undefined<br/>- setUserAgentOverride"] --> Complete["Return success"]
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L50-L120)
+
+#### get_page() Method
+The get_page method provides access to browser pages, handling navigation and error conditions. It integrates with the centralized browser instance and supports both direct URL access and chaining operations.
+
+```mermaid
+sequenceDiagram
+participant Client
+participant BrowserManager
+participant SeleniumBrowserManager
+participant Page
+Client->>SeleniumBrowserManager : get_page(url)
+SeleniumBrowserManager->>SeleniumBrowserManager : Apply rate limiting
+SeleniumBrowserManager->>SeleniumBrowserManager : Check browser state
+alt Browser not initialized
+SeleniumBrowserManager->>SeleniumBrowserManager : Initialize browser
+end
+SeleniumBrowserManager->>Page : driver.get(url)
+Page->>SeleniumBrowserManager : Wait for body element
+alt Page load successful
+SeleniumBrowserManager-->>Client : Return True
+else Timeout
+SeleniumBrowserManager-->>Client : Return False
+end
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L150-L160)
+
+#### memory_check_with_cleanup() Method
+The memory_check_with_cleanup method implements proactive memory management by monitoring system resources and triggering cleanup operations when configurable thresholds are exceeded.
+
+```mermaid
+flowchart TD
+Start([memory_check_with_cleanup]) --> GetMemoryUsage["Get Chrome, Python, and System memory usage"]
+GetMemoryUsage --> CheckThresholds["Check against thresholds:<br/>- chrome_memory_mb<br/>- python_memory_mb<br/>- memory_usage_percent"]
+CheckThresholds --> ThresholdExceeded{"Any threshold exceeded?"}
+ThresholdExceeded --> |Yes| PerformCleanup["Perform cleanup:<br/>- Close unused tabs<br/>- Clear browser cache<br/>- Force garbage collection"]
+PerformCleanup --> LogAction["Log cleanup action"]
+ThresholdExceeded --> |No| NoAction["No action needed"]
+NoAction --> ReturnHealthy["Return True"]
+LogAction --> ReturnUnhealthy["Return False"]
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L160-L170)
+
+## Dependency Analysis
+
+```mermaid
+graph TD
+BrowserManager[BrowserManager Singleton] --> SeleniumBrowserManager[SeleniumBrowserManager]
+SeleniumBrowserManager --> Chrome[Chrome Browser]
+SeleniumBrowserManager --> UndetectedChrome[undetected-chromedriver]
+SeleniumBrowserManager --> WebDriverManager[webdriver-manager]
+ConfigurableSupplierScraper[ConfigurableSupplierScraper] --> BrowserManager
+FixedAmazonExtractor[FixedAmazonExtractor] --> BrowserManager
+SupplierAuthenticationService[SupplierAuthenticationService] --> BrowserManager
+style BrowserManager fill:#f9f,stroke:#333
+style SeleniumBrowserManager fill:#bbf,stroke:#333
+style Chrome fill:#9f9,stroke:#333
+```
+
+**Diagram sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L1-L175)
+- [tools/configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L50)
+
+**Section sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L1-L175)
+- [tools/configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L50)
+
+## Performance Considerations
+
+The BrowserManager implements several performance optimizations to ensure efficient operation during long-running scraping tasks:
+
+1. **Memory Management**: Proactive monitoring and cleanup based on configurable thresholds
+2. **Connection Reuse**: Single browser instance shared across components
+3. **Stealth Mode**: Reduced detection risk through anti-bot measures
+4. **Headless Operation**: Resource-efficient execution without GUI overhead
+5. **Rate Limiting**: Controlled request timing to avoid overwhelming targets
+
+Configuration options in system_config.json allow tuning of memory thresholds and browser behavior to match system capabilities.
+
+**Section sources**
+- [config/system_config.json](file://config/system_config.json#L1-L300)
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L50-L120)
+
+## Troubleshooting Guide
+
+Common issues with the BrowserManager and their solutions:
+
+1. **Browser launch failures**: Ensure Chrome is properly installed and chromedriver is available
+2. **Memory leaks**: Verify memory_check_with_cleanup is called at appropriate intervals
+3. **CDP connection issues**: Check that remote-debugging-port is available and not blocked
+4. **Stealth detection**: Update undetected-chromedriver and review anti-detection settings
+5. **Authentication session loss**: Implement proper session management in dependent components
+
+The component logs detailed information about browser operations, which can be used to diagnose connectivity and performance issues.
+
+**Section sources**
+- [tools/selenium_browser_manager.py](file://tools/selenium_browser_manager.py#L1-L175)
+- [tools/supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L113)
+
+## Conclusion
+
+The BrowserManager component provides essential centralized browser management for the Amazon FBA Agent System. Its singleton architecture ensures efficient resource utilization while providing a consistent interface for browser operations. The integration with Chrome's DevTools Protocol enables advanced debugging and control capabilities, while the proactive memory management system maintains system stability during extended operations. Configuration options allow the component to be tuned for different environments and requirements, making it a robust foundation for the system's web scraping functionality.

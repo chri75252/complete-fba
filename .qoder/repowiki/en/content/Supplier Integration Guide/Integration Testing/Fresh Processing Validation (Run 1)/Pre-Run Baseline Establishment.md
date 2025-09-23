@@ -1,0 +1,93 @@
+# Pre-Run Baseline Establishment
+
+<cite>
+**Referenced Files in This Document**   
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+- [poundwholesale_co_uk_processing_state.json](file://OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json)
+- [linking_map.json](file://OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json)
+- [system_config.json](file://config/system_config.json)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
+</cite>
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Pre-Run Timestamp Reference Point](#pre-run-timestamp-reference-point)
+3. [Monitoring File Status and System Readiness](#monitoring-file-status-and-system-readiness)
+4. [Discrepancy Between Extracted Products and Resumption Index](#discrepancy-between-extracted-products-and-resumption-index)
+5. [Expected File Update Patterns During Execution](#expected-file-update-patterns-during-execution)
+6. [Performance Benchmarking Guidelines](#performance-benchmarking-guidelines)
+
+## Introduction
+This document establishes the pre-run baseline for the Amazon-only phase test using the `pre_run_timestamps.txt` file. It details how the last updated timestamp serves as a reference point for measuring processing duration, evaluates the status of key monitoring files to confirm system readiness, explains the significance of the discrepancy between extracted products and the resumption index, outlines expected file update patterns during execution, and provides performance benchmarking guidelines based on pre-run timestamps.
+
+**Section sources**
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+
+## Pre-Run Timestamp Reference Point
+The last updated timestamp in the pre-run state, recorded at **2025-09-09T16:43:54.857688+00:00**, serves as the critical reference point for measuring processing duration. This timestamp corresponds to the most recent update of the `poundwholesale_co_uk_processing_state.json` file and marks the end of the supplier extraction phase. All subsequent processing activities during the Amazon-only phase will be measured relative to this timestamp to calculate execution time, throughput, and efficiency metrics.
+
+This timestamp ensures accurate performance tracking by providing a consistent starting point for benchmarking. Any deviation in processing speed or unexpected delays can be quantified by comparing the actual runtime against expected durations derived from historical performance data.
+
+**Section sources**
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+- [poundwholesale_co_uk_processing_state.json](file://OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json)
+
+## Monitoring File Status and System Readiness
+The status of key monitoring files confirms the system's readiness for the Amazon-only phase test:
+
+- **Processing State File**: The `poundwholesale_co_uk_processing_state.json` file indicates that supplier extraction has completed with a `resumption_index` of 10451 and `total_products` of 10296. The processing status is set to "initialized," confirming the system is prepared to resume processing.
+- **Log Files Directory**: The most recent logs appear to be from July 2025, which will be verified after the run to ensure proper log rotation and timestamping.
+- **Amazon Cache**: The `OUTPUTS/FBA_ANALYSIS/amazon_cache/` directory contains multiple `amazon_*.json` files with ASIN/EAN mappings, indicating that previous Amazon data is available for matching.
+- **Linking Map**: The `linking_map.json` file contains EAN-to-ASIN mappings, essential for product matching during the Amazon analysis phase.
+- **Financial Reports**: The `financial_reports` directory contains multiple timestamped CSV reports, confirming that financial analysis capabilities are operational.
+
+These files collectively confirm that the system is in a stable state, with all necessary data structures in place for the Amazon-only phase test.
+
+**Section sources**
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+- [poundwholesale_co_uk_processing_state.json](file://OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json)
+- [linking_map.json](file://OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json)
+
+## Discrepancy Between Extracted Products and Resumption Index
+The discrepancy between the number of extracted products (10297) and the `resumption_index` (10451) indicates that the Amazon analysis phase is pending. The `resumption_index` represents the next product index to be processed, while the `total_products` count reflects the actual number of products extracted from the supplier site.
+
+This gap suggests that while supplier extraction has completed, the system has not yet begun analyzing these products against Amazon data. The difference of 154 products (10451 - 10297) may include products from previous runs or placeholder entries that require validation. This state is expected and confirms that the system is correctly positioned to begin the Amazon analysis phase without reprocessing already-analyzed products.
+
+The `fixed_enhanced_state_manager.py` implementation ensures that the resumption index is properly managed and prevents backward movement, maintaining processing integrity.
+
+**Section sources**
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+- [poundwholesale_co_uk_processing_state.json](file://OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
+
+## Expected File Update Patterns During Execution
+During execution, the following file update patterns are expected:
+
+- **Processing State File**: The `poundwholesale_co_uk_processing_state.json` file should be updated frequently (every product or batch) with incremental increases to the `resumption_index` and `successful_products` counters. The `last_updated` timestamp should reflect real-time updates.
+- **Log Files**: New log files should be created in the `logs/debug/` directory with timestamps corresponding to the current run, containing detailed processing information.
+- **Amazon Cache**: The `amazon_cache/` directory should show new or updated JSON files as ASIN/EAN mappings are created or refreshed.
+- **Linking Map**: The `linking_map.json` file should grow as new product matches are established, with additional entries appended to the array.
+- **Financial Reports**: New timestamped CSV reports should appear in the `financial_reports` directory as profitability analyses are completed.
+
+Deviations from these patterns, such as stale timestamps, missing updates, or unexpected file modifications, would indicate processing issues that require investigation.
+
+**Section sources**
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+- [poundwholesale_co_uk_processing_state.json](file://OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json)
+- [linking_map.json](file://OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json)
+
+## Performance Benchmarking Guidelines
+Performance benchmarking should be conducted by comparing pre-run and post-run timestamps to measure processing duration. The baseline timestamp (2025-09-09T16:43:54.857688+00:00) should be used as the starting point for all measurements.
+
+Key performance metrics include:
+- **Processing Duration**: Time elapsed between the pre-run timestamp and post-run completion.
+- **Products Processed Per Hour**: Calculated by dividing the total number of products analyzed by the processing duration.
+- **Success Rate**: Percentage of products successfully matched to Amazon listings.
+- **Error Rate**: Number of processing errors or failures encountered during execution.
+
+These metrics should be compared against historical performance data to identify improvements or regressions. The `system_config.json` file specifies processing limits and batch sizes that influence performance, and any changes to these settings should be documented and their impact analyzed.
+
+**Section sources**
+- [pre_run_timestamps.txt](file://results/verification_run_20250911_155300/A_run1/pre_run_timestamps.txt)
+- [system_config.json](file://config/system_config.json)
+- [poundwholesale_co_uk_processing_state.json](file://OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json)
