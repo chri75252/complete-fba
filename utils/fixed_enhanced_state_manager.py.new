@@ -748,7 +748,6 @@ class FixedEnhancedStateManager:
         except Exception:
             nurl = category_url
         sp["supplier_products_needing_extraction"] = int(discovered_count)
-        sp["category_denominator_frozen"] = True          # <-- make freeze effective across runs
 
         # Amazon totals:
         # 1) If explicit amazon_total is provided (post-filter), use it
@@ -762,9 +761,6 @@ class FixedEnhancedStateManager:
         if "amazon_products_completed" not in sp:
             sp["amazon_products_completed"] = 0
         sp["current_category_url"] = nurl
-        # Persist existing URL-keyed map (read elsewhere by guards/getters)
-        frozen_by_url = self.state_data.setdefault("frozen_category_denominators", {})
-        frozen_by_url[nurl] = int(sp["supplier_products_needing_extraction"])
 
         if manifest_urls:
             sp["current_manifest_hash"] = self.canonical_manifest_hash(manifest_urls)
@@ -859,71 +855,51 @@ class FixedEnhancedStateManager:
 
         sp = self.state_data.setdefault("system_progression", {})
         
-        # 🔍 CATEGORY_INDEX_TRACKER: ENHANCED MONOTONIC ADVANCEMENT with regression protection
+        # 🔍 CATEGORY_INDEX_TRACKER: CRITICAL FIX - NEVER OVERRIDE persistent_category_index during processing
         # The workflow's chunked processing continuously calls this method, but we must preserve 
-        # the correctly incremented values from mark_category_completed() and prevent any backward movement
+        # the correctly incremented values from mark_category_completed()
         current_persistent_index = sp.get("persistent_category_index")
         current_phase = sp.get("current_phase", "supplier")
         
-        # 🚨 FIXED: Enhanced monotonic category index advancement with validation
+        # 🚨 FIXED: Monotonic category index advancement (no backslides)
         if current_persistent_index is None:
             # First time - set initial index (1-based expected by all phases)
             sp["persistent_category_index"] = int(category_index)
             log.info(f"🔍 CATEGORY_INDEX_TRACKER: Setting initial category index to {category_index}")
         else:
-            # Enhanced monotonic rule with regression detection and validation
+            # Monotonic rule: never allow decreases; preserve on equal; advance on greater
             incoming = int(category_index)
             current  = int(current_persistent_index)
-            
-            # 🚨 REGRESSION PROTECTION: Detect and log category backward movement patterns
             if incoming < current:
-                # Check if this is a legitimate restart scenario or a real regression
-                has_significant_progress = (
-                    int(sp.get("successful_products", 0)) > 1000 or
-                    int(sp.get("supplier_products_completed", 0)) > 10
+                log.warning(
+                    f"🔒 CATEGORY_INDEX_TRACKER: Ignored backslide attempt {current} → {incoming}; preserving {current}"
                 )
-                
-                if has_significant_progress:
-                    log.warning(
-                        f"🔒 CATEGORY_INDEX_TRACKER: REGRESSION BLOCKED - attempted backslide {current} → {incoming} "
-                        f"with significant progress (preserving {current})"
-                    )
-                    # Maintain current index to prevent data loss
-                else:
-                    log.info(
-                        f"🔒 CATEGORY_INDEX_TRACKER: Allowing restart backslide {current} → {incoming} "
-                        f"(minimal progress detected)"
-                    )
-                    sp["persistent_category_index"] = incoming
             elif incoming == current:
                 log.info(
                     f"🔍 CATEGORY_INDEX_TRACKER: Preserving existing category index {current} (same category)"
                 )
             else:
-                # Forward advancement - always allowed
                 sp["persistent_category_index"] = incoming
                 log.info(
                     f"🔍 CATEGORY_INDEX_TRACKER: Advancing category index {current} → {incoming}"
                 )
         
-        frozen_now = bool(sp.get("category_denominator_frozen"))
-        active_idx = int(sp.get("persistent_category_index", 1))
-        active_category = (category_index == active_idx)
-        # RESUME iff we are on the active category OR it was already frozen last run.
-        is_resumption = active_category or frozen_now
-        
-        base = {
-            "current_phase": "supplier",
-            "current_category_url": normalized_category_url,
-            "original_category_url": category_url,
-            "total_categories": total_categories,
-        }
-        
-        sp.update(base)
-        if is_resumption:
-            log.info(f"🔄 RESUMPTION: Preserving per-category counters (reason: active_category={active_category}, frozen={frozen_now}) for {normalized_category_url}")
-        else:
-            log.info(f"🆕 NEW CATEGORY: No counter clearing needed for {normalized_category_url}")
+        sp.update(
+            {
+                "current_phase": "supplier",
+                "current_category_url": normalized_category_url,
+                "original_category_url": category_url,  # Keep original for reference
+                "total_categories": total_categories,
+                "category_denominator_frozen": False,
+                "category_freeze_timestamp": None,
+                "supplier_products_needing_extraction": 0,
+                "supplier_products_completed": 0,
+                "amazon_products_needing_analysis": 0,
+                "amazon_products_completed": 0,
+                # 🚨 SURGICAL FIX: Do NOT override category index fields here
+                # These are preserved above to prevent erratic behavior
+            }
+        )
         self.save_state_atomic()
 
     def update_supplier_progress_new(self, product_url: str, increment: int = 1):
@@ -1379,13 +1355,8 @@ class FixedEnhancedStateManager:
         except Exception:
             nurl = cat_url
         recorded_total = int(sp.get("supplier_products_needing_extraction", 0) or 0)
-        # When already frozen, never re-freeze; just realign URL if needed.
-        if bool(sp.get("category_denominator_frozen")):
-            if sp.get("current_category_url") != nurl:
-                sp["current_category_url"] = nurl
-            freeze_needed = False
-        else:
-            freeze_needed = (sp.get("current_category_url") not in (nurl,))
+        # Freeze exactly once per category even if URL was pre-set earlier
+        freeze_needed = (not bool(sp.get("category_denominator_frozen"))) or (sp.get("current_category_url") != nurl)
         if not freeze_needed and total_prod_in_cat is not None:
             try:
                 incoming_total = int(total_prod_in_cat)
@@ -2487,9 +2458,8 @@ class FixedEnhancedStateManager:
         """Advance PCI if completing the CURRENT category; prep state for the next category."""
         sp = self.state_data.setdefault("system_progression", {})
 
-        # 🚨 CRITICAL DEBUG: TESTING IF THIS METHOD IS CALLED AT ALL
-        log.error(f"🚨🚨🚨 MARK_CATEGORY_COMPLETED CALLED 🚨🚨🚨")
-        log.error(f"🔍 CATEGORY_COMPLETION_CALL: url={category_url[:50]}... absolute_cat_index={absolute_cat_index}")
+        # 🚨 DEBUG: Enhanced logging to track calls
+        log.info(f"🔍 CATEGORY_COMPLETION_CALL: url={category_url[:50]}... absolute_cat_index={absolute_cat_index}")
 
         # Normalize for strict equality
         try:
@@ -2498,33 +2468,40 @@ class FixedEnhancedStateManager:
         except Exception:
             nurl = str(category_url)
 
-        existing = int(sp.get("persistent_category_index", sp.get("current_category_index", 0)) or 0)
+        existing = int(sp.get("persistent_category_index", sp.get("current_category_index", 1)) or 1)
+        log.info(f"🔍 CATEGORY_COMPLETION_CALL: existing_pci={existing}")
 
-        if sp.get("current_category_url") == nurl:
-            candidate = existing + 1
-            if absolute_cat_index is not None:
-                # Monotonic guard: never allow backslide if absolute index is higher
-                candidate = max(candidate, int(absolute_cat_index) + 1)
+        # Normalize the stored current_category_url before comparing to the normalized argument
+        try:
+            from utils.normalization import normalize_url
+            _stored = normalize_url(sp.get("current_category_url", "") or "")
+        except Exception:
+            _stored = str(sp.get("current_category_url", "") or "")
 
-            # Single source of truth write (mirror legacy field too)
-            sp["persistent_category_index"] = int(candidate)
-            sp["current_category_index"] = int(candidate)
-
-            # Prepare NEXT category (reset per-category counters)
-            sp["supplier_products_needing_extraction"] = 0
-            sp["supplier_products_completed"] = 0
-            sp["amazon_products_needing_analysis"] = 0
-            sp["amazon_products_completed"] = 0
-
-            # Unfreeze for next category & clear URL
-            sp["category_denominator_frozen"] = False
-            sp["frozen_totals_committed"] = False
-            sp["current_category_url"] = ""
-
-            self.save_state_atomic("category-complete")
-            log.info(f"✅ CATEGORY_INDEX_TRACKER: Category completed {nurl} → next pci={candidate}")
+        # Advance by absolute JSON position if provided; otherwise simple +1.
+        # Monotonic: never allow backslide.
+        if absolute_cat_index is not None:
+            # Use absolute_cat_index + 1 for advancement (absolute_cat_index is the current completed category)
+            candidate = max(existing + 1, int(absolute_cat_index) + 1)
         else:
-            log.info(f"ℹ️ CATEGORY_INDEX_TRACKER: Ignored completion; current={sp.get('current_category_url','')} new={nurl}")
+            candidate = existing + 1
+
+        sp["persistent_category_index"] = int(candidate)
+        sp["current_category_index"] = int(candidate)
+
+        # Prepare NEXT category (reset per-category counters)
+        sp["supplier_products_needing_extraction"] = 0
+        sp["supplier_products_completed"] = 0
+        sp["amazon_products_needing_analysis"] = 0
+        sp["amazon_products_completed"] = 0
+
+        # Unfreeze for next category
+        sp["category_denominator_frozen"] = False
+        sp["frozen_totals_committed"] = False
+
+        self.save_state_atomic("category-complete")
+        log.info(f"✅ CATEGORY_INDEX_TRACKER: Category completed {nurl} → pci={candidate} (advanced from {existing})")
+        log.info(f"✅ CATEGORY_INDEX_TRACKER: absolute_cat_index={absolute_cat_index}, existing={existing}, candidate={candidate}")
 
     def get_resumption_index(self) -> int:
         """Get the current progress index for backward compatibility."""
@@ -2707,6 +2684,12 @@ class FixedEnhancedStateManager:
 
         # Standard resume proof log
         logger.info(f"📋 RESUME PROOF ({commit_type}): cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} phase={phase}")
+
+    def update_current_category_url(self, normalized_url: str) -> None:
+        """Authoritatively set current_category_url and persist."""
+        sp = self.state_data.setdefault("system_progression", {})
+        sp["current_category_url"] = str(normalized_url)
+        self.save_state_atomic("update-current-category-url")
 
 # Backward-compatible aliases without embedding legacy identifier in source
 try:

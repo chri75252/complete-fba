@@ -1934,7 +1934,7 @@ class PassiveExtractionWorkflow:
         self.log.info("Requesting authoritative resumption point from State Manager...")
         # Read current phase and corresponding progress directly from system_progression
         sp = self.state_manager.state_data.get("system_progression", {})
-        start_category_index = sp.get("persistent_category_index", 0)
+        start_category_index = sp.get("persistent_category_index", 1)
         resume_phase = sp.get("current_phase", "supplier")
         
         if resume_phase == "supplier":
@@ -2022,6 +2022,23 @@ class PassiveExtractionWorkflow:
 
         # Load state and linking map
         self.state_manager.load_state()
+        
+        # ✅ RESUME PROOF ENABLEMENT: Ensure frozen totals committed for resume banners
+        try:
+            sp_startup = (self.state_manager.state_data or {}).get("system_progression", {}) or {}
+            has_existing_denominators = (
+                int(sp_startup.get("supplier_products_needing_extraction", 0) or 0) > 0 or
+                int(sp_startup.get("amazon_products_needing_analysis", 0) or 0) > 0
+            )
+
+            if has_existing_denominators and hasattr(self.state_manager, "mark_frozen_totals_committed"):
+                if not sp_startup.get("frozen_totals_committed", False):
+                    self.state_manager.mark_frozen_totals_committed()
+                    self.log.info("✅ STARTUP: Frozen totals committed → resume proofs enabled")
+                else:
+                    self.log.info("✅ STARTUP: Frozen totals already committed → resume proofs active")
+        except Exception as e:
+            self.log.warning(f"[resume-enablement] Could not verify frozen totals: {e}")
         # Run validation with off-by-one clamping before computing resume/slicing
         if hasattr(self.state_manager, "validate_loaded_state"):
             try:
@@ -2044,8 +2061,17 @@ class PassiveExtractionWorkflow:
             sp = self.state_manager.state_data.get("system_progression", {})
             total_cats = sp.get("total_categories") or self._authoritative_total_categories()
             if self.system_config.get("resume", {}).get("banner_enabled", True):
+                # 📋 AUTHORITATIVE RESUME: Single source of truth for all progress tracking
                 self.log.info(
-                    f"▶ RESUME {sp.get('current_phase','supplier')}: category {sp.get('persistent_category_index',0)+1}/{total_cats} (system_progression)"
+                    "📋 AUTHORITATIVE RESUME: phase=%s cat=%d/%d url=%s supplier=%d/%d amazon=%d/%d",
+                    sp.get("current_phase", "unknown"),
+                    int(sp.get("persistent_category_index", 1)),
+                    int(sp.get("total_categories", 0)),
+                    sp.get("current_category_url", ""),
+                    int(sp.get("supplier_products_completed", 0)),
+                    int(sp.get("supplier_products_needing_extraction", 0)),
+                    int(sp.get("amazon_products_completed", 0)),
+                    int(sp.get("amazon_products_needing_analysis", 0)),
                 )
         except Exception:
             pass
@@ -2268,7 +2294,16 @@ class PassiveExtractionWorkflow:
 
             # Check hybrid processing configuration (from full config, not system section)
             hybrid_config = full_config.get("hybrid_processing", {})
-            if hybrid_config.get("enabled", False):
+            # 🚫 RESUME GUARD: disable hybrid when resuming a partially processed category/phase
+            sp_h = self.state_manager.state_data.get("system_progression", {}) or {}
+            is_resuming = any([
+                int(sp_h.get("persistent_category_index", 1)) > 1,
+                int(sp_h.get("supplier_products_completed", 0) or 0) > 0,
+                int(sp_h.get("amazon_products_completed", 0) or 0) > 0,
+                sp_h.get("current_phase") in ("amazon_analysis",),
+                bool(sp_h.get("category_denominator_frozen", False)),  # ← covers early-interrupt resumes
+            ])
+            if hybrid_config.get("enabled", False) and not is_resuming:
                 self.log.info("🔄 HYBRID PROCESSING MODE: Enabled")
                 return await self._run_hybrid_processing_mode(
                     self.workflow_config.get("supplier_url"),
@@ -2280,6 +2315,8 @@ class PassiveExtractionWorkflow:
                     max_products_per_cycle,
                     supplier_extraction_batch_size,
                 )
+            elif hybrid_config.get("enabled", False) and is_resuming:
+                self.log.info("🚫 HYBRID DISABLED FOR RESUME (phase-aware routing will handle resumption)")
 
             # Phase-aware dispatch: if saved phase is amazon_analysis, resume from cache
             try:
@@ -2382,7 +2419,7 @@ class PassiveExtractionWorkflow:
                     first_product = products_to_analyze[0]
                     category_url = first_product.get("source_url", "amazon_analysis_batch")
                     self.state_manager.initialize_category_processing(
-                        category_index=0,  # Amazon analysis is treated as single "category" 
+                        category_index=1,  # 1-based indexing, consistent with hybrid/supplier 
                         category_url=category_url,
                         total_categories=1  # Single phase processing
                     )
@@ -2394,13 +2431,20 @@ class PassiveExtractionWorkflow:
                 f"🚀 BATCH PROCESSING: {len(products_to_analyze)} products in {total_batches} batches of {batch_size}"
             )
 
-            # 1.6: Wire Amazon commits & proofs - Phase switch and initial commit
-            self.state_manager.commit_phase_switch(new_phase="amazon_analysis", reset_index=True)
+            # 1.6: Phase already switched above (resume-aware); do NOT reset counters again
+            # self.state_manager.commit_phase_switch(new_phase="amazon_analysis", reset_index=True)
             category_url = products_to_analyze[0].get("source_url", "amazon_analysis") if products_to_analyze else "amazon_analysis"
+            # Resolve authoritative category index for this Amazon group
+            if not hasattr(self, "_category_index_map"):
+                src_urls = (locals().get("category_urls")
+                            or getattr(self, "_active_category_urls", [])
+                            or (self._get_predefined_categories(self.supplier_name) or []))
+                self._category_index_map = {normalize_url(u): i + 1 for i, u in enumerate(src_urls)}
+            amz_cat_idx = self._category_index_map.get(normalize_url(category_url), 1)
             self.state_manager.commit_amazon_progress(
-                cat_idx=0,
+                cat_idx=amz_cat_idx,
                 queue_idx=0,
-                total_cats=1,
+                total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
                 cat_url=category_url,
                 queue_len=len(products_to_analyze)
             )
@@ -2433,9 +2477,9 @@ class PassiveExtractionWorkflow:
                         category_url = product_data.get("source_url", "unknown")
                         # Amazon analysis is per-category; keep totals local for clean progress math.
                         self.state_manager.commit_amazon_progress(
-                            cat_idx=batch_num + 1,
+                            cat_idx=amz_cat_idx,
                             queue_idx=i + 1,
-                            total_cats=1,
+                            total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
                             cat_url=category_url,
                             queue_len=len(batch_products)
                         )
@@ -2841,9 +2885,9 @@ class PassiveExtractionWorkflow:
 
                     # 1.6: Wire Amazon commits & proofs - Commit after processing item
                     self.state_manager.commit_amazon_progress(
-                        cat_idx=0,
+                        cat_idx=amz_cat_idx,
                         queue_idx=i + 1,
-                        total_cats=1,
+                        total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
                         cat_url=category_url,
                         queue_len=len(batch_products)
                     )
@@ -3407,7 +3451,7 @@ class PassiveExtractionWorkflow:
             # Log manifest overwrite if applicable
             if overwritten and prev_count is not None:
                 # Generate category index for logging (approximate from current processing state)
-                category_index = getattr(self, "_current_category_index", 0)
+                category_index = getattr(self, "_current_category_index", 1)
                 self.log.info(
                     f"MANIFEST UPDATE[C{category_index} {slug}]: overwritten=true prev={prev_count} curr={len(normalized_urls)}"
                 )
@@ -4901,6 +4945,11 @@ Return ONLY valid JSON, no additional text."""
         """Extract products from a list of category URLs with overall product limit enforcement."""
         import json  # Import at function level to ensure availability
 
+        # --- PHASE INTEGRITY GUARD ---
+        # Ensure we don't start supplier work while Amazon phase is incomplete
+        if not await self._ensure_phase_integrity():
+            return []  # Block supplier work until Amazon complete
+
         # 🔄 SUPPLIER CACHE FRESHNESS CHECK
         # If we have cached products and processing state indicates progress, skip supplier scraping
         actual_cache_file, cache_count = self._find_actual_supplier_cache_file(supplier_name)
@@ -5014,8 +5063,27 @@ Return ONLY valid JSON, no additional text."""
         # Proceed with normal supplier scraping with batching
         # supplier_extraction_batch_size is now passed as a parameter
 
-        # PHASE RESET FIX: Reset phase to supplier when starting supplier extraction
-        self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=True)
+        # 🚨 PHASE RESET FIX: Switch phase to supplier but preserve index for resumption
+        # Only reset index if this is truly a fresh start, not a resumption
+        sp = self.state_manager.state_data.get("system_progression", {})
+        has_previous_progress = (
+            int(sp.get("supplier_products_completed", 0)) > 0 or
+            int(sp.get("amazon_products_completed", 0)) > 0 or
+            int(sp.get("persistent_category_index", 1)) > 1
+        )
+        
+        if has_previous_progress:
+            # Resumption scenario - preserve indices
+            self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=False)
+            self.log.info("🔄 RESUMPTION: Phase switched to supplier with index preservation")
+        else:
+            # Fresh start scenario - reset indices
+            self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=True)
+            self.log.info("🆕 FRESH START: Phase switched to supplier with index reset")
+
+        # Startup sequence visibility: warn if totals were never committed
+        if not self.state_manager.state_data.get("system_progression", {}).get("frozen_totals_committed"):
+            self.log.warning("⚠️ STARTUP SEQUENCE: frozen_totals_committed is False or missing — initial freeze will occur on first valid commit.")
 
         self.log.info(f"🕷️ PERFORMING SUPPLIER SCRAPING from {len(category_urls)} categories")
         self.log.info(f"📦 Using supplier extraction batch size: {supplier_extraction_batch_size}")
@@ -5083,19 +5151,19 @@ Return ONLY valid JSON, no additional text."""
             await self._trigger_authentication_check(f"category_batch_{batch_num}")
 
             for subcategory_index, category_url in enumerate(category_batch, 1):
-                # Absolute, zero-based category index within this run
-                absolute_cat_index = (
-                    (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
-                )
-                # Absolute, zero-based category index within this run
-                absolute_cat_index = (
-                    (batch_num - 1) * supplier_extraction_batch_size + (subcategory_index - 1)
-                )
+                # Authoritative global index from the source-of-truth list (normalized)
+                if not hasattr(self, "_category_index_map"):
+                    # Prefer the list already in-scope; otherwise fall back to cached/global sources
+                    src_urls = (category_urls
+                                or getattr(self, "_active_category_urls", [])
+                                or (self._get_predefined_categories(self.supplier_name) or []))
+                    self._category_index_map = {normalize_url(u): i + 1 for i, u in enumerate(src_urls)}
+                absolute_cat_index = self._category_index_map.get(normalize_url(category_url), 1)
                 self._current_absolute_cat_index = absolute_cat_index
                 self._current_category_url = category_url
-                if absolute_cat_index < getattr(self, "_start_category_index", 0):
+                if absolute_cat_index < getattr(self, "_start_category_index", 1):
                     self.log.info(
-                        f"📋 SKIPPING category {absolute_cat_index} (before resume point {getattr(self, '_start_category_index', 0)})"
+                        f"📋 SKIPPING category {absolute_cat_index} (before resume point {getattr(self, '_start_category_index', 1)})"
                     )
                     continue
 
@@ -5107,20 +5175,25 @@ Return ONLY valid JSON, no additional text."""
                     break
 
                 self.log.info(f"Scraping category: {category_url}")
+
                 # --- BEGIN: Category entry identity & URL set ---
                 sp = self.state_manager.state_data.setdefault("system_progression", {})
                 i = int(absolute_cat_index)
                 entered_url = normalize_url(category_url)
                 sp["current_category_url"] = entered_url
 
-                pci = int(sp.get("persistent_category_index", 0))
-                expected_url = normalize_url(category_urls[pci]) if 0 <= pci < len(category_urls) else None
+                # 🎯 1-BASED PCI SYSTEM: Default to 1 instead of 0
+                pci = int(sp.get("persistent_category_index", 1))
+                # Convert 1-based PCI to 0-based list index for category_urls access
+                expected_pos = max(0, pci - 1)
+                expected_url = normalize_url(category_urls[expected_pos]) if 0 <= expected_pos < len(category_urls) else None
                 if expected_url != entered_url:
                     self.log.warning(
                         f"⚠️ PCI/URL mismatch at entry: pci={pci} expected={expected_url} actual={entered_url} (aligning PCI to i={i})"
                     )
-                    sp["persistent_category_index"] = i
-                    self.state_manager.save_state_atomic("align-pci-to-url")
+                    # 🔍 CATEGORY_INDEX_TRACKER: DO NOT OVERRIDE - Let mark_category_completed() handle increments
+                    self.log.info(f"🔍 CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)")
+                    # self.state_manager.save_state_atomic("align-pci-to-url")  # Removed - no longer needed
                 # --- END ---
 
                 # 🚨 SURGICAL FIX: PRE-EXTRACTION URL COLLECTION AND FILTERING
@@ -5151,7 +5224,7 @@ Return ONLY valid JSON, no additional text."""
                     self.log.info(f"🔒 TOTALS COMMITTED: Resume pointers now enabled for empty category")
                     
                     # Mark category as completed since there's nothing to process
-                    self.state_manager.mark_category_completed(category_url)
+                    self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     self.log.info(f"✅ EMPTY CATEGORY COMPLETED: Category {absolute_cat_index} marked as completed")
                     
                     continue
@@ -5374,31 +5447,107 @@ Return ONLY valid JSON, no additional text."""
                     + len(needs_amazon_only_urls)
                     + len(needs_full_extraction_urls)
                 )
-                # Canonical invariant line for audit/verification (single line)
                 self.log.info(
                     f"🧮 Filter Invariant: in={len(urls_for_manifest)} == "
                     f"skip={len(skip_entirely_urls)} + cached={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)}"
                 )
 
+                # 🔐 STEP-2 ALLOW-LIST for Amazon phase
+                # Include BOTH sets so Amazon phase targets (amazon-only ∪ full-extraction) for THIS category.
+                try:
+                    cat_allowed_keys = set()
+                    # `eans` already built above (url -> ean via product_cache_url_index)
+                    for u in needs_amazon_only_urls:
+                        nu = normalize_url(u)
+                        k = stable_key(nu, eans.get(u))
+                        if k:
+                            cat_allowed_keys.add(k)
+                    for u in needs_full_extraction_urls:
+                        nu = normalize_url(u)
+                        k = stable_key(nu, eans.get(u))
+                        if k:
+                            cat_allowed_keys.add(k)
+                    self._category_allowed_keys = cat_allowed_keys
+                    try:
+                        self._category_url_normalized = normalize_url(category_url)
+                    except Exception:
+                        self._category_url_normalized = category_url
+                    self.log.info(
+                        f"🔐 STEP-2 ALLOWED KEYS (category): {len(cat_allowed_keys)} "
+                        f"(amazon-only={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)})"
+                    )
+                except Exception as _e:
+                    self._category_allowed_keys = set()
+                    self.log.warning(f"[ALLOWLIST] build failed: {_e}")
+
                 supplier_total = len(needs_full_extraction_urls)
                 amazon_total = len(needs_amazon_only_urls) + supplier_total
                 if supplier_total == 0 and amazon_total == 0:
-                    self.state_manager.mark_category_completed(category_url)
-                    self.log.info(f"➡️ SKIP-ADVANCE: category[{i}] has no work → next i={i + 1}")
+                    self.log.info("🟦 Empty category after filters → marking complete and advancing PCI")
+                    self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     continue
+                
+                # Set the frozen denominators up-front so Amazon never stays at 0
+                try:
+                    self.state_manager.set_frozen_denominator(
+                        category_url,
+                        discovered_count=len(needs_full_extraction_urls),
+                        manifest_urls=urls_for_manifest,
+                    )
+                except Exception as e:
+                    self.log.warning(f"⚠️ set_frozen_denominator failed ({e}); will fall back to commit-time freeze")
+                
+                supplier_total = len(needs_full_extraction_urls)
+                amazon_total = len(needs_amazon_only_urls) + supplier_total
+                if supplier_total == 0 and amazon_total == 0:
+                    self.log.info("🟦 Empty category after filters → marking complete and advancing PCI")
+                    self.state_manager.mark_category_completed(category_url, absolute_cat_index)
+                    continue
+
                 # 🚨 CAPTURE METRICS: Persist denominators ONCE per category; do not overwrite on resume
                 sp = self.state_manager.state_data.setdefault("system_progression", {})
-                if not bool(sp.get("category_denominator_frozen", False)):
-                    sp["supplier_products_needing_extraction"] = len(needs_full_extraction_urls)
-                    sp["amazon_products_needing_analysis"] = len(needs_amazon_only_urls) + len(needs_full_extraction_urls)
-                    sp["supplier_products_completed"] = 0  # only for brand-new category
-                    sp["amazon_products_completed"] = 0    # only for brand-new category
-                    self.state_manager.save_state_atomic("denominators-set")
-                    self.log.info(
-                        f"📊 WORK DEFINED: supplier_extract={len(needs_full_extraction_urls)} amazon_analyze={len(needs_amazon_only_urls) + len(needs_full_extraction_urls)}"
+
+                # Freeze with explicit, post-filter totals to avoid wrong Amazon denominators
+                try:
+                    self.state_manager.set_frozen_denominator(
+                        category_url=category_url,
+                        discovered_count=supplier_total,            # supplier baseline
+                        manifest_urls=None,                         # do not infer amazon from manifest here
+                        amazon_total=amazon_total                   # explicit Amazon denominator
                     )
+                except Exception as e:
+                    self.log.warning(f"⚠️ post-filter freeze failed: {e} (continuing)")
+
+                frozen = bool(sp.get("category_denominator_frozen", False))
+                prior_work = (int(sp.get("supplier_products_completed", 0)) > 0
+                              or int(sp.get("amazon_products_completed", 0)) > 0)
+                prior_freeze = bool(sp.get("frozen_totals_committed", False))
+                if not bool(sp.get("category_denominator_frozen", False)):
+                    sp["supplier_products_needing_extraction"] = supplier_total
+                    sp["amazon_products_needing_analysis"] = amazon_total
+                    # DO NOT zero completed on resume; keep whatever was persisted
+                    sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0) or 0)
+                    sp["amazon_products_completed"]   = int(sp.get("amazon_products_completed", 0) or 0)
+                    self.state_manager.save_state_atomic("denominators-set")
+                    self.log.info(f"📊 WORK DEFINED: supplier_extract={supplier_total} amazon_analyze={amazon_total}")
                 else:
-                    self.log.info("📊 WORK DEFINED (resume): denominators frozen → not overwriting totals or completed")
+                    # RESUMPTION: Correct Amazon denominator if it's clearly wrong (0 when should be > 0)
+                    current_amazon_denominator = int(sp.get("amazon_products_needing_analysis", 0))
+                    amazon_completed = int(sp.get("amazon_products_completed", 0))
+
+                    # Only update if:
+                    # 1. Current denominator is 0 (clearly wrong)
+                    # 2. Calculated amazon_total > 0 (there is actual work)
+                    # 3. No progress lost (completed <= new denominator)
+                    if (current_amazon_denominator == 0 and
+                        amazon_total > 0 and
+                        amazon_completed <= amazon_total):
+                        sp["amazon_products_needing_analysis"] = amazon_total
+                        self.state_manager.save_state_atomic("amazon-denominator-corrected")
+                        self.log.info(f"📊 AMAZON DENOMINATOR CORRECTED: 0 → {amazon_total} (resume safety fix)")
+                        self.log.info(f"📊 WORK DEFINED (resume): supplier={sp.get('supplier_products_needing_extraction', 0)}, amazon={amazon_total}")
+                    else:
+                        self.log.info(f"📊 WORK DEFINED (resume): denominators frozen → supplier={sp.get('supplier_products_needing_extraction', 0)}, amazon={current_amazon_denominator}")
 
                 # 🚨 CONTRACT ENFORCEMENT: Fail fast if filtering contract is violated
                 if not filter_invariant_check:
@@ -5448,7 +5597,8 @@ Return ONLY valid JSON, no additional text."""
                 if needs_full_extraction_urls:
                     # Resume gating: read current progress from system_progression
                     sp = self.state_manager.state_data.get("system_progression", {})
-                    cat_ptr = sp.get("persistent_category_index", 0)
+                    # 🎯 1-BASED PCI SYSTEM: Default to 1 instead of 0
+                    cat_ptr = sp.get("persistent_category_index", 1)
                     current_phase = sp.get("current_phase", "supplier")
                     
                     if current_phase == "supplier":
@@ -5477,12 +5627,6 @@ Return ONLY valid JSON, no additional text."""
                     
                     # Get the total categories from state manager
                     total_cats = self.state_manager._authoritative_total_categories()
-                    
-                    self.log.info(
-                        f"📋 RESUME CHECK: current_cat={absolute_cat_index}, resume_cat_ptr={cat_ptr}, "
-                        f"resume_prod_ptr={prod_ptr}, needs_extraction={needs_full_extraction_count}, "
-                        f"total_cats={total_cats}"
-                    )
                     
                     # 🚨 ENHANCED RESUME LOGIC: More comprehensive checks
                     # Case 1: Category is before resume point AND has no work
@@ -5538,22 +5682,11 @@ Return ONLY valid JSON, no additional text."""
                     )
 
                     # Slice for resumed category
-                    start_offset = prod_ptr if absolute_cat_index == cat_ptr else 0
-                    work_urls = needs_full_extraction_urls
-                    first_resume_key = None
+                    start_offset = prod_ptr if absolute_cat_index == cat_ptr else 0  # base_completed
+                    work_urls = needs_full_extraction_urls                           # process remaining from 0
+                    first_resume_key = work_urls[0] if work_urls else None
                     if start_offset:
-                        if start_offset >= len(needs_full_extraction_urls):
-                            self.log.info(
-                                f"📋 Resume index {start_offset} >= {len(needs_full_extraction_urls)} — nothing new in this category."
-                            )
-                            continue
-                        first_resume_key = needs_full_extraction_urls[start_offset]
-                        # Defer PTR breadcrumbs to the state manager (it's gated on frozen totals).
-                        self.log.debug("PTR print suppressed at workflow; state manager will emit gated proofs")
-                        work_urls = needs_full_extraction_urls[start_offset:]
-                        self.log.info(
-                            f"📋 RESUME SLICE: Starting from index {start_offset}, processing {len(work_urls)} remaining products"
-                        )
+                        self.log.info(f"📋 RESUME: base_completed={start_offset}, remaining={len(work_urls)}")
                     else:
                         self.log.info(
                             f"📋 FULL CATEGORY PROCESSING: Processing all {len(needs_full_extraction_urls)} products"
@@ -5658,8 +5791,7 @@ Return ONLY valid JSON, no additional text."""
                         f"✅ NO EXTRACTION NEEDED: All products are either already processed or have cached supplier data"
                     )
                     products = []
-                    # 🚨 CRITICAL FIX: Skip to next category to prevent legacy path execution
-                    continue
+                    # Do NOT continue: we still need bookkeeping and to hydrate Amazon queue from cache
 
                 # CRITICAL FIX: Accumulate filtered URLs across all categories
                 all_needs_full_extraction_urls.extend(needs_full_extraction_urls)
@@ -5671,44 +5803,14 @@ Return ONLY valid JSON, no additional text."""
                         f"📋 AMAZON ANALYSIS NEEDED: {len(needs_amazon_only_urls)} products (already filtered by pre-extraction)"
                     )
                 
-                # 🚨 COMPREHENSIVE RESUME STATE VALIDATION
-                # Log detailed resume state information for debugging
-                try:
-                    sp = self.state_manager.state_data.get("system_progression", {})
-                    cat_ptr = sp.get("persistent_category_index", 0)
-                    current_phase = sp.get("current_phase", "supplier")
-                    
-                    if current_phase == "supplier":
-                        prod_ptr = sp.get("supplier_products_completed", 0)
-                    elif current_phase == "amazon_analysis":
-                        prod_ptr = sp.get("amazon_products_completed", 0)
-                    else:
-                        prod_ptr = 0
-                        
-                    self.log.info(
-                        f"📊 DETAILED RESUME STATE: current_cat={absolute_cat_index}, "
-                        f"resume_cat={cat_ptr}, resume_prod={prod_ptr}, "
-                        f"needs_full_extraction={len(needs_full_extraction_urls)}, "
-                        f"needs_amazon_only={len(needs_amazon_only_urls)}"
-                    )
-                except Exception as e:
-                    self.log.warning(f"⚠️ Could not get detailed resume state: {e}")
                 
                 # (reverted) removed Amazon phase switch and initial commit injection
-                # 🚨 SURGICAL FIX: Update state manager with current category URL being processed
+                # Update state manager with current category URL being processed (single source of truth)
                 if hasattr(self, "state_manager") and self.state_manager:
-                    nurl = normalize_url(category_url)
-                    if hasattr(self.state_manager, "update_current_category_url"):
-                        try:
-                            self.state_manager.update_current_category_url(nurl)
-                        except Exception:
-                            pass
-                    else:
-                        # Fallback: directly update the category URL in supplier_extraction_progress (normalized)
-                        if hasattr(self.state_manager, "state_data"):
-                            self.state_manager.state_data.setdefault(
-                                "supplier_extraction_progress", {}
-                            )["current_category_url"] = nurl
+                    try:
+                        self.state_manager.update_current_category_url(normalize_url(category_url))
+                    except Exception:
+                        pass
                 if urls_for_manifest:
                     # Single-point freeze AFTER final workset is known
                     manifest_urls = [normalize_url(u) for u in urls_for_manifest]
@@ -5740,6 +5842,8 @@ Return ONLY valid JSON, no additional text."""
                             discovered_count = int(existing or discovered_count)
 
                         # Emit proof banners and enter runtime phase after freeze persisted
+                        if hasattr(self.state_manager, "mark_frozen_totals_committed"):
+                            self.state_manager.mark_frozen_totals_committed()
                         self.state_manager.emit_first_after_resume_if_needed("supplier")
                         self.state_manager.enter_runtime_phase()
 
@@ -5763,7 +5867,7 @@ Return ONLY valid JSON, no additional text."""
                                 )
 
                             if (supplier_completed < 0 or supplier_completed > frozen_total_int) and hasattr(self.state_manager, "metrics"):
-                                self.state_manager.metrics.inc("resume_clamps_total", phase="supplier", cat=sp.get('persistent_category_index', 0))
+                                self.state_manager.metrics.inc("resume_clamps_total", phase="supplier", cat=sp.get('persistent_category_index', 1))
 
                         self.log.info(
                             f"🧬 LINEAGE: manifest={self._config_manifest_hash()} cat_url={normalize_url(category_url)} total={discovered_count}"
@@ -5771,19 +5875,9 @@ Return ONLY valid JSON, no additional text."""
                 else:
                     # Zero-product category: complete immediately and continue
                     cat_total = 0
-                    cat_idx = getattr(self, '_current_category_index', 0)
                     
-                    # Set up zero-product tracking
-                    if hasattr(self.state_manager, "commit_category_completed"):
-                        self.state_manager.commit_category_completed(cat_idx, category_url, phase="supplier")
-                    if hasattr(self.state_manager, "commit_phase_switch"):
-                        self.state_manager.commit_phase_switch(new_phase="amazon_analysis")  # enter amazon with empty queue
-                    if hasattr(self.state_manager, "commit_amazon_progress"):
-                        # Amazon analysis is per-category; keep totals local for clean progress math.
-                        self.state_manager.commit_amazon_progress(
-                            cat_idx=cat_idx, queue_idx=0, queue_len=0,
-                            total_cats=1, cat_url=category_url
-                        )
+                    # Single source of truth: complete category via state manager
+                    self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     self.state_manager.save_state_atomic("freeze-queue-empty")
                     
                     # Emit proof banners for zero-product fast-path
@@ -5793,7 +5887,7 @@ Return ONLY valid JSON, no additional text."""
                     # Complete the category and advance
                     if hasattr(self.state_manager, "commit_phase_switch"):
                         self.state_manager.commit_phase_switch(new_phase="supplier")
-                    self.state_manager.metrics.inc("zero_product_categories_total", cat=cat_idx)
+                    self.state_manager.metrics.inc("zero_product_categories_total", cat=absolute_cat_index)
                     
                     self.log.info(f"⚡ ZERO-PRODUCT FAST-PATH: Category {category_url} has no products, skipping...")
                     continue
@@ -5806,22 +5900,29 @@ Return ONLY valid JSON, no additional text."""
                         # Load total categories directly from config as authoritative source
                         total_categories = self._get_authoritative_category_count(category_urls)
 
-                        # Update system progression with accurate totals
+                        # Update denominators ONCE; never write PCI here and never zero completed on resume
                         sp = self.state_manager.state_data.setdefault("system_progression", {})
-                        sp.update(
-                            {
-                                "total_categories": total_categories,
-                                "persistent_category_index": category_index,
-                                "current_category_url": category_url,
-                                "original_category_url": category_url,
-                                "category_denominator_frozen": False,
-                                "category_freeze_timestamp": None,
-                                "supplier_products_needing_extraction": len(urls_for_manifest),
-                                "supplier_products_completed": 0,
-                                "amazon_products_needing_analysis": len(urls_for_manifest),
-                                "amazon_products_completed": 0,
-                            }
-                        )
+                        if not bool(sp.get("category_denominator_frozen", False)):
+                            # Always keep the current URL normalized to satisfy completion guard
+                            try:
+                                _nurl = normalize_url(category_url)
+                            except Exception:
+                                _nurl = str(category_url)
+
+                            sp["total_categories"] = int(total_categories)
+                            sp["current_category_url"] = _nurl
+                            sp["original_category_url"] = _nurl
+                            # Freeze once: denominators set, do not rewrite on resume
+                            sp["category_denominator_frozen"] = True
+                            sp["category_freeze_timestamp"] = None
+                            sp["supplier_products_needing_extraction"] = len(urls_for_manifest)
+                            sp["amazon_products_needing_analysis"] = len(urls_for_manifest)
+                            # ✅ Preserve completed counts on resume
+                            sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0) or 0)
+                            sp["amazon_products_completed"]   = int(sp.get("amazon_products_completed", 0) or 0)
+                            self.state_manager.save_state_atomic("denominators-set")
+                        else:
+                            self.log.info("📊 WORK DEFINED (resume): denominators frozen → not overwriting totals/completed")
 
                 self.category_manifests[category_url] = urls_for_manifest
                 self.log.info(
@@ -5834,6 +5935,9 @@ Return ONLY valid JSON, no additional text."""
                 self.log.info(
                     f"📊 Category completed: {len(products)} raw products extracted, {len(all_products)} total products accumulated"
                 )
+
+                # 🚨 REMOVED: Early completion call moved to end of Amazon phase
+                # (Prevents PCI advance while Amazon work is still in progress)
 
                 # 🚨 SURGICAL FIX: Update state manager with discovered product count for accurate processing state
                 if hasattr(self, "state_manager") and self.state_manager and len(products) > 0:
@@ -5876,11 +5980,55 @@ Return ONLY valid JSON, no additional text."""
         full_extraction_set = set(all_needs_full_extraction_urls)
         amazon_only_set = set(all_needs_amazon_only_urls)
 
-        # Process products that match the filtered URLs
+        # Process products scraped this run that match the filtered URLs
         for product in all_products:
             product_url = product.get("url", "")
             if product_url in full_extraction_set or product_url in amazon_only_set:
                 filtered_products.append(product)
+
+        # 🔧 Backfill cached "amazon-only" products the scraper did not touch (no supplier re-scrape)
+        try:
+            from utils.normalization import normalize_url as _norm_url, stable_key as _stable_key
+        except Exception:  # fail-safe normalizers
+            _norm_url = lambda u: (u or "").strip()
+            _stable_key = lambda u, e: f"url:{u}|ean:{e or ''}"
+
+        def _cache_key(url, ean):
+            return _stable_key(_norm_url(url), ean)
+
+        seen_keys = { _cache_key(p.get("url"), p.get("ean")) for p in filtered_products }
+
+        cache_index = getattr(self, "product_cache_url_index", {}) or {}
+        cached_backfill = []
+        for url in amazon_only_set:
+            nurl = _norm_url(url)
+            cached = cache_index.get(nurl)
+            if not cached:
+                continue
+            cache_key = _cache_key(cached.get("url") or nurl, cached.get("ean"))
+            if cache_key in seen_keys:
+                continue  # already present via live scrape
+            # enforce same price policy as live-scraped items
+            price = cached.get("price", 0) or 0
+            if not isinstance(price, (int, float)) or price <= 0:
+                continue
+            if not (MIN_PRICE <= price <= MAX_PRICE):
+                continue
+            # ensure minimal required fields for downstream
+            cached_copy = dict(cached)
+            cached_copy.setdefault("url", nurl)
+            cached_copy.setdefault("source_url", cached_copy.get("category_url") or nurl)
+            filtered_products.append(cached_copy)
+            seen_keys.add(cache_key)
+            cached_backfill.append(cached_copy)
+
+        if cached_backfill:
+            cached_backfill.sort(key=lambda p: _norm_url(p.get("url")))
+            self.log.info(
+                f"🧩 AMAZON-ONLY BACKFILL: added {len(cached_backfill)} cached products for Amazon analysis"
+            )
+        else:
+            self.log.info("🧩 AMAZON-ONLY BACKFILL: no cached additions required")
 
         self.log.info(
             f"🔍 FILTERED EXTRACTION COMPLETE: {len(filtered_products)} products from pre-extraction filtering (not {len(all_products)} total)"
@@ -5923,7 +6071,11 @@ Return ONLY valid JSON, no additional text."""
 
             # Get the authoritative total from the state manager
             category_url_normalized = getattr(self, '_current_category_url', category_url)
-            authoritative_total = self.state_manager.get_frozen_denominator(category_url_normalized)
+            sp = self.state_manager.state_data.get("system_progression", {})
+            if operation_type == "amazon_analysis":
+                authoritative_total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
+            else:
+                authoritative_total = self.state_manager.get_frozen_denominator(category_url_normalized)
             if authoritative_total is None:
                 self.log.warning(f"Could not find frozen denominator for {category_url_normalized}. Falling back to dynamic total.")
                 authoritative_total = total_products_int
@@ -5940,7 +6092,8 @@ Return ONLY valid JSON, no additional text."""
                     total_prod_in_cat=authoritative_total,
                 )
             elif operation_type == "amazon_analysis":
-                queue_idx_commit = max(0, int(product_index))
+                base_amz = int(self.state_manager.state_data.get("system_progression", {}).get("amazon_products_completed", 0) or 0)
+                queue_idx_commit = max(0, base_amz + int(product_index))
                 self.state_manager.commit_amazon_progress(
                     cat_idx=int(absolute_idx),
                     queue_idx=queue_idx_commit,
@@ -5962,7 +6115,6 @@ Return ONLY valid JSON, no additional text."""
                 self._supplier_product_counter = supplier_display
 
                 try:
-                    from utils.normalization import normalize_url
                     frozen_url = normalize_url(category_url_local)
                 except Exception:
                     frozen_url = category_url_local
@@ -6921,8 +7073,13 @@ Return ONLY valid JSON, no additional text."""
                                 profitable_count=0
                             )
                         
+                        # 🔧 CRITICAL FIX: Set current category URL before completion
+                        # This ensures mark_category_completed() URL comparison succeeds
+                        sp = self.state_manager.state_data.setdefault("system_progression", {})
+                        sp["current_category_url"] = category_url
+
                         # Mark category as complete in state manager
-                        self.state_manager.mark_category_completed(category_url)
+                        self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                         
                         # Save state after each category
                         self.state_manager.save_state(preserve_interruption_state=True)
@@ -7048,6 +7205,66 @@ Return ONLY valid JSON, no additional text."""
             self.log.error(
                 f"❌ CATEGORY SUMMARY ERROR: Failed to log summary for category {category_index}: {e}"
             )
+
+    def _finalize_category_completion(self, category_url: str, cat_idx: int):
+        """Finalize category processing and advance persistent_category_index"""
+        try:
+            # Normalize URL for consistency
+            from utils.normalization import normalize_url
+            normalized_url = normalize_url(category_url)
+        except Exception:
+            normalized_url = str(category_url)
+
+        # Mark category completed - this will advance the index via CF1 fix
+        self.state_manager.mark_category_completed(normalized_url, cat_idx)
+        self.log.info(f"🎯 WORKFLOW: Category {cat_idx} completed and finalized")
+
+        # Save state after completion
+        self.state_manager.save_state_atomic("workflow-category-complete")
+
+    def _is_category_fully_processed(self, category_url: str) -> bool:
+        """Check if category is fully processed and ready for completion"""
+        sp = self.state_manager.state_data.get("system_progression", {})
+
+        # Check supplier phase completion
+        supplier_needed = int(sp.get("supplier_products_needing_extraction", 0) or 0)
+        supplier_done = int(sp.get("supplier_products_completed", 0) or 0)
+
+        # Check Amazon phase completion
+        amazon_needed = int(sp.get("amazon_products_needing_analysis", 0) or 0)
+        amazon_done = int(sp.get("amazon_products_completed", 0) or 0)
+
+        # Category is complete when both phases are done
+        supplier_complete = (supplier_needed == 0) or (supplier_done >= supplier_needed)
+        amazon_complete = (amazon_needed == 0) or (amazon_done >= amazon_needed)
+
+        is_complete = supplier_complete and amazon_complete
+
+        if is_complete:
+            self.log.info(f"✅ CATEGORY COMPLETION CHECK: {category_url} is fully processed")
+            self.log.info(f"   Supplier: {supplier_done}/{supplier_needed}, Amazon: {amazon_done}/{amazon_needed}")
+
+        return is_complete
+
+    async def _ensure_phase_integrity(self):
+        """Ensure we don't start supplier work while Amazon is incomplete"""
+        sp = self.state_manager.state_data.get("system_progression", {})
+        if sp.get("current_phase") == "amazon_analysis":
+            total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
+            done = int(sp.get("amazon_products_completed", 0) or 0)
+            if total > 0 and done < total:
+                self.log.warning(f"🛑 PHASE INTEGRITY GUARD: Amazon phase incomplete (done={done}/{total})")
+                self.log.warning("🛑 FORCING AMAZON RESUME to complete category first")
+
+                # Force Amazon resume to complete
+                rp = type("RP", (), {
+                    "cat_idx": sp.get("persistent_category_index", 1),
+                    "prod_idx": done
+                })()
+                # This should trigger category completion via CF3
+                await self._run_amazon_phase_from_resume(rp)
+                return False  # Signal to caller to stop supplier work
+        return True  # Phase is safe to proceed
 
     def _validate_resume_point(self, resume_data: Dict[str, Any]) -> tuple[bool, List[str]]:
         """
@@ -7274,11 +7491,26 @@ Return ONLY valid JSON, no additional text."""
                     )
                     profitable_results.extend(chunk_results)
 
-                    # Check memory management
-                    memory_config = hybrid_config.get("memory_management", {})
-                    if memory_config.get("clear_cache_between_phases", False):
-                        self.log.info("🧹 Clearing cache between processing phases")
-                        # Add cache clearing logic here if needed
+                # 🚨 CRITICAL FIX: Mark each category in chunk as completed to advance category index
+                # This fixes the 1-based index stuck at 1 -> should advance to 2 for second category
+                for i, category_url in enumerate(chunk_categories):
+                    category_index = chunk_start + i + 1  # 1-based category index
+                    try:
+                        from utils.normalization import normalize_url
+                        self.state_manager.mark_category_completed(
+                            normalize_url(category_url), 
+                            category_index
+                        )
+                        self.state_manager.save_state_atomic("workflow-category-complete")
+                        self.log.info(f"🎯 HYBRID: Finalized category {category_index} ({category_url})")
+                    except Exception as e:
+                        self.log.warning(f"⚠️ HYBRID finalize failed for {category_url}: {e}")
+
+                # Check memory management
+                memory_config = hybrid_config.get("memory_management", {})
+                if memory_config.get("clear_cache_between_phases", False):
+                    self.log.info("🧹 Clearing cache between processing phases")
+                    # Add cache clearing logic here if needed
 
         elif processing_modes.get("balanced", {}).get("enabled", False):
             # Balanced mode: Extract in batches, analyze each batch
@@ -7406,9 +7638,9 @@ Return ONLY valid JSON, no additional text."""
         Commits after each item using commit_amazon_progress(...).
         """
         import math
-        cat_idx = int(getattr(rp, "cat_idx", 0))
+        cat_idx = int(getattr(rp, "cat_idx", 1))
         prod_offset = int(getattr(rp, "prod_idx", 0))
-        total_cats = int(self.state_manager.total_categories_authoritative() or 0)
+        total_cats = int(self.state_manager._authoritative_total_categories() or 0)
 
         # Current category URL: prefer state, fall back to index mapping if needed
         category_url = (self.state_manager.current_category_url() 
@@ -7478,6 +7710,32 @@ Return ONLY valid JSON, no additional text."""
                 self.log.info(f"[PROGRESS_COMMIT] queue_idx={queue_idx}/{total} cat_idx={cat_idx}")
                 if queue_idx == prod_offset:
                     self.log.info(f"[RESUME_HONORED] queue_idx={queue_idx}")
+
+        # --- AMAZON RESUME FINALIZER ---
+        # Check if Amazon queue is complete and finalize category
+        try:
+            cat_info = self.state_manager.get_current_category_info()
+            category_url = cat_info.get("cat_url")
+            cat_idx = cat_info.get("cat_idx", 1)
+        except Exception:
+            category_url = self.state_manager.state_data.get("system_progression", {}).get("current_category_url")
+            cat_idx = self.state_manager.state_data.get("system_progression", {}).get("persistent_category_index", 1)
+
+        # Rebuild queue to check completion
+        products = self._rebuild_category_amazon_queue(category_url)
+        total = len(products)
+
+        sp = self.state_manager.state_data.get("system_progression", {})
+        done = int(sp.get("amazon_products_completed", 0) or 0)
+
+        # If queue is complete, finalize category using new method
+        if total == 0 or done >= total:
+            self._finalize_category_completion(category_url, int(cat_idx))
+
+            # Phase switch back to supplier
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier (via resume finalizer)")
+
         return 0
 
     async def _analyze_products_batch(
@@ -7500,15 +7758,19 @@ Return ONLY valid JSON, no additional text."""
             p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
         ]
 
-        # After building the deterministic amazon_queue (price_filtered_products), switch phase to "amazon_analysis"
-        if hasattr(self.state_manager, "commit_phase_switch"):
-            self.state_manager.commit_phase_switch("amazon_analysis")
-            self.log.info("🔀 PHASE SWITCH: supplier → amazon_analysis")
+        # 🚨 RESUME-SAFE AMAZON PHASE SWITCH: Prevent counter reset during resumption
+        sp = (self.state_manager.state_data or {}).get("system_progression", {}) or {}
+        if sp.get("current_phase") != "amazon_analysis":
+            # Only switch if not already in Amazon phase (prevents reset loops)
+            self.state_manager.commit_phase_switch(new_phase="amazon_analysis", reset_index=False)
+            self.log.info("🔄 AMAZON PHASE: Switched to amazon_analysis with counter preservation")
             # Persist handover immediately to survive crash before first queue item
             try:
                 self.state_manager.save_state_atomic("phase-switch-amazon")
             except Exception:
                 pass
+        else:
+            self.log.info("🔄 AMAZON PHASE: Already in amazon_analysis phase, no switch needed")
         
         # Emit proof banner and clamp Amazon queue pointer
         if hasattr(self.state_manager, "emit_first_after_resume_if_needed"):
@@ -7533,7 +7795,7 @@ Return ONLY valid JSON, no additional text."""
                 )
 
             if (amazon_completed < 0 or amazon_completed > total_len) and hasattr(self.state_manager, "metrics"):
-                self.state_manager.metrics.inc("resume_clamps_total", phase="amazon_analysis", cat=sp.get('persistent_category_index', 0))
+                self.state_manager.metrics.inc("resume_clamps_total", phase="amazon_analysis", cat=sp.get('persistent_category_index', 1))
         else:
             start_amz = 0
 
@@ -7548,6 +7810,10 @@ Return ONLY valid JSON, no additional text."""
         start_amz = 0 if 'start_amz' not in locals() else start_amz
         start_batch = start_amz // max(1, batch_size)
         first_offset = start_amz % max(1, batch_size)
+        
+        # Add resume slice log for visibility
+        if start_amz > 0:
+            self.log.info(f"🪜 Amazon resume slice: start={start_amz} total={total_len} → remaining={total_len - start_amz}")
 
         for batch_num in range(start_batch, total_batches):
             start_idx = batch_num * batch_size
@@ -7710,378 +7976,15 @@ Return ONLY valid JSON, no additional text."""
                         queue_len=cat_info["queue_len"]
                     )
 
-        # After Amazon queue completion, switch back to "supplier" phase
-        if hasattr(self.state_manager, "commit_phase_switch"):
-            self.state_manager.commit_phase_switch("supplier")
-            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
-
-        return profitable_results
-
-    def _get_cached_products_path(self, category_url: str):
-        """Helper to get the path for a category's product cache file."""
-        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
-        return str(path_manager.get_cache_path("supplier_cache", category_filename))
-
-    def _combine_data(
-        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
-        """Combine supplier and Amazon data and calculate financial metrics."""
-        combined = {
-            "supplier_product_info": supplier_data,
-            "amazon_product_info": amazon_data,
-            "analysis_timestamp": datetime.now().isoformat(),
-            "session_id": session_id,
-        }
-        # Financial calculation is now handled within the main run loop before this function is called
-        # This function is primarily for combining data and adding match validation
-        match_validation = self._validate_product_match(supplier_data, amazon_data)
-        combined["match_validation"] = match_validation
-        return combined
-
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
-    def _sanitize_filename(self, title: str) -> str:
-        """Sanitize product title for use in filename"""
-        if not title:
-            return "unknown_title"
-        # Remove or replace problematic characters
-        sanitized = re.sub(r"[^\w\s-]", "", title)
-        sanitized = re.sub(r"\s+", "_", sanitized)
-        return sanitized[:50]  # Limit length to 50 chars
-
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
-    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
-        """Check if a product meets all defined business criteria."""
-        # This function is now largely redundant as profitability checks are done in the main loop.
-        # However, it can be used for other criteria like sales rank, reviews, etc.
-        amazon_data = combined_data.get("amazon_product_info", {})
-        financials = combined_data.get("financials", {})
-        # Check profitability (already done, but for completeness)
-        is_profitable = (
-            financials.get("ROI", 0) > MIN_ROI_PERCENT
-            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-        )
-        # Check Amazon listing quality
-        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
-        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
-        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
-        # Check for battery products (using the helper function)
-        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
-            combined_data["supplier_product_info"].get("title", "")
-        )
-        # Check for other non-FBA friendly keywords
-        is_non_fba_friendly = any(
-            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
-        ) or any(
-            k in combined_data["supplier_product_info"].get("title", "").lower()
-            for k in NON_FBA_FRIENDLY_KEYWORDS
-        )
-        # All criteria must be met
-        return (
-            is_profitable
-            and meets_rating
-            and meets_reviews
-            and meets_sales_rank
-            and not is_battery
-            and not is_non_fba_friendly
-        )
-
-    def _apply_batch_synchronization(
-        self,
-        max_products_per_cycle: int,
-        supplier_extraction_batch_size: int,
-        batch_sync_config: Dict[str, Any],
-    ) -> Tuple[int, int]:
-        """
-        Apply batch synchronization to align all batch sizes consistently.
-        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
-        """
-        target_batch_size = batch_sync_config.get("target_batch_size", 3)
-        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
-        validation_config = batch_sync_config.get("validation", {})
-
-        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
-        self.log.info(f"   target_batch_size: {target_batch_size}")
-        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
-
-        original_values = {
-            "max_products_per_cycle": max_products_per_cycle,
-            "supplier_extraction_batch_size": supplier_extraction_batch_size,
-            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
-        }
-
-        # Check for mismatched sizes and warn if configured
-        if validation_config.get("warn_on_mismatched_sizes", True):
-            unique_sizes = set(original_values.values())
-            if len(unique_sizes) > 1:
-                self.log.warning(
-                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
-                )
-                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
-
-        if synchronize_all:
-            # Synchronize all batch sizes to target
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            # Also update system config values in memory for consistency
-            if "system" in self.system_config:
-                self.system_config["max_products_per_cycle"] = target_batch_size
-                self.system_config["supplier_extraction_batch_size"] = target_batch_size
-                self.system_config["linking_map_batch_size"] = target_batch_size
-                # financial_report_batch_size managed by config_loader
-
-            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        else:
-            # Only synchronize the two main processing batch sizes
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            self.log.info(
-                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
-            )
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        return new_max_products_per_cycle, new_supplier_extraction_batch_size
-
-    async def _analyze_products_batch(
-        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
-    ) -> List[Dict[str, Any]]:
-        """Analyze a batch of supplier products for Amazon matching and profitability."""
-        profitable_results = []
-
-        # Filter and prepare products for analysis
-        valid_products = [
-            p
-            for p in products
-            if p.get("title")
-            and isinstance(p.get("price"), (float, int))
-            and p.get("price", 0) > 0
-            and p.get("url")
-        ]
-
-        price_filtered_products = [
-            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
-        ]
-
-        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
-
-        # Process products in cycles
-        batch_size = max_products_per_cycle
-        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
-
-        for batch_num in range(total_batches):
-            start_idx = batch_num * batch_size
-            end_idx = min(start_idx + batch_size, len(price_filtered_products))
-            batch_products = price_filtered_products[start_idx:end_idx]
-
-            self.log.info(
-                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
-            )
-
-            for i, product_data in enumerate(batch_products):
-                current_index = start_idx + i + 1
-                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
-
-                # Check if already processed
-                if self.state_manager.is_product_processed(product_data.get("url")):
-                    self.log.info(
-                        f"Product already processed: {product_data.get('url')}. Skipping."
-                    )
-                    continue
-
-                # Amazon data extraction and analysis
-                amazon_data = await self._get_amazon_data(product_data)
-                if not amazon_data or "error" in amazon_data:
-                    self.log.warning(
-                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
-                    )
-
-                    # 🚨 FIX: Create no-match linking entry for batch processing
-                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                    if supplier_ean == "None" or supplier_ean is None:
-                        supplier_ean = None
-
-                    # Determine the reason for no match
-                    error_info = (
-                        amazon_data.get("error")
-                        if isinstance(amazon_data, dict)
-                        else "No Amazon data returned"
-                    )
-                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
-
-                    # Create no-match linking entry
-                    no_match_entry = {
-                        "supplier_ean": supplier_ean,
-                        "amazon_asin": None,
-                        "supplier_title": product_data.get("title"),
-                        "amazon_title": None,
-                        "supplier_price": product_data.get("price"),
-                        "amazon_price": None,
-                        "match_method": "none",  # NEW: Indicates no match found
-                        "confidence": 0,  # NEW: No confidence for failed matches
-                        "created_at": datetime.now().isoformat(),
-                        "supplier_url": product_data.get("url"),
-                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
-                    }
-
-                    # Add no-match entry to linking map using optimized method
-                    self._add_linking_map_entry_optimized(no_match_entry)
-                    self.log.info(
-                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
-                    )
-
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_amazon_extraction"
-                    )
-                    
-                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
-                    if hasattr(self.state_manager, "commit_amazon_progress"):
-                        # Get current category info
-                        cat_info = self.state_manager.get_current_category_info()
-                        self.state_manager.commit_amazon_progress(
-                            cat_idx=cat_info["cat_idx"],
-                            queue_idx=i,  # 0-based index within batch
-                            total_cats=cat_info["total_cats"],
-                            cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
-                        )
-                    continue
-
-                # Save Amazon cache and create linking map
-                supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                asin = amazon_data.get("asin", "NO_ASIN")
-
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
-                    )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
-
-                # Financial analysis
-                try:
-                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
-                    supplier_price = float(product_data.get("price", 0))
-                    current_price = amazon_data.get("current_price", 0)
-
-                    if supplier_price > 0 and current_price > 0:
-                        financials = calc_financials(
-                            supplier_price=supplier_price,
-                            amazon_price=current_price,
-                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
-                            amazon_rating=amazon_data.get("rating", 0),
-                            amazon_review_count=amazon_data.get("reviews", 0),
-                        )
-
-                        # Check profitability
-                        if (
-                            financials.get("ROI", 0) > MIN_ROI_PERCENT
-                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-                        ):
-                            self.log.info(
-                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
-                            )
-
-                            combined_data = self._combine_supplier_amazon_data(
-                                product_data, amazon_data, "hybrid_batch"
-                            )
-                            combined_data["financials"] = financials
-                            profitable_results.append(combined_data)
-
-                            self.state_manager.update_success_metrics(
-                                True, True, financials.get("NetProfit", 0)
-                            )
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_profitable"
-                            )
-                        else:
-                            self.log.info(
-                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
-                            )
-                            self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_not_profitable"
-                            )
-
-                except Exception as e:
-                    self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_financial_calculation"
-                    )
-
-                # Inside the Amazon processing loop, after each item k (0-based) is processed
-                if hasattr(self.state_manager, "commit_amazon_progress"):
-                    # Get current category info
-                    cat_info = self.state_manager.get_current_category_info()
-                    self.state_manager.commit_amazon_progress(
-                        cat_idx=cat_info["cat_idx"],
-                        queue_idx=i,  # 0-based index within batch
-                        total_cats=cat_info["total_cats"],
-                        cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
-                    )
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
 
         # After Amazon queue completion, switch back to "supplier" phase
         if hasattr(self.state_manager, "commit_phase_switch"):
@@ -8456,378 +8359,15 @@ Return ONLY valid JSON, no additional text."""
                         queue_len=cat_info["queue_len"]
                     )
 
-        # After Amazon queue completion, switch back to "supplier" phase
-        if hasattr(self.state_manager, "commit_phase_switch"):
-            self.state_manager.commit_phase_switch("supplier")
-            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
-
-        return profitable_results
-
-    def _get_cached_products_path(self, category_url: str):
-        """Helper to get the path for a category's product cache file."""
-        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
-        return str(path_manager.get_cache_path("supplier_cache", category_filename))
-
-    def _combine_data(
-        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
-        """Combine supplier and Amazon data and calculate financial metrics."""
-        combined = {
-            "supplier_product_info": supplier_data,
-            "amazon_product_info": amazon_data,
-            "analysis_timestamp": datetime.now().isoformat(),
-            "session_id": session_id,
-        }
-        # Financial calculation is now handled within the main run loop before this function is called
-        # This function is primarily for combining data and adding match validation
-        match_validation = self._validate_product_match(supplier_data, amazon_data)
-        combined["match_validation"] = match_validation
-        return combined
-
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
-    def _sanitize_filename(self, title: str) -> str:
-        """Sanitize product title for use in filename"""
-        if not title:
-            return "unknown_title"
-        # Remove or replace problematic characters
-        sanitized = re.sub(r"[^\w\s-]", "", title)
-        sanitized = re.sub(r"\s+", "_", sanitized)
-        return sanitized[:50]  # Limit length to 50 chars
-
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
-    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
-        """Check if a product meets all defined business criteria."""
-        # This function is now largely redundant as profitability checks are done in the main loop.
-        # However, it can be used for other criteria like sales rank, reviews, etc.
-        amazon_data = combined_data.get("amazon_product_info", {})
-        financials = combined_data.get("financials", {})
-        # Check profitability (already done, but for completeness)
-        is_profitable = (
-            financials.get("ROI", 0) > MIN_ROI_PERCENT
-            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-        )
-        # Check Amazon listing quality
-        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
-        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
-        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
-        # Check for battery products (using the helper function)
-        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
-            combined_data["supplier_product_info"].get("title", "")
-        )
-        # Check for other non-FBA friendly keywords
-        is_non_fba_friendly = any(
-            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
-        ) or any(
-            k in combined_data["supplier_product_info"].get("title", "").lower()
-            for k in NON_FBA_FRIENDLY_KEYWORDS
-        )
-        # All criteria must be met
-        return (
-            is_profitable
-            and meets_rating
-            and meets_reviews
-            and meets_sales_rank
-            and not is_battery
-            and not is_non_fba_friendly
-        )
-
-    def _apply_batch_synchronization(
-        self,
-        max_products_per_cycle: int,
-        supplier_extraction_batch_size: int,
-        batch_sync_config: Dict[str, Any],
-    ) -> Tuple[int, int]:
-        """
-        Apply batch synchronization to align all batch sizes consistently.
-        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
-        """
-        target_batch_size = batch_sync_config.get("target_batch_size", 3)
-        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
-        validation_config = batch_sync_config.get("validation", {})
-
-        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
-        self.log.info(f"   target_batch_size: {target_batch_size}")
-        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
-
-        original_values = {
-            "max_products_per_cycle": max_products_per_cycle,
-            "supplier_extraction_batch_size": supplier_extraction_batch_size,
-            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
-        }
-
-        # Check for mismatched sizes and warn if configured
-        if validation_config.get("warn_on_mismatched_sizes", True):
-            unique_sizes = set(original_values.values())
-            if len(unique_sizes) > 1:
-                self.log.warning(
-                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
-                )
-                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
-
-        if synchronize_all:
-            # Synchronize all batch sizes to target
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            # Also update system config values in memory for consistency
-            if "system" in self.system_config:
-                self.system_config["max_products_per_cycle"] = target_batch_size
-                self.system_config["supplier_extraction_batch_size"] = target_batch_size
-                self.system_config["linking_map_batch_size"] = target_batch_size
-                # financial_report_batch_size managed by config_loader
-
-            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        else:
-            # Only synchronize the two main processing batch sizes
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            self.log.info(
-                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
-            )
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        return new_max_products_per_cycle, new_supplier_extraction_batch_size
-
-    async def _analyze_products_batch(
-        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
-    ) -> List[Dict[str, Any]]:
-        """Analyze a batch of supplier products for Amazon matching and profitability."""
-        profitable_results = []
-
-        # Filter and prepare products for analysis
-        valid_products = [
-            p
-            for p in products
-            if p.get("title")
-            and isinstance(p.get("price"), (float, int))
-            and p.get("price", 0) > 0
-            and p.get("url")
-        ]
-
-        price_filtered_products = [
-            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
-        ]
-
-        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
-
-        # Process products in cycles
-        batch_size = max_products_per_cycle
-        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
-
-        for batch_num in range(total_batches):
-            start_idx = batch_num * batch_size
-            end_idx = min(start_idx + batch_size, len(price_filtered_products))
-            batch_products = price_filtered_products[start_idx:end_idx]
-
-            self.log.info(
-                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
-            )
-
-            for i, product_data in enumerate(batch_products):
-                current_index = start_idx + i + 1
-                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
-
-                # Check if already processed
-                if self.state_manager.is_product_processed(product_data.get("url")):
-                    self.log.info(
-                        f"Product already processed: {product_data.get('url')}. Skipping."
-                    )
-                    continue
-
-                # Amazon data extraction and analysis
-                amazon_data = await self._get_amazon_data(product_data)
-                if not amazon_data or "error" in amazon_data:
-                    self.log.warning(
-                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
-                    )
-
-                    # 🚨 FIX: Create no-match linking entry for batch processing
-                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                    if supplier_ean == "None" or supplier_ean is None:
-                        supplier_ean = None
-
-                    # Determine the reason for no match
-                    error_info = (
-                        amazon_data.get("error")
-                        if isinstance(amazon_data, dict)
-                        else "No Amazon data returned"
-                    )
-                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
-
-                    # Create no-match linking entry
-                    no_match_entry = {
-                        "supplier_ean": supplier_ean,
-                        "amazon_asin": None,
-                        "supplier_title": product_data.get("title"),
-                        "amazon_title": None,
-                        "supplier_price": product_data.get("price"),
-                        "amazon_price": None,
-                        "match_method": "none",  # NEW: Indicates no match found
-                        "confidence": 0,  # NEW: No confidence for failed matches
-                        "created_at": datetime.now().isoformat(),
-                        "supplier_url": product_data.get("url"),
-                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
-                    }
-
-                    # Add no-match entry to linking map using optimized method
-                    self._add_linking_map_entry_optimized(no_match_entry)
-                    self.log.info(
-                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
-                    )
-
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_amazon_extraction"
-                    )
-                    
-                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
-                    if hasattr(self.state_manager, "commit_amazon_progress"):
-                        # Get current category info
-                        cat_info = self.state_manager.get_current_category_info()
-                        self.state_manager.commit_amazon_progress(
-                            cat_idx=cat_info["cat_idx"],
-                            queue_idx=i,  # 0-based index within batch
-                            total_cats=cat_info["total_cats"],
-                            cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
-                        )
-                    continue
-
-                # Save Amazon cache and create linking map
-                supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                asin = amazon_data.get("asin", "NO_ASIN")
-
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
-                    )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
-
-                # Financial analysis
-                try:
-                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
-                    supplier_price = float(product_data.get("price", 0))
-                    current_price = amazon_data.get("current_price", 0)
-
-                    if supplier_price > 0 and current_price > 0:
-                        financials = calc_financials(
-                            supplier_price=supplier_price,
-                            amazon_price=current_price,
-                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
-                            amazon_rating=amazon_data.get("rating", 0),
-                            amazon_review_count=amazon_data.get("reviews", 0),
-                        )
-
-                        # Check profitability
-                        if (
-                            financials.get("ROI", 0) > MIN_ROI_PERCENT
-                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-                        ):
-                            self.log.info(
-                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
-                            )
-
-                            combined_data = self._combine_supplier_amazon_data(
-                                product_data, amazon_data, "hybrid_batch"
-                            )
-                            combined_data["financials"] = financials
-                            profitable_results.append(combined_data)
-
-                            self.state_manager.update_success_metrics(
-                                True, True, financials.get("NetProfit", 0)
-                            )
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_profitable"
-                            )
-                        else:
-                            self.log.info(
-                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
-                            )
-                            self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_not_profitable"
-                            )
-
-                except Exception as e:
-                    self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_financial_calculation"
-                    )
-
-                # Inside the Amazon processing loop, after each item k (0-based) is processed
-                if hasattr(self.state_manager, "commit_amazon_progress"):
-                    # Get current category info
-                    cat_info = self.state_manager.get_current_category_info()
-                    self.state_manager.commit_amazon_progress(
-                        cat_idx=cat_info["cat_idx"],
-                        queue_idx=i,  # 0-based index within batch
-                        total_cats=cat_info["total_cats"],
-                        cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
-                    )
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
 
         # After Amazon queue completion, switch back to "supplier" phase
         if hasattr(self.state_manager, "commit_phase_switch"):
@@ -9202,378 +8742,15 @@ Return ONLY valid JSON, no additional text."""
                         queue_len=cat_info["queue_len"]
                     )
 
-        # After Amazon queue completion, switch back to "supplier" phase
-        if hasattr(self.state_manager, "commit_phase_switch"):
-            self.state_manager.commit_phase_switch("supplier")
-            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
-
-        return profitable_results
-
-    def _get_cached_products_path(self, category_url: str):
-        """Helper to get the path for a category's product cache file."""
-        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
-        return str(path_manager.get_cache_path("supplier_cache", category_filename))
-
-    def _combine_data(
-        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
-        """Combine supplier and Amazon data and calculate financial metrics."""
-        combined = {
-            "supplier_product_info": supplier_data,
-            "amazon_product_info": amazon_data,
-            "analysis_timestamp": datetime.now().isoformat(),
-            "session_id": session_id,
-        }
-        # Financial calculation is now handled within the main run loop before this function is called
-        # This function is primarily for combining data and adding match validation
-        match_validation = self._validate_product_match(supplier_data, amazon_data)
-        combined["match_validation"] = match_validation
-        return combined
-
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
-    def _sanitize_filename(self, title: str) -> str:
-        """Sanitize product title for use in filename"""
-        if not title:
-            return "unknown_title"
-        # Remove or replace problematic characters
-        sanitized = re.sub(r"[^\w\s-]", "", title)
-        sanitized = re.sub(r"\s+", "_", sanitized)
-        return sanitized[:50]  # Limit length to 50 chars
-
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
-    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
-        """Check if a product meets all defined business criteria."""
-        # This function is now largely redundant as profitability checks are done in the main loop.
-        # However, it can be used for other criteria like sales rank, reviews, etc.
-        amazon_data = combined_data.get("amazon_product_info", {})
-        financials = combined_data.get("financials", {})
-        # Check profitability (already done, but for completeness)
-        is_profitable = (
-            financials.get("ROI", 0) > MIN_ROI_PERCENT
-            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-        )
-        # Check Amazon listing quality
-        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
-        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
-        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
-        # Check for battery products (using the helper function)
-        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
-            combined_data["supplier_product_info"].get("title", "")
-        )
-        # Check for other non-FBA friendly keywords
-        is_non_fba_friendly = any(
-            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
-        ) or any(
-            k in combined_data["supplier_product_info"].get("title", "").lower()
-            for k in NON_FBA_FRIENDLY_KEYWORDS
-        )
-        # All criteria must be met
-        return (
-            is_profitable
-            and meets_rating
-            and meets_reviews
-            and meets_sales_rank
-            and not is_battery
-            and not is_non_fba_friendly
-        )
-
-    def _apply_batch_synchronization(
-        self,
-        max_products_per_cycle: int,
-        supplier_extraction_batch_size: int,
-        batch_sync_config: Dict[str, Any],
-    ) -> Tuple[int, int]:
-        """
-        Apply batch synchronization to align all batch sizes consistently.
-        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
-        """
-        target_batch_size = batch_sync_config.get("target_batch_size", 3)
-        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
-        validation_config = batch_sync_config.get("validation", {})
-
-        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
-        self.log.info(f"   target_batch_size: {target_batch_size}")
-        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
-
-        original_values = {
-            "max_products_per_cycle": max_products_per_cycle,
-            "supplier_extraction_batch_size": supplier_extraction_batch_size,
-            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
-        }
-
-        # Check for mismatched sizes and warn if configured
-        if validation_config.get("warn_on_mismatched_sizes", True):
-            unique_sizes = set(original_values.values())
-            if len(unique_sizes) > 1:
-                self.log.warning(
-                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
-                )
-                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
-
-        if synchronize_all:
-            # Synchronize all batch sizes to target
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            # Also update system config values in memory for consistency
-            if "system" in self.system_config:
-                self.system_config["max_products_per_cycle"] = target_batch_size
-                self.system_config["supplier_extraction_batch_size"] = target_batch_size
-                self.system_config["linking_map_batch_size"] = target_batch_size
-                # financial_report_batch_size managed by config_loader
-
-            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        else:
-            # Only synchronize the two main processing batch sizes
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            self.log.info(
-                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
-            )
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        return new_max_products_per_cycle, new_supplier_extraction_batch_size
-
-    async def _analyze_products_batch(
-        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
-    ) -> List[Dict[str, Any]]:
-        """Analyze a batch of supplier products for Amazon matching and profitability."""
-        profitable_results = []
-
-        # Filter and prepare products for analysis
-        valid_products = [
-            p
-            for p in products
-            if p.get("title")
-            and isinstance(p.get("price"), (float, int))
-            and p.get("price", 0) > 0
-            and p.get("url")
-        ]
-
-        price_filtered_products = [
-            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
-        ]
-
-        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
-
-        # Process products in cycles
-        batch_size = max_products_per_cycle
-        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
-
-        for batch_num in range(total_batches):
-            start_idx = batch_num * batch_size
-            end_idx = min(start_idx + batch_size, len(price_filtered_products))
-            batch_products = price_filtered_products[start_idx:end_idx]
-
-            self.log.info(
-                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
-            )
-
-            for i, product_data in enumerate(batch_products):
-                current_index = start_idx + i + 1
-                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
-
-                # Check if already processed
-                if self.state_manager.is_product_processed(product_data.get("url")):
-                    self.log.info(
-                        f"Product already processed: {product_data.get('url')}. Skipping."
-                    )
-                    continue
-
-                # Amazon data extraction and analysis
-                amazon_data = await self._get_amazon_data(product_data)
-                if not amazon_data or "error" in amazon_data:
-                    self.log.warning(
-                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
-                    )
-
-                    # 🚨 FIX: Create no-match linking entry for batch processing
-                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                    if supplier_ean == "None" or supplier_ean is None:
-                        supplier_ean = None
-
-                    # Determine the reason for no match
-                    error_info = (
-                        amazon_data.get("error")
-                        if isinstance(amazon_data, dict)
-                        else "No Amazon data returned"
-                    )
-                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
-
-                    # Create no-match linking entry
-                    no_match_entry = {
-                        "supplier_ean": supplier_ean,
-                        "amazon_asin": None,
-                        "supplier_title": product_data.get("title"),
-                        "amazon_title": None,
-                        "supplier_price": product_data.get("price"),
-                        "amazon_price": None,
-                        "match_method": "none",  # NEW: Indicates no match found
-                        "confidence": 0,  # NEW: No confidence for failed matches
-                        "created_at": datetime.now().isoformat(),
-                        "supplier_url": product_data.get("url"),
-                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
-                    }
-
-                    # Add no-match entry to linking map using optimized method
-                    self._add_linking_map_entry_optimized(no_match_entry)
-                    self.log.info(
-                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
-                    )
-
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_amazon_extraction"
-                    )
-                    
-                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
-                    if hasattr(self.state_manager, "commit_amazon_progress"):
-                        # Get current category info
-                        cat_info = self.state_manager.get_current_category_info()
-                        self.state_manager.commit_amazon_progress(
-                            cat_idx=cat_info["cat_idx"],
-                            queue_idx=i,  # 0-based index within batch
-                            total_cats=cat_info["total_cats"],
-                            cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
-                        )
-                    continue
-
-                # Save Amazon cache and create linking map
-                supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                asin = amazon_data.get("asin", "NO_ASIN")
-
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
-                    )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
-
-                # Financial analysis
-                try:
-                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
-                    supplier_price = float(product_data.get("price", 0))
-                    current_price = amazon_data.get("current_price", 0)
-
-                    if supplier_price > 0 and current_price > 0:
-                        financials = calc_financials(
-                            supplier_price=supplier_price,
-                            amazon_price=current_price,
-                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
-                            amazon_rating=amazon_data.get("rating", 0),
-                            amazon_review_count=amazon_data.get("reviews", 0),
-                        )
-
-                        # Check profitability
-                        if (
-                            financials.get("ROI", 0) > MIN_ROI_PERCENT
-                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-                        ):
-                            self.log.info(
-                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
-                            )
-
-                            combined_data = self._combine_supplier_amazon_data(
-                                product_data, amazon_data, "hybrid_batch"
-                            )
-                            combined_data["financials"] = financials
-                            profitable_results.append(combined_data)
-
-                            self.state_manager.update_success_metrics(
-                                True, True, financials.get("NetProfit", 0)
-                            )
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_profitable"
-                            )
-                        else:
-                            self.log.info(
-                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
-                            )
-                            self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_not_profitable"
-                            )
-
-                except Exception as e:
-                    self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_financial_calculation"
-                    )
-
-                # Inside the Amazon processing loop, after each item k (0-based) is processed
-                if hasattr(self.state_manager, "commit_amazon_progress"):
-                    # Get current category info
-                    cat_info = self.state_manager.get_current_category_info()
-                    self.state_manager.commit_amazon_progress(
-                        cat_idx=cat_info["cat_idx"],
-                        queue_idx=i,  # 0-based index within batch
-                        total_cats=cat_info["total_cats"],
-                        cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
-                    )
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
 
         # After Amazon queue completion, switch back to "supplier" phase
         if hasattr(self.state_manager, "commit_phase_switch"):
@@ -9948,378 +9125,15 @@ Return ONLY valid JSON, no additional text."""
                         queue_len=cat_info["queue_len"]
                     )
 
-        # After Amazon queue completion, switch back to "supplier" phase
-        if hasattr(self.state_manager, "commit_phase_switch"):
-            self.state_manager.commit_phase_switch("supplier")
-            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
-
-        return profitable_results
-
-    def _get_cached_products_path(self, category_url: str):
-        """Helper to get the path for a category's product cache file."""
-        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
-        return str(path_manager.get_cache_path("supplier_cache", category_filename))
-
-    def _combine_data(
-        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
-        """Combine supplier and Amazon data and calculate financial metrics."""
-        combined = {
-            "supplier_product_info": supplier_data,
-            "amazon_product_info": amazon_data,
-            "analysis_timestamp": datetime.now().isoformat(),
-            "session_id": session_id,
-        }
-        # Financial calculation is now handled within the main run loop before this function is called
-        # This function is primarily for combining data and adding match validation
-        match_validation = self._validate_product_match(supplier_data, amazon_data)
-        combined["match_validation"] = match_validation
-        return combined
-
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
-    def _sanitize_filename(self, title: str) -> str:
-        """Sanitize product title for use in filename"""
-        if not title:
-            return "unknown_title"
-        # Remove or replace problematic characters
-        sanitized = re.sub(r"[^\w\s-]", "", title)
-        sanitized = re.sub(r"\s+", "_", sanitized)
-        return sanitized[:50]  # Limit length to 50 chars
-
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
-    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
-        """Check if a product meets all defined business criteria."""
-        # This function is now largely redundant as profitability checks are done in the main loop.
-        # However, it can be used for other criteria like sales rank, reviews, etc.
-        amazon_data = combined_data.get("amazon_product_info", {})
-        financials = combined_data.get("financials", {})
-        # Check profitability (already done, but for completeness)
-        is_profitable = (
-            financials.get("ROI", 0) > MIN_ROI_PERCENT
-            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-        )
-        # Check Amazon listing quality
-        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
-        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
-        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
-        # Check for battery products (using the helper function)
-        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
-            combined_data["supplier_product_info"].get("title", "")
-        )
-        # Check for other non-FBA friendly keywords
-        is_non_fba_friendly = any(
-            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
-        ) or any(
-            k in combined_data["supplier_product_info"].get("title", "").lower()
-            for k in NON_FBA_FRIENDLY_KEYWORDS
-        )
-        # All criteria must be met
-        return (
-            is_profitable
-            and meets_rating
-            and meets_reviews
-            and meets_sales_rank
-            and not is_battery
-            and not is_non_fba_friendly
-        )
-
-    def _apply_batch_synchronization(
-        self,
-        max_products_per_cycle: int,
-        supplier_extraction_batch_size: int,
-        batch_sync_config: Dict[str, Any],
-    ) -> Tuple[int, int]:
-        """
-        Apply batch synchronization to align all batch sizes consistently.
-        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
-        """
-        target_batch_size = batch_sync_config.get("target_batch_size", 3)
-        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
-        validation_config = batch_sync_config.get("validation", {})
-
-        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
-        self.log.info(f"   target_batch_size: {target_batch_size}")
-        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
-
-        original_values = {
-            "max_products_per_cycle": max_products_per_cycle,
-            "supplier_extraction_batch_size": supplier_extraction_batch_size,
-            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
-        }
-
-        # Check for mismatched sizes and warn if configured
-        if validation_config.get("warn_on_mismatched_sizes", True):
-            unique_sizes = set(original_values.values())
-            if len(unique_sizes) > 1:
-                self.log.warning(
-                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
-                )
-                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
-
-        if synchronize_all:
-            # Synchronize all batch sizes to target
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            # Also update system config values in memory for consistency
-            if "system" in self.system_config:
-                self.system_config["max_products_per_cycle"] = target_batch_size
-                self.system_config["supplier_extraction_batch_size"] = target_batch_size
-                self.system_config["linking_map_batch_size"] = target_batch_size
-                # financial_report_batch_size managed by config_loader
-
-            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        else:
-            # Only synchronize the two main processing batch sizes
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            self.log.info(
-                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
-            )
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        return new_max_products_per_cycle, new_supplier_extraction_batch_size
-
-    async def _analyze_products_batch(
-        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
-    ) -> List[Dict[str, Any]]:
-        """Analyze a batch of supplier products for Amazon matching and profitability."""
-        profitable_results = []
-
-        # Filter and prepare products for analysis
-        valid_products = [
-            p
-            for p in products
-            if p.get("title")
-            and isinstance(p.get("price"), (float, int))
-            and p.get("price", 0) > 0
-            and p.get("url")
-        ]
-
-        price_filtered_products = [
-            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
-        ]
-
-        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
-
-        # Process products in cycles
-        batch_size = max_products_per_cycle
-        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
-
-        for batch_num in range(total_batches):
-            start_idx = batch_num * batch_size
-            end_idx = min(start_idx + batch_size, len(price_filtered_products))
-            batch_products = price_filtered_products[start_idx:end_idx]
-
-            self.log.info(
-                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
-            )
-
-            for i, product_data in enumerate(batch_products):
-                current_index = start_idx + i + 1
-                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
-
-                # Check if already processed
-                if self.state_manager.is_product_processed(product_data.get("url")):
-                    self.log.info(
-                        f"Product already processed: {product_data.get('url')}. Skipping."
-                    )
-                    continue
-
-                # Amazon data extraction and analysis
-                amazon_data = await self._get_amazon_data(product_data)
-                if not amazon_data or "error" in amazon_data:
-                    self.log.warning(
-                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
-                    )
-
-                    # 🚨 FIX: Create no-match linking entry for batch processing
-                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                    if supplier_ean == "None" or supplier_ean is None:
-                        supplier_ean = None
-
-                    # Determine the reason for no match
-                    error_info = (
-                        amazon_data.get("error")
-                        if isinstance(amazon_data, dict)
-                        else "No Amazon data returned"
-                    )
-                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
-
-                    # Create no-match linking entry
-                    no_match_entry = {
-                        "supplier_ean": supplier_ean,
-                        "amazon_asin": None,
-                        "supplier_title": product_data.get("title"),
-                        "amazon_title": None,
-                        "supplier_price": product_data.get("price"),
-                        "amazon_price": None,
-                        "match_method": "none",  # NEW: Indicates no match found
-                        "confidence": 0,  # NEW: No confidence for failed matches
-                        "created_at": datetime.now().isoformat(),
-                        "supplier_url": product_data.get("url"),
-                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
-                    }
-
-                    # Add no-match entry to linking map using optimized method
-                    self._add_linking_map_entry_optimized(no_match_entry)
-                    self.log.info(
-                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
-                    )
-
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_amazon_extraction"
-                    )
-                    
-                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
-                    if hasattr(self.state_manager, "commit_amazon_progress"):
-                        # Get current category info
-                        cat_info = self.state_manager.get_current_category_info()
-                        self.state_manager.commit_amazon_progress(
-                            cat_idx=cat_info["cat_idx"],
-                            queue_idx=i,  # 0-based index within batch
-                            total_cats=cat_info["total_cats"],
-                            cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
-                        )
-                    continue
-
-                # Save Amazon cache and create linking map
-                supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                asin = amazon_data.get("asin", "NO_ASIN")
-
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
-                    )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
-
-                # Financial analysis
-                try:
-                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
-                    supplier_price = float(product_data.get("price", 0))
-                    current_price = amazon_data.get("current_price", 0)
-
-                    if supplier_price > 0 and current_price > 0:
-                        financials = calc_financials(
-                            supplier_price=supplier_price,
-                            amazon_price=current_price,
-                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
-                            amazon_rating=amazon_data.get("rating", 0),
-                            amazon_review_count=amazon_data.get("reviews", 0),
-                        )
-
-                        # Check profitability
-                        if (
-                            financials.get("ROI", 0) > MIN_ROI_PERCENT
-                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-                        ):
-                            self.log.info(
-                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
-                            )
-
-                            combined_data = self._combine_supplier_amazon_data(
-                                product_data, amazon_data, "hybrid_batch"
-                            )
-                            combined_data["financials"] = financials
-                            profitable_results.append(combined_data)
-
-                            self.state_manager.update_success_metrics(
-                                True, True, financials.get("NetProfit", 0)
-                            )
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_profitable"
-                            )
-                        else:
-                            self.log.info(
-                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
-                            )
-                            self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_not_profitable"
-                            )
-
-                except Exception as e:
-                    self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_financial_calculation"
-                    )
-
-                # Inside the Amazon processing loop, after each item k (0-based) is processed
-                if hasattr(self.state_manager, "commit_amazon_progress"):
-                    # Get current category info
-                    cat_info = self.state_manager.get_current_category_info()
-                    self.state_manager.commit_amazon_progress(
-                        cat_idx=cat_info["cat_idx"],
-                        queue_idx=i,  # 0-based index within batch
-                        total_cats=cat_info["total_cats"],
-                        cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
-                    )
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
 
         # After Amazon queue completion, switch back to "supplier" phase
         if hasattr(self.state_manager, "commit_phase_switch"):
@@ -10693,6 +9507,1548 @@ Return ONLY valid JSON, no additional text."""
                         cat_url=cat_info["cat_url"],
                         queue_len=cat_info["queue_len"]
                     )
+
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
+
+        return profitable_results
+
+    def _get_cached_products_path(self, category_url: str):
+        """Helper to get the path for a category's product cache file."""
+        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
+        return str(path_manager.get_cache_path("supplier_cache", category_filename))
+
+    def _combine_data(
+        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
+    ) -> Dict[str, Any]:
+        """Combine supplier and Amazon data and calculate financial metrics."""
+        combined = {
+            "supplier_product_info": supplier_data,
+            "amazon_product_info": amazon_data,
+            "analysis_timestamp": datetime.now().isoformat(),
+            "session_id": session_id,
+        }
+        # Financial calculation is now handled within the main run loop before this function is called
+        # This function is primarily for combining data and adding match validation
+        match_validation = self._validate_product_match(supplier_data, amazon_data)
+        combined["match_validation"] = match_validation
+        return combined
+
+    def _overlap_score(self, title_a: str, title_b: str) -> float:
+        """Calculate word overlap score between two titles"""
+        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
+        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
+        return len(a & b) / max(1, len(a))
+
+    def _sanitize_filename(self, title: str) -> str:
+        """Sanitize product title for use in filename"""
+        if not title:
+            return "unknown_title"
+        # Remove or replace problematic characters
+        sanitized = re.sub(r"[^\w\s-]", "", title)
+        sanitized = re.sub(r"\s+", "_", sanitized)
+        return sanitized[:50]  # Limit length to 50 chars
+
+    def _validate_product_match(
+        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Validate the match between supplier and Amazon products using configurable thresholds."""
+        matching_thresholds = self.system_config.get("performance", {}).get(
+            "matching_thresholds", {}
+        )
+
+        # Get configurable thresholds with fallback to more conservative defaults
+        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
+        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
+        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
+
+        title_overlap_score = self._overlap_score(
+            supplier_product.get("title", ""), amazon_product.get("title", "")
+        )
+
+        match_quality = "low"
+        confidence = 0.0
+
+        # Use configurable thresholds - much more strict than previous hardcoded values
+        if title_overlap_score >= high_title_similarity:
+            match_quality = "high"
+            confidence = 0.9
+        elif title_overlap_score >= medium_title_similarity:
+            match_quality = "medium"
+            confidence = 0.6
+        elif title_overlap_score >= title_similarity_threshold:
+            match_quality = "low"
+            confidence = 0.3
+        else:
+            match_quality = "very_low"
+            confidence = 0.1
+
+        self.log.debug(
+            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
+        )
+
+        return {
+            "match_quality": match_quality,
+            "confidence": confidence,
+            "title_overlap_score": title_overlap_score,
+        }
+
+    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
+        """Check if a product meets all defined business criteria."""
+        # This function is now largely redundant as profitability checks are done in the main loop.
+        # However, it can be used for other criteria like sales rank, reviews, etc.
+        amazon_data = combined_data.get("amazon_product_info", {})
+        financials = combined_data.get("financials", {})
+        # Check profitability (already done, but for completeness)
+        is_profitable = (
+            financials.get("ROI", 0) > MIN_ROI_PERCENT
+            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+        )
+        # Check Amazon listing quality
+        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
+        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
+        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
+        # Check for battery products (using the helper function)
+        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
+            combined_data["supplier_product_info"].get("title", "")
+        )
+        # Check for other non-FBA friendly keywords
+        is_non_fba_friendly = any(
+            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
+        ) or any(
+            k in combined_data["supplier_product_info"].get("title", "").lower()
+            for k in NON_FBA_FRIENDLY_KEYWORDS
+        )
+        # All criteria must be met
+        return (
+            is_profitable
+            and meets_rating
+            and meets_reviews
+            and meets_sales_rank
+            and not is_battery
+            and not is_non_fba_friendly
+        )
+
+    def _apply_batch_synchronization(
+        self,
+        max_products_per_cycle: int,
+        supplier_extraction_batch_size: int,
+        batch_sync_config: Dict[str, Any],
+    ) -> Tuple[int, int]:
+        """
+        Apply batch synchronization to align all batch sizes consistently.
+        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
+        """
+        target_batch_size = batch_sync_config.get("target_batch_size", 3)
+        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
+        validation_config = batch_sync_config.get("validation", {})
+
+        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
+        self.log.info(f"   target_batch_size: {target_batch_size}")
+        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
+
+        original_values = {
+            "max_products_per_cycle": max_products_per_cycle,
+            "supplier_extraction_batch_size": supplier_extraction_batch_size,
+            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
+        }
+
+        # Check for mismatched sizes and warn if configured
+        if validation_config.get("warn_on_mismatched_sizes", True):
+            unique_sizes = set(original_values.values())
+            if len(unique_sizes) > 1:
+                self.log.warning(
+                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
+                )
+                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
+
+        if synchronize_all:
+            # Synchronize all batch sizes to target
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            # Also update system config values in memory for consistency
+            if "system" in self.system_config:
+                self.system_config["max_products_per_cycle"] = target_batch_size
+                self.system_config["supplier_extraction_batch_size"] = target_batch_size
+                self.system_config["linking_map_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
+
+            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        else:
+            # Only synchronize the two main processing batch sizes
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            self.log.info(
+                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
+            )
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        return new_max_products_per_cycle, new_supplier_extraction_batch_size
+
+    async def _analyze_products_batch(
+        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
+    ) -> List[Dict[str, Any]]:
+        """Analyze a batch of supplier products for Amazon matching and profitability."""
+        profitable_results = []
+
+        # Filter and prepare products for analysis
+        valid_products = [
+            p
+            for p in products
+            if p.get("title")
+            and isinstance(p.get("price"), (float, int))
+            and p.get("price", 0) > 0
+            and p.get("url")
+        ]
+
+        price_filtered_products = [
+            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
+        ]
+
+        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
+
+        # Process products in cycles
+        batch_size = max_products_per_cycle
+        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
+
+        for batch_num in range(total_batches):
+            start_idx = batch_num * batch_size
+            end_idx = min(start_idx + batch_size, len(price_filtered_products))
+            batch_products = price_filtered_products[start_idx:end_idx]
+
+            self.log.info(
+                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
+            )
+
+            for i, product_data in enumerate(batch_products):
+                current_index = start_idx + i + 1
+                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
+
+                # Check if already processed
+                if self.state_manager.is_product_processed(product_data.get("url")):
+                    self.log.info(
+                        f"Product already processed: {product_data.get('url')}. Skipping."
+                    )
+                    continue
+
+                # Amazon data extraction and analysis
+                amazon_data = await self._get_amazon_data(product_data)
+                if not amazon_data or "error" in amazon_data:
+                    self.log.warning(
+                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
+                    )
+
+                    # 🚨 FIX: Create no-match linking entry for batch processing
+                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                    if supplier_ean == "None" or supplier_ean is None:
+                        supplier_ean = None
+
+                    # Determine the reason for no match
+                    error_info = (
+                        amazon_data.get("error")
+                        if isinstance(amazon_data, dict)
+                        else "No Amazon data returned"
+                    )
+                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
+
+                    # Create no-match linking entry
+                    no_match_entry = {
+                        "supplier_ean": supplier_ean,
+                        "amazon_asin": None,
+                        "supplier_title": product_data.get("title"),
+                        "amazon_title": None,
+                        "supplier_price": product_data.get("price"),
+                        "amazon_price": None,
+                        "match_method": "none",  # NEW: Indicates no match found
+                        "confidence": 0,  # NEW: No confidence for failed matches
+                        "created_at": datetime.now().isoformat(),
+                        "supplier_url": product_data.get("url"),
+                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
+                    }
+
+                    # Add no-match entry to linking map using optimized method
+                    self._add_linking_map_entry_optimized(no_match_entry)
+                    self.log.info(
+                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
+                    )
+
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_amazon_extraction"
+                    )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        # Get current category info
+                        cat_info = self.state_manager.get_current_category_info()
+                        self.state_manager.commit_amazon_progress(
+                            cat_idx=cat_info["cat_idx"],
+                            queue_idx=i,  # 0-based index within batch
+                            total_cats=cat_info["total_cats"],
+                            cat_url=cat_info["cat_url"],
+                            queue_len=cat_info["queue_len"]
+                        )
+                    continue
+
+                # Save Amazon cache and create linking map
+                supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                asin = amazon_data.get("asin", "NO_ASIN")
+
+                # Save Amazon data
+                filename_identifier = (
+                    supplier_ean
+                    if supplier_ean
+                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                )
+                amazon_cache_path = str(
+                    path_manager.get_output_path(
+                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                    )
+                )
+                with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+
+                # Financial analysis
+                try:
+                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
+                    supplier_price = float(product_data.get("price", 0))
+                    current_price = amazon_data.get("current_price", 0)
+
+                    if supplier_price > 0 and current_price > 0:
+                        financials = calc_financials(
+                            supplier_price=supplier_price,
+                            amazon_price=current_price,
+                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
+                            amazon_rating=amazon_data.get("rating", 0),
+                            amazon_review_count=amazon_data.get("reviews", 0),
+                        )
+
+                        # Check profitability
+                        if (
+                            financials.get("ROI", 0) > MIN_ROI_PERCENT
+                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+                        ):
+                            self.log.info(
+                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
+                            )
+
+                            combined_data = self._combine_supplier_amazon_data(
+                                product_data, amazon_data, "hybrid_batch"
+                            )
+                            combined_data["financials"] = financials
+                            profitable_results.append(combined_data)
+
+                            self.state_manager.update_success_metrics(
+                                True, True, financials.get("NetProfit", 0)
+                            )
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_profitable"
+                            )
+                        else:
+                            self.log.info(
+                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
+                            )
+                            self.state_manager.update_success_metrics(True, False)
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_not_profitable"
+                            )
+
+                except Exception as e:
+                    self.log.error(f"Financial calculation failed: {e}")
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_financial_calculation"
+                    )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    # Get current category info
+                    cat_info = self.state_manager.get_current_category_info()
+                    self.state_manager.commit_amazon_progress(
+                        cat_idx=cat_info["cat_idx"],
+                        queue_idx=i,  # 0-based index within batch
+                        total_cats=cat_info["total_cats"],
+                        cat_url=cat_info["cat_url"],
+                        queue_len=cat_info["queue_len"]
+                    )
+
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
+
+        return profitable_results
+
+    def _get_cached_products_path(self, category_url: str):
+        """Helper to get the path for a category's product cache file."""
+        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
+        return str(path_manager.get_cache_path("supplier_cache", category_filename))
+
+    def _combine_data(
+        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
+    ) -> Dict[str, Any]:
+        """Combine supplier and Amazon data and calculate financial metrics."""
+        combined = {
+            "supplier_product_info": supplier_data,
+            "amazon_product_info": amazon_data,
+            "analysis_timestamp": datetime.now().isoformat(),
+            "session_id": session_id,
+        }
+        # Financial calculation is now handled within the main run loop before this function is called
+        # This function is primarily for combining data and adding match validation
+        match_validation = self._validate_product_match(supplier_data, amazon_data)
+        combined["match_validation"] = match_validation
+        return combined
+
+    def _overlap_score(self, title_a: str, title_b: str) -> float:
+        """Calculate word overlap score between two titles"""
+        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
+        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
+        return len(a & b) / max(1, len(a))
+
+    def _sanitize_filename(self, title: str) -> str:
+        """Sanitize product title for use in filename"""
+        if not title:
+            return "unknown_title"
+        # Remove or replace problematic characters
+        sanitized = re.sub(r"[^\w\s-]", "", title)
+        sanitized = re.sub(r"\s+", "_", sanitized)
+        return sanitized[:50]  # Limit length to 50 chars
+
+    def _validate_product_match(
+        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Validate the match between supplier and Amazon products using configurable thresholds."""
+        matching_thresholds = self.system_config.get("performance", {}).get(
+            "matching_thresholds", {}
+        )
+
+        # Get configurable thresholds with fallback to more conservative defaults
+        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
+        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
+        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
+
+        title_overlap_score = self._overlap_score(
+            supplier_product.get("title", ""), amazon_product.get("title", "")
+        )
+
+        match_quality = "low"
+        confidence = 0.0
+
+        # Use configurable thresholds - much more strict than previous hardcoded values
+        if title_overlap_score >= high_title_similarity:
+            match_quality = "high"
+            confidence = 0.9
+        elif title_overlap_score >= medium_title_similarity:
+            match_quality = "medium"
+            confidence = 0.6
+        elif title_overlap_score >= title_similarity_threshold:
+            match_quality = "low"
+            confidence = 0.3
+        else:
+            match_quality = "very_low"
+            confidence = 0.1
+
+        self.log.debug(
+            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
+        )
+
+        return {
+            "match_quality": match_quality,
+            "confidence": confidence,
+            "title_overlap_score": title_overlap_score,
+        }
+
+    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
+        """Check if a product meets all defined business criteria."""
+        # This function is now largely redundant as profitability checks are done in the main loop.
+        # However, it can be used for other criteria like sales rank, reviews, etc.
+        amazon_data = combined_data.get("amazon_product_info", {})
+        financials = combined_data.get("financials", {})
+        # Check profitability (already done, but for completeness)
+        is_profitable = (
+            financials.get("ROI", 0) > MIN_ROI_PERCENT
+            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+        )
+        # Check Amazon listing quality
+        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
+        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
+        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
+        # Check for battery products (using the helper function)
+        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
+            combined_data["supplier_product_info"].get("title", "")
+        )
+        # Check for other non-FBA friendly keywords
+        is_non_fba_friendly = any(
+            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
+        ) or any(
+            k in combined_data["supplier_product_info"].get("title", "").lower()
+            for k in NON_FBA_FRIENDLY_KEYWORDS
+        )
+        # All criteria must be met
+        return (
+            is_profitable
+            and meets_rating
+            and meets_reviews
+            and meets_sales_rank
+            and not is_battery
+            and not is_non_fba_friendly
+        )
+
+    def _apply_batch_synchronization(
+        self,
+        max_products_per_cycle: int,
+        supplier_extraction_batch_size: int,
+        batch_sync_config: Dict[str, Any],
+    ) -> Tuple[int, int]:
+        """
+        Apply batch synchronization to align all batch sizes consistently.
+        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
+        """
+        target_batch_size = batch_sync_config.get("target_batch_size", 3)
+        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
+        validation_config = batch_sync_config.get("validation", {})
+
+        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
+        self.log.info(f"   target_batch_size: {target_batch_size}")
+        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
+
+        original_values = {
+            "max_products_per_cycle": max_products_per_cycle,
+            "supplier_extraction_batch_size": supplier_extraction_batch_size,
+            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
+        }
+
+        # Check for mismatched sizes and warn if configured
+        if validation_config.get("warn_on_mismatched_sizes", True):
+            unique_sizes = set(original_values.values())
+            if len(unique_sizes) > 1:
+                self.log.warning(
+                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
+                )
+                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
+
+        if synchronize_all:
+            # Synchronize all batch sizes to target
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            # Also update system config values in memory for consistency
+            if "system" in self.system_config:
+                self.system_config["max_products_per_cycle"] = target_batch_size
+                self.system_config["supplier_extraction_batch_size"] = target_batch_size
+                self.system_config["linking_map_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
+
+            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        else:
+            # Only synchronize the two main processing batch sizes
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            self.log.info(
+                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
+            )
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        return new_max_products_per_cycle, new_supplier_extraction_batch_size
+
+    async def _analyze_products_batch(
+        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
+    ) -> List[Dict[str, Any]]:
+        """Analyze a batch of supplier products for Amazon matching and profitability."""
+        profitable_results = []
+
+        # Filter and prepare products for analysis
+        valid_products = [
+            p
+            for p in products
+            if p.get("title")
+            and isinstance(p.get("price"), (float, int))
+            and p.get("price", 0) > 0
+            and p.get("url")
+        ]
+
+        price_filtered_products = [
+            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
+        ]
+
+        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
+
+        # Process products in cycles
+        batch_size = max_products_per_cycle
+        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
+
+        for batch_num in range(total_batches):
+            start_idx = batch_num * batch_size
+            end_idx = min(start_idx + batch_size, len(price_filtered_products))
+            batch_products = price_filtered_products[start_idx:end_idx]
+
+            self.log.info(
+                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
+            )
+
+            for i, product_data in enumerate(batch_products):
+                current_index = start_idx + i + 1
+                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
+
+                # Check if already processed
+                if self.state_manager.is_product_processed(product_data.get("url")):
+                    self.log.info(
+                        f"Product already processed: {product_data.get('url')}. Skipping."
+                    )
+                    continue
+
+                # Amazon data extraction and analysis
+                amazon_data = await self._get_amazon_data(product_data)
+                if not amazon_data or "error" in amazon_data:
+                    self.log.warning(
+                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
+                    )
+
+                    # 🚨 FIX: Create no-match linking entry for batch processing
+                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                    if supplier_ean == "None" or supplier_ean is None:
+                        supplier_ean = None
+
+                    # Determine the reason for no match
+                    error_info = (
+                        amazon_data.get("error")
+                        if isinstance(amazon_data, dict)
+                        else "No Amazon data returned"
+                    )
+                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
+
+                    # Create no-match linking entry
+                    no_match_entry = {
+                        "supplier_ean": supplier_ean,
+                        "amazon_asin": None,
+                        "supplier_title": product_data.get("title"),
+                        "amazon_title": None,
+                        "supplier_price": product_data.get("price"),
+                        "amazon_price": None,
+                        "match_method": "none",  # NEW: Indicates no match found
+                        "confidence": 0,  # NEW: No confidence for failed matches
+                        "created_at": datetime.now().isoformat(),
+                        "supplier_url": product_data.get("url"),
+                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
+                    }
+
+                    # Add no-match entry to linking map using optimized method
+                    self._add_linking_map_entry_optimized(no_match_entry)
+                    self.log.info(
+                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
+                    )
+
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_amazon_extraction"
+                    )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        # Get current category info
+                        cat_info = self.state_manager.get_current_category_info()
+                        self.state_manager.commit_amazon_progress(
+                            cat_idx=cat_info["cat_idx"],
+                            queue_idx=i,  # 0-based index within batch
+                            total_cats=cat_info["total_cats"],
+                            cat_url=cat_info["cat_url"],
+                            queue_len=cat_info["queue_len"]
+                        )
+                    continue
+
+                # Save Amazon cache and create linking map
+                supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                asin = amazon_data.get("asin", "NO_ASIN")
+
+                # Save Amazon data
+                filename_identifier = (
+                    supplier_ean
+                    if supplier_ean
+                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                )
+                amazon_cache_path = str(
+                    path_manager.get_output_path(
+                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                    )
+                )
+                with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+
+                # Financial analysis
+                try:
+                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
+                    supplier_price = float(product_data.get("price", 0))
+                    current_price = amazon_data.get("current_price", 0)
+
+                    if supplier_price > 0 and current_price > 0:
+                        financials = calc_financials(
+                            supplier_price=supplier_price,
+                            amazon_price=current_price,
+                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
+                            amazon_rating=amazon_data.get("rating", 0),
+                            amazon_review_count=amazon_data.get("reviews", 0),
+                        )
+
+                        # Check profitability
+                        if (
+                            financials.get("ROI", 0) > MIN_ROI_PERCENT
+                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+                        ):
+                            self.log.info(
+                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
+                            )
+
+                            combined_data = self._combine_supplier_amazon_data(
+                                product_data, amazon_data, "hybrid_batch"
+                            )
+                            combined_data["financials"] = financials
+                            profitable_results.append(combined_data)
+
+                            self.state_manager.update_success_metrics(
+                                True, True, financials.get("NetProfit", 0)
+                            )
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_profitable"
+                            )
+                        else:
+                            self.log.info(
+                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
+                            )
+                            self.state_manager.update_success_metrics(True, False)
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_not_profitable"
+                            )
+
+                except Exception as e:
+                    self.log.error(f"Financial calculation failed: {e}")
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_financial_calculation"
+                    )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    # Get current category info
+                    cat_info = self.state_manager.get_current_category_info()
+                    self.state_manager.commit_amazon_progress(
+                        cat_idx=cat_info["cat_idx"],
+                        queue_idx=i,  # 0-based index within batch
+                        total_cats=cat_info["total_cats"],
+                        cat_url=cat_info["cat_url"],
+                        queue_len=cat_info["queue_len"]
+                    )
+
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
+
+        return profitable_results
+
+    def _get_cached_products_path(self, category_url: str):
+        """Helper to get the path for a category's product cache file."""
+        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
+        return str(path_manager.get_cache_path("supplier_cache", category_filename))
+
+    def _combine_data(
+        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
+    ) -> Dict[str, Any]:
+        """Combine supplier and Amazon data and calculate financial metrics."""
+        combined = {
+            "supplier_product_info": supplier_data,
+            "amazon_product_info": amazon_data,
+            "analysis_timestamp": datetime.now().isoformat(),
+            "session_id": session_id,
+        }
+        # Financial calculation is now handled within the main run loop before this function is called
+        # This function is primarily for combining data and adding match validation
+        match_validation = self._validate_product_match(supplier_data, amazon_data)
+        combined["match_validation"] = match_validation
+        return combined
+
+    def _overlap_score(self, title_a: str, title_b: str) -> float:
+        """Calculate word overlap score between two titles"""
+        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
+        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
+        return len(a & b) / max(1, len(a))
+
+    def _sanitize_filename(self, title: str) -> str:
+        """Sanitize product title for use in filename"""
+        if not title:
+            return "unknown_title"
+        # Remove or replace problematic characters
+        sanitized = re.sub(r"[^\w\s-]", "", title)
+        sanitized = re.sub(r"\s+", "_", sanitized)
+        return sanitized[:50]  # Limit length to 50 chars
+
+    def _validate_product_match(
+        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Validate the match between supplier and Amazon products using configurable thresholds."""
+        matching_thresholds = self.system_config.get("performance", {}).get(
+            "matching_thresholds", {}
+        )
+
+        # Get configurable thresholds with fallback to more conservative defaults
+        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
+        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
+        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
+
+        title_overlap_score = self._overlap_score(
+            supplier_product.get("title", ""), amazon_product.get("title", "")
+        )
+
+        match_quality = "low"
+        confidence = 0.0
+
+        # Use configurable thresholds - much more strict than previous hardcoded values
+        if title_overlap_score >= high_title_similarity:
+            match_quality = "high"
+            confidence = 0.9
+        elif title_overlap_score >= medium_title_similarity:
+            match_quality = "medium"
+            confidence = 0.6
+        elif title_overlap_score >= title_similarity_threshold:
+            match_quality = "low"
+            confidence = 0.3
+        else:
+            match_quality = "very_low"
+            confidence = 0.1
+
+        self.log.debug(
+            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
+        )
+
+        return {
+            "match_quality": match_quality,
+            "confidence": confidence,
+            "title_overlap_score": title_overlap_score,
+        }
+
+    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
+        """Check if a product meets all defined business criteria."""
+        # This function is now largely redundant as profitability checks are done in the main loop.
+        # However, it can be used for other criteria like sales rank, reviews, etc.
+        amazon_data = combined_data.get("amazon_product_info", {})
+        financials = combined_data.get("financials", {})
+        # Check profitability (already done, but for completeness)
+        is_profitable = (
+            financials.get("ROI", 0) > MIN_ROI_PERCENT
+            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+        )
+        # Check Amazon listing quality
+        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
+        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
+        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
+        # Check for battery products (using the helper function)
+        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
+            combined_data["supplier_product_info"].get("title", "")
+        )
+        # Check for other non-FBA friendly keywords
+        is_non_fba_friendly = any(
+            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
+        ) or any(
+            k in combined_data["supplier_product_info"].get("title", "").lower()
+            for k in NON_FBA_FRIENDLY_KEYWORDS
+        )
+        # All criteria must be met
+        return (
+            is_profitable
+            and meets_rating
+            and meets_reviews
+            and meets_sales_rank
+            and not is_battery
+            and not is_non_fba_friendly
+        )
+
+    def _apply_batch_synchronization(
+        self,
+        max_products_per_cycle: int,
+        supplier_extraction_batch_size: int,
+        batch_sync_config: Dict[str, Any],
+    ) -> Tuple[int, int]:
+        """
+        Apply batch synchronization to align all batch sizes consistently.
+        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
+        """
+        target_batch_size = batch_sync_config.get("target_batch_size", 3)
+        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
+        validation_config = batch_sync_config.get("validation", {})
+
+        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
+        self.log.info(f"   target_batch_size: {target_batch_size}")
+        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
+
+        original_values = {
+            "max_products_per_cycle": max_products_per_cycle,
+            "supplier_extraction_batch_size": supplier_extraction_batch_size,
+            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
+        }
+
+        # Check for mismatched sizes and warn if configured
+        if validation_config.get("warn_on_mismatched_sizes", True):
+            unique_sizes = set(original_values.values())
+            if len(unique_sizes) > 1:
+                self.log.warning(
+                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
+                )
+                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
+
+        if synchronize_all:
+            # Synchronize all batch sizes to target
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            # Also update system config values in memory for consistency
+            if "system" in self.system_config:
+                self.system_config["max_products_per_cycle"] = target_batch_size
+                self.system_config["supplier_extraction_batch_size"] = target_batch_size
+                self.system_config["linking_map_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
+
+            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        else:
+            # Only synchronize the two main processing batch sizes
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            self.log.info(
+                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
+            )
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        return new_max_products_per_cycle, new_supplier_extraction_batch_size
+
+    async def _analyze_products_batch(
+        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
+    ) -> List[Dict[str, Any]]:
+        """Analyze a batch of supplier products for Amazon matching and profitability."""
+        profitable_results = []
+
+        # Filter and prepare products for analysis
+        valid_products = [
+            p
+            for p in products
+            if p.get("title")
+            and isinstance(p.get("price"), (float, int))
+            and p.get("price", 0) > 0
+            and p.get("url")
+        ]
+
+        price_filtered_products = [
+            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
+        ]
+
+        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
+
+        # Process products in cycles
+        batch_size = max_products_per_cycle
+        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
+
+        for batch_num in range(total_batches):
+            start_idx = batch_num * batch_size
+            end_idx = min(start_idx + batch_size, len(price_filtered_products))
+            batch_products = price_filtered_products[start_idx:end_idx]
+
+            self.log.info(
+                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
+            )
+
+            for i, product_data in enumerate(batch_products):
+                current_index = start_idx + i + 1
+                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
+
+                # Check if already processed
+                if self.state_manager.is_product_processed(product_data.get("url")):
+                    self.log.info(
+                        f"Product already processed: {product_data.get('url')}. Skipping."
+                    )
+                    continue
+
+                # Amazon data extraction and analysis
+                amazon_data = await self._get_amazon_data(product_data)
+                if not amazon_data or "error" in amazon_data:
+                    self.log.warning(
+                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
+                    )
+
+                    # 🚨 FIX: Create no-match linking entry for batch processing
+                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                    if supplier_ean == "None" or supplier_ean is None:
+                        supplier_ean = None
+
+                    # Determine the reason for no match
+                    error_info = (
+                        amazon_data.get("error")
+                        if isinstance(amazon_data, dict)
+                        else "No Amazon data returned"
+                    )
+                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
+
+                    # Create no-match linking entry
+                    no_match_entry = {
+                        "supplier_ean": supplier_ean,
+                        "amazon_asin": None,
+                        "supplier_title": product_data.get("title"),
+                        "amazon_title": None,
+                        "supplier_price": product_data.get("price"),
+                        "amazon_price": None,
+                        "match_method": "none",  # NEW: Indicates no match found
+                        "confidence": 0,  # NEW: No confidence for failed matches
+                        "created_at": datetime.now().isoformat(),
+                        "supplier_url": product_data.get("url"),
+                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
+                    }
+
+                    # Add no-match entry to linking map using optimized method
+                    self._add_linking_map_entry_optimized(no_match_entry)
+                    self.log.info(
+                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
+                    )
+
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_amazon_extraction"
+                    )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        # Get current category info
+                        cat_info = self.state_manager.get_current_category_info()
+                        self.state_manager.commit_amazon_progress(
+                            cat_idx=cat_info["cat_idx"],
+                            queue_idx=i,  # 0-based index within batch
+                            total_cats=cat_info["total_cats"],
+                            cat_url=cat_info["cat_url"],
+                            queue_len=cat_info["queue_len"]
+                        )
+                    continue
+
+                # Save Amazon cache and create linking map
+                supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                asin = amazon_data.get("asin", "NO_ASIN")
+
+                # Save Amazon data
+                filename_identifier = (
+                    supplier_ean
+                    if supplier_ean
+                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                )
+                amazon_cache_path = str(
+                    path_manager.get_output_path(
+                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                    )
+                )
+                with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+
+                # Financial analysis
+                try:
+                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
+                    supplier_price = float(product_data.get("price", 0))
+                    current_price = amazon_data.get("current_price", 0)
+
+                    if supplier_price > 0 and current_price > 0:
+                        financials = calc_financials(
+                            supplier_price=supplier_price,
+                            amazon_price=current_price,
+                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
+                            amazon_rating=amazon_data.get("rating", 0),
+                            amazon_review_count=amazon_data.get("reviews", 0),
+                        )
+
+                        # Check profitability
+                        if (
+                            financials.get("ROI", 0) > MIN_ROI_PERCENT
+                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+                        ):
+                            self.log.info(
+                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
+                            )
+
+                            combined_data = self._combine_supplier_amazon_data(
+                                product_data, amazon_data, "hybrid_batch"
+                            )
+                            combined_data["financials"] = financials
+                            profitable_results.append(combined_data)
+
+                            self.state_manager.update_success_metrics(
+                                True, True, financials.get("NetProfit", 0)
+                            )
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_profitable"
+                            )
+                        else:
+                            self.log.info(
+                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
+                            )
+                            self.state_manager.update_success_metrics(True, False)
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_not_profitable"
+                            )
+
+                except Exception as e:
+                    self.log.error(f"Financial calculation failed: {e}")
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_financial_calculation"
+                    )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    # Get current category info
+                    cat_info = self.state_manager.get_current_category_info()
+                    self.state_manager.commit_amazon_progress(
+                        cat_idx=cat_info["cat_idx"],
+                        queue_idx=i,  # 0-based index within batch
+                        total_cats=cat_info["total_cats"],
+                        cat_url=cat_info["cat_url"],
+                        queue_len=cat_info["queue_len"]
+                    )
+
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier")
+
+        return profitable_results
+
+    def _get_cached_products_path(self, category_url: str):
+        """Helper to get the path for a category's product cache file."""
+        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
+        return str(path_manager.get_cache_path("supplier_cache", category_filename))
+
+    def _combine_data(
+        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
+    ) -> Dict[str, Any]:
+        """Combine supplier and Amazon data and calculate financial metrics."""
+        combined = {
+            "supplier_product_info": supplier_data,
+            "amazon_product_info": amazon_data,
+            "analysis_timestamp": datetime.now().isoformat(),
+            "session_id": session_id,
+        }
+        # Financial calculation is now handled within the main run loop before this function is called
+        # This function is primarily for combining data and adding match validation
+        match_validation = self._validate_product_match(supplier_data, amazon_data)
+        combined["match_validation"] = match_validation
+        return combined
+
+    def _overlap_score(self, title_a: str, title_b: str) -> float:
+        """Calculate word overlap score between two titles"""
+        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
+        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
+        return len(a & b) / max(1, len(a))
+
+    def _sanitize_filename(self, title: str) -> str:
+        """Sanitize product title for use in filename"""
+        if not title:
+            return "unknown_title"
+        # Remove or replace problematic characters
+        sanitized = re.sub(r"[^\w\s-]", "", title)
+        sanitized = re.sub(r"\s+", "_", sanitized)
+        return sanitized[:50]  # Limit length to 50 chars
+
+    def _validate_product_match(
+        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Validate the match between supplier and Amazon products using configurable thresholds."""
+        matching_thresholds = self.system_config.get("performance", {}).get(
+            "matching_thresholds", {}
+        )
+
+        # Get configurable thresholds with fallback to more conservative defaults
+        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
+        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
+        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
+
+        title_overlap_score = self._overlap_score(
+            supplier_product.get("title", ""), amazon_product.get("title", "")
+        )
+
+        match_quality = "low"
+        confidence = 0.0
+
+        # Use configurable thresholds - much more strict than previous hardcoded values
+        if title_overlap_score >= high_title_similarity:
+            match_quality = "high"
+            confidence = 0.9
+        elif title_overlap_score >= medium_title_similarity:
+            match_quality = "medium"
+            confidence = 0.6
+        elif title_overlap_score >= title_similarity_threshold:
+            match_quality = "low"
+            confidence = 0.3
+        else:
+            match_quality = "very_low"
+            confidence = 0.1
+
+        self.log.debug(
+            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
+        )
+
+        return {
+            "match_quality": match_quality,
+            "confidence": confidence,
+            "title_overlap_score": title_overlap_score,
+        }
+
+    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
+        """Check if a product meets all defined business criteria."""
+        # This function is now largely redundant as profitability checks are done in the main loop.
+        # However, it can be used for other criteria like sales rank, reviews, etc.
+        amazon_data = combined_data.get("amazon_product_info", {})
+        financials = combined_data.get("financials", {})
+        # Check profitability (already done, but for completeness)
+        is_profitable = (
+            financials.get("ROI", 0) > MIN_ROI_PERCENT
+            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+        )
+        # Check Amazon listing quality
+        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
+        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
+        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
+        # Check for battery products (using the helper function)
+        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
+            combined_data["supplier_product_info"].get("title", "")
+        )
+        # Check for other non-FBA friendly keywords
+        is_non_fba_friendly = any(
+            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
+        ) or any(
+            k in combined_data["supplier_product_info"].get("title", "").lower()
+            for k in NON_FBA_FRIENDLY_KEYWORDS
+        )
+        # All criteria must be met
+        return (
+            is_profitable
+            and meets_rating
+            and meets_reviews
+            and meets_sales_rank
+            and not is_battery
+            and not is_non_fba_friendly
+        )
+
+    def _apply_batch_synchronization(
+        self,
+        max_products_per_cycle: int,
+        supplier_extraction_batch_size: int,
+        batch_sync_config: Dict[str, Any],
+    ) -> Tuple[int, int]:
+        """
+        Apply batch synchronization to align all batch sizes consistently.
+        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
+        """
+        target_batch_size = batch_sync_config.get("target_batch_size", 3)
+        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
+        validation_config = batch_sync_config.get("validation", {})
+
+        self.log.info(f"🔄 BATCH SYNCHRONIZATION: Enabled")
+        self.log.info(f"   target_batch_size: {target_batch_size}")
+        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
+
+        original_values = {
+            "max_products_per_cycle": max_products_per_cycle,
+            "supplier_extraction_batch_size": supplier_extraction_batch_size,
+            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
+        }
+
+        # Check for mismatched sizes and warn if configured
+        if validation_config.get("warn_on_mismatched_sizes", True):
+            unique_sizes = set(original_values.values())
+            if len(unique_sizes) > 1:
+                self.log.warning(
+                    f"⚠️ BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
+                )
+                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
+
+        if synchronize_all:
+            # Synchronize all batch sizes to target
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            # Also update system config values in memory for consistency
+            if "system" in self.system_config:
+                self.system_config["max_products_per_cycle"] = target_batch_size
+                self.system_config["supplier_extraction_batch_size"] = target_batch_size
+                self.system_config["linking_map_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
+
+            self.log.info(f"✅ BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        else:
+            # Only synchronize the two main processing batch sizes
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            self.log.info(
+                f"✅ BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
+            )
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        return new_max_products_per_cycle, new_supplier_extraction_batch_size
+
+    async def _analyze_products_batch(
+        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
+    ) -> List[Dict[str, Any]]:
+        """Analyze a batch of supplier products for Amazon matching and profitability."""
+        profitable_results = []
+
+        # Filter and prepare products for analysis
+        valid_products = [
+            p
+            for p in products
+            if p.get("title")
+            and isinstance(p.get("price"), (float, int))
+            and p.get("price", 0) > 0
+            and p.get("url")
+        ]
+
+        price_filtered_products = [
+            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
+        ]
+
+        self.log.info(f"🔍 Analyzing {len(price_filtered_products)} products in batch mode")
+
+        # Process products in cycles
+        batch_size = max_products_per_cycle
+        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
+
+        for batch_num in range(total_batches):
+            start_idx = batch_num * batch_size
+            end_idx = min(start_idx + batch_size, len(price_filtered_products))
+            batch_products = price_filtered_products[start_idx:end_idx]
+
+            self.log.info(
+                f"🔄 Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
+            )
+
+            for i, product_data in enumerate(batch_products):
+                current_index = start_idx + i + 1
+                self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
+
+                # Check if already processed
+                if self.state_manager.is_product_processed(product_data.get("url")):
+                    self.log.info(
+                        f"Product already processed: {product_data.get('url')}. Skipping."
+                    )
+                    continue
+
+                # Amazon data extraction and analysis
+                amazon_data = await self._get_amazon_data(product_data)
+                if not amazon_data or "error" in amazon_data:
+                    self.log.warning(
+                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
+                    )
+
+                    # 🚨 FIX: Create no-match linking entry for batch processing
+                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                    if supplier_ean == "None" or supplier_ean is None:
+                        supplier_ean = None
+
+                    # Determine the reason for no match
+                    error_info = (
+                        amazon_data.get("error")
+                        if isinstance(amazon_data, dict)
+                        else "No Amazon data returned"
+                    )
+                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
+
+                    # Create no-match linking entry
+                    no_match_entry = {
+                        "supplier_ean": supplier_ean,
+                        "amazon_asin": None,
+                        "supplier_title": product_data.get("title"),
+                        "amazon_title": None,
+                        "supplier_price": product_data.get("price"),
+                        "amazon_price": None,
+                        "match_method": "none",  # NEW: Indicates no match found
+                        "confidence": 0,  # NEW: No confidence for failed matches
+                        "created_at": datetime.now().isoformat(),
+                        "supplier_url": product_data.get("url"),
+                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
+                    }
+
+                    # Add no-match entry to linking map using optimized method
+                    self._add_linking_map_entry_optimized(no_match_entry)
+                    self.log.info(
+                        f"✅ Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'} → NO MATCH"
+                    )
+
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_amazon_extraction"
+                    )
+                    
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        # Get current category info
+                        cat_info = self.state_manager.get_current_category_info()
+                        self.state_manager.commit_amazon_progress(
+                            cat_idx=cat_info["cat_idx"],
+                            queue_idx=i,  # 0-based index within batch
+                            total_cats=cat_info["total_cats"],
+                            cat_url=cat_info["cat_url"],
+                            queue_len=cat_info["queue_len"]
+                        )
+                    continue
+
+                # Save Amazon cache and create linking map
+                supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                asin = amazon_data.get("asin", "NO_ASIN")
+
+                # Save Amazon data
+                filename_identifier = (
+                    supplier_ean
+                    if supplier_ean
+                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                )
+                amazon_cache_path = str(
+                    path_manager.get_output_path(
+                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                    )
+                )
+                with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+
+                # Financial analysis
+                try:
+                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
+                    supplier_price = float(product_data.get("price", 0))
+                    current_price = amazon_data.get("current_price", 0)
+
+                    if supplier_price > 0 and current_price > 0:
+                        financials = calc_financials(
+                            supplier_price=supplier_price,
+                            amazon_price=current_price,
+                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
+                            amazon_rating=amazon_data.get("rating", 0),
+                            amazon_review_count=amazon_data.get("reviews", 0),
+                        )
+
+                        # Check profitability
+                        if (
+                            financials.get("ROI", 0) > MIN_ROI_PERCENT
+                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+                        ):
+                            self.log.info(
+                                f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
+                            )
+
+                            combined_data = self._combine_supplier_amazon_data(
+                                product_data, amazon_data, "hybrid_batch"
+                            )
+                            combined_data["financials"] = financials
+                            profitable_results.append(combined_data)
+
+                            self.state_manager.update_success_metrics(
+                                True, True, financials.get("NetProfit", 0)
+                            )
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_profitable"
+                            )
+                        else:
+                            self.log.info(
+                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
+                            )
+                            self.state_manager.update_success_metrics(True, False)
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_not_profitable"
+                            )
+
+                except Exception as e:
+                    self.log.error(f"Financial calculation failed: {e}")
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_financial_calculation"
+                    )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    # Get current category info
+                    cat_info = self.state_manager.get_current_category_info()
+                    self.state_manager.commit_amazon_progress(
+                        cat_idx=cat_info["cat_idx"],
+                        queue_idx=i,  # 0-based index within batch
+                        total_cats=cat_info["total_cats"],
+                        cat_url=cat_info["cat_url"],
+                        queue_len=cat_info["queue_len"]
+                    )
+
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
 
         # After Amazon queue completion, switch back to "supplier" phase
         if hasattr(self.state_manager, "commit_phase_switch"):

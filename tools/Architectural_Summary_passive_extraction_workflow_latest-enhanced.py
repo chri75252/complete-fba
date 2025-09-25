@@ -5403,8 +5403,16 @@ Return ONLY valid JSON, no additional text."""
                 # Build canonical allowed key set for this category (used to scope Amazon queue)
                 try:
                     cat_allowed_keys = set()
-                    # Only Amazon-only URLs are eligible for immediate Amazon analysis
+                    # 🚨 CRITICAL FIX: Include BOTH Amazon-only AND full extraction URLs for Amazon analysis
+                    # Amazon-only products (have cached supplier data)
                     for u in needs_amazon_only_urls:
+                        nu = normalize_url(u)
+                        efu = self._ean_for_url(u, eans)
+                        k = stable_key(nu, efu)
+                        if k:
+                            cat_allowed_keys.add(k)
+                    # Full extraction products (also need Amazon analysis after supplier extraction)
+                    for u in needs_full_extraction_urls:
                         nu = normalize_url(u)
                         efu = self._ean_for_url(u, eans)
                         k = stable_key(nu, efu)
@@ -5412,7 +5420,7 @@ Return ONLY valid JSON, no additional text."""
                             cat_allowed_keys.add(k)
                     self._category_allowed_keys = cat_allowed_keys
                     self._category_url_normalized = normalize_url(category_url)
-                    self.log.info(f"🔐 STEP-2 ALLOWED KEYS (category): {len(self._category_allowed_keys)}")
+                    self.log.info(f"🔐 STEP-2 ALLOWED KEYS (category): {len(self._category_allowed_keys)} (Amazon-only: {len(needs_amazon_only_urls)} + Full extraction: {len(needs_full_extraction_urls)})")
                 except Exception:
                     self._category_allowed_keys = set()
                     try:
