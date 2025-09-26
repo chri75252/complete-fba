@@ -1,0 +1,87 @@
+2025-09-26 14:46:57,323 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20250926_144657.log
+2025-09-26 14:46:57,330 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-09-26 14:46:57,330 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-09-26 14:46:57,330 - selective_asin_processor - INFO - Initializing Amazon extractor...
+2025-09-26 14:46:57,330 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2025-09-26 14:46:57,330 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-09-26 14:46:57,331 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-09-26 14:46:57,331 - tools.amazon_playwright_extractor - INFO - ?? AmazonExtractor will use centralized BrowserManager
+2025-09-26 14:46:57,331 - selective_asin_processor - INFO - Amazon extractor initialized successfully
+2025-09-26 14:46:57,331 - selective_asin_processor - INFO - Starting selective processing of 1933 linking map entries
+2025-09-26 14:46:57,331 - selective_asin_processor - INFO - [1] Processing: 5010792236995_B0DWDRZDZC
+2025-09-26 14:46:57,331 - selective_asin_processor - INFO - [1] Processing 5010792236995_B0DWDRZDZC - Cache exists but will be refreshed
+2025-09-26 14:46:57,331 - selective_asin_processor - INFO - [1] Extracting Amazon data for ASIN: B0DWDRZDZC
+2025-09-26 14:46:59,251 - tools.amazon_playwright_extractor - INFO - ?? AmazonExtractor connecting via BrowserManager singleton
+2025-09-26 14:46:59,618 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-09-26 14:46:59,618 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-09-26 14:46:59,695 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/140.0.7339.128
+2025-09-26 14:46:59,695 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-09-26 14:46:59,696 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-09-26 14:46:59,794 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-09-26 14:46:59,794 - utils.browser_manager - INFO - ?? Using existing context with 1 pages
+2025-09-26 14:46:59,794 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 140.0.7339.128
+2025-09-26 14:46:59,794 - tools.amazon_playwright_extractor - INFO - ? AmazonExtractor connected via BrowserManager singleton
+2025-09-26 14:46:59,794 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0DWDRZDZC. Getting a new one from BrowserManager.
+2025-09-26 14:46:59,794 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/dp/B0DW5NKRXN?th=1
+2025-09-26 14:47:02,457 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-09-26 14:47:02,617 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-09-26 14:47:03,627 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2025-09-26 14:47:06,633 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2025-09-26 14:47:06,633 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-09-26 14:47:06,670 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-09-26 14:47:06,671 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2025-09-26 14:47:11,675 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2025-09-26 14:47:18,680 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0DWDRZDZC
+2025-09-26 14:47:18,680 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2025-09-26 14:47:18,707 - tools.amazon_playwright_extractor - INFO - Title found: 'LEGO Botanicals Happy Plants Toy - Crafts Kit for Kids incl. 2 Artificial Plants with 2 Colourful Flower Pots & Interchangeable Cartoon Faces - Nature Gifts for 9+ Year Old Girls & Teens - 10349' via #productTitle
+2025-09-26 14:47:18,707 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2025-09-26 14:47:18,724 - tools.amazon_playwright_extractor - INFO - Current price: 17.99 via #corePrice_feature_div .a-offscreen
+2025-09-26 14:47:18,755 - tools.amazon_playwright_extractor - INFO - Original price: 37.98 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2025-09-26 14:47:18,786 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2025-09-26 14:47:18,810 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/81JGnQochGL._AC_SL1500_.jpg via #landingImage
+2025-09-26 14:47:18,860 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2025-09-26 14:47:18,862 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2025-09-26 14:47:18,943 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2025-09-26 14:47:19,045 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2025-09-26 14:47:19,062 - tools.amazon_playwright_extractor - INFO - Rating: 4.9 via #acrPopover[title*='out of 5 stars']
+2025-09-26 14:47:19,076 - tools.amazon_playwright_extractor - INFO - Review count: 824 via #acrCustomerReviewText
+2025-09-26 14:47:19,076 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2025-09-26 14:47:19,172 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2025-09-26 14:47:19,372 - tools.amazon_playwright_extractor - INFO - Found 7 features.
+2025-09-26 14:47:19,372 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2025-09-26 14:47:19,393 - tools.amazon_playwright_extractor - INFO - Description found using selector: #aplus_feature_div
+2025-09-26 14:47:19,393 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2025-09-26 14:47:19,803 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2025-09-26 14:47:19,803 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2025-09-26 14:47:19,803 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2025-09-26 14:47:19,803 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2025-09-26 14:47:19,803 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2025-09-26 14:47:25,852 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2025-09-26 14:47:25,880 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2025-09-26 14:47:25,907 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: True
+2025-09-26 14:47:25,936 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2025-09-26 14:47:25,969 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2025-09-26 14:47:27,000 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 175 rows found
+2025-09-26 14:47:27,012 - tools.amazon_playwright_extractor - INFO - Processing 175 rows in Keepa Product Details AG Grid.
+2025-09-26 14:47:28,288 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.94' in Keepa AG Grid.
+2025-09-26 14:47:28,369 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 2.70' in Keepa AG Grid.
+2025-09-26 14:47:31,264 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 51 items from Keepa Product Details AG Grid.
+2025-09-26 14:47:31,264 - tools.amazon_playwright_extractor - INFO - ASIN B0DWDRZDZC: Attempting to extract EANs from Keepa product_details_tab_data.
+2025-09-26 14:47:31,264 - tools.amazon_playwright_extractor - INFO - ASIN B0DWDRZDZC: EAN '5702017814681' found in Keepa details via key 'Product Codes - EAN'.
+2025-09-26 14:47:31,265 - tools.amazon_playwright_extractor - INFO - ASIN B0DWDRZDZC: BSR not found or invalid from page. Attempting fallback from Keepa.
+2025-09-26 14:47:31,265 - tools.amazon_playwright_extractor - WARNING - ASIN B0DWDRZDZC: Could not find BSR in any Keepa data source.
+2025-09-26 14:47:31,266 - selective_asin_processor - INFO - [1] ✅ Success: 5010792236995_B0DWDRZDZC -> £17.99
+2025-09-26 14:47:31,266 - selective_asin_processor - INFO -     Price change: £15.30 -> £17.99 (+17.6%)
+2025-09-26 14:47:31,266 - selective_asin_processor - INFO - [2] Processing: 5060082934117_B0D7VWC1XH
+2025-09-26 14:47:31,266 - selective_asin_processor - INFO - [2] Processing 5060082934117_B0D7VWC1XH - Cache exists but will be refreshed
+2025-09-26 14:47:31,266 - selective_asin_processor - INFO - [2] Extracting Amazon data for ASIN: B0D7VWC1XH
+2025-09-26 14:47:31,832 - utils.browser_manager - INFO - ?? Browser memory usage: 6128.0MB > 2048MB threshold (monitoring only - restart disabled)
+2025-09-26 14:47:33,781 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0D7VWC1XH. Getting a new one from BrowserManager.
+2025-09-26 14:47:33,781 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/dp/B0DH4WBPD4
+2025-09-26 14:47:36,403 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-09-26 14:47:36,548 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-09-26 14:47:37,555 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2025-09-26 14:47:40,559 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2025-09-26 14:47:40,559 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2025-09-26 14:47:40,593 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2025-09-26 14:47:40,594 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
