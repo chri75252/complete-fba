@@ -1,136 +1,111 @@
-# CRITICAL RESUME LOGIC REQUIREMENTS - COMPLETE SPECIFICATION
-
-## 🚨 FUNDAMENTAL ISSUE IDENTIFIED
-The system is incorrectly using `category_completion_status` count (92-93 entries) to determine starting position instead of implementing proper fresh start vs resume logic. This causes the system to start from URL #93-94 in the categories config instead of following proper resume markers.
-
-## ✅ CORRECT BEHAVIOR SPECIFICATION
-
-### Fresh Start Detection
-- **Condition**: NO processing state file exists
-- **Action**: Start from URL index 0 (first category in config)
-- **Source**: First URL in `config/poundwholesale_categories.json`
-
-### Resume Detection  
-- **Condition**: Processing state file EXISTS with valid data
-- **Action**: Use `system_progression` resume markers
-- **Source**: `system_progression` section takes ABSOLUTE precedence
-
-## 🎯 PRIMARY RESUME SOURCE: system_progression Section
-
-The system depends on `system_progression` as the primary resume source (takes precedence over legacy `supplier_extraction_progress`).
-
-### Resume Markers Retrieved by System
-```json
 {
-  "system_progression": {
-    "current_category_index": 5,           // ← RESUME MARKER: Which category to continue
-    "current_product_index_in_category": 10, // ← RESUME MARKER: Which product within category
-    "current_phase": "supplier",           // ← RESUME MARKER: Which phase was interrupted
-    "current_category_url": "https://...", // ← VALIDATION: Exact category URL for consistency check
-    "total_categories": 25,                // Context: Total categories to process
-    "total_products_in_current_category": 100 // Context: Products in current category
-  }
-}
-```
-
-## 📋 PHASE DETECTION LOGIC
-
-### Supplier Website Extraction Interruption
-- **When**: `current_phase == "supplier"`
-- **Resume Action**: Continue supplier product extraction
-- **Resume Point**:
-  - Category: `current_category_index` (e.g., category 5)
-  - Product: `current_product_index_in_category` (e.g., product 10 within that category)
-  - URL: Validate against `current_category_url`
-
-### Amazon Detail Extraction Interruption
-- **When**: `current_phase == "amazon"`
-- **Resume Action**: Continue Amazon analysis/linking
-- **Resume Point**:
-  - Category: `current_category_index` (e.g., category 5)
-  - Product: `current_product_index_in_category` (e.g., product 10 within that category)
-  - URL: Validate against `current_category_url`
-
-## 🔄 LEGACY SECTION: supplier_extraction_progress
-Used for backward compatibility only - system prefers `system_progression`.
-
-```json
-{
-  "supplier_extraction_progress": {
-    "current_category_index": 5,          // ← LEGACY: Mirrors system_progression
-    "last_processed_index": 10,           // ← LEGACY: Product index (less reliable)
-    "progress_index": 10                  // ← LEGACY: Alternative product index
-  }
-}
-```
-
-## 🎯 RESUME DECISION MATRIX
-
-| Scenario | Primary Source | Fallback Source | Action |
-|----------|---------------|-----------------|--------|
-| Both sections exist | system_progression | supplier_extraction_progress | Use system_progression values |
-| Only legacy exists | supplier_extraction_progress | None | Use legacy values |
-| Inconsistent values | system_progression | None | system_progression takes precedence |
-| Missing phase info | Infer from context | Default to "supplier" | Start with supplier phase |
-
-## 🔧 SPECIFIC RESUME ALGORITHM
-
-```python
-def get_resume_point():
-    # Primary source
-    sp = state_data.get("system_progression", {})
-    
-    if sp:
-        return {
-            'category_index': sp.get("current_category_index", 0),
-            'product_index': sp.get("current_product_index_in_category", 0),
-            'phase': sp.get("current_phase", "supplier"),
-            'category_url': sp.get("current_category_url", "")
-        }
-    
-    # Fallback to legacy
-    sep = state_data.get("supplier_extraction_progress", {})
-    return {
-        'category_index': sep.get("current_category_index", 0),
-        'product_index': sep.get("last_processed_index", 0),
-        'phase': "supplier",  # Default assumption
-        'category_url': sep.get("current_category_url", "")
+  "asin_from_details": "B0BYWS9B8K",
+  "title": "Ertzinla Catnip Toys Banana for Cats UK Banana, 100% Natural Cat nip Filled",
+  "current_price": 5.49,
+  "original_price": 12.0,
+  "amazon_monthly_sales_badge": 400,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61AZOYV84kL._AC_SL1200_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41RTwjuTysL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51ojhG4i9lL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/318tfAPe2TL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51OceTupYoL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51Bjp5RW4GL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61Xf22tdfIL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0BYWS9B8K",
+    "Date First Available": "19 Mar. 2023"
+  },
+  "date_first_available_from_details": "19 Mar. 2023",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "WeiLi Star",
+  "sold_by_amazon": false,
+  "rating": 4.3,
+  "review_count": 562,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "🐱 Super Value Catnip Toys - Filled with 100% organic catnip, stuffed 16g catnip. Single Size: 12x3x3cm; Single Weight: 18g.",
+    "🐱 Natural Catnip -- Each cat catnip toy is added with 16g catnip to keep your cat excited and happy. Natural catnip is also good for cats to boost digestion and regulate mood.",
+    "🐱 Safe and Durable Material -- This catnip toy is made of soft linen and is filled with 100% catnip, not easy to deform. Kittens will kick, lick, chew, cuddle and snuggle with these right-sized plush toys!",
+    "🐱 Fun Catnip Toys -- Rich colors and organic catnip keep your cat pouncing, chasing, playing to stimulate their instinctive reactions, and enhance the interaction between you and the cat. Ideal for indoor cats.",
+    "🐱 Buy with Confidence -- 100% refund or replace will be supported if not satisfied and just be free to contact us if any questions, our team will assist you within 24 hours. Please do not let your puppy swallow these toys."
+  ],
+  "description": "Product Description Catnip Toys Eggplant Catnip Toys Carrot Catnip Toys Banana Catnip Toys Fish Catnip Toys Cacti Catnip Toys Add To Basket Add To Basket Add To Basket Add To Basket Add To Basket Add To Basket Customer Reviews 4.3 out of 5 stars 562 4.3 out of 5 stars 562 4.3 out of 5 stars 562 4.3 out of 5 stars 562 4.2 out of 5 stars 60 4.3 out of 5 stars 562 Price £5.49 £ 5 . 49 £5.49 £ 5 . 49 £5.49 £ 5 . 49 £5.49 £ 5 . 49 £3.99 £ 3 . 99 £5.49 £ 5 . 49 Color Yellow Purple Orange Yellow blue&amp;white green",
+  "specifications_table": {
+    "Product Dimensions": "‎20 x 15 x 1.8 cm; 30 g",
+    "Breed Recommendation": "‎all",
+    "Flavor": "‎catnip",
+    "Colour": "‎Yellow",
+    "Special features": "‎Portable, Lightweight",
+    "Batteries required": "‎No",
+    "Batteries Included": "‎No",
+    "Item Weight": "‎30 g"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 1584,
+      "main_cat_name": "Pet Supplies 30 drops / month",
+      "sub_cat_current_rank": 5,
+      "sub_cat_name": "Catnip Toys 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Ertzinla Catnip Toys Banana for Cats UK Banana, 100% Natural Cat nip Filled",
+      "Sales Rank - Reference": "Pet Supplies",
+      "Sales Rank - Display Group": "pet_products_display_on_website",
+      "Bought in past month": "400+",
+      "Reviews - Rating": 4.3,
+      "Reviews - Rating Count": 562.0,
+      "Last Price Change": "2 months ago",
+      "Buy Box Seller": "WeiLi Star (99% positive over last 12 months)",
+      "Lowest FBA Seller": "WeiLi Star (99% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.5,
+      "Referral Fee %": "14.94 %",
+      "Referral Fee based on current Buy Box price": 0.82,
+      "Total Offer Count": "1",
+      "Tracking since": "2023/06/05",
+      "Listed since": "2023/03/19",
+      "Categories - Root": "Pet Supplies",
+      "Categories - Sub": "Catnip Toys",
+      "Categories - Tree": "Pet Supplies › Cats › Toys › Catnip Toys",
+      "Website Display Group - Name": "Pet Products",
+      "ASIN": "B0BYWS9B8K",
+      "Parent ASIN": "B0CVVKJ591",
+      "Variation ASINs": "B0BYWS9B8K, B0CSFDBYGJ, B0D2WZ6QJ8, B0D2WYPSKT, B0D2WYPMYT, B0DHG8BQYD, B0DHG8C51V, B0CQJNRCJ8",
+      "Freq. Bought Together": "B0779CC8TR",
+      "Type": "PET_TOY",
+      "Manufacturer": "Ertzinla",
+      "Brand": "Ertzinla",
+      "Product Group": "Pet Products",
+      "Color": "Yellow",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Scent": "Catnip",
+      "Pattern": "纯色",
+      "Style": "Banana",
+      "Material": "涤纶混纺",
+      "Target Audience": "Cats",
+      "Recommended Uses": "室内",
+      "Package - Dimension (cm³)": "11.8 x 9.9 x 2.5 cm (= 292 cm³ )",
+      "Package - Weight (g)": "40",
+      "Package - Quantity": "0",
+      "Item - Dimension (cm³)": "20.0 x 15.0 x 1.8 cm (= 540 cm³ )",
+      "Item - Model (g)": "30"
     }
-```
-
-## 📊 KEY RESUME INDEXES SUMMARY
-
-### Primary Resume Indexes (from system_progression):
-- `current_category_index` - Which category (0-based)
-- `current_product_index_in_category` - Which product within category (0-based)
-- `current_phase` - "supplier" or "amazon" phase
-- `current_category_url` - URL validation/consistency check
-
-### Legacy Resume Indexes (from supplier_extraction_progress):
-- `current_category_index` - Which category (mirrors primary)
-- `last_processed_index` - Which product (less reliable naming)
-- `progress_index` - Alternative product index (redundant)
-
-## 🔄 PHASE CONTINUATION LOGIC
-
-### Supplier Phase Resume:
-- Continue extracting products from supplier website
-- Start at `current_product_index_in_category` within `current_category_index`
-- Complete supplier extraction before moving to Amazon phase
-
-### Amazon Phase Resume:
-- Continue Amazon detail extraction/linking
-- Start at `current_product_index_in_category` within `current_category_index`
-- Process products that need Amazon analysis
-
-## 🚨 CRITICAL REQUIREMENT: NEVER USE category_completion_status COUNT
-
-The system must NEVER use `len(category_completion_status)` or similar patterns to determine starting position. This is the root cause of the current issue where the system starts from URL #93-94 instead of proper resume markers.
-
-## ✅ IMPLEMENTATION VALIDATION CHECKLIST
-
-- [ ] Fresh start detection: No processing state file → Start from index 0
-- [ ] Resume detection: Processing state exists → Use system_progression
-- [ ] system_progression precedence over supplier_extraction_progress
-- [ ] Eliminate all category_completion_status count usage for positioning
-- [
+  },
+  "sales_rank": 1584,
+  "category": "Pet Supplies 30",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 100,
+  "asin_extracted_from_page": "B0BYWS9B8K",
+  "asin_queried": "B0BYWS9B8K",
+  "asin": "B0BYWS9B8K"
+}

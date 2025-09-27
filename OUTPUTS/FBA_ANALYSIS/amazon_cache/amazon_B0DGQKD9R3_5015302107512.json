@@ -1,1 +1,116 @@
-=a?Object.keys(a):[],l=e.get(n.xn.QuoteItemDict);(0,c.H)(d.RzE,`spotlightTabData is not sufficient. PreviewType: ${i}, CurrentTab: ${this.currentTab}`,`${t} - previewType: ${i}`,{tabDataFromFeed:s,tabsFromFeed:o.join(","),quoteDict:l})}getSpotlightTagName(t){const{cryptos:e,deprecatedToNewCryptos:i}=this.transformerProvider.config;return(0,s.Km)(t)&&!(0,s.q8)(e,i,t)?this.isKumoDesign?n.Qk.SpotlightCurrencyV2:n.Qk.SpotlightCurrency:this.isKumoDesign?n.Qk.PriceSpotlightV2:n.Qk.PriceSpotlight}getSpotlightEarningsTagName(t,e){var i;const r=null===(i=t.get(n.xn.MoneyInfoApiData).quoteNotificationDetails)||void 0===i?void 0:i[e],a=null==r?void 0:r.find((t=>t.notificationType===n.JD.EarningRelease));if(this.removeTMPL(n.Kr.moneyCardEarningsType),a&&a.notification){const{EpsForecast:e,EpsReported:i}=a.notification;if(e&&i&&e.length>0&&i.length>0)return this.setTMPL(n.Kr.moneyCardEarningsType,"post"),n.Qk.SpotlightEarnings;const{analystRecommendationNumber:r,numberOfAnalysts:s,recommendation:o}=t.get(n.xn.AnalystRecommendation)||{};if(r&&s&&o)return this.setTMPL(n.Kr.moneyCardEarningsType,"pre"),n.Qk.SpotlightPreEarnings}return n.Qk.PriceSpotlight}generateMetadataForSpotlight(t,e,i,r){let a=arguments.length>4&&void 0!==arguments[4]?arguments[4]:"";const o=r.get(n.xn.CardSize),l=r.get(n.xn.CardType),d=r.get(n.xn.PreviewType),c=r.get(n.xn.MoneyInfoApiData),u=r.get(n.xn.ChartItemDict),{quote:h}=i,g=(0,s.W$)(h,u),p=this.getTabSignature(r,t),m=r.get(n.xn.CurrentQuoteIds),v=r.get(n.xn.QuoteItemDict),f=[];switch(this.addQuoteItemsToArray(f,m,v),e){case n.Qk.SpotlightCurrencyV2:case n.Qk.SpotlightCurrency:return{quote:h,quoteNotificationDetails:c.quoteNotificationDetails,chartData:g,tabName:t,cardSize:o,previewType:d,signature:p,experienceName:l,destinationUrl:a,telemetryObject:this.tabTelemetryObject,isKumoDesign:this.isKumoDesign,isCopilotThemeEnabled:(0,b.q6)()};case n.Qk.SpotlightEarnings:return{feedData:c,quote:i.quote,tabName:t,cardSize:o,destinationUrl:a,signature:p,telemetryObject:this.tabTelemetryObject};case n.Qk.SpotlightPreEarnings:return{quoteNotificationDetails:c.quoteNotificationDetails,quote:i.quote,tabName:t,cardSize:o,destinationUrl:a,previewType:d,signature:p,analystRecommendation:r.get(n.xn.AnalystRecommendation),telemetryObject:this.tabTelemetryObject};case n.Qk.MarketMovers:return{cardSize:o,experienceName:l,signature:this.getTabSignature(r,t),chartData:u[f[0].id],tabName:t,telemetryObject:this.tabTelemetryObject,quoteDetails:f};default:return{quote:h,tabData:c,tabName:t,previewType:d,chartData:g,quoteNotificationDetails:c.quoteNotificationDetails,experienceName:l,telemetryObject:this.tabTelemetryObject,signature:p,footerData:this.transformToFooterData(r),isKumoDesign:this.isKumoDesign,cardSize:o,isCopilotThemeEnabled:(0,b.q6)()}}}updateSpotlightTabData(t){var e;const i=t.get(n.xn.MoneyInfoApiData);if(!i.tabListDetails)return;const r=t.get(n.xn.PreviewType),a=t.get(n.xn.QuoteItemDict),o=(0,s.bv)(r,a,i.tabListDetails);t.set(n.xn.SpotlightTabData,o);const l=t.get(n.xn.ChartItemDict),d="object"==typeof(null==o?void 0:o.quote)?l[null==o||null===(e=o.quote)||void 0===e?void 0:e.id]:null;t.set(n.xn.ChartDateFilterChartType,n.oX.OneDayOneMinute),t.set(n.xn.ChartDateFilterData,{[n.oX.OneDayOneMinute]:d}),o&&(this.setTMPL(n.Kr.moneyCardSpotlightDataFrom,o.dataFrom),this.setTMPL(n.Kr.moneySpotlightPreviewType,r),this.setTMPL(n.Kr.moneySpotlightUXTriggered,"1"))}getNewsListForSentiment(t){return t&&t.length?t.reduce(((t,e)=>{var i;return null!==(i=e.notification)&&void 0!==i&&i.newsDetail&&t.push(e.notification.newsDetail),t}),[]):[]}getQuoteListTagName(t,e){var i;return this.isMarketCharts2CHeroCard(e)&&this.currentTab&&!(0,s.Qr)(null===(i=t.tabListDetails)||void 0===i||null===(i=i[this.currentTab])||void 0===i||null===(i=i.quoteItems)||void 0===i||null===(i=i[0])||void 0===i?void 0:i.series)?n.Qk.HorizontalQuoteList:n.Qk.VerticalQuoteList}isMarketCharts2CHeroCard(t){return this.currentTab==n.HQ.Market&&(0,g.AS)(t.get(n.xn.CardType))&&t.get(n.xn.CardSize)===a.Nv._2x_2y}isSpotlightHeroCard(t){return(0,s.xS)(t.get(n.xn.CardType))}hasFooter(t){return!this.isSpotlightHeroCard(t)&&!this.isMarketCharts2CHeroCard(t)}getQuoteListCardSize(t,e){return t===n.Qk.HorizontalQuoteList?a.Nv._2x_2y:e}getRubyCardData(t){return r.Xw.safeExecute((()=>{const e=this.getWidgetTitle(t),i=this.getNavLink(t),r=this.getSpotlightAiSummaryText(t);r&&this.setTMPL(n.Kr.moneySpotlightAIPresent,"1");const a={...this.getGemTakedownOverrideProps(t,r),prefixExtendMenuItems:this.generateActionMenuItems(t)},s=this.telemetryBuilder.createNavClickTelemetryTag(this.tabTelemetryObject,{name:n.Lb.moneyRubyClick,signature:this.getTabSignature(t,this.tabNameShownInUX),previewType:this.fullPreviewType||void 0}),o=r||e,l=r?e:void 0,d={text:l||o,textDarkMode:this.isKumoDarkMode(),telemetryTag:s,href:i};return{heading:o,badge:l,rootTelemetryObject:this.tabTelemetryObject,rootTelemetryTag:this.telemetryBuilder.createTelemetryObjectTag(this.tabTelemetryObject),isInDarkMode:this.isKumoDarkMode(),href:i,isImmersive:!r,backgroundValue:this.getBackgroundValue(t),cardActionPropsOverride:a,subtitleData:d}}),void 0,d.sBb,"MoneyInfo - getRubyCardData")}getPillViewModel(t){const e=this.getRubyPillQuote(t);if(!e)return;const i=e.changePcntNumber||0,r=(0,g.e9)(i,"danger",C,C,this.transformerProvider.config.swapGainLossColor),a=this.getRubyPillIconUrl(e),s=i<0?this.transformerProvider.strings.priceDownNotificationText:this.transformerProvider.strings.priceUpNotificationText,o=this.getRubyPillMainLabel(e),l=`${o} ${s} ${e.changePcnt}`;return{data:{destinationUrl:(0,g.rX)(this.transformerProvider.config.urls,e.id),labelAppearance:r,iconSize:"small",iconTitle:s,ariaLabel:l,mainLabel:o,label1:e.changePcnt,iconSrc:a},rootTelemetryTag:this.telemetryBuilder.createNavClickTelemetryTag(this.tabTelemetryObject,{name:n.Lb.moneyInfoMiniWidget,signature:this.getTabSignature(t,this.tabNameShownInUX)})}}getRubyPillMainLabel(t){var e;return(null===(e=u.jG.CurrentMarket)||void 0===e?void 0:e.startsWith("zh"))||u.jG.CurrentMarket===w.IY.JAJP||u.jG.CurrentMarket===w.IY.KOKR?t.shortName||t.displayName||"":t.symbol}getRubyPillQuote(t){var e;const i=this.getTabFirstQuote(t,n.HQ.PriceSpotlight),r=t.get(n.xn.MoneyInfoApiData)||{},a=r.tabListDetails||{},s=((this.currentTab&&a[this.currentTab]||{}).quoteItems||[]).find((t=>t.id!==(null==i?void 0:i.id)));if(s)return s;const o=(null===(e=a[n.HQ.Suggested])||void 0===e?void 0:e.quoteItems)||[];if(!o.length)return void(0,c.H)(d.jjy,"MoneyInfo - ruby pill data is invalid","There is no recommended quote for fallback",{tabListDetails:a
+{
+  "asin_from_details": "B0DGQKD9R3",
+  "title": "U-Excel 2-Pack Fish Shaped Foam Bath Mirrors for Babys, Kids, Children -Animal Educational Play Toy Mirror – Safe, Fun & Interactive Bath Time",
+  "current_price": 5.99,
+  "original_price": 13.01,
+  "amazon_monthly_sales_badge": 50,
+  "main_image": "https://m.media-amazon.com/images/I/41l2FJdmsSL._AC_SX450_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41l2FJdmsSL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41D0ZMOAOTL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31-0V1ndWgL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/310gBDvEbtL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31b+89-8tmL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51MCy-aQvBL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31AeKGhbt-L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0DGQKD9R3",
+    "Date First Available": "11 Sept. 2024"
+  },
+  "date_first_available_from_details": "11 Sept. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Elite Trade Ltd",
+  "sold_by_amazon": false,
+  "rating": 3.2,
+  "review_count": 20,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Fun Fish Shape Design: Each mirror features a whimsical fish shape with bright colours and friendly faces, captivating your child’s attention and making bath time more enjoyable.",
+    "Soft Foam Construction: Made from high-quality, non-toxic foam, these mirrors are soft and lightweight, providing a safe and gentle option for children. The foam material is also resistant to splashes and easy to handle.",
+    "Shatterproof & Safe: Unlike glass mirrors, our foam mirrors are designed to be shatterproof and impact-resistant, making them a safe choice for your little one’s bath time.",
+    "Flexible and Easy to Attach: The mirrors can be easily attached to the bathroom wall or bathtub when wet. They’re easy to reposition and remove without leaving residue.",
+    "Rounded Edges: Each mirror is crafted with rounded edges to prevent any sharp corners, ensuring a safe play experience.",
+    "Easy to Clean: The smooth surface of the foam makes it easy to wipe clean with a damp cloth, ensuring hygiene and convenience.",
+    "Perfect for Interactive Play: Encourages visual exploration and self-recognition, helping to make bath time a fun and interactive experience for children.",
+    "Customer Service: Dislike? Unsatisfied? Not fits? No worry. Whatever the problem, please feel free to contact our customer service for a refund or resend within 24 hours. We aim to provide 100% satisfaction customer service for our customers."
+  ],
+  "description": "U-Excel 2-Pack Fish Shaped Foam Bath Mirrors for Babys, Kids, Children -Animal Educational Play Toy Mirror – Safe, Fun &amp; Interactive Bath Time Transform bath time into a joyful, engaging experience with our 2-Pack Fish Shaped Foam Bath Mirrors! Designed specifically for children, these playful mirrors add a touch of fun while ensuring safety and durability during every bath. Why Choose Our Fish Shaped Foam Bath Mirrors? Our foam bath mirrors combine playful design with practical features, making them a perfect addition to your child’s bath time routine. The soft foam material and bright fish shapes create an engaging environment, while the shatterproof design provides peace of mind for parents. Make bath time a splash with our Fish Shaped Foam Bath Mirrors – safe, fun, and designed with your child in mind!",
+  "specifications_table": {
+    "Brand": "‎U-Excel",
+    "Model Number": "‎mirror2525",
+    "Product Dimensions": "‎12.5 x 15 x 0.5 cm; 30 g",
+    "Material": "‎foam",
+    "Special Features": "‎Lightweight, Lighted",
+    "Item Weight": "‎30 g"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 12930,
+      "main_cat_name": "Toys & Games 8 drops / month",
+      "sub_cat_current_rank": 185,
+      "sub_cat_name": "Bath Toys 2"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "U-Excel 2-Pack Fish Shaped Foam Bath Mirrors for Babys, Kids, Children -Animal Educational Play Toy Mirror – Safe, Fun & Interactive Bath Time",
+      "Sales Rank - Reference": "Toys & Games",
+      "Sales Rank - Display Group": "toy_display_on_website",
+      "Bought in past month": "50+",
+      "Reviews - Rating": 3.2,
+      "Reviews - Rating Count": 20.0,
+      "Last Price Change": "7 days ago",
+      "Buy Box Seller": "Elite Trade Ltd (88% positive over last 12 months)",
+      "Lowest FBA Seller": "Elite Trade Ltd (88% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.5,
+      "Referral Fee %": "15.03 %",
+      "Referral Fee based on current Buy Box price": 0.9,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/09/11",
+      "Listed since": "2024/09/11",
+      "Categories - Root": "Toys & Games",
+      "Categories - Sub": "Bath Toys",
+      "Categories - Tree": "Toys & Games › Baby & Toddler Toys › Bath Toys",
+      "Website Display Group - Name": "Kitchen",
+      "ASIN": "B0DGQKD9R3",
+      "Product Codes - UPC": "734071461049",
+      "Product Codes - EAN": "0734071461049",
+      "Product Codes - PartNumber": "mirror2525",
+      "Freq. Bought Together": "B07B4JTCPT, B0CFV8TMWV",
+      "Type": "HOME_MIRROR",
+      "Manufacturer": "U-Excel",
+      "Brand": "U-Excel",
+      "Product Group": "Home",
+      "Model": "MIRROR2525",
+      "Unit Details - Unit Value": "2",
+      "Unit Details - Unit Type": "count",
+      "Style": "Playful",
+      "Material": "foam",
+      "Number of Items": "2",
+      "Package - Dimension (cm³)": "22.4 x 15.0 x 2.4 cm (= 806 cm³ )",
+      "Package - Weight (g)": "30",
+      "Item - Dimension (cm³)": "12.5 x 15.0 x 0.5 cm (= 94 cm³ )",
+      "Included Components": "mirror"
+    }
+  },
+  "eans_on_page": [
+    "0734071461049"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "0734071461049",
+  "sales_rank": 12930,
+  "category": "Toys & Games 8",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 30,
+  "asin_extracted_from_page": "B0DGQKD9R3",
+  "asin_queried": "B0DGQKD9R3",
+  "asin": "B0DGQKD9R3",
+  "_search_method_used": "title"
+}

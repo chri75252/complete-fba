@@ -360,7 +360,7 @@ def financials(supplier, amazon, supplier_price_inc_vat):
     
     amazon_price_ex_vat = selling_price_inc_vat / (1 + VAT_RATE)
     output_vat = selling_price_inc_vat * VAT_RATE / (1 + VAT_RATE)
-    net_proceeds = selling_price_inc_vat - referral_fee - fba_fee - output_vat - supplier_price_inc_vat
+    net_proceeds = amazon_price_ex_vat - referral_fee - fba_fee - supplier_price_ex_vat
     hmrc = output_vat - input_vat
     net_profit = net_proceeds - hmrc - PREP_COST - SHIP_COST
     
@@ -394,10 +394,10 @@ def run_calculations():
     """
     Core calculation function modified to run on a specific linking map file.
     """
-    linking_map_path = "/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map - Copy.json"
-    supplier_cache_path = "/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json"
-    amazon_scrape_dir = "/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/FBA_ANALYSIS/amazon_cache"
-    output_dir = "/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/FBA_ANALYSIS/financial_reports"
+    linking_map_path = r"C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\not_found_asins - Copy.json"
+    supplier_cache_path = r"C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json"
+    amazon_scrape_dir = r"C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache"
+    output_dir = r"C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports"
 
     os.makedirs(output_dir, exist_ok=True)
 

@@ -1,79 +1,82 @@
-snippets around the references, as well as symbolic information.
-You will generally be able to use the info from the snippets and the regex-based approach to adjust the references as well.
-You can assume that all symbol editing tools are reliable, so you don't need to verify the results if the tool returns without error.
-
-
-Let us discuss the regex-based approach.
-The regex-based approach is your primary tool for editing code whenever replacing or deleting a whole symbol would be a more expensive operation.
-This is the case if you need to adjust just a few lines of code within a method, or a chunk that is much smaller than a whole symbol.
-You use other tools to find the relevant content and
-then use your knowledge of the codebase to write the regex, if you haven't collected enough information of this content yet.
-You are extremely good at regex, so you never need to check whether the replacement produced the correct result.
-In particular, you know what to escape and what not to escape, and you know how to use wildcards.
-Also, the regex tool never adds any indentation (contrary to the symbolic editing tools), so you have to take care to add the correct indentation
-when using it to insert code.
-Moreover, the replacement tool will fail if it can't perform the desired replacement, and this is all the feedback you need.
-Your overall goal for replacement operations is to use relatively short regexes, since I want you to minimize the number
-of output tokens. For replacements of larger chunks of code, this means you intelligently make use of wildcards for the middle part 
-and of characteristic snippets for the before/after parts that uniquely identify the chunk.
-
-For small replacements, up to a single line, you follow the following rules:
-
-  1. If the snippet to be replaced is likely to be unique within the file, you perform the replacement by directly using the escaped version of the 
-     original.
-  2. If the snippet is probably not unique, and you want to replace all occurrences, you use the `allow_multiple_occurrences` flag.
-  3. If the snippet is not unique, and you want to replace a specific occurrence, you make use of the code surrounding the snippet
-     to extend the regex with content before/after such that the regex will have exactly one match.
-  4. You generally assume that a snippet is unique, knowing that the tool will return an error on multiple matches. You only read more file content
-     (for crafvarting a more specific regex) if such a failure unexpectedly occurs. 
-
-Examples:
-
-1 Small replacement
-You have read code like
-  
-  ```python
-  ...
-  x = linear(x)
-  x = relu(x)
-  return x
-  ...
-  ```
-
-and you want to replace `x = relu(x)` with `x = gelu(x)`.
-You first try `replace_regex()` with the regex `x = relu\(x\)` and the replacement `x = gelu(x)`.
-If this fails due to multiple matches, you will try `(linear\(x\)\s*)x = relu\(x\)(\s*return)` with the replacement `\1x = gelu(x)\2`.
-
-2 Larger replacement
-
-You have read code like
-
-```python
-def my_func():
-  ...
-  # a comment before the snippet
-  x = add_fifteen(x)
-  # beginning of long section within my_func
-  ....
-  # end of long section
-  call_subroutine(z)
-  call_second_subroutine(z)
-```
-and you want to replace the code starting with `x = add_fifteen(x)` until (including) `call_subroutine(z)`, but not `call_second_subroutine(z)`.
-Initially, you assume that the the beginning and end of the chunk uniquely determine it within the file.
-Therefore, you perform the replacement by using the regex `x = add_fifteen\(x\)\s*.*?call_subroutine\(z\)`
-and the replacement being the new code you want to insert.
-
-If this fails due to multiple matches, you will try to extend the regex with the content before/after the snippet and match groups. 
-The matching regex becomes:
-`(before the snippet\s*)x = add_fifteen\(x\)\s*.*?call_subroutine\(z\)` 
-and the replacement includes the group as (schematically):
-`\1<new_code>`
-
-Generally, I remind you that you rely on the regex tool with providing you the correct feedback, no need for more verification!
-
-IMPORTANT: REMEMBER TO USE WILDCARDS WHEN APPROPRIATE! I WILL BE VERY UNHAPPY IF YOU WRITE LONG REGEXES WITHOUT USING WILDCARDS INSTEAD!
-
-
-INFO  2025-09-15 21:36:52,831 [MainThread] serena.cli:start_mcp_server:185 - Starting MCP server �
-INFO  2025-09-15 21:36:52,896 [MainThread] serena.mcp:_set_mcp_tools:240 - Starting MCP server with 26 tools: ['read_file', 'create_text_file', 'list_dir', 'fin
+{
+  "asin_from_details": "B0FBGKH9NN",
+  "title": "Active Enzyme Laundry Stain Remover Spray – Deep Cleaning Formula for Stubborn Stains, Oil & Collar Marks on White Shirts & Garments – Powerful Clothing Cleaner (2)",
+  "current_price": 16.99,
+  "main_image": "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61bXV-cvOHL._AC_SX466_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/61bXV-cvOHL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41iPTblO9kL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51cGClvm1GL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/51Cz8urhuTL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41W+Q2OJ1bL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/W/MEDIAX_1215821-T2/images/I/41cOHETRV+L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0FBGKH9NN",
+    "Date First Available": "30 May 2025"
+  },
+  "date_first_available_from_details": "30 May 2025",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Ziswin Direct",
+  "sold_by_amazon": false,
+  "rating": 5.0,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "【Powerful Enzyme Formula】This active enzyme stain remover spray breaks down tough stains into water-soluble particles for effortless removal. Its advanced booster prevents re-depositing, ensuring complete stain elimination from fabrics.",
+    "【Instant Stain Removal】Works within seconds! Our fast-acting laundry stain remover dissolves coffee, wine, ink, and food stains instantly—no scrubbing or lingering residue.",
+    "【Easy Application】For stubborn stains (collars, cuffs), apply a small amount, gently scrub, and rinse. No pre-soaking needed—ideal for busy lifestyles.",
+    "【Fabric-Safe & Versatile】Safe for cotton, linen, synthetics, and delicates. Effectively removes organic stains like juice, tea, and grease while preserving fabric quality.",
+    "【Portable & Multi-Scenario Use】Compact design for home, travel, or outdoor adventures. Tackle cooking spills, party mishaps, or camping stains anytime, anywhere."
+  ],
+  "description": "Product description Active Enzyme Laundry Stain Remover Spray – Deep Cleaning Formula for Stubborn Stains, Oil &amp; Collar Marks on White Shirts &amp; Garments – Powerful Clothing Cleaner Ingredients Laundry Stain Remover Spray",
+  "specifications_table": {
+    "Units": "‎1.0 millilitre",
+    "Brand": "‎Generic",
+    "Format": "‎Liquid",
+    "Country of origin": "‎China"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Active Enzyme Laundry Stain Remover Spray – Deep Cleaning Formula for Stubborn Stains, Oil & Collar Marks on White Shirts & Garments – Powerful Clothing Cleaner (2)",
+      "Last Price Change": "8 days ago",
+      "Buy Box Seller": "Ziswin Direct (76% positive over last 12 months)",
+      "Lowest FBM Seller": "Ziswin Direct (76% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2025/06/01",
+      "Listed since": "2025/05/30",
+      "Categories - Root": "Grocery",
+      "Categories - Sub": "Liquid Detergent",
+      "Categories - Tree": "Grocery › Home Care & Cleaning › Laundry › Liquid Detergent",
+      "Website Display Group - Name": "Health and Beauty",
+      "ASIN": "B0FBGKH9NN",
+      "Product Codes - PartNumber": "10321-5UK",
+      "Parent ASIN": "B0FBGJ43VN",
+      "Variation ASINs": "B0FBGJC7Y9, B0FBGKH9NN, B0FBGH9P36",
+      "Type": "LAUNDRY_DETERGENT",
+      "Manufacturer": "Generic",
+      "Brand": "Generic",
+      "Product Group": "Drugstore",
+      "Model": "10321-5UK",
+      "Size": "1 ml (Pack of 1)",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "millilitre",
+      "Scent": "nothing",
+      "Item Form": "Liquid",
+      "Product Benefit": "Stain Remover",
+      "Number of Items": "1",
+      "Package - Quantity": "2",
+      "Ingredients": "Laundry Stain Remover Spray"
+    }
+  },
+  "asin_extracted_from_page": "B0FBGKH9NN",
+  "asin_queried": "B0FBGKH9NN",
+  "asin": "B0FBGKH9NN"
+}

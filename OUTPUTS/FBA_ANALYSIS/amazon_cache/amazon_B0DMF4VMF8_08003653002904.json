@@ -1,1 +1,69 @@
-alog),o4=e=>(0,i.jsx)(oQ.a,{recipientType:e});var o5=n(461311);let o7=new D.jm(()=>Promise.all([n.e(45539),n.e(7811),n.e(11795),n.e(10269),n.e(68634),n.e(51079),n.e(66605),n.e(49468),n.e(13663),n.e(30143),n.e(74941),n.e(94626)]).then(n.bind(n,207233)),{name:"AddRecipientsDialog"}),o6=new D.tY(o7,e=>e.setShouldShowAddRecipientsDialogMutator),o9=(0,D.s_)(o7,e=>e.AddRecipientsDialog,void 0,void 0,{onlyImportIf:()=>(0,o5.aE)().shouldShow});var o3=n(665543);let o8=(0,l.P)(e=>{let t=Z.useContext(U.A),n=(0,o5.aE)(),o=Z.useRef(null),r=Z.useMemo(()=>`recipient-well-label-${nP._[e.recipientType].toLowerCase()}`,[e.recipientType]);Z.useEffect(()=>{o.current&&(o.current.id=r)},[r]);let a=(0,eO.Ay)("OAakRb",(0,eO.Ay)(o3.b));return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsx)(oQ.a,{ref:o,onClick:()=>{(0,R.G7)("mon-recipient-addrecipients")?o6.importAndExecute(!0,e.recipientType,t,r):function(e){let t=e.targetWindow||window,n=t.document,o=n.createElement("div");o.id="galDialogDiv",n.body.appendChild(o),(0,oJ.XX)((0,i.jsx)(iB.IF,{window:t,children:(0,i.jsx)(o1,{viewState:e.viewState,targetWindow:t,onDismiss:()=>{(0,oJ.xJ)(o),o.isConnected&&n.body.removeChild(o)},wellLabel:o4(e.recipientType)})}),o)}({viewState:e.viewState,recipientType:e.recipientType,targetWindow:t})},recipientType:e.recipientType,roleDesc:a,recipientSize:e.recipientSize,styleAsButton:!0}),(0,R.G7)("mon-recipient-addrecipients")&&n.shouldShow&&n.activeRecipientType===e.recipientType&&(0,i.jsx)(o9,{viewState:e.viewState,recipientType:e.recipientType,mailboxInfo:e.viewState.mailboxInfo,targetWindow:t})]})},"RecipientWellLabelWithGALModal");var o2=n(413972);let re=(0,nI.jK)("addEntity",e=>{e?.hasSessionStarted&&(e.conversationId=(0,it._)())});var rt=n(539887);function rn(e){let t=e.EmailAddress;return"PDL"===t.RoutingType?t.Name:function(e){let t=[];return e&&e.forEach((e,n)=>{t[n]=e.Id||e.EmailAddress.EmailAddress||e.EmailAddress.Name}),t}([e])[0]}var ri=n(480207),ro=n(931197),rr=n(25872),ra=n(535278),rl=n(729050),rs="zWl2D",rc="wYmGl",rd="vI3Jv",ru="HztaP",rp="QFieH";let rm=new Map([["full",30],["medium",26],["compact",22]]);var rf=n(208528),rg=n(990932),rh=n(943698),rA="Wd_e8",rv="BzUlf",rw=n(378320);let rb={className:"uIkUP"},rI={children:(0,i.jsx)(rh.MZl,{}),className:"Ur_aA"};function rC(e,t){return(0,i.jsx)("div",{className:t,children:e})}function rS(e,t,n){let o=t===nP._.To||t===nP._.MailMergeRecipient,r=t===nP._.Cc,l=t===nP._.Bcc,s=t===nP._.ReplyTo;return(0,i.jsx)("div",{className:(0,a.A)({gZum_:o,nxE4t:o&&!n,SZoKq:o&&n,U2cII:o&&!n,iP72H:r,tbwXO:r&&!n,Bkaq3:r&&n,eiBM0:r&&!n,i4BdH:l,qH68z:l&&!n,ce42e:l&&n,rrWkt:l&&!n,yXKSa:s,[ru]:s&&!n,[rv]:s&&n}),children:(0,i.jsx)(o8,{viewState:e,recipientType:t,recipientSize:n?function(){let e=(0,tr.x1)();if(rm.has(e))return rm.get(e)}():void 0})})}let ry=(0,l.P)(({isReadOnly:e,isFromShown:t,ccRecipientWell:n,bccRecipientWell:o,composeViewState:r,senderPersona:l,isNewLayout:s,editorRef:c,replyToRecipientWell:d})=>{let u=Date.now();(0,ex.A)(u,r,"RecipientPanel");let p=(0,Z.useRef)({}),m=(0,Z.useRef)(null),f=(e,t)=>()=>{(0,rw.Q)(t,e)},g=(0,Z.useCallback)(()=>{let e=m?.current?.ownerDocument?.defaultView;(0,O.zU)(r,e??window,c),f(!0,r.ccRecipientWell?.recipientEditorViewState)},[r,c]),h=(0,Z.useCallback)(()=>{(0,oq.A)(r),f(!0,r.ccRecipientWell?.recipientEditorViewState)},[r]),A=(0,Z.useCallback)(()=>{(0,nR.A)(r),f(!0,r.bccRecipientWell?.recipientEditorViewState)},[r]),v=(0,Z.useCallback)(()=>{(0,te.A)(r,!0)},[r]),w=(0,Z.useCallback)((e,t)=>{t||e.forEach(e=>{e.persona?.EmailAddress&&n&&(0,oZ.zU)((0,oY.A)(n,[e.persona.EmailAddress]))})},[n]),b=(0,Z.useCallback)(()=>{let e=null==r.protectionViewState.IRMData||r.protectionViewState.IRMData.ModifyRecipientsAllowed,t=!r.showCompactRecipientWell&&e,n=!!t&&!r.isCcShown&&!r.isMailMerge,o=!!t&&!r.isBccShown&&!r.isMailMerge,a=r.isInlineCompose&&(0,ez.A)();return(0,i.jsxs)("div",{className:"xcb6F",children:[r.isInlineCompose&&(0,i.jsx)(eZ,{viewState:r}),n&&(0,i.jsx)(ob.$,{appearance:"subtle",size:"small",onClick:h,className:rA,children:(0,eO.Ay)(oU.F)}),o&&(0,i.jsx)(ob.$,{appearance:"subtle",size:"small",onClick:A,className:rA,children:(0,eO.Ay)("_TuR0d")}),s&&a&&!r.fromViewState.isFromShown&&(0,i.jsx)(oN,{viewState:r,isMiniButton:!0}),r.isInlineCompose&&!s&&(0,i.jsx)(ob.$,{appearance:"subtle",onClick:g,title:(0,eO.Ay)(o_),icon:rI,"aria-label":(0,eO.Ay)(o_),size:"small"})]})},[r,g,A,h,s]);(0,Z.useEffect)(()=>{r.perfDatapoint?.addToCustomWaterfall(6,"RecipientPanelLoaded",!0);let e=r.addin.lastFocusedControl;e&&f(3===e,r.toRecipientWell?.recipientEditorViewState)},[]);let I=e=>(0,oX.A)(e,[]),C=(0,Z.useCallback)(e=>e,[]),S=(0,Z.useCallback)(()=>{(0,nK.A)(r.addin,3)},[r.addin]),y=r.showCompactRecipientWell&&!(!s&&t),x=(0,Z.useMemo)(()=>(!!y||!e)&&(0,oG.A)(r.mailboxInfo),[y,e,r.mailboxInfo,(0,rf.H)().isLicenseEnabled]),E=(0,Z.useCallback)((e,t)=>{let n={viewState:e,draggableItemType:J.W.ReadWriteRecipient,dropViewState:e.dropViewState,onEditorFocus:S,recipientType:t,onItemsRemoved:w,processItemToAdd:function(e,t){return(n,i,o)=>{let r=o||e,a=r.findResultSet.findIndex(e=>e.EmailAddress===n.persona.EmailAddress);return(0,Q.IF)("AddRecipientFromFindControl",{index:a.toString(),source:n.persona.debug?.source??"X"}),i?function(e,t,n,i){if(t){let o=rn(t);(0,rt.o)(o)||((0,Q.IF)("EntityAddSourceFromFindControl",[n,e.queryString?.length??0,i]),re(e.findPeopleFeedbackManager))}}(r,n.persona,a,i):function(e,t,n,i){if(t){let o=rn(t);if((0,rt.o)(o)||re(e.findPeopleFeedbackManager),(0,rr.A)(e)&&n>=0){let n=e.mailboxInfo,o=(0,i$.C)(n),r=o.SessionSettings?.UserPuid??"",a=o.SessionSettings?.TenantGuid??"",l=t.LogicalId?t.LogicalId:(0,ro.K)(e.mailboxInfo).sessionIds.latestQFRequestId;ri.BL.importAndExecute(i,r,a,l,t.TransactionId,t.ReferenceId??"","EntityClicked",void 0,void 0,void 0,n)}}}(r,n.persona,a,rl.A.MailCompose),t.editorId&&(0,nv.Q)(t.editorId),!0}}(e,r),convertInitialItemsToWellItems:C,inputAriaLabel:(0,o2.A)(t),showPresence:x,builtinPluginsProps:{composeOverflow:{ownerCollapsesRecipients:!0}},scenario:"owa.react.mail.compose"};return(0,i.jsx)(oi,{appearance:"underline",contentAfter:{children:(0,i.jsx)(ra.p,{...n,containerClassName:"LCArn"}),className:"uUaQm"},contentBefore:{children:t==nP._.To||t==nP._.MailMergeRecipient?b():void 0,className:"y95LA"},classN
+{
+  "asin_from_details": "B0DMF4VMF8",
+  "title": "MR.SIGA Dustpan and Brush Sets, Dust Pan and Brush Bamboo Handle, Durable Bristles and Easy-Sweep Blade, Lightweight Design, Grey",
+  "current_price": 14.99,
+  "amazon_monthly_sales_badge": 300,
+  "main_image": "https://m.media-amazon.com/images/I/61s4oHvOLZL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31bUWpYlEUL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/417ogrDRDsL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41G5KCLdH9L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/417gh0kLSrL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/513PAtAiu5L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41Q6xX27BuL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41oEemG4hWL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0DMF4VMF8",
+    "Item model number": "SJ21968",
+    "Date First Available": "25 Dec. 2024"
+  },
+  "date_first_available_from_details": "25 Dec. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Mr SIGA UK",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 3971,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "Elegant and compact design: MR.SIGA dustpan and brush sets has a natural bamboo handle, its portable design makes it easy to carry and store, the brush and pan set ideal for quick clean-ups anywhere in the home or office. Measures 30centimetres X 23.1centimetres(11.8 inch x 9.1 inch)",
+    "Brush is made of dense and durable bristles, it won't scratch cleaning surface. Soft rubber lip lies flat against cleaning surface and allows for maximum pickup, while built-in raised bar makes debris not easy to fall",
+    "Use this mini dustpan and brush in kitchen, office, bathroom, garage and it helps tackle the messes effectively. Handle snaps into dustpan and features a loop for hanging storage",
+    "This all purpose sweeping brush is your great household assistant, ideal for cleaning debris from couch, furniture, countertop, the small dustpan and brush also works effectively on bed sheet, car interior or any surface that needs a helping hand",
+    "MR.SIGA's mission: Make your housework easier, and make the world cleaner, please do not hesitate to contact us with any questions you may have, We will do our best to give you a satisfactory answer"
+  ],
+  "description": "Product Description Durable Bristles The densely packed bristles on the brush are built to last, maintaining their shape and effectiveness over time for thorough cleaning sessions. Easy Storage Design Equipped with a handy hanging rope, this set can be easily stored away when not in use, keeping your cleaning tools organized and within reach. Ergonomic Bamboo Handle The durable and comfortable bamboo handle offers a natural, ergonomic grip that is both sustainable and pleasant to hold, enhancing your cleaning experience. Soft Rubber Lip Designed with a soft rubber lip that lies flat against the surface, this dustpan ensures maximum pickup of dirt and debris, leaving your floors spotless without scratching. Where can I use the broom and dustpan set? This versatile dustpan and brush set is suitable for cleaning dirt from various surfaces such as sofas, furniture, and countertops. It's ideal for use in the kitchen, office, bathroom, car interiors,and other areas needing a quick clean. Will this dustpan pick up all the dust? Yes, the soft rubber lip ensures a tight seal against surfaces, picking up every last speck of dust while the built-in raised bar prevents debris from falling. What are the benefits of bamboo handles? The ergonomic bamboo handle is both durable and comfortable, making it a practical and stylish choice for your cleaning needs. Will the bristles on the brush scratch cleaning surfaces? No, the MR.SIGA brush is made of dense and durable bristles that are soft enough to clean without scratching any delicate surfaces, ensuring safe and effective cleaning. How is the brush stored when not in use? The handle of the brush snaps into the dustpan, and a hanging loop is included for easy access and space-saving organization. MORE CHOICES Dustpan and Brush Set Add To Basket Dustpan and Brush Set Add To Basket Dustpan and Brush Set Add To Basket Dustpan and Brush Set Add To Basket Dustpan and Brush Set Add To Basket Dustpan and Brush Set Add To Basket Customer Reviews 4.6 out of 5 stars 3,971 4.6 out of 5 stars 3,971 4.6 out of 5 stars 3,971 4.5 out of 5 stars 5,703 4.5 out of 5 stars 5,703 4.5 out of 5 stars 5,703 Price £14.99 £ 14 . 99 £14.99 £ 14 . 99 £14.99 £ 14 . 99 £11.99 £ 11 . 99 £11.99 £ 11 . 99 £11.99 £ 11 . 99 Set 1 1 1 1 1 1 Color Grey Black White Black Grey White Size 11.8 \" x 9.1 \" 11.8 \" x 9.1 \" 11.8 \" x 9.1 \" 7.1 \" x 6.2 \" 7.1 \" x 6.2 \" 7.1 \" x 6.2 \" Handle Material Bamboo Bamboo Bamboo Bamboo Bamboo Bamboo Style Modern Modern Modern Modern Modern Modern",
+  "specifications_table": {
+    "Product Dimensions": "‎30 x 23.3 x 8 cm; 224 g",
+    "Specific uses": "‎Kitchen, Office, Bathroom, Garage, Couch, Furniture, Countertop, Bed Sheet, Car Interior, Any Surface",
+    "Care instructions": "‎Do not use the broom to sweep up any oils or corrosive substance to prevent damage and deterioration of the bristles.",
+    "Is assembly required": "‎No",
+    "Number of pieces": "‎1",
+    "Batteries required": "‎No",
+    "Item weight": "‎224 Grams"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Product details tab timeout (extended)",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 1842,
+      "main_cat_name": "Grocery 36 drops / month",
+      "sub_cat_current_rank": 8,
+      "sub_cat_name": "Dustpan & Brush Sets 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled"
+  },
+  "sales_rank": 1842,
+  "category": "Grocery 36",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 200,
+  "asin_extracted_from_page": "B0DMF4VMF8",
+  "asin_queried": "B0DMF4VMF8",
+  "asin": "B0DMF4VMF8",
+  "_search_method_used": "title"
+}

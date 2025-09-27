@@ -1,151 +1,96 @@
-"""
-Enhanced Data Extractor for Amazon FBA Agent System
-Provides robust extraction methods for product data with improved accuracy and error handling.
-"""
-
-import re
-import logging
-from typing import Dict, Any, Optional, List, Tuple
-from bs4 import BeautifulSoup, Tag
-import json
-
-log = logging.getLogger(__name__)
-
-
-class DataExtractor:
-    """Enhanced data extraction utilities for product information."""
-    
-    def __init__(self):
-        """Initialize the data extractor with common patterns."""
-        # Price patterns for various formats
-        self.price_patterns = [
-            r'(?:£|$|€)\s*(\d{1,3}(?:[,.\s]\d{3})*(?:[.,]\d{1,2})?)',
-            r'(\d{1,3}(?:[,.\s]\d{3})*(?:[.,]\d{1,2})?)\s*(?:£|$|€)',
-            r'(?:GBP|USD|EUR)\s*(\d{1,3}(?:[,.\s]\d{3})*(?:[.,]\d{1,2})?)',
-            r'(\d{1,3}(?:[,.\s]\d{3})*(?:[.,]\d{1,2})?)\s*(?:GBP|USD|EUR)',
-        ]
-        
-        # Weight patterns
-        self.weight_patterns = [
-            r'(\d+(?:\.\d+)?)\s*(kg|kilogram|kilo)',
-            r'(\d+(?:\.\d+)?)\s*(g|gram)',
-            r'(\d+(?:\.\d+)?)\s*(lb|lbs|pound)',
-            r'(\d+(?:\.\d+)?)\s*(oz|ounce)',
-        ]
-        
-        # Dimension patterns
-        self.dimension_patterns = [
-            r'(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*(cm|mm|in|inch|inches)?',
-            r'(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)\s*(cm|mm|in|inch|inches)?',
-            r'L:\s*(\d+(?:\.\d+)?)\s*W:\s*(\d+(?:\.\d+)?)\s*H:\s*(\d+(?:\.\d+)?)\s*(cm|mm|in|inch|inches)?',
-        ]
-        
-        # EAN/UPC/GTIN patterns
-        self.identifier_patterns = [
-            r'(?:EAN|ean)[\s:-]*(\d{13})',
-            r'(?:UPC|upc)[\s:-]*(\d{12})',
-            r'(?:GTIN|gtin)[\s:-]*(\d{8,14})',
-            r'(?:Barcode|barcode)[\s:-]*(\d{8,14})',
-            r'(?:ISBN|isbn)[\s:-]*(\d{10,13})',
-            r'(?:ASIN|asin)[\s:-]*([A-Z0-9]{10})',
-        ]
-
-    def extract_price(self, text: str) -> Optional[float]:
-        """
-        Extract price from text with improved accuracy.
-        
-        Args:
-            text: Text containing price information
-            
-        Returns:
-            Extracted price as float or None
-        """
-        if not text:
-            return None
-            
-        text = str(text).strip()
-        
-        # Look for "Now" price first (for "Was X Now Y" patterns)
-        now_match = re.search(r'(?:Now|now)[\s:]*(?:£|$|€)?\s*(\d+(?:[.,]\d+)?)', text)
-        if now_match:
-            try:
-                price_str = now_match.group(1).replace(',', '.')
-                price = float(price_str)
-                if 0.01 <= price <= 1000000:
-                    return price
-            except ValueError:
-                pass
-        
-        # Try each price pattern
-        for pattern in self.price_patterns:
-            matches = re.findall(pattern, text, re.IGNORECASE)
-            if matches:
-                for match in matches:
-                    try:
-                        # Clean the price string
-                        price_str = match if isinstance(match, str) else match[0]
-                        # Remove spaces used as thousand separators
-                        price_str = price_str.replace(' ', '')
-                        # Handle European vs US number formats
-                        if ',' in price_str and '.' in price_str:
-                            # Determine which is the decimal separator
-                            if price_str.rfind(',') > price_str.rfind('.'):
-                                # European format: 1.234,56
-                                price_str = price_str.replace('.', '').replace(',', '.')
-                            else:
-                                # US format: 1,234.56
-                                price_str = price_str.replace(',', '')
-                        elif ',' in price_str:
-                            # Could be either format
-                            parts = price_str.split(',')
-                            if len(parts) == 2 and len(parts[1]) <= 2:
-                                # Likely European decimal: 123,45
-                                price_str = price_str.replace(',', '.')
-                            else:
-                                # Likely thousand separator: 1,234
-                                price_str = price_str.replace(',', '')
-                        
-                        price = float(price_str)
-                        # Sanity check
-                        if 0.01 <= price <= 1000000:
-                            return price
-                    except (ValueError, AttributeError):
-                        continue
-        
-        # Fallback: try to extract any number
-        numbers = re.findall(r'\d+(?:[.,]\d+)?', text)
-        for num_str in numbers:
-            try:
-                price = float(num_str.replace(',', '.'))
-                if 0.01 <= price <= 1000000:
-                    return price
-            except ValueError:
-                continue
-                
-        return None
-
-    def extract_weight(self, text: str) -> Optional[Dict[str, Any]]:
-        """
-        Extract weight information from text.
-        
-        Args:
-            text: Text containing weight information
-            
-        Returns:
-            Dict with 'value' and 'unit' or None
-        """
-        if not text:
-            return None
-            
-        text = str(text).lower().strip()
-        
-        for pattern in self.weight_patterns:
-            match = re.search(pattern, text)
-            if match:
-                try:
-                    value = float(match.group(1))
-                    unit = match.group(2)
-                    return {
-                        'value': value,
-                        'unit': unit,
-                        'p
+{
+  "asin_from_details": "B0BQWJRSGJ",
+  "title": "Masterplast Breathable Cohesive Support Bandage 7Cm X 3.6M",
+  "current_price": 3.84,
+  "original_price": 4.0,
+  "main_image": "https://m.media-amazon.com/images/I/71cftVFdmRL._SL1233_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51GZ65FpSoL._SX38_SY50_CR,0,0,38,50_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Blossom Lavender",
+  "sold_by_amazon": false,
+  "rating": 5.0,
+  "review_count": 3,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "SUPPORT SPRAINS & STRAINS: Masterplast Cohesive Support Bandage, gives the support of a crepe bandage with the added advantage of being flexible and self fastening. It can be removed and repositioned and is fully breathable",
+    "FLEXIBLE & BREATHABLE: Masterplast Cohesive Support Bandage is flexible, breathable making it comfortable to wear. Self securing bandage, pins and tape are not required. Painless to remove, the bandage does not stick to skin",
+    "SPORTS SUPPORT: Masterplast Cohesive Support Bandage, provides support to damaged muscles, tendons and ligaments. Add to sports/gym bag, add to travelling bag first aid kit",
+    "LATEX ALLERGY: Masterplast Cohesive Support Bandage, contains latex, do not use if you have an allergy to latex. Keep out of the reach of children. Do not apply too tightly",
+    "ABOUT THE PRODUCT: Masterplast Cohesive Bandage, 7cm x3.6M approx. Material 97 PercentPolyester, 3 PercentElastance. Hand Wash Only. Colour: Blue"
+  ],
+  "description": "Masterplast Cohesive Support Bandage, gives the support of a crepe bandage with the added advantage of being flexible and self fastening. Provides support to damaged muscles, tendons and ligaments. Add to sports/gym bag, add to travelling bag first aid kit. The bandage can be removed and repositioned and is fully breathable. Self securing bandage, pins and tape are not required. Painless to remove, the bandage does not stick to skin. Masterplast Cohesive Support Bandage, contains latex, do not use if you have an allergy to latex. Keep out of the reach of children. Do not apply too tightly. Search Amazon.co.uk for the Masterplast Range of products. Masterplast Cohesive Bandage, 7cm x3.6M approx. Material 97 PercentPolyester, 3 PercentElastance. Hand Wash Only. Colour: Blue",
+  "specifications_table": {
+    "Brand Name": "Masterplast",
+    "Manufacturer": "151 Products limited",
+    "Customer Reviews": "5.0 5.0 out of 5 stars (3) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 5.0 out of 5 stars",
+    "ASIN": "B0BQWJRSGJ",
+    "Item height": "17 centimetres"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 104046,
+      "main_cat_name": "Health & Personal Care 5 drops / month",
+      "sub_cat_current_rank": 0,
+      "sub_cat_name": "-1 0"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Masterplast Breathable Cohesive Support Bandage 7Cm X 3.6M",
+      "Sales Rank - Reference": "Health & Personal Care",
+      "Sales Rank - Display Group": "health_and_beauty_display_on_website",
+      "Reviews - Rating": 5.0,
+      "Reviews - Rating Count": 3.0,
+      "Last Price Change": "6 days ago",
+      "Buy Box Seller": "Blossom Lavender (82% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 4.73,
+      "Referral Fee %": "8.07 %",
+      "Referral Fee based on current Buy Box price": 0.31,
+      "Lowest FBM Seller": "Blossom Lavender (82% positive over last 12 months) Deabbacus (81% positive over last 12 months)",
+      "Total Offer Count": "6",
+      "Tracking since": "2022/12/23",
+      "Listed since": "2022/12/22",
+      "Categories - Root": "Health & Personal Care",
+      "Categories - Sub": "Tape & Supplies",
+      "Categories - Tree": "Health & Personal Care › Medical Supplies & Equipment › Orthopaedic Supplies › Tape & Supplies",
+      "Website Display Group - Name": "BISS Basic",
+      "ASIN": "B0BQWJRSGJ",
+      "Product Codes - EAN": "5050375018440",
+      "Product Codes - PartNumber": "MP1018-36",
+      "Freq. Bought Together": "B07K7NBK7H, B0BZZ3275K",
+      "Type": "NUTS",
+      "Manufacturer": "151 Products limited",
+      "Brand": "Masterplast",
+      "Product Group": "BISS",
+      "Color": "Blue",
+      "Material": "Polyester, Elastane",
+      "Number of Items": "1",
+      "Package - Dimension (cm³)": "44.0 x 22.0 x 12.5 cm (= 12,100 cm³ )",
+      "Package - Weight (g)": "1,600",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "12.5 x 6.0 x 17.0 cm (= 1,275 cm³ )",
+      "Item - Model (g)": "40"
+    }
+  },
+  "eans_on_page": [
+    "5050375018440"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5050375018440",
+  "sales_rank": 104046,
+  "category": "Health & Personal Care 5",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 5,
+  "asin_extracted_from_page": "B0BQWJRSGJ",
+  "asin_queried": "B0BQWJRSGJ",
+  "asin": "B0BQWJRSGJ",
+  "_search_method_used": "EAN"
+}

@@ -1,1 +1,88 @@
-sets:u}=Y();me({assetType:S.APP,entryUUID:a,answerMode:"search",reason:"apps-mode"});const w=l.useCallback(()=>{const v=new URL(window.location.href);v.pathname=`/apps/${a}`,window.open(v.toString(),"_blank","noopener,noreferrer")},[a]),I=l.useMemo(()=>({height:`${o*(9/16)*c}px`}),[c]),{result:g}=W(),{canUseCanvas:N,openCanvas:f,isCanvasOpen:_,doCanvasAction:x,canvasState:m}=X(),T=l.useCallback(v=>{f(),x({type:"setAsset",asset:s,result:g}),x({type:"setTab",tab:p.Preview}),v.preventDefault()},[s,x,f,g]),j=l.useCallback(v=>{f(),x({type:"setAsset",asset:s,result:g}),x({type:"setTab",tab:p.Assets}),v.preventDefault()},[f,s,g,x]),E=Z(u),A=Q(s);let D=null;N&&_?D=m?.asset?.uuid===n?e.jsx(C,{variant:"subtle",className:"flex size-full items-center justify-center",children:e.jsx(z,{variant:"tinyRegular",children:e.jsx(R,{defaultMessage:"This app is open in the canvas panel",id:"cvyp/2qtyS"})})}):e.jsx(C,{variant:"subtle",className:"flex size-full items-center justify-center",children:e.jsx(z,{variant:"tinyRegular",children:e.jsx(R,{defaultMessage:"A different app is open in the canvas panel",id:"i0ews1qu5w"})})}):D=G(t.url)?null:e.jsx("iframe",{ref:i,src:t.url,title:"Embedded App",sandbox:"allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms",referrerPolicy:"no-referrer",width:`${o}px`,height:`${o*(9/16)}px`,loading:"eager",className:"absolute left-0 top-0 origin-top-left",style:{colorScheme:"normal",transform:`scale(${c})`}});const oe=l.useCallback(()=>{h("generated asset downloaded",{assetType:S.CODE_FILE,answerMode:"apps",entryUUID:a,reason:"powerpoint-export"})},[a,h]),le=l.useCallback(()=>{h("generated asset downloaded",{assetType:S.SLIDES,answerMode:"apps",entryUUID:a,reason:"pdf-export"})},[a,h]);return e.jsxs("div",{className:"flex flex-col gap-3",children:[e.jsx(C,{className:"relative aspect-[16/9] w-full overflow-hidden rounded-lg border shadow-sm",style:I,variant:"raised",as:"figure",ref:r,children:D}),e.jsxs("div",{className:"flex gap-3",children:[e.jsxs(b,{href:"#",onClick:w,"aria-label":d({defaultMessage:"View full screen",id:"nnujdEvOPI"}),className:"text-quiet hover:text-super inline-flex items-center gap-1.5 text-xs font-normal transition-opacity",children:[e.jsx(k,{icon:J,size:"xs",className:"-mt-px"}),d({defaultMessage:"View full screen",id:"nnujdEvOPI"})]}),E&&e.jsxs(b,{href:E,download:!0,onClick:oe,"aria-label":d($),className:"text-quiet hover:text-super inline-flex cursor-pointer items-center gap-1.5 text-xs font-normal transition-opacity",children:[e.jsx(k,{icon:Ce,size:"xs",className:"-mt-px"}),e.jsx(R,{...$})]}),A&&e.jsxs(b,{href:`${t.url}?print=1`,target:"slidesPrintWindow",onClick:le,"aria-label":d(O),className:"text-quiet hover:text-super inline-flex items-center gap-1.5 text-xs font-normal transition-opacity",children:[e.jsx(k,{icon:K,size:"xs",className:"-mt-px"}),e.jsx(R,{...O})]}),e.jsxs(b,{href:"#",onClick:j,"aria-label":d({defaultMessage:"View assets",id:"sVZhnRF+M2"}),className:"text-quiet hover:text-super inline-flex items-center gap-1.5 text-xs font-normal transition-opacity",children:[e.jsx(k,{icon:Ne,size:"xs",className:"-mt-px"}),d({defaultMessage:"View assets",id:"sVZhnRF+M2"})]}),N&&e.jsxs(b,{href:"#",onClick:T,target:"_blank","aria-label":d({defaultMessage:"View canvas",id:"Urkw+dRNYX"}),className:"text-quiet hover:text-super inline-flex items-center gap-1.5 text-xs font-normal transition-opacity",children:[e.jsx(k,{icon:Te,size:"xs",className:"-mt-px"}),d({defaultMessage:"View canvas",id:"Urkw+dRNYX"})]})]})]})},({app:t,...a},{app:n,...s})=>fe(a,s)&&ie(t,n));ae.displayName="ResponsiveAppAsset";const Ye=Object.freeze(Object.defineProperty({__proto__:null,ANSWER_MODE_TABS_HEIGHT:se,AppAssetIframe:P,AppsMode:te,ResponsiveAppAsset:ae},Symbol.toStringTag,{value:"Module"}));function Fe(){return{loading:!1,activeTab:p.Preview}}const Ue=(t,a)=>U(a).with({type:"setLoading"},({loading:n,assetType:s})=>({...t,loading:n,loadingAssetType:s})).with({type:"setAsset"},({asset:n,result:s})=>({...t,asset:n,assetResult:s})).with({type:"setTab"},({tab:n})=>({...t,activeTab:n})).exhaustive();var p;(function(t){t.Preview="preview",t.Assets="assets"})(p||(p={}));const ne=y.memo(()=>{const{closeCanvas:t,setCanvasDispatch:a,setCanvasState:n}=X(),[s,i]=l.useReducer(Ue,Fe()),{results:o}=B(),{isMobileStyle:c}=we();l.useEffect(()=>{a(i)},[i,a]),l.useEffect(()=>{n(s)},[s,n]);const r=l.useMemo(()=>s.asset?.app,[s]),d=l.useCallback(()=>{if(!r||!s.assetResult)return;const m=new URL(window.location.href);m.pathname=`/apps/${s.assetResult.backend_uuid}`,window.open(m.toString(),"_blank","noopener,noreferrer")},[r,s.assetResult]),h=l.useCallback(()=>{t()},[t]),u=l.useMemo(()=>{const m=[],T=Q(s.asset);let j;if(s.assetResult?.blocks){const E=s.assetResult.blocks.filter(A=>A.assets_mode_block).flatMap(A=>A.assets_mode_block?.assets??[]);j=Z(E)}return T&&r?.url&&m.push({type:"default",text:"PDF",icon:K,href:`${r.url}?print=1`,target:"slidesPrintWindow",isExportable:!0}),j&&m.push({type:"default",text:"PowerPoint",icon:Ee,href:j,download:"presentation.pptx",isDownloadable:!0}),!T&&r?.app_url&&m.push({type:"default",text:"Download",icon:Re,href:r.app_url,target:"_blank",isDownloadable:!0}),m},[s.asset,s.assetResult?.blocks,r?.url,r?.app_url]),w=s.activeTab,I=l.useMemo(()=>[{key:p.Preview,text:"Preview",active:w==p.Preview,onClick:()=>i({type:"setTab",tab:p.Preview}),show:!0},{key:p.Assets,text:"Assets",active:w==p.Assets,onClick:()=>i({type:"setTab",tab:p.Assets}),show:!0}],[w,i]),g=s.loading&&s.loadingAssetType==="APP",N=s.loading&&s.loadingAssetType==="SLIDES",{$t:f}=F(),_=U(w).with(p.Preview,()=>e.jsx(e.Fragment,{children:r?e.jsx("div",{className:"m-md flex grow text-clip rounded-md",children:e.jsx(P,{url:r.url})}):e.jsx("div",{className:"flex size-full items-center justify-center",children:e.jsx(he,{size:32,className:"text-super"})})})).with(p.Assets,()=>e.jsx(ee,{})).exhaustive(),x=f(N?{defaultMessage:"New slides are being generated",id:"ggK8nS0+sw"}:g?{defaultMessage:"A new app is being generated",id:"Y1uZU1L1YH"}:{defaultMessage:"Made with Perplexity Labs",id:"HcyC9onqnh"});return e.jsx(_e,{children:e.jsxs(ge.div,{className:"lg:py-sm lg:pr-sm erp-tab:py-0 erp-tab:pr-0 erp-tab:pl-2 flex h-full w-0 flex-col text-clip",initial:{flexGrow:0,flexShrink:1,opacity:0},animate:{flexGrow:2,flexShrink:0,opacity:1},exit:{flexGrow:0,flexShrink:1,opacity:0},transition:{duration:.2,ease:ve},children:[e.jsxs(C,{variant:"background",className:"erp-tab:rounded-none h-headerHeight px-md py-sm flex items-center justify-end rounded-t-lg border-b",children:[
+{
+  "asin_from_details": "B0DL9ZX9TY",
+  "title": "Dekton 200-Piece Picture Hanging Set- Wall Hanging Kit| Includes Hooks, Nails, and D-Rings| Ideal for Frames and Artwork| Heavy-Duty & Reliable| Versatile for Home, Office, Gallery Use| Organized Box",
+  "current_price": 5.9,
+  "original_price": 8.26,
+  "main_image": "https://m.media-amazon.com/images/I/71-oEFB-JhL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41dH06qYckL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41XFbLgW2FL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Coldbar",
+  "sold_by_amazon": false,
+  "rating": 4.8,
+  "availability_text": "Only 4 left in stock.",
+  "in_stock": true,
+  "features": [
+    "Complete Hanging Solution: The Dekton 200-Piece Picture Hanging Set includes an extensive assortment of hooks, nails, and D-rings, providing everything you need for a secure and reliable hanging experience. Whether you're decorating your home, office, or gallery, this comprehensive kit has you covered for all your framing and artwork needs.",
+    "Heavy-Duty & Reliable: Designed for durability, this set features high-quality materials that ensure your pictures and frames stay firmly in place. Each component is crafted to support a variety of weights, making this kit ideal for both lightweight and heavier items.",
+    "Organized and Convenient Storage: The kit comes in a well-organized box with separate compartments for each type of hardware. This thoughtful design keeps everything neatly stored and easily accessible, saving you time and hassle during your projects.",
+    "Enhanced Safety and Stability: With its robust construction and secure fittings, the Dekton Picture Hanging Set ensures that your valuable frames and artwork are hung safely. You can trust this kit to provide long-lasting performance and stability, protecting your displays from accidental falls or damage.",
+    "Versatile Application: Perfect for a wide range of uses, including home decor, office spaces, and art galleries. This set is versatile enough to accommodate various picture sizes and types, offering flexibility for any hanging project. Simple and straightforward to use, this hanging set allows you to quickly and efficiently mount your pictures and artwork."
+  ],
+  "description": "Transform your space effortlessly with the Dekton 200-Piece Picture Hanging Set, the ultimate solution for all your wall hanging needs. This comprehensive wall hanging kit is designed to provide everything you need to securely and stylishly display frames, artwork, and other decorative items in any setting. It includes an extensive assortment of hooks, nails, and D-rings, offering a versatile range of options to accommodate various weights and sizes of hanging items. Whether you're decorating your home, setting up an office gallery, or curating an art exhibition, this set delivers the heavy-duty reliability required for a professional finish. The kit features a selection of high-quality hooks designed to support a range of weights, ensuring that even your heaviest frames and artwork are securely mounted. The included nails are sturdy and durable, perfect for creating a stable base for your wall hangings. Each component is crafted from premium materials, guaranteeing long-lasting performance and strength. Organizational convenience is a key feature of this set. All components are neatly arranged in a well-organized box, making it easy to find the exact pieces you need for each project. The box itself is designed for easy storage and access, so you can keep your tools and hardware in one place, ready for any hanging task that comes your way. Ideal for use in various environments, including homes, offices, and galleries, the Dekton 200-Piece Picture Hanging Set is perfect for both personal and professional applications.",
+  "specifications_table": {
+    "Brand": "DEKTON",
+    "ASIN": "B0DL9ZX9TY",
+    "Item Type Name": "DEKTON 200PCS PICTURE HANGING SET",
+    "Included Components": "1 X 200PCS PICTURE HANGING SET",
+    "Item height": "12.1 centimetres",
+    "Manufacturer": "Avron Trading Ltd"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Dekton 200-Piece Picture Hanging Set- Wall Hanging Kit| Includes Hooks, Nails, and D-Rings| Ideal for Frames and Artwork| Heavy-Duty & Reliable| Versatile for Home, Office, Gallery Use| Organized Box",
+      "Last Price Change": "12 days ago",
+      "Buy Box Seller": "Coldbar (94% positive over last 12 months)",
+      "Lowest FBA Seller": "Coldbar (94% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 2.42,
+      "Referral Fee %": "13.05 %",
+      "Referral Fee based on current Buy Box price": 0.77,
+      "Total Offer Count": "3",
+      "Tracking since": "2025/01/04",
+      "Listed since": "2024/10/29",
+      "Categories - Root": "DIY & Tools",
+      "Categories - Sub": "Magnetic Hooks",
+      "Categories - Tree": "DIY & Tools › Hardware › Hooks › Magnetic Hooks",
+      "Website Display Group - Name": "Home Improvement",
+      "ASIN": "B0DL9ZX9TY",
+      "Product Codes - EAN": "5055441457185",
+      "Product Codes - PartNumber": "DH03065",
+      "Type": "PICTURE_HANGER",
+      "Manufacturer": "Avron Trading Ltd",
+      "Brand": "DEKTON",
+      "Brand Store Name": "DEKTON",
+      "Brand Store URL Name": "DEKTON",
+      "Brand Store URL": "https://www.amazon.com/stores/DEKTON/page/D4068B3B-47DA-4257-93DF-12C56F15A592",
+      "Product Group": "Home Improvement",
+      "Model": "DH03065",
+      "Color": "Red",
+      "Unit Details - Unit Value": "1",
+      "Unit Details - Unit Type": "count",
+      "Binding": "DIY & Tools",
+      "Package - Dimension (cm³)": "20.0 x 13.0 x 4.0 cm (= 1,040 cm³ )",
+      "Package - Weight (g)": "320",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "18.5 x 2.5 x 12.1 cm (= 560 cm³ )",
+      "Item - Model (g)": "320",
+      "Included Components": "1 X 200PCS PICTURE HANGING SET"
+    }
+  },
+  "eans_on_page": [
+    "5055441457185"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5055441457185",
+  "asin_extracted_from_page": "B0DL9ZX9TY",
+  "asin_queried": "B0DL9ZX9TY",
+  "asin": "B0DL9ZX9TY",
+  "_search_method_used": "EAN"
+}

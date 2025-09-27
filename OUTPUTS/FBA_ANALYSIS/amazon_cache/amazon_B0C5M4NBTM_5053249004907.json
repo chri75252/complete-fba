@@ -1,184 +1,119 @@
-# Browser Manager Chrome CDP Compatibility Fixes - Comprehensive Technical Documentation
-
-## Session Overview
-**Date**: 2025-08-28  
-**Issue**: Chrome CDP connection failures preventing browser automation visibility  
-**Root Cause**: Chrome 139.0.7258.155 incompatibility with Playwright CDP connection  
-**Status**: Resolved with fallback, user requires Chrome profile functionality  
-**Workspace**: `c:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`
-
-## Problem Details
-
-### Initial Error Pattern
-```
-2025-08-28 12:02:37,603 - utils.browser_manager - ERROR - ❌ Could not connect to persistent Chrome on port 9222. Error: BrowserType.connect_over_cdp: socket hang up
-Call log:
-  - <ws preparing> retrieving websocket url from http://localhost:9222
-```
-
-### User Requirements
-- Chrome profile: `chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\ChromeDebugProfile"`
-- Browser must be visible (not headless)
-- All automation activities must be visible to user
-- Must maintain Chrome sync functionality
-
-### Diagnostic Results  
-- **Chrome Processes**: 46 processes found running
-- **Debug Port 9222**: Not accessible despite Chrome running
-- **Chrome Version**: 139.0.7258.155
-- **Playwright Version**: 1.54.0
-- **Conclusion**: Chrome not started with debug flags
-
-## Key Implementation - Enhanced Browser Manager
-
-### Original Failing Code (from copywprking version):
-```python
-async def launch_browser(self, cdp_port: int, headless: bool = False):
-    self.playwright = await async_playwright().start()
-    try:
-        log.info(f"🔌 Connecting to persistent Chrome on debug port {cdp_port}")
-        self.browser = await self.playwright.chromium.connect_over_cdp(f"http://localhost:{cdp_port}")
-        # ... context setup
-        log.info("✅ Connected to persistent Chrome successfully")
-    except Exception as e:
-        log.error(f"❌ Could not connect to persistent Chrome on port {cdp_port}. Error: {e}")
-        # Clean up and raise exception - NO FALLBACK
-        raise Exception(f"Failed to connect to persistent Chrome on port {cdp_port}. Please start Chrome with debug port.")
-```
-
-### Enhanced Implementation with Fallback:
-```python
-async def launch_browser(self, cdp_port: int, headless: bool = False):
-    self.playwright = await async_playwright().start()
-    
-    # Multi-attempt CDP connection with retry logic
-    connection_success = False
-    max_attempts = 3
-    
-    for attempt in range(1, max_attempts + 1):
-        try:
-            log.info(f"🔄 CDP connection attempt {attempt}/{max_attempts}")
-            if attempt > 1:
-                await asyncio.sleep(2 * attempt)  # Exponential backoff
-            
-            self.browser = await self.playwright.chromium.connect_over_cdp(
-                f"http://localhost:{cdp_port}", timeout=15000
-            )
-            
-            if self.browser and self.browser.is_connected():
-                log.info(f"✅ Successfully connected to Chrome on port {cdp_port}")
-                connection_success = True
-                break
-                
-        except Exception as connect_error:
-            log.warning(f"⚠️ CDP connection attempt {attempt} failed: {connect_error}")
-            continue
-    
-    # FALLBACK: Use Playwright's bundled Chromium when CDP fails
-    if not connection_success:
-        log.warning(f"⚠️ Chrome profile connection failed - falling back to bundled browser")
-        
-        try:
-            log.info(f"🔄 Falling back to Playwright's bundled Chromium (headless: {headless})")
-            self.browser = await self.playwright.chromium.launch(
-                headless=headless,
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                    "--disable-web-security",
-                    "--disable-features=VizDisplayCompositor", 
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage"
-                ]
-            )
-            log.info(f"✅ Successfully launched Playwright's bundled Chromium")
-            
-        except Exception as fallback_error:
-            log.error(f"❌ Fallback browser also failed: {fallback_error}")
-            raise Exception(f"Both Chrome profile and fallback browser failed.")
-```
-
-## Browser Visibility Enhancement
-
-### Problem: Automation in Background Tabs
-User could see browser but automation activities were happening in background tabs.
-
-### Solution: Bring Pages to Front
-```python
-async def get_page(self, url: Optional[str] = None, reuse_existing: bool = True) -> Page:
-    # ... existing page retrieval logic ...
-    
-    # Bring page to front so user can see automation activities
-    try:
-        await page.bring_to_front()
-        log.debug("Brought page to front for visibility")
-    except Exception as e:
-        log.debug(f"Could not bring page to front: {e}")
-    
-    return page
-```
-
-## Chrome Debug Test Script
-
-### Complete Test Script (test_chrome_debug.py):
-```python
-import asyncio
-import aiohttp
-import subprocess
-from playwright.async_api import async_playwright
-
-async def test_chrome_debug_port():
-    """Test Chrome debug port availability."""
-    try:
-        timeout = aiohttp.ClientTimeout(total=10)
-        async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.get(f"http://localhost:9222/json/version") as response:
-                if response.status == 200:
-                    version_info = await response.json()
-                    browser_version = version_info.get('Browser', 'Unknown')
-                    log.info(f"✅ Chrome debug port accessible - {browser_version}")
-                    return True, version_info
-                return False, None
-    except Exception as e:
-        log.error(f"❌ Debug port test failed: {e}")
-        return False, None
-
-def check_chrome_processes():
-    """Check if Chrome processes are running."""
-    result = subprocess.run(
-        ["tasklist", "/fi", "imagename eq chrome.exe", "/fo", "csv"],
-        capture_output=True, text=True, timeout=10
-    )
-    if result.returncode == 0 and "chrome.exe" in result.stdout:
-        lines = result.stdout.strip().split('\n')[1:]
-        chrome_count = len([line for line in lines if line.strip()])
-        log.info(f"✅ Found {chrome_count} Chrome processes running")
-        return True
-    return False
-```
-
-## Playwright Installation Fixes
-
-### Version Mismatch Resolution:
-```bash
-# Problem: chromium-1181 expected but chromium-1187 available
-# Solution: Copy newer version to expected path
-robcopy "C:\Users\chris\AppData\Local\ms-playwright\chromium-1187" "C:\Users\chris\AppData\Local\ms-playwright\chromium-1181" /E
-```
-
-### Type Annotation Fix:
-```python
-# Original (caused error in Python 3.13+):
-async with aiohttp.ClientSession(timeout=5) as session:
-
-# Fixed:
-timeout = aiohttp.ClientTimeout(total=5)
-async with aiohttp.ClientSession(timeout=timeout) as session:
-```
-
-## Test Results Summary
-
-### ✅ Successful Tests
-1. **Fallback Browser Launch**: Playwright's bundled Chromium works
-2. **Browser Visibility**: headless=False maintained, automation visible
-3. **Complete Workflow**: End-to-end processing with fallback browser
-4. **Error Recovery**: Graceful fallback wh
+{
+  "asin_from_details": "B0C5M4NBTM",
+  "title": "100 Card Sleeves Hard Sleeves for Cards, 3\"x4\" Baseball Card Protectors Hard Plastic, 35pt Card Holders for Baseball Cards, Football Cards (100 Hard Sleeves + 100 Clear Sleeves)",
+  "current_price": 14.99,
+  "original_price": 16.99,
+  "amazon_monthly_sales_badge": 300,
+  "main_image": "https://m.media-amazon.com/images/I/71JlS2KCkgL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41QNoVco7XL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51CNU+Wg+sL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51tcp664E7L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51Pxyv7e07L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51ooM80Le6L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41KojbFmXfL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51EBqLlKmKL._SL1500_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0C5M4NBTM",
+    "Date First Available": "23 Jun. 2023"
+  },
+  "date_first_available_from_details": "23 Jun. 2023",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Tiop Lior",
+  "sold_by_amazon": false,
+  "rating": 4.2,
+  "review_count": 102,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "【BONUS PACKS】- You will get 100 transparent hard sleeves for cards and 100 soft card sleeves, giving your trading cards or baseball cards double protection.",
+    "【SUPER CLEAR】- Our hard sleeves for cards is highly transparent, different from most blue tint baseball card holders. Theses card sleeves hard plastic not only fit for mtg yugioh and other playing cards board game, but also suit for sports cards baseball cards football card kpop photocard.",
+    "【STANDARD SIZE】- External size 3*4 inches, internal size 2.6*3.8 inches, the card protectors hard plastic is suitable for most cards extremely lightweight and can be carried in a pocket or bag.",
+    "【HIGH QUALITY】- Made with clear rigid PVC, the yugioh sleeves is waterproof and durable. Our packaging ensures that the plastic card holder will no bend curve and deform in transit. Acid-free sleeves offer your collectible cards a long-term protection.",
+    "【EXCELLENT SERVICE】- Your satisfaction is always our priority. If you have any concerns or question about our card sleeves hard plastic, whether before or after the purchase, please feel free to contact us, we will solve it in 12 hour"
+  ],
+  "description": "Product Description SERVE YOUR PRECIOUS ALL-ROUND PROTECTION Depending on the quantity you purchased, you will get: 100 hard sleeves + 100 clear sleeves.They serve your precious collectible trading cards an all-round protection. FOUR KEY FEATURE OF OUR CARD SLEEVE HARD PLASTIC As you can see, our hard sleeves are: Easy to use: Take out our card holders, tuck your sleeveless or sleeved card in, and that's all. Scratch resistant: Made of high-density materials, our card cases are scratch resistant, which will save you a lot of effort to tear off the film. High transparency: Unlike other blue and blurry sleeve, ours are highly transparent, which is good for showing the original charm of your cards. Sturdy and durable: Good quality and large quantity, our sleeves for trading cards are designed for long-term use by trading card collectors. Clear and Thin Soft Sleeve Sturdy and Transparent Hard Sleeves Curved and Delicate Corner",
+  "specifications_table": {
+    "Manufacturer": "‎TiopLior",
+    "Brand": "‎TiopLior",
+    "Model Number": "‎SL-200-Deals",
+    "Product Dimensions": "‎10.16 x 7.62 x 0.1 cm; 1.91 kg",
+    "Colour": "‎Transparent",
+    "Material Type": "‎Plastic, Polypropylene (PP)",
+    "Number of Items": "‎100",
+    "Size": "‎100 Hard Sleeves + 100 Clear Sleeves",
+    "Sheet Size": "‎2.6 x 3.8 inches",
+    "Manufacturer Part Number": "‎SL-200-Deals",
+    "Item Weight": "‎1.92 kg"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 3284,
+      "main_cat_name": "Toys & Games 18 drops / month",
+      "sub_cat_current_rank": 24,
+      "sub_cat_name": "Trading Card Sleeves 4"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "100 Card Sleeves Hard Sleeves for Cards, 3\"x4\" Baseball Card Protectors Hard Plastic, 35pt Card Holders for Baseball Cards, Football Cards (100 Hard Sleeves + 100 Clear Sleeves)",
+      "Sales Rank - Reference": "Toys & Games",
+      "Sales Rank - Display Group": "toy_display_on_website",
+      "Bought in past month": "300+",
+      "Reviews - Rating": 4.2,
+      "Reviews - Rating Count": 102.0,
+      "Last Price Change": "1 day ago",
+      "Buy Box Seller": "Tiop Lior (100% positive over last 12 months)",
+      "Lowest FBA Seller": "Tiop Lior (100% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 3.04,
+      "Referral Fee %": "15.01 %",
+      "Referral Fee based on current Buy Box price": 2.25,
+      "Total Offer Count": "1",
+      "Tracking since": "2023/08/11",
+      "Listed since": "2023/06/23",
+      "Categories - Root": "Toys & Games",
+      "Categories - Sub": "Sleeves",
+      "Categories - Tree": "Toys & Games › Collectible Toys › Collectible Display & Storage › Trading Card Storage Albums & Cases › Sleeves",
+      "Website Display Group - Name": "Office Product",
+      "ASIN": "B0C5M4NBTM",
+      "Product Codes - PartNumber": "SL-200-Deals",
+      "Freq. Bought Together": "B0002TT3N4",
+      "Type": "CARD_DOCUMENT_SLEEVE",
+      "Manufacturer": "TiopLior",
+      "Brand": "TiopLior",
+      "Brand Store Name": "TiopLior",
+      "Brand Store URL Name": "Tioplior",
+      "Brand Store URL": "https://www.amazon.com/stores/Tioplior/page/957E78EE-D79F-40D2-8315-69ABF52E5A55",
+      "Product Group": "Office Product",
+      "Model": "SL-200-Deals",
+      "Color": "Transparent",
+      "Size": "100 Hard Sleeves + 100 Clear Sleeves",
+      "Style": "100 Hard Sleeves + 100 Clear Sleeves",
+      "Material": "Plastic",
+      "Binding": "Office Product",
+      "Number of Items": "100",
+      "Videos - Video Count": "1",
+      "Videos - Main Videos": "Creator: Main, https://m.media-amazon.com/images/I/51EBqLlKmKL.jpg, https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-eu-west-1-prod/45b0e5f6-a10c-4e7f-b43a-ea8974b1f435/default.jobtemplate.hls.m3u8",
+      "Package - Dimension (cm³)": "19.8 x 11.1 x 8.4 cm (= 1,846 cm³ )",
+      "Package - Weight (g)": "900",
+      "Package - Quantity": "0",
+      "Item - Dimension (cm³)": "10.2 x 7.6 x 0.1 cm (= 8 cm³ )",
+      "Item - Model (g)": "1,915",
+      "One Time Coupon - Percentage": "10 %"
+    }
+  },
+  "sales_rank": 3284,
+  "category": "Toys & Games 18",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 150,
+  "asin_extracted_from_page": "B0C5M4NBTM",
+  "asin_queried": "B0C5M4NBTM",
+  "asin": "B0C5M4NBTM",
+  "_search_method_used": "EAN_cached"
+}

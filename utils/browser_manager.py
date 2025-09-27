@@ -80,11 +80,11 @@ class BrowserManager:
             return
 
         self.playwright = await async_playwright().start()
-        
+
         # ?? CRITICAL: ONLY connect to existing Chrome debug instance
         # NEVER launch new Chromium instances - user has existing Chrome running
         # Documentation: "Connect to user's existing Chrome debug instance"
-        
+
         log.info(f"?? Connecting to existing Chrome debug instance on port {cdp_port}")
         log.info("?? Per troubleshooting docs: Using existing Chrome debug only")
         
@@ -217,10 +217,14 @@ class BrowserManager:
             
             # Launch bundled Chromium in visible mode
             self.browser = await self.playwright.chromium.launch(
-                headless=False,  # Always visible per requirements
+                headless=True,  # CRITICAL FIX: Use headless mode to prevent popup
                 args=[
                     "--no-first-run",
-                    "--no-default-browser-check"
+                    "--no-default-browser-check",
+                    "--disable-web-security",      # Allow extension access in headless
+                    "--disable-features=VizDisplayCompositor",  # Prevent display issues
+                    "--enable-automation",         # Keep automation features
+                    "--no-sandbox"                 # Ensure compatibility
                 ]
             )
             
@@ -325,6 +329,10 @@ class BrowserManager:
             )
             
             log.info("? Connected to existing Chrome debug instance")
+
+            # CRITICAL FIX: Minimize all Chrome windows immediately after connection
+            await self._minimize_chrome_windows()
+
             return True
             
         except Exception as e:
@@ -340,13 +348,16 @@ class BrowserManager:
             # Use different profile directory to avoid conflicts with user's Chrome
             self.context = await self.playwright.chromium.launch_persistent_context(
                 user_data_dir=profile_dir,
-                headless=headless,
+                headless=True,  # FORCE HEADLESS to prevent popup
                 args=[
                     f"--remote-debugging-port={cdp_port + 1}",  # Use different port
                     "--no-first-run",
                     "--no-default-browser-check",
                     "--disable-blink-features=AutomationControlled",
-                    "--disable-web-security"
+                    "--disable-web-security",
+                    "--window-position=2000,2000",  # Position window off-screen
+                    "--window-size=800,600",        # Small window size
+                    "--no-startup-window"           # Prevent startup window focus
                 ],
                 ignore_default_args=["--enable-automation"],
                 timeout=45000,
@@ -360,6 +371,29 @@ class BrowserManager:
         except Exception as e:
             log.error(f"? Persistent context fallback failed: {e}")
             return False
+
+    async def _minimize_chrome_windows(self):
+        """This function is disabled to prevent interference with the user's browser."""
+        log.warning("Window minimization is currently disabled.")
+        pass
+
+    async def _keep_chrome_minimized(self):
+        """Continuously ensure Chrome stays minimized during processing"""
+        try:
+            # Set up a background task to keep Chrome minimized
+            import asyncio
+
+            async def minimize_loop():
+                while True:
+                    await asyncio.sleep(5)  # Check every 5 seconds
+                    await self._minimize_chrome_windows()
+
+            # Start the minimize loop in the background
+            asyncio.create_task(minimize_loop())
+            log.info("🔄 Started Chrome minimize monitor")
+
+        except Exception as e:
+            log.warning(f"⚠️ Could not start Chrome minimize monitor: {e}")
 
     async def _connect_with_enhanced_compatibility(self, cdp_port: int, chrome_info: dict) -> bool:
         """Enhanced compatibility mode for Chrome 139.x Protocol 1.3"""
@@ -1066,6 +1100,7 @@ async def get_page_for_url(url: str, reuse_existing: bool = True) -> Page:
         # For persistent browser, headless is not relevant since we're connecting to existing Chrome
         try:
             await manager.launch_browser(chrome_debug_port, headless=False)
+            
         except Exception as e:
             log.error(f"? Failed to connect to persistent Chrome: {e}")
             raise Exception(f"Cannot connect to persistent Chrome on port {chrome_debug_port}. Please start Chrome with debug port.")

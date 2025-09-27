@@ -1,1 +1,57 @@
-quired_scopes===!1&&l.connected);if(s.length===0)return null;const h="gap-sm py-sm grid grid-cols-3";return e.jsx("div",{className:"mt-md relative",children:e.jsxs("div",{className:"px-12",ref:d,children:[e.jsx(te,{suggestionsScrollContainerRef:d}),e.jsxs(L,{variant:c?"raised":void 0,className:c?"pt-sm px-sm border-super mb-md rounded-lg border":"",children:[c&&e.jsx(se,{}),e.jsxs(k,{variant:"smallBold",className:"gap-xs flex items-center",children:[e.jsx(Y,{size:16}),e.jsx("span",{children:"Email"})]}),e.jsx("div",{className:h,children:s.filter(l=>l.icon==="mail").slice(0,3).map((l,r)=>e.jsx(M,{suggestion:l,index:r,disabled:c,onQueryClick:a},`suggestion-${r}`))}),e.jsxs("div",{className:"mt-sm",children:[e.jsxs(k,{variant:"smallBold",className:"gap-xs flex items-center",children:[e.jsx(J,{size:16}),e.jsx("span",{children:"Calendar"})]}),e.jsx("div",{className:h,children:s.filter(l=>l.icon==="calendar").slice(0,3).map((l,r)=>e.jsx(M,{suggestion:l,index:r,disabled:c,onQueryClick:a},`suggestion-${r}`))})]})]}),e.jsxs("div",{className:"mt-sm",children:[e.jsxs(k,{variant:"smallBold",className:"gap-xs flex items-center",children:[e.jsx(K,{size:16}),e.jsx("span",{children:"Browser"})]}),e.jsx("div",{className:h,children:s.filter(l=>l.icon==="browser").slice(0,3).map((l,r)=>e.jsx(M,{suggestion:l,index:r,onQueryClick:a},`suggestion-${r}`))})]}),e.jsxs("div",{className:"mt-sm",children:[e.jsxs(k,{variant:"smallBold",className:"gap-xs flex items-center",children:[e.jsx(Z,{size:16}),e.jsx("span",{children:"Search"})]}),e.jsx("div",{className:h,children:s.filter(l=>l.icon!=="browser"&&l.icon!=="calendar"&&l.icon!=="mail").slice(0,3).map((l,r)=>e.jsx(M,{suggestion:l,index:r,onQueryClick:a},`suggestion-${r}`))})]})]})})});ae.displayName="SuggestionsCarousel";const Me={type:"spring",stiffness:381.47,damping:40.17},Pe={enter:s=>({x:s>0?300:-300,opacity:0}),center:{x:0,opacity:1},exit:s=>({x:s>0?-300:300,opacity:0})},oe=C.memo(({isOpen:s,handleClose:d,currentVideo:a,handleVideoSelect:x,onVideoWatched:u})=>{const[c,h]=t.useState(0),[l,r]=t.useState(!1),n=F(),{videoRef:v,setVideoRef:j,togglePlayback:w}=H(),b=t.useCallback(i=>{j(i,s)},[j,s]),f=t.useMemo(()=>({maxHeight:"calc(100vh - 32px)"}),[]),S=t.useCallback(()=>{h(1);const i=(a+1)%n.length;x(i)},[a,x,n]),y=t.useCallback(()=>{S(),u(a+1)},[S,u,a]),g=t.useCallback(()=>{const i=v.current;i&&i.currentTime>=5&&u(a+1)},[a,u,v]),E=t.useCallback(i=>{const p=n[i];p&&(P.preload(p.videoSrc,{as:"video"}),P.preload(p.previewSrc,{as:"image"}))},[n]),N=t.useCallback(i=>{E(i)},[E]),I=t.useCallback(i=>{i!==a&&(h(i>a?1:-1),x(i))},[a,x]);return t.useEffect(()=>{const i=v.current;if(i)return i.addEventListener("ended",y),i.addEventListener("timeupdate",g),()=>{i.removeEventListener("ended",y),i.removeEventListener("timeupdate",g)}},[a,y,g,v]),t.useEffect(()=>{s&&r(!0),w(s)},[s,w]),e.jsx("div",{className:"bg-backdrop/80 fixed left-0 top-0 z-[60] flex size-full min-h-screen shrink-0 items-center justify-center px-6 py-4 pb-8 backdrop-blur-sm transition-opacity ease-out",onClick:d,style:{opacity:s?1:0,pointerEvents:s?"auto":"none",visibility:l?"visible":"hidden"},onTransitionEnd:()=>{s||r(!1)},children:e.jsxs("div",{className:"relative flex size-full flex-col items-center",style:f,children:[e.jsx("div",{className:"absolute right-0 top-0 z-30",children:e.jsx(_,{icon:Q,onClick:d,variant:"border",size:"small",pill:!0,extraCSS:"bg-subtlest backdrop-blur-[2px] hover:bg-subtler rounded-md"})}),e.jsxs("div",{className:"my-auto flex flex-col items-center justify-center",children:[e.jsx("div",{className:"relative mb-6 aspect-video max-h-[calc(100vh-200px)] w-[80vw] max-w-full rounded-lg shadow-md",onClick:i=>i.stopPropagation(),children:e.jsx(U,{initial:!1,custom:c,children:e.jsx(D.div,{custom:c,variants:Pe,initial:"enter",animate:"center",exit:"exit",transition:Me,className:"absolute inset-0 z-10 size-full",children:e.jsx("video",{ref:b,src:n[a].fullVideoSrc,playsInline:!0,controls:!0,className:"size-full rounded-lg object-contain",preload:"auto",style:{aspectRatio:"16/9"},"aria-label":n[a].label})},a)})}),e.jsx("div",{className:"mb-4 text-center",children:e.jsx(k,{variant:"extraSmall",children:n[a].label})})]}),e.jsx("div",{className:"mt-auto flex max-w-[1100px] items-center justify-center gap-4",onClick:i=>i.stopPropagation(),children:n.map(({previewSrc:i,label:p},o)=>e.jsx(ge,{tooltipText:p,tooltipLayout:"top",className:"z-[70]",bodyClassName:"!bg-[oklch(var(--dark-background-base-color))] border border-[oklch(var(--dark-border-color))] text-[oklch(var(--dark-foreground-color))]",arrowClassName:"",children:e.jsxs("div",{className:"relative cursor-pointer",onClick:m=>{I(o),m.stopPropagation()},onMouseEnter:()=>N(o),children:[e.jsx("img",{className:"rounded-md",src:i,alt:p}),a===o?e.jsxs(e.Fragment,{children:[e.jsx("div",{className:"absolute inset-0 rounded-md bg-black/60"}),e.jsx("div",{className:"border-super absolute inset-[-4px] rounded-[10px] border-2"})]}):e.jsx("div",{className:"absolute inset-0 flex items-center justify-center",children:e.jsx("div",{className:"flex size-8 items-center justify-center rounded-md bg-[oklch(var(--dark-background-base-color))]",children:e.jsx(O,{icon:ee,size:"md",className:"text-[oklch(var(--light-background-base-color))]"})})})]})},o))})]})})});oe.displayName="VideosViewModal";const Le={type:"spring",stiffness:381.47,damping:40.17},_e={enter:s=>({x:s>0?300:-300,opacity:0}),center:{x:0,opacity:1},exit:s=>({x:s>0?-300:300,opacity:0})},ne=C.memo(({onVideoWatched:s,isModalOpened:d})=>{const[a,x]=t.useState(0),[u,c]=t.useState(0),[h,l]=t.useState(!1),r=t.useRef(new Set([0])),n=F(),{videoRef:v,setVideoRef:j,togglePlayback:w}=H(),b=t.useCallback(o=>{j(o,d)
+{
+  "asin_from_details": "B0CJBXTF9L",
+  "title": "4pcs Xmas Ugly Sweater Printed Gift Paper Bags with Handles, Christmas Kraft Paper Gift Boxes, Winter Wonderland Candy Treat Goodie Bags",
+  "current_price": 3.99,
+  "original_price": 6.99,
+  "main_image": "https://m.media-amazon.com/images/I/91qyT9QrEXL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/61PhGgUJIaL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51UtKNF9zNL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51-FKCMMa6L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51UrnXxPTYL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/61DNMF3YWUL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51TZrpb-dsL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/51mPQJth2YL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Product Dimensions\n                                    ‏\n                                    :\n                                    ‎": "8 x 8 x 0.5 cm; 100 g",
+    "Date First Available\n                                    ‏\n                                    :\n                                    ‎": "19 Sept. 2023",
+    "ASIN\n                                    ‏\n                                    :\n                                    ‎": "B0CJBXTF9L",
+    "Country of origin\n                                    ‏\n                                    :\n                                    ‎": "China",
+    "Customer reviews": "4.6 4.6 out of 5 stars (45) var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); });",
+    "Product Dimensions\n                                    ‏": "‎ 8 x 8 x 0.5 cm; 100 g",
+    "Date First Available\n                                    ‏": "‎ 19 Sept. 2023",
+    "ASIN\n                                    ‏": "‎ B0CJBXTF9L",
+    "Country of origin\n                                    ‏": "‎ China",
+    "Best Sellers Rank": "23,771 in Stationery & Office Supplies (See Top 100 in Stationery & Office Supplies) 874 in Gift Bags"
+  },
+  "date_first_available_from_details": "‎ 19 Sept. 2023",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "MUDAMUDA Store",
+  "sold_by_amazon": false,
+  "rating": 4.6,
+  "review_count": 45,
+  "availability_text": "Only 13 left in stock.",
+  "in_stock": true,
+  "features": [
+    "🎅🎅Package contents：the package comes with 4 pieces of Xmas ugly sweater theme party bags in 4 styles, each style has 1 pieces,Nice Christmas theme party decorations will be a hit for a gift bag to your kids. Throw an amazing Christmas party.",
+    "❄️❄️Moderate Size: Each of ugly sweater gift bags measure 8.3×6.3×3.1 inches, proper size to hold a variety of items,such as candies, cookies, gifts, chocolates, snacks etc.Releasing your hands and bringing you much convenience.",
+    "🎄🎄Delicate Pattern Design: Our ugly sweater paper bags are designed with patterns full of Christmas elements, including ugly sweater, scarf, tie, gift, hat, candy,etc.They are ideal for Christmas theme party favors to make the party more attractive,your guests can enjoy this wonderful moment in a better party atmosphere.",
+    "🎁🎁Reliable material: These Christmas party candy bags are made of quality thickened kraft paper material, safe and odorless, sturdy and durable, lightweight and portable, can be reusable for a long time,and it is very convenient to use.",
+    "🌟🌟Widely applicable: The ugly sweater paper gift bags are suitable for many occasions, such as Xmas party,frozen snowflake holiday theme party,frozen snowflake theme party,kids birthday theme party; baby shower; flamingo theme party or any theme events,besides the storage function these frozen snowflake favor bags are also a striking party decoration."
+  ],
+  "description": "????Package contents?the package comes with 4 pieces of Xmas ugly sweater theme party bags in 4 styles, each style has 1 pieces,Nice Christmas theme party decorations will be a hit for a gift bag to your kids. Throw an amazing Christmas party. ????Moderate Size: Each of ugly sweater gift bags measure 8.3×6.3×3.1 inches, proper size to hold a variety of items,such as candies, cookies, gifts, chocolates, snacks etc.Releasing your hands and bringing you much convenience. ????Delicate Pattern Design: Our ugly sweater paper bags are designed with patterns full of Christmas elements, including ugly sweater, scarf, tie, gift, hat, candy,etc.They are ideal for Christmas theme party favors to make the party more attractive,your guests can enjoy this wonderful moment in a better party atmosphere.",
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled"
+  },
+  "asin_extracted_from_page": "B0CJBXTF9L",
+  "asin_queried": "B0CJBXTF9L",
+  "asin": "B0CJBXTF9L",
+  "_search_method_used": "title"
+}

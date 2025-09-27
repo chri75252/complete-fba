@@ -329,7 +329,8 @@ def financials(supplier, amazon, supplier_price_inc_vat):
         return {}
         
     # Defaults (if Keepa block is missing)
-    referral_fee = 0.15 * amazon_price
+    # Default referral fee must be ex-VAT to match ex-VAT economics
+    referral_fee = 0.15 * (amazon_price / (1 + VAT_RATE))
     fba_fee = 2.8
     
     # Extract fees from Keepa data structure as organized by amazon_playwright_extractor.py
@@ -358,18 +359,31 @@ def financials(supplier, amazon, supplier_price_inc_vat):
         input_vat = supplier_price_ex_vat * VAT_RATE
         supplier_price_inc_vat = supplier_price_ex_vat + input_vat  # Recalculate inc VAT
     
-    amazon_price_ex_vat = selling_price_inc_vat / (1 + VAT_RATE)
-    output_vat = selling_price_inc_vat * VAT_RATE / (1 + VAT_RATE)
-    net_proceeds = selling_price_inc_vat - referral_fee - fba_fee - output_vat - supplier_price_inc_vat
-    hmrc = output_vat - input_vat
-    net_profit = net_proceeds - hmrc - PREP_COST - SHIP_COST
+    # --- OMP / NETP (Amazon deemed supplier) ---
+    # Work purely EX-VAT for economics. Amazon handles customer VAT.
+    amazon_price_ex_vat    = selling_price_inc_vat / (1 + VAT_RATE)
     
-    # Fixed ROI calculation: ROI = (Net Profit / Total Cost) * 100
-    # Total cost = supplier cost + all fees
-    total_cost = supplier_price_ex_vat + PREP_COST + SHIP_COST
-    roi = (net_profit / total_cost) * 100 if total_cost > 0 else 0
+    # supplier_price_ex_vat is calculated before this block based on SUPPLIER_PRICES_INCLUDE_VAT.
+    # The user-provided diff included a line to recalculate it, which I am omitting to preserve the existing logic.
+    # supplier_price_ex_vat  = supplier_price_inc_vat / (1 + VAT_RATE)
+
+    # Display-only VAT figures (do NOT use these in profit):
+    output_vat  = selling_price_inc_vat - amazon_price_ex_vat        # This is the VAT Amazon handles.
+    input_vat_supplier     = supplier_price_inc_vat - supplier_price_ex_vat
+    input_vat_fees_prep_ship = VAT_RATE * (referral_fee + fba_fee + PREP_COST + SHIP_COST)
+    input_vat        = input_vat_supplier + input_vat_fees_prep_ship # For return dict compatibility
+    hmrc           = -input_vat   # OMP: your return shows refund of inputs
+
+    # EX-VAT economics:
+    net_proceeds = amazon_price_ex_vat - referral_fee - fba_fee - supplier_price_ex_vat
+    net_profit   = net_proceeds - PREP_COST - SHIP_COST
+
+    # ROI on EX-VAT cash tied up:
+    total_cost_ex_vat = supplier_price_ex_vat + PREP_COST + SHIP_COST
+    roi = (net_profit / total_cost_ex_vat) * 100 if total_cost_ex_vat > 0 else 0
     
-    breakeven = supplier_price_inc_vat + referral_fee + fba_fee + PREP_COST + SHIP_COST
+    # Breakeven shelf price (inc-VAT) = 1.2 * (all ex-VAT costs)
+    breakeven = 1.2 * (supplier_price_ex_vat + referral_fee + fba_fee + PREP_COST + SHIP_COST)
     
     # Fixed Profit Margin calculation: Profit Margin = (Net Profit / Revenue) * 100
     profit_margin = (net_profit / selling_price_inc_vat) * 100 if selling_price_inc_vat > 0 else 0

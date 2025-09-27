@@ -1,8 +1,105 @@
-.nonTerminated,j=R.text,ne=R.reference,ue=R.warning,se=R.textContext,ae=R.referenceContext,be=R.warningContext,K=R.position,Wr=R.indent||[],we=E.length,G=0,nr=-1,J=K.column||1,ar=K.line||1,Y="",Ce=[],te,Se,Q,N,V,M,I,_,he,qe,Z,ce,ee,$,tr,fe,ge,B,O;for(typeof L=="string"&&(L=L.charCodeAt(0)),fe=de(),_=ue?Xr:g,G--,we++;++G<we;)if(V===m&&(J=Wr[nr]||1),V=E.charCodeAt(G),V===b){if(I=E.charCodeAt(G+1),I===T||I===m||I===w||I===S||I===b||I===x||I!==I||L&&I===L){Y+=a(V),J++;continue}for(ee=G+1,ce=ee,O=ee,I===t?(O=++ce,I=E.charCodeAt(O),I===n||I===c?($=i,O=++ce):$=p):$=e,te="",Z="",N="",tr=q[$],O--;++O<we&&(I=E.charCodeAt(O),!!tr(I));)N+=a(I),$===e&&v.call(l,N)&&(te=N,Z=l[N]);Q=E.charCodeAt(O)===y,Q&&(O++,Se=$===e?h(N):!1,Se&&(te=N,Z=Se)),B=1+O-ee,!Q&&!z||(N?$===e?(Q&&!Z?_(pe,1):(te!==N&&(O=ce+te.length,B=1+O-ce,Q=!1),Q||(he=te?C:F,R.attribute?(I=E.charCodeAt(O),I===P?(_(he,B),Z=null):d(I)?Z=null:_(he,B)):_(he,B))),M=Z):(Q||_(D,B),M=parseInt(N,o[$]),re(M)?(_(oe,B),M=a(s)):M in f?(_(ie,B),M=f[M]):(qe="",H(M)&&_(ie,B),M>65535&&(M-=65536,qe+=a(M>>>10|55296),M=56320|M&1023),M=qe+a(M))):$!==e&&_(le,B)),M?(lr(),fe=de(),G=O-1,J+=O-ee+1,Ce.push(M),ge=de(),ge.offset++,ne&&ne.call(ae,M,{start:fe,end:ge},E.slice(ee-1,O)),fe=ge):(N=E.slice(ee-1,O),Y+=N,J+=N.length,G=O-1)}else V===10&&(ar++,nr++,J=0),V===V?(Y+=a(V),J++):lr();return Ce.join("");function de(){return{line:ar,column:J,offset:G+(K.offset||0)}}function Xr(ir,or){var Ae=de();Ae.column+=or,Ae.offset+=or,ue.call(be,k[ir],Ae,ir)}function lr(){Y&&(Ce.push(Y),j&&j.call(se,Y,{start:fe,end:de()}),Y="")}}function re(E){return E>=55296&&E<=57343||E>1114111}function H(E){return E>=1&&E<=8||E===11||E>=13&&E<=31||E>=127&&E<=159||E>=64976&&E<=65007||(E&65535)===65535||(E&65535)===65534}return Ye}var Qe={exports:{}},Nr;function wt(){return Nr||(Nr=1,function(l){var f=typeof window<"u"?window:typeof WorkerGlobalScope<"u"&&self instanceof WorkerGlobalScope?self:{};/**
- * Prism: Lightweight, robust, elegant syntax highlighting
- *
- * @license MIT <https://opensource.org/licenses/MIT>
- * @author Lea Verou <https://lea.verou.me>
- * @namespace
- * @public
- */var u=function(r){var d=/(?:^|\s)lang(?:uage)?-([\w-]+)(?=\s|$)/i,h=0,v={},a={manual:r.Prism&&r.Prism.manual,disableWorkerMessageHandler:r.Prism&&r.Prism.disableWorkerMessageHandler,util:{encode:function t(n){return n instanceof g?new g(n.type,t(n.content),n.alias):Array.isArray(n)?n.map(t):n.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(t){return Object.prototype.toString.call(t).slice(8,-1)},objId:function(t){return t.__id||Object.defineProperty(t,"__id",{value:++h}),t.__id},clone:function t(n,c){c=c||{};var s,e;switch(a.util.type(n)){case"Object":if(e=a.util.objId(n),c[e])return c[e];s={},c[e]=s;for(var i in n)n.hasOwnProperty(i)&&(s[i]=t(n[i],c));return s;case"Array":return e=a.util.objId(n),c[e]?c[e]:(s=[],c[e]=s,n.forEach(function(p,o){s[o]=t(p,c)}),s);default:return n}},getLanguage:function(t){for(;t;){var n=d.exec(t.className);if(n)return n[1].toLowerCase();t=t.parentElement}return"none"},setLanguage:function(t,n){t.className=t.className.replace(RegExp(d,"gi"),""),t.classList.add("language-"+n)},currentScript:function(){if(typeof document>"u")return null;if("currentScript"in document)return document.currentScript;try{throw new Error}catch(s){var t=(/at [^(\r\n]*\((.*):[^:]+:[^:]+\)$/i.exec(s.stack)||[])[1];if(t){var n=document.getElementsByTagName("script");for(var c in n)if(n[c].src==t)return n[c]}return null}},isActive:function(t,n,c){for(var s="no-"+n;t;){var e=t.classList;if(e.contains(n))return!0;if(e.contains(s))return!1;t=t.parentElement}return!!c}},languages:{plain:v,plaintext:v,text:v,txt:v,extend:function(t,n){var c=a.util.clone(a.languages[t]);for(var s in n)c[s]=n[s];return c},insertBefore:function(t,n,c,s){s=s||a.languages;var e=s[t],i={};for(var p in e)if(e.hasOwnProperty(p)){if(p==n)for(var o in c)c.hasOwnProperty(o)&&(i[o]=c[o]);c.hasOwnProperty(p)||(i[p]=e[p])}var q=s[t];return s[t]=i,a.languages.DFS(a.languages,function(C,D){D===q&&C!=t&&(this[C]=i)}),i},DFS:function t(n,c,s,e){e=e||{};var i=a.util.objId;for(var p in n)if(n.hasOwnProperty(p)){c.call(n,p,n[p],s||p);var o=n[p],q=a.util.type(o);q==="Object"&&!e[i(o)]?(e[i(o)]=!0,t(o,c,null,e)):q==="Array"&&!e[i(o)]&&(e[i(o)]=!0,t(o,c,p,e))}}},plugins:{},highlightAll:function(t,n){a.highlightAllUnder(document,t,n)},highlightAllUnder:function(t,n,c){var s={callback:c,container:t,selector:'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'};a.hooks.run("before-highlightall",s),s.elements=Array.prototype.slice.apply(s.container.querySelectorAll(s.selector)),a.hooks.run("before-all-elements-highlight",s);for(var e=0,i;i=s.elements[e++];)a.highlightElement(i,n===!0,s.callback)},highlightElement:function(t,n,c){var s=a.util.getLanguage(t),e=a.languages[s];a.util.setLanguage(t,s);var i=t.parentElement;i&&i.nodeName.toLowerCase()==="pre"&&a.util.setLanguage(i,s);var p=t.textContent,o={element:t,language:s,grammar:e,code:p};function q(D){o.highlightedCode=D,a.hooks.run("before-insert",o),o.element.innerHTML=o.highlightedCode,a.hooks.run("after-highlight",o),a.hooks.run("complete",o),c&&c.call(o.element)}if(a.hooks.run("before-sanity-check",o),i=o.element.parentElement,i&&i.nodeName.toLowerCase()==="pre"&&!i.hasAttribute("tabindex")&&i.setAttribute("tabindex","0"),!o.code){a.hooks.run("complete",o),c&&c.call(o.element);return}if(a.hooks.run("before-highlight",o),!o.grammar){q(a.util.encode(o.code));return}if(n&&r.Worker){var C=new Worker(a.filename);C.onmessage=function(D){q(D.data)},C.postMessage(JSON.stringify({language:o.language,code:o.
+{
+  "asin_from_details": "B0DFW3PP68",
+  "title": "Pressure Relief Valve for Triton 6Pcs, Mellbree PRD Disc Seals Cover Valve Shower Spares Parts Compatible with Triton Electric Showers",
+  "current_price": 5.99,
+  "amazon_monthly_sales_badge": 400,
+  "main_image": "https://m.media-amazon.com/images/I/61kmoK4GvFL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41MizfjAi1L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41UT83IzsgL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31OWVGcIb+L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41SvoAW9iJL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41tQxn6Fs3L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "ASIN": "B0DFW3PP68",
+    "Date First Available": "2 Sept. 2024"
+  },
+  "date_first_available_from_details": "2 Sept. 2024",
+  "prime_eligible": true,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "Mellbree EU Direct",
+  "sold_by_amazon": false,
+  "rating": 4.2,
+  "review_count": 41,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "features": [
+    "BROAD COMPATIBILITY: Our pressure relief device is designed to be compatible with Triton electric showers, including models such as Triton Agio, Triton Alicante, Triton Amber, Triton Aquablast, Triton Aquastorm, Triton Aquasurge, Triton Aquatronic 1 Plus, Triton Aspirante, Triton Aspirante Electric, Triton Aspirante Millenium, Triton Aspirante Topaz, Triton Aspirante Xr, Triton Belize, Triton Bezique 2, Triton Biarritz 2, Triton Biscay 2, and more.",
+    "NOTE: The PRD disc can often fail due to scale in hard water areas, Please replace it regularly.",
+    "UPGRADE SAFETY: Experience the latest upgrade with our Pressure Relief Device featuring a seal cover design. This innovative feature not only prevents leaks but also offers burst protection in case of excessively high shower pressure, ensuring a safer shower experience for you.",
+    "EFFORTLESS INSTALLATION: Mellbree shower pressure relief valve is specifically designed for Triton electric showers as a replacement for the 82800450 model. Simply remove your old pressure relief device and effortlessly install the new PRD replacement. With a leak-proof design, it ensures a secure fit to safeguard and maintain the functionality of your shower.",
+    "COMPLETE PACKAGE: We have observed that often it is the seal cover that breaks, so you don't need to spend money replacing the entire PRD, just the cover. You will get 6 seal cover that will give you peace of mind for almost a full year."
+  ],
+  "specifications_table": {
+    "Manufacturer": "‎Mellbree",
+    "Part Number": "‎Tri-Sealcover-ME",
+    "Product Dimensions": "‎2 x 1 x 0.5 cm; 10 g",
+    "Item model number": "‎Tri-Sealcover-ME",
+    "Colour": "‎Black",
+    "Material": "‎Polytetrafluoroethylene",
+    "Included Components": "‎Pressure Relief Valve",
+    "Batteries Required?": "‎No",
+    "Item Weight": "‎10 g"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "sales_rank_details_table": {
+      "main_cat_current_rank": 5597,
+      "main_cat_name": "DIY & Tools 19 drops / month",
+      "sub_cat_current_rank": 3,
+      "sub_cat_name": "Bathtub & Shower Diverter Valves 3"
+    },
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Pressure Relief Valve for Triton 6Pcs, Mellbree PRD Disc Seals Cover Valve Shower Spares Parts Compatible with Triton Electric Showers",
+      "Sales Rank - Reference": "DIY & Tools",
+      "Sales Rank - Display Group": "home_improvement_display_on_website",
+      "Bought in past month": "400+",
+      "Reviews - Rating": 4.2,
+      "Reviews - Rating Count": 41.0,
+      "Last Price Change": "19 days ago",
+      "Buy Box Seller": "Mellbree EU Direct (97% positive over last 12 months)",
+      "Lowest FBA Seller": "Mellbree EU Direct (97% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.46,
+      "Referral Fee %": "13.02 %",
+      "Referral Fee based on current Buy Box price": 0.78,
+      "Total Offer Count": "1",
+      "Tracking since": "2024/09/12",
+      "Listed since": "2024/09/02",
+      "Categories - Root": "DIY & Tools",
+      "Categories - Sub": "Bathtub & Shower Diverter Valves",
+      "Categories - Tree": "DIY & Tools › Plumbing › Valves › Bathtub & Shower Diverter Valves",
+      "Website Display Group - Name": "Home Improvement",
+      "ASIN": "B0DFW3PP68",
+      "Product Codes - PartNumber": "Tri-Sealcover-ME",
+      "Freq. Bought Together": "B09GFNMPRK, B0BG863J9V",
+      "Type": "VALVE",
+      "Manufacturer": "Mellbree",
+      "Brand": "Mellbree",
+      "Product Group": "Home Improvement",
+      "Model": "Tri-Sealcover-ME",
+      "Color": "Black",
+      "Unit Details - Unit Value": "6",
+      "Unit Details - Unit Type": "count",
+      "Material": "Polytetrafluoroethylene",
+      "Number of Items": "6",
+      "Package - Dimension (cm³)": "16.3 x 4.9 x 1.1 cm (= 88 cm³ )",
+      "Package - Weight (g)": "10",
+      "Item - Dimension (cm³)": "2.0 x 1.0 x 0.5 cm (= 1 cm³ )",
+      "Included Components": "Pressure Relief Valve"
+    }
+  },
+  "sales_rank": 5597,
+  "category": "DIY & Tools 19",
+  "sales_rank_source": "Keepa_SalesRankDetailsTable",
+  "estimated_monthly_sales_from_bsr": 50,
+  "asin_extracted_from_page": "B0DFW3PP68",
+  "asin_queried": "B0DFW3PP68",
+  "asin": "B0DFW3PP68",
+  "_search_method_used": "EAN_cached"
+}

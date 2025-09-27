@@ -1,1 +1,93 @@
-(l),(0,ek.Ay)("cal-workflows")&&a.push(tl(t,o,[])),a}),tn=(0,A.l)(function(e,t,n,i,r){return{type:o.B9,id:(0,h.V)(4101),title:(0,w.Ay)(I.uX),overflowMenuLauncherLabel:(0,w.Ay)(I.EM),hasOwnOverflow:!1,controls:eF(e,t,n,i,r,"SimplifiedRibbon")}}),ti=(0,A.l)(function(e,t,n,i){let r=[];if((0,f.vY)(e)&&(r.push((0,g.dI)(e,"ReadForm",!0,n,[],i,f.rq.CalendarFormRibbon)),e.IsOrganizer||e.IsCoOrganizer)){let i=(0,g.yt)(e,t,n,[],!0);i&&r.push(i)}return{type:o.B9,id:(0,h.V)(4102),title:(0,w.Ay)(I.wk),overflowMenuLauncherLabel:(0,w.Ay)(I.wk),hasOwnOverflow:!1,controls:r}}),tr=(0,A.l)(function(e,t,n){let i=[];return i.push((0,g.GE)(e,t=>{let{onSuccess:n,onError:i}=(0,eQ.c)(t,e,"ReadForm","SimplifiedRibbon");(0,b._1)(e,{FreeBusyType:t},"ReadForm",void 0,n,i)},(0,y.Rc)(e,!1),n,[],(0,eD.v$)(e))),(0,v.W6)(e)||i.push((0,g.Mi)(e,t,F(e),2,n,[])),{type:o.B9,id:(0,h.V)(4105),title:(0,w.Ay)(I.tz),overflowMenuLauncherLabel:(0,w.Ay)(I.tz),hasOwnOverflow:!1,controls:i}}),to=(0,A.l)(function(e,t,n,i){let r=[];return(0,eV.t)(e$.D,e.ParentFolderId.mailboxInfo)&&r.push(T(e,t,n,i,"SimplifiedRibbon")),(0,v.W6)(e)||r.push(C(e,t,n,"SimplifiedRibbon")),{type:o.B9,id:(0,h.V)(4106),title:(0,w.Ay)(I.Cp),overflowMenuLauncherLabel:(0,w.Ay)(I.Cp),hasOwnOverflow:!1,controls:r}}),ta=(0,A.l)(function(e,t,n,i){let r=[],a=n??window,l=e.RequiredAttendees?.map(e=>e.Mailbox)?.filter(e=>e)??[],s=e.OptionalAttendees?.map(e=>e.Mailbox)?.filter(e=>e)??[];return r.push((0,g.NU)(e,t,()=>{eN.fC.importAndExecute(t,"CalendarReadingPane",l,s,e.Subject,a,e.ParentFolderId.mailboxInfo)},i,[])),{type:o.B9,id:(0,h.V)(4108),title:(0,w.Ay)(I.LA),overflowMenuLauncherLabel:(0,w.Ay)(I.LA),hasOwnOverflow:!1,controls:r}}),tl=(0,A.l)(function(e,t,n){let i=[];return i.push((0,g.N1)(()=>{R.ZK.importAndExecute(!0,e)},t,n)),{type:o.B9,id:(0,h.V)(4113),title:(0,w.Ay)(I.RK),overflowMenuLauncherLabel:(0,w.Ay)(I.RK),controls:i}}),ts=(0,A.l)(function(e,t,n,i){let r=[];return r.push(eU(e,t,()=>{eB.importAndExecute(e,n)},i)),{type:o.B9,id:(0,h.V)(4109),title:(0,w.Ay)(I.Gu),overflowMenuLauncherLabel:(0,w.Ay)(I.Gu),hasOwnOverflow:!1,controls:r}}),tu=(0,A.l)(function(e,t,n){return{type:o.B9,id:(0,h.V)(4104),title:(0,w.Ay)(I.a6),overflowMenuLauncherLabel:(0,w.Ay)(I.a6),hasOwnOverflow:!1,controls:eS(e,t,n,"SimplifiedRibbon")}}),td=(0,A.l)((e,t,n,i,r)=>{let o=[e8(e,t,n,i,r)];if((0,e2.U)(e)&&!(0,v.W6)(e)){let e=e3.x.tryImportForRender();e&&o.push(e(t,r))}return{tabs:o}});var tc=n(24864),tp=n(985731),tm=n(383887),tA=n(805667);let tf=(0,tc.P)(function(e){let t=a.useCallback(t=>{t.indexOf((0,h.V)(4001))>-1?(R.Dk.importAndExecute(e.formId,tA.O.ReadingPane,Date.now(),!0),(0,K.IF)("ReadingPaneSchedulingAssistantTabClicked")):R.JQ.importAndExecute(e.formId)},[e.formId]),n=a.useCallback(()=>tm.mO(e.formId)?.showSchedulingAssistant?4001:4e3,[e.formId]),s=a.useCallback(()=>td(e.event,e.formId,e.txpObject,e.targetWindow,e.uniqueIdBase),[e.event,e.formId,e.txpObject,e.targetWindow]),u=a.useCallback(()=>e6(e.event,e.formId,e.txpObject,e.targetWindow,e.uniqueIdBase),[e.event,e.formId,e.txpObject,e.targetWindow]);return(0,r.jsx)("div",{className:(0,l.A)("gIoAI",tp.F),children:(0,r.jsx)(o.Yi,{getSingleLineRibbonDefinition:s,getMultiLineRibbonDefinition:u,iconColorMap:(i||(i=new Map([[4540,3],[4532,3],[4502,0],[4542,0],[4528,4],[4554,1],[4558,5],[4535,4],[4550,1],[4519,2],[4538,0],[4539,5],[4524,5],[4525,5],[4553,4],[4541,5]])),i),ribbonScenarioName:"CalendarReadingPane",controlRendererFunction:m,thisWindow:e.targetWindow,onTabClick:t,noKeytipLayer:!0,getDefaultSelectedTabId:n})})},"ReadingPaneRibbon");var tv=n(880080);let tg=(0,A.l)((e,t,n,i)=>{let r=(e,t,n)=>{(0,b._1)(n,{ClpLabelProperty:e,ClpLabelModificationHeader:t},"ReadForm")},o=tv.mS(t)?.viewState;return(0,g.Hf)(t,e,o?.protectionViewState,o,(t,n)=>{r(t,n,e)},n,i,[])})},39677:(e,t,n)=>{"use strict";n.d(t,{A:()=>r});var i=n(384782);function r(e){return!e||e===i.DG.Explicit}},40235:(e,t,n)=>{"use strict";
+{
+  "asin_from_details": "B0BBPHRRQ4",
+  "title": "Gem Imports LTD SUM1094 BBQ Fries Trays | Multicolor | 6pcs Accessory",
+  "current_price": 1.69,
+  "main_image": "https://m.media-amazon.com/images/I/51Ssv0OdPyL._AC_SX425_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/51Ssv0OdPyL._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "24 Aug. 2022"
+  },
+  "date_first_available_from_details": "24 Aug. 2022",
+  "prime_eligible": false,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "the-home-fusion-company",
+  "sold_by_amazon": false,
+  "rating": 4.5,
+  "availability_text": "Only 10 left in stock.",
+  "in_stock": true,
+  "features": [
+    "PACKAGE INCLUDES: 6pcs Fries Trays.",
+    "PRINTED DESIGN: Designed with printed designs that make it fancier.",
+    "PERFECT FOR THEMED PARTY: This material can be used for any themed party.",
+    "CARDBOARD MATERIALS: Made from a high-quality cardboard material that makes it sturdy and safe to use.",
+    "FANTASTIC PROP: Be fantastic and unique while using these trays on your fries."
+  ],
+  "description": "Be fantastic and unique while using these trays on your fries.",
+  "specifications_table": {
+    "Product Dimensions": "‎21.5 x 0.6 x 20 cm; 115 g",
+    "Manufacturer recommended age": "‎12 months and up",
+    "Item model number": "‎SUM1094",
+    "Number of pieces": "‎1",
+    "Assembly Required": "‎No",
+    "Batteries Required?": "‎No",
+    "Material Care Instructions": "‎Hand Wash Only",
+    "Radio Control Suitability": "‎Side Dish, Appetizer, Snack",
+    "Colour": "‎Multicolor",
+    "Release date": "‎22 Aug. 2022",
+    "ASIN": "‎B0BBPHRRQ4"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
+    "product_details_tab_data": {
+      "Title": "Gem Imports LTD SUM1094 BBQ Fries Trays | Multicolor | 6pcs Accessory",
+      "Last Price Change": "just now",
+      "Buy Box Seller": "the-home-fusion-company (92% positive over last 12 months)",
+      "FBA Pick&Pack Fee": 1.73,
+      "Referral Fee %": "14.95 %",
+      "Referral Fee based on current Buy Box price": 0.55,
+      "Lowest FBM Seller": "the-home-fusion-company (92% positive over last 12 months)",
+      "Total Offer Count": "1",
+      "Tracking since": "2022/11/28",
+      "Listed since": "2022/08/24",
+      "Categories - Root": "Home & Kitchen",
+      "Categories - Sub": "Serving Trays",
+      "Categories - Tree": "Home & Kitchen › Cooking & Dining › Tableware › Dishware & Serving Pieces › Plates & Serving Dishes › Serving Trays, Dishes & Platters › Serving Trays",
+      "Website Display Group - Name": "Toy",
+      "ASIN": "B0BBPHRRQ4",
+      "Product Codes - EAN": "5056170310949",
+      "Product Codes - PartNumber": "SUM1094",
+      "Type": "DISHWARE_PLATE",
+      "Manufacturer": "Gem Imports LTD",
+      "Brand": "Gem Imports LTD",
+      "Product Group": "Toy",
+      "Model": "SUM1094",
+      "Color": "Multicolor",
+      "Unit Details - Unit Value": "6",
+      "Unit Details - Unit Type": "count",
+      "Recommended Uses": "Snack",
+      "Binding": "Toy",
+      "Release Date": "2022-08-22",
+      "Package - Dimension (cm³)": "21.5 x 20.0 x 0.6 cm (= 258 cm³ )",
+      "Package - Weight (g)": "115",
+      "Package - Quantity": "1",
+      "Item - Dimension (cm³)": "21.5 x 0.6 x 20.0 cm (= 258 cm³ )",
+      "Included Components": "6 Accessory"
+    }
+  },
+  "eans_on_page": [
+    "5056170310949"
+  ],
+  "ean_on_page_source": "Keepa_Product_Details",
+  "ean_on_page": "5056170310949",
+  "asin_extracted_from_page": "B0BBPHRRQ4",
+  "asin_queried": "B0BBPHRRQ4",
+  "asin": "B0BBPHRRQ4",
+  "_search_method_used": "EAN_cached"
+}
