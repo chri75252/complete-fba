@@ -1,0 +1,75 @@
+2025-10-04 02:58:30,985 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_025830.log
+2025-10-04 02:58:30,985 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_025830.log
+2025-10-04 02:58:30,986 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-10-04 02:58:30,987 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-10-04 02:58:30,991 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-10-04 02:58:31,572 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-10-04 02:58:31,572 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-10-04 02:58:31,575 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/141.0.7390.55
+2025-10-04 02:58:31,575 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-10-04 02:58:31,577 - utils.browser_manager - DEBUG - ?? Using IPv6 endpoint for CDP connection
+2025-10-04 02:58:31,577 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-10-04 02:58:31,861 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-10-04 02:58:31,862 - utils.browser_manager - INFO - ?? Using existing context with 4 pages
+2025-10-04 02:58:31,862 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 141.0.7390.55
+2025-10-04 02:58:31,862 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 02:58:31,863 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 02:58:31,863 - __main__ - INFO - 🔐 Initializing Clearance King authentication helper...
+2025-10-04 02:58:31,863 - __main__ - INFO - ✅ Using configured credentials for clearance-king.co.uk
+2025-10-04 02:58:31,863 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-10-04 02:58:31,955 - tools.clearance_king.supplier_authentication_service - INFO - ❌ Login link found - not authenticated
+2025-10-04 02:58:31,955 - __main__ - INFO - 🔐 Not authenticated, initiating login...
+2025-10-04 02:58:31,955 - tools.clearance_king.supplier_authentication_service - INFO - 🔐 Starting login process for Clearance King...
+2025-10-04 02:58:31,956 - tools.clearance_king.supplier_authentication_service - INFO - 🚀 Performing login via StandalonePlaywrightLogin...
+2025-10-04 02:58:31,957 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-10-04 02:58:31,957 - tools.standalone_playwright_login - INFO - 🌐 Navigating to login page: https://www.clearance-king.co.uk/customer/account/login/
+2025-10-04 02:58:37,177 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="email"]
+2025-10-04 02:58:38,181 - tools.standalone_playwright_login - INFO - 🔍 Using config password selector: input#pass
+2025-10-04 02:58:43,195 - tools.standalone_playwright_login - DEBUG - Password selector 'input#pass' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("input#pass") to be visible
+    15 × locator resolved to hidden <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-bind="attr: {autocomplete: autocomplete}"/>
+
+2025-10-04 02:58:48,210 - tools.standalone_playwright_login - DEBUG - Password selector 'input[name="login[password]"]' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("input[name=\"login[password]\"]") to be visible
+
+2025-10-04 02:58:53,220 - tools.standalone_playwright_login - DEBUG - Password selector 'input[name="password"]' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("input[name=\"password\"]") to be visible
+    15 × locator resolved to hidden <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-bind="attr: {autocomplete: autocomplete}"/>
+
+2025-10-04 02:58:58,225 - tools.standalone_playwright_login - DEBUG - Password selector 'input[type="password"]' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("input[type=\"password\"]") to be visible
+    15 × locator resolved to hidden <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-bind="attr: {autocomplete: autocomplete}"/>
+
+2025-10-04 02:59:03,236 - tools.standalone_playwright_login - DEBUG - Password selector '#password' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("#password") to be visible
+
+2025-10-04 02:59:08,239 - tools.standalone_playwright_login - DEBUG - Password selector '#pass' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("#pass") to be visible
+    15 × locator resolved to hidden <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-bind="attr: {autocomplete: autocomplete}"/>
+
+2025-10-04 02:59:13,250 - tools.standalone_playwright_login - DEBUG - Password selector '#customer_password' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("#customer_password") to be visible
+
+2025-10-04 02:59:18,262 - tools.standalone_playwright_login - DEBUG - Password selector '.password-field' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator(".password-field") to be visible
+
+2025-10-04 02:59:23,276 - tools.standalone_playwright_login - DEBUG - Password selector 'input[id*="password"]' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("input[id*=\"password\"]") to be visible
+
+2025-10-04 02:59:28,288 - tools.standalone_playwright_login - DEBUG - Password selector 'input[autocomplete="current-password"]' failed: Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("input[autocomplete=\"current-password\"]") to be visible
+
+2025-10-04 02:59:28,290 - tools.clearance_king.supplier_authentication_service - ERROR - ❌ Login failed: Could not find or fill password field
+2025-10-04 02:59:28,291 - __main__ - ERROR - ❌ Authentication failed. Exiting workflow.
+2025-10-04 02:59:28,291 - __main__ - WARNING - ⚠️ Browser cleanup warning: 'BrowserManager' object has no attribute 'cleanup'
+2025-10-04 02:59:28,293 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

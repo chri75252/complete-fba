@@ -1,0 +1,30 @@
+2025-10-04 02:34:48,326 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_023448.log
+2025-10-04 02:34:48,327 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_023448.log
+2025-10-04 02:34:48,327 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-10-04 02:34:48,327 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-10-04 02:34:48,331 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-10-04 02:34:48,891 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-10-04 02:34:48,892 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-10-04 02:34:48,894 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/141.0.7390.55
+2025-10-04 02:34:48,894 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-10-04 02:34:48,896 - utils.browser_manager - DEBUG - ?? Using IPv6 endpoint for CDP connection
+2025-10-04 02:34:48,896 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-10-04 02:34:49,164 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-10-04 02:34:49,164 - utils.browser_manager - INFO - ?? Using existing context with 4 pages
+2025-10-04 02:34:49,164 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 141.0.7390.55
+2025-10-04 02:34:49,165 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 02:34:49,165 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 02:34:49,165 - __main__ - INFO - 🔐 Initializing Clearance King authentication helper...
+2025-10-04 02:34:49,165 - __main__ - INFO - ✅ Using configured credentials for clearance-king.co.uk
+2025-10-04 02:34:49,165 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-10-04 02:34:49,214 - tools.clearance_king.supplier_authentication_service - INFO - ❌ Login link found - not authenticated
+2025-10-04 02:34:49,214 - __main__ - INFO - 🔐 Not authenticated, initiating login...
+2025-10-04 02:34:49,215 - tools.clearance_king.supplier_authentication_service - INFO - 🔐 Starting login process for Clearance King...
+2025-10-04 02:34:49,215 - tools.clearance_king.supplier_authentication_service - INFO - 🌐 Navigating to login page: https://www.clearance-king.co.uk/customer/account/login/
+2025-10-04 02:35:00,695 - tools.clearance_king.supplier_authentication_service - ERROR - ❌ Login failed with exception: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("input#email") to be visible
+
+2025-10-04 02:35:00,696 - __main__ - ERROR - ❌ Authentication failed. Exiting workflow.
+2025-10-04 02:35:00,696 - __main__ - WARNING - ⚠️ Browser cleanup warning: 'BrowserManager' object has no attribute 'cleanup'
+2025-10-04 02:35:00,697 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

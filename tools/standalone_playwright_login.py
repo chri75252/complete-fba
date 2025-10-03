@@ -33,8 +33,10 @@ class LoginResult:
 class StandalonePlaywrightLogin:
     """Standalone Playwright login for PoundWholesale"""
 
-    def __init__(self, cdp_port: int = 9222, email: str = None, password: str = None):
-        """Initialize login handler with credentials"""
+    def __init__(self, browser_manager=None, cdp_port: int = 9222, email: str = None, password: str = None, supplier_url: str = None, test_product_url: str = None, supplier_config: dict = None):
+        """Initialize login handler with credentials and optional supplier config"""
+        # Support both old (cdp_port) and new (browser_manager) approaches
+        self.browser_manager = browser_manager
         self.cdp_port = cdp_port
         self.cdp_endpoint = f"http://localhost:{cdp_port}"
 
@@ -47,27 +49,51 @@ class StandalonePlaywrightLogin:
         # Credentials - accept from constructor or use defaults
         self.email = email or "info@theblacksmithmarket.com"
         self.password = password or "0Dqixm9c&"
-        self.base_url = "https://www.poundwholesale.co.uk"
-        self.login_url = f"{self.base_url}/customer/account/login/"
+        
+        # Store supplier config for later use
+        self.supplier_config = supplier_config or {}
 
-        # Price verification selectors
-        self.PRICE_SELECTORS = [
-            '.price .amount',
-            '.price-current',
-            '.product-price .amount',
-            '.woocommerce-Price-amount',
-            '.price',
-            '.product-price',
-            '.current-price',
-            '.sale-price',
-            'span[class*="price"]',
-            '.price-box .price',
-            '.product-info-price .price',
-            'span.price',
-            '.price-container .price',
-            '.regular-price',
-            '.price-final_price'
-        ]
+        # Config-driven URLs and selectors with fallbacks
+        if supplier_config and "login_config" in supplier_config:
+            login_config = supplier_config["login_config"]
+            self.base_url = supplier_config.get("base_url", "https://www.poundwholesale.co.uk")
+            if self.base_url.endswith('/'):
+                self.base_url = self.base_url.rstrip('/')
+            
+            login_path = login_config.get("login_path", "/customer/account/login/")
+            self.login_url = f"{self.base_url}{login_path}"
+            self.test_product_url = login_config.get("test_product_url", f"{self.base_url}/test-product")
+            self.PRICE_SELECTORS = login_config.get("price_selectors", [
+                '.price .amount', '.price-current', '.product-price .amount'
+            ])
+        else:
+            # Config-driven approach - no hardcoded fallbacks
+            if not supplier_url:
+                raise ValueError("supplier_url is required when supplier_config is not provided")
+            if not test_product_url:
+                raise ValueError("test_product_url is required when supplier_config is not provided")
+            
+            self.base_url = supplier_url
+            self.login_url = f"{self.base_url}/customer/account/login/"
+            self.test_product_url = test_product_url
+            # Default price verification selectors
+            self.PRICE_SELECTORS = [
+                '.price .amount',
+                '.price-current',
+                '.product-price .amount',
+                '.woocommerce-Price-amount',
+                '.price',
+                '.product-price',
+                '.current-price',
+                '.sale-price',
+                'span[class*="price"]',
+                '.price-box .price',
+                '.product-info-price .price',
+                'span.price',
+                '.price-container .price',
+                '.regular-price',
+                '.price-final_price'
+            ]
 
     async def connect_browser(self) -> bool:
         """Connect to shared Chrome instance via CDP"""
@@ -109,8 +135,10 @@ class StandalonePlaywrightLogin:
             log.info("🔍 Checking if already logged in...")
 
             # Navigate to a product page that requires login to see prices
-            test_product = f"{self.base_url}/sealapack-turkey-roasting-bags-2-pack"
-            await self.page.goto(test_product, wait_until='domcontentloaded')
+            if not self.test_product_url:
+                raise ValueError("test_product_url is required for authentication verification")
+            
+            await self.page.goto(self.test_product_url, wait_until='domcontentloaded')
             await self.page.wait_for_load_state('networkidle', timeout=10000)
 
             # Look for price elements (main indicator)
@@ -164,8 +192,17 @@ class StandalonePlaywrightLogin:
             await self.page.goto(self.login_url, wait_until='domcontentloaded')
             await self.page.wait_for_load_state('networkidle', timeout=10000)
 
-            # PoundWholesale/Magento-specific email field selectors (in order of preference)
-            email_selectors = [
+            # Config-driven email field selectors
+            # Use supplier-specific selectors from config, with fallbacks
+            config_selectors = self.supplier_config.get('authentication', {}).get('login_selectors', {})
+            email_selectors = []
+            
+            # Add config-specific selector first if available
+            if config_selectors.get('email_field'):
+                email_selectors.append(config_selectors['email_field'])
+            
+            # Add common fallback selectors
+            email_selectors.extend([
                 'input[name="login[username]"]',  # Magento-specific
                 'input[name="email"]',
                 'input[type="email"]',
@@ -175,7 +212,7 @@ class StandalonePlaywrightLogin:
                 'input[id*="email"]',
                 'input[placeholder*="email" i]',
                 'input[autocomplete="email"]'
-            ]
+            ])
 
             email_filled = False
             for selector in email_selectors:
@@ -200,33 +237,43 @@ class StandalonePlaywrightLogin:
                     login_duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
 
-            # PoundWholesale/Magento-specific password field selectors (in order of preference)
-            password_selectors = [
+            # Brief wait to ensure form is fully loaded
+            await asyncio.sleep(1)
+
+            # Config-driven password field selectors
+            password_selectors = []
+            
+            # Add config-specific selector first if available
+            if config_selectors.get('password_field'):
+                password_selectors.append(config_selectors['password_field'])
+                log.info(f"🔍 Using config password selector: {config_selectors['password_field']}")
+            
+            # Add common fallback selectors
+            password_selectors.extend([
                 'input[name="login[password]"]',  # Magento-specific
                 'input[name="password"]',
                 'input[type="password"]',
                 '#password',
+                '#pass',  # Clearance King specific
                 '#customer_password',
                 '.password-field',
                 'input[id*="password"]',
                 'input[autocomplete="current-password"]'
-            ]
+            ])
 
             password_filled = False
             for selector in password_selectors:
                 try:
+                    # Try to find the element - it might be hidden, so we'll force interaction
                     element = self.page.locator(selector).first
-                    if await element.is_visible():
-                        await element.click()
-                        await asyncio.sleep(0.3)
-                        # Clear field first
-                        await element.fill("")
-                        await element.fill(self.password)
-                        log.info(f"✅ Filled password using selector: {selector}")
-                        password_filled = True
-                        break
+                    # Use force=True to interact with hidden elements
+                    await element.fill(self.password, force=True)
+                    log.info(f"✅ Filled password using selector: {selector} (forced)")
+                    password_filled = True
+                    break
                 except Exception as e:
                     log.debug(f"Password selector '{selector}' failed: {e}")
+                    continue
 
             if not password_filled:
                 return LoginResult(
@@ -235,8 +282,15 @@ class StandalonePlaywrightLogin:
                     login_duration_seconds=(datetime.now() - start_time).total_seconds()
                 )
 
-            # PoundWholesale/Magento-specific submit button selectors (in order of preference)
-            submit_selectors = [
+            # Config-driven submit button selectors
+            submit_selectors = []
+            
+            # Add config-specific selector first if available
+            if config_selectors.get('login_button'):
+                submit_selectors.append(config_selectors['login_button'])
+            
+            # Add common fallback selectors
+            submit_selectors.extend([
                 'button[type="submit"]',
                 'input[type="submit"]',
                 '.login-button',
@@ -244,10 +298,12 @@ class StandalonePlaywrightLogin:
                 'button:has-text("Log In")',
                 'button:has-text("Login")',
                 '#login-btn',
+                '#send2',  # Clearance King specific
                 '#customer_login_btn',
                 '.btn-login',
-                '.submit-button'
-            ]
+                '.submit-button',
+                'button.action.login.primary'  # Clearance King specific
+            ])
 
             submit_clicked = False
             for selector in submit_selectors:
@@ -392,8 +448,8 @@ class StandalonePlaywrightLogin:
                 log.error("No page available for price verification")
                 return False
 
-            # Navigate to a test product that requires login to see prices
-            test_product = f"{self.base_url}/sealapack-turkey-roasting-bags-2-pack"
+            # Navigate to test product for price verification
+            test_product = self.test_product_url or f"{self.base_url}/test-product"
             await target_page.goto(test_product, wait_until='domcontentloaded')
             await target_page.wait_for_load_state('networkidle', timeout=10000)
 
@@ -488,19 +544,25 @@ class StandalonePlaywrightLogin:
             log.warning(f"Cleanup warning: {e}")
 
 # Convenience function for easy import
-async def login_to_poundwholesale(cdp_port: int = 9222, email: str = None, password: str = None) -> LoginResult:
+async def login_to_poundwholesale(cdp_port: int = 9222, email: str = None, password: str = None, supplier_config: dict = None) -> LoginResult:
     """
-    Convenience function to login to PoundWholesale
+    Convenience function to login to PoundWholesale with optional config-driven support
 
     Args:
         cdp_port: CDP port for Chrome connection (default 9222)
         email: Login email (optional, uses default if not provided)
         password: Login password (optional, uses default if not provided)
+        supplier_config: Optional supplier config dict for config-driven behavior
 
     Returns:
         LoginResult with success status and details
     """
-    login_handler = StandalonePlaywrightLogin(cdp_port, email, password)
+    login_handler = StandalonePlaywrightLogin(
+        cdp_port=cdp_port, 
+        email=email, 
+        password=password,
+        supplier_config=supplier_config
+    )
 
     try:
         result = await login_handler.login_workflow()

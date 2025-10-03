@@ -1,0 +1,131 @@
+2025-10-04 02:57:10,111 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_025710.log
+2025-10-04 02:57:10,111 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_025710.log
+2025-10-04 02:57:10,112 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-10-04 02:57:10,112 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-10-04 02:57:10,116 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-10-04 02:57:10,692 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-10-04 02:57:10,693 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-10-04 02:57:10,695 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/141.0.7390.55
+2025-10-04 02:57:10,696 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-10-04 02:57:10,697 - utils.browser_manager - DEBUG - ?? Using IPv6 endpoint for CDP connection
+2025-10-04 02:57:10,698 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-10-04 02:57:10,982 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-10-04 02:57:10,983 - utils.browser_manager - INFO - ?? Using existing context with 4 pages
+2025-10-04 02:57:10,983 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 141.0.7390.55
+2025-10-04 02:57:10,983 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 02:57:10,983 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 02:57:10,984 - __main__ - INFO - 🔐 Initializing Clearance King authentication helper...
+2025-10-04 02:57:10,984 - __main__ - INFO - ✅ Using configured credentials for clearance-king.co.uk
+2025-10-04 02:57:10,984 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-10-04 02:57:11,036 - tools.clearance_king.supplier_authentication_service - INFO - ❌ Login link found - not authenticated
+2025-10-04 02:57:11,036 - __main__ - INFO - 🔐 Not authenticated, initiating login...
+2025-10-04 02:57:11,037 - tools.clearance_king.supplier_authentication_service - INFO - 🔐 Starting login process for Clearance King...
+2025-10-04 02:57:11,037 - tools.clearance_king.supplier_authentication_service - INFO - 🚀 Performing login via StandalonePlaywrightLogin...
+2025-10-04 02:57:11,037 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-10-04 02:57:11,038 - tools.standalone_playwright_login - INFO - 🌐 Navigating to login page: https://www.clearance-king.co.uk/customer/account/login/
+2025-10-04 02:57:16,524 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="email"]
+2025-10-04 02:57:17,533 - tools.standalone_playwright_login - INFO - 🔍 Using config password selector: input#pass
+2025-10-04 02:57:17,533 - tools.standalone_playwright_login - DEBUG - Trying password selector: input#pass
+2025-10-04 02:57:47,715 - tools.standalone_playwright_login - DEBUG - Password element interaction failed: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("input#pass").first
+    - locator resolved to <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-gtm-form-interact-field-id="1" data-bind="attr: {autocomplete: autocomplete}"/>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+2025-10-04 02:57:47,716 - tools.standalone_playwright_login - DEBUG - Trying password selector: input[name="login[password]"]
+2025-10-04 02:57:47,723 - tools.standalone_playwright_login - DEBUG - Trying password selector: input[name="password"]
+2025-10-04 02:58:17,902 - tools.standalone_playwright_login - DEBUG - Password element interaction failed: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("input[name=\"password\"]").first
+    - locator resolved to <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-gtm-form-interact-field-id="1" data-bind="attr: {autocomplete: autocomplete}"/>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+2025-10-04 02:58:17,903 - tools.standalone_playwright_login - DEBUG - Trying password selector: input[type="password"]
+2025-10-04 02:58:48,090 - tools.standalone_playwright_login - DEBUG - Password element interaction failed: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("input[type=\"password\"]").first
+    - locator resolved to <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-gtm-form-interact-field-id="1" data-bind="attr: {autocomplete: autocomplete}"/>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    27 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+    - waiting for" https://www.clearance-king.co.uk/customer/account/login/" navigation to finish...
+    - navigated to "https://www.clearance-king.co.uk/customer/account/"
+    - waiting for element to be visible, enabled and stable
+  - element was detached from the DOM, retrying
+    - locator resolved to <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-bind="attr: {autocomplete: autocomplete}"/>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    26 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+2025-10-04 02:58:48,091 - tools.standalone_playwright_login - DEBUG - Trying password selector: #password
+2025-10-04 02:58:48,098 - tools.standalone_playwright_login - DEBUG - Trying password selector: #pass
+2025-10-04 02:59:18,279 - tools.standalone_playwright_login - DEBUG - Password element interaction failed: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("#pass").first
+    - locator resolved to <input id="pass" name="password" type="password" class="input-text" autocomplete="off" data-validate="{required:true}" data-bind="attr: {autocomplete: autocomplete}"/>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+2025-10-04 02:59:18,280 - tools.standalone_playwright_login - DEBUG - Trying password selector: #customer_password
+2025-10-04 02:59:18,285 - tools.standalone_playwright_login - DEBUG - Trying password selector: .password-field
+2025-10-04 02:59:18,288 - tools.standalone_playwright_login - DEBUG - Trying password selector: input[id*="password"]
+2025-10-04 02:59:18,294 - tools.standalone_playwright_login - DEBUG - Trying password selector: input[autocomplete="current-password"]
+2025-10-04 02:59:18,299 - tools.clearance_king.supplier_authentication_service - ERROR - ❌ Login failed: Could not find or fill password field
+2025-10-04 02:59:18,300 - __main__ - ERROR - ❌ Authentication failed. Exiting workflow.
+2025-10-04 02:59:18,300 - __main__ - WARNING - ⚠️ Browser cleanup warning: 'BrowserManager' object has no attribute 'cleanup'
+2025-10-04 02:59:18,301 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

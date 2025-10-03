@@ -1,6 +1,6 @@
 {
-  "__comment_exhaustive_mode": "🚀 EXHAUSTIVE MODE - Process EVERY product under £20 from ALL categories",
-  "__comment_no_limits": "ALL artificial limits removed except £20 price filter",
+  "__comment_exhaustive_mode": "\ud83d\ude80 EXHAUSTIVE MODE - Process EVERY product under \u00a320 from ALL categories",
+  "__comment_no_limits": "ALL artificial limits removed except \u00a320 price filter",
   "pipeline_toggles": {
     "separate_supplier_amazon_loops": true,
     "mark_cached_only_complete": true,
@@ -15,7 +15,7 @@
     "test_mode": false,
     "clear_cache": false,
     "selective_cache_clear": false,
-   "archive_system": {
+    "archive_system": {
       "enabled": false,
       "mode": "",
       "target_supplier": "",
@@ -39,13 +39,12 @@
     "supplier_extraction_batch_size": 100,
     "max_categories_to_process": 0
   },
-     "max_categories_per_request": 0,
-      "dynamic_reordering": {
-        "enabled": false,
-        "trigger_interval_categories": 5,
-        "trigger_interval_products": 100
-      },
-
+  "max_categories_per_request": 0,
+  "dynamic_reordering": {
+    "enabled": false,
+    "trigger_interval_categories": 5,
+    "trigger_interval_products": 100
+  },
   "processing_limits": {
     "max_products_per_category": 1000,
     "max_products_per_run": 1000000,
@@ -243,13 +242,31 @@
     "poundwholesale.co.uk": {
       "username": "info@theblacksmithmarket.com",
       "password": "0Dqixm9c&"
+    },
+    "clearance-king.co.uk": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
     }
   },
   "workflows": {
     "poundwholesale_workflow": {
       "supplier_name": "poundwholesale.co.uk",
+      "supplier_url": "https://www.poundwholesale.co.uk",
+      "categories_config_path": "config/poundwholesale_categories.json",
+      "test_product_url": "https://www.poundwholesale.co.uk/sealapack-turkey-roasting-bags-2-pack",
       "use_predefined_categories": true,
       "ai_client": null
+    },
+    "clearance_king_workflow": {
+      "supplier_name": "clearance-king.co.uk",
+      "supplier_url": "https://www.clearance-king.co.uk",
+      "categories_config_path": "config/clearance-king_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "workflow_type": "passive_extraction",
+      "authentication_required": true,
+      "session_persistence": true,
+      "test_product_url": "https://www.clearance-king.co.uk/sport-line-aquatic-advanced-swimming-goggles-colours-may-vary-1.html"
     }
   },
   "ai_features": {

@@ -629,10 +629,7 @@ def _load_cache_directories():
 
 cache_directories = _load_cache_directories()
 
-# Global constant for persistent linking map in dedicated directory
-LINKING_MAP_DIR = os.path.join(OUTPUT_DIR, "linking_maps")
-os.makedirs(LINKING_MAP_DIR, exist_ok=True)
-LINKING_MAP_PATH = os.path.join(LINKING_MAP_DIR, "linking_map.json")
+# NOTE: Linking map paths moved to instance variables in __init__ for per-supplier isolation
 
 # Other directories
 SUPPLIER_CACHE_DIR = os.path.join(BASE_DIR, "OUTPUTS", "cached_products")
@@ -1399,6 +1396,13 @@ class PassiveExtractionWorkflow:
             self.log.error(f"🚨 Output dir: {self.output_dir}")
             self.log.error(f"🚨 Supplier cache dir: {self.supplier_cache_dir}")
             raise
+
+        # Initialize supplier-specific linking map path
+        self.linking_map_path = get_linking_map_path(self.supplier_name)
+        self.linking_map_dir = self.linking_map_path.parent
+        os.makedirs(self.linking_map_dir, exist_ok=True)
+        self.log.info(f"✅ Linking map directory: {self.linking_map_dir}")
+
         # 🚨 FIX 3: Initialize state manager with accurate totals BEFORE startup analysis
         try:
             # Get total cache and category counts for proper initialization
@@ -1831,7 +1835,14 @@ class PassiveExtractionWorkflow:
             from pathlib import Path
             import json
 
-            config_path = Path(__file__).parent.parent / "config" / "poundwholesale_categories.json"
+            # Read from workflow config (passed to constructor)
+            categories_config_path = self.workflow_config.get("categories_config_path")
+            if not categories_config_path:
+                # Backwards compatibility fallback
+                categories_config_path = f"config/{self.supplier_name.replace('.', '_')}_categories.json"
+                self.log.warning(f"⚠️ categories_config_path not in config, using fallback: {categories_config_path}")
+
+            config_path = Path(categories_config_path)
             if config_path.exists():
                 with open(config_path, "r", encoding="utf-8") as f:
                     config_data = json.load(f)
@@ -7331,7 +7342,7 @@ Return ONLY valid JSON, no additional text."""
                 try:
                     slug = re.sub(r"[^a-z0-9]+", "-", current_category_url.lower()).strip("-")[:30]
                     manifest_path = (
-                        Path("OUTPUTS") / "manifests" / "poundwholesale.co.uk" / f"{slug}.json"
+                        Path("OUTPUTS") / "manifests" / self.supplier_name / f"{slug}.json"
                     )
                     if not manifest_path.exists():
                         self.log.warning(
@@ -11791,7 +11802,15 @@ Return ONLY valid JSON, no additional text."""
                     try:
                         from tools.standalone_playwright_login import StandalonePlaywrightLogin
 
-                        login_handler = StandalonePlaywrightLogin(self.browser_manager)
+                        # Get config-driven URLs for authentication testing
+                        supplier_url = self.workflow_config.get("supplier_url", f"https://{self.supplier_name}")
+                        test_product_url = self.workflow_config.get("test_product_url")
+
+                        login_handler = StandalonePlaywrightLogin(
+                            self.browser_manager,
+                            supplier_url=supplier_url,
+                            test_product_url=test_product_url
+                        )
                         login_result = await login_handler.perform_login(self.supplier_name)
 
                         if login_result:
