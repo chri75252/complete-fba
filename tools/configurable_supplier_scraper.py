@@ -583,23 +583,33 @@ class ConfigurableSupplierScraper:
                 if i > 0 and i % 25 == 0:
                     try:
                         if hasattr(self, "browser_manager") and self.browser_manager:
-                            from tools.supplier_authentication_service import (
-                                SupplierAuthenticationService,
+                            # Import the correct per-supplier authentication service dynamically
+                            import importlib
+                            from urllib.parse import urlparse
+                            supplier_domain = urlparse(base_url).netloc.replace('www.', '')
+                            supplier_slug = supplier_domain.split('.')[0].replace('-', '_')
+                            module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+                            auth_module = importlib.import_module(module_path)
+                            SupplierAuthenticationService = getattr(
+                                auth_module, "SupplierAuthenticationService",
+                                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
                             )
                             from config.system_config_loader import SystemConfigLoader
 
                             page = await self.browser_manager.get_page()
                             if page:
-                                auth_service = SupplierAuthenticationService(self.browser_manager)
+                                # ✅ Pass Page object, not BrowserManager
+                                auth_service = SupplierAuthenticationService(page)
                                 config_loader = SystemConfigLoader()
-                                credentials = config_loader.get_credentials("poundwholesale.co.uk")
+                                credentials = config_loader.get_credentials(supplier_domain)
 
                                 if credentials:
                                     log.info(
                                         f"🔐 PROACTIVE AUTH CHECK: Verifying login at product {i+1}"
                                     )
+                                    # Helper is page-based; no need to pass page param
                                     authenticated = await auth_service.ensure_authenticated_session(
-                                        page, credentials
+                                        credentials
                                     )
 
                                     if not authenticated:
@@ -647,26 +657,13 @@ class ConfigurableSupplierScraper:
                 try:
                     soup = BeautifulSoup(product_html, "html.parser")
 
-                    # Extract core product data from individual product page
-                    title = self._extract_text_by_selector(
-                        soup, ["h1.page-title .base", "[data-ui-id='page-title-wrapper']"]
-                    )
-                    # CRITICAL FIX: Use configurable price extraction instead of hardcoded selectors
+                    # Extract core product data from individual product page (config-driven)
+                    title = await self.extract_title(soup, product_html, product_url)
                     price = await self.extract_price(soup, product_html, product_url)
-                    ean = self._extract_text_by_selector(
-                        soup, [".value.attribute-code-product_barcode"]
-                    )
-                    sku = self._extract_text_by_selector(
-                        soup, [".value.attribute-code-sku", "[itemprop='sku']"]
-                    )
-                    availability = self._extract_text_by_selector(
-                        soup, [".stock.available", ".stock.unavailable"]
-                    )
+                    ean = self.extract_ean(soup, product_url)
+                    availability = self.extract_availability(soup, product_url)
 
-                    # Get image from product page or fallback to placeholder
-                    image_url = self._extract_image_by_selector(
-                        soup, ["img.product-image-photo", ".product-image img"]
-                    )
+                    # Image intentionally omitted to avoid discrepancies across suppliers
 
                     # Create product data
                     product = {
@@ -675,9 +672,7 @@ class ConfigurableSupplierScraper:
                         "url": product_url,
                         "normalized_url": normalize_url(product_url),
                         "ean": normalize_ean(ean),
-                        "sku": sku,
                         "availability": availability,
-                        "image_url": image_url,
                         "source_url": url,
                         "scraped_at": datetime.now().isoformat(),
                     }
@@ -784,17 +779,23 @@ class ConfigurableSupplierScraper:
                             # Trigger authentication check when pricing fails
                             try:
                                 if hasattr(self, "browser_manager") and self.browser_manager:
-                                    from tools.supplier_authentication_service import (
-                                        SupplierAuthenticationService,
+                                    # Import the correct per-supplier authentication service dynamically
+                                    import importlib
+                                    from urllib.parse import urlparse
+                                    supplier_domain = urlparse(base_url).netloc.replace('www.', '')
+                                    supplier_slug = supplier_domain.split('.')[0].replace('-', '_')
+                                    module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+                                    auth_module = importlib.import_module(module_path)
+                                    SupplierAuthenticationService = getattr(
+                                        auth_module, "SupplierAuthenticationService",
+                                        getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
                                     )
 
                                     # Get current page for authentication check
                                     page = await self.browser_manager.get_page()
                                     if page:
-                                        # Check if we're still authenticated
-                                        auth_service = SupplierAuthenticationService(
-                                            self.browser_manager
-                                        )
+                                        # ✅ Pass Page object, not BrowserManager
+                                        auth_service = SupplierAuthenticationService(page)
 
                                         # Get credentials (you may need to pass these from the workflow)
                                         from config.system_config_loader import SystemConfigLoader
@@ -808,9 +809,10 @@ class ConfigurableSupplierScraper:
                                             log.info(
                                                 f"🔐 AUTHENTICATION CHECK: Verifying login status for product {i+1}"
                                             )
+                                            # Helper is page-based; no need to pass page param
                                             authenticated = (
                                                 await auth_service.ensure_authenticated_session(
-                                                    page, credentials
+                                                    credentials
                                                 )
                                             )
 
@@ -941,23 +943,33 @@ class ConfigurableSupplierScraper:
                 if i > 0 and i % 25 == 0:
                     try:
                         if hasattr(self, "browser_manager") and self.browser_manager:
-                            from tools.supplier_authentication_service import (
-                                SupplierAuthenticationService,
+                            # Import the correct per-supplier authentication service dynamically
+                            import importlib
+                            from urllib.parse import urlparse
+                            supplier_domain = urlparse(base_url).netloc.replace('www.', '')
+                            supplier_slug = supplier_domain.split('.')[0].replace('-', '_')
+                            module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+                            auth_module = importlib.import_module(module_path)
+                            SupplierAuthenticationService = getattr(
+                                auth_module, "SupplierAuthenticationService",
+                                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
                             )
                             from config.system_config_loader import SystemConfigLoader
 
                             page = await self.browser_manager.get_page()
                             if page:
-                                auth_service = SupplierAuthenticationService(self.browser_manager)
+                                # ✅ Pass Page object, not BrowserManager
+                                auth_service = SupplierAuthenticationService(page)
                                 config_loader = SystemConfigLoader()
-                                credentials = config_loader.get_credentials("poundwholesale.co.uk")
+                                credentials = config_loader.get_credentials(supplier_domain)
 
                                 if credentials:
                                     log.info(
                                         f"🔐 PROACTIVE AUTH CHECK: Verifying login at product {i+1}"
                                     )
+                                    # Helper is page-based; no need to pass page param
                                     authenticated = await auth_service.ensure_authenticated_session(
-                                        page, credentials
+                                        credentials
                                     )
 
                                     if not authenticated:
@@ -1001,26 +1013,13 @@ class ConfigurableSupplierScraper:
                 try:
                     soup = BeautifulSoup(product_html, "html.parser")
 
-                    # Extract core product data from individual product page
-                    title = self._extract_text_by_selector(
-                        soup, ["h1.page-title .base", "[data-ui-id='page-title-wrapper']"]
-                    )
-                    # CRITICAL FIX: Use configurable price extraction instead of hardcoded selectors
+                    # Extract core product data from individual product page (config-driven)
+                    title = await self.extract_title(soup, product_html, product_url)
                     price = await self.extract_price(soup, product_html, product_url)
-                    ean = self._extract_text_by_selector(
-                        soup, [".value.attribute-code-product_barcode"]
-                    )
-                    sku = self._extract_text_by_selector(
-                        soup, [".value.attribute-code-sku", "[itemprop='sku']"]
-                    )
-                    availability = self._extract_text_by_selector(
-                        soup, [".stock.available", ".stock.unavailable"]
-                    )
+                    ean = self.extract_ean(soup, product_url)
+                    availability = self.extract_availability(soup, product_url)
 
-                    # Get image from product page or fallback to placeholder
-                    image_url = self._extract_image_by_selector(
-                        soup, ["img.product-image-photo", ".product-image img"]
-                    )
+                    # Image intentionally omitted to avoid discrepancies across suppliers
 
                     # Create product data
                     product = {
@@ -1029,9 +1028,7 @@ class ConfigurableSupplierScraper:
                         "url": product_url,
                         "normalized_url": normalize_url(product_url),
                         "ean": normalize_ean(ean),
-                        "sku": sku,
                         "availability": availability,
-                        "image_url": image_url,
                         "source_url": url,
                         "scraped_at": datetime.now().isoformat(),
                     }
@@ -1116,17 +1113,23 @@ class ConfigurableSupplierScraper:
                             # Trigger authentication check when pricing fails
                             try:
                                 if hasattr(self, "browser_manager") and self.browser_manager:
-                                    from tools.supplier_authentication_service import (
-                                        SupplierAuthenticationService,
+                                    # Import the correct per-supplier authentication service dynamically
+                                    import importlib
+                                    from urllib.parse import urlparse
+                                    supplier_domain = urlparse(base_url).netloc.replace('www.', '')
+                                    supplier_slug = supplier_domain.split('.')[0].replace('-', '_')
+                                    module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+                                    auth_module = importlib.import_module(module_path)
+                                    SupplierAuthenticationService = getattr(
+                                        auth_module, "SupplierAuthenticationService",
+                                        getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
                                     )
 
                                     # Get current page for authentication check
                                     page = await self.browser_manager.get_page()
                                     if page:
-                                        # Check if we're still authenticated
-                                        auth_service = SupplierAuthenticationService(
-                                            self.browser_manager
-                                        )
+                                        # ✅ Pass Page object, not BrowserManager
+                                        auth_service = SupplierAuthenticationService(page)
 
                                         # Get credentials (you may need to pass these from the workflow)
                                         from config.system_config_loader import SystemConfigLoader
@@ -1140,9 +1143,10 @@ class ConfigurableSupplierScraper:
                                             log.info(
                                                 f"🔐 AUTHENTICATION CHECK: Verifying login status for product {i+1}"
                                             )
+                                            # Helper is page-based; no need to pass page param
                                             authenticated = (
                                                 await auth_service.ensure_authenticated_session(
-                                                    page, credentials
+                                                    credentials
                                                 )
                                             )
 
@@ -1300,21 +1304,13 @@ class ConfigurableSupplierScraper:
 
     async def _extract_product_data_from_soup(self, soup: BeautifulSoup, product_url: str, category_url: Optional[str] = None) -> Dict:
         """Extract product data from BeautifulSoup object."""
+        """Extract product data from BeautifulSoup object using domain-aware helpers."""
         try:
-            title = self._extract_text_by_selector(
-                soup, ["h1.page-title .base", "[data-ui-id='page-title-wrapper']"]
-            )
+            title = await self.extract_title(soup, str(soup), product_url)
             price = await self.extract_price(soup, str(soup), product_url)
-            ean = self._extract_text_by_selector(soup, [".value.attribute-code-product_barcode"])
-            sku = self._extract_text_by_selector(
-                soup, [".value.attribute-code-sku", "[itemprop='sku']"]
-            )
-            availability = self._extract_text_by_selector(
-                soup, [".stock.available", ".stock.unavailable"]
-            )
-            image_url = self._extract_image_by_selector(
-                soup, ["img.product-image-photo", ".product-image img"]
-            )
+            ean = self.extract_ean(soup, product_url)
+            availability = self.extract_availability(soup, product_url)
+            # Image intentionally omitted to avoid discrepancies across suppliers
 
             return {
                 "title": title,
@@ -1322,16 +1318,13 @@ class ConfigurableSupplierScraper:
                 "url": product_url,
                 "normalized_url": normalize_url(product_url),
                 "ean": normalize_ean(ean),
-                "sku": sku,
                 "availability": availability,
-                "image_url": image_url,
-                "source_url": category_url,  # ✅ add the category context as the source
+                "source_url": category_url,
                 "scraped_at": datetime.now().isoformat(),
             }
         except Exception as e:
             log.error(f"Error extracting product data: {e}")
             return None
-
     async def _set_page_limiter(self, url: str) -> bool:
         """
         Sets the products per page limiter to the configured value (e.g., 60).
@@ -2135,16 +2128,55 @@ HTML CONTENT:
     async def extract_title(
         self, element: BeautifulSoup, element_html: str, context_url: str
     ) -> Optional[str]:
-        """Extract product title using configured selectors."""
+        """Extract product title using configured selectors with detail-page fallbacks."""
         try:
-            selectors = self._get_selectors_for_domain(urlparse(context_url).netloc)
-            title_selectors = selectors.get("field_mappings", {}).get("title", [])
+            selectors_cfg = self._get_selectors_for_domain(urlparse(context_url).netloc)
+            fm = (selectors_cfg or {}).get("field_mappings", {})
 
-            for selector in title_selectors:
-                title_element = element.select_one(selector)
-                if title_element and title_element.text.strip():
-                    return title_element.text.strip()
+            # Prefer detail-page selectors when present
+            candidate_lists = [
+                fm.get("product_detail_title", []),
+                fm.get("title", []),
+            ]
 
+            for candidate in candidate_lists:
+                for selector in candidate or []:
+                    try:
+                        node = element.select_one(selector)
+                    except Exception:
+                        node = None
+                    if node:
+                        txt = (node.get_text(" ", strip=True) or "").strip()
+                        if txt:
+                            return txt
+
+            # Generic fallbacks (schema/meta/semantic headings)
+            try:
+                og = element.select_one("meta[property='og:title']")
+                if og and og.get("content"):
+                    return og.get("content").strip()
+            except Exception:
+                pass
+            try:
+                tw = element.select_one("meta[name='twitter:title']")
+                if tw and tw.get("content"):
+                    return tw.get("content").strip()
+            except Exception:
+                pass
+            try:
+                h = element.select_one(".page-title .base") or element.select_one("h1.page-title") or element.select_one("h1")
+                if h and h.get_text(strip=True):
+                    return h.get_text(strip=True)
+            except Exception:
+                pass
+
+            # Final fallback: HTML <title>
+            try:
+                t = element.find("title")
+                if t and t.get_text(strip=True):
+                    return t.get_text(strip=True)
+            except Exception:
+                pass
             return None
         except Exception as e:
             log.error(f"Error extracting title: {e}")

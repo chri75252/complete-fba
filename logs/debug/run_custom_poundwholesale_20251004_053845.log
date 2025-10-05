@@ -1,0 +1,41 @@
+2025-10-04 05:38:45,728 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_053845.log
+2025-10-04 05:38:45,729 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_053845.log
+2025-10-04 05:38:45,729 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-10-04 05:38:45,730 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-10-04 05:38:45,734 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-10-04 05:38:46,445 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-10-04 05:38:46,445 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-10-04 05:38:46,447 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/141.0.7390.55
+2025-10-04 05:38:46,448 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-10-04 05:38:46,449 - utils.browser_manager - DEBUG - ?? Using IPv6 endpoint for CDP connection
+2025-10-04 05:38:46,450 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-10-04 05:38:46,804 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-10-04 05:38:46,805 - utils.browser_manager - INFO - ?? Using existing context with 4 pages
+2025-10-04 05:38:46,805 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 141.0.7390.55
+2025-10-04 05:38:46,805 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 05:38:46,805 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 05:38:46,806 - __main__ - INFO - 🔐 Initializing Clearance King authentication helper...
+2025-10-04 05:38:46,806 - __main__ - INFO - ✅ Using configured credentials for clearance-king.co.uk
+2025-10-04 05:38:46,806 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-10-04 05:38:46,926 - tools.clearance_king.supplier_authentication_service - INFO - ❌ Login link found - not authenticated
+2025-10-04 05:38:46,926 - __main__ - INFO - 🔐 Not authenticated, initiating login...
+2025-10-04 05:38:46,926 - tools.clearance_king.supplier_authentication_service - INFO - 🔐 Starting login process for Clearance King...
+2025-10-04 05:38:46,927 - tools.clearance_king.supplier_authentication_service - INFO - 🚀 Performing login via StandalonePlaywrightLogin...
+2025-10-04 05:38:46,927 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-10-04 05:38:46,927 - tools.standalone_playwright_login - INFO - 🌐 Navigating to login page: https://www.clearance-king.co.uk/customer/account/login/
+2025-10-04 05:38:50,887 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input#email
+2025-10-04 05:38:51,887 - tools.standalone_playwright_login - INFO - 🔍 Using config password selector: input#pass
+2025-10-04 05:38:52,059 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input#pass (forced)
+2025-10-04 05:38:52,262 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: button#send2.action.login.primary
+2025-10-04 05:38:52,262 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-10-04 05:38:52,266 - tools.standalone_playwright_login - WARNING - Still on login page - login may have failed
+2025-10-04 05:38:52,266 - tools.standalone_playwright_login - INFO - 🔍 Verifying price access...
+2025-10-04 05:38:52,776 - tools.standalone_playwright_login - ERROR - Error verifying price access: Page.goto: net::ERR_ABORTED at https://www.clearance-king.co.uk/sport-line-aquatic-advanced-swimming-goggles-colours-may-vary-1.html
+Call log:
+  - navigating to "https://www.clearance-king.co.uk/sport-line-aquatic-advanced-swimming-goggles-colours-may-vary-1.html", waiting until "domcontentloaded"
+
+2025-10-04 05:38:52,777 - tools.standalone_playwright_login - ERROR - ❌ Login verification failed. No success indicators found and no price access.
+2025-10-04 05:38:52,778 - tools.clearance_king.supplier_authentication_service - ERROR - ❌ Login failed: Login form submitted but verification failed on all checks.
+2025-10-04 05:38:52,778 - __main__ - ERROR - ❌ Authentication failed. Exiting workflow.
+2025-10-04 05:38:52,779 - __main__ - WARNING - ⚠️ Browser cleanup warning: 'BrowserManager' object has no attribute 'cleanup'
+2025-10-04 05:38:52,781 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

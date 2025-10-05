@@ -184,6 +184,16 @@ class StandalonePlaywrightLogin:
         """Perform login using reliable Playwright selectors"""
         start_time = datetime.now()
 
+        # Fast path: if we already have price access, don't login again
+        try:
+            if await self.check_if_already_logged_in():
+                duration = (datetime.now() - start_time).total_seconds()
+                log.info(f"✅ Already logged in; skipping login (took {duration:.1f}s)")
+                return LoginResult(success=True, login_detected=True, price_access_verified=True,
+                                   login_duration_seconds=duration)
+        except Exception:
+            pass
+
         try:
             log.info("🔐 Starting Playwright login...")
 
@@ -284,38 +294,45 @@ class StandalonePlaywrightLogin:
 
             # Config-driven submit button selectors
             submit_selectors = []
-            
+
             # Add config-specific selector first if available
             if config_selectors.get('login_button'):
                 submit_selectors.append(config_selectors['login_button'])
-            
-            # Add common fallback selectors
+
+            # Add common fallback selectors (prioritize form-specific ones)
             submit_selectors.extend([
-                'button[type="submit"]',
-                'input[type="submit"]',
-                '.login-button',
-                'button:has-text("Sign In")',
-                'button:has-text("Log In")',
-                'button:has-text("Login")',
-                '#login-btn',
+                'button.action.login.primary',  # Clearance King specific - prioritize
                 '#send2',  # Clearance King specific
-                '#customer_login_btn',
-                '.btn-login',
-                '.submit-button',
-                'button.action.login.primary'  # Clearance King specific
+                'input[type="submit"]',
+                'button:has-text("Sign In")',
+                'button:has-text("Log In"), button:has-text("Login")',
+                '.login-button', '#login-btn', '#customer_login_btn', '.btn-login', '.submit-button'
             ])
 
             submit_clicked = False
+            # Try submit buttons that are inside the same form as the password field
+            login_form = self.page.locator("form:has(input[type='password'])").first
             for selector in submit_selectors:
                 try:
-                    element = self.page.locator(selector).first
-                    if await element.is_visible():
-                        await element.click()
+                    target = (login_form.locator(selector).first
+                              if await login_form.count() > 0
+                              else self.page.locator(selector).first)
+                    if await target.is_visible() and await target.is_enabled():
+                        await target.click(timeout=2000)
                         log.info(f"✅ Clicked submit using selector: {selector}")
                         submit_clicked = True
                         break
                 except Exception as e:
                     log.debug(f"Submit selector '{selector}' failed: {e}")
+
+            # Final fallback: press Enter in password field to submit the form
+            if not submit_clicked:
+                try:
+                    await self.page.keyboard.press("Enter")
+                    log.info("↩️  Pressed Enter in password field as submit fallback")
+                    submit_clicked = True
+                except Exception:
+                    pass
 
             if not submit_clicked:
                 return LoginResult(
@@ -444,14 +461,42 @@ class StandalonePlaywrightLogin:
 
             # Use provided page or default to self.page
             target_page = page or self.page
+
+            # ✅ PATCH 2: Defensive guard - if a BrowserManager was mistakenly passed, resolve a Page from it
+            if target_page is not None and not hasattr(target_page, "goto") and hasattr(target_page, "get_page"):
+                try:
+                    base = self.base_url or getattr(self, "supplier_url", None) or "about:blank"
+                    target_page = await target_page.get_page(base, reuse_existing=True)
+                    log.debug("ℹ️ Resolved BrowserManager to a Playwright Page for price verification")
+                except Exception as resolve_err:
+                    log.error(f"❌ Could not resolve a Page from BrowserManager: {resolve_err}")
+                    return False
+
             if not target_page:
                 log.error("No page available for price verification")
                 return False
 
             # Navigate to test product for price verification
             test_product = self.test_product_url or f"{self.base_url}/test-product"
-            await target_page.goto(test_product, wait_until='domcontentloaded')
-            await target_page.wait_for_load_state('networkidle', timeout=10000)
+            try:
+                await target_page.goto(test_product, wait_until='domcontentloaded')
+                await target_page.wait_for_load_state('networkidle', timeout=8000)
+            except Exception as e:
+                # Handle intermittent "net::ERR_ABORTED" during post-login redirects
+                if "ERR_ABORTED" in str(e):
+                    log.warning("⚠️ Test-product navigation aborted; retrying once…")
+                    try:
+                        # Reset to base, then re-open test product
+                        if self.base_url:
+                            await target_page.goto(self.base_url, wait_until='domcontentloaded')
+                        await target_page.goto(test_product, wait_until='domcontentloaded')
+                        await target_page.wait_for_load_state('networkidle', timeout=8000)
+                    except Exception as e2:
+                        log.error(f"Retry failed during price verification: {e2}")
+                        return False
+                else:
+                    log.error(f"Navigation error during price verification: {e}")
+                    return False
 
             # Look for price elements with currency symbols
             for selector in self.PRICE_SELECTORS:
@@ -498,12 +543,16 @@ class StandalonePlaywrightLogin:
     async def login_workflow(self) -> LoginResult:
         """Complete login workflow - checks if already logged in first"""
         try:
-            # Connect to browser
-            if not await self.connect_browser():
-                return LoginResult(
-                    success=False,
-                    error_message="Failed to connect to browser"
-                )
+            # ✅ PATCH 3: If we already have a Playwright Page, reuse it and skip CDP entirely
+            if self.page is not None and hasattr(self.page, "goto"):
+                log.debug("ℹ️ Reusing provided Playwright Page; skipping CDP connect")
+            else:
+                # Connect to browser via CDP
+                if not await self.connect_browser():
+                    return LoginResult(
+                        success=False,
+                        error_message="Failed to connect to browser"
+                    )
 
             # FORCE THE BROWSER TAB TO BE VISIBLE
             await self.page.bring_to_front()

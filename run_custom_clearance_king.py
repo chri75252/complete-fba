@@ -20,11 +20,11 @@ from playwright.async_api import async_playwright
 from config.system_config_loader import SystemConfigLoader
 from tools.standalone_playwright_login import StandalonePlaywrightLogin
 from tools.passive_extraction_workflow_latest import PassiveExtractionWorkflow
-from tools.supplier_authentication_service import SupplierAuthenticationService
+from tools.clearance_king.supplier_authentication_service import ClearanceKingAuthenticationHelper
 from utils.logger import setup_logger
 from utils.browser_manager import BrowserManager
 
-# 🚨 IMPORT HYGIENE: Validate correct module is imported
+# 🚨 IMPORT HYGIENE: Validate correct shared workflow module is imported
 import inspect
 workflow_module_path = inspect.getfile(PassiveExtractionWorkflow)
 expected_path_suffix = os.path.join("tools", "passive_extraction_workflow_latest.py")
@@ -32,7 +32,7 @@ if not workflow_module_path.endswith(expected_path_suffix.replace(os.sep, "/")):
     print(f"WARNING: PassiveExtractionWorkflow imported from unexpected path: {workflow_module_path}")
     print(f"Expected path to end with: {expected_path_suffix}")
 else:
-    print(f"IMPORT HYGIENE: PassiveExtractionWorkflow imported from correct path: {workflow_module_path}")
+    print(f"✅ CONFIG-DRIVEN: PassiveExtractionWorkflow imported from shared workflow: {workflow_module_path}")
 
 async def main():
     """Main function to run the custom Clearance King extraction workflow."""
@@ -73,8 +73,8 @@ async def main():
         supplier_url = workflow_config.get('supplier_url', f"https://{supplier_name}")
         supplier_config_path = os.path.join("config", "supplier_configs", f"{supplier_name}.json")
 
-        log.info(f"🔐 Initializing authentication service for logout detection...")
-        auth_service = SupplierAuthenticationService(browser_manager)
+        log.info(f"🔐 Initializing Clearance King authentication helper...")
+        auth_helper = ClearanceKingAuthenticationHelper(page)
 
         if not credentials:
             log.error(f"🚨 Credentials for {supplier_name} not found in config. Exiting.")
@@ -84,10 +84,16 @@ async def main():
 
         log.info(f"🌐 Connecting to existing Chrome debug port {chrome_debug_port} for authentication...")
 
-        authenticated = await auth_service.ensure_authenticated_session(page, credentials)
-        if not authenticated:
-            log.error("Authentication failed. Exiting workflow.")
-            return
+        # Check if already authenticated
+        is_authenticated = await auth_helper.is_authenticated()
+        if not is_authenticated:
+            log.info("🔐 Not authenticated, initiating login...")
+            authenticated = await auth_helper.login(credentials)
+            if not authenticated:
+                log.error("❌ Authentication failed. Exiting workflow.")
+                return
+        else:
+            log.info("✅ Already authenticated!")
 
         # Pass the single browser manager instance to the workflow
         workflow = PassiveExtractionWorkflow(

@@ -6,11 +6,21 @@ import os
 # Add project root to Python path to resolve module imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Ensure Windows consoles can render Unicode log output
+try:
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    if hasattr(sys.stderr, 'reconfigure'):
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
+
+
 from playwright.async_api import async_playwright
 from config.system_config_loader import SystemConfigLoader
 from tools.standalone_playwright_login import StandalonePlaywrightLogin
 from tools.passive_extraction_workflow_latest import PassiveExtractionWorkflow
-from tools.supplier_authentication_service import SupplierAuthenticationService
+from tools.poundwholesale.supplier_authentication_service import PoundwholesaleAuthenticationHelper
 from utils.logger import setup_logger
 from utils.browser_manager import BrowserManager
 
@@ -63,8 +73,8 @@ async def main():
         supplier_url = workflow_config.get('supplier_url', f"https://{supplier_name}")
         supplier_config_path = os.path.join("config", "supplier_configs", f"{supplier_name}.json")
 
-        log.info(f"🔐 Initializing authentication service for logout detection...")
-        auth_service = SupplierAuthenticationService(browser_manager)
+        log.info(f"🔐 Initializing Poundwholesale authentication helper...")
+        auth_helper = PoundwholesaleAuthenticationHelper(page)
 
         if not credentials:
             log.error(f"🚨 Credentials for {supplier_name} not found in config. Exiting.")
@@ -74,10 +84,16 @@ async def main():
         
         log.info(f"🌐 Connecting to existing Chrome debug port {chrome_debug_port} for authentication...")
 
-        authenticated = await auth_service.ensure_authenticated_session(page, credentials)
-        if not authenticated:
-            log.error("Authentication failed. Exiting workflow.")
-            return
+        # Check if already authenticated
+        is_authenticated = await auth_helper.is_authenticated()
+        if not is_authenticated:
+            log.info("🔐 Not authenticated, initiating login...")
+            authenticated = await auth_helper.login(credentials)
+            if not authenticated:
+                log.error("❌ Authentication failed. Exiting workflow.")
+                return
+        else:
+            log.info("✅ Already authenticated!")
 
         # Pass the single browser manager instance to the workflow
         workflow = PassiveExtractionWorkflow(

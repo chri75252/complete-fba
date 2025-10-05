@@ -7,8 +7,20 @@ import asyncio
 import logging
 import os
 from typing import Dict, Optional
+from urllib.parse import urlparse
 from playwright.async_api import Page, TimeoutError as PlaywrightTimeoutError
 from tools.standalone_playwright_login import StandalonePlaywrightLogin
+from config.system_config_loader import SystemConfigLoader
+
+def _normalize_domain(url_or_host: str) -> str:
+    """Normalize domain for consistent credential lookup"""
+    host = url_or_host
+    if "://" in url_or_host:
+        host = urlparse(url_or_host).netloc
+    host = host.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return host
 
 class ClearanceKingAuthenticationHelper:
     """
@@ -16,6 +28,11 @@ class ClearanceKingAuthenticationHelper:
     """
 
     def __init__(self, page: Page):
+        # ✅ Type guard: Fail fast with clear message if wrong type passed
+        assert hasattr(page, "goto"), (
+            "ClearanceKingAuthenticationHelper expects a Playwright Page object, "
+            "not BrowserManager. Please pass: page = await browser_manager.get_page(...)"
+        )
         self.page = page
         self.log = logging.getLogger(__name__)
 
@@ -39,22 +56,7 @@ class ClearanceKingAuthenticationHelper:
             bool: True if authenticated, False otherwise
         """
         try:
-            # Quick check - if we're on login page, definitely not authenticated
-            current_url = self.page.url
-            if "/customer/account/login" in current_url:
-                self.log.info("❌ Currently on login page - not authenticated")
-                return False
-
-            # Check for login button on page (indicates not authenticated)
-            try:
-                login_link = await self.page.wait_for_selector("a[href*='login']", timeout=3000)
-                if login_link:
-                    self.log.info("❌ Login link found - not authenticated")
-                    return False
-            except PlaywrightTimeoutError:
-                pass
-
-            # Use StandalonePlaywrightLogin for price verification (most reliable check)
+            # 1) Price visibility (strongest signal) - check price access first
             try:
                 # Load clearance-king supplier config directly from file
                 import json
@@ -76,33 +78,44 @@ class ClearanceKingAuthenticationHelper:
                 )
                 login_handler.page = self.page  # Use existing page
                 
-                # Verify price access for complete authentication confirmation
-                self.log.info("🔍 Verifying price access to confirm authentication...")
-                price_access = await login_handler.verify_price_access(self.page)
-                if price_access:
-                    self.log.info(f"✅ Authentication confirmed via price access verification")
+                # Use existing page for price verification
+                if await login_handler.verify_price_access(page=self.page):
+                    self.log.info("✅ Price visible on test product — authenticated")
                     return True
-                else:
-                    self.log.info("❌ Price access verification failed - not authenticated")
-                    return False
-                    
             except Exception as e:
-                self.log.debug(f"Could not verify price access: {e}")
-                # Fall back to basic DOM checks if price verification fails
+                self.log.debug(f"Price verification failed: {e}")
+
+            # 2) Explicit "logout / account" indicators
+            try:
+                logout_selectors = [
+                    "a[href*='logout']",
+                    "a:has-text('My Account')",
+                    "a:has-text('Account')",
+                    ".customer-welcome",
+                    ".customer-name"
+                ]
+                for selector in logout_selectors:
+                    try:
+                        element = await self.page.locator(selector).first
+                        if await element.is_visible(timeout=1000):
+                            self.log.info(f"✅ Logout/Account indicator found ({selector}) — authenticated")
+                            return True
+                    except Exception:
+                        continue
+            except Exception:
                 pass
 
-            # Fallback: Check for basic authentication indicators
-            for selector in self.auth_check_selectors:
-                try:
-                    element = await self.page.wait_for_selector(selector, timeout=3000)
-                    if element:
-                        self.log.info(f"✅ Basic authentication indicator found: {selector}")
-                        return True
-                except PlaywrightTimeoutError:
-                    continue
+            # 3) As a weak negative, a visible login link
+            try:
+                login_link = await self.page.locator("a[href*='login']").first
+                if await login_link.is_visible(timeout=1000):
+                    self.log.info("❌ Login link visible — likely not authenticated")
+                    return False
+            except Exception:
+                pass
 
-            # If no clear indicators, assume not authenticated
-            self.log.info("❌ No authentication indicators found - not authenticated")
+            # Default conservative answer
+            self.log.info("❌ No clear authentication indicators found")
             return False
 
         except Exception as e:
@@ -153,9 +166,9 @@ class ClearanceKingAuthenticationHelper:
                 )
                 login_handler.page = self.page  # Use existing page
                 
-                # Perform login using StandalonePlaywrightLogin
+                # Perform login using StandalonePlaywrightLogin (uses login_workflow for skip-if-authenticated)
                 self.log.info("🚀 Performing login via StandalonePlaywrightLogin...")
-                login_result = await login_handler.perform_login()
+                login_result = await login_handler.login_workflow()
                 
                 if login_result.success:
                     self.log.info("✅ Login successful via StandalonePlaywrightLogin!")
@@ -172,16 +185,18 @@ class ClearanceKingAuthenticationHelper:
             self.log.error(f"❌ Login failed with exception: {str(e)}")
             return False
 
-    async def ensure_authenticated_session(self, page: Page, credentials: Dict[str, str]) -> bool:
+    async def ensure_authenticated_session(self, credentials: Dict[str, str] | None = None) -> bool:
         """
         Ensure user is authenticated, performing login if necessary
 
         Args:
-            page: Playwright page object (for compatibility, but self.page is used)
-            credentials: Dictionary with 'username' and 'password' keys
+            credentials: Dictionary with 'username' and 'password' keys (optional, will load from config if not provided)
 
         Returns:
             bool: True if authenticated session is established, False otherwise
+
+        Note:
+            This helper is page-based; it uses self.page set in __init__
         """
         try:
             self.log.info("🔍 Checking current authentication status...")
@@ -191,8 +206,23 @@ class ClearanceKingAuthenticationHelper:
                 self.log.info("✅ Already authenticated - no login required")
                 return True
 
-            # Not authenticated, attempt login
+            # Not authenticated, attempt login with robust credentials resolution
             self.log.info("🔐 Not authenticated - attempting login...")
+
+            # Always resolve credentials robustly
+            if not credentials or not credentials.get("username") or not credentials.get("password"):
+                self.log.warning("⚠️ Credentials missing or incomplete - loading from config")
+                loader = SystemConfigLoader()
+                # Normalize domain from login URL for consistent credential lookup
+                credential_key = _normalize_domain(self.login_url)  # Will be "clearance-king.co.uk"
+                resolved_creds = loader.get_credentials(credential_key)
+
+                if not resolved_creds or not resolved_creds.get("username") or not resolved_creds.get("password"):
+                    self.log.error(f"❌ Missing credentials for {credential_key}")
+                    return False
+                credentials = resolved_creds
+                self.log.info(f"✅ Loaded credentials from config for {credential_key}")
+
             return await self.login(credentials)
 
         except Exception as e:

@@ -14,6 +14,11 @@ class PoundwholesaleAuthenticationHelper:
     """
 
     def __init__(self, page: Page):
+        # ✅ Type guard: Fail fast with clear message if wrong type passed
+        assert hasattr(page, "goto"), (
+            "PoundwholesaleAuthenticationHelper expects a Playwright Page object, "
+            "not BrowserManager. Please pass: page = await browser_manager.get_page(...)"
+        )
         self.page = page
         self.log = logging.getLogger(__name__)
 
@@ -173,16 +178,18 @@ class PoundwholesaleAuthenticationHelper:
             self.log.error(f"❌ Login failed with exception: {str(e)}")
             return False
 
-    async def ensure_authenticated_session(self, page: Page, credentials: Dict[str, str]) -> bool:
+    async def ensure_authenticated_session(self, credentials: Dict[str, str] | None = None) -> bool:
         """
         Ensure user is authenticated, performing login if necessary
 
         Args:
-            page: Playwright page object (for compatibility, but self.page is used)
-            credentials: Dictionary with 'email'/'username' and 'password' keys
+            credentials: Dictionary with 'email'/'username' and 'password' keys (optional, will load from config if not provided)
 
         Returns:
             bool: True if authenticated session is established, False otherwise
+
+        Note:
+            This helper is page-based; it uses self.page set in __init__
         """
         try:
             self.log.info("🔍 Checking current authentication status...")

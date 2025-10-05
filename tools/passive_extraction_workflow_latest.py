@@ -1335,6 +1335,17 @@ class FixedAmazonExtractor(AmazonExtractor):
 
 
 class PassiveExtractionWorkflow:
+    @staticmethod
+    def _valid_ean_for_key(ean: str) -> str | None:
+        """Return normalized EAN if it is strictly 8, 12 or 13 digits; otherwise None."""
+        if not ean:
+            return None
+        try:
+            from utils.normalization import normalize_ean as _norm_ean
+            ne = _norm_ean(ean)
+        except Exception:
+            ne = "".join(ch for ch in str(ean) if ch and ch.isdigit())
+        return ne if ne and len(ne) in (8, 12, 13) and ne.isdigit() else None
     def __init__(self, config_loader, workflow_config, browser_manager=None, ai_client=None):
         """Initialize the Passive Extraction Workflow with configuration and services."""
         # Configuration and services
@@ -1360,6 +1371,9 @@ class PassiveExtractionWorkflow:
         # 🚨 CRITICAL FIX: Initialize full scan tracking for RC-6
         self._last_full_scan_ts = 0
         self._full_scan_interval = 300  # 5 minutes default interval
+
+        # Track authentication timing to avoid redundant checks
+        self.last_authentication_time = None
 
         # 🚨 IMPORT HYGIENE: Log module path to confirm correct workflow is running
         self.log.info(f"MODULE PATH: {__file__}")
@@ -1556,9 +1570,14 @@ class PassiveExtractionWorkflow:
         self.product_cache = self.cached_products
 
         # ✅ Authoritative: stable_key set for O(1) membership checks
-        self.product_cache_key_index = {
-            stable_key(p.get("url"), p.get("ean")) for p in self.cached_products
-        }
+        self.product_cache_key_index = set()
+        for p in self.cached_products:
+            try:
+                k = stable_key(normalize_url(p.get('url')), self._valid_ean_for_key(p.get('ean')))
+                if k:
+                    self.product_cache_key_index.add(k)
+            except Exception:
+                pass
         # ℹ️ Diagnostics only (may be empty if imports unavailable)
         self.product_cache_url_index = {
             normalize_url(p.get("url")): p for p in self.cached_products if p.get("url")
@@ -4570,7 +4589,7 @@ Return ONLY valid JSON, no additional text."""
 
                 # seed seen set from existing cache
                 for p in existing_products:
-                    k = stable_key(p.get("url"), p.get("ean"))
+                    k = stable_key(normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean")))
                     if k:
                         seen.add(k)
 
@@ -4580,7 +4599,12 @@ Return ONLY valid JSON, no additional text."""
 
                 for p in products:
                     # 🚨 ATOMIC FIX 3: Compare via stable key
-                    k = stable_key(p.get("url"), p.get("ean"))
+                    # purge noisy SKU before keying
+                    try:
+                        p.pop("sku", None)
+                    except Exception:
+                        pass
+                    k = stable_key(normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean")))
                     scanned += 1
 
                     # Reduced logging: only periodic debug updates during scan
@@ -4638,17 +4662,24 @@ Return ONLY valid JSON, no additional text."""
                     f"✅ ATOMICALLY saved {len(all_products)} products ({new_count} new) to cache: {os.path.basename(final_path)} (size: {file_size} bytes)"
                 )
 
-                # 🚨 ATOMIC FIX 6: Update in-memory cache to match disk state
-                if hasattr(self, "_current_all_products"):
-                    self._current_all_products = all_products.copy()
+                # ?? ATOMIC FIX 6: Update in-memory cache while preserving reference used by appends
+                if hasattr(self, '_current_all_products') and isinstance(self._current_all_products, list):
+                    try:
+                        self._current_all_products[:] = all_products
+                    except Exception:
+                        self._current_all_products = list(all_products)
                     self.log.debug(
-                        f"🔄 SYNC: In-memory cache synchronized with disk cache ({len(all_products)} products)"
+                        f'?? SYNC: In-memory cache updated in-place ({len(all_products)} products)'
                     )
 
                 # Keep Step-2 deterministic within the same run: update key set immediately
                 try:
                     for product in products:
-                        k_new = stable_key(product.get("url"), product.get("ean"))
+                        try:
+                            product.pop("sku", None)
+                        except Exception:
+                            pass
+                        k_new = stable_key(normalize_url(product.get("url")), self._valid_ean_for_key(product.get("ean")))
                         if k_new:
                             self.product_cache_key_index.add(k_new)
                 except Exception as e:
@@ -5437,7 +5468,7 @@ Return ONLY valid JSON, no additional text."""
 
                 # Filter remaining URLs using stable_key(normalized_url, ean)
                 for u in remaining_after_linking_map:
-                    k = stable_key(normalize_url(u), eans.get(u))
+                    k = stable_key(normalize_url(u), self._valid_ean_for_key(eans.get(u)))
                     if k in cache_idx:
                         cached_keys += 1  # Amazon-only (no supplier re-extract)
                         needs_amazon_only_urls.append(u)
@@ -11455,8 +11486,15 @@ Return ONLY valid JSON, no additional text."""
         try:
             self.log.info("🔐 Performing authentication fallback...")
 
-            # Import and use the authentication service
-            from tools.supplier_authentication_service import SupplierAuthenticationService
+            # Import the correct per-supplier authentication service dynamically
+            import importlib
+            supplier_slug = self.supplier_name.split('.')[0].replace('-', '_')
+            module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+            auth_module = importlib.import_module(module_path)
+            SupplierAuthenticationService = getattr(
+                auth_module, "SupplierAuthenticationService",
+                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+            )
 
             # Get credentials from config
             supplier_config_path = os.path.join(
@@ -11723,20 +11761,33 @@ Return ONLY valid JSON, no additional text."""
         Trigger the same login script that runs at system startup before each category extraction.
         This ensures authentication is refreshed at workflow boundaries as required.
         """
+        # Throttle frequent checks (skip if recent)
+        from datetime import datetime, timedelta
+        if self.last_authentication_time and datetime.now() - self.last_authentication_time < timedelta(minutes=5):
+            self.log.info("⏩ Skipping auth check (within cooldown window)")
+            return True
+
         try:
             self.log.info(f"🔐 LOGIN SCRIPT TRIGGER: Checking authentication before {context}")
 
-            # Import the same authentication service used at system startup
-            from tools.supplier_authentication_service import SupplierAuthenticationService
+            # Import the correct per-supplier authentication service dynamically
+            import importlib
+            supplier_slug = self.supplier_name.split('.')[0].replace('-', '_')
+            module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+            auth_module = importlib.import_module(module_path)
+            SupplierAuthenticationService = getattr(
+                auth_module, "SupplierAuthenticationService",
+                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+            )
 
             if hasattr(self, "browser_manager") and self.browser_manager:
-                # Initialize authentication service using same pattern as run_custom_poundwholesale.py
-                auth_service = SupplierAuthenticationService(self.browser_manager)
+                # ✅ PATCH 1: Get a real Page first; never hand the helper a BrowserManager
+                # Use supplier_url from config or derive from supplier_name (no hardcoded defaults)
+                supplier_url = self.workflow_config.get("supplier_url") or f"https://{self.supplier_name}"
+                page = await self.browser_manager.get_page(supplier_url, reuse_existing=True)
 
-                # Get a page from browser manager to check authentication
-                page = await self.browser_manager.get_page(
-                    self.workflow_config.get("supplier_url", "https://www.poundwholesale.co.uk")
-                )
+                # Initialize authentication service with the Page object (not BrowserManager)
+                auth_service = SupplierAuthenticationService(page)
 
                 if page:
                     # Get supplier credentials from system config (hybrid processing enabled)
@@ -11749,15 +11800,18 @@ Return ONLY valid JSON, no additional text."""
                         "password": credentials_config.get("password", "0Dqixm9c&"),
                     }
 
-                    # Use the same authentication method as startup script
+                    # Helper is page-based; it already holds the Page (no need to pass page param)
                     authenticated = await auth_service.ensure_authenticated_session(
-                        page, credentials
+                        credentials
                     )
 
                     if authenticated:
                         self.log.info(
                             f"✅ LOGIN SCRIPT SUCCESS: Authentication verified for {context}"
                         )
+                        # Update authentication timestamp on success
+                        from datetime import datetime
+                        self.last_authentication_time = datetime.now()
                         return True
                     else:
                         self.log.warning(
@@ -11786,11 +11840,21 @@ Return ONLY valid JSON, no additional text."""
     async def _check_authentication_before_category(self) -> bool:
         """Check authentication before category and trigger fallback if needed"""
         try:
-            # Import the authentication service
-            from tools.supplier_authentication_service import SupplierAuthenticationService
+            # Import the correct per-supplier authentication service dynamically
+            import importlib
+            supplier_slug = self.supplier_name.split('.')[0].replace('-', '_')
+            module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+            auth_module = importlib.import_module(module_path)
+            SupplierAuthenticationService = getattr(
+                auth_module, "SupplierAuthenticationService",
+                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+            )
 
             if hasattr(self, "browser_manager") and self.browser_manager:
-                auth_service = SupplierAuthenticationService(self.browser_manager)
+                # ✅ Get Page first, then pass to auth service (not BrowserManager)
+                supplier_url = self.workflow_config.get("supplier_url") or f"https://{self.supplier_name}"
+                page = await self.browser_manager.get_page(supplier_url, reuse_existing=True)
+                auth_service = SupplierAuthenticationService(page)
 
                 # Check if authenticated
                 is_authenticated = await auth_service.is_authenticated()
@@ -12045,3 +12109,5 @@ Return ONLY valid JSON, no additional text."""
             self.log.info(
                 f"🧹 MEMORY CONTINUITY: Recent context preserved for debugging and state recovery"
             )
+
+

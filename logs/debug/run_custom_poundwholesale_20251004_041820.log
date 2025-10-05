@@ -1,0 +1,276 @@
+2025-10-04 04:18:20,253 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_041820.log
+2025-10-04 04:18:20,253 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251004_041820.log
+2025-10-04 04:18:20,253 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-10-04 04:18:20,254 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-10-04 04:18:20,258 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-10-04 04:18:20,813 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-10-04 04:18:20,813 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-10-04 04:18:20,815 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/141.0.7390.55
+2025-10-04 04:18:20,816 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-10-04 04:18:20,818 - utils.browser_manager - DEBUG - ?? Using IPv6 endpoint for CDP connection
+2025-10-04 04:18:20,818 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-10-04 04:18:21,092 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-10-04 04:18:21,092 - utils.browser_manager - INFO - ?? Using existing context with 4 pages
+2025-10-04 04:18:21,092 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 141.0.7390.55
+2025-10-04 04:18:21,093 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:18:21,093 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:18:21,093 - __main__ - INFO - 🔐 Initializing Clearance King authentication helper...
+2025-10-04 04:18:21,093 - __main__ - INFO - ✅ Using configured credentials for clearance-king.co.uk
+2025-10-04 04:18:21,093 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-10-04 04:18:21,189 - tools.clearance_king.supplier_authentication_service - INFO - ❌ Login link found - not authenticated
+2025-10-04 04:18:21,189 - __main__ - INFO - 🔐 Not authenticated, initiating login...
+2025-10-04 04:18:21,190 - tools.clearance_king.supplier_authentication_service - INFO - 🔐 Starting login process for Clearance King...
+2025-10-04 04:18:21,190 - tools.clearance_king.supplier_authentication_service - INFO - 🚀 Performing login via StandalonePlaywrightLogin...
+2025-10-04 04:18:21,191 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2025-10-04 04:18:21,191 - tools.standalone_playwright_login - INFO - 🌐 Navigating to login page: https://www.clearance-king.co.uk/customer/account/login/
+2025-10-04 04:18:26,770 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input[name="email"]
+2025-10-04 04:18:27,782 - tools.standalone_playwright_login - INFO - 🔍 Using config password selector: input#pass
+2025-10-04 04:18:27,954 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input#pass (forced)
+2025-10-04 04:18:58,142 - tools.standalone_playwright_login - DEBUG - Submit selector 'button[type="submit"]' failed: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type=\"submit\"]").first
+    - locator resolved to <button disabled title="Go" type="submit" class="action search button">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not enabled
+     - retrying click action
+       - waiting 500ms
+
+2025-10-04 04:18:58,355 - tools.standalone_playwright_login - INFO - ✅ Clicked submit using selector: input[type="submit"]
+2025-10-04 04:18:58,355 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2025-10-04 04:18:58,468 - tools.standalone_playwright_login - INFO - ✅ Login success confirmed by indicator: text=My Account
+2025-10-04 04:18:58,468 - tools.standalone_playwright_login - INFO - 🔍 Verifying price access...
+2025-10-04 04:19:02,094 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £0.58
+2025-10-04 04:19:02,095 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 40.9s)
+2025-10-04 04:19:02,095 - tools.clearance_king.supplier_authentication_service - INFO - ✅ Login successful via StandalonePlaywrightLogin!
+2025-10-04 04:19:02,096 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2025-10-04 04:19:02,097 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2025-10-04 04:19:02,098 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2025-10-04 04:19:02,098 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-10-04 04:19:02,099 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-10-04 04:19:02,099 - PassiveExtractionWorkflow - INFO - ✅ Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\clearance-king.co.uk
+2025-10-04 04:19:02,100 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 5 products in clearance-king-co-uk_products_cache.json
+2025-10-04 04:19:02,101 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 5 products, 0 categories
+2025-10-04 04:19:02,102 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-10-04 04:19:02,103 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 5 actual products in cache (total entries: 5)
+2025-10-04 04:19:02,104 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 1 categories
+2025-10-04 04:19:02,104 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2025-10-04 04:19:02,105 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2025-10-04 04:19:02,105 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2025-10-04 04:19:02,105 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=False, startup_completed=True
+2025-10-04 04:19:02,106 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-04 04:19:02,106 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-04 04:19:02,107 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-04 04:19:02,107 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-04 04:19:02,107 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-04 04:19:02,108 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-04 04:19:02,113 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-04 04:19:02,114 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-04 04:19:02,115 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2025-10-04 04:19:02,115 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2025-10-04 04:19:02,116 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-10-04 04:19:02,116 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-10-04 04:19:02,117 - amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2025-10-04 04:19:02,117 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-10-04 04:19:02,118 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-10-04 04:19:02,118 - amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2025-10-04 04:19:02,119 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2025-10-04 04:19:02,120 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-10-04 04:19:02,120 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-10-04 04:19:02,121 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-10-04 04:19:02,121 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-10-04 04:19:02,122 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-10-04 04:19:02,122 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-10-04 04:19:02,123 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-10-04 04:19:02,123 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-10-04 04:19:02,124 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-10-04 04:19:02,124 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-10-04 04:19:02,125 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-10-04 04:19:02,125 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-10-04 04:19:02,126 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2025-10-04 04:19:02,126 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-10-04 04:19:02,127 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: clearance-king.co.uk ---
+2025-10-04 04:19:02,127 - PassiveExtractionWorkflow - INFO - Session ID: clearance-king.co.uk_20251004_041902
+2025-10-04 04:19:02,127 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for clearance-king.co.uk
+2025-10-04 04:19:02,128 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 155 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\clearance-king_categories.json
+2025-10-04 04:19:02,129 - utils.fixed_enhanced_state_manager - DEBUG - 💾 save_debounced: runtime mode (no file-grounded recompute)
+2025-10-04 04:19:02,129 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-04 04:19:02,130 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-04 04:19:02,130 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-04 04:19:02,130 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-04 04:19:02,131 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-04 04:19:02,131 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-04 04:19:02,132 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-04 04:19:02,136 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-04 04:19:02,137 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-04 04:19:02,137 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2025-10-04 04:19:02,138 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2025-10-04 04:19:02,138 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (manifest)
+2025-10-04 04:19:02,139 - utils.fixed_enhanced_state_manager - INFO - 🚨 FIRST AFTER-RESUME KEY: phase=supplier cat=1/155 prod=0/0 commit_type=manifest
+2025-10-04 04:19:02,140 - utils.fixed_enhanced_state_manager - INFO - 📋 RESUME PROOF (manifest): cat=1/155 prod=0/0 phase=supplier
+2025-10-04 04:19:02,140 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-04 04:19:02,141 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-04 04:19:02,141 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-04 04:19:02,142 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-04 04:19:02,142 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-04 04:19:02,143 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-04 04:19:02,144 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-04 04:19:02,150 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-04 04:19:02,152 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-04 04:19:02,152 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2025-10-04 04:19:02,153 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2025-10-04 04:19:02,154 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-04 04:19:02,155 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN TOTAL CATEGORIES set to 155 (hash=19f4ffd1)
+2025-10-04 04:19:02,155 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-04 04:19:02,156 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-04 04:19:02,157 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-04 04:19:02,157 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-04 04:19:02,158 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-04 04:19:02,158 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-04 04:19:02,160 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-04 04:19:02,166 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-04 04:19:02,167 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-04 04:19:02,168 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2025-10-04 04:19:02,169 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2025-10-04 04:19:02,169 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-04 04:19:02,170 - PassiveExtractionWorkflow - WARNING - ⚠️ RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2025-10-04 04:19:02,170 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2025-10-04 04:19:02,171 - PassiveExtractionWorkflow - INFO - ✅ RESUMPTION POINT CONFIRMED: Starting from category index 1 at product 0 in phase 'supplier'.
+2025-10-04 04:19:02,171 - PassiveExtractionWorkflow - INFO - 🔄 PHASE-AWARE GATING: Routing to supplier extraction phase
+2025-10-04 04:19:02,172 - PassiveExtractionWorkflow - DEBUG - PTR print suppressed at workflow; state manager will emit gated proofs
+2025-10-04 04:19:02,172 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-10-04 04:19:02,173 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-10-04 04:19:02,173 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-10-04 04:19:02,174 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-10-04 04:19:02,174 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-10-04 04:19:02,175 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-10-04 04:19:02,176 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-10-04 04:19:02,178 - utils.fixed_enhanced_state_manager - INFO - Loaded state for clearance-king.co.uk - resumption from index 0
+2025-10-04 04:19:02,178 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ Contradiction: is_fresh_start=True with non-zero progress; normalizing is_fresh_start=False
+2025-10-04 04:19:02,179 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-04 04:19:02,179 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-04 04:19:02,180 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-04 04:19:02,180 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-04 04:19:02,181 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-04 04:19:02,181 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-04 04:19:02,182 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-04 04:19:02,190 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-04 04:19:02,192 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-04 04:19:02,193 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2025-10-04 04:19:02,193 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2025-10-04 04:19:02,194 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-04 04:19:02,194 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for clearance-king.co.uk
+2025-10-04 04:19:02,195 - PassiveExtractionWorkflow - INFO - 📋 AUTHORITATIVE RESUME: phase=supplier cat=1/155 url= supplier=0/0 amazon=0/0
+2025-10-04 04:19:02,196 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-10-04 04:19:02,197 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\clearance-king.co.uk\linking_map.json - Creating new map
+2025-10-04 04:19:02,197 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 0 EANs, 0 URLs, 0 ASINs in 0.000s
+2025-10-04 04:19:02,198 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 0
+2025-10-04 04:19:02,200 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 5 products in clearance-king-co-uk_products_cache.json
+2025-10-04 04:19:02,201 - PassiveExtractionWorkflow - INFO - [PHASE_COUNTS] lm_file=C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\clearance-king.co.uk\linking_map.json lm_count=0 cache_file=C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\clearance-king-co-uk_products_cache.json cache_count=5
+2025-10-04 04:19:02,201 - SentinelMonitor[clearance-king.co.uk] - WARNING - WARNING: supplier_cache_vs_linking_map divergence 100.0% (linking=0, cache=5)
+2025-10-04 04:19:02,202 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: AMAZON_ANALYSIS (supplier cache: 5 products, no linking map)
+2025-10-04 04:19:02,202 - PassiveExtractionWorkflow - INFO - 🔍 STATE CONTRADICTION CHECK DEBUG:
+2025-10-04 04:19:02,203 - PassiveExtractionWorkflow - INFO -    is_fresh_start: False
+2025-10-04 04:19:02,204 - PassiveExtractionWorkflow - INFO -    successful_products: 0
+2025-10-04 04:19:02,204 - PassiveExtractionWorkflow - INFO -    system_progression.persistent_category_index: 0
+2025-10-04 04:19:02,204 - PassiveExtractionWorkflow - INFO -    supplier_extraction.persistent_category_index: 1
+2025-10-04 04:19:02,205 - PassiveExtractionWorkflow - INFO -    supplier_extraction.categories_completed: 0 categories [TELEMETRY]
+2025-10-04 04:19:02,205 - PassiveExtractionWorkflow - INFO -    has_evidence_of_work: True
+2025-10-04 04:19:02,206 - PassiveExtractionWorkflow - INFO - ✅ No state contradiction - proceeding with start_processing() call...
+2025-10-04 04:19:02,206 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-10-04 04:19:02,207 - PassiveExtractionWorkflow - INFO - ✅ No existing linking map found at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\clearance-king.co.uk\linking_map.json - Creating new map
+2025-10-04 04:19:02,208 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 0 EANs, 0 URLs, 0 ASINs in 0.000s
+2025-10-04 04:19:02,208 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-10-04 04:19:02,209 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for clearance-king.co.uk
+2025-10-04 04:19:02,210 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 155 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\clearance-king_categories.json
+2025-10-04 04:19:02,211 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-10-04 04:19:02,211 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 155 predefined categories (infinite mode)
+2025-10-04 04:19:02,212 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-10-04 04:19:02,212 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-10-04 04:19:02,213 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-10-04 04:19:02,214 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-10-04 04:19:02,214 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-10-04 04:19:02,215 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 5 products in clearance-king-co-uk_products_cache.json
+2025-10-04 04:19:02,216 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-10-04 04:19:02,216 - utils.fixed_enhanced_state_manager - INFO - 🔄 PHASE TRANSITION: supplier → supplier
+2025-10-04 04:19:02,217 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-04 04:19:02,217 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-04 04:19:02,218 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-04 04:19:02,218 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-04 04:19:02,218 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-04 04:19:02,219 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-04 04:19:02,219 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-04 04:19:02,226 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (27 entries) saved successfully
+2025-10-04 04:19:02,227 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-04 04:19:02,228 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2025-10-04 04:19:02,228 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2025-10-04 04:19:02,229 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-04 04:19:02,229 - utils.fixed_enhanced_state_manager - INFO - ✅ RESUME HONORED: phase=supplier cat=1/155 prod=0/0 commit_type=PHASE_SWITCH
+2025-10-04 04:19:02,230 - utils.fixed_enhanced_state_manager - INFO - 📋 RESUME PROOF (PHASE_SWITCH): cat=1/155 prod=0/0 phase=supplier
+2025-10-04 04:19:02,230 - PassiveExtractionWorkflow - INFO - 🆕 FRESH START: Phase switched to supplier with index reset
+2025-10-04 04:19:02,231 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-10-04 04:19:02,231 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-10-04 04:19:02,232 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 5 products in clearance-king-co-uk_products_cache.json
+2025-10-04 04:19:02,233 - PassiveExtractionWorkflow - INFO - 📊 CACHE FOUND: 5 products available for progress tracking
+2025-10-04 04:19:02,234 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-10-04 04:19:02,234 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-10-04 04:19:02,234 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-10-04 04:19:02,238 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:02,238 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:02,238 - utils.browser_manager - INFO - ?? Navigating to https://www.clearance-king.co.uk
+2025-10-04 04:19:05,040 - utils.browser_manager - INFO - ? Page ready for https://www.clearance-king.co.uk
+2025-10-04 04:19:10,149 - tools.supplier_authentication_service - INFO - ✅ Logout link found - user is authenticated
+2025-10-04 04:19:10,149 - tools.supplier_authentication_service - INFO - ✅ Already logged in!
+2025-10-04 04:19:10,150 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-10-04 04:19:10,150 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:10,151 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:10,151 - configurable_supplier_scraper - INFO - Processing page 1: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:10,151 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html (attempt 1/3)
+2025-10-04 04:19:10,151 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:10,151 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:10,152 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:12,595 - configurable_supplier_scraper - INFO - Retrying https://www.clearance-king.co.uk/baby-kids/baby-accessories.html in 2.49s...
+2025-10-04 04:19:15,089 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html (attempt 2/3)
+2025-10-04 04:19:15,090 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:15,090 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:15,090 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:16,995 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:16,995 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html
+2025-10-04 04:19:17,058 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.clearance-king.co.uk/baby-kids/baby-accessories.html (Size: 397345 bytes)
+2025-10-04 04:19:17,347 - config.supplier_config_loader - INFO - Loaded supplier selector config for domain: clearance-king.co.uk
+2025-10-04 04:19:17,348 - configurable_supplier_scraper - INFO - 📁 Loaded selectors for domain clearance-king.co.uk from legacy config/supplier_configs/
+2025-10-04 04:19:17,435 - configurable_supplier_scraper - INFO - Found 24 new product URLs on page 1
+2025-10-04 04:19:17,435 - configurable_supplier_scraper - INFO - Processing page 2: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2
+2025-10-04 04:19:17,436 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2 (attempt 1/3)
+2025-10-04 04:19:17,436 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:17,437 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:17,437 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2
+2025-10-04 04:19:20,011 - configurable_supplier_scraper - INFO - Retrying https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2 in 1.90s...
+2025-10-04 04:19:21,927 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2 (attempt 2/3)
+2025-10-04 04:19:21,928 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:21,929 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:21,929 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2
+2025-10-04 04:19:23,771 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2
+2025-10-04 04:19:23,771 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2
+2025-10-04 04:19:23,833 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=2 (Size: 403736 bytes)
+2025-10-04 04:19:24,042 - configurable_supplier_scraper - INFO - Found 24 new product URLs on page 2
+2025-10-04 04:19:24,043 - configurable_supplier_scraper - INFO - Processing page 3: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=3
+2025-10-04 04:19:24,044 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=3 (attempt 1/3)
+2025-10-04 04:19:24,044 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:24,045 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:24,045 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=3
+2025-10-04 04:19:25,976 - configurable_supplier_scraper - INFO - Retrying https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=3 in 1.78s...
+2025-10-04 04:19:27,769 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=3 (attempt 2/3)
+2025-10-04 04:19:27,769 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-04 04:19:27,769 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-04 04:19:27,769 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/baby-kids/baby-accessories.html?p=3
+2025-10-04 04:19:28,292 - __main__ - WARNING - ⚠️ Browser cleanup warning: 'BrowserManager' object has no attribute 'cleanup'
+2025-10-04 04:19:28,301 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
