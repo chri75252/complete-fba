@@ -185,12 +185,16 @@ def show_processing_status():
         try:
             with open(state_file, 'r') as f:
                 state = json.load(f)
-            
+
             supplier = Path(state_file).stem.replace('_processing_state', '')
-            progress = f"{state.get('last_processed_index', 0)}/{state.get('total_products', 0)}"
-            category = state.get('current_category_index', 0)
-            
+            sp = state.get('system_progression', {})
+            supplier_completed = sp.get('supplier_products_completed', 0)
+            supplier_needed = sp.get('supplier_products_needing_extraction', 0)
+            progress = f"{supplier_completed}/{supplier_needed}"
+            category = sp.get('persistent_category_index', 0)
+
             print(f"  📊 {supplier}: {progress} products, category {category}")
+
         except:
             continue
     

@@ -226,8 +226,9 @@ Category 1: https://www.poundwholesale.co.uk/homeware/wholesale-home-accessories
 Category X: https://www.poundwholesale.co.uk/empty-category
 ├── URL Discovery: 0 URLs found
 ├── Frozen Denominator: Set to 0
-├── Category Completion: Mark as completed immediately  
-├── Index Reset: Category index → 0
+├── Category Completion: Mark as completed immediately
+├── Product Index Reset: Per-category product index → 0 (this category only)
+├── PCI Advancement: persistent_category_index advances to next category
 └── Continue: Move to next category
 ```
 
@@ -256,7 +257,8 @@ All Categories Processed:
 - **Cross-Run Stability**: Same denominators used across resume sessions
 
 ### Resume Pointer Management
-- **Monotonic**: Pointers never go backward across runs
+- **Strictly Monotonic PCI Enforcement**: persistent_category_index enforced at state manager layer - NEVER allows backward movement (P0 fix Oct 5, 2025)
+- **Monotonic Product Pointers**: Product indices never go backward within categories across runs
 - **Phase-Aware**: Resume directly into correct phase (supplier or Amazon)
 - **Overflow Safe**: Invalid pointers clamped, never reset to 0
 

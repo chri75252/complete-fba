@@ -1,17 +1,18 @@
 # AGENTS.md
 
-## ?? CLAUDE_DIRECTIVES - EXECUTE IMMEDIATELY
+## ?? AGENT DIRECTIVES - EXECUTE IMMEDIATELY
 
-### **?? CRITICAL TESTING & VERIFICATION STANDARDS:**
-- ?? **MANDATORY_FIX_TESTING**: WHENEVER A FIX IS IMPLEMENTED YOU MUST THOROUGHLY TEST YOUR FIXES
-- ?? **NO_CLAIMS_WITHOUT_VERIFICATION**: Tasks cannot be marked complete without actual verification  
-- ?? **MANDATORY_FILE_VERIFICATION_PROTOCOL**: For any future response whenever referencing files (primarily output files, scripts, folders, subfolders, etc.) you MUST:
-  1. ? **VERIFY_ACTUAL_EXISTENCE**: Check file/directory actually exists at specified path
-  2. ? **CHECK_TIMESTAMP**: Verify file creation/modification timestamp and confirm it's recent/relevant
-  3. ? **VERIFY_CONTENT**: Read and analyze actual file content before making any claims about what it contains
-  4. ? **CONFIRM_CORRECT_SUPPLIER**: Ensure files reference the correct supplier (poundwholesale.co.uk, NOT clearance-king.co.uk)
-  5. ? **PROVIDE_FULL_PATHS**: Always provide complete absolute directory paths, timestamps, and content verification
-  6. ? **NO_ASSUMPTIONS**: Never reference files without first reading and verifying their actual content and relevance
+### **?? Foundational & Project-Specific Standards:**
+- ?? **ADHERE_TO_GEMINI_MD**: All actions must comply with the core principles outlined in `GEMINI.md`. This file provides project-specific context that builds upon that foundation.
+- ?? **MANDATORY_FIX_TESTING**: Whenever a fix is implemented, you must thoroughly test it to ensure correctness and prevent regressions.
+- ?? **NO_CLAIMS_WITHOUT_VERIFICATION**: Tasks cannot be marked complete without actual, verifiable proof of success (e.g., passing tests, verified file outputs).
+- ?? **MANDATORY_FILE_VERIFICATION_PROTOCOL**: When referencing files (outputs, scripts, etc.), you MUST follow this protocol:
+  1.  ? **VERIFY_ACTUAL_EXISTENCE**: Check if the file/directory actually exists at the specified path using `ls` or `find`.
+  2.  ? **CHECK_TIMESTAMP**: Verify the file's creation/modification timestamp to confirm it's recent and relevant to the current task.
+  3.  ? **VERIFY_CONTENT**: Read and analyze the actual file content (`cat`, `grep`) before making any claims about what it contains.
+  4.  ? **CONFIRM_CORRECT_SUPPLIER**: For this project, ensure files reference the correct supplier (`poundwholesale.co.uk`, NOT `clearance-king.co.uk`).
+  5.  ? **PROVIDE_FULL_PATHS**: Always use complete, absolute directory paths in diffs and explanations to avoid ambiguity.
+  6.  ? **NO_ASSUMPTIONS**: Never reference files without first reading and verifying their actual content and relevance.
 
 ---
 
@@ -26,7 +27,7 @@
 - **Complete Resumable Processing**: Main workflow (`PassiveExtractionWorkflow`) includes supplier scraping, Amazon extraction, financial analysis, and profitability checking with state persistence
 - **Robust Output Directory Handling**: All output, cache, and report files written to directories defined by `output_root` in config or default to `OUTPUTS/`
 
-### Supported Agents & Ecosystem
+### Agent Ecosystem & Hierarchy
 - **Primary Agent**: Claude Code (optimized for this system)
 - **Compatible Agents**: Cursor, GitHub Copilot, Gemini CLI, OpenAI Codex [89][90][92][95][97]
 - **Multi-Agent Orchestration**: System designed for tech-lead-orchestrator coordination [91][94][96]
@@ -45,59 +46,59 @@
 ### Complete Workflow Architecture
 ```
 [run_custom_poundwholesale.py] (Entry Point)
-     ¦
+     ï¿½
      ?
 [PassiveExtractionWorkflow::run] (use_predefined_categories=True, ai_client=None)
-     ¦
+     ï¿½
      +-> 1. Load Predefined Categories from `config/poundwholesale_categories.json`
-     ¦
+     ï¿½
      +-> 2. [ConfigurableSupplierScraper] -> Scrape Supplier Product Data
-     ¦   +-> Saves to: {output_root}/cached_products/poundwholesale-co-uk_products_cache.json
-     ¦
+     ï¿½   +-> Saves to: {output_root}/cached_products/poundwholesale-co-uk_products_cache.json
+     ï¿½
      +-> 3. [COMPLETE PROCESSING LOOP]
-     ¦   +-> For each supplier product:
-     ¦         +-> a. [AmazonExtractor] -> Search Amazon by EAN (or Title fallback)
-     ¦         ¦     +-> Saves to: {output_root}/FBA_ANALYSIS/amazon_cache/amazon_{ASIN}_{EAN or title}.json
-     ¦         +-> b. [Linking Map] -> Update EAN-to-ASIN mapping
-     ¦         ¦     +-> Saves to: {output_root}/FBA_ANALYSIS/linking_maps/poundwholesale-co-uk/linking_map.json
-     ¦         +-> c. [FBA_Financial_calculator] -> Calculate Profitability
-     ¦         ¦     +-> Saves to: {output_root}/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv
-     ¦         +-> d. [EnhancedStateManager] -> Mark Product as Processed
-     ¦               +-> Saves to: {output_root}/CACHE/processing_states/poundwholesale-co-uk_processing_state.json
+     ï¿½   +-> For each supplier product:
+     ï¿½         +-> a. [AmazonExtractor] -> Search Amazon by EAN (or Title fallback)
+     ï¿½         ï¿½     +-> Saves to: {output_root}/FBA_ANALYSIS/amazon_cache/amazon_{ASIN}_{EAN or title}.json
+     ï¿½         +-> b. [Linking Map] -> Update EAN-to-ASIN mapping
+     ï¿½         ï¿½     +-> Saves to: {output_root}/FBA_ANALYSIS/linking_maps/poundwholesale-co-uk/linking_map.json
+     ï¿½         +-> c. [FBA_Financial_calculator] -> Calculate Profitability
+     ï¿½         ï¿½     +-> Saves to: {output_root}/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv
+     ï¿½         +-> d. [EnhancedStateManager] -> Mark Product as Processed
+     ï¿½               +-> Saves to: {output_root}/CACHE/processing_states/poundwholesale-co-uk_processing_state.json
 ```
 
 ### Directory Structure
 ```
 +-- tools/                          # Core automation agents (MAIN WORKFLOW)
-¦   +-- supplier_authentication_service.py    # Session management & login automation
-¦   +-- configurable_supplier_scraper.py      # Multi-site product extraction
-¦   +-- amazon_playwright_extractor.py        # Amazon data matching & caching
-¦   +-- FBA_Financial_calculator.py           # ROI & profitability analysis
-¦   +-- passive_extraction_workflow_latest.py # Orchestration coordinator (413 KB version)
-¦   +-- category_completion_tracker.py        # Utility & optimizer
+ï¿½   +-- supplier_authentication_service.py    # Session management & login automation
+ï¿½   +-- configurable_supplier_scraper.py      # Multi-site product extraction
+ï¿½   +-- amazon_playwright_extractor.py        # Amazon data matching & caching
+ï¿½   +-- FBA_Financial_calculator.py           # ROI & profitability analysis
+ï¿½   +-- passive_extraction_workflow_latest.py # Orchestration coordinator (413 KB version)
+ï¿½   +-- category_completion_tracker.py        # Utility & optimizer
 +-- utils/                          # Shared infrastructure & utilities
-¦   +-- enhanced_state_manager.py             # Persistent state & resumption
-¦   +-- browser_manager.py                    # Playwright session handling
-¦   +-- path_manager.py                       # Cross-platform file operations
-¦   +-- logger.py                             # Centralized logging
-¦   +-- file_manager.py                       # File operations
-¦   +-- windows_save_guardian.py              # Utility & optimizer
-¦   +-- hash_lookup_optimizer.py              # Utility & optimizer
-¦   +-- sentinel_monitor.py                   # Utility & optimizer
-¦   +-- url_cache_filter.py                   # Utility & optimizer
-¦   +-- browser_circuit_breaker.py            # Utility & optimizer
+ï¿½   +-- enhanced_state_manager.py             # Persistent state & resumption
+ï¿½   +-- browser_manager.py                    # Playwright session handling
+ï¿½   +-- path_manager.py                       # Cross-platform file operations
+ï¿½   +-- logger.py                             # Centralized logging
+ï¿½   +-- file_manager.py                       # File operations
+ï¿½   +-- windows_save_guardian.py              # Utility & optimizer
+ï¿½   +-- hash_lookup_optimizer.py              # Utility & optimizer
+ï¿½   +-- sentinel_monitor.py                   # Utility & optimizer
+ï¿½   +-- url_cache_filter.py                   # Utility & optimizer
+ï¿½   +-- browser_circuit_breaker.py            # Utility & optimizer
 +-- config/                         # System configuration
-¦   +-- system_config.json                    # Main environment & API settings
-¦   +-- poundwholesale_categories.json        # Supplier-specific category mappings
-¦   +-- SystemConfigLoader.py                 # Configuration loader
+ï¿½   +-- system_config.json                    # Main environment & API settings
+ï¿½   +-- poundwholesale_categories.json        # Supplier-specific category mappings
+ï¿½   +-- SystemConfigLoader.py                 # Configuration loader
 +-- OUTPUTS/                        # Data persistence & reports
-¦   +-- cached_products/                      # Supplier product cache
-¦   +-- FBA_ANALYSIS/                         # Financial reports & analysis
-¦   ¦   +-- amazon_cache/                     # Amazon product data cache
-¦   ¦   +-- linking_maps/                     # EAN-to-ASIN mappings
-¦   ¦   +-- financial_reports/                # CSV outputs & summaries
-¦   +-- CACHE/                                # Processing states & resumption data
-¦   +-- logs/                                 # Debug and execution logs
+ï¿½   +-- cached_products/                      # Supplier product cache
+ï¿½   +-- FBA_ANALYSIS/                         # Financial reports & analysis
+ï¿½   ï¿½   +-- amazon_cache/                     # Amazon product data cache
+ï¿½   ï¿½   +-- linking_maps/                     # EAN-to-ASIN mappings
+ï¿½   ï¿½   +-- financial_reports/                # CSV outputs & summaries
+ï¿½   +-- CACHE/                                # Processing states & resumption data
+ï¿½   +-- logs/                                 # Debug and execution logs
 +-- run_custom_poundwholesale.py    # ENTRY POINT
 ```
 
@@ -703,9 +704,9 @@ class SpecializedAgents:
 
 ---
 
-**Last Updated**: 2025-09-16  
-**Version**: 4.0 (Integrated with gemini.md standards)
+**Last Updated**: 2025-09-17
+**Version**: 4.1 (Aligned with GEMINI.md v1.0)
 **Maintained By**: Complete FBA System Team  
 **Status**: ACTIVE STANDARD - All agent development must comply
 
-**?? NOTICE**: This file integrates project-specific requirements from gemini.md with latest 2025 AGENTS.md ecosystem standards. For complete development guidance, reference both this file and `docs/README.md`.
+**?? NOTICE**: This file provides project-specific context. It must be used in conjunction with the master directives in `GEMINI.md`. For complete development guidance, reference both this file and `docs/README.md`.

@@ -7,7 +7,7 @@ def test_state_manager_tracks_phase_separately():
     supplier = "unit_test_supplier"
     sm = FixedEnhancedStateManager(supplier_name=supplier)
     sm.initialize_category_processing(0, "http://example.com/cat", 2)
-    sm.update_supplier_extraction_progress_new("http://example.com/p1")
+    sm.update_supplier_progress_new("http://example.com/p1")
     sm.update_amazon_analysis_progress_new("http://example.com/p1")
 
     state_path = get_processing_state_path(supplier)
@@ -16,9 +16,9 @@ def test_state_manager_tracks_phase_separately():
         data = json.load(f)
     sp = data["system_progression"]
     ud = data["user_display_metrics"]
-    assert sp["supplier_extraction_resumption_index"] == 1
-    assert sp["amazon_analysis_resumption_index"] == 1
-    assert sp["current_phase"] == "amazon_analysis"
+    assert sp.get("supplier_products_completed", 0) == 1
+    assert sp.get("amazon_products_completed", 0) == 1
+    assert sp.get("current_phase") == "amazon_analysis"
     assert ud["progress_count"] == 1
     assert ud["session_products_processed"] == 1
 
@@ -26,11 +26,11 @@ def test_state_manager_tracks_phase_separately():
     state_path.unlink(missing_ok=True)
 
 
-def test_update_supplier_extraction_progress_uses_current_key():
+def test_update_supplier_progress_uses_current_key():
     supplier = "unit_test_supplier_key"
     sm = FixedEnhancedStateManager(supplier_name=supplier)
-    sm.update_supplier_extraction_progress(3, 10)
-    assert sm.state_data["supplier_extraction_progress"]["current_category_index"] == 3
+    sm.update_supplier_progress(category_index=3, total_categories=10)
+    assert sm.state_data["system_progression"]["persistent_category_index"] == 3
     get_processing_state_path(supplier).unlink(missing_ok=True)
 
 
@@ -44,6 +44,6 @@ def test_correct_category_totals_realtime_updates_denominator():
     path = get_processing_state_path(supplier)
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    assert data["supplier_extraction_progress"]["total_products_in_current_category"] == 5
+    assert data["system_progression"]["supplier_products_needing_extraction"] == 5
     path.unlink(missing_ok=True)
 

@@ -164,8 +164,8 @@ def validate_current_processing_state() -> Tuple[bool, str]:
         
         # Check key metrics for improvement
         total_products = state_data.get('total_products', 0)
-        total_categories = state_data.get('supplier_extraction_progress', {}).get('total_categories', 0)
-        current_category_index = state_data.get('supplier_extraction_progress', {}).get('current_category_index', 0)
+        total_categories = state_data.get('system_progression', {}).get('total_categories', 0)
+        current_category_index = state_data.get('system_progression', {}).get('persistent_category_index', 0)
         
         issues = []
         

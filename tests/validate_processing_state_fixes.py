@@ -126,8 +126,8 @@ def validate_fix_1_url_discovery(state: Dict[str, Any], log_metrics: Dict[str, A
     """Validate Fix 1: URL Discovery Integration."""
     print("\n🔍 VALIDATING FIX 1: URL Discovery Integration")
     
-    discovered_in_state = state.get('supplier_extraction_progress', {}).get('discovered_products_in_current_category', 0)
-    current_category = state.get('supplier_extraction_progress', {}).get('current_category_url', '')
+    discovered_in_state = state.get('system_progression', {}).get('supplier_products_needing_extraction', 0)
+    current_category = state.get('system_progression', {}).get('current_category_url', '')
     
     # Check if we have URL discovery data in logs
     urls_discovered_in_logs = log_metrics.get('urls_discovered', {})
@@ -154,7 +154,7 @@ def validate_fix_2_category_url_tracking(state: Dict[str, Any], log_metrics: Dic
     """Validate Fix 2: Category URL Tracking."""
     print("\n🔍 VALIDATING FIX 2: Category URL Tracking")
     
-    current_category_in_state = state.get('supplier_extraction_progress', {}).get('current_category_url', '')
+    current_category_in_state = state.get('system_progression', {}).get('current_category_url', '')
     categories_in_logs = log_metrics.get('categories_processed', [])
     
     success = True
@@ -179,7 +179,7 @@ def validate_fix_3_product_index_tracking(state: Dict[str, Any], log_metrics: Di
     """Validate Fix 3: Product Index Tracking."""
     print("\n🔍 VALIDATING FIX 3: Product Index Tracking")
     
-    current_product_index = state.get('supplier_extraction_progress', {}).get('current_product_index_in_category', 0)
+    current_product_index = state.get('system_progression', {}).get('supplier_products_completed', 0)
     products_processed_in_logs = log_metrics.get('products_processed', 0)
     
     success = True
@@ -242,11 +242,11 @@ def print_summary(state: Dict[str, Any]) -> None:
     print(f"Last Updated: {last_updated}")
     
     # Progress info
-    supplier_progress = state.get('supplier_extraction_progress', {})
+    supplier_progress = state.get('system_progression', {})
     print(f"Current Category: {supplier_progress.get('current_category_url', 'none')}")
-    print(f"Products Discovered: {supplier_progress.get('discovered_products_in_current_category', 0)}")
-    print(f"Current Product Index: {supplier_progress.get('current_product_index_in_category', 0)}")
-    print(f"Total Products in Category: {supplier_progress.get('total_products_in_current_category', 0)}")
+    print(f"Products Discovered: {supplier_progress.get('supplier_products_needing_extraction', 0)}")
+    print(f"Current Product Index: {supplier_progress.get('supplier_products_completed', 0)}")
+    print(f"Total Products in Category: {supplier_progress.get('supplier_products_needing_extraction', 0)}")
     
     # Gap processing info
     gap_processing = state.get('gap_processing', {})

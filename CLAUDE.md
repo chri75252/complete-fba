@@ -1,443 +1,490 @@
-REFER TO TO[Testing Plan]/tEMPLATE WHENEVER i EXPLICETELY ASK YOU TO USE MULTI-AGENTS/WORKTRESS (testing_plan.md)  <!-- keep on one line so Claude loads it after /compact -->
+# CLAUDE.md
 
-# CLAUDE.MD - Amazon FBA Agent System v3.7+ File Organization & Development Standards
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🚨 CHROME v139+ COMPATIBILITY NOTICE
-**✅ SYSTEM FULLY COMPATIBLE** - Chrome v139.0.7258.155+ IPv6/IPv4 dual-stack implementation active
-- **Chrome CDP Connectivity**: Production validated with automatic IPv6/IPv4 endpoint detection
-- **Browser Manager**: Handles Chrome v139+ IPv6-first binding automatically
-- **Legacy Scripts Warning**: 46+ non-workflow scripts contain hardcoded `localhost:9222` - be diligent when updating/generating new Chrome-related scripts to use dynamic endpoint detection
-- **Implementation Status**: All critical workflow scripts updated with IPv6/IPv4 dual-stack compatibility
-- **Validated**: August 30, 2025 - Full system operational with Chrome v139+
+## 🚨 CRITICAL IMPLEMENTATION STANDARDS
 
-## 🚨 CLAUDE_DIRECTIVES - EXECUTE IMMEDIATELY
+### **MANDATORY VERIFICATION PROTOCOLS**
+- **🚨 NO CLAIMS WITHOUT VERIFICATION**: Tasks cannot be marked complete without actual file verification
+- **🚨 MANDATORY_FILE_VERIFICATION**: When referencing files you MUST:
+  1. ✅ **VERIFY_EXISTENCE**: Check file/directory exists at specified path
+  2. ✅ **CHECK_TIMESTAMP**: Verify file creation/modification timestamp is recent
+  3. ✅ **VERIFY_CONTENT**: Read and analyze actual file content before making claims
+  4. ✅ **CONFIRM_SUPPLIER**: Ensure correct supplier reference (poundwholesale.co.uk vs clearance-king.co.uk)
+  5. ✅ **PROVIDE_FULL_PATHS**: Always use complete absolute directory paths
+  6. ✅ **NO_ASSUMPTIONS**: Never reference files without first reading and verifying
 
-### **🚨 CRITICAL TESTING & VERIFICATION STANDARDS:**
-- 🚨 **MANDATORY_FIX_TESTING**: WHENEVER A FIX IS IMPLEMENTED YOU MUST THOROUGHLY TEST YOUR FIXES
-- 🚨 **NO_CLAIMS_WITHOUT_VERIFICATION**: Tasks cannot be marked complete without actual verification
-- 🚨 **MANDATORY_FILE_VERIFICATION_PROTOCOL**: For any future response whenever referencing files (primarily output files, scripts, folders, subfolders, etc.) you MUST:
-  1. ✅ **VERIFY_ACTUAL_EXISTENCE**: Check file/directory actually exists at specified path
-  2. ✅ **CHECK_TIMESTAMP**: Verify file creation/modification timestamp and confirm it's recent/relevant
-  3. ✅ **VERIFY_CONTENT**: Read and analyze actual file content before making any claims about what it contains
-  4. ✅ **CONFIRM_CORRECT_SUPPLIER**: Ensure files reference the correct supplier (poundwholesale.co.uk, NOT clearance-king.co.uk)
-  5. ✅ **PROVIDE_FULL_PATHS**: Always provide complete absolute directory paths, timestamps, and content verification
-  6. ✅ **NO_ASSUMPTIONS**: Never reference files without first reading and verifying their actual content and relevance
-- 🚨 **MANDATORY_BACKUP_PROTOCOL**: Before testing any script, parameter, toggle, or making major edits that might affect functionality:
-  1. ✅ **CREATE_BACKUP_DIRECTORY**: Create a "backup" folder in the same directory if it doesn't exist
-  2. ✅ **DATED_SUBFOLDER**: Create subfolder titled with brief reason + date (e.g., "clear_cache_toggle_test_20250701")
-  3. ✅ **BACKUP_ALL_AFFECTED**: Copy ALL files/folders/scripts that might be affected by the test/change
-  4. ✅ **VERIFY_BACKUP**: Confirm backup was created successfully before proceeding
-- 🚨 **TASK_SUCCESS_CRITERIA**/**TASK_TESTING_CRITERIA**: For any task TESTING involving file/folder/script output through the use of full workflow or specific scripts to be considered successfully completed:
-  1. ✅ **CORRECT_TIMESTAMP**: EVERY File must have accurate creation/modification timestamp based on the script or workflow involved in the test
-  2. ✅ **CORRECT_FILE_PATH**: Exact absolute path must be verified and accessible and match the expected output location ( as per line 90 - 233 which the output tracker)
-  3. ✅ **CORRCT_SCRIPT_EXECUTION_&_CHRONOLOGY**: Chekc if all exepcted script ran and in the correct order ( as per Workflow Diagram 12 - 138 which workflow diagram )
-  3. ✅ **CONTENT_VERIFICATION**: File content must be analyzed and verified against expectations
-- 🚨 **NO_FAKE_OUTPUTS**: Never claim file paths or content that haven't been actually verified
-- 🚨 **ASK_FOR_SCREENSHOTS**: When fix involves verification you cannot perform (like LangSmith dashboard), explicitly ask user for screenshots
+### **🚨 MANDATORY BACKUP PROTOCOL**
+Before testing any script or making major edits:
+1. ✅ **CREATE_BACKUP_DIRECTORY**: Create "backup" folder in same directory
+2. ✅ **DATED_SUBFOLDER**: Create subfolder with brief reason + date (e.g., "test_change_20251006")
+3. ✅ **BACKUP_ALL_AFFECTED**: Copy ALL files/folders/scripts that might be affected
+4. ✅ **VERIFY_BACKUP**: Confirm backup created successfully before proceeding
 
+### **🚨 UPDATE PROTOCOL - CRITICAL COMPLIANCE**
+When updating ANY file, script, output, or folder:
+1. **⚠️ CASCADING UPDATES**: Check ALL related files that reference the changed item
+2. **⚠️ DOCUMENTATION SYNC**: Update ALL relevant documentation with new paths/procedures
+3. **⚠️ PATH CONSISTENCY CHECK**: Verify path_manager.py and system_config.json reflect changes
 
-### **FORBIDDEN OPS REMINDER (Strict)**
-- No command-line in-place editors (`sed -i`, `perl -pi`, `ed`, etc.)
-- No “auto-fix” Python/Node scripts that reorder or rewrite large file sections
-- No mass search-and-replace across the repo without a Serena manifest + manual snippet patches
+### **🔒 SERENA MCP READ-ONLY USAGE**
+**Purpose**: Discovery & verification only - NEVER write/mutate with Serena
+**Order**: Investigate → hypothesize minimal change → use Serena to validate coverage → manual edits
 
-- ✅ **SERENA_POST-SCAN_VERIFICATION**: After manual edits, re-run Serena for the target symbol/pattern and assert:
-  - No unintended matches remain
-  - Any intentional keeps are listed with reasons
-  - Pre/Post match counts and files touched are included in the response
+## Project Overview
 
-## ⚠️ MANDATORY_PROTOCOLS
+The Amazon FBA Agent System v3.7+ is a production-ready automation platform for FBA product sourcing from supplier websites to Amazon marketplace. It features file-grounded state management, Chrome v139+ compatibility, smart memory management, and resumable processing workflows using Playwright browser automation.
 
+### **🎯 System Characteristics**
+- **Configurable Entry Point**: Launched via `run_custom_poundwholesale.py` with operational settings from `config/system_config.json`
+- **No AI Logic**: All AI features are **disabled** - uses deterministic, selector-based scraping and matching
+- **Single-Phase Price Scraping**: Processes full price range (`min_price_gbp` to `max_price_gbp` from config)
+- **Complete Resumable Processing**: Full workflow implementation with state persistence after every operation
+- **Chrome v139+ Compatible**: IPv6/IPv4 dual-stack implementation with automatic endpoint detection
+- **File-Grounded State**: All state calculations based on actual files, not memory variables
 
-### 🔒 SERENA MCP — READ‑ONLY USAGE (Compact)
-**Purpose:** Discovery & verification only (locate symbols/patterns/files). **Never** write/mutate.
-**Order:** Investigate → hypothesize minimal change → use Serena to confirm coverage & find stragglers → manual edits.
-**How:** `find_symbol`, `find_pattern`, `list_files` with filters; capture file paths + line ranges.
-**Proof:** Provide pre‑edit match count & file list; post‑edit count (expect 0 or documented keeps) and files touched.
-**Ban:** Any Serena or shell command that edits files.
+## Commands
 
-### 🚀 AGENT / TOOL INVOCATION QUICK‑START
-## IMPROTANT
+### **🚀 Running the System**
 
-Refer to the *Awesome Claude Agents* orchestration protocol. 
-- For any multi-step or feature development, START by invoking the `tech-lead-orchestrator`.
-- WAIT for its structured routing map (named agents; specified order).
-- Then, use ONLY the agents listed in the routing map, in the sequence, for each task.
-- All information handoff and filtering is to be managed by the main agent, not by sub-agent-to-sub-agent calls.
-Never improvise agent selection or skip the orchestrator step.
-
-
-### **⚠️ UPDATE PROTOCOL - CRITICAL COMPLIANCE**
-<!-- LOAD_FOR: ALL_COMPLEXITY_LEVELS -->
-<!-- SELECTIVE: false -->
-
-**⚠️ MANDATORY EXECUTION - Whenever you update ANY file, script, output, or folder:**
-
-1. **⚠️ CASCADING UPDATES** (All complexity levels)
-   - ✅ REQUIRED: Check ALL related files that reference the changed item
-   - ✅ REQUIRED: Update ALL scripts that use the modified paths/functions
-   - ✅ REQUIRED: Update ALL documentation that mentions the changed item
-   - ✅ REQUIRED: Update ALL configuration files with new references
-
-2. **⚠️ DOCUMENTATION SYNC** (Medium+ complexity)
-   - ✅ REQUIRED: Update ALL relevant documentation in `docs/`
-   - ✅ REQUIRED: Update README.md with new paths/procedures
-   - ✅ REQUIRED: Update architecture diagrams if applicable
-   - ✅ REQUIRED: Update troubleshooting guides with new references
-
-3. **⚠️ PATH CONSISTENCY CHECK** (All complexity levels)
-   - ✅ REQUIRED: Verify path_manager.py reflects changes
-   - ✅ REQUIRED: Update system_config.json if paths changed
-   - ✅ REQUIRED: Test that all scripts still work with new paths
-
-
-### **🔧 ZEN MCP TOOLS AVAILABLE:**
-When user explicitly requests ZEN MCP tools, available tools include:
-- **chat**: General collaborative thinking and brainstorming (models: o3, flash)
-- **thinkdeep**: Multi-stage comprehensive investigation and reasoning (models: o3, flash)
-- **planner**: Interactive sequential planning with step-by-step breakdown (models: o3, flash)
-- **consensus**: Multi-model consensus workflow for decision making (models: o3, flash)
-- **codereview**: Step-by-step code review with expert analysis (models: o3, flash)
-- **precommit**: Pre-commit validation workflow with expert analysis (models: o3, flash)
-- **debug**: Root cause analysis and systematic debugging (models: o3, flash)
-- **secaudit**: Security audit workflow with OWASP compliance (models: o3, flash)
-- **docgen**: Documentation generation with complexity analysis (models: o3, flash)
-- **analyze**: Comprehensive code analysis and architectural assessment (models: o3, flash)
-- **refactor**: Refactoring analysis with code smell detection (models: o3, flash)
-- **tracer**: Code tracing workflow for execution flow analysis (models: o3, flash)
-- **testgen**: Test generation with edge case coverage (models: o3, flash)
-
-### **MANDATORY_SESSION_INITIALIZATION:**
-- 🚨 **SELECTIVE_FILE_ACCESS**: REQUIRED - Only read files when explicitly requested or necessary for specific tasks
-- 🚨 **PATH_MANAGEMENT_ACTIVE**: REQUIRED - Ensure path_manager.py functions are used when working with paths
-
-- 🚫 **SERENA_WRITE_DISABLED**: Confirm Serena runs strictly in read‑only mode; refuse any write/mutation path.
-### **MANDATORY_ONGOING_BEHAVIOR:**
-- ⚠️ **UPDATE_PROTOCOL_COMPLIANCE**: CRITICAL - Cascading updates for ANY file changes
-- ⚠️ **DOCUMENTATION_SYNC**: Update ALL related docs when changes occur
-- 🚨 **API_KEY_PRESERVATION**: CRITICAL - NEVER remove or modify existing API keys in scripts or env files
-
-
-
-
-## 🎯 LATEST SYSTEM ENHANCEMENTS (July 29, 2025)
-
-- 🔎 **SEARCH‑THEN‑CONFIRM**: Perform primary analysis first; run Serena to validate coverage and find stragglers before manual edits.
-- ✍️ **Manual Snippet Patching Only**: Never use command‑line editors or auto‑fixers; patch the exact snippet/block manually.
-- 📚 **Patch All Occurrences**: When Serena finds N matches, update **all N** deliberately (unless explicitly marked `@keep`).
-### **🚨 P0 CRITICAL FIXES COMPLETED**
-- **✅ UTF-8 ENCODING RESOLUTION**: Fixed `'charmap' codec can't decode byte 0x9d` errors system-wide
-- **✅ PRODUCT CACHE PATH FIX**: Resolved state manager file location mismatch (dots vs hyphens)
-- **✅ LINKING MAP SCHEMA STANDARDIZATION**: Consistent schema for all entry types (`match_method: "none"`, `confidence: 0`)
-- **✅ FILE-GROUNDED STATE IMPLEMENTATION**: State calculations based on actual files, not memory variables
-- **CRITICAL INSIGHT**: Character encoding issues indicate deeper architectural problems
-- **CRITICAL INSIGHT**: Path consistency is fundamental to data integrity across system components
-- **CRITICAL INSIGHT**: Complete schema coverage required - every processing outcome must be recorded
-- **CRITICAL INSIGHT**: File-grounded state is essential for reliable recovery in long-running systems
-
-### **🧹 SMART MEMORY MANAGEMENT SYSTEM**
-- **✅ VERIFIED WORKING**: Smart memory clearing with sliding window approach prevents accumulation
-- **Smart Cache Clearing**: Only clears when >500 products accumulated, keeps recent 100 for continuity
-- **Sliding Window Approach**: Maintains processing continuity while preventing memory leaks
-- **Linking Map Management**: Clears every 500 entries after saving to prevent memory leaks
-- **Python Garbage Collection**: Triggered automatically when Python memory >3GB
-- **Node.js Monitoring**: Monitors Node.js processes (>2GB triggers browser restart)
-- **CRITICAL**: Files are NEVER cleared - only in-memory variables are cleared
-- **Smart Memory Strategy**: Write to disk → Smart sliding window clear → Continue processing
-- **Intelligent Clearing**: Only triggers when significant accumulation occurs (>500 products)
-- **File-Based Progress Tracking**: Six methods for zero-risk progress monitoring from persistent files
-- **Safe Memory Clearing**: `safe_memory_clear_with_file_fallback()` preserves critical counters while clearing large data structures
-- **Authentication Tracking**: `get_authentication_fallback_count_from_state()` monitors products without pricing data
-- **Comprehensive Progress**: `get_current_progress_from_files()` provides complete status with zero memory dependency
-
-### **🔄 BROWSER RESTART SYSTEM**
-- **✅ VERIFIED WORKING**: Automatic browser restart every 2.5 hours
-- **Time-Based Restart**: Prevents authentication connection degradation
-- **Memory-Based Restart**: Triggers on high Python/Node.js memory usage
-- **Connection Recovery**: Automatic restart on connection timeouts
-- **Zero Downtime**: ~2.7 second restart time with immediate recovery
-- **Authentication Integration**: Restart triggers before category batch processing
-
-### **🔐 AUTHENTICATION RESILIENCE**
-- **Category Batch Authentication**: Checks authentication before each category batch
-- **Connection Timeout Handling**: Automatic browser restart on CDP timeouts
-- **Fallback Recovery**: Multiple authentication methods with graceful degradation
-- **Session Persistence**: Maintains authentication across browser restarts
-
-## 🧠 **CRITICAL LESSONS LEARNED FROM P0 FIXES**
-
-### **🎯 NON-OBVIOUS TECHNICAL DISCOVERIES**
-
-#### **1. Encoding Issues as System Architecture Indicators**
-- **Discovery**: Character encoding problems reveal deeper architectural issues
-- **Insight**: UTF-8 must be explicitly specified at every file boundary
-- **Implication**: Treat encoding as first-class architectural concern
-- **Best Practice**: Never rely on system default encodings in production code
-
-#### **2. Path Consistency as Data Integrity Foundation**  
-- **Discovery**: Inconsistent file naming cascades through entire system
-- **Insight**: Centralized path management prevents systematic failures
-- **Implication**: Single source of truth for all file path construction
-- **Best Practice**: Standardize naming conventions at architectural level
-
-#### **3. Complete Schema Coverage Principle**
-- **Discovery**: Every processing outcome must be explicitly handled and recorded
-- **Insight**: No-match scenarios are as important as successful matches
-- **Implication**: Design schemas for complete operational coverage
-- **Best Practice**: Create entries for all possible processing states
-
-#### **4. File-Grounded State as Recovery Strategy**
-- **Discovery**: Memory-based state becomes unreliable in long-running systems
-- **Insight**: Persistent state must reflect actual file system reality
-- **Implication**: Calculate state from persistent data, not memory variables
-- **Best Practice**: Use files as single source of truth for system state
-
-#### **5. Gap Processing as Efficiency Multiplier**
-- **Discovery**: Processing decisions based on current state enable massive optimization
-- **Insight**: System intelligence comes from understanding its own state
-- **Implication**: Always analyze what work is actually necessary
-- **Best Practice**: Implement gap detection for all bulk processing operations
-
-### **🎯 DEBUGGING METHODOLOGY INSIGHTS**
-
-#### **1. Systematic Issue Identification**
-- **Method**: Start with observable symptoms, trace to root architectural causes
-- **Key**: Don't fix symptoms, fix underlying architectural problems
-- **Success Pattern**: P0 fixes addressed fundamental design issues, not surface problems
-
-#### **2. File-First Debugging Approach**
-- **Method**: Always verify actual file contents before making assumptions
-- **Key**: System state must match file reality, not memory state
-- **Success Pattern**: File-grounded state calculations eliminated state inconsistencies
-
-#### **3. Schema-First Data Design**
-- **Method**: Define complete schemas before implementation
-- **Key**: Account for all possible outcomes, including failure cases
-- **Success Pattern**: Standardized linking map schemas eliminated downstream errors
-
-
-# Amazon FBA Agent System
-
-This repository hosts the simplified Amazon FBA Agent workflow used to scrape supplier products, match them to Amazon listings and calculate profitability.
-
-The process's emtry point in `run_custom_poundwholesale.py` and is orchestrated by `PassiveExtractionWorkflow` and progresses through authentication, supplier scraping, Amazon data extraction, financial analysis and state management.
-
-See [docs/readme.md](docs/readme.md) for the full documentation and historical notes.
-
-## Quick Start
+**Main Entry Point:**
 ```bash
-# install dependencies
-pip install -r requirements.txt
-
-# run the workflow (Chrome must be running with debug port 9222)
 python run_custom_poundwholesale.py
 ```
-The LangGraph-based features are currently **disabled**; the standard workflow runs without LangGraph integration.
 
-Configuration is controlled through [config/system_config.json](config/system_config.json). Before contributing, review [docs/PULL_REQUEST_CHECKLIST.md](docs/PULL_REQUEST_CHECKLIST.md) for development and security guidelines
-### **PROJECT_DIRECTIVE_EXECUTION_CHECKLIST:**
+**Prerequisites:**
+1. **Start Chrome with debug port** (REQUIRED):
+   - Windows: `chrome --remote-debugging-port=9222 --user-data-dir=C:\temp\chrome-debug`
+   - Linux: `chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug`
+2. **Verify Chrome connection**: `curl http://localhost:9222/json/version`
+3. **Install dependencies**: `pip install -r requirements.txt`
+4. **Install Playwright browsers**: `playwright install chromium`
+
+**Alternative Entry Point:**
+```bash
+python run_complete_fba_system.py
 ```
-✅ EXECUTION_VALIDATION (Update after completion):
-- [ ] Path management functions verified active
-- [ ] Update protocol compliance confirmed
-- [ ] Documentation sync mechanisms active
+
+### **🧪 Testing**
+
+**Environment Setup:**
+```bash
+# Create isolated environment (REQUIRED)
+python -m venv .venv
+source .venv/bin/activate  # Linux/WSL
+# .venv\Scripts\activate   # Windows
+
+# Install test dependencies
+pip install -r requirements.txt
+pip install pytest pytest-asyncio pytest-mock pytest-cov
 ```
 
+**Test Execution:**
+```bash
+# Run all tests
+pytest
 
-## 🎯 Purpose
-This document establishes the standardized file organization system for the Amazon FBA Agent System v3.5. All scripts, tools, and processes MUST follow these conventions to maintain consistency, enable proper automation, and ensure maintainability.
+# Specific test categories
+pytest tests/unit/                    # Unit tests only
+pytest -m integration                  # Integration tests (requires external services)
+pytest -m e2e                         # End-to-end tests (requires full system setup)
+pytest tests/performance/ --benchmark-only  # Performance tests
 
-### Key System Characteristics
+# Code quality checks
+tox -e lint                          # Linting and formatting
+tox -e format                        # Auto-format code
+tox -e type-check                    # Type checking with mypy
+tox -e security                      # Security vulnerability scanning
 
-- **Configurable Entry Point:**  
-  The system is launched via `run_custom_poundwholesale.py`, which loads all operational toggles, batch sizes, and output directories from `config/system_config.json`.
-- **No AI Logic:**  
-  All AI-driven features (category selection, data extraction, diagnostics) are **disabled**. The system uses only deterministic, selector-based scraping and matching.
-- **Single-Phase Price Scraping:**  
-  The workflow scrapes the full price range as defined in the config (`min_price_gbp` to `max_price_gbp`).
-- **Complete, Resumable Processing Loop:**  
-  The main workflow (`PassiveExtractionWorkflow`) is fully implemented, including supplier scraping, Amazon extraction, financial analysis, and profitability checking.  
-  The system saves its state after every product and batch, allowing interruption and seamless resumption.
-- **Robust Output Directory Handling:**  
-  All output, cache, and report files are written to directories defined by `output_root` in the config, or default to `OUTPUTS/` if not set.  
-  This includes supplier cache, Amazon cache, linking maps, financial reports, and processing state.
-- **Centralized State Management:**  
-  The `EnhancedStateManager` ensures that all progress (including supplier scraping, Amazon extraction, and financial analysis) is checkpointed and can be resumed from the exact point of interruption.
+# Coverage reporting
+tox -e coverage-report
+```
 
----
+**🚨 TASK_SUCCESS_CRITERIA**: For testing to be considered successful:
+1. ✅ **CORRECT_TIMESTAMP**: Every file must have accurate creation/modification timestamp
+2. ✅ **CORRECT_FILE_PATH**: Exact absolute path verified and accessible
+3. ✅ **CORRECT_SCRIPT_EXECUTION**: All expected scripts ran in correct order
+4. ✅ **CONTENT_VERIFICATION**: File content analyzed and verified against expectations
 
-## 2. Complete Workflow Diagram
+### **🔧 Development Tools**
+
+**System Diagnostics:**
+```bash
+# Chrome v139+ compatibility verification
+python utils/browser_manager.py --health-check --auto-restart
+
+# Memory management validation
+python test_memory_leak_fixes.py
+
+# State file validation
+python utils/fixed_enhanced_state_manager.py --validate-state --supplier=poundwholesale-co-uk
+
+# Comprehensive system audit
+python run_system_audit.py
+```
+
+## Architecture
+
+### **🏗️ Complete Workflow Architecture**
+
+The system follows a **Freeze-Mark-Resume** sequence with file-grounded state management:
 
 ```
 [run_custom_poundwholesale.py] (Entry Point)
      │
      ▼
-[PassiveExtractionWorkflow::run] (use_predefined_categories=True, ai_client=None)
+[PassiveExtractionWorkflow::run] (Core Orchestrator - 413 KB implementation)
      │
-     ├─> 1. Load Predefined Categories from `config/poundwholesale_categories.json`
+     ├─> 1. 🎯 System Initialization
+     │    ├─> Chrome CDP connection (IPv6/IPv4 auto-detection)
+     │    ├─> Authentication verification
+     │    ├─> Configuration loading (system_config.json)
+     │    └─> Startup state analysis (file-grounded calculations)
      │
-     ├─> 2. [ConfigurableSupplierScraper] -> Scrape Supplier Product Data
-     │   └─> Saves to: {output_root}/cached_products/poundwholesale-co-uk_products_cache.json
+     ├─> 2. 📂 Category Processing Sequence (NEW SEQUENCE)
+     │    └─> For each category in config/poundwholesale_categories.json:
+     │        ├─> a. URL Discovery & Manifest Generation (BEFORE initialization)
+     │        │   ├─> Scrape category page for all product URLs
+     │        │   ├─> Save complete URL list atomically to manifest
+     │        │   └─> Freeze denominator (write-once, never changes)
+     │        ├─> b. Category Initialization (AFTER freezing)
+     │        │   ├─> Initialize category processing with frozen denominators
+     │        │   ├─> Setup progress tracking with access to frozen totals
+     │        │   └─> Handle empty categories (denominator=0, mark complete)
+     │        └─> c. Product Processing Loop
+     │            ├─> Resume pointer validation using frozen denominators
+     │            ├─> Supplier data extraction
+     │            ├─> Amazon analysis (EAN-first, title fallback)
+     │            ├─> Financial calculations (UK marketplace, 20% VAT)
+     │            └─> Atomic state commits
      │
-     ├─> 3. [COMPLETE PROCESSING LOOP]
-     │   └─> For each supplier product:
-     │         ├─> a. [AmazonExtractor] -> Search Amazon by EAN (or Title fallback)
-     │         │     └─> Extracts full product data (no AI fallbacks)
-     │         │     └─> Saves to: {output_root}/FBA_ANALYSIS/amazon_cache/amazon_{ASIN}_{EAN or title}.json
-     │         ├─> b. [Linking Map] -> Update EAN-to-ASIN mapping
-     │         │     └─> Saves to: {output_root}/FBA_ANALYSIS/linking_maps/poundwholesale-co-uk/linking_map.json
-     │         ├─> c. [FBA_Financial_calculator] -> Calculate Profitability
-     │         │     └─> Reads config for VAT, fees, etc.
-     │         │     └─> Saves profitable products to: {output_root}/FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv
-     │         └─> d. [EnhancedStateManager] -> Mark Product as Processed
-     │               └─> Saves to: {output_root}/CACHE/processing_states/poundwholesale-co-uk_processing_state.json
+     ├─> 3. 🔄 Interruption & Resume Behavior
+     │    ├─> Atomic state persistence using WindowsSaveGuardian
+     │    ├─> Resume pointer storage as {phase, cat_idx, prod_idx}
+     │    ├─> Phase-aware resumption (supplier or amazon_analysis)
+     │    └─> Monotonic validation (pointers only advance, never regress)
      │
-     └─> 4. [Resume Logic]
-         └─> On restart, loads state and resumes from last unprocessed product/category
+     └─> 4. 📊 Output Generation
 ```
 
----
+### **🔧 Core Components & Dependencies**
 
-## 2.a Main scripts part of workflow ( ALWAYS CROSS CHECK IF THE UTILITIES & OPTIMIAZATION SCRIPTS ARE PART OF THE WORFKLOW AND/OR IF THEY HAVE BEEN MAYBE REPLACE FOR ISNTANCE )
-Entry Point & Orchestrator:
-run_custom_poundwholesale.py
-passive_extraction_workflow_latest.py (the 413 KB version)
+**Entry Points:**
+- `run_custom_poundwholesale.py` - Primary launcher with authentication and browser setup
+- `run_complete_fba_system.py` - Alternative system launcher
 
-Core Services & Managers:
-SystemConfigLoader.py
-utils/browser_manager.py
-tools/supplier_authentication_service.py
-utils/enhanced_state_manager.py
-utils/path_manager.py
-utils/logger.py
-utils/file_manager.py
+**Core Workflow Engine:**
+- `tools/passive_extraction_workflow_latest.py` - Main orchestrator (413 KB, PassiveExtractionWorkflow class)
 
-Data Extraction & Processing Tools:
-tools/configurable_supplier_scraper.py
-tools/amazon_playwright_extractor.py
-tools/FBA_Financial_calculator.py
+**Direct Dependencies (Core Workflow Tools):**
+- `tools/configurable_supplier_scraper.py` - Supplier data extraction with URL filtering and O(1) hash-based duplicate prevention
+- `tools/amazon_playwright_extractor.py` - Amazon product extraction via Playwright with EAN-first matching
+- `tools/FBA_Financial_calculator.py` - Financial analysis and ROI calculations for UK marketplace
+- `tools/supplier_authentication_service.py` - Session management and login automation
 
-Utilities & Optimizers:
-utils/windows_save_guardian.py
-utils/hash_lookup_optimizer.py
-utils/sentinel_monitor.py
-utils/url_cache_filter.py
-utils/browser_circuit_breaker.py
-tools/category_completion_tracker.py
+**Essential Utilities:**
+- `utils/fixed_enhanced_state_manager.py` - **CRITICAL**: File-grounded state management with freeze-mark-resume sequence
+- `utils/browser_manager.py` - Chrome CDP connection management with IPv6/IPv4 dual-stack support
+- `utils/windows_save_guardian.py` - Atomic file operations for Windows compatibility
+- `utils/path_manager.py` - Cross-platform path management
+- `utils/sentinel_monitor.py` - System monitoring and divergence detection
 
-## 3. Output Tracker (Complete)
+**Configuration System:**
+- `config/system_config_loader.py` - System configuration loading with helper methods
+- `config/system_config.json` - Main configuration (processing limits, performance, browser settings)
+- `config/poundwholesale_categories.json` - Predefined category URLs
+- `config/supplier_configs/` - Supplier-specific configurations and credentials
 
-| Output Type             | File Path (relative to `output_root`)                                                      | Status         | Content                                                              |
-|-------------------------|--------------------------------------------------------------------------------------------|----------------|----------------------------------------------------------------------|
-| **Category Config**     | `config/poundwholesale_categories.json`                                                    | ✅ **Input**    | Predefined list of category URLs to scrape.                          |
-| **Supplier Cache**      | `cached_products/poundwholesale-co-uk_products_cache.json`                                 | ✅ **Generated**| Raw product data scraped from the supplier.                          |
-| **Amazon Data Cache**   | `FBA_ANALYSIS/amazon_cache/amazon_{ASIN}_{EAN or title}.json`                              | ✅ **Active**   | Detailed product data from a single Amazon page.                     |
-| **Linking Map**         | `FBA_ANALYSIS/linking_maps/poundwholesale-co-uk/linking_map.json`                          | ✅ **Active**   | Links supplier EANs to the corresponding Amazon ASINs.               |
-| **Financial Report**    | `FBA_ANALYSIS/financial_reports/fba_financial_report_{timestamp}.csv`                      | ✅ **Active**   | Complete financial breakdown for all profitable products.            |
-| **Processing State**    | `CACHE/processing_states/poundwholesale-co-uk_processing_state.json`                       | ✅ **Active**   | Tracks processed products for resumability.                          |
-| **Logs**                | `logs/debug/run_custom_poundwholesale_{timestamp}.log`                                     | ✅ **Active**   | Full debug logs for each run.                                        |
+**Indirect Dependencies (Secondary Utilities):**
+- `utils/url_cache_filter.py` - URL deduplication (used by configurable_supplier_scraper)
+- `utils/browser_circuit_breaker.py` - Failure protection (used by browser_manager)
+- `utils/hash_lookup_optimizer.py` - O(1) duplicate prevention optimization
+- `tools/category_completion_tracker.py` - Category processing optimization
 
----
+### **🎯 Key Architectural Patterns**
 
-## 4. Quick Start & Execution
+**File-Grounded State Management:**
+- All state calculations based on actual files, not memory variables
+- Seven zero-risk methods for progress tracking from persistent files
+- EnhancedStateManager with thread-safe atomic operations
+- Resume capability from exact interruption point across sessions
 
-To run the system, execute the entry point script from your terminal.  
-**The system will perform full end-to-end processing, including supplier scraping, Amazon extraction, financial analysis, and profitability reporting.**
+**Freeze-Mark-Resume Sequence:**
+1. **Freeze**: Denominator frozen on first category encounter (write-once)
+2. **Mark**: State committed atomically with WindowsSaveGuardian
+3. **Resume**: Direct routing to correct phase and position
 
-```bash
-# Navigate to the project directory
-cd C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32
+**Smart Memory Management:**
+- Sliding window approach (clear at 500 products, keep recent 100)
+- 99% reduction in memory clearing operations
+- Automatic browser restart every 2.5 hours
+- Python garbage collection triggered at 3GB memory usage
 
-# Run the custom script
-python run_custom_poundwholesale.py
+**Chrome v139+ Compatibility:**
+- IPv6/IPv4 dual-stack implementation with automatic endpoint detection
+- Dynamic endpoint detection (no hardcoded localhost:9222)
+- Production validated with automatic connection fallback
+
+**Processing Flow:**
+1. Load supplier categories and perform startup analysis
+2. For each category: URL discovery → manifest generation → denominator freezing → processing
+3. Product processing: supplier extraction → Amazon matching → financial analysis → state commit
+4. Output generation with comprehensive file tracking
+
+### **📁 Output Structure**
 
 ```
+OUTPUTS/
+├── cached_products/                              # Supplier product cache
+│   └── poundwholesale-co-uk_products_cache.json
+├── FBA_ANALYSIS/
+│   ├── amazon_cache/                             # Individual Amazon product data
+│   │   ├── amazon_B09W64GKR4_5050375010819.json
+│   │   └── amazon_{ASIN}_{EAN_or_title}.json
+│   ├── linking_maps/                             # EAN→ASIN mappings
+│   │   └── poundwholesale.co.uk/                 # Note: dotted folder format
+│   │       └── linking_map.json
+│   └── financial_reports/                        # Profitability analysis
+│       └── fba_financial_report_{timestamp}.csv
+├── CACHE/
+│   └── processing_states/                        # State management for resumability
+│       └── poundwholesale-co-uk_processing_state.json
+├── DIAGNOSTICS/                                  # System diagnostics
+│   ├── save_telemetry.log
+│   ├── sentinels.log
+│   └── state_validation.json
+└── logs/
+    ├── debug/                                    # Detailed execution logs
+    │   └── run_custom_poundwholesale_{timestamp}.log
+    ├── health/                                   # System health monitoring
+    └── application/                              # Application-level logs
+```
 
+### **⚙️ Configuration System**
 
-## Configuration (AUTO-UPDATE TRIGGER: New suppliers, system settings, or browser requirements)
+**Hierarchical Configuration:**
+- **system_config.json**: Global settings (processing limits, performance, browser config)
+- **supplier_configs/*.json**: Supplier-specific settings and credentials
+- **categories JSON files**: Predefined category URLs for each supplier
 
-### System Configuration
-Main system settings are detailed in `docs/README.md` and `config/system-config-toggle-v2.md`. The security suite validates configuration integrity through `tools/security_checks.py`.
+**Critical Configuration Sections:**
+```json
+{
+  "system": {
+    "max_products": 1000000,
+    "max_products_per_category": 1000,
+    "financial_report_batch_size": 50,
+    "chrome_debug_port": 9222,
+    "reuse_browser": true
+  },
+  "processing_limits": {
+    "min_price_gbp": 0.01,
+    "max_price_gbp": 20.0,
+    "min_products_per_category": 1
+  },
+  "pipeline_toggles": {
+    "separate_supplier_amazon_loops": true,
+    "frozen_category_denominator": true,
+    "resume_abs_index_math": true
+  },
+  "authentication": {
+    "enabled": true,
+    "consecutive_failure_threshold": 5
+  }
+}
+```
 
-### Supplier Configuration  
-- System configs: `config/system_configs/*.json`
-- Supplier-specific scraping rules
-- Category mappings and pricing filters
-- Authentication and navigation settings
+**Financial Configuration (UK Marketplace):**
+- Default FBA fee percentage: 15%
+- UK VAT rate: 20%
+- Target profit margin: 25%
+- Currency: GBP
 
-## Security Management (AUTO-UPDATE TRIGGER: New security protocols, API changes, or safety requirements)
+### **🌐 Browser Automation**
 
-### 🚨 CRITICAL API KEY PRESERVATION POLICY
-**🚨 MANDATORY DIRECTIVE: NEVER REMOVE OR MODIFY EXISTING API KEYS**
-- ✅ **PRESERVE ALL EXISTING API KEYS** in scripts and environment files --> if needed comment out api keys
-- ✅ **ADD KEYS WHEN NEEDED** but never remove working configurations
-- ✅ **MAINTAIN FUNCTIONALITY** - Keep all working API integrations intact
+**Playwright Integration:**
+- Chrome CDP (Chrome DevTools Protocol) with IPv6/IPv4 dual-stack
+- Automatic browser health monitoring and restart
+- Session persistence across browser restarts
+- Connection timeout handling with automatic recovery
 
-**Current Working API Keys (USE THESE WHEN NEEDED/REQUESTED):**
+**Browser Management:**
+- Time-based restart (every 2.5 hours)
+- Memory-based restart (Python >3GB, Node.js >2GB)
+- Zero downtime restart (~2.7 seconds)
+- Authentication integration with restart system
+
+### **🔄 State Management System**
+
+**File-Grounded State Principles:**
+- State calculated from persistent files, not memory variables
+- Atomic operations using WindowsSaveGuardian
+- Thread-safe operations with RLock
+- Seven zero-risk progress tracking methods
+
+**State Structure:**
+```json
+{
+  "system_progression": {
+    "current_phase": "supplier",                      // supplier | amazon_analysis
+    "persistent_category_index": 0,                 // NEVER resets, tracks absolute position
+    "supplier_products_needing_extraction": 47,      // RESET per category
+    "supplier_products_completed": 0,                 // RESET per category
+    "amazon_products_needing_analysis": 45,           // RESET per category
+    "amazon_products_completed": 0                    // RESET per category
+  }
+}
+```
+
+**Resume Behavior:**
+- Phase-aware resumption (direct routing to supplier or amazon_analysis)
+- Monotonic pointer advancement (never goes backward)
+- Structured resume pointer storage: {phase, cat_idx, prod_idx}
+- Overflow safety with clamping (not reset)
+
+## Development Notes
+
+### **🪟 Windows Compatibility**
+- Full Windows 10/11 support with native memory management
+- Atomic file operations to prevent permission issues
+- Windows Memory Manager with accurate process monitoring
+- PowerShell and Command Prompt compatibility
+
+### **⚡ Performance Optimizations**
+- O(1) hash-based duplicate prevention (20-40% improvement)
+- Smart memory clearing (99% reduction in operations)
+- URL pre-filtering eliminates duplicate processing
+- Configurable batch processing for different system capabilities
+
+### **🧪 Testing Infrastructure**
+- Comprehensive test suite with unit, integration, and E2E tests
+- Performance benchmarking capabilities
+- Security vulnerability scanning
+- Type checking with mypy
+- File-grounded state testing
+
+### **📊 Monitoring and Debugging**
+- Multi-level logging system (debug, health, application logs)
+- Real-time performance monitoring
+- Comprehensive error reporting with stack traces
+- System diagnostics and validation tools
+- Sentinel monitoring for divergence detection
+
+### **🔐 Security Management**
+- **🚨 CRITICAL API KEY PRESERVATION**: NEVER remove or modify existing API keys
+- Session isolation and security for each supplier
+- Encrypted credential storage where possible
+- UTF-8 encoding enforcement at every file boundary
+- Configuration validation and fallbacks
+
+**Current Working API Keys (USE WHEN NEEDED):**
 - OpenAI API Key: `sk-ZVcoRkU6brREgixWUDk7lTq_aBNRZwdh_PWwOZuJwKT3BlbkFJvOyKLWAM8OhjyHN0b8e66E1O2G7N2Ew_g3SngsDToA`
 - GitHub Token: `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`
-	
----
 
+## Environment Variables
 
-### **✅ Advanced FBA Analysis Workflows**
-<!-- RELEVANCE_KEYWORDS: fba, analysis, financial, roi, profitability -->
-<!-- ZEN_MCP_PRIORITY: thinkdeep:HIGH, analyze:HIGH, debug:MEDIUM -->
+### **Required Variables**
+```bash
+# Browser Automation
+CHROME_REMOTE_PORT=9222
+PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
 
+# Output Management
+OUTPUTS_BASE_PATH=./OUTPUTS
+output_root=./OUTPUTS
 
+# Supplier Configuration
+SUPPLIER_SESSION_TIMEOUT=3600
+AUTHENTICATION_RETRY_ATTEMPTS=3
+SESSION_VALIDATION_INTERVAL=300
 
----
+# Amazon API Configuration
+AMAZON_REQUEST_DELAY_MS=1000
+AMAZON_CACHE_TTL_HOURS=24
+EAN_MATCHING_CONFIDENCE_THRESHOLD=0.85
 
-## 📋 DOCUMENTATION_REFERENCE
-<!-- LOAD_ON_DEMAND: true -->
-<!-- SELECTIVE: true -->
+# Financial Analysis (UK Marketplace)
+DEFAULT_FBA_FEE_PERCENTAGE=15
+VAT_RATE_UK=20
+PROFIT_MARGIN_TARGET=25
 
-### **📋 Complete Technical Documentation**
-<!-- RELEVANCE_KEYWORDS: documentation, technical, architecture, system -->
-<!-- ZEN_MCP_PRIORITY: thinkdeep:MEDIUM, analyze:LOW, debug:LOW -->
+# System Optimization
+MAX_CONCURRENT_EXTRACTIONS=3
+CACHE_RETENTION_DAYS=30
+```
 
-**📋 REFERENCE - Load when documentation context is detected:**
+## Troubleshooting
 
-**Complete technical details available in:**
-- `/mnt/c/Users/chris/Cloud-Drive_christianhaddad8@gmail.com/Cloud-Drive/Full/claude code/Amazon-FBA-Agent-System-v3/docs/README.md`
+### **🔧 Common Issues**
 
+**Chrome Connection Issues:**
+```bash
+# Check Chrome v139+ IPv6/IPv4 connectivity
+netstat -tuln | grep 9222
+curl -6 http://localhost:9222/json/version  # IPv6
+curl -4 http://localhost:9222/json/version  # IPv4
 
-## 🔄 Trigger Definitions
+# Auto-recovery with dynamic endpoint detection
+python utils/browser_manager.py --health-check --auto-restart --ipv6-first
+```
 
-### Content-Driven Regeneration
-- **CLAUDE_STANDARDS.md changes** → Regenerate claude.md (filtered) + docs/CLAUDE_STANDARDS.md (full)
-- **New rules/policies** → Update all target files
-- **Path updates** → Cascade through automation scripts
+**Authentication Failures:**
+```bash
+# Reset Chrome session and restart browser
+pkill -f chrome && sleep 2
+python utils/browser_manager.py --health-check --auto-restart
 
-### Event-Driven Regeneration  
-- **Script output changes** → Update documentation references
-- **Test completion** → Prompt for sync opportunities
-- **Git activity** → Smart prompting based on workflow state
+# Clear authentication cache
+rm -rf OUTPUTS/CACHE/auth_sessions/*.json
+python tools/supplier_authentication_service.py --reset-auth
+```
 
+**State Corruption Recovery:**
+```bash
+# Validate and rebuild state from files
+python utils/fixed_enhanced_state_manager.py --validate-state --supplier=poundwholesale-co-uk
+python utils/fixed_enhanced_state_manager.py --rebuild-from-cache --file-grounded
+```
 
-## 🚨 CRITICAL IMPLEMENTATION NOTES
+**Memory Issues:**
+```bash
+# Monitor and optimize memory usage
+python -m memory_profiler run_custom_poundwholesale.py
 
+# Manual memory optimization
+python -c "from tools.passive_extraction_workflow_latest import PassiveExtractionWorkflow; workflow = PassiveExtractionWorkflow(); workflow.safe_memory_clear_with_file_fallback()"
+```
 
+## Multi-Agent Orchestration
 
+### **🤖 Agent Communication Protocol**
+For multi-step or feature development:
+1. **START** with `tech-lead-orchestrator` for routing map
+2. **WAIT** for structured agent sequence
+3. **USE ONLY** listed agents in specified order
+4. **MANAGE** all information handoff as main agent
+5. **NEVER** improvise agent selection or skip orchestrator
 
+### **🔄 Sub-Agent Deployment Strategy**
+```
+Main Claude (coordinator)
+├── Authentication Specialist (login/session management)
+├── Data Quality Reviewer (validation specialist)
+├── Performance Monitor (resource optimization)
+└── Error Recovery Agent (failure handling)
+```
 
-### **FORBIDDEN OPS REMINDER (Strict)**
-- No command-line in-place editors (`sed -i`, `perl -pi`, `ed`, etc.)
-- No “auto-fix” Python/Node scripts that reorder or rewrite large file sections
-- No mass search-and-replace across the repo without a Serena manifest + manual snippet patches
+## Documentation References
 
----
+**Complete Technical Documentation:**
+- `docs/README.md` - Comprehensive technical documentation
+- `config/system-config-toggle-v2.md` - System settings and toggles
+- `docs/PULL_REQUEST_CHECKLIST.md` - Development and security standards
+- `latest_workflow.md` - Detailed workflow behavior and sequence
+- `AGENTS.md` - Multi-agent orchestration and deployment guide
 
-## 📚 Related Documentation
-
-**Complete technical details available in:**
-- `/mnt/c/Users/chris/Cloud-Drive_christianhaddad8@gmail.com/Cloud-Drive/Full/claude code/Amazon-FBA-Agent-System-v3/docs/README.md`
-- `/mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/system-config-toggle-v2.md`
----
-
-**Last Updated**: 2025-06-23
-**Version**: 3.6
-**Maintained By**: Amazon FBA Agent System Team
-**Status**: ACTIVE STANDARD - All development must comply
-
-**⚠️ NOTICE**: This file is auto-generated from CLAUDE_STANDARDS.md. For complete development guidance, see CLAUDE_STANDARDS.md
+**System Status**: ✅ Production Ready
+**Chrome Compatibility**: ✅ v139+ with IPv6/IPv4 dual-stack
+**Last Updated**: October 6, 2025
+**Platform Support**: Windows 10/11, Linux, WSL2
+**Python Compatibility**: 3.8+

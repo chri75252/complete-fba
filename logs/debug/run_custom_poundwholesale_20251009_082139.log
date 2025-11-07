@@ -1,0 +1,892 @@
+2025-10-09 08:21:39,389 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251009_082139.log
+2025-10-09 08:21:39,389 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251009_082139.log
+2025-10-09 08:21:39,389 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-10-09 08:21:39,390 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2025-10-09 08:21:39,390 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2025-10-09 08:21:39,978 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2025-10-09 08:21:39,978 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2025-10-09 08:21:39,980 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv6: Chrome/141.0.7390.55
+2025-10-09 08:21:39,980 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2025-10-09 08:21:39,981 - utils.browser_manager - DEBUG - ?? Using IPv6 endpoint for CDP connection
+2025-10-09 08:21:39,982 - utils.browser_manager - INFO - ?? Using endpoint: http://[::1]:9222
+2025-10-09 08:21:40,570 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2025-10-09 08:21:40,571 - utils.browser_manager - INFO - ?? Using existing context with 10 pages
+2025-10-09 08:21:40,571 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 141.0.7390.55
+2025-10-09 08:21:40,571 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:40,571 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:40,571 - __main__ - INFO - 🔐 Initializing Poundwholesale authentication helper...
+2025-10-09 08:21:40,572 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-10-09 08:21:40,572 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-10-09 08:21:40,656 - tools.poundwholesale.supplier_authentication_service - INFO - ✅ Authentication confirmed via selector: .customer-welcome
+2025-10-09 08:21:40,657 - __main__ - INFO - ✅ Already authenticated!
+2025-10-09 08:21:40,658 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2025-10-09 08:21:40,658 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2025-10-09 08:21:40,658 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2025-10-09 08:21:40,658 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2025-10-09 08:21:40,659 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2025-10-09 08:21:40,659 - PassiveExtractionWorkflow - INFO - ✅ Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk
+2025-10-09 08:21:40,732 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10235 products in poundwholesale-co-uk_products_cache.json
+2025-10-09 08:21:40,736 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 10235 products, 0 categories
+2025-10-09 08:21:40,736 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2025-10-09 08:21:40,824 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10235 actual products in cache (total entries: 10235)
+2025-10-09 08:21:40,954 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 10786 processed products in linking map
+2025-10-09 08:21:41,204 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 170 categories
+2025-10-09 08:21:41,217 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2025-10-09 08:21:41,226 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=10786 (reason: system_progression)
+2025-10-09 08:21:41,227 - utils.fixed_enhanced_state_manager - INFO - 🔧 CATEGORY REGRESSION FIX: Updated persistent_category_index=170 (was 1) from product 10786
+2025-10-09 08:21:41,227 - utils.fixed_enhanced_state_manager - INFO - 📋 CATEGORY FIX EVIDENCE: Product 10786 → Category 170
+2025-10-09 08:21:41,227 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=10786 (reason: system_progression)
+2025-10-09 08:21:41,228 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=False, startup_completed=True
+2025-10-09 08:21:41,228 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:21:41,228 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:21:41,229 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:21:41,229 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:21:41,229 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:21:41,230 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:21:41,238 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-09 08:21:41,239 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:21:41,240 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:21:41,240 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2025-10-09 08:21:41,240 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+2025-10-09 08:21:41,241 - PassiveExtractionWorkflow - INFO - ✅ Startup analysis performed - gap processing detection initialized
+2025-10-09 08:21:41,241 - amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2025-10-09 08:21:41,241 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-10-09 08:21:41,241 - amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2025-10-09 08:21:41,242 - amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2025-10-09 08:21:41,243 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2025-10-09 08:21:41,243 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-10-09 08:21:41,243 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-10-09 08:21:41,243 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-10-09 08:21:41,244 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-10-09 08:21:41,244 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-10-09 08:21:41,244 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-10-09 08:21:41,244 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-10-09 08:21:41,244 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+2025-10-09 08:21:41,244 - PassiveExtractionWorkflow - INFO - 🚀 HashLookupOptimizer initialized - ready for O(1) lookups
+2025-10-09 08:21:41,245 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+2025-10-09 08:21:41,245 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+2025-10-09 08:21:41,245 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2025-10-09 08:21:41,245 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2025-10-09 08:21:41,246 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-10-09 08:21:41,246 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-10-09 08:21:41,246 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20251009_082141
+2025-10-09 08:21:41,246 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-10-09 08:21:41,247 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 230 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-10-09 08:21:41,248 - utils.fixed_enhanced_state_manager - DEBUG - 💾 save_debounced: runtime mode (no file-grounded recompute)
+2025-10-09 08:21:41,248 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:21:41,248 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:21:41,248 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:21:41,249 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:21:41,249 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:21:41,249 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:21:41,250 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:21:41,258 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-09 08:21:41,259 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:21:41,260 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:21:41,260 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2025-10-09 08:21:41,260 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (manifest)
+2025-10-09 08:21:41,260 - utils.fixed_enhanced_state_manager - INFO - 🚨 FIRST AFTER-RESUME KEY: phase=supplier cat=170/230 prod=0/0 commit_type=manifest
+2025-10-09 08:21:41,261 - utils.fixed_enhanced_state_manager - INFO - 📋 RESUME PROOF (manifest): cat=170/230 prod=0/0 phase=supplier
+2025-10-09 08:21:41,261 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:21:41,261 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:21:41,261 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:21:41,262 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:21:41,262 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:21:41,262 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:21:41,263 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:21:41,270 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-09 08:21:41,271 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:21:41,271 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:21:41,272 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2025-10-09 08:21:41,272 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-09 08:21:41,272 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN TOTAL CATEGORIES set to 230 (hash=d1acab0e)
+2025-10-09 08:21:41,272 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:21:41,273 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:21:41,274 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:21:41,274 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:21:41,275 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:21:41,275 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:21:41,275 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:21:41,284 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-09 08:21:41,285 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:21:41,285 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:21:41,286 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2025-10-09 08:21:41,286 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-09 08:21:41,286 - PassiveExtractionWorkflow - WARNING - ⚠️ RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2025-10-09 08:21:41,287 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2025-10-09 08:21:41,287 - PassiveExtractionWorkflow - INFO - ✅ RESUMPTION POINT CONFIRMED: Starting from category index 170 at product 0 in phase 'supplier'.
+2025-10-09 08:21:41,287 - PassiveExtractionWorkflow - INFO - 🔄 PHASE-AWARE GATING: Routing to supplier extraction phase
+2025-10-09 08:21:41,287 - PassiveExtractionWorkflow - DEBUG - PTR print suppressed at workflow; state manager will emit gated proofs
+2025-10-09 08:21:41,287 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-10-09 08:21:41,288 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2025-10-09 08:21:41,288 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 1000
+2025-10-09 08:21:41,288 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2025-10-09 08:21:41,288 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-10-09 08:21:41,289 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2025-10-09 08:21:41,289 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2025-10-09 08:21:41,290 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resumption from index 10786
+2025-10-09 08:21:41,291 - utils.fixed_enhanced_state_manager - WARNING - ⚠️ Contradiction: is_fresh_start=True with non-zero progress; normalizing is_fresh_start=False
+2025-10-09 08:21:41,291 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:21:41,291 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:21:41,291 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:21:41,292 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:21:41,292 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:21:41,292 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:21:41,293 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:21:41,301 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-09 08:21:41,301 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:21:41,302 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:21:41,302 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2025-10-09 08:21:41,302 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-09 08:21:41,303 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-10-09 08:21:41,303 - PassiveExtractionWorkflow - INFO - 📋 LOADED STATE: phase=supplier cat=170/230 url= supplier=0/0 amazon=0/0
+2025-10-09 08:21:41,303 - PassiveExtractionWorkflow - INFO - 📋 AUTHORITATIVE RESUME: phase=supplier cat=170/230 url= supplier=0/0 amazon=0/0
+2025-10-09 08:21:41,303 - PassiveExtractionWorkflow - INFO - ✅ Processing state loaded - system will resume from last position
+2025-10-09 08:21:41,409 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10786 entries
+2025-10-09 08:21:41,687 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10310 EANs, 10702 URLs, 6769 ASINs in 0.278s
+2025-10-09 08:21:41,688 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10786 entries
+2025-10-09 08:21:41,688 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'list'>, length: 10786
+2025-10-09 08:21:41,781 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10235 products in poundwholesale-co-uk_products_cache.json
+2025-10-09 08:21:41,787 - PassiveExtractionWorkflow - INFO - [PHASE_COUNTS] lm_file=C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json lm_count=10786 cache_file=C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json cache_count=10235
+2025-10-09 08:21:41,788 - SentinelMonitor[poundwholesale.co.uk] - INFO - Sentinel: supplier_cache_vs_linking_map divergence 5.4% (linking=10786, cache=10235)
+2025-10-09 08:21:41,788 - PassiveExtractionWorkflow - INFO - 🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: 10786 > cache: 10235)
+2025-10-09 08:21:41,789 - PassiveExtractionWorkflow - INFO - ✅ System will start with first URL in config and skip already processed products
+2025-10-09 08:21:41,789 - PassiveExtractionWorkflow - INFO - ✅ RESUMPTION GUARD: reverse-gap detected but resume evidence exists (resume_idx=10786, frozen=False, phase=supplier)
+2025-10-09 08:21:41,790 - PassiveExtractionWorkflow - INFO - 🔄 Treating as GAP_PROCESSING to preserve resumption state
+2025-10-09 08:21:41,790 - utils.fixed_enhanced_state_manager - INFO - 🔄 PHASE TRANSITION: supplier → supplier
+2025-10-09 08:21:41,790 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:21:41,791 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:21:41,791 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:21:41,791 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:21:41,791 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:21:41,792 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:21:41,792 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:21:41,802 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (25 entries) saved successfully
+2025-10-09 08:21:41,803 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:21:41,804 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:21:41,804 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2025-10-09 08:21:41,804 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-09 08:21:41,804 - utils.fixed_enhanced_state_manager - INFO - ✅ RESUME HONORED: phase=supplier cat=170/230 prod=0/0 commit_type=PHASE_SWITCH
+2025-10-09 08:21:41,805 - utils.fixed_enhanced_state_manager - INFO - 📋 RESUME PROOF (PHASE_SWITCH): cat=170/230 prod=0/0 phase=supplier
+2025-10-09 08:21:41,805 - PassiveExtractionWorkflow - INFO - 🔍 STATE CONTRADICTION CHECK DEBUG:
+2025-10-09 08:21:41,805 - PassiveExtractionWorkflow - INFO -    is_fresh_start: False
+2025-10-09 08:21:41,806 - PassiveExtractionWorkflow - INFO -    successful_products: 10786
+2025-10-09 08:21:41,806 - PassiveExtractionWorkflow - INFO -    system_progression.persistent_category_index: 0
+2025-10-09 08:21:41,806 - PassiveExtractionWorkflow - INFO -    supplier_extraction.persistent_category_index: 170
+2025-10-09 08:21:41,806 - PassiveExtractionWorkflow - INFO -    supplier_extraction.categories_completed: 0 categories [TELEMETRY]
+2025-10-09 08:21:41,807 - PassiveExtractionWorkflow - INFO -    has_evidence_of_work: True
+2025-10-09 08:21:41,807 - PassiveExtractionWorkflow - INFO - ✅ No state contradiction - proceeding with start_processing() call...
+2025-10-09 08:21:41,807 - PassiveExtractionWorkflow - INFO - ✅ Processing state initialized and started
+2025-10-09 08:21:41,935 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk\linking_map.json with 10786 entries
+2025-10-09 08:21:42,212 - PassiveExtractionWorkflow - INFO - 🔥 HASH INDEX BUILT: 10310 EANs, 10702 URLs, 6769 ASINs in 0.276s
+2025-10-09 08:21:42,212 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES BUILT: Ready for O(1) lookups on 10786 entries
+2025-10-09 08:21:42,213 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-10-09 08:21:42,213 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-10-09 08:21:42,214 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 230 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-10-09 08:21:42,214 - PassiveExtractionWorkflow - INFO - 🌟 INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=1000
+2025-10-09 08:21:42,214 - PassiveExtractionWorkflow - INFO - 📋 Processing ALL 230 predefined categories (infinite mode)
+2025-10-09 08:21:42,214 - PassiveExtractionWorkflow - INFO - 🚫 HYBRID DISABLED FOR RESUME (phase-aware routing will handle resumption)
+2025-10-09 08:21:42,294 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10235 products in poundwholesale-co-uk_products_cache.json
+2025-10-09 08:21:42,298 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-10-09 08:21:42,298 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 230 categories
+2025-10-09 08:21:42,298 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 100
+2025-10-09 08:21:42,444 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10235 products in poundwholesale-co-uk_products_cache.json
+2025-10-09 08:21:42,547 - PassiveExtractionWorkflow - INFO - 📊 CACHE FOUND: 10235 products available for progress tracking
+2025-10-09 08:21:42,547 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 230 categories in 3 batches
+2025-10-09 08:21:42,548 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/3 (100 categories)
+2025-10-09 08:21:42,548 - PassiveExtractionWorkflow - INFO - 🔐 LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2025-10-09 08:21:42,549 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:42,549 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:42,549 - utils.browser_manager - INFO - ?? Navigating to https://www.poundwholesale.co.uk
+2025-10-09 08:21:44,215 - utils.browser_manager - INFO - ? Page ready for https://www.poundwholesale.co.uk
+2025-10-09 08:21:44,216 - tools.poundwholesale.supplier_authentication_service - INFO - 🔍 Checking current authentication status...
+2025-10-09 08:21:45,022 - tools.poundwholesale.supplier_authentication_service - INFO - ✅ Authentication confirmed via selector: .customer-welcome
+2025-10-09 08:21:45,022 - tools.poundwholesale.supplier_authentication_service - INFO - ✅ Already authenticated - no login required
+2025-10-09 08:21:45,022 - PassiveExtractionWorkflow - INFO - ✅ LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2025-10-09 08:21:45,024 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 1 (before resume point 170)
+2025-10-09 08:21:45,024 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 2 (before resume point 170)
+2025-10-09 08:21:45,024 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 3 (before resume point 170)
+2025-10-09 08:21:45,025 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 4 (before resume point 170)
+2025-10-09 08:21:45,025 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 5 (before resume point 170)
+2025-10-09 08:21:45,025 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 6 (before resume point 170)
+2025-10-09 08:21:45,025 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 7 (before resume point 170)
+2025-10-09 08:21:45,025 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 8 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 9 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 10 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 11 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 12 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 13 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 14 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 15 (before resume point 170)
+2025-10-09 08:21:45,026 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 16 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 17 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 18 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 19 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 20 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 21 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 22 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 23 (before resume point 170)
+2025-10-09 08:21:45,027 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 24 (before resume point 170)
+2025-10-09 08:21:45,028 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 25 (before resume point 170)
+2025-10-09 08:21:45,028 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 26 (before resume point 170)
+2025-10-09 08:21:45,028 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 27 (before resume point 170)
+2025-10-09 08:21:45,028 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 28 (before resume point 170)
+2025-10-09 08:21:45,028 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 29 (before resume point 170)
+2025-10-09 08:21:45,028 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 30 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 31 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 32 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 33 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 34 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 35 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 36 (before resume point 170)
+2025-10-09 08:21:45,029 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 37 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 38 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 39 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 40 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 41 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 42 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 43 (before resume point 170)
+2025-10-09 08:21:45,030 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 44 (before resume point 170)
+2025-10-09 08:21:45,031 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 45 (before resume point 170)
+2025-10-09 08:21:45,031 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 46 (before resume point 170)
+2025-10-09 08:21:45,031 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 47 (before resume point 170)
+2025-10-09 08:21:45,031 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 48 (before resume point 170)
+2025-10-09 08:21:45,031 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 49 (before resume point 170)
+2025-10-09 08:21:45,032 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 50 (before resume point 170)
+2025-10-09 08:21:45,032 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 51 (before resume point 170)
+2025-10-09 08:21:45,032 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 52 (before resume point 170)
+2025-10-09 08:21:45,032 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 53 (before resume point 170)
+2025-10-09 08:21:45,032 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 54 (before resume point 170)
+2025-10-09 08:21:45,032 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 55 (before resume point 170)
+2025-10-09 08:21:45,033 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 56 (before resume point 170)
+2025-10-09 08:21:45,033 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 57 (before resume point 170)
+2025-10-09 08:21:45,033 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 58 (before resume point 170)
+2025-10-09 08:21:45,033 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 59 (before resume point 170)
+2025-10-09 08:21:45,033 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 60 (before resume point 170)
+2025-10-09 08:21:45,033 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 61 (before resume point 170)
+2025-10-09 08:21:45,034 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 62 (before resume point 170)
+2025-10-09 08:21:45,034 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 63 (before resume point 170)
+2025-10-09 08:21:45,034 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 64 (before resume point 170)
+2025-10-09 08:21:45,034 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 65 (before resume point 170)
+2025-10-09 08:21:45,034 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 66 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 67 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 68 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 69 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 70 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 71 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 72 (before resume point 170)
+2025-10-09 08:21:45,035 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 73 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 74 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 75 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 76 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 77 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 78 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 79 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 80 (before resume point 170)
+2025-10-09 08:21:45,036 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 81 (before resume point 170)
+2025-10-09 08:21:45,037 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 82 (before resume point 170)
+2025-10-09 08:21:45,037 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 83 (before resume point 170)
+2025-10-09 08:21:45,037 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 84 (before resume point 170)
+2025-10-09 08:21:45,037 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 85 (before resume point 170)
+2025-10-09 08:21:45,037 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 86 (before resume point 170)
+2025-10-09 08:21:45,037 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 87 (before resume point 170)
+2025-10-09 08:21:45,038 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 88 (before resume point 170)
+2025-10-09 08:21:45,038 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 89 (before resume point 170)
+2025-10-09 08:21:45,038 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 90 (before resume point 170)
+2025-10-09 08:21:45,038 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 91 (before resume point 170)
+2025-10-09 08:21:45,038 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 92 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 93 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 94 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 95 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 96 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 97 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 98 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 99 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 100 (before resume point 170)
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - ✅ Completed batch 1: 0 total products extracted so far
+2025-10-09 08:21:45,039 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 2/3 (100 categories)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - ⏩ Skipping auth check (within cooldown window)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 101 (before resume point 170)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 102 (before resume point 170)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 103 (before resume point 170)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 104 (before resume point 170)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 105 (before resume point 170)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 106 (before resume point 170)
+2025-10-09 08:21:45,040 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 107 (before resume point 170)
+2025-10-09 08:21:45,041 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 108 (before resume point 170)
+2025-10-09 08:21:45,041 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 109 (before resume point 170)
+2025-10-09 08:21:45,041 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 110 (before resume point 170)
+2025-10-09 08:21:45,041 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 111 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 112 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 113 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 114 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 115 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 116 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 117 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 118 (before resume point 170)
+2025-10-09 08:21:45,042 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 119 (before resume point 170)
+2025-10-09 08:21:45,043 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 120 (before resume point 170)
+2025-10-09 08:21:45,043 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 121 (before resume point 170)
+2025-10-09 08:21:45,043 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 122 (before resume point 170)
+2025-10-09 08:21:45,043 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 123 (before resume point 170)
+2025-10-09 08:21:45,043 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 124 (before resume point 170)
+2025-10-09 08:21:45,044 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 125 (before resume point 170)
+2025-10-09 08:21:45,044 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 126 (before resume point 170)
+2025-10-09 08:21:45,044 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 127 (before resume point 170)
+2025-10-09 08:21:45,044 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 128 (before resume point 170)
+2025-10-09 08:21:45,044 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 129 (before resume point 170)
+2025-10-09 08:21:45,045 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 130 (before resume point 170)
+2025-10-09 08:21:45,045 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 131 (before resume point 170)
+2025-10-09 08:21:45,045 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 132 (before resume point 170)
+2025-10-09 08:21:45,045 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 133 (before resume point 170)
+2025-10-09 08:21:45,045 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 134 (before resume point 170)
+2025-10-09 08:21:45,046 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 135 (before resume point 170)
+2025-10-09 08:21:45,046 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 136 (before resume point 170)
+2025-10-09 08:21:45,046 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 137 (before resume point 170)
+2025-10-09 08:21:45,046 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 138 (before resume point 170)
+2025-10-09 08:21:45,046 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 139 (before resume point 170)
+2025-10-09 08:21:45,047 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 140 (before resume point 170)
+2025-10-09 08:21:45,047 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 141 (before resume point 170)
+2025-10-09 08:21:45,047 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 142 (before resume point 170)
+2025-10-09 08:21:45,047 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 143 (before resume point 170)
+2025-10-09 08:21:45,047 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 144 (before resume point 170)
+2025-10-09 08:21:45,048 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 145 (before resume point 170)
+2025-10-09 08:21:45,048 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 146 (before resume point 170)
+2025-10-09 08:21:45,048 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 147 (before resume point 170)
+2025-10-09 08:21:45,048 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 148 (before resume point 170)
+2025-10-09 08:21:45,048 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 149 (before resume point 170)
+2025-10-09 08:21:45,048 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 150 (before resume point 170)
+2025-10-09 08:21:45,049 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 151 (before resume point 170)
+2025-10-09 08:21:45,049 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 152 (before resume point 170)
+2025-10-09 08:21:45,049 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 153 (before resume point 170)
+2025-10-09 08:21:45,049 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 154 (before resume point 170)
+2025-10-09 08:21:45,049 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 155 (before resume point 170)
+2025-10-09 08:21:45,049 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 156 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 157 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 158 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 159 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 160 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 161 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 162 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 163 (before resume point 170)
+2025-10-09 08:21:45,050 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 164 (before resume point 170)
+2025-10-09 08:21:45,051 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 165 (before resume point 170)
+2025-10-09 08:21:45,051 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 166 (before resume point 170)
+2025-10-09 08:21:45,051 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 167 (before resume point 170)
+2025-10-09 08:21:45,051 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 168 (before resume point 170)
+2025-10-09 08:21:45,051 - PassiveExtractionWorkflow - INFO - 📋 SKIPPING category 169 (before resume point 170)
+2025-10-09 08:21:45,051 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:45,051 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:45,051 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:45,052 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments (attempt 1/3)
+2025-10-09 08:21:45,052 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:45,052 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:45,052 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:46,583 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments in 2.01s...
+2025-10-09 08:21:48,591 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments (attempt 2/3)
+2025-10-09 08:21:48,591 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:48,592 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:48,592 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:51,254 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:51,254 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:21:51,349 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments (Size: 726729 bytes)
+2025-10-09 08:21:51,514 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2025-10-09 08:21:51,590 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-10-09 08:21:51,590 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2
+2025-10-09 08:21:51,590 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2 (attempt 1/3)
+2025-10-09 08:21:51,591 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:51,591 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:51,591 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2
+2025-10-09 08:21:52,989 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2 in 2.04s...
+2025-10-09 08:21:55,040 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2 (attempt 2/3)
+2025-10-09 08:21:55,041 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:55,041 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:55,042 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2
+2025-10-09 08:21:57,046 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2
+2025-10-09 08:21:57,046 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2
+2025-10-09 08:21:57,135 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=2 (Size: 720423 bytes)
+2025-10-09 08:21:57,392 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-10-09 08:21:57,392 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3
+2025-10-09 08:21:57,392 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3 (attempt 1/3)
+2025-10-09 08:21:57,392 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:21:57,393 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:21:57,393 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3
+2025-10-09 08:21:58,944 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3 in 1.59s...
+2025-10-09 08:22:00,539 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3 (attempt 2/3)
+2025-10-09 08:22:00,540 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:00,540 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:00,540 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3
+2025-10-09 08:22:02,018 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3
+2025-10-09 08:22:02,018 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3
+2025-10-09 08:22:02,106 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=3 (Size: 715318 bytes)
+2025-10-09 08:22:02,317 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-10-09 08:22:02,318 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4
+2025-10-09 08:22:02,318 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4 (attempt 1/3)
+2025-10-09 08:22:02,318 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:02,319 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:02,319 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4
+2025-10-09 08:22:03,683 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4 in 1.52s...
+2025-10-09 08:22:05,208 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4 (attempt 2/3)
+2025-10-09 08:22:05,208 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:05,209 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:05,209 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4
+2025-10-09 08:22:07,174 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4
+2025-10-09 08:22:07,174 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4
+2025-10-09 08:22:07,274 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=4 (Size: 714406 bytes)
+2025-10-09 08:22:07,490 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-10-09 08:22:07,490 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5
+2025-10-09 08:22:07,490 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5 (attempt 1/3)
+2025-10-09 08:22:07,490 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:07,491 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:07,491 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5
+2025-10-09 08:22:09,042 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5 in 1.89s...
+2025-10-09 08:22:10,941 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5 (attempt 2/3)
+2025-10-09 08:22:10,942 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:10,942 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:10,942 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5
+2025-10-09 08:22:12,641 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5
+2025-10-09 08:22:12,642 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5
+2025-10-09 08:22:12,749 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=5 (Size: 704227 bytes)
+2025-10-09 08:22:12,975 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-10-09 08:22:12,975 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6
+2025-10-09 08:22:12,976 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6 (attempt 1/3)
+2025-10-09 08:22:12,976 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:12,976 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:12,977 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6
+2025-10-09 08:22:14,554 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6 in 2.03s...
+2025-10-09 08:22:16,593 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6 (attempt 2/3)
+2025-10-09 08:22:16,594 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:16,594 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:16,594 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6
+2025-10-09 08:22:19,485 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6
+2025-10-09 08:22:19,485 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6
+2025-10-09 08:22:19,584 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=6 (Size: 681746 bytes)
+2025-10-09 08:22:19,811 - configurable_supplier_scraper - INFO - Found 18 new product URLs on page 6
+2025-10-09 08:22:19,811 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7
+2025-10-09 08:22:19,811 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7 (attempt 1/3)
+2025-10-09 08:22:19,811 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:19,812 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:19,812 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7
+2025-10-09 08:22:21,150 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7 in 2.36s...
+2025-10-09 08:22:23,523 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7 (attempt 2/3)
+2025-10-09 08:22:23,524 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:23,524 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:23,524 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7
+2025-10-09 08:22:24,829 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7
+2025-10-09 08:22:24,830 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7
+2025-10-09 08:22:24,887 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/fasteners-assortments?p=7 (Size: 408363 bytes)
+2025-10-09 08:22:24,996 - configurable_supplier_scraper - INFO - No products found on page 7, stopping pagination
+2025-10-09 08:22:24,997 - configurable_supplier_scraper - INFO - Collected 118 total product URLs across 7 pages
+2025-10-09 08:22:24,997 - PassiveExtractionWorkflow - INFO - Discovered 118 product URLs for category: https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:22:25,002 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale.co.uk_diy_fasteners-assortments_manifest.json (5 entries) saved successfully
+2025-10-09 08:22:25,003 - PassiveExtractionWorkflow - INFO - 📝 MANIFEST CREATED: Saved 118 URLs to poundwholesale.co.uk_diy_fasteners-assortments_manifest.json
+2025-10-09 08:22:25,004 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:22:25,004 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:22:25,004 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:22:25,004 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:22:25,005 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:22:25,005 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:22:25,005 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:22:25,014 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-10-09 08:22:25,016 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:22:25,016 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:22:25,016 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=170/230 url=https://www.poundwholesale.co.uk/diy/fasteners-assortments prod_idx=0/118
+2025-10-09 08:22:25,017 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (freeze-category)
+2025-10-09 08:22:25,017 - utils.fixed_enhanced_state_manager - INFO - 🔒 FROZEN DENOMINATOR: Category https://www.poundwholesale.co.uk/diy/fasteners-assortments → 118 products (LOCKED)
+2025-10-09 08:22:25,018 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: Category 170 → 118 products (snapshot)
+2025-10-09 08:22:25,018 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:22:25,019 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:22:25,019 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:22:25,019 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:22:25,019 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:22:25,019 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:22:25,020 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:22:25,027 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-10-09 08:22:25,028 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:22:25,029 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:22:25,029 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=170/230 url=https://www.poundwholesale.co.uk/diy/fasteners-assortments prod_idx=0/118
+2025-10-09 08:22:25,029 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-09 08:22:25,029 - PassiveExtractionWorkflow - INFO - 🔒 TOTALS COMMITTED: Resume pointers now enabled
+2025-10-09 08:22:25,030 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-10-09 08:22:25,031 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 230 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\poundwholesale_categories.json
+2025-10-09 08:22:25,031 - utils.fixed_enhanced_state_manager - DEBUG - Category index unchanged: 170
+2025-10-09 08:22:25,032 - utils.fixed_enhanced_state_manager - INFO - ✅ PHASE PRESERVED: 'supplier' (loaded from state)
+2025-10-09 08:22:25,032 - utils.fixed_enhanced_state_manager - INFO - 🔄 RESUMPTION: Preserving per-category counters (reason: active_category=True, frozen=True) for https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:22:25,032 - utils.fixed_enhanced_state_manager - INFO - 📋 CATEGORY INIT COMPLETE:
+  PCI (persistent_category_index): 170
+  Phase (current_phase): supplier
+  Category URL: https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:22:25,033 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:22:25,033 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:22:25,033 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:22:25,034 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:22:25,034 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:22:25,034 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:22:25,035 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:22:25,045 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-10-09 08:22:25,047 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:22:25,047 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:22:25,048 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=170/230 url=https://www.poundwholesale.co.uk/diy/fasteners-assortments prod_idx=0/118
+2025-10-09 08:22:25,048 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (category-init)
+2025-10-09 08:22:25,049 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 70/100 in batch 2 (Category 171/230)
+2025-10-09 08:22:25,049 - PassiveExtractionWorkflow - INFO - PAGINATION[C171 fasteners-assortments]: pages=7 urls_page=20,20,20,20,20,18 total=118
+2025-10-09 08:22:25,050 - PassiveExtractionWorkflow - INFO - 🔗 DETAILED PRE-EXTRACTION FILTERING: Analyzing 118 collected URLs
+2025-10-09 08:22:25,260 - PassiveExtractionWorkflow - DEBUG - 🔗 UNIFIED FILTER: Loaded 10313 EANs and 10702 URLs from linking map
+2025-10-09 08:22:25,260 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-adhesive-chrome-utensil-hook-set-3pc
+2025-10-09 08:22:25,260 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/procamp-black-metal-carabiner-clips-4-pack
+2025-10-09 08:22:25,261 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-self-adhesive-stainless-steel-hook-set-3pc
+2025-10-09 08:22:25,261 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-diamond-burr-set-30pc
+2025-10-09 08:22:25,261 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-pcs-4-8mm-x-380mm-white-cable-ties
+2025-10-09 08:22:25,262 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-self-adhesive-stainless-steel-hooks-2-pack
+2025-10-09 08:22:25,262 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-piece-4-8mm-x-250mm-white-cable-ties
+2025-10-09 08:22:25,263 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-hose-clip-assortment-mega-pack-26pc
+2025-10-09 08:22:25,263 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-10-piece-9mm-x-500mm-white-cable-tie
+2025-10-09 08:22:25,264 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-adhesive-hook-set-6pc
+2025-10-09 08:22:25,264 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-piece-4-8mm-x-380mm-black-cable-ties
+2025-10-09 08:22:25,265 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-self-adhesive-hooks-20-pack
+2025-10-09 08:22:25,265 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-household-assortment-mega-pack-242pc
+2025-10-09 08:22:25,265 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-cable-ties-black-2-55mm-x-150mm
+2025-10-09 08:22:25,266 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-picture-hanging-kit
+2025-10-09 08:22:25,266 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-pcs-4-8mm-x-300mm-black-cable-ties
+2025-10-09 08:22:25,266 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-stix-damage-free-picture-hanging-strips-set-12pc
+2025-10-09 08:22:25,267 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-chrome-adhesive-hook-set-3pc
+2025-10-09 08:22:25,267 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-s-hooks-4-pack
+2025-10-09 08:22:25,267 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-clear-adhesive-hook-set-4pc
+2025-10-09 08:22:25,267 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-white-adhesive-hooks-2-pack
+2025-10-09 08:22:25,267 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-spare-brass-plated-grommets-10mm-50-pack
+2025-10-09 08:22:25,268 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-general-purpose-jumbo-hook
+2025-10-09 08:22:25,268 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-cable-ties-assorted-colours-300mm-50pc
+2025-10-09 08:22:25,268 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-piece-4-8mm-x-200mm-black-cable-ties
+2025-10-09 08:22:25,268 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-adhesive-clear-utensil-hook-set-3pc
+2025-10-09 08:22:25,269 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-storage-hook-assortment-8pc
+2025-10-09 08:22:25,269 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-picture-hanger-assortment-mega-pack-42pc
+2025-10-09 08:22:25,269 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-slide-self-adhesive-furniture-bumpers-6-pack
+2025-10-09 08:22:25,269 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/50pc-assorted-rubber-o-rings
+2025-10-09 08:22:25,269 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-nut-machine-screw-assortment-160-piece
+2025-10-09 08:22:25,270 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-s-hooks-3-pack
+2025-10-09 08:22:25,270 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-large-s-hooks-3pc
+2025-10-09 08:22:25,270 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-10-piece-9mm-x-500mm-black-cable-ties
+2025-10-09 08:22:25,270 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-general-purpose-hooks-2-pack
+2025-10-09 08:22:25,271 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-15pc-picture-hanging-set
+2025-10-09 08:22:25,271 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-white-adhesive-cable-hooks-6-pack
+2025-10-09 08:22:25,271 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-slide-self-adhesive-furniture-bumpers-2-pack
+2025-10-09 08:22:25,271 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-carabiner-clips-set-4pc
+2025-10-09 08:22:25,272 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-white-cable-ties-assorted-150pc
+2025-10-09 08:22:25,272 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-colour-coded-nylon-cable-ties-2-5-x-100mm-200pc
+2025-10-09 08:22:25,272 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-10-piece-xl-s-hook-set
+2025-10-09 08:22:25,273 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-damage-free-adhesive-picture-hooks-2pc
+2025-10-09 08:22:25,273 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-round-cable-clip-assortment-mega-pack-390pc
+2025-10-09 08:22:25,273 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-cable-ties-assorted-colours-120pc
+2025-10-09 08:22:25,273 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-jumbo-hook-with-adhesive-strip
+2025-10-09 08:22:25,274 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-piece-4-8mm-x-200mm-white-cable-ties
+2025-10-09 08:22:25,274 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-clear-adhesive-cable-hooks-6-pack
+2025-10-09 08:22:25,274 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/151-self-adhesive-white-plastic-hooks-12-pack
+2025-10-09 08:22:25,275 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-medium-clear-suction-hooks-12pc
+2025-10-09 08:22:25,275 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-key-ring-assortment-mega-pack-36pc
+2025-10-09 08:22:25,276 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-s-hooks-2-pack
+2025-10-09 08:22:25,276 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-250-piece-2-5mm-x-150mm-white-cable-ties
+2025-10-09 08:22:25,277 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-wood-screws-assortment-105pc
+2025-10-09 08:22:25,277 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-50pc-o-ring-assortment
+2025-10-09 08:22:25,278 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-hose-clamp-set-15-pack
+2025-10-09 08:22:25,278 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-galvanised-tool-hooks-5pc
+2025-10-09 08:22:25,279 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-self-adhesive-stainless-steel-hook-set-4pc
+2025-10-09 08:22:25,279 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-adhesive-white-utensil-hook-set-3pc
+2025-10-09 08:22:25,280 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-picture-hanging-assortment-mega-pack-200pc
+2025-10-09 08:22:25,280 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-mixed-nail-assortment-mega-pack-550pc
+2025-10-09 08:22:25,281 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-pvc-coated-utility-hooks-2pc
+2025-10-09 08:22:25,281 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-stix-damage-free-small-picture-hanging-strips-4-pack
+2025-10-09 08:22:25,282 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-cable-manager-assortment-mega-pack-71pc
+2025-10-09 08:22:25,282 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-3-in-1-adhesive-hanging-hook
+2025-10-09 08:22:25,283 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-assorted-cable-clips-100pc
+2025-10-09 08:22:25,283 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-chrome-adhesive-hook-set-4pc
+2025-10-09 08:22:25,284 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-250-piece-2-5mm-x-150mm-black-cable-ties
+2025-10-09 08:22:25,284 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-clear-adhesive-hooks-2-pack
+2025-10-09 08:22:25,284 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-assorted-hooks-eyes-set-20pc
+2025-10-09 08:22:25,285 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-snap-hook-set-assorted-colours-3pc
+2025-10-09 08:22:25,285 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-white-adhesive-hook-set-3pc
+2025-10-09 08:22:25,285 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-pcs-4-8mm-x-300mm-white-cable-ties
+2025-10-09 08:22:25,286 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-6-piece-9mm-x-1000mm-black-cable-tie
+2025-10-09 08:22:25,286 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-professional-organiser-187-x-118-x-32mm
+2025-10-09 08:22:25,286 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-clear-nylon-cable-ties-set-75pc
+2025-10-09 08:22:25,287 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/prima-stainless-steel-s-hook-6-pack
+2025-10-09 08:22:25,287 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-self-adhesive-hooks-12pc
+2025-10-09 08:22:25,287 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-anchors-tapping-screws-assortment-70pc
+2025-10-09 08:22:25,287 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-cable-ties-white-4-8mm-x-200mm
+2025-10-09 08:22:25,288 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/151-multipurpose-storage-hooks-2-pack
+2025-10-09 08:22:25,288 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-nail-carpet-tacks-assortment-310pc
+2025-10-09 08:22:25,288 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-clear-adhesive-cable-hooks-20-pack
+2025-10-09 08:22:25,289 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/secure-fix-small-clear-hooks-2-pack
+2025-10-09 08:22:25,289 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/151-87-piece-picture-hanging-kit
+2025-10-09 08:22:25,289 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-damage-free-adhesive-picture-hook
+2025-10-09 08:22:25,289 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-chipboard-screws-assortment-100pc
+2025-10-09 08:22:25,290 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-stix-damage-free-large-picture-hanging-strips-4-pack
+2025-10-09 08:22:25,291 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-chrome-adhesive-hooks-2-pack
+2025-10-09 08:22:25,291 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-flat-spring-washers-165pc
+2025-10-09 08:22:25,292 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-6-piece-9mm-x-1000mm-white-cable-ties
+2025-10-09 08:22:25,292 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-white-cable-ties-150mm-150pc
+2025-10-09 08:22:25,292 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-slide-assorted-adhesive-furniture-bumpers-44pc
+2025-10-09 08:22:25,293 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-brass-door-handles-10cm-4pc
+2025-10-09 08:22:25,293 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/procamp-large-s-camping-hooks-6-pack
+2025-10-09 08:22:25,293 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-flat-connector-plates-set-100-x-15mm-8pc
+2025-10-09 08:22:25,293 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-tapping-screws-assortment-100pc
+2025-10-09 08:22:25,294 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-assorted-cable-tie-set-100pc
+2025-10-09 08:22:25,294 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-self-adhesive-hooks-12pc
+2025-10-09 08:22:25,294 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-assorted-rivets-100pc
+2025-10-09 08:22:25,295 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-slide-assorted-adhesive-furniture-bumpers-78pc
+2025-10-09 08:22:25,295 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-snap-hook-carabiner-clip-set-3pc
+2025-10-09 08:22:25,296 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-chrome-jumbo-hook-with-adhesive-strip
+2025-10-09 08:22:25,296 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-clear-jumbo-hook-with-adhesive-strip
+2025-10-09 08:22:25,296 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-mixed-o-ring-assortment-125pc
+2025-10-09 08:22:25,297 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-100-piece-4-8mm-x-250mm-black-cable-ties
+2025-10-09 08:22:25,297 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-50-piece-high-vis-cable-ties
+2025-10-09 08:22:25,297 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-cable-ties-black-4-8mm-x-380mm
+2025-10-09 08:22:25,298 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/did-screw-in-cup-hooks-10pc
+2025-10-09 08:22:25,298 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-mixed-screw-hook-eye-assortment-mega-pack-125pc
+2025-10-09 08:22:25,299 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-gecko-grip-clear-adhesive-hook-set-3pc
+2025-10-09 08:22:25,299 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-20-piece-7-8mm-x-530mm-black-cable-ties
+2025-10-09 08:22:25,299 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-40mm-castor-wheel-set-4pc
+2025-10-09 08:22:25,300 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-2pc-general-purpose-hooks
+2025-10-09 08:22:25,300 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/dekton-mixed-heavy-duty-screw-hook-eye-assortment-mega-pack-151pc
+2025-10-09 08:22:25,301 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-hook-loop-sticky-pads-22mm-36-pack
+2025-10-09 08:22:25,301 - PassiveExtractionWorkflow - DEBUG - 🔗 URL-based linking map skip: https://www.poundwholesale.co.uk/marksman-tubular-double-hook
+2025-10-09 08:22:25,301 - PassiveExtractionWorkflow - INFO - 📊 LINKING MAP FILTER RESULTS:
+  Total URLs: 118
+  Skipped (in linking map): 117
+  Remaining for processing: 1
+2025-10-09 08:22:25,427 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 10235 products in poundwholesale-co-uk_products_cache.json
+2025-10-09 08:22:25,804 - PassiveExtractionWorkflow - DEBUG - 📊 Loaded 10235 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk_products_cache.json
+2025-10-09 08:22:25,804 - PassiveExtractionWorkflow - INFO - ✅ Product cache indexes built: keys=10229, url_idx=10235, ean_idx=9896
+2025-10-09 08:22:26,246 - PassiveExtractionWorkflow - INFO - ✅ Product cache indexes built: keys=10231, url_idx=10235, ean_idx=9897
+2025-10-09 08:22:26,247 - PassiveExtractionWorkflow - INFO - 🔗 STEP 1 - LINKING MAP CHECK: 117 complete (skipped)
+2025-10-09 08:22:26,247 - PassiveExtractionWorkflow - INFO - 💾 STEP 2 - PRODUCT CACHE CHECK (stable_key): 1 cached; 0 need extraction
+2025-10-09 08:22:26,247 - PassiveExtractionWorkflow - INFO - 🧮 Filter Invariant: in=118 == skip=117 + cached=1 + full=0
+2025-10-09 08:22:26,247 - PassiveExtractionWorkflow - INFO - ✅ FILTER INVARIANT VALIDATED:
+  in=118 == skip=117 + cached=1 + full=0
+2025-10-09 08:22:26,248 - PassiveExtractionWorkflow - INFO - 🔒 FROZEN DENOMINATOR: https://www.poundwholesale.co.uk/diy/fasteners-assortments = 118
+2025-10-09 08:22:26,248 - PassiveExtractionWorkflow - INFO - 🎯 RESUMING IN SUPPLIER PHASE:
+  Resume from product: 119
+  Skipping:
+    - 117 in linking map (already complete)
+    - 1 in cache (already extracted)
+  Products to process: 0
+2025-10-09 08:22:26,249 - PassiveExtractionWorkflow - INFO - 📋 FILE-BASED RESUME CALCULATION:
+  Phase (AUTHORITY): supplier
+  Category: https://www.poundwholesale.co.uk/diy/fasteners-assortments
+  Resume from product: 119
+  Denominator: 118
+  Evidence:
+    - Total URLs extracted: 118
+    - Linking map (skip): 117
+    - Supplier cache: 1
+    - Need full extraction: 0
+  Filter invariant: ✅ PASS
+  Worklist type: full_extraction
+  Worklist size: 0
+2025-10-09 08:22:26,249 - PassiveExtractionWorkflow - INFO - 📋 RESUME STATE: phase=supplier cat=170/230 url=https://www.poundwholesale.co.uk/diy/fasteners-assortments supplier=0/118 amazon=0/118
+2025-10-09 08:22:26,250 - PassiveExtractionWorkflow - INFO - 🔐 STEP-2 ALLOWED KEYS (category): 1 (amazon-only=1 + full=0)
+2025-10-09 08:22:26,250 - utils.fixed_enhanced_state_manager - WARNING - 🔒 FREEZE_GUARD_VIOLATION: Attempted re-freeze of https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:22:26,251 - utils.fixed_enhanced_state_manager - WARNING - 🔒 FREEZE_GUARD_VIOLATION: Attempted re-freeze of https://www.poundwholesale.co.uk/diy/fasteners-assortments
+2025-10-09 08:22:26,251 - PassiveExtractionWorkflow - INFO - 📊 WORK DEFINED (resume): denominators frozen → supplier=118, amazon=118
+2025-10-09 08:22:26,251 - PassiveExtractionWorkflow - INFO - ✅ SKIP_ENTIRELY (117): ['https://www.poundwholesale.co.uk/dekton-gecko-grip-adhesive-chrome-utensil-hook-set-3pc', 'https://www.poundwholesale.co.uk/procamp-black-metal-carabiner-clips-4-pack', 'https://www.poundwholesale.co.uk/dekton-gecko-grip-self-adhesive-stainless-steel-hook-set-3pc', 'https://www.poundwholesale.co.uk/marksman-diamond-burr-set-30pc', 'https://www.poundwholesale.co.uk/dekton-100-pcs-4-8mm-x-380mm-white-cable-ties']...
+2025-10-09 08:22:26,252 - PassiveExtractionWorkflow - INFO - 🚀 NEEDS_AMAZON_ONLY (1): ['https://www.poundwholesale.co.uk/marksman-tool-hooks-4-set-3pc']
+2025-10-09 08:22:26,252 - PassiveExtractionWorkflow - INFO - 📈 FILTERING EFFICIENCY: 117/118 = 99.2% already processed
+2025-10-09 08:22:26,253 - PassiveExtractionWorkflow - INFO - 💾 CACHE UTILIZATION: 1/118 = 0.8% have supplier data
+2025-10-09 08:22:26,253 - PassiveExtractionWorkflow - INFO - 📊 EXTRACTION NEEDED: 0/118 = 0.0% need fresh extraction
+2025-10-09 08:22:26,253 - PassiveExtractionWorkflow - INFO - ✅ NO EXTRACTION NEEDED: All products are either already processed or have cached supplier data
+2025-10-09 08:22:26,254 - PassiveExtractionWorkflow - INFO - 📋 AMAZON ANALYSIS NEEDED: 1 products (already filtered by pre-extraction)
+2025-10-09 08:22:26,255 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:22:26,255 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:22:26,255 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:22:26,256 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:22:26,256 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:22:26,257 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:22:26,257 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:22:26,266 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-10-09 08:22:26,267 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:22:26,267 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:22:26,268 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=170/230 url=https://www.poundwholesale.co.uk/diy/fasteners-assortments prod_idx=0/118
+2025-10-09 08:22:26,268 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (update-current-category-url)
+2025-10-09 08:22:26,270 - PassiveExtractionWorkflow - INFO - 🔒 B.3_USING EXISTING FROZEN DENOMINATOR: https://www.poundwholesale.co.uk/diy/fasteners-assortments → 118 products
+2025-10-09 08:22:26,270 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE START: preserve=True, startup_completed=True
+2025-10-09 08:22:26,271 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Timestamp updated
+2025-10-09 08:22:26,272 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2025-10-09 08:22:26,272 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+2025-10-09 08:22:26,273 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+2025-10-09 08:22:26,273 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2025-10-09 08:22:26,274 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2025-10-09 08:22:26,283 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk_processing_state.json (27 entries) saved successfully
+2025-10-09 08:22:26,284 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2025-10-09 08:22:26,284 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk_processing_state.json
+2025-10-09 08:22:26,285 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=170/230 url=https://www.poundwholesale.co.uk/diy/fasteners-assortments prod_idx=0/118
+2025-10-09 08:22:26,286 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+2025-10-09 08:22:26,286 - utils.fixed_enhanced_state_manager - INFO - FIRST_AFTER_RESUME_KEY phase=supplier cat=170 prod=0 denom=118
+2025-10-09 08:22:26,287 - utils.fixed_enhanced_state_manager - INFO - METRIC name=resume_proof_emitted_total value=1 phase=supplier type=first_after_resume
+2025-10-09 08:22:26,287 - utils.fixed_enhanced_state_manager - DEBUG - STATE: entered runtime phase
+2025-10-09 08:22:26,288 - PassiveExtractionWorkflow - INFO - 🧬 LINEAGE: manifest=d1acab0ed7fffee590022adcc5031222a477abb67c6944c231be5bf285c41841 cat_url=https://www.poundwholesale.co.uk/diy/fasteners-assortments total=118
+2025-10-09 08:22:26,288 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/diy/fasteners-assortments: Found 118 products across 7 pages.
+2025-10-09 08:22:26,289 - PassiveExtractionWorkflow - INFO - 📊 Category completed: 0 raw products extracted, 0 total products accumulated
+2025-10-09 08:22:26,290 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:26,290 - PassiveExtractionWorkflow - WARNING - ⚠️ PCI/URL mismatch at entry: pci=170 expected=https://www.poundwholesale.co.uk/diy/fasteners-assortments actual=https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating (aligning PCI to i=171)
+2025-10-09 08:22:26,290 - PassiveExtractionWorkflow - INFO - 🔍 CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)
+2025-10-09 08:22:26,291 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:26,291 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:26,291 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating (attempt 1/3)
+2025-10-09 08:22:26,292 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:26,293 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:26,293 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:27,863 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating in 1.95s...
+2025-10-09 08:22:29,826 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating (attempt 2/3)
+2025-10-09 08:22:29,827 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:29,827 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:29,827 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:32,583 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:32,583 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating
+2025-10-09 08:22:32,678 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating (Size: 728296 bytes)
+2025-10-09 08:22:32,922 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 1
+2025-10-09 08:22:32,922 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2
+2025-10-09 08:22:32,922 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2 (attempt 1/3)
+2025-10-09 08:22:32,923 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:32,923 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:32,923 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2
+2025-10-09 08:22:34,457 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2 in 1.98s...
+2025-10-09 08:22:36,444 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2 (attempt 2/3)
+2025-10-09 08:22:36,445 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:36,445 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:36,445 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2
+2025-10-09 08:22:39,380 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2
+2025-10-09 08:22:39,380 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2
+2025-10-09 08:22:39,494 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=2 (Size: 739236 bytes)
+2025-10-09 08:22:39,737 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 2
+2025-10-09 08:22:39,737 - configurable_supplier_scraper - INFO - Processing page 3: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3
+2025-10-09 08:22:39,738 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3 (attempt 1/3)
+2025-10-09 08:22:39,738 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:39,738 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:39,739 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3
+2025-10-09 08:22:41,285 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3 in 1.60s...
+2025-10-09 08:22:42,889 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3 (attempt 2/3)
+2025-10-09 08:22:42,890 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:42,890 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:42,891 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3
+2025-10-09 08:22:44,376 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3
+2025-10-09 08:22:44,376 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3
+2025-10-09 08:22:44,480 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=3 (Size: 723584 bytes)
+2025-10-09 08:22:44,753 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 3
+2025-10-09 08:22:44,754 - configurable_supplier_scraper - INFO - Processing page 4: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4
+2025-10-09 08:22:44,754 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4 (attempt 1/3)
+2025-10-09 08:22:44,755 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:44,755 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:44,755 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4
+2025-10-09 08:22:46,353 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4 in 2.25s...
+2025-10-09 08:22:48,603 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4 (attempt 2/3)
+2025-10-09 08:22:48,603 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:48,604 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:48,604 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4
+2025-10-09 08:22:50,099 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4
+2025-10-09 08:22:50,100 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4
+2025-10-09 08:22:50,216 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=4 (Size: 739441 bytes)
+2025-10-09 08:22:50,593 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 4
+2025-10-09 08:22:50,593 - configurable_supplier_scraper - INFO - Processing page 5: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5
+2025-10-09 08:22:50,594 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5 (attempt 1/3)
+2025-10-09 08:22:50,594 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:50,594 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:50,594 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5
+2025-10-09 08:22:52,131 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5 in 2.31s...
+2025-10-09 08:22:54,438 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5 (attempt 2/3)
+2025-10-09 08:22:54,438 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:54,439 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:54,439 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5
+2025-10-09 08:22:57,034 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5
+2025-10-09 08:22:57,034 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5
+2025-10-09 08:22:57,131 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=5 (Size: 722138 bytes)
+2025-10-09 08:22:57,354 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 5
+2025-10-09 08:22:57,355 - configurable_supplier_scraper - INFO - Processing page 6: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6
+2025-10-09 08:22:57,355 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6 (attempt 1/3)
+2025-10-09 08:22:57,355 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:22:57,356 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:22:57,356 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6
+2025-10-09 08:22:58,901 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6 in 1.75s...
+2025-10-09 08:23:00,658 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6 (attempt 2/3)
+2025-10-09 08:23:00,659 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:00,659 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:00,659 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6
+2025-10-09 08:23:02,214 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6
+2025-10-09 08:23:02,214 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6
+2025-10-09 08:23:02,316 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=6 (Size: 723871 bytes)
+2025-10-09 08:23:02,569 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 6
+2025-10-09 08:23:02,570 - configurable_supplier_scraper - INFO - Processing page 7: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7
+2025-10-09 08:23:02,570 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7 (attempt 1/3)
+2025-10-09 08:23:02,570 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:02,570 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:02,571 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7
+2025-10-09 08:23:04,108 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7 in 1.55s...
+2025-10-09 08:23:05,662 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7 (attempt 2/3)
+2025-10-09 08:23:05,662 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:05,663 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:05,663 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7
+2025-10-09 08:23:08,162 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7
+2025-10-09 08:23:08,162 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7
+2025-10-09 08:23:08,251 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=7 (Size: 726140 bytes)
+2025-10-09 08:23:08,443 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 7
+2025-10-09 08:23:08,444 - configurable_supplier_scraper - INFO - Processing page 8: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8
+2025-10-09 08:23:08,444 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8 (attempt 1/3)
+2025-10-09 08:23:08,444 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:08,445 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:08,445 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8
+2025-10-09 08:23:10,102 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8 in 2.30s...
+2025-10-09 08:23:12,412 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8 (attempt 2/3)
+2025-10-09 08:23:12,412 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:12,413 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:12,413 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8
+2025-10-09 08:23:14,560 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8
+2025-10-09 08:23:14,560 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8
+2025-10-09 08:23:14,653 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=8 (Size: 718519 bytes)
+2025-10-09 08:23:14,899 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 8
+2025-10-09 08:23:14,899 - configurable_supplier_scraper - INFO - Processing page 9: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9
+2025-10-09 08:23:14,900 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9 (attempt 1/3)
+2025-10-09 08:23:14,900 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:14,900 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:14,900 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9
+2025-10-09 08:23:16,449 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9 in 1.64s...
+2025-10-09 08:23:18,097 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9 (attempt 2/3)
+2025-10-09 08:23:18,097 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:18,098 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:18,098 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9
+2025-10-09 08:23:20,960 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9
+2025-10-09 08:23:20,961 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9
+2025-10-09 08:23:21,092 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=9 (Size: 731216 bytes)
+2025-10-09 08:23:21,340 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 9
+2025-10-09 08:23:21,341 - configurable_supplier_scraper - INFO - Processing page 10: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10
+2025-10-09 08:23:21,341 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10 (attempt 1/3)
+2025-10-09 08:23:21,342 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:21,342 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:21,342 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10
+2025-10-09 08:23:22,946 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10 in 1.82s...
+2025-10-09 08:23:24,776 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10 (attempt 2/3)
+2025-10-09 08:23:24,777 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:24,777 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:24,777 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10
+2025-10-09 08:23:26,862 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10
+2025-10-09 08:23:26,863 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10
+2025-10-09 08:23:26,957 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=10 (Size: 727781 bytes)
+2025-10-09 08:23:27,215 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 10
+2025-10-09 08:23:27,216 - configurable_supplier_scraper - INFO - Processing page 11: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11
+2025-10-09 08:23:27,216 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11 (attempt 1/3)
+2025-10-09 08:23:27,216 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:27,217 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:27,217 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11
+2025-10-09 08:23:28,731 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11 in 1.93s...
+2025-10-09 08:23:30,669 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11 (attempt 2/3)
+2025-10-09 08:23:30,670 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:30,670 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:30,670 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11
+2025-10-09 08:23:31,961 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11
+2025-10-09 08:23:31,961 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11
+2025-10-09 08:23:32,061 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=11 (Size: 728839 bytes)
+2025-10-09 08:23:32,321 - configurable_supplier_scraper - INFO - Found 20 new product URLs on page 11
+2025-10-09 08:23:32,321 - configurable_supplier_scraper - INFO - Processing page 12: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=12
+2025-10-09 08:23:32,321 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=12 (attempt 1/3)
+2025-10-09 08:23:32,321 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2025-10-09 08:23:32,322 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2025-10-09 08:23:32,322 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/diy/wholesale-painting-decorating?p=12
+2025-10-09 08:23:32,491 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser
+2025-10-09 08:23:32,493 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

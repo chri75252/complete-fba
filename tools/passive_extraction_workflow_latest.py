@@ -103,14 +103,16 @@ from openai import OpenAI
 
 # Import URL normalization
 try:
-    from utils.normalization import normalize_url, stable_key
+    from utils.normalization import normalize_url, stable_key, normalize_ean
 except ImportError:
     try:
-        from ..utils.normalization import normalize_url
+        from ..utils.normalization import normalize_url, normalize_ean
     except ImportError:
         # Fallback function
         def normalize_url(url: str) -> str:
             return url.lower().rstrip('/')
+        def normalize_ean(ean: str) -> str:
+            return str(ean).strip() if ean else None
 
 # Import required custom modules
 # FIXED: Change relative imports to absolute imports when running as standalone script
@@ -1446,31 +1448,8 @@ class PassiveExtractionWorkflow:
         except Exception as e:
             self.log.warning(f"⚠️ Could not initialize state manager with totals: {e}")
 
-        # 🚨 SURGICAL FIX: Perform startup analysis to detect reverse gap scenario
-        if hasattr(self.state_manager, "perform_startup_analysis"):
-            try:
-                self.state_manager.perform_startup_analysis()
-                self.log.info("✅ Startup analysis performed - gap processing detection initialized")
-            except Exception as e:
-                self.log.warning(f"⚠️ Startup analysis failed: {e}")
-        else:
-            # Fallback: manually update gap processing status
-            if hasattr(self.state_manager, "state_data"):
-                gap_data = self.state_manager.state_data.setdefault("gap_processing", {})
-                gap_data["startup_analysis_completed"] = True
-                # Check linking map vs cache to set reverse gap detection
-                linking_map_count = self.state_manager.state_data.get("runtime_settings", {}).get(
-                    "linking_map_count", 0
-                )
-                supplier_cache_count = self.state_manager.state_data.get(
-                    "runtime_settings", {}
-                ).get("supplier_cache_count", 0)
-                if linking_map_count > supplier_cache_count:
-                    gap_data["reverse_gap_detected"] = True
-                    gap_data["phase"] = "reverse_gap_fresh_categories"
-                    self.log.info(
-                        f"🔄 REVERSE GAP DETECTED: Linking map ({linking_map_count}) > Cache ({supplier_cache_count})"
-                    )
+        # 🚨 PRIMARY BUG FIX: perform_startup_analysis() moved to run() method AFTER load_state()
+        # This ensures the analysis runs on the actual persisted state, not an empty default state.
 
         # 🔧 CRITICAL FIX: Validate category count consistency across all sources
         if hasattr(self.state_manager, "validate_category_count_consistency"):
@@ -2050,190 +2029,29 @@ class PassiveExtractionWorkflow:
         self.log.info(f"   supplier_extraction_batch_size: {supplier_extraction_batch_size}")
         self.log.info(f"   max_categories_per_request: {max_categories_per_request}")
 
-        # Load state and linking map
-        self.state_manager.load_state()
-        
-        # ✅ RESUME PROOF ENABLEMENT: Ensure frozen totals committed for resume banners
-        try:
-            sp_startup = (self.state_manager.state_data or {}).get("system_progression", {}) or {}
-            has_existing_denominators = (
-                int(sp_startup.get("supplier_products_needing_extraction", 0) or 0) > 0 or
-                int(sp_startup.get("amazon_products_needing_analysis", 0) or 0) > 0
-            )
+        # 🚨 CENTRALIZED STARTUP: Single authoritative entry point for all state initialization
+        # This replaces ALL previous conflicting startup logic (load_state, perform_startup_analysis,
+        # phase detection, resumption guards, contradiction checks, etc.)
+        start_category_index = self.state_manager.initialize_workflow_session()
 
-            if has_existing_denominators and hasattr(self.state_manager, "mark_frozen_totals_committed"):
-                if not sp_startup.get("frozen_totals_committed", False):
-                    self.state_manager.mark_frozen_totals_committed()
-                    self.log.info("✅ STARTUP: Frozen totals committed → resume proofs enabled")
-                else:
-                    self.log.info("✅ STARTUP: Frozen totals already committed → resume proofs active")
-        except Exception as e:
-            self.log.warning(f"[resume-enablement] Could not verify frozen totals: {e}")
-        # Run validation with off-by-one clamping before computing resume/slicing
-        if hasattr(self.state_manager, "validate_loaded_state"):
-            try:
-                self.state_manager.validate_loaded_state()
-            except Exception:
-                pass
-        elif hasattr(self.state_manager, "validate_and_repair_state"):
-            try:
-                self.state_manager.validate_and_repair_state()
-            except Exception:
-                pass
-        # Categories are already frozen above - no need for duplicate legacy calls
+        # 🎯 FIX C: Index binding with MAX logic - ensures PCI never decreases
+        sp = self.state_manager.state_data.get("system_progression", {})
+        pci = int(sp.get("persistent_category_index", 1) or 1)
+        cursor = int(self.state_manager.state_data.get("session_resume_cursor") or pci or 1)
+        self._start_category_index = max(pci, cursor)  # FIX C: Use MAX for monotonicity preservation
 
+        resume_phase = sp.get("current_phase", "supplier")
+
+        # 🎯 FIX E: Enhanced observability - show both PCI and cursor
+        self.log.info(f"🎯 WORKFLOW START CURSOR: category_index={self._start_category_index} (pci={pci}, cursor={cursor}, max={max(pci, cursor)})")
+        self.log.info(
+            f"✅ WORKFLOW INITIALIZED: Starting from category {self._start_category_index} in phase '{resume_phase}'"
+        )
+
+        # Load consecutive failures counter from state
         self.consecutive_amazon_price_misses = self.state_manager.state_data.get(
             "consecutive_amazon_price_misses", 0
         )
-        self.log.info(f"📋 Loaded existing processing state for {self.supplier_name}")
-        # Resume banner with frozen denominator
-        try:
-            sp = self.state_manager.state_data.get("system_progression", {})
-            total_cats = sp.get("total_categories") or self._authoritative_total_categories()
-            if self.system_config.get("resume", {}).get("banner_enabled", True):
-                # 📋 AUTHORITATIVE RESUME: Single source of truth for all progress tracking
-                self.log.info(
-                    "📋 AUTHORITATIVE RESUME: phase=%s cat=%d/%d url=%s supplier=%d/%d amazon=%d/%d",
-                    sp.get("current_phase", "unknown"),
-                    int(sp.get("persistent_category_index", 1)),
-                    int(sp.get("total_categories", 0)),
-                    sp.get("current_category_url", ""),
-                    int(sp.get("supplier_products_completed", 0)),
-                    int(sp.get("supplier_products_needing_extraction", 0)),
-                    int(sp.get("amazon_products_completed", 0)),
-                    int(sp.get("amazon_products_needing_analysis", 0)),
-                )
-        except Exception:
-            pass
-
-        # 🚨 REMOVED: Hard reset logic removed per user request - was causing incorrect cache validation
-        # System will now always attempt to resume from processing state without validation conflicts
-        self.log.info("✅ Processing state loaded - system will resume from last position")
-
-        # Load the linking map for the current supplier
-        self.linking_map = self._load_linking_map(self.supplier_name)
-        self.log.debug(
-            f"🔍 DEBUG: linking_map loaded as type: {type(self.linking_map)}, length: {len(self.linking_map)}"
-        )
-
-        # 🚨 CRITICAL: Two-Phase Detection Logic - Find actual supplier cache file
-        supplier_cache_file, supplier_cache_count = self._find_actual_supplier_cache_file(
-            self.supplier_name
-        )
-        supplier_cache_exists = bool(supplier_cache_file)
-
-        # 🚨 FIX 2: Store total cache count for proper state updates
-        self.total_cache_count = supplier_cache_count
-
-        linking_map_count = len(self.linking_map) if self.linking_map else 0
-
-        # MD refs: surgical_implementation_guide_with_complete_analysis.md §Phase Detection
-        # Log file-grounded counts for phase detection verification
-        lm_path = self._get_linking_map_path_for_supplier(self.supplier_name)
-        self.log.info(f"[PHASE_COUNTS] lm_file={lm_path} lm_count={linking_map_count} cache_file={supplier_cache_file} cache_count={supplier_cache_count}")
-
-        # 🚨 SENTINEL MONITORING: Check for session vs global totals divergence
-        self.sentinel_monitor.check_totals_divergence(
-            linking_map_count, supplier_cache_count, "supplier_cache_vs_linking_map"
-        )
-
-        # Phase detection logic - FIXED to handle reverse gap scenario correctly
-        if supplier_cache_count == 0:
-            current_phase = "SUPPLIER_EXTRACTION"
-            self.log.info(f"🔍 PHASE DETECTION: SUPPLIER_EXTRACTION (no supplier cache found)")
-        elif linking_map_count == 0:
-            current_phase = "AMAZON_ANALYSIS"
-            self.log.info(
-                f"🔍 PHASE DETECTION: AMAZON_ANALYSIS (supplier cache: {supplier_cache_count} products, no linking map)"
-            )
-        elif linking_map_count > supplier_cache_count:
-            # REVERSE GAP: More linking map entries than cache entries
-            current_phase = "FRESH_CATEGORIES"
-            self.log.info(
-                f"🔍 PHASE DETECTION: FRESH_CATEGORIES (reverse gap - linking map: {linking_map_count} > cache: {supplier_cache_count})"
-            )
-            self.log.info(
-                "✅ System will start with first URL in config and skip already processed products"
-            )
-        elif linking_map_count < supplier_cache_count:
-            # NORMAL GAP: More cache entries than linking map entries
-            current_phase = "GAP_PROCESSING"
-            gap_size = supplier_cache_count - linking_map_count
-            self.log.info(
-                f"🔍 PHASE DETECTION: GAP_PROCESSING (normal gap - cache: {supplier_cache_count} > linking map: {linking_map_count})"
-            )
-            self.log.info(f"📊 GAP SIZE: {gap_size} products need Amazon analysis first")
-        else:
-            current_phase = "COMPLETED"
-            self.log.info(
-                f"🔍 PHASE DETECTION: COMPLETED (supplier: {supplier_cache_count}, linking map: {linking_map_count})"
-            )
-
-        self.current_phase = current_phase
-
-        config_hash = str(hash(str(self.system_config)))
-        runtime_settings = {
-            "max_products_to_process": max_products_to_process,
-            "max_products_per_category": max_products_per_category,
-            "current_phase": current_phase,
-            "supplier_cache_count": supplier_cache_count,
-            "linking_map_count": linking_map_count,
-        }
-        # 🚨 SURGICAL WORKFLOW FIX: STATE CONTRADICTION GUARDRAIL (ENHANCED)
-        # Fixed to read from correct state tracking system and add comprehensive debug logging
-        current_state = self.state_manager.state_data
-        is_fresh_start_flag = current_state.get("is_fresh_start", True)
-        successful_products = current_state.get("successful_products", 0)
-
-        # Check BOTH tracking systems for evidence of work (dual tracking fix)
-        system_progression = current_state.get("system_progression", {})
-        # Legacy subtree must not be consulted; use clean progress_display only
-        supplier_extraction = {}
-
-        # System progression tracking
-        system_category = system_progression.get("current_category_index")
-
-        # Supplier extraction tracking (more reliable for detecting actual work)
-        # Use the new system_progression structure instead of legacy resume pointer
-        supplier_category = start_category_index
-        completed_categories = []
-
-        # Enhanced evidence detection using authoritative sources only
-        has_evidence_of_work = (
-            successful_products > 0
-            or (system_category is not None and system_category > 0)
-            or supplier_category > 0
-            # 🚨 REMOVED: completed_categories control flow (violates audit rules)
-            # Only use indexes, linking map, product cache, and Amazon cache for control flow
-        )
-
-        # Debug logging to show actual state values being read
-        self.log.info("🔍 STATE CONTRADICTION CHECK DEBUG:")
-        self.log.info(f"   is_fresh_start: {is_fresh_start_flag}")
-        self.log.info(f"   successful_products: {successful_products}")
-        self.log.info(f"   system_progression.persistent_category_index: {system_category}")
-        self.log.info(f"   supplier_extraction.persistent_category_index: {supplier_category}")
-        # 🚨 TELEMETRY ONLY: completed_categories for logging purposes only
-        self.log.info(
-            f"   supplier_extraction.categories_completed: {len(completed_categories)} categories [TELEMETRY]"
-        )
-        self.log.info(f"   has_evidence_of_work: {has_evidence_of_work}")
-
-        if is_fresh_start_flag and has_evidence_of_work:
-            self.log.warning(
-                "🚨 STATE CONTRADICTION DETECTED - PREVENTING start_processing() CALL..."
-            )
-            self.log.warning(
-                f"   Fresh start flag=True but evidence shows {successful_products} successful products"
-            )
-            # 🚨 TELEMETRY ONLY: Don't use completed_categories count for control flow
-            self.log.warning(f"   with working category processing status [TELEMETRY]")
-            self.state_manager.state_data["is_fresh_start"] = False
-            self.log.info("✅ State contradiction resolved - preserved existing progress")
-        else:
-            self.log.info("✅ No state contradiction - proceeding with start_processing() call...")
-            self.state_manager.start_processing(config_hash, runtime_settings)
-            self.log.info("✅ Processing state initialized and started")
 
         try:
             # Note: Supplier configuration is loaded automatically by ConfigurableSupplierScraper
@@ -3432,7 +3250,6 @@ class PassiveExtractionWorkflow:
         self, supplier_name: str, category_url: str, urls: List[str]
     ) -> str:
         """Persist the ground-truth list of product URLs for a category with atomic write using WindowsSaveGuardian."""
-        from utils.normalization import normalize_url, stable_key
         from utils.windows_save_guardian import WindowsSaveGuardian
         import re
 
@@ -3543,7 +3360,6 @@ class PassiveExtractionWorkflow:
         search_method: str = "unknown",
     ) -> Dict[str, Any]:
         """Create a normalized linking map entry with consistent EAN and URL normalization."""
-        from utils.normalization import normalize_url, stable_key, normalize_ean
 
         # Extract and normalize EAN
         supplier_ean = product_data.get("ean") or product_data.get("barcode")
@@ -5104,24 +4920,7 @@ Return ONLY valid JSON, no additional text."""
 
         # Proceed with normal supplier scraping with batching
         # supplier_extraction_batch_size is now passed as a parameter
-
-        # 🚨 PHASE RESET FIX: Switch phase to supplier but preserve index for resumption
-        # Only reset index if this is truly a fresh start, not a resumption
-        sp = self.state_manager.state_data.get("system_progression", {})
-        has_previous_progress = (
-            int(sp.get("supplier_products_completed", 0)) > 0 or
-            int(sp.get("amazon_products_completed", 0)) > 0 or
-            int(sp.get("persistent_category_index", 1)) > 1
-        )
-        
-        if has_previous_progress:
-            # Resumption scenario - preserve indices
-            self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=False)
-            self.log.info("🔄 RESUMPTION: Phase switched to supplier with index preservation")
-        else:
-            # Fresh start scenario - reset indices
-            self.state_manager.commit_phase_switch(new_phase="supplier", reset_index=True)
-            self.log.info("🆕 FRESH START: Phase switched to supplier with index reset")
+        # (Phase switch logic now handled correctly in run() method at line ~2187)
 
         # Startup sequence visibility: warn if totals were never committed
         if not self.state_manager.state_data.get("system_progression", {}).get("frozen_totals_committed"):
@@ -5158,9 +4957,15 @@ Return ONLY valid JSON, no additional text."""
 
         # Store as instance variable for progress callback access
         self._current_all_products = all_products
+
+        # 🎯 REVISED: Start enumeration from cursor, not from beginning
+        # Use cursor-adjusted category URLs starting from session_resume_cursor
+        cursor_urls = category_urls[self._start_category_index-1:]  # Adjust for 1-based indexing
+        self.log.info(f"🎯 ENUMERATING FROM CURSOR: {len(cursor_urls)} categories starting from index {self._start_category_index}")
+
         category_batches = [
-            category_urls[i : i + supplier_extraction_batch_size]
-            for i in range(0, len(category_urls), supplier_extraction_batch_size)
+            cursor_urls[i : i + supplier_extraction_batch_size]
+            for i in range(0, len(cursor_urls), supplier_extraction_batch_size)
         ]
 
         # Get progress tracking configuration
@@ -5170,10 +4975,12 @@ Return ONLY valid JSON, no additional text."""
 
         # Initialize extraction progress tracking
 
+        # Keep track of absolute indices for state management
+        self._category_index_offset = self._start_category_index - 1
 
         if progress_config.get("enabled", True):
             self.log.info(
-                f"📊 PROGRESS TRACKING: Extracting from {len(category_urls)} categories in {len(category_batches)} batches"
+                f"📊 PROGRESS TRACKING: Extracting from {len(cursor_urls)} categories in {len(category_batches)} batches"
             )
 
         for batch_num, category_batch in enumerate(category_batches, 1):
@@ -5203,9 +5010,11 @@ Return ONLY valid JSON, no additional text."""
                 absolute_cat_index = self._category_index_map.get(normalize_url(category_url), 1)
                 self._current_absolute_cat_index = absolute_cat_index
                 self._current_category_url = category_url
+                
+                # 🚨 FIX D: Category skip logic - skip already processed categories
                 if absolute_cat_index < getattr(self, "_start_category_index", 1):
                     self.log.info(
-                        f"📋 SKIPPING category {absolute_cat_index} (before resume point {getattr(self, '_start_category_index', 1)})"
+                        f"⏭️ SKIP: Category {absolute_cat_index} < start {getattr(self, '_start_category_index', 1)} (already processed)"
                     )
                     continue
 
@@ -5290,14 +5099,12 @@ Return ONLY valid JSON, no additional text."""
                     "supplier_name": self.supplier_name,
                 }
 
-                # Use an atomic save operation if available, otherwise a standard one.
-                # Assuming an atomic saver exists on self.state_manager._atomic_writer or similar.
-                try:
-                    from utils.atomic_file_operations import save_json_atomic
-                    save_json_atomic(manifest_path, manifest_obj)
+                # 🚨 FIX #4: Use Windows-safe WindowsSaveGuardian instead of Unix-specific fcntl
+                success = self.save_guardian.save_json_atomic(manifest_path, manifest_obj)
+                if success:
                     self.log.info(f"📝 MANIFEST CREATED: Saved {len(manifest_urls)} URLs to {manifest_path.name}")
-                except Exception as e:
-                    self.log.error(f"Failed to save manifest for {category_url}: {e}")
+                else:
+                    self.log.error(f"❌ Failed to save manifest for {category_url}")
 
                 # 2. Freeze the denominator if it's not already frozen
                 discovered_count = len(manifest_urls)
@@ -5319,7 +5126,10 @@ Return ONLY valid JSON, no additional text."""
 
                 # Update detailed progress tracking AFTER denominators are frozen
                 if progress_config.get("enabled", True):
+                    # 🎯 REVISED: Calculate category index with cursor offset
                     category_index = absolute_cat_index + 1
+                    display_category_index = (self._category_index_offset + subcategory_index)
+
                     # Initialize category tracking for precise resumption
                     # MD refs: comprehensive_legacy_processing_and_phase_detection_analysis_report.md §Category Indexing
                     # Use the absolute index without off-by-one adjustment for proper state tracking
@@ -5328,6 +5138,9 @@ Return ONLY valid JSON, no additional text."""
                         category_url=category_url,
                         total_categories=self._authoritative_total_categories(),
                     )
+
+                    # 🎯 LOGGING: Add cursor-aware logging
+                    self.log.info(f"🎯 CATEGORY PROCESSING: abs_index={absolute_cat_index}, display_index={display_category_index}, url={category_url[:50]}...")
                     # 🚨 MIGRATION: Removed legacy writer - using atomic commits only
 
                     if progress_config.get("progress_display", {}).get(
@@ -5402,53 +5215,68 @@ Return ONLY valid JSON, no additional text."""
                     f"🔗 UNIFIED FILTER: Loaded {len(processed_eans)} EANs and {len(processed_urls)} URLs from linking map"
                 )
 
-                # Filter URLs against linking map (SKIP_ENTIRELY)
+                # ✅ USER REQUIREMENT: EAN-first linking map filtering
+                # Products in linking map are skipped completely (no supplier extraction)
                 skip_entirely_urls = []
                 remaining_after_linking_map = []
 
+                # Build cache indexes if not already available for EAN lookup
+                if not hasattr(self, "product_cache_ean_index") or not hasattr(
+                    self, "product_cache_url_index"
+                ):
+                    cached_products = self._load_supplier_cache(supplier_name)
+                    if cached_products:
+                        # Canonicalize supplier cache snapshot and legacy alias
+                        self.cached_products = cached_products or []
+                        self.product_cache = self.cached_products
+                        # 🚨 RC-3 FIX: Use canonical normalization for consistent filtering
+                        self.product_cache_ean_index = {
+                            p.get("ean"): p for p in self.cached_products if p.get("ean")
+                        }
+                        self.product_cache_url_index = {
+                            normalize_url(p.get("url")): p for p in self.cached_products if p.get("url")  # Canonical normalization
+                        }
+                        self.log.info(
+                            f"✅ Product cache URL/EAN indexes built: url_idx={len(self.product_cache_url_index)}, ean_idx={len(self.product_cache_ean_index)}"
+                        )
+
                 for url in urls_for_manifest:
-                    # 🚨 RC-3 FIX: Use canonical normalization for consistent filtering
-                    normalized_url = normalize_url(url)  # Canonical normalization
-                    # Primary check: URL-based filtering (always available)
-                    if normalized_url in processed_urls:
+                    # Canonical normalization
+                    normalized_url = normalize_url(url)
+
+                    # Get EAN from product cache if available
+                    product_ean = None
+                    if hasattr(self, "product_cache_url_index"):
+                        p_for_ean = self.product_cache_url_index.get(normalized_url)
+                        if p_for_ean:
+                            product_ean = p_for_ean.get("ean")
+
+                    # ✅ EAN-first linking map check (primary skip condition)
+                    skip_due_to_linking_map = False
+
+                    # PRIMARY CHECK: EAN-based filtering (if EAN available)
+                    if product_ean and product_ean in processed_eans:
                         skip_entirely_urls.append(url)
-                    else:
-                        # 🚨 ENHANCEMENT: Try EAN-based filtering if product cache is available
-                        # Load product from cache to get EAN for enhanced filtering
-                        product_ean = None
+                        skip_due_to_linking_map = True
+                        self.log.debug(f"🔗 EAN-based linking map skip: {url} (EAN: {product_ean})")
 
-                        # Build cache indexes if not already available
-                        if not hasattr(self, "product_cache_ean_index") or not hasattr(
-                            self, "product_cache_url_index"
-                        ):
-                            cached_products = self._load_supplier_cache(supplier_name)
-                            if cached_products:
-                                # Canonicalize supplier cache snapshot and legacy alias
-                                self.cached_products = cached_products or []
-                                self.product_cache = self.cached_products
-                                # 🚨 RC-3 FIX: Use canonical normalization for consistent filtering
-                                self.product_cache_ean_index = {
-                                    p.get("ean"): p for p in self.cached_products if p.get("ean")
-                                }
-                                self.product_cache_url_index = {
-                                    normalize_url(p.get("url")): p for p in self.cached_products if p.get("url")  # Canonical normalization
-                                }
-                                self.log.info(
-                                    f"✅ Product cache URL/EAN indexes built: url_idx={len(self.product_cache_url_index)}, ean_idx={len(self.product_cache_ean_index)}"
-                                )
+                    # SECONDARY CHECK: URL-based filtering (fallback)
+                    elif normalized_url in processed_urls:
+                        skip_entirely_urls.append(url)
+                        skip_due_to_linking_map = True
+                        self.log.debug(f"🔗 URL-based linking map skip: {url}")
 
-                        # Get product EAN from cache if available
-                        if hasattr(self, "product_cache_url_index"):
-                            p_for_ean = self.product_cache_url_index.get(normalized_url)
-                            if p_for_ean:
-                                product_ean = p_for_ean.get("ean")  # Use normalized URL
+                    # Product not in linking map - needs processing
+                    if not skip_due_to_linking_map:
+                        remaining_after_linking_map.append(url)
 
-                        # Secondary check: EAN-based filtering (when available)
-                        if product_ean and product_ean in processed_eans:
-                            skip_entirely_urls.append(url)
-                            self.log.debug(f"🔗 EAN-based skip: {url} (EAN: {product_ean})")
-                        else:
-                            remaining_after_linking_map.append(url)
+                # Log filter results
+                self.log.info(
+                    f"📊 LINKING MAP FILTER RESULTS:\n"
+                    f"  Total URLs: {len(urls_for_manifest)}\n"
+                    f"  Skipped (in linking map): {len(skip_entirely_urls)}\n"
+                    f"  Remaining for processing: {len(remaining_after_linking_map)}"
+                )
 
                 # STEP 2: PRODUCT CACHE FILTERING (canonical)
                 self._ensure_product_cache_indexes(supplier_name)
@@ -5494,6 +5322,118 @@ Return ONLY valid JSON, no additional text."""
                     f"skip={len(skip_entirely_urls)} + cached={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)}"
                 )
 
+                # ═══════════════════════════════════════════════════════════════════
+                # ✅ USER REQUIREMENT: RESUME POSITION CALCULATION (File-Based Authority)
+                # ═══════════════════════════════════════════════════════════════════
+
+                # Get persisted phase (AUTHORITY for resume routing)
+                sp = self.state_manager.state_data.get("system_progression", {})
+                persisted_phase = sp.get("current_phase", "supplier")
+
+                # Calculate counts from filter outputs (already computed above)
+                in_count = len(urls_for_manifest)          # Total extracted URLs
+                skip_count = len(skip_entirely_urls)       # In linking map (skip)
+                cached_count = len(needs_amazon_only_urls)  # In cache (amazon-only)
+                full_count = len(needs_full_extraction_urls)  # Need full extraction
+
+                # ✅ VALIDATION: Filter invariant check (enhanced with pass/fail)
+                filter_invariant_holds = (in_count == skip_count + cached_count + full_count)
+
+                if not filter_invariant_holds:
+                    self.log.error(
+                        f"🚨 FILTER INVARIANT VIOLATION:\n"
+                        f"  in={in_count} != skip={skip_count} + cached={cached_count} + full={full_count}\n"
+                        f"  Difference: {in_count - (skip_count + cached_count + full_count)}"
+                    )
+                else:
+                    self.log.info(
+                        f"✅ FILTER INVARIANT VALIDATED:\n"
+                        f"  in={in_count} == skip={skip_count} + cached={cached_count} + full={full_count}"
+                    )
+
+                # ✅ USER REQUIREMENT: Set denominators from filter (both phases use same)
+                sp["supplier_products_needing_extraction"] = in_count
+                sp["amazon_products_needing_analysis"] = in_count
+
+                # ✅ FROZEN DENOMINATOR: Store for validation (non-mutating)
+                frozen_denominators = sp.setdefault("frozen_category_denominators", {})
+                category_url_normalized = normalize_url(category_url)
+
+                if category_url_normalized not in frozen_denominators:
+                    # First time seeing this category - freeze
+                    frozen_denominators[category_url_normalized] = in_count
+                    self.log.info(f"🔒 FROZEN DENOMINATOR: {category_url_normalized} = {in_count}")
+                else:
+                    # Validation: Check if denominator changed
+                    frozen_value = frozen_denominators[category_url_normalized]
+                    if frozen_value != in_count:
+                        self.log.warning(
+                            f"⚠️ DENOMINATOR DRIFT DETECTED:\n"
+                            f"  Category: {category_url_normalized}\n"
+                            f"  Frozen: {frozen_value}\n"
+                            f"  Current: {in_count}\n"
+                            f"  Using current value (website may have changed)"
+                        )
+
+                # ✅ RESUME START CALCULATION (Phase-Aware)
+                if persisted_phase == "amazon_analysis":
+                    # Amazon phase: Resume after last linking map entry
+                    resume_start_index = skip_count + 1
+                    worklist_type = "amazon_only"
+                    worklist = needs_amazon_only_urls
+
+                    self.log.info(
+                        f"🎯 RESUMING IN AMAZON PHASE:\n"
+                        f"  Resume from product: {resume_start_index} (after {skip_count} in linking map)\n"
+                        f"  Products to process: {len(worklist)}\n"
+                        f"  Supplier phase: COMPLETE (phase authority)"
+                    )
+
+                else:  # supplier phase
+                    # ✅ USER REQUIREMENT: Skip cached + linking map products
+                    resume_start_index = cached_count + skip_count + 1
+                    worklist_type = "full_extraction"
+                    worklist = needs_full_extraction_urls
+
+                    self.log.info(
+                        f"🎯 RESUMING IN SUPPLIER PHASE:\n"
+                        f"  Resume from product: {resume_start_index}\n"
+                        f"  Skipping:\n"
+                        f"    - {skip_count} in linking map (already complete)\n"
+                        f"    - {cached_count} in cache (already extracted)\n"
+                        f"  Products to process: {len(worklist)}"
+                    )
+
+                # ✅ COMPREHENSIVE RESUME EVIDENCE LOG
+                self.log.info(
+                    f"📋 FILE-BASED RESUME CALCULATION:\n"
+                    f"  Phase (AUTHORITY): {persisted_phase}\n"
+                    f"  Category: {category_url_normalized}\n"
+                    f"  Resume from product: {resume_start_index}\n"
+                    f"  Denominator: {in_count}\n"
+                    f"  Evidence:\n"
+                    f"    - Total URLs extracted: {in_count}\n"
+                    f"    - Linking map (skip): {skip_count}\n"
+                    f"    - Supplier cache: {cached_count}\n"
+                    f"    - Need full extraction: {full_count}\n"
+                    f"  Filter invariant: {'✅ PASS' if filter_invariant_holds else '❌ FAIL'}\n"
+                    f"  Worklist type: {worklist_type}\n"
+                    f"  Worklist size: {len(worklist)}"
+                )
+
+                # 📋 RESUME STATE: Values that will drive routing (after init + filter)
+                self.log.info(
+                    "📋 RESUME STATE: phase=%s cat=%d/%d url=%s supplier=%d/%d amazon=%d/%d",
+                    persisted_phase,
+                    int(sp.get("persistent_category_index", 1)),
+                    int(sp.get("total_categories", 0)),
+                    category_url_normalized,
+                    int(sp.get("supplier_products_completed", 0)),
+                    in_count,  # Using file-based denominator
+                    int(sp.get("amazon_products_completed", 0)),
+                    in_count,  # Using file-based denominator
+                )
+
                 # 🔐 STEP-2 ALLOW-LIST for Amazon phase
                 # Include BOTH sets so Amazon phase targets (amazon-only ∪ full-extraction) for THIS category.
                 try:
@@ -5528,17 +5468,11 @@ Return ONLY valid JSON, no additional text."""
                     self.log.info("🟦 Empty category after filters → marking complete and advancing PCI")
                     self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     continue
-                
-                # Set the frozen denominators up-front so Amazon never stays at 0
-                try:
-                    self.state_manager.set_frozen_denominator(
-                        category_url,
-                        discovered_count=len(needs_full_extraction_urls),
-                        manifest_urls=urls_for_manifest,
-                    )
-                except Exception as e:
-                    self.log.warning(f"⚠️ set_frozen_denominator failed ({e}); will fall back to commit-time freeze")
-                
+
+                # ✅ LAYER_1_FIX: First duplicate freeze removed - denominator already frozen at manifest generation (line 5108)
+                # Original code attempted re-freeze using len(needs_full_extraction_urls)=2 instead of discovered_count=58
+                # This caused 96.6% data loss (56/58 products marked complete prematurely)
+
                 supplier_total = len(needs_full_extraction_urls)
                 amazon_total = len(needs_amazon_only_urls) + supplier_total
                 if supplier_total == 0 and amazon_total == 0:
@@ -5549,16 +5483,9 @@ Return ONLY valid JSON, no additional text."""
                 # 🚨 CAPTURE METRICS: Persist denominators ONCE per category; do not overwrite on resume
                 sp = self.state_manager.state_data.setdefault("system_progression", {})
 
-                # Freeze with explicit, post-filter totals to avoid wrong Amazon denominators
-                try:
-                    self.state_manager.set_frozen_denominator(
-                        category_url=category_url,
-                        discovered_count=supplier_total,            # supplier baseline
-                        manifest_urls=None,                         # do not infer amazon from manifest here
-                        amazon_total=amazon_total                   # explicit Amazon denominator
-                    )
-                except Exception as e:
-                    self.log.warning(f"⚠️ post-filter freeze failed: {e} (continuing)")
+                # ✅ LAYER_1_FIX: Second duplicate freeze removed - denominator already frozen at manifest generation
+                # Original code attempted another re-freeze with post-filter totals
+                # Both duplicate freezes have been removed - single freeze at line 5108 is authoritative
 
                 frozen = bool(sp.get("category_denominator_frozen", False))
                 prior_work = (int(sp.get("supplier_products_completed", 0)) > 0
@@ -6030,7 +5957,8 @@ Return ONLY valid JSON, no additional text."""
 
         # 🔧 Backfill cached "amazon-only" products the scraper did not touch (no supplier re-scrape)
         try:
-            from utils.normalization import normalize_url as _norm_url, stable_key as _stable_key
+            _norm_url = normalize_url
+            _stable_key = stable_key
         except Exception:  # fail-safe normalizers
             _norm_url = lambda u: (u or "").strip()
             _stable_key = lambda u, e: f"url:{u}|ean:{e or ''}"
@@ -7252,7 +7180,6 @@ Return ONLY valid JSON, no additional text."""
         """Finalize category processing and advance persistent_category_index"""
         try:
             # Normalize URL for consistency
-            from utils.normalization import normalize_url
             normalized_url = normalize_url(category_url)
         except Exception:
             normalized_url = str(category_url)
@@ -7538,9 +7465,8 @@ Return ONLY valid JSON, no additional text."""
                 for i, category_url in enumerate(chunk_categories):
                     category_index = chunk_start + i + 1  # 1-based category index
                     try:
-                        from utils.normalization import normalize_url
                         self.state_manager.mark_category_completed(
-                            normalize_url(category_url), 
+                            normalize_url(category_url),
                             category_index
                         )
                         self.state_manager.save_state_atomic("workflow-category-complete")

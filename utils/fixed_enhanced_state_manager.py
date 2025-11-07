@@ -230,47 +230,57 @@ class FixedEnhancedStateManager:
             "frozen_category_denominators": {},
         }
 
-    def _detect_actual_fresh_start(self):
-        """Enhanced fresh start detection with processed product validation"""
+      # 🚨 REVERTED: The _detect_actual_fresh_start method was fundamentally flawed.
+    # Fresh start detection is now handled directly and simply within load_state().
 
-        flag_fresh_start = self.state_data.get("is_fresh_start", True)
-        successful_products = self.state_data.get("successful_products", 0)
-        global_counters = self.state_data.get("global_counters", {})
-        total_processed = global_counters.get("total_products_processed", 0)
-        system_progression = self.state_data.get("system_progression", {})
+    def initialize_workflow_session(self) -> int:
+        """
+        🚨 PRIMARY ENTRY POINT: Single, authoritative method for starting or resuming a workflow.
 
-        # 🎯 1-BASED PCI SYSTEM: Default to 1 instead of 0 to match human-readable logs
-        current_category = int(system_progression.get("persistent_category_index", 1) or 1)
-        supplier_completed = int(system_progression.get("supplier_products_completed", 0) or 0)
-        amazon_completed = int(system_progression.get("amazon_products_completed", 0) or 0)
+        This is the ONLY method that should be called at workflow startup. It:
+        1. Loads state from disk
+        2. Performs startup analysis on the loaded state
+        3. Returns the authoritative start category index
 
-        actual_fresh_start = (
-            successful_products == 0
-            and total_processed == 0
-            and current_category == 0
-            and supplier_completed == 0
-            and amazon_completed == 0
+        This replaces ALL conflicting startup logic in the workflow.
+
+        Returns:
+            int: The category index to start/resume from (1-based)
+        """
+        log.info("🚀 INITIALIZING WORKFLOW SESSION...")
+
+        # Block any pointer writes until startup analysis is finished
+        self.state_data["startup_completed"] = False
+
+        # Step 1: Load the state from disk. This sets the is_fresh_start flag.
+        self.load_state()
+        log.info("✅ State loaded from disk.")
+
+        # Step 2: Perform startup analysis on the now-loaded data.
+        self.perform_startup_analysis()
+        log.info("✅ Startup analysis complete.")
+
+        # Step 3: Return the authoritative starting point
+        sp = self.state_data.get("system_progression", {})
+        start_category_index = int(sp.get("persistent_category_index", 1) or 1)
+        current_phase = sp.get("current_phase", "supplier")
+
+        log.info(
+            f"🎯 AUTHORITATIVE START POSITION: Category {start_category_index} in phase '{current_phase}'"
         )
 
-        if flag_fresh_start != actual_fresh_start:
-            log.warning(
-                f"🚨 FRESH START CONTRADICTION DETECTED: "
-                f"flag={flag_fresh_start} actual={actual_fresh_start} "
-                f"products={successful_products} processed={total_processed} "
-                f"category_index={current_category} supplier_completed={supplier_completed} "
-                f"amazon_completed={amazon_completed}"
-            )
-            self.state_data["is_fresh_start"] = actual_fresh_start
-
-        return actual_fresh_start
+        return start_category_index
 
     def load_state(self) -> bool:
         """
         Load existing state from file, with backward compatibility
-        Returns True if state was loaded, False if starting fresh
+        Returns True if state was loaded (resumption), False if starting fresh
+        Sets authoritative is_fresh_start flag on self.state_data
         """
         if not self.state_file_path.exists():
             log.info(f"No existing state file found for {self.supplier_name}, starting fresh")
+            self.state_data = self._get_default_state()
+            self.state_data['is_fresh_start'] = True  # Authoritative flag
             return False
 
         try:
@@ -286,7 +296,7 @@ class FixedEnhancedStateManager:
                 self._merge_state_data(loaded_data)
 
             log.info(
-                f"Loaded state for {self.supplier_name} - resumption from index {self.state_data['resumption_index']}"
+                f"Loaded state for {self.supplier_name} - resumption from index {self.state_data.get('resumption_index', 0)}"
             )
             # 🧹 MIGRATION SCRUB: remove legacy subtree if present
             if isinstance(self.state_data, dict) and "supplier_extraction_progress" in self.state_data:
@@ -296,10 +306,14 @@ class FixedEnhancedStateManager:
                     self.save_state_atomic()
                 except Exception as e:
                     log.warning(f"⚠️ Could not remove legacy subtree: {e}")
+
+            self.state_data['is_fresh_start'] = False  # Authoritative flag
             return True
 
         except Exception as e:
             log.warning(f"Failed to load state file: {e}, starting fresh")
+            self.state_data = self._get_default_state()
+            self.state_data['is_fresh_start'] = True  # Authoritative flag
             return False
 
     def _migrate_legacy_state(self, legacy_data: Dict[str, Any]):
@@ -343,10 +357,13 @@ class FixedEnhancedStateManager:
             sp["persistent_category_index"] = sp["current_category_index"]
             log.info(f"🔍 CATEGORY_INDEX_TRACKER: Migrated current_category_index ({sp['current_category_index']}) to persistent_category_index")
         elif "persistent_category_index" not in sp:
-            # Initialize both fields to 1 (1-based system)
-            sp["persistent_category_index"] = 1
-            sp["current_category_index"] = 1
-            log.info("🔍 CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (1-based system)")
+            # 🚨 FIX B: PCI hardening - only default to 1 on fresh start
+            if self.state_data.get("is_fresh_start", False):
+                sp["persistent_category_index"] = 1
+                sp["current_category_index"] = 1
+                log.info("🔍 CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (fresh start)")
+            else:
+                log.warning("⚠️ PCI MISSING ON RESUME: Preserving existing state and not defaulting to 1")
 
         # 🚨 CROSS-RUN MONOTONICITY GUARD: Validate resumption pointer never decreases between runs
         self._validate_cross_run_monotonicity()
@@ -434,7 +451,7 @@ class FixedEnhancedStateManager:
 
         if regression_detected:
             self.log.warning(
-                "?? CORRECTED CROSS-RUN REGRESSION: Restored progress to stay within frozen denominator bounds."
+                "?? DISPLAY COUNTER CLAMPED: Session counters adjusted for observability. Authoritative resume uses file-based state (linking map + cache), not these display values."
             )
 
 
@@ -467,7 +484,24 @@ class FixedEnhancedStateManager:
             self.state_data.setdefault("gap_processing", {})["reverse_gap_detected"] = False
             self.state_data["resume_reason"] = "system_progression"
             log.info(f"RESUME DECISION: START_AT_INDEX={start_at} (reason: system_progression)")
-        # 🚨 REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
+
+            # 🚨 FINAL FIX: Use the authoritative flag from load_state() to gate category calculation.
+            sp = self.state_data.setdefault("system_progression", {})
+            is_fresh_start = self.state_data.get('is_fresh_start', False)
+            log.info(f"🔍 STARTUP CHECK: is_fresh_start flag is '{is_fresh_start}'")
+
+            # NEW: never mutate PCI from counts; compute only a session cursor by URL status
+            if not is_fresh_start:
+                manifest_urls = self._get_frozen_or_live_manifest_urls()
+                completion = file_grounded_data.get("category_completion_status", {})
+                self.state_data["session_resume_cursor"] = self._first_incomplete_index_by_url(manifest_urls, completion, hint=sp.get("persistent_category_index", 1))
+                cursor_url = manifest_urls[self.state_data["session_resume_cursor"]-1] if self.state_data["session_resume_cursor"] <= len(manifest_urls) else "N/A"
+                log.info(f"🎯 START MODE: is_fresh_start=False, pci={sp.get('persistent_category_index', 1)}, session_cursor={self.state_data['session_resume_cursor']}, url={cursor_url[:80]}...")
+            else:
+                self.state_data["session_resume_cursor"] = 1
+                cursor_url = manifest_urls[0] if manifest_urls else "N/A"
+                log.info(f"🎯 START MODE: is_fresh_start=True, pci={sp.get('persistent_category_index', 1)}, session_cursor={self.state_data['session_resume_cursor']}, url={cursor_url[:80]}...")
+            # 🚨 REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
         elif file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
             log.info(
                 f"🔄 REVERSE GAP DETECTED: Linking map ({file_grounded_data['linking_map_count']}) > Cache ({file_grounded_data['total_products']})"
@@ -486,20 +520,11 @@ class FixedEnhancedStateManager:
                 )
             elif current_resumption_index == 0:
                 # If resumption_index is 0, check if this is truly a fresh start or a restart
-                # 🚨 FIX 1: Use enhanced fresh start detection instead of manual logic
-                is_actual_fresh_start = self._detect_actual_fresh_start()
-
-                if not is_actual_fresh_start:
-                    # This appears to be a restart, not a fresh start - preserve some progress
-                    log.warning(
-                        f"🔄 REVERSE GAP: Detected restart with resumption_index=0 but previous state exists - preserving index"
-                    )
-                    self.state_data["resume_reason"] = "reverse_gap_restart_preserved"
-                else:
-                    # Truly fresh start
-                    self.state_data["resumption_index"] = 0
-                    self.state_data["resume_reason"] = "reverse_gap_fresh_start"
-                    log.info(f"✅ REVERSE GAP: Fresh start confirmed - resumption_index = 0")
+                # 🚨 REVERTED: This logic was using the flawed _detect_actual_fresh_start method
+                # Simple approach: if resumption_index is 0, treat as fresh start for reverse gap processing
+                self.state_data["resumption_index"] = 0
+                self.state_data["resume_reason"] = "reverse_gap_fresh_start"
+                log.info(f"✅ REVERSE GAP: Fresh start confirmed - resumption_index = 0")
             else:
                 # Preserve existing resume index to avoid restarting from first category
                 log.warning(
@@ -545,8 +570,23 @@ class FixedEnhancedStateManager:
         self._startup_completed = True
         self.state_data["gap_processing"]["startup_analysis_completed"] = True
 
-        # Save the startup analysis results
+        # 🎯 FINAL STARTUP AUTHORIZATION: Now allow pointer fields to be persisted
+        sp = self.state_data.setdefault("system_progression", {})
+        cursor = int(self.state_data.get("session_resume_cursor", 1) or 1)
+        urls = self._get_frozen_or_live_manifest_urls()
+
+        # Set the authoritative start position for display purposes only
+        sp["current_category_index"] = cursor
+        sp["current_category_url"] = urls[cursor-1] if urls and 1 <= cursor <= len(urls) else ""
+
+        # Mark startup as completed for pointer gating
+        self.state_data["startup_completed"] = True
+
+        # Final safe save with pointer fields
         self.save_state(preserve_interruption_state=False)
+
+        log.info(f"🎯 AUTHORITATIVE START POSITION: Category {cursor} in phase '{sp.get('current_phase','supplier')}'")
+        log.info(f"🎯 STARTUP GATING COMPLETE: session_cursor={cursor}, startup_completed=True")
 
         log.info("✅ STARTUP ANALYSIS: Completed comprehensive state analysis")
         return self.state_data.get("gap_processing", {}).get("category_completion_status", {})
@@ -654,9 +694,7 @@ class FixedEnhancedStateManager:
                 f"🔍 REAL-TIME DISCOVERY: Category {category_url[:50]}... discovered {discovered_count} products (was {current_total})"
             )
 
-            # Use normalized URL for consistent key comparison
-            from utils.normalization import normalize_url
-
+            # Use normalized URL for consistent key comparison (using module-level import)
             normalized_category_url = normalize_url(category_url)
 
             # Update the category completion status if it exists
@@ -697,8 +735,8 @@ class FixedEnhancedStateManager:
     def update_current_category_url(self, normalized_url: str) -> None:
         """Authoritatively set the current category URL in system_progression."""
         sp = self.state_data.setdefault("system_progression", {})
+        # 🚨 FIX #2: Use module-level import instead of function-scoped to avoid UnboundLocalError
         try:
-            from utils.normalization import normalize_url
             nurl = normalize_url(normalized_url)
         except Exception:
             nurl = str(normalized_url)
@@ -735,12 +773,18 @@ class FixedEnhancedStateManager:
         Set frozen denominator with guard against multiple freezes.
 
         Returns:
-            bool: True if freeze was applied, False if already frozen
+            bool: True if freeze was applied
+
+        Raises:
+            ValueError: If category denominator is already frozen (LAYER_2_FIX)
         """
-        # Guard: only allow first freeze for this category
+        # ✅ LAYER_2_FIX: Strengthen freeze guard - enforce with exception instead of advisory return
+        # Original guard logged warning but returned False (advisory only)
+        # Now raises ValueError to prevent silent corruption
         if self.is_category_denominator_frozen(category_url):
-            self.log.warning(f"🔒 FREEZE_GUARD_VIOLATION: Attempted re-freeze of {category_url}")
-            return False
+            error_msg = f"🔒 FREEZE_GUARD_VIOLATION: Category {category_url} already frozen - denominator is immutable"
+            self.log.error(error_msg)
+            raise ValueError(error_msg)
 
         sp = self.state_data.setdefault("system_progression", {})
         try:
@@ -769,8 +813,107 @@ class FixedEnhancedStateManager:
         if manifest_urls:
             sp["current_manifest_hash"] = self.canonical_manifest_hash(manifest_urls)
 
+            # Freeze/validate manifest with ordered URLs and hash
+            from datetime import datetime, timezone
+            import hashlib
+
+            sp.setdefault("categories_manifest", {})
+            if not sp["categories_manifest"].get("urls"):
+                # First time: freeze the manifest order
+                sp["categories_manifest"] = {
+                    "urls": manifest_urls,
+                    "hash": self.canonical_manifest_hash(manifest_urls),
+                    "frozen_at": datetime.now(timezone.utc).isoformat(),
+                }
+                log.info(f"🧊 FROZEN CATEGORY MANIFEST: {len(manifest_urls)} URLs (hash: {sp['categories_manifest']['hash'][:8]}...)")
+            else:
+                # Check for manifest drift
+                live_hash = self.canonical_manifest_hash(manifest_urls)
+                frozen_hash = sp["categories_manifest"].get("hash")
+                if live_hash != frozen_hash:
+                    log.warning("⚠️ Category manifest drift detected; honoring frozen order for resumption.")
+                    log.info(f"🧊 FROZEN HASH: {frozen_hash[:8]}... vs LIVE HASH: {live_hash[:8]}...")
+                else:
+                    log.debug(f"✅ Manifest hash consistent: {frozen_hash[:8]}...")
+
         self.save_state_atomic("freeze-category")
         self.log.info(f"🔒 FROZEN DENOMINATOR: Category {nurl} → {discovered_count} products (LOCKED)")
+        return True
+
+    def validate_three_source_consistency(self, category_url: str, manifest_path: Optional[str] = None) -> bool:
+        """
+        ✅ LAYER_3_FIX: Validate denominator consistency across all three sources.
+
+        Ensures alignment between:
+        1. Manifest file (source of truth for discovered URLs)
+        2. Frozen denominator in state (immutable snapshot)
+        3. Resume pointer denominator (used for progress calculation)
+
+        Args:
+            category_url: Category URL to validate
+            manifest_path: Optional explicit manifest path (auto-discovered if None)
+
+        Returns:
+            bool: True if all three sources are consistent
+
+        Raises:
+            ValueError: If three-source validation fails with mismatched values
+        """
+        import json
+        import os
+        from pathlib import Path
+
+        try:
+            nurl = normalize_url(category_url)
+        except Exception:
+            nurl = category_url
+
+        # Source 1: Manifest file (ground truth)
+        if manifest_path is None:
+            # Auto-discover manifest path from OUTPUTS structure
+            supplier_domain = nurl.split('/')[2].replace('.', '-')
+            category_parts = [p for p in nurl.split('/')[3:] if p]
+            category_name = '_'.join(category_parts) if category_parts else 'unknown'
+            manifest_path = f"OUTPUTS/manifests/{supplier_domain}/{supplier_domain}_{category_name}_manifest.json"
+
+        manifest_total = 0
+        if os.path.exists(manifest_path):
+            try:
+                with open(manifest_path, 'r', encoding='utf-8') as f:
+                    manifest_data = json.load(f)
+                    manifest_total = len(manifest_data.get('urls', []))
+            except Exception as e:
+                self.log.warning(f"⚠️ Could not read manifest at {manifest_path}: {e}")
+        else:
+            self.log.warning(f"⚠️ Manifest not found at {manifest_path}")
+
+        # Source 2: Frozen denominator in state (stored at top level, not in system_progression)
+        frozen_denominators = self.state_data.get("frozen_category_denominators", {})
+        state_denom = frozen_denominators.get(nurl, 0)
+
+        # Get system_progression for Source 3
+        sp = self.state_data.get("system_progression", {})
+
+        # Source 3: Resume pointer denominator
+        resume_denom = int(sp.get("supplier_products_needing_extraction", 0))
+
+        # Three-source validation
+        if manifest_total > 0:  # Only validate if manifest exists
+            if not (manifest_total == state_denom == resume_denom):
+                error_msg = (
+                    f"❌ THREE-SOURCE VALIDATION FAILED for {nurl}:\n"
+                    f"  Source 1 (Manifest): {manifest_total} URLs\n"
+                    f"  Source 2 (State frozen_category_denominators): {state_denom}\n"
+                    f"  Source 3 (Resume supplier_products_needing_extraction): {resume_denom}\n"
+                    f"  Expected: All three sources must match exactly"
+                )
+                self.log.error(error_msg)
+                raise ValueError(error_msg)
+
+        self.log.info(
+            f"✅ THREE-SOURCE VALIDATION PASSED: {nurl} → "
+            f"manifest={manifest_total}, state={state_denom}, resume={resume_denom}"
+        )
         return True
 
     def get_frozen_denominator(self, category_url: str) -> Optional[int]:
@@ -853,8 +996,7 @@ class FixedEnhancedStateManager:
         self, category_index: int, category_url: str, total_categories: int
     ):
         """Initialize tracking for a new category"""
-        from utils.normalization import normalize_url
-
+        # Using module-level import of normalize_url
         normalized_category_url = normalize_url(category_url)
 
         sp = self.state_data.setdefault("system_progression", {})
@@ -875,65 +1017,61 @@ class FixedEnhancedStateManager:
             incoming = int(category_index)
             current  = int(current_persistent_index)
             
-            # 🚨 REGRESSION PROTECTION: Detect and log category backward movement patterns
+            # 🚨 STRICT MONOTONIC ENFORCEMENT: NEVER allow backward movement
             if incoming < current:
-                # Check if this is a legitimate restart scenario or a real regression
-                has_significant_progress = (
-                    int(sp.get("successful_products", 0)) > 1000 or
-                    int(sp.get("supplier_products_completed", 0)) > 10
+                # ✅ CRITICAL: Explicitly preserve current PCI
+                sp["persistent_category_index"] = current
+                log.warning(
+                    f"🔒 PCI PRESERVED: Display counters were session-scoped; authoritative progress comes from files (linking map + cache). "
+                    f"Resume derived 'completed' from files, not from these counters. PCI preserved at {current}"
                 )
-                
-                if has_significant_progress:
-                    log.warning(
-                        f"🔒 CATEGORY_INDEX_TRACKER: REGRESSION BLOCKED - attempted backslide {current} → {incoming} "
-                        f"with significant progress (preserving {current})"
-                    )
-                    # Maintain current index to prevent data loss
-                else:
-                    log.info(
-                        f"🔒 CATEGORY_INDEX_TRACKER: Allowing restart backslide {current} → {incoming} "
-                        f"(minimal progress detected)"
-                    )
-                    sp["persistent_category_index"] = incoming
             elif incoming == current:
-                log.info(
-                    f"🔍 CATEGORY_INDEX_TRACKER: Preserving existing category index {current} (same category)"
-                )
-            else:
+                log.debug(f"Category index unchanged: {current}")
+            else:  # incoming > current
                 # Forward advancement - always allowed
                 sp["persistent_category_index"] = incoming
-                log.info(
-                    f"🔍 CATEGORY_INDEX_TRACKER: Advancing category index {current} → {incoming}"
-                )
+                log.info(f"✅ Category advanced: {current} → {incoming}")
         
         frozen_now = bool(sp.get("category_denominator_frozen"))
         active_idx = int(sp.get("persistent_category_index", 1))
         active_category = (category_index == active_idx)
         # RESUME iff we are on the active category OR it was already frozen last run.
         is_resumption = active_category or frozen_now
-        
-        base = {
-            "current_phase": "supplier",
-            "current_category_url": normalized_category_url,
-            "original_category_url": category_url,
-            "total_categories": total_categories,
-        }
-        
-        sp.update(base)
+
+        # ✅ FIX: Conditional phase initialization (preserve loaded phase)
+        if not sp.get("current_phase"):
+            sp["current_phase"] = "supplier"
+            log.info("🆕 INITIAL PHASE: Set to 'supplier' (fresh start)")
+        else:
+            log.info(f"✅ PHASE PRESERVED: '{sp['current_phase']}' (loaded from state)")
+
+        # ✅ FIX: Update ONLY category context fields (not phase/PCI)
+        sp["current_category_url"] = normalized_category_url
+        sp["original_category_url"] = category_url
+        sp["total_categories"] = total_categories
         if is_resumption:
             log.info(f"🔄 RESUMPTION: Preserving per-category counters (reason: active_category={active_category}, frozen={frozen_now}) for {normalized_category_url}")
         else:
             log.info(f"🆕 NEW CATEGORY: No counter clearing needed for {normalized_category_url}")
-        self.save_state_atomic()
+
+        # ✅ VERIFICATION: Log final state to prove preservation
+        log.info(
+            f"📋 CATEGORY INIT COMPLETE:\n"
+            f"  PCI (persistent_category_index): {sp.get('persistent_category_index')}\n"
+            f"  Phase (current_phase): {sp.get('current_phase')}\n"
+            f"  Category URL: {normalized_category_url}"
+        )
+
+        self.save_state_atomic("category-init")
 
     def update_supplier_progress_new(self, product_url: str, increment: int = 1):
         """Update progress during supplier extraction phase"""
         sp = self.state_data.setdefault("system_progression", {})
-        sp["current_phase"] = "supplier"
+        # 🚨 FIX A (Location 1): Phase guard - only set if not already in amazon_analysis
+        prior = sp.get("current_phase")
+        if prior in (None, "", "supplier"):
+            sp["current_phase"] = "supplier"
         sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0)) + int(increment)
-
-        ud = self.state_data.setdefault("user_display_metrics", {})
-        ud["progress_count"] = ud.get("progress_count", 0) + increment
 
         # Mirror legacy display counters from system_progression without influencing control flow
         current_completed = int(sp.get("supplier_products_completed", 0))
@@ -993,6 +1131,13 @@ class FixedEnhancedStateManager:
             # Update timestamp
             self.state_data["last_updated"] = datetime.now(timezone.utc).isoformat()
             log.debug(f"💾 ATOMIC SAVE: Timestamp updated")
+
+            # 🚨 HARDEN STATE: Ensure critical keys are always present
+            if "system_progression" in self.state_data:
+                sp = self.state_data["system_progression"]
+                sp.setdefault("supplier_products_completed", 0)
+                sp.setdefault("amazon_products_completed", 0)
+                log.debug(f"💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)")
 
             # 🚨 CRITICAL: Do NOT perform file-grounded recalculation here during processing
             # Only update from file-grounded data if this is not preserving interruption state
@@ -1130,6 +1275,30 @@ class FixedEnhancedStateManager:
         Emit FIRST_AFTER_RESUME_KEY banner once per phase.
         Stores flag in diagnostics section to avoid polluting control state.
         """
+        # 🚨 STARTUP GATING: Prevent premature pointer writes during startup analysis
+        if not self.state_data.get("startup_completed", False):
+            if hasattr(self, "_log") and self._log:
+                logger = self._log
+            else:
+                import logging
+                logger = logging.getLogger(__name__)
+
+            logger.debug(f"⏸️ Startup gating: suppressed FIRST_AFTER_RESUME_KEY during '{phase}'")
+            return
+
+        # Additional gating: ensure totals are committed and active-phase denominator is available
+        sp = self.state_data.get("system_progression", {})
+        if not bool(sp.get("frozen_totals_committed", False)):
+            return
+        if phase == "supplier":
+            _total_needed = int(sp.get("supplier_products_needing_extraction", 0) or 0)
+        elif phase == "amazon_analysis":
+            _total_needed = int(sp.get("amazon_products_needing_analysis", 0) or 0)
+        else:
+            _total_needed = 0
+        if _total_needed <= 0:
+            return
+
         diag = self.state_data.setdefault("diagnostics", {})
         key = f"first_after_resume_emitted_{phase}"
 
@@ -1242,10 +1411,26 @@ class FixedEnhancedStateManager:
 
     def log_resume_proof_after_commit(self, context: str) -> None:
         """Log resume proof banner after atomic commits for audit trail."""
+        # 🚨 STARTUP GATING: Prevent premature pointer logging during startup analysis
+        if not self.state_data.get("startup_completed", False):
+            # During startup, only log safe commits without pointer fields
+            log.debug(f"⏸️ Startup gating: {context} saved without pointer logging")
+            return
+
         sp = self.state_data.get("system_progression", {})
+        # Additional gating: ensure totals are committed and active-phase denominator is available
+        if not bool(sp.get("frozen_totals_committed", False)):
+            return
         phase = sp.get("current_phase", "unknown")
         cat_idx = sp.get("persistent_category_index", 1)
-        prod_idx = sp.get("supplier_products_completed", 0)
+        if phase == "amazon_analysis":
+            prod_idx = sp.get("amazon_products_completed", 0)
+            _total_needed = int(sp.get("amazon_products_needing_analysis", 0) or 0)
+        else:
+            prod_idx = sp.get("supplier_products_completed", 0)
+            _total_needed = int(sp.get("supplier_products_needing_extraction", 0) or 0)
+        if _total_needed <= 0:
+            return
 
         # Check if this is the first commit after a resume
         if not getattr(self, '_first_resume_logged', False):
@@ -1424,7 +1609,10 @@ class FixedEnhancedStateManager:
             # If total_prod_in_cat can't be coerced, skip the upper clamp but keep going
             pass
 
-        sp["current_phase"] = "supplier"
+        # 🚨 FIX A (Location 2): Phase guard - only set if not already in amazon_analysis
+        prior = sp.get("current_phase")
+        if prior in (None, "", "supplier"):
+            sp["current_phase"] = "supplier"
         if sp.get("current_category_url") and sp["current_category_url"] != nurl:
             self.log.warning(f"⚠️ CAT-URL MISMATCH: idx={cat_idx} url={nurl} current_url={sp['current_category_url']}")
         sp["supplier_products_completed"] = int(prod_idx)
@@ -1565,16 +1753,25 @@ class FixedEnhancedStateManager:
     def log_resume_proof_after_commit(self, commit_type: str):
         """Log resume proof after atomic commit for audit trail."""
         sp = self.state_data.get("system_progression", {})
+        # Additional gating: ensure totals are committed and active-phase denominator is available
+        if not bool(sp.get("frozen_totals_committed", False)):
+            return
         cat_idx = sp.get("persistent_category_index", 1)
         total_cats = sp.get("total_categories", 0)
         phase = sp.get("current_phase", "unknown")
 
         if phase == "supplier":
             prod_idx = sp.get("supplier_products_completed", 0)
+            _total_needed = int(sp.get("supplier_products_needing_extraction", 0) or 0)
         elif phase == "amazon_analysis":
             prod_idx = sp.get("amazon_products_completed", 0)
+            _total_needed = int(sp.get("amazon_products_needing_analysis", 0) or 0)
         else:
             prod_idx = 0
+            _total_needed = 0
+
+        if _total_needed <= 0:
+            return
 
         self.log.info(f"📋 ATOMIC COMMIT [{commit_type}]: cat={cat_idx}/{total_cats} prod={prod_idx} phase={phase}")
 
@@ -1901,6 +2098,15 @@ class FixedEnhancedStateManager:
                 sp["persistent_category_index"] = 1
                 repairs.append(f"Fixed negative category index {current_cat_idx} to 1 (1-based system)")
 
+        elif "persistent_category_index" not in sp:
+            # 🚨 FIX B: PCI hardening - only default to 1 on fresh start
+            if self.state_data.get("is_fresh_start", False):
+                sp["persistent_category_index"] = 1
+                sp["current_category_index"] = 1
+                log.info("🔍 CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (fresh start)")
+            else:
+                log.warning("⚠️ PCI MISSING ON RESUME: Preserving existing state and not defaulting to 1")
+
         return repairs
 
     def _repair_phase_contamination(self) -> List[str]:
@@ -2004,14 +2210,12 @@ class FixedEnhancedStateManager:
             log.debug(f"?? AMAZON RESUME INDEX → COMPLETED: {amazon_resumption_index}")
 
         if current_category_url is not None:
-            # Normalize URL for consistent tracking
+            # Normalize URL for consistent tracking (using module-level import)
             try:
-                from utils.normalization import normalize_url
-
                 sp["current_category_url"] = normalize_url(current_category_url)
                 sp["original_category_url"] = current_category_url
-            except ImportError:
-                # Fallback if normalization not available
+            except Exception:
+                # Fallback if normalization fails
                 sp["current_category_url"] = current_category_url
 
         if total_categories is not None:
@@ -2491,9 +2695,8 @@ class FixedEnhancedStateManager:
         log.error(f"🚨🚨🚨 MARK_CATEGORY_COMPLETED CALLED 🚨🚨🚨")
         log.error(f"🔍 CATEGORY_COMPLETION_CALL: url={category_url[:50]}... absolute_cat_index={absolute_cat_index}")
 
-        # Normalize for strict equality
+        # Normalize for strict equality (using module-level import)
         try:
-            from utils.normalization import normalize_url
             nurl = normalize_url(category_url)
         except Exception:
             nurl = str(category_url)
@@ -2648,8 +2851,7 @@ class FixedEnhancedStateManager:
             sp["current_phase"] = phase_map.get(str(extraction_phase), str(extraction_phase))
         if category_url is not None:
             try:
-                from utils.normalization import normalize_url
-
+                # Using module-level import of normalize_url
                 sp["current_category_url"] = normalize_url(category_url)
                 sp["original_category_url"] = category_url
             except Exception:
@@ -2680,12 +2882,36 @@ class FixedEnhancedStateManager:
 
     def log_resume_proof_after_commit(self, commit_type: str) -> None:
         """RESUME PROOF LOG: Log with specific banners for audit trail verification."""
+        # 🚨 STARTUP GATING: Prevent premature pointer writes during startup analysis
+        if not self.state_data.get("startup_completed", False):
+            # During startup, only log safe commits without pointer fields
+            if hasattr(self, "_log") and self._log:
+                logger = self._log
+            else:
+                import logging
+                logger = logging.getLogger(__name__)
+
+            if commit_type == "manifest":
+                logger.debug("⏸️ Startup gating: manifest saved without pointer fields")
+            else:
+                logger.debug(f"⏸️ Startup gating: {commit_type} saved without pointer fields")
+            return
+
         sp = self.state_data.setdefault("system_progression", {})
+        # Additional gating: ensure totals are committed and active-phase denominator is available
+        if not bool(sp.get("frozen_totals_committed", False)):
+            return
         cat_idx = sp.get("persistent_category_index", 1)
-        prod_idx = sp.get("supplier_products_completed", 0)
         total_cats = sp.get("total_categories", 0)
-        total_prod = sp.get("supplier_products_needing_extraction", 0)
         phase = sp.get("current_phase", "supplier")
+        if phase == "amazon_analysis":
+            prod_idx = sp.get("amazon_products_completed", 0)
+            total_prod = sp.get("amazon_products_needing_analysis", 0)
+        else:
+            prod_idx = sp.get("supplier_products_completed", 0)
+            total_prod = sp.get("supplier_products_needing_extraction", 0)
+        if int(total_prod or 0) <= 0:
+            return
 
         # Check if this is the first commit after resume
         is_first_after_resume = not hasattr(self, '_first_commit_logged')
@@ -2707,6 +2933,115 @@ class FixedEnhancedStateManager:
 
         # Standard resume proof log
         logger.info(f"📋 RESUME PROOF ({commit_type}): cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} phase={phase}")
+
+    def _calculate_category_from_product_index(self, product_index, category_completion):
+        """
+        Calculate the category index that contains the specified product index.
+
+        Args:
+            product_index: The absolute product index (1-based)
+            category_completion: Dictionary of category completion data
+
+        Returns:
+            The 1-based category index containing the product
+        """
+        products_seen = 0
+        category_list = list(category_completion.keys())
+
+        # Edge case: empty category completion data
+        if not category_list:
+            log.warning("⚠️ CATEGORY CALCULATION: Empty category_completion, returning index 1")
+            return 1
+
+        for cat_idx, category_url in enumerate(category_list, 1):
+            cat_data = category_completion.get(category_url, {})
+            products_in_category = int(cat_data.get("processed", 0))
+
+            if products_seen + products_in_category >= product_index:
+                return cat_idx
+
+            products_seen += products_in_category
+
+        # Fallback: if product_index exceeds all categories, return last category index
+        return max(len(category_list), 1)
+
+    def _enforce_monotonic_progression(self, proposed_index, current_index):
+        """
+        Ensure category index only moves forward (monotonic progression).
+
+        Args:
+            proposed_index: Newly calculated category index
+            current_index: Existing persistent category index
+
+        Returns:
+            The valid category index respecting monotonic progression
+        """
+        if proposed_index >= current_index:
+            return proposed_index
+        else:
+            log.warning(f"🛡️ MONOTONIC PROTECTION: Preserved index {current_index} over regressed {proposed_index}")
+            return current_index
+
+    def _first_incomplete_index_by_url(self, manifest_urls, completion, hint=1):
+        """
+        Returns 1-based index of the first URL whose status != FULLY_PROCESSED,
+        scanning forward from 'hint' (wraps once). Never mutates PCI.
+
+        Args:
+            manifest_urls: List of category URLs in frozen order
+            completion: Category completion status dict
+            hint: Starting position hint (1-based)
+
+        Returns:
+            1-based index of first incomplete category
+        """
+        n = max(1, len(manifest_urls))
+        start = max(1, int(hint or 1))
+        order = list(range(start-1, n)) + list(range(0, start-1))
+        for i in order:
+            url = manifest_urls[i]
+            st = (completion.get(url, {}) or {}).get("status", "")
+            if st != "FULLY_PROCESSED":
+                return i+1
+        return n  # all done; point to last
+
+    def _get_frozen_or_live_manifest_urls(self) -> List[str]:
+        """
+        Get category URLs from frozen manifest if available, otherwise load from config.
+        Used for URL-based session cursor calculation.
+        """
+        from pathlib import Path
+        import json
+
+        # Check if we have a frozen manifest in state data
+        sp = self.state_data.get("system_progression", {})
+        manifest_info = sp.get("categories_manifest", {})
+
+        if manifest_info and manifest_info.get("urls"):
+            # Use frozen manifest URLs if available
+            log.info(f"🧊 Using frozen manifest with {len(manifest_info['urls'])} URLs (hash: {manifest_info.get('hash', 'unknown')[:8]}...)")
+            return manifest_info["urls"]
+
+        # Fall back to loading from config file
+        try:
+            config_path = (
+                Path(__file__).parent.parent
+                / "config"
+                / f"{self.supplier_name.replace('.co.uk', '')}_categories.json"
+            )
+
+            if config_path.exists():
+                with open(config_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    category_urls = data.get("category_urls", [])
+                    log.info(f"📂 Loaded {len(category_urls)} category URLs from config")
+                    return category_urls
+            else:
+                log.warning(f"⚠️ Category config file not found: {config_path}")
+                return []
+        except Exception as e:
+            log.error(f"❌ Failed to load category URLs: {e}")
+            return []
 
 # Backward-compatible aliases without embedding legacy identifier in source
 try:

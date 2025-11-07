@@ -1,0 +1,88 @@
+### Review-only patch (do not apply automatically)
+### Absolute path mapping (for clarity):
+###   a/utils/fixed_enhanced_state_manager.py → C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\utils\fixed_enhanced_state_manager.py
+###   a/tools/passive_extraction_workflow_latest.py → C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+
+diff --git a/utils/fixed_enhanced_state_manager.py b/utils/fixed_enhanced_state_manager.py
+--- a/utils/fixed_enhanced_state_manager.py
++++ b/utils/fixed_enhanced_state_manager.py
+@@ -1392,7 +1398,13 @@
+     def save_state_atomic(self, note: str = "") -> None:
+         """
+         Atomic save wrapper used by new progression methods.
+         Accepts an optional note and forwards to the unified save path
+         that emits atomic-save breadcrumbs and resume-proof hooks.
+         """
+-        self.save(note=note)
++        # Block premature saves during startup initialization
++        if not getattr(self, "_startup_completed", False):
++            log.debug(f"⏸️ SAVE BLOCKED: Initialization incomplete ({note})")
++            return
++        self.save(note=note)
+
+@@ -1400,12 +1411,17 @@
+     def save_debounced(self, note: str = "", min_interval: float = 2.0) -> None:
+-        # Startup saves are allowed; after runtime begins we must not recalc file-grounded totals
+-        if self._startup_completed:
+-            log.debug("💾 save_debounced: runtime mode (no file-grounded recompute)")
++        # Block premature saves during initialization (not just log)
++        if not getattr(self, "_startup_completed", False):
++            log.debug(f"⏸️ SAVE BLOCKED: Initialization incomplete ({note})")
++            return
++        log.debug("💾 save_debounced: runtime mode (no file-grounded recompute)")
+
+         now = time.time()
+         if now - getattr(self, "_last_save_time", 0) < min_interval:
+             return
+         self._last_save_time = now
+         self.save(note=note)
+
+@@ -1379,6 +1379,12 @@
+     def save(self, note: str = "") -> None:
+         """Atomically save state with optional note."""
++        # Defense-in-depth: Do not save during startup initialization
++        if not getattr(self, "_startup_completed", False):
++            log.warning(f"⚠️ SAVE ATTEMPTED DURING STARTUP: {note} (blocked)")
++            return
+
+         st = self.state_data
+         sp = st.setdefault("system_progression", {})
+         sp["_writer_session_uuid"] = self._writer_session_uuid
+
+diff --git a/tools/passive_extraction_workflow_latest.py b/tools/passive_extraction_workflow_latest.py
+--- a/tools/passive_extraction_workflow_latest.py
++++ b/tools/passive_extraction_workflow_latest.py
+@@ -1915,6 +1915,12 @@
+     async def run(self):
+         """Main execution loop for the workflow."""
+         ...
++        # Initialize workflow session BEFORE any state freezing/saving
++        start_category_index = self.state_manager.initialize_workflow_session()
++        sp = self.state_manager.state_data.get("system_progression", {})
++        resume_phase = sp.get("current_phase", "supplier")
+
+         # Resolve categories and compute config hash
+         category_urls = self._get_predefined_categories(self.supplier_name) or []
+         self._active_category_urls = category_urls
+         cfg_hash = self.state_manager.compute_supplier_config_hash(category_urls)
+
+@@ -1927,9 +1933,9 @@
+-        # Freeze total categories and mark frozen BEFORE any resume logic
+-        self.state_manager.set_total_categories(len(category_urls), cfg_hash)
+-        self.state_manager.save_state_atomic()
+-        self.log.info(f"💠 FROZEN TOTAL CATEGORIES set to {len(category_urls)} (hash={cfg_hash[:8]})")
+-        if hasattr(self.state_manager, "mark_frozen_totals_committed"):
+-            self.state_manager.mark_frozen_totals_committed()
++        # Now safe to freeze totals and persist AFTER initialization
++        self.state_manager.set_total_categories(len(category_urls), cfg_hash)
++        self.state_manager.save_state_atomic("manifest-after-init")
++        self.log.info(f"💠 FROZEN TOTAL CATEGORIES set to {len(category_urls)} (hash={cfg_hash[:8]})")
++        if hasattr(self.state_manager, "mark_frozen_totals_committed"):
++            self.state_manager.mark_frozen_totals_committed()
+
+@@ -2032,7 +2038,7 @@
+-        start_category_index = self.state_manager.initialize_workflow_session()
++        # initialize_workflow_session() already called above
+
+### End of review-only patch
+

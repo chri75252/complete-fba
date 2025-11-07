@@ -150,8 +150,8 @@ class TestFixedEnhancedStateManager(unittest.TestCase):
         # Verify state was updated
         sp = state_manager.state_data.get("system_progression", {})
         self.assertEqual(sp.get("current_phase"), "supplier")
-        self.assertEqual(sp.get("current_category_index"), 1)
-        self.assertEqual(sp.get("current_product_index_in_category"), 5)
+        self.assertEqual(sp.get("persistent_category_index"), 1)
+        self.assertEqual(sp.get("supplier_products_completed"), 5)
         
         # Test Amazon progress commit
         state_manager.commit_amazon_progress(
@@ -165,8 +165,8 @@ class TestFixedEnhancedStateManager(unittest.TestCase):
         # Verify state was updated
         sp = state_manager.state_data.get("system_progression", {})
         self.assertEqual(sp.get("current_phase"), "amazon_analysis")
-        self.assertEqual(sp.get("current_category_index"), 2)
-        self.assertEqual(sp.get("current_product_index_in_category"), 10)
+        self.assertEqual(sp.get("persistent_category_index"), 2)
+        self.assertEqual(sp.get("amazon_products_completed"), 10)
     
     def test_cross_run_monotonicity(self):
         """Test cross-run monotonicity validation."""
@@ -175,8 +175,8 @@ class TestFixedEnhancedStateManager(unittest.TestCase):
         
         # Set up initial state
         state_manager.state_data["system_progression"] = {
-            "current_category_index": 5,
-            "current_product_index_in_category": 10
+            "persistent_category_index": 5,
+            "supplier_products_completed": 10
         }
         state_manager.state_data["resumption_index"] = 100
         
@@ -184,7 +184,7 @@ class TestFixedEnhancedStateManager(unittest.TestCase):
         state_manager._validate_cross_run_monotonicity()
         
         # Try to set backward values (should be corrected)
-        state_manager.state_data["system_progression"]["current_category_index"] = 3  # Backward
+        state_manager.state_data["system_progression"]["persistent_category_index"] = 3  # Backward
         state_manager.state_data["resumption_index"] = 50  # Backward
         
         # Validation should correct these
@@ -192,7 +192,7 @@ class TestFixedEnhancedStateManager(unittest.TestCase):
         
         # Check that values were corrected
         sp = state_manager.state_data.get("system_progression", {})
-        self.assertGreaterEqual(sp.get("current_category_index", 0), 5)
+        self.assertGreaterEqual(sp.get("persistent_category_index", 0), 5)
         self.assertGreaterEqual(state_manager.state_data.get("resumption_index", 0), 100)
     
     def test_legacy_method_disabled(self):
