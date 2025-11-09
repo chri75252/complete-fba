@@ -8,6 +8,8 @@ import os
 import time
 from datetime import datetime
 from metrics_core import MetricsLoader, load_metrics
+import pandas as pd
+import plotly.express as px
 
 # Page configuration
 st.set_page_config(
@@ -33,7 +35,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=10)
 def get_cached_metrics(base_dir: str, supplier: str, paths_hash: str):
     """Cached metrics loader - only reloads when files change"""
     try:
@@ -46,11 +48,36 @@ def get_cached_metrics(base_dir: str, supplier: str, paths_hash: str):
 def get_paths_hash(paths):
     """Create hash from file modification times for cache invalidation"""
     try:
-        mtimes = []
-        for path_key, path_value in paths.items():
-            if path_value and os.path.exists(path_value):
-                mtimes.append(os.path.getmtime(path_value))
-        return hash(tuple(mtimes))
+        mt = []
+        sf = paths.get('state_file')
+        lf = paths.get('linking_file')
+        fin = paths.get('financial_dir')
+        ac = paths.get('amazon_cache_dir')
+        
+        # State and linking file mtimes
+        for p in [sf, lf]:
+            if p and os.path.exists(p):
+                mt.append(os.path.getmtime(p))
+        
+        # Financial dir: latest CSV mtime and count
+        if fin and os.path.exists(fin):
+            csvs = [os.path.join(fin, f) for f in os.listdir(fin) 
+                   if f.startswith('fba_financial_report_') and f.endswith('.csv')]
+            if csvs:
+                latest = max(csvs, key=os.path.getmtime)
+                mt.append(os.path.getmtime(latest))
+                mt.append(len(csvs))
+        
+        # Amazon cache dir: latest amazon_*.json mtime and count
+        if ac and os.path.exists(ac):
+            caches = [os.path.join(ac, f) for f in os.listdir(ac) 
+                     if f.startswith('amazon_') and f.endswith('.json')]
+            if caches:
+                latest = max(caches, key=os.path.getmtime)
+                mt.append(os.path.getmtime(latest))
+                mt.append(len(caches))
+        
+        return hash(tuple(mt))
     except:
         return 0
 
@@ -85,7 +112,7 @@ def format_currency(amount):
         return str(amount)
 
 
-def render_health_panel(state_metrics):
+def render_health_panel(state_metrics, linking_metrics=None, supplier_cache_metrics=None):
     """Render the health status panel"""
     st.subheader("🏥 System Health")
 
@@ -119,6 +146,28 @@ def render_health_panel(state_metrics):
             <p>{status_text}</p>
         </div>
         """, unsafe_allow_html=True)
+        
+        # Current category and per-category progress (separate tile)
+        cc = state_metrics.get("current_category_url")
+        short = "—"
+        if cc:
+            parts = cc.split("://", 1)[-1]
+            short = parts.split("/", 1)[-1] if "/" in parts else parts
+        
+        cp = state_metrics.get("category_progress") or {}
+        sup_done = cp.get("supplier_products_completed")
+        sup_need = cp.get("supplier_products_needing_extraction")
+        amz_done = cp.get("amazon_products_completed")
+        amz_need = cp.get("amazon_products_needing_analysis")
+        
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>Current Category</h4>
+            <p>{short}</p>
+            <p>Supplier: <strong>{sup_done if sup_done is not None else '—'}</strong>/<strong>{sup_need if sup_need is not None else '—'}</strong> •
+               Amazon: <strong>{amz_done if amz_done is not None else '—'}</strong>/<strong>{amz_need if amz_need is not None else '—'}</strong></p>
+        </div>
+        """, unsafe_allow_html=True)
 
     with cols[1]:
         status = state_metrics.get("processing_status", "Unknown")
@@ -133,15 +182,16 @@ def render_health_panel(state_metrics):
         """, unsafe_allow_html=True)
 
     with cols[2]:
-        successful = state_metrics.get("successful_products", 0)
-        processed = state_metrics.get("processed_products", 0)
+        # Total Extracted and Total Processed
+        linking_total = linking_metrics.get("total_matches", 0) if linking_metrics else 0
+        supplier_total = supplier_cache_metrics.get("product_count", 0) if supplier_cache_metrics else 0
         fresh_starts = state_metrics.get("fresh_starts", 0)
 
         st.markdown(f"""
         <div class="metric-container">
             <h4>Processing Stats</h4>
-            <p>Successful: <strong>{format_number(successful)}</strong></p>
-            <p>Processed: <strong>{format_number(processed)}</strong></p>
+            <p>Total Extracted (supplier cache): <strong>{format_number(supplier_total)}</strong></p>
+            <p>Total Processed (linking map): <strong>{format_number(linking_total)}</strong></p>
             <p>Fresh Starts: <strong>{format_number(fresh_starts)}</strong></p>
         </div>
         """, unsafe_allow_html=True)
@@ -258,6 +308,92 @@ def render_logs_panel(log_data):
     st.code(log_text, language="text")
 
 
+def create_roi_histogram(df):
+    """Histogram of ROI values with sensible bins."""
+    try:
+        tmp = df.copy()
+        tmp['ROI'] = pd.to_numeric(tmp.get('ROI'), errors='coerce')
+        tmp = tmp[tmp['ROI'].notna()]
+        if tmp.empty:
+            return None
+        fig = px.histogram(tmp, x='ROI', nbins=50, title="ROI Histogram (All Products)")
+        fig.update_layout(xaxis_title="ROI (%)", yaxis_title="Count")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating ROI histogram: {str(e)}")
+        return None
+
+def create_profit_vs_price_chart(df):
+    """Scatter: NetProfit vs SellingPrice, sized by offer count if available."""
+    try:
+        tmp = df.copy()
+        tmp['SellingPrice_incVAT'] = pd.to_numeric(tmp.get('SellingPrice_incVAT'), errors='coerce')
+        tmp['NetProfit'] = pd.to_numeric(tmp.get('NetProfit'), errors='coerce')
+        size_col = None
+        for c in ['total_offer_count', 'fba_seller_count', 'fbm_seller_count']:
+            if c in tmp.columns:
+                tmp[c] = pd.to_numeric(tmp[c], errors='coerce')
+                size_col = c
+                break
+        tmp = tmp[tmp['SellingPrice_incVAT'].notna() & tmp['NetProfit'].notna()]
+        if tmp.empty:
+            return None
+        color_col = 'MatchQuality' if 'MatchQuality' in tmp.columns else None
+        fig = px.scatter(tmp, x='SellingPrice_incVAT', y='NetProfit',
+                         color=color_col, size=size_col,
+                         title="Net Profit vs Selling Price",
+                         labels={'SellingPrice_incVAT': "Selling Price", 'NetProfit': "Net Profit"} )
+        return fig
+    except Exception as e:
+        st.error(f"Error creating Profit vs Price chart: {str(e)}")
+        return None
+
+def create_price_ratio_histogram(df):
+    """Histogram of price ratio (Amazon/Supplier)."""
+    try:
+        tmp = df.copy()
+        sp = pd.to_numeric(tmp.get('SupplierPrice_incVAT'), errors='coerce')
+        ap = pd.to_numeric(tmp.get('SellingPrice_incVAT'), errors='coerce')
+        ratio = ap / sp
+        tmp = tmp[ratio.notna() & (sp > 0)]
+        if tmp.empty:
+            return None
+        tmp = tmp.assign(Price_Ratio=ratio[ratio.notna() & (sp > 0)])
+        fig = px.histogram(tmp, x='Price_Ratio', nbins=50, title="Price Ratio (Amazon/Supplier)")
+        fig.update_layout(xaxis_title="Price Ratio (x)", yaxis_title="Count")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating price ratio histogram: {str(e)}")
+        return None
+
+def create_match_quality_bar(df):
+    """Bar chart of MatchQuality distribution if available."""
+    try:
+        if 'MatchQuality' not in df.columns:
+            return None
+        vc = df['MatchQuality'].value_counts().reset_index()
+        vc.columns = ['MatchQuality', 'Count']
+        fig = px.bar(vc, x='MatchQuality', y='Count', title="Match Quality Distribution")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating MatchQuality bar chart: {str(e)}")
+        return None
+
+def create_seller_mix_bar(df):
+    """Stacked bar of FBA vs FBM seller counts (aggregated)."""
+    try:
+        cols = [c for c in ['fba_seller_count','fbm_seller_count'] if c in df.columns]
+        if len(cols) == 0:
+            return None
+        agg = {c: pd.to_numeric(df[c], errors='coerce').fillna(0).sum() for c in cols}
+        plot_df = pd.DataFrame({'Type': list(agg.keys()), 'Count': list(agg.values())})
+        fig = px.bar(plot_df, x='Type', y='Count', title="Seller Mix (Aggregated)")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating Seller Mix chart: {str(e)}")
+        return None
+
+
 def render_sidebar():
     """Render the sidebar controls"""
     st.sidebar.header("⚙️ Configuration")
@@ -326,11 +462,6 @@ def main():
     # Render sidebar
     base_dir, supplier, auto_refresh, paths = render_sidebar()
 
-    # Auto-refresh mechanism
-    if auto_refresh > 0:
-        time.sleep(auto_refresh)
-        st.rerun()
-
     # Load metrics with caching
     paths_hash = get_paths_hash(paths)
     metrics_data = get_cached_metrics(base_dir, supplier, str(paths_hash))
@@ -339,17 +470,106 @@ def main():
         st.error("❌ Failed to load metrics data")
         return
 
+    # Live Progress section
+    link = metrics_data.get('linking_metrics', {})
+    cache = metrics_data.get('amazon_cache_metrics', {})
+    now_m = link.get('total_matches', 0)
+    now_c = cache.get('file_count', 0)
+    prev_m = st.session_state.get('prev_matches', now_m)
+    prev_c = st.session_state.get('prev_cache', now_c)
+    delta_m = now_m - prev_m
+    delta_c = now_c - prev_c
+    st.session_state['prev_matches'] = now_m
+    st.session_state['prev_cache'] = now_c
+    st.markdown(f"**Live Progress** — Matches: {now_m} ({delta_m:+}), Cache files: {now_c} ({delta_c:+})")
+    
+    # Current Category context panel
+    cc = metrics_data.get("state_metrics", {}).get("current_category_url")
+    short = "—"
+    if cc:
+        parts = cc.split("://", 1)[-1]
+        short = parts.split("/", 1)[-1] if "/" in parts else parts
+    
+    cp = metrics_data.get("state_metrics", {}).get("category_progress") or {}
+    sup_done = cp.get("supplier_products_completed")
+    sup_need = cp.get("supplier_products_needing_extraction")
+    amz_done = cp.get("amazon_products_completed")
+    amz_need = cp.get("amazon_products_needing_analysis")
+    
+    st.markdown(f"""
+    <div class="metric-container">
+        <h4>📂 Current Category</h4>
+        <p><strong>{short}</strong></p>
+        <p>Supplier: <strong>{sup_done if sup_done is not None else '—'}</strong>/<strong>{sup_need if sup_need is not None else '—'}</strong> • 
+           Amazon: <strong>{amz_done if amz_done is not None else '—'}</strong>/<strong>{amz_need if amz_need is not None else '—'}</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
+    
     # Render panels
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        render_health_panel(metrics_data.get("state_metrics"))
+        render_health_panel(
+            metrics_data.get("state_metrics"),
+            metrics_data.get("linking_metrics"),
+            metrics_data.get("supplier_cache_metrics")
+        )
 
     with col2:
         render_matching_panel(metrics_data.get("linking_metrics"))
 
     # Financial panel (full width)
     render_financial_panel(metrics_data.get("financial_metrics"))
+
+    # Analytics Charts section
+    st.markdown("---")
+    st.markdown("## 📊 Analytics Charts")
+    
+    # Try to load financial data for charts
+    fin_metrics = metrics_data.get("financial_metrics", {})
+    fin_dir = paths.get("financial_dir")
+    
+    if fin_dir and os.path.exists(fin_dir):
+        try:
+            csv_files = [f for f in os.listdir(fin_dir) 
+                        if f.startswith('fba_financial_report_') and f.endswith('.csv') 
+                        and os.path.isfile(os.path.join(fin_dir, f))]
+            
+            if csv_files:
+                # Load the latest CSV for charting
+                latest_csv = sorted(csv_files)[-1]
+                df = pd.read_csv(os.path.join(fin_dir, latest_csv))
+                
+                # Render charts in grid
+                c1, c2 = st.columns(2)
+                with c1:
+                    fig = create_roi_histogram(df)
+                    if fig:
+                        st.plotly_chart(fig, use_container_width=True)
+                with c2:
+                    fig = create_price_ratio_histogram(df)
+                    if fig:
+                        st.plotly_chart(fig, use_container_width=True)
+                
+                c3, c4 = st.columns(2)
+                with c3:
+                    fig = create_profit_vs_price_chart(df)
+                    if fig:
+                        st.plotly_chart(fig, use_container_width=True)
+                with c4:
+                    fig = create_match_quality_bar(df)
+                    if fig:
+                        st.plotly_chart(fig, use_container_width=True)
+                
+                fig_mix = create_seller_mix_bar(df)
+                if fig_mix:
+                    st.plotly_chart(fig_mix, use_container_width=True)
+            else:
+                st.info("📁 No financial CSV files available for charting")
+        except Exception as e:
+            st.error(f"⚠️ Error loading chart data: {str(e)}")
+    else:
+        st.info("📁 Financial directory not found - charts unavailable")
 
     # Logs panel (full width)
     render_logs_panel(metrics_data.get("log_data"))
@@ -358,6 +578,17 @@ def main():
     st.markdown("---")
     st.markdown(f"**Last Updated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | **Supplier:** {supplier}")
 
+    # Non-blocking auto-refresh at the end (after UI renders)
+    if auto_refresh and auto_refresh > 0:
+        import time as _t
+        _t.sleep(auto_refresh)
+    st.rerun()
+
 
 if __name__ == "__main__":
     main()
+
+
+
+
+

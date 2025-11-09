@@ -81,6 +81,25 @@ class MetricsLoader:
         # Find logs directory
         logs_dir = os.path.join(self.base_dir, "logs", "debug")
 
+        # Find Amazon cache directory
+        amazon_cache_dir = os.path.join(self.base_dir, "OUTPUTS", "FBA_ANALYSIS", "amazon_cache")
+        if not os.path.exists(amazon_cache_dir):
+            amazon_cache_dir = None
+
+        # Find supplier cache file
+        cached_products_dir = os.path.join(self.base_dir, "OUTPUTS", "cached_products")
+        cached_products_file = None
+        cache_patterns = [
+            f"{hyphenated_supplier}_products_cache.json",
+            f"{normalized_supplier}_products_cache.json",
+            f"{supplier_hint}_products_cache.json"
+        ]
+        for pattern in cache_patterns:
+            candidate = os.path.join(cached_products_dir, pattern)
+            if os.path.exists(candidate):
+                cached_products_file = candidate
+                break
+
         # Find config file for category count
         config_dir = os.path.join(self.base_dir, "config")
         config_file = None
@@ -103,6 +122,8 @@ class MetricsLoader:
             "linking_file": linking_file,
             "financial_dir": financial_dir,
             "logs_dir": logs_dir if os.path.exists(logs_dir) else None,
+            "amazon_cache_dir": amazon_cache_dir,
+            "cached_products_file": cached_products_file,
             "config_file": config_file,
             "supplier_variants": {
                 "dotted": supplier_hint,
@@ -147,10 +168,27 @@ class MetricsLoader:
             # Load configured categories from config file
             configured_categories = self._load_configured_categories(config_file) if config_file else None
 
+            # Extract current category and per-category progress
+            system_progression = data.get("system_progression", {})
+            current_category_url = system_progression.get("current_category_url") or data.get("category_url")
+            
+            # Per-category progress (if current category exists)
+            category_progress = {}
+            if current_category_url and current_category_url in category_performance:
+                cat_data = category_performance[current_category_url]
+                category_progress = {
+                    "supplier_products_needing_extraction": cat_data.get("supplier_products_needing_extraction"),
+                    "supplier_products_completed": cat_data.get("supplier_products_completed"),
+                    "amazon_products_needing_analysis": cat_data.get("amazon_products_needing_analysis"),
+                    "amazon_products_completed": cat_data.get("amazon_products_completed")
+                }
+
             metrics = {
                 "state_file_found": True,
                 "observed_categories": observed_categories,
                 "configured_categories": configured_categories,
+                "current_category_url": current_category_url,
+                "category_progress": category_progress,
                 "last_updated": self._parse_datetime(data.get("last_updated")),
                 "processing_status": data.get("processing_status"),
                 "successful_products": data.get("successful_products", 0),
@@ -174,7 +212,7 @@ class MetricsLoader:
             }
 
     def load_linking_map_metrics(self, linking_file: str) -> Dict[str, Any]:
-        """Load linking map metrics with chunked processing for large JSON files"""
+        """Load linking map metrics with robust parsing for array, dict, and JSONL formats"""
         if not linking_file or not os.path.exists(linking_file):
             return {
                 "total_matches": 0,
@@ -192,25 +230,53 @@ class MetricsLoader:
             return self._cache[cache_key]
 
         try:
-            # Stream processing for large JSON arrays
+            # Robust parsing: support JSON array, dict, and JSONL
+            items = []
+            try:
+                with open(linking_file, 'r', encoding='utf-8') as f:
+                    obj = json.load(f)
+                    if isinstance(obj, list):
+                        items = obj
+                    elif isinstance(obj, dict):
+                        items = list(obj.values())
+            except json.JSONDecodeError:
+                # Try JSONL format (one JSON object per line)
+                with open(linking_file, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith('{') and line.endswith('}'):
+                            try:
+                                items.append(json.loads(line))
+                            except json.JSONDecodeError:
+                                pass
+
+            # Count metrics from items
             confidence_counts = {"high": 0, "medium": 0, "low": 0}
             method_counts = {}
             no_ean_count = 0
-            total_matches = 0
+            total_matches = len(items)
 
-            # Process in chunks to avoid memory issues
-            for item in self._stream_json_array(linking_file):
-                total_matches += 1
-
-                # Confidence counting
-                confidence = item.get("confidence", "unknown").lower()
-                if confidence in confidence_counts:
-                    confidence_counts[confidence] += 1
+            for item in items:
+                # Confidence counting (handle both string and numeric)
+                confidence = item.get("confidence", "unknown")
+                if isinstance(confidence, (int, float)):
+                    # Numeric confidence - map to categories
+                    if confidence >= 0.8:
+                        conf_key = "high"
+                    elif confidence >= 0.5:
+                        conf_key = "medium"
+                    else:
+                        conf_key = "low"
                 else:
-                    confidence_counts[confidence] = 1
+                    conf_key = str(confidence).lower()
+                
+                if conf_key in confidence_counts:
+                    confidence_counts[conf_key] += 1
+                else:
+                    confidence_counts[conf_key] = confidence_counts.get(conf_key, 0) + 1
 
                 # Method counting
-                method = item.get("match_method", "unknown").lower()
+                method = str(item.get("match_method", "unknown")).lower()
                 method_counts[method] = method_counts.get(method, 0) + 1
 
                 # EAN counting
@@ -255,7 +321,9 @@ class MetricsLoader:
             }
 
         try:
-            csv_files = [f for f in os.listdir(financial_dir) if f.endswith('.csv')]
+            # Root-only: exclude subdirectories
+            csv_files = [f for f in os.listdir(financial_dir) 
+                        if f.endswith('.csv') and os.path.isfile(os.path.join(financial_dir, f))]
             if not csv_files:
                 return {
                     "files_scanned": 0,
@@ -302,16 +370,18 @@ class MetricsLoader:
                             errors='coerce'
                         )
 
-                        # Count profitable (ROI > 15% = 0.15)
-                        profitable_mask = roi_values > 0.15
-                        profitable_count += profitable_mask.sum()
-
                         # Sum ROI for average calculation
                         total_roi_sum += roi_values.sum()
 
                     if profit_col:
-                        # Convert profit values
-                        profit_values = pd.to_numeric(df_full[profit_col], errors='coerce')
+                        # Convert profit values with explicit numeric coercion
+                        df_full[profit_col] = pd.to_numeric(df_full[profit_col], errors='coerce')
+                        profit_values = df_full[profit_col]
+                        
+                        # Profitable products: NetProfit > 0 (explicit definition)
+                        profitable_count += int((profit_values > 0).sum())
+                        
+                        # Total profit sum
                         total_profit_sum += profit_values.sum()
 
                 except Exception as e:
@@ -470,6 +540,50 @@ class MetricsLoader:
         except Exception:
             return None
 
+    def load_supplier_cache_metrics(self, cached_file: str) -> Dict[str, Any]:
+        """Load supplier cache product count"""
+        if not cached_file or not os.path.exists(cached_file):
+            return {"product_count": 0}
+        
+        try:
+            with open(cached_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                # Handle both list format and dict with 'products' key
+                if isinstance(data, list):
+                    count = len(data)
+                elif isinstance(data, dict):
+                    products = data.get('products', [])
+                    count = len(products) if isinstance(products, list) else 0
+                else:
+                    count = 0
+                
+                return {"product_count": count}
+        except Exception as e:
+            return {"product_count": 0, "error": str(e)}
+
+    def load_amazon_cache_metrics(self, amazon_cache_dir: str) -> Dict[str, Any]:
+        """Load Amazon cache metrics (file count and latest mtime)"""
+        if not amazon_cache_dir or not os.path.exists(amazon_cache_dir):
+            return {"file_count": 0, "latest_mtime": None}
+        
+        try:
+            cache_files = [f for f in os.listdir(amazon_cache_dir) 
+                          if f.startswith('amazon_') and f.endswith('.json')]
+            file_count = len(cache_files)
+            
+            latest_mtime = None
+            if cache_files:
+                full_paths = [os.path.join(amazon_cache_dir, f) for f in cache_files]
+                latest_path = max(full_paths, key=os.path.getmtime)
+                latest_mtime = datetime.fromtimestamp(os.path.getmtime(latest_path))
+            
+            return {
+                "file_count": file_count,
+                "latest_mtime": latest_mtime
+            }
+        except Exception as e:
+            return {"file_count": 0, "latest_mtime": None, "error": str(e)}
+
 
 def load_metrics(base_dir: str, supplier_hint: str) -> Dict[str, Any]:
     """Main function to load all metrics"""
@@ -481,5 +595,7 @@ def load_metrics(base_dir: str, supplier_hint: str) -> Dict[str, Any]:
         "state_metrics": loader.load_state_metrics(paths["state_file"], paths.get("config_file")),
         "linking_metrics": loader.load_linking_map_metrics(paths["linking_file"]),
         "financial_metrics": loader.load_financial_metrics(paths["financial_dir"]),
+        "supplier_cache_metrics": loader.load_supplier_cache_metrics(paths.get("cached_products_file")),
+        "amazon_cache_metrics": loader.load_amazon_cache_metrics(paths.get("amazon_cache_dir")),
         "log_data": loader.tail_logs(paths["logs_dir"])
     }
