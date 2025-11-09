@@ -1,3 +1,7 @@
+---
+trigger: model_decision
+description: when asked to actually implementb/integrate code, or atart sctually rditing files, nippets or  whatevrr it may be  in regards to editing files, folders, directories and so on ; then  go through this set of rules
+---
 
  Amazon FBA Agent System v3.7+ File Organization & Development Standards
 
