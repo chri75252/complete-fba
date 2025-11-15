@@ -792,16 +792,15 @@ class FixedAmazonExtractor(AmazonExtractor):
                     continue
 
             for element in search_result_elements[:10]:  # More results for title search
-                asin = await element.get_attribute("data-asin")
-                # FIX: Remove overly restrictive 10-character requirement for ASIN validation
-                # ASINs can be valid with fewer than 10 characters
-                if (
-                    asin and len(asin) >= 8 and len(asin) <= 12
-                ):  # More reasonable range for ASIN validation
+                # FIXED: Use 4-fallback ASIN extraction instead of single data-asin check
+                asin = await self._extract_asin_from_element(element)
+
+                if asin:  # Successfully extracted via any fallback method
                     # Use improved title extraction
                     result_title = await self._extract_title_from_element(element, asin)
-
                     potential_asins_info.append({"asin": asin, "title": result_title})
+                else:
+                    log.warning(f"Could not extract ASIN from element (all fallbacks failed)")
 
             # Create search_results_data in expected format
             if potential_asins_info:
@@ -809,10 +808,18 @@ class FixedAmazonExtractor(AmazonExtractor):
                     "results": potential_asins_info,
                     "search_method": "title_search_bar_interaction",
                 }
-                log.info(f"Title search found {len(potential_asins_info)} results for '{title}'")
+                # FIXED: Enhanced logging for ASIN extraction success
+                log.info(
+                    f"🎯 ASIN EXTRACTION SUCCESS: Found {len(potential_asins_info)} ASINs "
+                    f"for title search: '{title}'"
+                )
             else:
                 search_results_data = {"error": f"No valid ASINs found for title '{title}'"}
-                log.warning(f"No valid ASINs found for title '{title}'")
+                # FIXED: Enhanced logging for ASIN extraction failure
+                log.warning(
+                    f"⚠️ ASIN EXTRACTION FAILED: No ASINs found for title search: '{title}'. "
+                    f"Found {len(search_result_elements)} elements but couldn't extract ASINs."
+                )
 
         except Exception as search_error:
             log.error(f"Error during title search for '{title}': {search_error}")
@@ -896,6 +903,78 @@ class FixedAmazonExtractor(AmazonExtractor):
 
         log.warning(f"Could not extract title for ASIN {asin} using any selector")
         return "Unknown Title"
+
+    async def _extract_asin_from_element(self, element) -> Optional[str]:
+        """
+        Extract ASIN with 4 fallback methods for maximum reliability.
+
+        Based on Chrome DevTools analysis showing ASIN available in multiple locations:
+        - Fallback #1: data-asin attribute (current, sometimes empty)
+        - Fallback #2: href /dp/ASIN pattern (MOST RELIABLE, always present)
+        - Fallback #3: data-uuid attribute (alternative Amazon format)
+        - Fallback #4: Regex search in HTML (last resort)
+
+        Returns:
+            ASIN string (10 alphanumeric chars) or None if extraction fails
+        """
+        log = self.log
+
+        # Fallback #1: data-asin attribute (current implementation)
+        try:
+            asin = await element.get_attribute("data-asin")
+            if asin and 8 <= len(asin) <= 12:
+                log.debug(f"ASIN extracted via Fallback #1 (data-asin): {asin}")
+                return asin
+        except Exception as e:
+            log.debug(f"Fallback #1 (data-asin) failed: {e}")
+
+        # Fallback #2: Extract from href /dp/ASIN (MOST RELIABLE from Chrome DevTools)
+        try:
+            # Find link with /dp/ in href
+            link = await element.query_selector('a[href*="/dp/"]')
+            if link:
+                href = await link.get_attribute("href")
+                if href:
+                    # Extract ASIN from /dp/B0BC28WRNL/ pattern
+                    match = re.search(r'/dp/([A-Z0-9]{10})', href)
+                    if match:
+                        asin = match.group(1)
+                        log.debug(f"ASIN extracted via Fallback #2 (href /dp/): {asin}")
+                        return asin
+        except Exception as e:
+            log.debug(f"Fallback #2 (href /dp/) failed: {e}")
+
+        # Fallback #3: data-uuid attribute
+        try:
+            uuid = await element.get_attribute("data-uuid")
+            if uuid and 8 <= len(uuid) <= 12:
+                log.debug(f"ASIN extracted via Fallback #3 (data-uuid): {uuid}")
+                return uuid
+        except Exception as e:
+            log.debug(f"Fallback #3 (data-uuid) failed: {e}")
+
+        # Fallback #4: Regex search in HTML (last resort)
+        try:
+            html = await element.inner_html()
+
+            # Try multiple ASIN patterns
+            asin_patterns = [
+                r'/dp/([A-Z0-9]{10})',  # Most common
+                r'data-asin["\']?[:=]["\']?([A-Z0-9]{10})',
+                r'asin["\']?[:=]["\']?([A-Z0-9]{10})',
+            ]
+
+            for pattern in asin_patterns:
+                match = re.search(pattern, html)
+                if match:
+                    asin = match.group(1)
+                    log.debug(f"ASIN extracted via Fallback #4 (regex '{pattern}'): {asin}")
+                    return asin
+        except Exception as e:
+            log.debug(f"Fallback #4 (regex) failed: {e}")
+
+        log.warning(f"ASIN extraction failed: All 4 fallbacks exhausted")
+        return None
 
     async def search_by_ean_and_extract_data(
         self, ean: str, supplier_product_title: str, page: Optional[Page] = None
