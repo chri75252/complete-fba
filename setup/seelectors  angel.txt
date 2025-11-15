@@ -1,0 +1,132 @@
+# Angel Wholesale (angelwholesale.co.uk) - CSS Selectors
+
+## PRODUCT LISTING PAGE SELECTORS
+
+### Product Item Container
+```css
+#product-listing-container article
+```
+*Note: Each product is contained within an article element under the product-listing-container*
+
+### Title (on listing page)
+```css
+article h3 a
+```
+*Alternative: The product title appears in heading tags within each article*
+
+### Price (on listing page)
+```css
+article .price--withoutTax
+```
+*The main price displays without tax information*
+
+### Product URL (on listing page)
+```css
+article h3 a[href]
+```
+*Or: `article a[href*="/p"]` for product links*
+
+### Out of Stock Indicator
+```
+article .out-of-stock-message
+```
+*Note: Products display "Out of stock" text when unavailable. In listing: text appears near product*
+
+***
+
+## INDIVIDUAL PRODUCT PAGE SELECTORS
+
+### Product Title
+```css
+.productView h1.productView-title
+```
+*Alternative: `h1.productView-title` or main heading on product page*
+
+### Price
+```css
+.productView-price .price--withoutTax
+```
+*Main product price without VAT*
+
+### Price Login Required
+```
+.productView .price-login-required
+```
+*Note: This site displays prices publicly. If login required, text would appear instead of price*
+
+### EAN/Barcode
+```
+Product Specification section: Look for "Barcode" label
+CSS: `.productView-info dt:contains('Barcode') + dd`
+```
+*Barcode appears in the PRODUCT SPECIFICATION table with label "Barcode"*
+*Example values found: "5012128621741", "5012128616792"*
+
+### Stock Status / Availability
+```css
+.productView-info .availability
+```
+*Text format: "AVAILABILITY: 48 IN STOCK" or "AVAILABILITY: 96 IN STOCK"*
+
+### SKU
+```css
+.productView-info .sku
+```
+*Format: "SKU: C19593" - appears next to availability*
+
+### Out of Stock (product page)
+```
+.productView .out-of-stock-badge
+```
+*Would display when product is unavailable*
+
+***
+
+## CATEGORY/SEARCH RESULT PAGE SELECTORS
+
+### Next Page Button
+```css
+a:contains('LOAD MORE')
+```
+*This site uses infinite scroll with a "LOAD MORE" link button*
+*No traditional pagination - products load dynamically*
+
+### Price (in results)
+```css
+article .price--withoutTax
+```
+*Same as product listing price selector*
+
+### Product Title (in results)
+```css
+article h3 a
+```
+*Same as product listing title selector*
+
+### Product URL (in results)
+```css
+article h3 a[href]
+```
+*Same as product listing URL selector*
+
+---
+
+## ADDITIONAL NOTES
+
+1. **Product Container Structure**: Products on listing pages are contained in `<article>` elements within `#product-listing-container`
+
+2. **Bulk Pricing**: Products show tiered pricing like "Buy 24+ for £0.81 each" - these appear as separate elements
+
+3. **Sale Badge**: Sale items have a badge with class containing "SALE"
+
+4. **Assorted Designs**: Some products show "Assorted Designs" indicator with an info icon
+
+5. **Images**: Product images use class `.card-image` or similar within article containers
+
+6. **Price Format**: Prices shown are exclusive of VAT, format: "£0.86 each"
+
+7. **Stock Status Format**: 
+   - In Stock: "AVAILABILITY: X IN STOCK" (where X is quantity)
+   - Out of Stock: Would show "Out of stock" badge/text
+
+8. **Pagination**: Uses "LOAD MORE" button for infinite scroll rather than traditional numbered pagination

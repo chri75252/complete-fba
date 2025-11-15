@@ -1390,8 +1390,52 @@ class ConfigurableSupplierScraper:
     async def _collect_all_product_urls(self, url: str, max_products: int) -> List[str]:
         """
         Collects all product URLs from paginated category pages.
-        Navigates through pages using ?p=N URL pattern.
+
+        UPDATED: Now checks config for pagination method and routes appropriately.
+        - If pagination_method is "button" → uses button pagination
+        - Otherwise → uses URL-based pagination (?p=N pattern)
         """
+        # ========================================
+        # NEW: Check pagination method from config
+        # ========================================
+        domain = urlparse(url).netloc
+        config = self._get_selectors_for_domain(domain)
+
+        # Check BOTH "pagination" and "category_page" sections
+        pagination_config = config.get("pagination", {})
+        category_page_config = config.get("category_page", {})
+
+        # Prioritize: category_page > pagination > default to "url"
+        pagination_method = (
+            category_page_config.get("pagination_method") or
+            pagination_config.get("pagination_method") or
+            "url"
+        )
+
+        # For button selectors, check both sections
+        button_selectors = (
+            pagination_config.get("next_button_selector") or
+            category_page_config.get("next_page_button_selector") or
+            []
+        )
+
+        # Merge both configs for button pagination method
+        merged_pagination_config = {
+            "pagination_method": pagination_method,
+            "next_button_selector": button_selectors,
+            "next_button_javascript": pagination_config.get("next_button_javascript")
+        }
+
+        # Route to appropriate pagination method
+        if pagination_method == "button":
+            log.info(f"🔘 Config specifies BUTTON pagination for {domain}")
+            return await self._collect_urls_button_pagination(url, max_products, merged_pagination_config)
+        else:
+            log.info(f"🔗 Using URL pagination for {domain}")
+
+        # ========================================
+        # EXISTING CODE: URL-based pagination (unchanged)
+        # ========================================
         log.info(f"Collecting product URLs from paginated pages starting at: {url}")
         all_product_urls = set()
         urls_per_page = []  # Track URLs found per page for pagination logging
@@ -1456,6 +1500,156 @@ class ConfigurableSupplierScraper:
         self.last_page_count = current_page
         self.last_urls_per_page = urls_per_page  # New: track URLs per page for pagination logging
         return self.last_collected_urls
+
+    async def _collect_urls_button_pagination(
+        self,
+        category_url: str,
+        max_products: int,
+        pagination_config: dict
+    ) -> List[str]:
+        """
+        Collect product URLs using BUTTON-BASED pagination (LOAD MORE, NEXT buttons).
+
+        Used when config specifies pagination_method: "button".
+        Clicks button repeatedly until all products loaded or max reached.
+
+        Args:
+            category_url: Category page URL
+            max_products: Maximum products to collect
+            pagination_config: Pagination config from supplier config
+
+        Returns:
+            List of unique product URLs
+        """
+        log.info(f"🔄 Using BUTTON pagination for: {category_url}")
+
+        all_product_urls = set()
+        button_selectors = pagination_config.get("next_button_selector", [])
+        button_javascript = pagination_config.get("next_button_javascript", None)
+
+        if not button_selectors:
+            log.warning("⚠️ Button pagination configured but no selectors provided, falling back to URL pagination")
+            return await self._collect_all_product_urls(category_url, max_products)
+
+        try:
+            # Navigate to category page - use BrowserManager pattern
+            page = await self.browser_manager.get_page()
+            if not page:
+                log.error("❌ Failed to get page from BrowserManager")
+                return await self._collect_all_product_urls(category_url, max_products)
+
+            await page.goto(category_url, wait_until="networkidle", timeout=30000)
+
+            clicks = 0
+            max_clicks = 10  # Safety limit
+
+            while len(all_product_urls) < max_products and clicks < max_clicks:
+                # Extract product URLs from current page state
+                current_urls = await self._extract_product_urls_from_page(page)
+                new_urls = set(current_urls) - all_product_urls
+
+                if new_urls:
+                    log.info(f"📦 Found {len(new_urls)} new product URLs (total: {len(all_product_urls) + len(new_urls)})")
+                    all_product_urls.update(new_urls)
+
+                # Try to find and click LOAD MORE / NEXT button
+                button_clicked = False
+
+                # Method 1: Try JavaScript click (preferred if configured)
+                if button_javascript:
+                    try:
+                        result = await page.evaluate(button_javascript)
+                        if result:
+                            button_clicked = True
+                            log.info("✅ Button clicked via JavaScript")
+                            await page.wait_for_timeout(2000)  # Wait for content to load
+                    except Exception as e:
+                        log.debug(f"JavaScript button click failed: {e}")
+
+                # Method 2: Try CSS selector click (fallback)
+                if not button_clicked:
+                    for selector in button_selectors:
+                        try:
+                            button = await page.query_selector(selector)
+                            if button:
+                                is_visible = await button.is_visible()
+                                if is_visible:
+                                    await button.click()
+                                    button_clicked = True
+                                    log.info(f"✅ Button clicked via selector: {selector}")
+                                    await page.wait_for_timeout(2000)
+                                    break
+                        except Exception as e:
+                            log.debug(f"Selector '{selector}' click failed: {e}")
+                            continue
+
+                # If button not found or clicked, we're done
+                if not button_clicked:
+                    log.info("🏁 No more pagination buttons found, collection complete")
+                    break
+
+                clicks += 1
+
+            # Only close page if NOT using BrowserManager (BrowserManager handles page lifecycle)
+            if page and not self.use_browser_manager:
+                try:
+                    await page.close()
+                except Exception as close_error:
+                    log.warning(f"Error closing page: {close_error}")
+
+            log.info(f"✅ Button pagination complete: {len(all_product_urls)} unique URLs collected")
+            # Expose same attributes as URL pagination for consistency
+            self.last_collected_urls = list(all_product_urls)[:max_products]
+            self.last_page_count = clicks + 1
+            return self.last_collected_urls
+
+        except Exception as e:
+            log.error(f"❌ Button pagination failed: {e}")
+            log.info("⚠️ Falling back to URL-based pagination...")
+            return await self._collect_all_product_urls(category_url, max_products)
+
+    async def _extract_product_urls_from_page(self, page) -> List[str]:
+        """
+        Extract product URLs from current page state (for button pagination).
+
+        Args:
+            page: Playwright page object
+
+        Returns:
+            List of product URLs found on current page
+        """
+        try:
+            # Get domain-specific selectors
+            domain = urlparse(page.url).netloc
+            config = self._get_selectors_for_domain(domain)
+            url_selectors = config.get("field_mappings", {}).get("url", [])
+
+            product_urls = []
+
+            for selector in url_selectors:
+                if not selector:
+                    continue
+
+                # Query all matching elements
+                elements = await page.query_selector_all(selector)
+
+                for element in elements:
+                    href = await element.get_attribute("href")
+                    if href:
+                        # Normalize URL
+                        if href.startswith("/"):
+                            base_url = f"{urlparse(page.url).scheme}://{domain}"
+                            href = base_url + href
+                        elif not href.startswith("http"):
+                            href = f"{page.url.rstrip('/')}/{href}"
+
+                        product_urls.append(href)
+
+            return product_urls
+
+        except Exception as e:
+            log.error(f"❌ Failed to extract product URLs from page: {e}")
+            return []
 
     def _extract_text_by_selector(self, soup: BeautifulSoup, selectors: List[str]) -> Optional[str]:
         """Extract text using a list of CSS selectors."""
@@ -3241,20 +3435,71 @@ HTML CONTENT:
         await self.close_session()
 
     def extract_ean(self, product_page_soup, context_url: str = None):
-        """Extract EAN from the product page using multiple methods including HTML pattern search."""
+        """
+        Extract EAN/barcode with REVERSED priority: CSS selectors FIRST, pattern matching SECOND.
 
-        # FIRST: Try HTML pattern search for 8-14 digit codes (MOST RELIABLE)
+        This prevents false positives from pattern matching (e.g., category IDs in URLs).
+        Patterns become fallback only when structured extraction fails.
+        """
+
+        # ========================================
+        # PRIORITY 1: CSS SELECTORS (Lines 3246-3290)
+        # ========================================
+        selectors = []
+        domain = None
+
+        if context_url:
+            domain = urlparse(context_url).netloc
+            selectors_config = self._get_selectors_for_domain(domain)
+            selectors = selectors_config.get("field_mappings", {}).get("ean", [])
+
+        for selector in selectors:
+            if not selector:
+                continue
+
+            # --- MANUAL ITERATION PATTERN (for BeautifulSoup :has/:contains workaround) ---
+            if selector == ".specs-row":
+                # Used by angelwholesale and similar sites with table-row structures
+                specs_rows = product_page_soup.select('.specs-row')
+                for row in specs_rows:
+                    data_cells = row.select('.specs-data')
+                    if len(data_cells) >= 2:
+                        # Check if first cell is label containing "barcode" or "ean"
+                        label = data_cells[0].get_text(strip=True).lower()
+                        if 'barcode' in label or 'ean' in label or 'gtin' in label:
+                            value = data_cells[1].get_text(strip=True)
+                            # Validate: digits only, 8-14 characters
+                            if value and value.isdigit() and 8 <= len(value) <= 14:
+                                log.info(f"🎯 EAN found via manual iteration (.specs-row): {value}")
+                                return value
+
+            # --- STANDARD CSS SELECTOR ---
+            else:
+                element = product_page_soup.select_one(selector)
+                if element:
+                    text = element.get_text(strip=True)
+                    # Validate: digits only, 8-14 characters
+                    if text and text.isdigit() and 8 <= len(text) <= 14:
+                        log.info(f"🎯 EAN found via CSS selector '{selector}': {text}")
+                        return text
+
+        # ========================================
+        # PRIORITY 2: PATTERN MATCHING FALLBACK (Lines 3291-3325)
+        # ========================================
+        # Only runs if CSS selectors fail
+        log.debug("CSS selectors found no EAN, attempting pattern matching fallback...")
+
         html_content = str(product_page_soup)
         ean_patterns = [
-            r"Product Barcode/ASIN/EAN:\s*([0-9]{8,14})",  # Poundwholesale specific pattern
-            r"barcode[^>]*[>:]?\s*([0-9]{8,14})",
-            r"ean[^>]*[>:]?\s*([0-9]{8,14})",
-            r"gtin[^>]*[>:]?\s*([0-9]{8,14})",
-            r"upc[^>]*[>:]?\s*([0-9]{8,14})",
-            r'"([0-9]{13})"',  # 13-digit codes in quotes
-            r'"([0-9]{12})"',  # 12-digit codes in quotes
-            r">([0-9]{13})<",  # 13-digit codes between tags
-            r">([0-9]{12})<",  # 12-digit codes between tags
+            r"Product Barcode/ASIN/EAN:\s*([0-9]{8,14})",  # Pattern 1 - Poundwholesale
+            r"barcode[^>]*[>:]?\s*([0-9]{8,14})",          # Pattern 2
+            r"\bean\b[^>]*[>:]?\s*([0-9]{8,14})",          # Pattern 3 - FIXED with word boundary
+            r"gtin[^>]*[>:]?\s*([0-9]{8,14})",             # Pattern 4
+            r"upc[^>]*[>:]?\s*([0-9]{8,14})",              # Pattern 5
+            r'"([0-9]{13})"',                               # Pattern 6 - 13 digits in quotes
+            r'"([0-9]{12})"',                               # Pattern 7 - 12 digits in quotes
+            r'>([0-9]{13})<',                               # Pattern 8 - 13 digits in tags
+            r'>([0-9]{12})<',                               # Pattern 9 - 12 digits in tags
         ]
 
         for pattern in ean_patterns:
@@ -3262,41 +3507,13 @@ HTML CONTENT:
             for match in matches:
                 code = match.group(1).strip()
                 if len(code) >= 8 and code.isdigit():
-                    log.info(f"🎯 EAN found via pattern search: {code}")
+                    log.warning(f"⚠️ EAN found via pattern matching (fallback): {code}")
                     return code
 
-        # SECOND: Try CSS selectors
-        selectors = []  # Default to empty list
-        if context_url:
-            domain = urlparse(context_url).netloc  # Parse domain from product page URL
-            selectors_config = self._get_selectors_for_domain(domain)
-            selectors = selectors_config.get("field_mappings", {}).get("ean", [])
-
-        # Enhanced selectors for Poundwholesale specifically
-        if not selectors or "poundwholesale" in (context_url or ""):
-            selectors = [
-                # Meta tags (most reliable)
-                "meta[name='product:ean']",
-                "meta[property='product:ean']",
-                "meta[name='product:gtin']",
-                "meta[property='product:gtin']",
-                # Script and data attributes
-                "script[type='application/ld+json']",
-                "[data-barcode]",
-                "[data-ean]",
-                "[data-gtin]",
-                # Clearance King specific
-                "div.product-info-main div.ck-product-code-b-code span.ck-b-code-value b",
-                "div.product-info-main div.ck-product-code-b-code span.ck-b-code-value",
-                "table.additional-attributes-table td[data-th='EAN']",
-                "div.product.attribute.sku div.value[itemprop='sku']",
-                "div.product.attribute.gtin div.value[itemprop='gtin13']",
-            ]
-        for selector in selectors:
-            if selector:  # Skip empty selectors
-                element = product_page_soup.select_one(selector)
-                if element:
-                    return element.get_text(strip=True)
+        # ========================================
+        # NO EAN FOUND
+        # ========================================
+        log.warning(f"❌ No EAN found for {domain} via CSS selectors or pattern matching")
         return None
 
     def extract_barcode(self, product_page_soup, context_url: str = None):

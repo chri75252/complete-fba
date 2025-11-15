@@ -1,0 +1,105 @@
+name: supplier-onboarding
+description: Guided supplier onboarding for Amazon FBA Agent System
+version: 1.0.0
+author: Amazon FBA Team
+
+interface:
+  inputs:
+    domain:
+      type: string
+      required: true
+      description: "Supplier domain (any form: URL, dot-form, hyphen-form)"
+      example: "poundwholesale.co.uk"
+
+    categories_source:
+      type: string
+      required: true
+      description: "Path to categories JSON file OR inline JSON string"
+      example: "config/poundwholesale_categories.json"
+
+    selectors_source:
+      type: string
+      required: true
+      description: "Path to selectors JSON file OR inline JSON object"
+      example: "config/supplier_configs/example.co.uk.json"
+
+    workflow_key:
+      type: string
+      required: true
+      description: "Workflow key in system_config.json workflows section"
+      example: "poundwholesale_workflow"
+
+    mode:
+      type: string
+      required: false
+      default: "generate"
+      enum: ["reference", "generate"]
+      description: "reference: validate only, generate: create files"
+
+    scaffolds:
+      type: array
+      required: false
+      default: []
+      items:
+        type: string
+        enum: ["supplier-package", "auth-helper", "runner-shim"]
+      description: "Optional scaffolds to generate"
+
+    test_product_url:
+      type: string
+      required: false
+      description: "URL of a test product for validation"
+
+    username:
+      type: string
+      required: false
+      description: "Supplier login username (required if authentication_required is true)"
+
+    password:
+      type: string
+      required: false
+      description: "Supplier login password (required if authentication_required is true)"
+
+    authentication_required:
+      type: boolean
+      required: false
+      default: false
+      description: "Set to true if supplier requires login to view prices/products"
+
+  outputs:
+    success:
+      type: boolean
+      description: "Overall success status"
+
+    files_generated:
+      type: array
+      items:
+        type: string
+      description: "List of generated file paths (absolute)"
+
+    sanity_results:
+      type: object
+      properties:
+        scraping_rate:
+          type: boolean
+        amazon_cache:
+          type: boolean
+        linking_map:
+          type: boolean
+        financial_csv:
+          type: boolean
+        processing_state:
+          type: boolean
+        no_critical_errors:
+          type: boolean
+
+    errors:
+      type: array
+      items:
+        type: string
+      description: "Error messages if any"
+
+    remediation:
+      type: object
+      required: false
+      description: "Remediation guidance for failed checks"

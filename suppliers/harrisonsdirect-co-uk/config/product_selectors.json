@@ -1,0 +1,25 @@
+{
+  "supplier_name": "harrisonsdirect.co.uk",
+  "supplier_url": "https://www.harrisonsdirect.co.uk",
+  "selectors": {
+    "product_card": "li.product-item",
+    "product_title": "a.product-item-link",
+    "product_price": "span.price",
+    "product_url": "a.product-item-link",
+    "product_image": "img.product-image-photo",
+    "stock_status": "div.stock"
+  },
+  "authentication": {
+    "required": true,
+    "login_url": "https://www.harrisonsdirect.co.uk/customer/account/login/",
+    "username_selector": "#email",
+    "password_selector": "#pass",
+    "submit_selector": "#send2",
+    "success_indicator": ".page-title"
+  },
+  "scraping_config": {
+    "pagination_selector": "a.action.next",
+    "wait_for_products": "li.product-item",
+    "product_wait_timeout_ms": 10000
+  }
+}

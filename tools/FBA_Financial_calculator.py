@@ -48,6 +48,11 @@ PREP_COST = _config.get("amazon", {}).get("fba_fees", {}).get("prep_house_fixed_
 SHIP_COST = 0.0
 SUPPLIER_PRICES_INCLUDE_VAT = _config.get("supplier", {}).get("prices_include_vat", True)
 
+# Fee defaults from config (fallbacks when Keepa data not available)
+FBA_FEES_CFG = _config.get("amazon", {}).get("fba_fees", {})
+REFERRAL_FEE_RATE_DEFAULT = FBA_FEES_CFG.get("referral_fee_rate", 0.15)
+FBA_FEE_DEFAULT = FBA_FEES_CFG.get("fulfillment_fee_minimum", 2.8)
+
 # Global variable to cache the linking map
 _linking_map = None
 
@@ -330,8 +335,8 @@ def financials(supplier, amazon, supplier_price_inc_vat):
         
     # Defaults (if Keepa block is missing)
     # Default referral fee must be ex-VAT to match ex-VAT economics
-    referral_fee = 0.15 * (amazon_price / (1 + VAT_RATE))
-    fba_fee = 2.8
+    referral_fee = REFERRAL_FEE_RATE_DEFAULT * (amazon_price / (1 + VAT_RATE))
+    fba_fee = FBA_FEE_DEFAULT
     
     # Extract fees from Keepa data structure as organized by amazon_playwright_extractor.py
     if 'keepa' in amazon and amazon['keepa']:
@@ -382,11 +387,13 @@ def financials(supplier, amazon, supplier_price_inc_vat):
     total_cost_ex_vat = supplier_price_ex_vat + PREP_COST + SHIP_COST
     roi = (net_profit / total_cost_ex_vat) * 100 if total_cost_ex_vat > 0 else 0
     
-    # Breakeven shelf price (inc-VAT) = 1.2 * (all ex-VAT costs)
-    breakeven = 1.2 * (supplier_price_ex_vat + referral_fee + fba_fee + PREP_COST + SHIP_COST)
+    # Breakeven shelf price (inc-VAT) = (1 + VAT_RATE) * (all ex-VAT costs)
+    breakeven = (1 + VAT_RATE) * (
+        supplier_price_ex_vat + referral_fee + fba_fee + PREP_COST + SHIP_COST
+    )
     
     # Fixed Profit Margin calculation: Profit Margin = (Net Profit / Revenue) * 100
-    profit_margin = (net_profit / selling_price_inc_vat) * 100 if selling_price_inc_vat > 0 else 0
+    profit_margin = (net_profit / amazon_price_ex_vat) * 100 if amazon_price_ex_vat > 0 else 0
     return {
         'SupplierPrice_incVAT': supplier_price_inc_vat,
         'SupplierPrice_exVAT': supplier_price_ex_vat,
@@ -555,10 +562,12 @@ def run_calculations(supplier_name, supplier_cache_path=None, output_dir=None, a
         'generated_calculations': len(records),
         'output_file': out_path
     }
-    
+
     if 'ROI' in df.columns:
-        stats['profitable_count'] = df[df['ROI'] > 0.3].shape[0]
-        stats['marginal_count'] = df[(df['ROI'] <= 0.3) & (df['ROI'] > 0)].shape[0] 
+        min_roi_cfg = _config.get("analysis", {}).get("min_roi_percent", 30.0)
+        profitable_threshold = float(min_roi_cfg)  # ROI is already in percent
+        stats['profitable_count'] = df[df['ROI'] > profitable_threshold].shape[0]
+        stats['marginal_count'] = df[(df['ROI'] <= profitable_threshold) & (df['ROI'] > 0)].shape[0]
         stats['unprofitable_count'] = df[df['ROI'] <= 0].shape[0]
         stats['top_5_by_roi'] = df.head(5)[['ASIN', 'EAN', 'SupplierTitle', 'ROI', 'NetProfit', 'SellingPrice_incVAT', 'SupplierPrice_incVAT']].to_dict('records')
     

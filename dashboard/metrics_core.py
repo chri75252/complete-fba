@@ -161,32 +161,41 @@ class MetricsLoader:
             # Chunked reading for large JSON files
             data = self._read_json_chunked(state_file)
 
-            # Calculate observed categories from category_performance
-            category_performance = data.get("category_performance", {})
-            observed_categories = len(category_performance.keys()) if category_performance else 0
-
-            # Load configured categories from config file
-            configured_categories = self._load_configured_categories(config_file) if config_file else None
-
-            # Extract current category and per-category progress
+            # Extract system progression data
             system_progression = data.get("system_progression", {})
-            current_category_url = system_progression.get("current_category_url") or data.get("category_url")
+            category_performance = data.get("category_performance", {})
             
-            # Per-category progress (if current category exists)
-            category_progress = {}
-            if current_category_url and current_category_url in category_performance:
-                cat_data = category_performance[current_category_url]
-                category_progress = {
-                    "supplier_products_needing_extraction": cat_data.get("supplier_products_needing_extraction"),
-                    "supplier_products_completed": cat_data.get("supplier_products_completed"),
-                    "amazon_products_needing_analysis": cat_data.get("amazon_products_needing_analysis"),
-                    "amazon_products_completed": cat_data.get("amazon_products_completed")
-                }
+            # Get category index and total from system_progression (source of truth)
+            persistent_category_index = system_progression.get("persistent_category_index", 0)
+            total_categories = system_progression.get("total_categories", 0)
+            
+            # Load configured categories from config file as fallback
+            configured_categories = self._load_configured_categories(config_file) if config_file else None
+            if configured_categories is None:
+                configured_categories = total_categories
+            
+            # Extract current category URL with fallbacks
+            current_category_url = (
+                system_progression.get("current_category_url")
+                or system_progression.get("original_category_url")
+                or data.get("category_url")
+                or ""
+            )
+            
+            # Per-category progress: read directly from system_progression (not category_performance)
+            category_progress = {
+                "supplier_products_needing_extraction": system_progression.get("supplier_products_needing_extraction", 0),
+                "supplier_products_completed": system_progression.get("supplier_products_completed", 0),
+                "amazon_products_needing_analysis": system_progression.get("amazon_products_needing_analysis", 0),
+                "amazon_products_completed": system_progression.get("amazon_products_completed", 0)
+            }
 
             metrics = {
                 "state_file_found": True,
-                "observed_categories": observed_categories,
+                "observed_categories": persistent_category_index,  # Use index, not len(dict)
                 "configured_categories": configured_categories,
+                "persistent_category_index": persistent_category_index,  # Explicit field
+                "total_categories": total_categories,  # Explicit field
                 "current_category_url": current_category_url,
                 "category_progress": category_progress,
                 "last_updated": self._parse_datetime(data.get("last_updated")),

@@ -988,7 +988,8 @@ class FixedAmazonExtractor(AmazonExtractor):
             # Enhanced list of selectors for finding individual product tiles
             search_selectors = [
                 # Try to exclude obvious ad containers at the selection stage
-                "div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored-product'])",
+                # FIXED: Added new Amazon 2025 sponsored classes (puis-sponsored, sp-sponsored-result)
+                "div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored']):not([class*='puis-sponsored']):not([data-component-type='sp-sponsored-result'])",
                 "div.s-result-item[data-asin]:not([data-asin=''])",
                 "div[data-component-type='s-search-result'][data-asin]:not([data-asin=''])",
                 "div.s-search-results > div[data-asin]",
@@ -1047,26 +1048,43 @@ class FixedAmazonExtractor(AmazonExtractor):
                         except Exception as html_error:
                             log.debug(f"Could not get HTML for element debug: {html_error}")
 
-                    # Check 1: Explicit "Sponsored" text directly visible within the element
+                    # Check 1: Explicit "Sponsored" text + NEW Amazon 2025 sponsored indicators
+                    # FIXED: Replaced element.locator() with element.evaluate() (correct Playwright API)
                     try:
-                        sponsored_badge_locator = element.locator(
-                            "span:visible",
-                            has_text=re.compile(r"^\\s*Sponsored\\s*$", re.IGNORECASE),
-                        )
-                        if await sponsored_badge_locator.count() > 0:
-                            is_sponsored = True
-                            sponsor_detection_reason = "visible 'Sponsored' text badge"
+                        is_sponsored = await element.evaluate("""el => {
+                            // Check for "Sponsored" text in spans
+                            const spans = el.querySelectorAll('span');
+                            for (const span of spans) {
+                                if (/^\\s*Sponsored\\s*$/i.test(span.textContent)) return true;
+                            }
+
+                            // NEW: Amazon 2025 sponsored indicators (from Chrome DevTools analysis)
+                            if (el.querySelector('.puis-sponsored-label-text')) return true;
+                            if (el.querySelector('.puis-label-popover')) return true;
+                            if (el.querySelector('[data-ad-marker="true"]')) return true;
+
+                            return false;
+                        }""")
+
+                        if is_sponsored:
+                            sponsor_detection_reason = "visible 'Sponsored' text or puis-sponsored class"
                     except Exception as e_badge:
                         log.debug(f"Error checking sponsored badge for ASIN {asin}: {e_badge}")
 
                     # Check 2: Aria-label on the element or a significant child
+                    # FIXED: Replaced element.locator() with element.evaluate()
                     if not is_sponsored:
                         try:
-                            if (
-                                await element.locator('[aria-label="Sponsored"]:visible').count()
-                                > 0
-                            ):
-                                is_sponsored = True
+                            is_sponsored = await element.evaluate("""el => {
+                                // Check aria-label on element itself
+                                if (el.getAttribute('aria-label')?.toLowerCase().includes('sponsored')) return true;
+
+                                // Check aria-label on children
+                                const sponsoredElements = el.querySelectorAll('[aria-label*="Sponsored" i], [aria-label*="sponsored" i]');
+                                return sponsoredElements.length > 0;
+                            }""")
+
+                            if is_sponsored:
                                 sponsor_detection_reason = "aria-label='Sponsored'"
                         except Exception as e_aria:
                             log.debug(f"Error checking aria-label for ASIN {asin}: {e_aria}")
@@ -1098,12 +1116,19 @@ class FixedAmazonExtractor(AmazonExtractor):
                         try:
                             element_classes = await element.get_attribute("class") or ""
                             known_ad_classes = [
+                                # OLD (keep for backwards compatibility)
                                 "AdHolder",
                                 "s-widget-sponsored-product",
                                 "sponsored-results-padding",
                                 "s-result-item-sponsored-popup",
-                                "puis-sponsored-container-component",
                                 "ad-feedback",
+
+                                # NEW: Amazon 2025 sponsored classes (from Chrome DevTools analysis)
+                                "puis-sponsored-label-text",
+                                "puis-sponsored-label-popover",
+                                "puis-sponsored-container",
+                                "sp-sponsored-result",
+                                "s-widget-sponsored",  # Broader match
                             ]
                             for ad_class in known_ad_classes:
                                 if ad_class in element_classes:
@@ -1114,13 +1139,15 @@ class FixedAmazonExtractor(AmazonExtractor):
                             log.debug(f"Error checking tile classes for ASIN {asin}: {e_class}")
 
                     # Check 5: Text content contains typical ad indicators
+                    # FIXED: Replaced element.locator() with element.evaluate()
                     if not is_sponsored:
                         try:
-                            ad_indicators_locator = element.locator(
-                                "text=/sponsored|advertisement|ad for/i"
-                            )
-                            if await ad_indicators_locator.count() > 0:
-                                is_sponsored = True
+                            is_sponsored = await element.evaluate("""el => {
+                                const text = el.innerText?.toLowerCase() || '';
+                                return /sponsored|advertisement|ad for/i.test(text);
+                            }""")
+
+                            if is_sponsored:
                                 sponsor_detection_reason = "text containing ad indicators"
                         except Exception as e_text:
                             log.debug(
@@ -1145,6 +1172,14 @@ class FixedAmazonExtractor(AmazonExtractor):
                             f"Found {len(organic_results)} organic results, stopping search to improve performance."
                         )
                         break
+
+                # FIXED: Log sponsored filtering results for transparency
+                organic_count = len(organic_results)
+                sponsored_count = len(search_result_elements) - organic_count
+                log.info(
+                    f"📊 SPONSORED FILTERING RESULTS: {organic_count} organic products, "
+                    f"{sponsored_count} sponsored products filtered out"
+                )
 
                 # Check if we have any organic results
                 if not organic_results:
