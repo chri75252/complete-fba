@@ -570,7 +570,7 @@ def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForm
 
     # Save single categories file for both system_config.json and state manager
     guardian.save_json_atomic(final_categories, categories_data)
-    print(f"SUCCESS: Created: {categories_filename} (compatible with both system and state manager)")
+    print(f"[OK] Created: {categories_filename} (compatible with both system and state manager)")
 
     # Update system_config.json to use the correct path
     system_config_path = repo_root / "config" / "system_config.json"
@@ -583,15 +583,15 @@ def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForm
 
     system_config["workflows"][workflow_key]["categories_config_path"] = f"config/{categories_filename}"
     guardian.save_json_atomic(system_config_path, system_config)
-    print(f"SUCCESS: Updated system_config.json to use: config/{categories_filename}")
+    print(f"[OK] Updated system_config.json to use: config/{categories_filename}")
 
     # Validate category file
     if not categories_data.get("category_urls"):
-        print("\nWARNING: No category URLs were provided!")
+        print("\n[WARN]  WARNING: No category URLs were provided!")
         print("   The category file will be empty.")
         print("   Workflow will enter fresh_start mode.")
     else:
-        print(f"\nSUCCESS: Category file validation:")
+        print(f"\n[OK] Category file validation:")
         print(f"   - Total URLs: {len(categories_data.get('category_urls', []))}")
         print(f"   - Single file used by both system and state manager")
 
@@ -891,9 +891,7 @@ class SupplierOnboardingWizard:
         atomic_move_to_final(self.staging_dir, self.repo_root, self.forms, self.session_input["workflow_key"])
 
         # 4a. Register workflow in system_config.json
-        # FIX: Use consistent naming (no _workflow suffix) - matches atomic_move_to_final logic
-        supplier_name_clean = self.forms.domain.replace('.co.uk', '').replace('.com', '').replace('.', '')
-        categories_path = f"config/{supplier_name_clean}_categories.json"
+        categories_path = f"config/{self.session_input['workflow_key']}_categories.json"
         auth_required = self.session_input.get("authentication_required", False)
         test_product_url = self.session_input.get("test_product_url")
 
@@ -929,8 +927,8 @@ class SupplierOnboardingWizard:
                 supplier_url=supplier_url,
                 repo_root=self.repo_root
             )
-            print(f"✅ Generated authentication helper: {auth_helper_path}")
-            print(f"⚠️ Auth helper is a TEMPLATE - customize login selectors manually")
+            print(f"[OK] Generated authentication helper: {auth_helper_path}")
+            print(f"[WARN] Auth helper is a TEMPLATE - customize login selectors manually")
             print(f"   Edit: {auth_helper_path}")
 
         # 5. Determine runner (with NEW parameters for full runner generation)
@@ -962,7 +960,9 @@ class SupplierOnboardingWizard:
             "success": all_passed,
             "files_generated": [
                 str(NamingConventions.selector_config_path(self.forms.domain, self.repo_root)),
-                str(NamingConventions.categories_config_path(self.session_input["workflow_key"], self.repo_root))
+                str(NamingConventions.categories_config_path(self.session_input["workflow_key"], self.repo_root)),
+                runner,  # ADD RUNNER SCRIPT TO TRACKED FILES
+                str(self.repo_root / "config" / "system_config.json")  # TRACK SYSTEM CONFIG UPDATE
             ],
             "sanity_results": checks,
             "remediation": remediation,

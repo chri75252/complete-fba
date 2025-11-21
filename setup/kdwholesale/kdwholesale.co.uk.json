@@ -1,0 +1,74 @@
+{
+  "supplier_id": "kdwholesale-co-uk",
+  "supplier_name": "KD Wholesale",
+  "base_url": "https://kdwholesale.co.uk/",
+  "field_mappings": {
+    "title": [
+      "h1"
+    ],
+    "price": [
+      "div.ty-product-block__price-actual",
+      ".ty-price"
+    ],
+    "url": [
+      "a[title][href*=\"/hardware/\"]",
+      "a[title][href*=\"/plumbing/\"]",
+      "a[title][href*=\"/decorative/\"]",
+      "a[title][href*=\"/toys/\"]",
+      "a[title][href*=\"/home-essential-products/\"]",
+      "a[title][href*=\"/stationery-art-and-craft-en-2/\"]",
+      "a[title][href*=\"/gift-certificates/\"]",
+      "a[title][href*=\"/party-items/\"]",
+      "a[title][href*=\"/cooking-dining/\"]",
+      "a[title][href*=\"/mobile-phone-accessories/\"]",
+      "a[title][href*=\"/health-beauty/\"]",
+      "a[title][href*=\"/automotive/\"]",
+      "a[title][href*=\"/baby-kids/\"]",
+      "a[title][href*=\"/clearance/\"]"
+    ],
+    "image": [
+      "img.ty-pict",
+      ".ty-product-img img"
+    ],
+    "ean": [
+      ".ty-product-feature__value",
+      ".ty-product-feature .ty-product-feature__value",
+      ".specs-row",
+      "meta[property='product:ean']",
+      "[data-ean]",
+      "[data-barcode]"
+    ],
+    "sku": [
+      "script[type=\"application/ld+json\"]",
+      ".ty-sku",
+      ".product-sku",
+      "[data-ty-sku]"
+    ],
+    "availability": [
+      ".ty-qty",
+      ".stock",
+      ".ty-product-block__availability"
+    ]
+  },
+  "pagination": {
+    "pagination_method": "url"
+  },
+  "category_page": {
+    "pagination_method": "url"
+  },
+  "special_extraction": {
+    "sku_from_jsonld": true,
+    "ean_patterns": true,
+    "structured_data_selector": "script[type=\"application/ld+json\"]"
+  },
+  "extraction_notes": {
+    "platform": "TSM (Team System for Multi-Vendor)",
+    "css_prefix": ".ty-",
+    "ean_extraction": "CSS selector found - .ty-product-feature__value in Features tab",
+    "ean_example": "5010303179964 (13 digits - confirmed valid EAN)",
+    "ean_location": "Features tab, structured .ty-product-feature container",
+    "sku_source": "JSON-LD structured data with @type='Product'",
+    "pagination_pattern": "{category_url}/page-{page_num}/",
+    "product_container": ".ty-grid-list__item.ty-quick-view-button__wrapper.et-grid-item"
+  }
+}

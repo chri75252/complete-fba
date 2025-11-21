@@ -42,7 +42,8 @@ class MetricsLoader:
         """
         # Normalize supplier name in different formats
         normalized_supplier = supplier_hint.replace('.', '_').lower()
-        hyphenated_supplier = supplier_hint.replace('.', '-').lower()
+        # Handle both dots and underscores when creating hyphenated version
+        hyphenated_supplier = supplier_hint.replace('.', '-').replace('_', '-').lower()
 
         # Find processing state file
         state_dir = os.path.join(self.base_dir, "OUTPUTS", "CACHE", "processing_states")
@@ -101,13 +102,21 @@ class MetricsLoader:
                 break
 
         # Find config file for category count
-        config_dir = os.path.join(self.base_dir, "config")
+        config_dir = os.path.join(self.base_dir, "config", "supplier_configs")
+        # Fallback to parent config dir if not found in supplier_configs
+        if not os.path.exists(config_dir):
+             config_dir = os.path.join(self.base_dir, "config")
+
         config_file = None
         config_patterns = [
             f"{normalized_supplier}_categories.json",
             f"{supplier_hint.replace('.', '')}_categories.json",
             # Fallback: try base domain pattern (e.g., poundwholesale_categories.json)
-            f"{supplier_hint.split('.')[0]}_categories.json" if '.' in supplier_hint else None
+            f"{supplier_hint.split('.')[0]}_categories.json" if '.' in supplier_hint else None,
+            # NEW: Add standard config files
+            f"{supplier_hint}.json",
+            f"{normalized_supplier}.json",
+            f"{hyphenated_supplier}.json"
         ]
         for pattern in config_patterns:
             if pattern is None:
@@ -202,7 +211,9 @@ class MetricsLoader:
                 "processing_status": data.get("processing_status"),
                 "successful_products": data.get("successful_products", 0),
                 "processed_products": data.get("successful_products", 0),  # Using successful as processed
-                "fresh_starts": 1 if data.get("is_fresh_start", False) else 0
+                "fresh_starts": 1 if data.get("is_fresh_start", False) else 0,
+                "total_products": data.get("total_products", 0),
+                "last_processed_index": data.get("last_processed_index", 0)
             }
 
             self._cache[cache_key] = metrics

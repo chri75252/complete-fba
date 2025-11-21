@@ -229,6 +229,10 @@ class FixedEnhancedStateManager:
             "global_counters": {},
             "frozen_category_denominators": {},
         }
+    
+    def _get_default_state(self) -> Dict[str, Any]:
+        """Alias for _initialize_state to satisfy load_state calls"""
+        return self._initialize_state()
 
       # 🚨 REVERTED: The _detect_actual_fresh_start method was fundamentally flawed.
     # Fresh start detection is now handled directly and simply within load_state().
@@ -491,8 +495,9 @@ class FixedEnhancedStateManager:
             log.info(f"🔍 STARTUP CHECK: is_fresh_start flag is '{is_fresh_start}'")
 
             # NEW: never mutate PCI from counts; compute only a session cursor by URL status
+            # NEW: never mutate PCI from counts; compute only a session cursor by URL status
+            manifest_urls = self._get_frozen_or_live_manifest_urls()
             if not is_fresh_start:
-                manifest_urls = self._get_frozen_or_live_manifest_urls()
                 completion = file_grounded_data.get("category_completion_status", {})
                 self.state_data["session_resume_cursor"] = self._first_incomplete_index_by_url(manifest_urls, completion, hint=sp.get("persistent_category_index", 1))
                 cursor_url = manifest_urls[self.state_data["session_resume_cursor"]-1] if self.state_data["session_resume_cursor"] <= len(manifest_urls) else "N/A"
@@ -1125,19 +1130,18 @@ class FixedEnhancedStateManager:
         Perform the actual atomic save operation with comprehensive error handling.
         """
         try:
-            # 🚨 DEBUG: Add detailed save operation logging to identify hang location
-            log.debug(f"💾 ATOMIC SAVE START: preserve={preserve_interruption_state}, startup_completed={self._startup_completed}")
-
-            # Update timestamp
-            self.state_data["last_updated"] = datetime.now(timezone.utc).isoformat()
-            log.debug(f"💾 ATOMIC SAVE: Timestamp updated")
-
             # 🚨 HARDEN STATE: Ensure critical keys are always present
             if "system_progression" in self.state_data:
                 sp = self.state_data["system_progression"]
                 sp.setdefault("supplier_products_completed", 0)
                 sp.setdefault("amazon_products_completed", 0)
                 log.debug(f"💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)")
+
+            # 🚨 STARTUP GUARD: Block premature saves unless explicitly authorized
+            # This prevents the "Index 1 Overwrite" bug if workflow init order is wrong
+            if not self._startup_completed and preserve_interruption_state:
+                log.warning("🛑 SAVE BLOCKED: Attempted to save state before startup completion")
+                return False
 
             # 🚨 CRITICAL: Do NOT perform file-grounded recalculation here during processing
             # Only update from file-grounded data if this is not preserving interruption state

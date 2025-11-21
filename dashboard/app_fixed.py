@@ -339,7 +339,9 @@ def render_sidebar():
         "poundwholesale_co_uk",
         "poundwholesale.co.uk",
         "clearance_king_co_uk",
-        "clearance-king.co.uk"
+        "clearance-king.co.uk",
+        "angelwholesale_co_uk",
+        "angelwholesale.co.uk"
     ]
 
     supplier = st.sidebar.selectbox(

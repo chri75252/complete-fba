@@ -1446,8 +1446,13 @@ class ConfigurableSupplierScraper:
             if current_page == 1:
                 page_url = url
             else:
-                separator = "&" if "?" in url else "?"
-                page_url = f"{url}{separator}p={current_page}"
+                # Check if we have a next page URL from the previous iteration
+                if 'next_page_url' in locals() and next_page_url:
+                    page_url = next_page_url
+                else:
+                    # Fallback to standard parameter pagination if no next link found
+                    separator = "&" if "?" in url else "?"
+                    page_url = f"{url}{separator}p={current_page}"
 
             log.info(f"Processing page {current_page}: {page_url}")
 
@@ -1484,6 +1489,26 @@ class ConfigurableSupplierScraper:
             # Stop if no new products found or max reached
             if not page_urls or len(all_product_urls) >= max_products:
                 break
+
+            # Extract next page URL for the next iteration
+            next_page_url = None
+            next_button_selector = config.get("pagination", {}).get("next_page_button") or \
+                                  config.get("category_page", {}).get("next_page_button")
+            
+            if next_button_selector:
+                try:
+                    soup = BeautifulSoup(html_content, "html.parser")
+                    next_link = soup.select_one(next_button_selector)
+                    if next_link and next_link.get("href"):
+                        next_href = next_link.get("href")
+                        # Handle relative URLs
+                        if not next_href.startswith("http"):
+                            next_page_url = urljoin(base_url, next_href)
+                        else:
+                            next_page_url = next_href
+                        log.info(f"🔗 Found next page URL: {next_page_url}")
+                except Exception as e:
+                    log.warning(f"Failed to extract next page URL: {e}")
 
             current_page += 1
 

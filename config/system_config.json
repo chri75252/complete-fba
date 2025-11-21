@@ -141,6 +141,11 @@
     "retry_attempts": 5,
     "retry_delay_seconds": 3,
     "batch_size": 100,
+    "matching_thresholds": {
+      "title_similarity": 0.25,
+      "medium_title_similarity": 0.5,
+      "high_title_similarity": 0.75
+    },
     "rate_limiting": {
       "rate_limit_delay": 1.5,
       "batch_delay": 8.0,
@@ -275,6 +280,24 @@
       "use_predefined_categories": true,
       "ai_client": null,
       "authentication_required": false
+    },
+    "kdwholesale_workflow": {
+      "supplier_name": "kdwholesale.co.uk",
+      "supplier_url": "https://kdwholesale.co.uk",
+      "categories_config_path": "config/kdwholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false,
+      "test_product_url": "https://kdwholesale.co.uk/cleaning-and-laundry-products/cleaning-products/buzz-stainless-steel-scourers-6-pk/"
+    },
+    "laceywholesale_workflow": {
+      "supplier_name": "laceywholesale.co.uk",
+      "supplier_url": "https://laceywholesale.co.uk",
+      "categories_config_path": "config/laceywholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false,
+      "test_product_url": "https://laceywholesale.co.uk/product/aquafresh-toothpaste-125ml-x-12/"
     }
   },
   "ai_features": {

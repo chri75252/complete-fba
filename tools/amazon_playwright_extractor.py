@@ -1604,100 +1604,14 @@ class AmazonExtractor:
     
     def _calculate_title_similarity(self, title1: str, title2: str) -> float:
         """
-        ENHANCED TITLE MATCHING - Fixes 90% failure rate with multi-layered scoring.
-        
-        Improvements over basic Jaccard similarity:
-        1. Removes common stop words that add noise
-        2. Prioritizes brand and model words with higher weights
-        3. Handles package size variations intelligently
-        4. Uses token-based scoring with position awareness
-        5. Implements deterministic fallback rules
+        ENHANCED TITLE MATCHING - COMMENTED OUT
+        System will now select first product that loads.
         """
-        if not title1 or not title2:
-            return 0.0
-            
-        # Enhanced preprocessing with stop word removal
-        def preprocess_title(title):
-            title = title.lower().strip()
-            # Remove common fluff words that cause false negatives
-            stop_words = {
-                'new', 'sale', 'offer', 'deal', 'hot', 'best', 'top', 'premium', 
-                'quality', 'great', 'amazing', 'perfect', 'ultimate', 'professional',
-                'classic', 'original', 'genuine', 'authentic', 'official', 'branded',
-                'the', 'and', 'or', 'with', 'for', 'in', 'on', 'at', 'by', 'from'
-            }
-            words = [w for w in title.split() if w not in stop_words and len(w) > 2]
-            return words
-        
-        words1 = preprocess_title(title1)
-        words2 = preprocess_title(title2)
-        
-        if not words1 or not words2:
-            return 0.0
-        
-        # Multi-layer scoring approach
-        total_score = 0.0
-        max_possible_score = 0.0
-        
-        # Layer 1: Brand matching (highest weight)
-        brand_indicators = {'apple', 'samsung', 'sony', 'nike', 'adidas', 'lego', 'disney', 'microsoft'}
-        brand_words1 = set(w for w in words1 if w in brand_indicators)
-        brand_words2 = set(w for w in words2 if w in brand_indicators)
-        if brand_words1 and brand_words2:
-            brand_match = len(brand_words1.intersection(brand_words2)) / max(len(brand_words1), len(brand_words2))
-            total_score += brand_match * 0.4  # 40% weight for brand matching
-        max_possible_score += 0.4
-        
-        # Layer 2: Model/Product number matching (high weight)
-        model_pattern = r'\b[A-Z0-9]+\b'
-        models1 = set(re.findall(model_pattern, ' '.join(words1).upper()))
-        models2 = set(re.findall(model_pattern, ' '.join(words2).upper()))
-        if models1 and models2:
-            model_match = len(models1.intersection(models2)) / max(len(models1), len(models2))
-            total_score += model_match * 0.3  # 30% weight for model matching
-        max_possible_score += 0.3
-        
-        # Layer 3: Package size matching (medium weight)
-        def extract_package_info(words):
-            package_indicators = []
-            for i, word in enumerate(words):
-                if word in ['pack', 'set', 'box', 'bundle', 'kit', 'pieces', 'pcs']:
-                    # Look for numbers before the package indicator
-                    if i > 0 and words[i-1].isdigit():
-                        package_indicators.append(f"{words[i-1]}_{word}")
-                    elif i < len(words)-1 and words[i+1].isdigit():
-                        package_indicators.append(f"{words[i+1]}_{word}")
-            return set(package_indicators)
-        
-        package1 = extract_package_info(words1)
-        package2 = extract_package_info(words2)
-        if package1 and package2:
-            package_match = len(package1.intersection(package2)) / max(len(package1), len(package2))
-            total_score += package_match * 0.2  # 20% weight for package matching
-        elif not package1 and not package2:
-            # Both have no package info - this is actually a good match
-            total_score += 0.2
-        max_possible_score += 0.2
-        
-        # Layer 4: Core word matching with TF-IDF concept (remaining weight)
-        words1_set = set(words1)
-        words2_set = set(words2)
-        intersection = len(words1_set.intersection(words2_set))
-        union = len(words1_set.union(words2_set))
-        
-        if union > 0:
-            jaccard_score = intersection / union
-            total_score += jaccard_score * 0.1  # 10% weight for general word matching
-        max_possible_score += 0.1
-        
-        # Normalize score
-        final_score = total_score / max_possible_score if max_possible_score > 0 else 0.0
-        
-        # Deterministic fallback rule for high-confidence matches
-        if intersection >= 3 and final_score >= 0.7:
-            final_score = min(0.95, final_score + 0.15)  # Boost high-quality matches
-        
-        return round(final_score, 3)
+        # COMMENTED OUT - Complex scoring system disabled
+        # if not title1 or not title2:
+        #     return 0.0
+        # ... [complex scoring logic commented out]
+        return 0.0  # Return neutral score - no longer used for selection
 
     def _estimate_sales_from_bsr(self, rank: int, category: str = "") -> int:
         # (Content from amazon_playwright_extractor_final_corrected.py)
@@ -1734,10 +1648,11 @@ class AmazonExtractor:
             search_result_elements = await page.query_selector_all("[data-component-type='s-search-result']")
             log.info(f"Found {len(search_result_elements)} search results for '{title}'")
             
-            # Collect results with similarity scoring
-            results_with_scores = []
-            
-            for res_elem in search_result_elements[:5]: 
+            # Collect results without similarity scoring - COMMENTED OUT
+            # results_with_scores = []
+            organic_results = []
+
+            for res_elem in search_result_elements[:5]:
                 item_data: Dict[str, Any] = {"asin": await res_elem.get_attribute("data-asin")}
                 title_el = await res_elem.query_selector("h2 a.a-link-normal span.a-text-normal")
                 if title_el: item_data["title"] = (await title_el.text_content() or "").strip()
@@ -1745,44 +1660,50 @@ class AmazonExtractor:
                 if price_el: item_data["price"] = self._parse_price(await price_el.text_content() or "")
                 img_el = await res_elem.query_selector("img.s-image")
                 if img_el: item_data["image_url"] = await img_el.get_attribute("src")
-                rating_el = await res_elem.query_selector(".a-icon-star-small") 
+                rating_el = await res_elem.query_selector(".a-icon-star-small")
                 if rating_el:
                     rating_text_aria = await rating_el.get_attribute("aria-label")
-                    rating_text_span = await rating_el.query_selector("span.a-icon-alt") 
+                    rating_text_span = await rating_el.query_selector("span.a-icon-alt")
                     rating_text_content = rating_text_aria or (await rating_text_span.text_content() if rating_text_span else None)
 
                     if rating_text_content:
                         rating_match = re.search(r"([\d.]+)\s*out of", rating_text_content)
                         if rating_match: item_data["rating"] = float(rating_match.group(1))
-                reviews_el = await res_elem.query_selector("span.a-size-base[dir='auto'], a.a-link-normal span.a-size-base") 
+                reviews_el = await res_elem.query_selector("span.a-size-base[dir='auto'], a.a-link-normal span.a-size-base")
                 if reviews_el:
                     reviews_text = await reviews_el.text_content()
                     if reviews_text: item_data["review_count"] = self._parse_number(reviews_text)
-                
+
                 if item_data.get("asin") and item_data.get("title"):
-                    # Calculate similarity score and add to results with score
-                    similarity_score = self._calculate_title_similarity(title, item_data["title"])
-                    item_data["title_similarity_score"] = round(similarity_score, 3)  # Add score to item data
-                    results_with_scores.append((item_data, similarity_score))
-                    
-                    # ENHANCED THRESHOLD - Optimized for new multi-layer algorithm
-                    # 0.75+ = High confidence with new algorithm (vs 0.85 with old basic algorithm)
-                    if exact_match and similarity_score >= 0.75:
-                        result["exact_match_found"] = True
-                        result["exact_match_item"] = item_data
-                        log.info(f"HIGH CONFIDENCE MATCH: {similarity_score:.3f} - '{item_data.get('title', '')[:50]}...'")
-                        break
-            
-            # Sort results by their similarity score (highest first)
-            results_with_scores.sort(key=lambda x: x[1], reverse=True)
-            
-            # Add sorted results to the final result
-            result["results"] = [item_data for item_data, _ in results_with_scores]
-            
-            # Log the similarity-based sorting
+                    # COMMENTED OUT - No similarity scoring, take first product that loads
+                    # similarity_score = self._calculate_title_similarity(title, item_data["title"])
+                    # item_data["title_similarity_score"] = round(similarity_score, 3)  # Add score to item data
+                    # results_with_scores.append((item_data, similarity_score))
+
+                    # COMMENTED OUT - No similarity threshold matching
+                    # if exact_match and similarity_score >= 0.75:
+                    #     result["exact_match_found"] = True
+                    #     result["exact_match_item"] = item_data
+                    #     log.info(f"HIGH CONFIDENCE MATCH: {similarity_score:.3f} - '{item_data.get('title', '')[:50]}...'")
+
+                    # COMMENTED OUT - Take first result instead
+                    organic_results.append(item_data)
+                    break  # Take first valid result and exit
+
+            # COMMENTED OUT - No sorting needed, use first result
+            # results_with_scores.sort(key=lambda x: x[1], reverse=True)
+
+            # Add results to the final result (first product that loads)
+            result["results"] = organic_results
+
+            # COMMENTED OUT - No similarity-based logging needed
+            # if len(result["results"]) > 0:
+            #     log.info(f"Search results sorted by title similarity. Top result: '{result['results'][0].get('title', '')}' with score {result['results'][0].get('title_similarity_score', 0)}")
+
+            # COMMENTED OUT - Log first result selection
             if len(result["results"]) > 0:
-                log.info(f"Search results sorted by title similarity. Top result: '{result['results'][0].get('title', '')}' with score {result['results'][0].get('title_similarity_score', 0)}")
-            
+                log.info(f"First product selected: '{result['results'][0].get('title', '')}' - ASIN: {result['results'][0].get('asin', '')}")
+
             return result
         except Exception as e: 
             log.error(f"Error during Amazon search for '{title}': {e}", exc_info=True)
@@ -1797,3 +1718,794 @@ class AmazonExtractor:
             try: await self.browser.close()
             except Exception as e: log.error(f"Error closing browser: {e}")
         self.browser = None
+
+
+# =============================================================================
+# FIXEDAMAZONEXTRACTOR CLASS - Extended Amazon Extractor with EAN/Title Search
+# Migrated from passive_extraction_workflow_latest.py (Nov 17, 2025)
+# Includes visibility filtering, enhanced selectors, and helper methods
+# =============================================================================
+
+class FixedAmazonExtractor(AmazonExtractor):
+    """
+    Extension of AmazonExtractor.
+    Includes EAN search capabilities and attempts EAN extraction from product pages.
+    It reuses browser pages and avoids unnecessary page creation/closure for extension stability.
+    """
+
+    def __init__(self, chrome_debug_port: int, ai_client: Optional[OpenAI] = None):
+        super().__init__(chrome_debug_port, ai_client)
+        # self.ai_client is already set by parent constructor if ai_client is passed.
+
+    async def connect(self) -> Browser:  # type: ignore
+        """
+        Connect to browser using the centralized BrowserManager singleton.
+        All browser operations now go through the shared BrowserManager instance.
+        """
+        log.info(f"🔧 FixedAmazonExtractor connecting via BrowserManager singleton")
+        try:
+            # Import BrowserManager locally (matches base class pattern)
+            from utils.browser_manager import BrowserManager
+
+            # Use the browser manager singleton for centralized browser management
+            browser_manager = BrowserManager.get_instance()
+
+            # Ensure browser manager is properly launched
+            if not hasattr(browser_manager, "browser") or not browser_manager.browser:
+                await browser_manager.launch_browser(cdp_port=self.chrome_debug_port)
+
+            # Get the shared browser instance
+            self.browser = browser_manager.browser
+            log.info("✅ FixedAmazonExtractor connected via BrowserManager singleton")
+
+            return self.browser
+        except Exception as e:
+            log.error(f"❌ FixedAmazonExtractor failed to connect via BrowserManager: {e}")
+            log.error(
+                "Ensure Chrome is running with --remote-debugging-port=9222 and BrowserManager is properly initialized"
+            )
+            raise
+
+    def _overlap_score(self, title_a: str, title_b: str) -> float:
+        """Calculate word overlap score between two titles - COMMENTED OUT"""
+        # COMENTED OUT - System will now select first product that loads
+        # a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
+        # b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
+        # return len(a & b) / max(1, len(a))
+        return 0.0  # Return neutral score - no longer used for selection
+
+    async def search_by_title_using_search_bar(
+        self, title: str, page: Optional[Page] = None
+    ) -> Dict[str, Any]:
+        """Search Amazon by title using search bar interaction (not URL building)"""
+        if not self.browser or not self.browser.is_connected():
+            await self.connect()
+
+        log.info(f"Searching Amazon by title using search bar: '{title}'")
+
+        # Get page from parameter or use BrowserManager
+        if page is None:
+            from utils.browser_manager import get_page_for_url
+
+            log.info("No page provided to search_by_title, getting one from BrowserManager.")
+            page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
+
+        try:
+            # Navigate to Amazon UK and search by typing title into search bar
+            log.info(f"Navigating to Amazon UK to search for title: {title}")
+            await page.goto("https://www.amazon.co.uk", timeout=60000)
+
+            # Type title into search box and press Enter
+            await page.fill("input#twotabsearchtextbox", title, timeout=5000)
+            await page.press("input#twotabsearchtextbox", "Enter")
+
+            # ✅ STABILIZATION FIX: Wait for page to stabilize BEFORE extraction
+            await page.wait_for_load_state('domcontentloaded', timeout=5000)
+            await asyncio.sleep(0.5)  # Minimal wait as observed/requested
+
+            # Wait for search results
+            await page.wait_for_selector("div.s-search-results", timeout=15000)
+
+            # Parse search results - extract first few results with improved element selection
+            potential_asins_info = []
+
+            # Try multiple selectors for search result elements
+            search_result_elements = []
+            search_selectors = [
+                "div.s-search-results > div[data-asin]",
+                "div[data-component-type='s-search-result']",
+                "div[data-asin]:not([data-asin=''])",
+                "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
+            ]
+
+            for selector in search_selectors:
+                try:
+                    elements = await page.query_selector_all(selector)
+                    if elements:
+                        search_result_elements = elements
+                        log.info(
+                            f"Title search found {len(elements)} elements using selector: {selector}"
+                        )
+                        break
+                except Exception as e:
+                    log.debug(f"Title search selector '{selector}' failed: {e}")
+                    continue
+
+            # ✅ UNIFIED APPROACH: Use same product selection as EAN search
+            # Apply visibility filtering to select first visible organic product
+            found_product = False  # ✅ External success flag for safety
+
+            for i, element in enumerate(search_result_elements[:15]):
+                if found_product:  # ✅ CRITICAL SAFETY GUARD: Prevent continuation after success
+                    break
+
+                try:
+                    # VISIBILITY FILTERING: Skip hidden/sponsored products (same as EAN search)
+                    is_visible = await element.is_visible()
+
+                    if not is_visible:
+                        log.debug(f"Title search element {i+1}: Hidden by AdBlocker (likely sponsored)")
+                        continue  # Skip AdBlocker-hidden sponsored products
+
+                    # ASIN EXTRACTION: Use 4-fallback method
+                    asin = await self._extract_asin_from_element(element)
+
+                    if not asin:
+                        log.debug(f"Title search element {i+1}: No valid ASIN found")
+                        continue  # Skip elements without valid ASIN
+
+                    # TITLE EXTRACTION: Get product title
+                    result_title = await self._extract_title_from_element(element, asin)
+
+                    # SUCCESS: Found first visible organic product with valid ASIN
+                    potential_asins_info.append({"asin": asin, "title": result_title})
+                    log.info(f"✅ Title search: Selected first visible organic product - ASIN {asin}")
+                    found_product = True  # ✅ CRITICAL: Set flag BEFORE break
+                    break  # ✅ Stop at first visible product
+
+                except Exception as visibility_error:
+                    log.debug(f"Error processing title search element {i+1}: {visibility_error}")
+                    continue  # Try next element, but flag will prevent continuation if already set
+
+            # ✅ POST-LOOP VALIDATION: Ensure we found what we expected
+            if not found_product and potential_asins_info:
+                log.warning(f"⚠️ INCONSISTENT STATE: found_product=False but have results. This should not happen.")
+                # Auto-correct: Set flag to true if somehow we have results
+                found_product = True
+
+            # Create search_results_data in expected format
+            if potential_asins_info:
+                search_results_data = {
+                    "results": potential_asins_info,
+                    "search_method": "title_search_bar_interaction",
+                }
+                # FIXED: Enhanced logging for ASIN extraction success
+                log.info(
+                    f"🎯 ASIN EXTRACTION SUCCESS: Found {len(potential_asins_info)} ASINs "
+                    f"for title search: '{title}'"
+                )
+            else:
+                search_results_data = {"error": f"No valid ASINs found for title '{title}'"}
+                # FIXED: Enhanced logging for ASIN extraction failure
+                log.warning(
+                    f"⚠️ ASIN EXTRACTION FAILED: No ASINs found for title search: '{title}'. "
+                    f"Found {len(search_result_elements)} elements but couldn't extract ASINs."
+                )
+
+        except Exception as search_error:
+            log.error(f"Error during title search for '{title}': {search_error}")
+            search_results_data = {
+                "error": f"Search error for title '{title}': {str(search_error)}"
+            }
+
+        return search_results_data
+
+    async def _extract_title_from_element(self, element, asin: str) -> str:
+        """Extract title from search result element using multiple fallback selectors"""
+        title_selectors = [
+            "h2 a span.a-text-normal",
+            "h2 a span",
+            ".s-title-instructions-style span.a-text-normal",
+            "span.a-size-medium.a-color-base.a-text-normal",
+            "h2 span.a-size-base-plus",
+            "h2 a",
+            "h2",
+            "[data-cy='title-recipe-title']",
+            ".s-line-clamp-2 span",
+            ".s-line-clamp-3 span",
+            ".s-line-clamp-4 span",
+            ".s-size-mini .s-link-style a span",
+            ".s-size-mini .s-link-style span",
+            "span[data-a-text-type='title']",
+            "a.a-link-normal > span.a-text-normal",
+            "a span[aria-label]",
+            "a[href*='/dp/'] span",
+            ".a-link-normal span",
+        ]
+
+        for selector in title_selectors:
+            try:
+                title_element = await element.query_selector(selector)
+                if title_element:
+                    title_text = await title_element.inner_text()
+                    if title_text and title_text.strip() and title_text.strip() != "":
+                        log.debug(
+                            f"ASIN {asin} title extracted using selector '{selector}': {title_text.strip()[:50]}..."
+                        )
+                        return title_text.strip()
+            except Exception as e:
+                log.debug(f"Selector '{selector}' failed for ASIN {asin}: {e}")
+                continue
+
+        # Fallback level 1: Try any element with "title" in class or data attributes
+        try:
+            title_containing_selectors = [
+                "[class*='title']",
+                "[data-cy*='title']",
+                "[data-a-target*='title']",
+                ".a-size-base-plus",
+                ".a-size-medium",
+            ]
+
+            for fallback_selector in title_containing_selectors:
+                fallback_element = await element.query_selector(fallback_selector)
+                if fallback_element:
+                    fallback_text = await fallback_element.inner_text()
+                    if fallback_text and fallback_text.strip():
+                        log.debug(
+                            f"ASIN {asin} title extracted using fallback selector '{fallback_selector}': {fallback_text.strip()[:50]}..."
+                        )
+                        return fallback_text.strip()
+        except Exception as e:
+            log.debug(f"Fallback title extraction with selectors failed for ASIN {asin}: {e}")
+
+        # Fallback level 2: Try to get any text content from h2 or other common title containers
+        try:
+            fallback_element = await element.query_selector("h2, .a-text-normal, .a-link-normal")
+            if fallback_element:
+                fallback_text = await fallback_element.inner_text()
+                if fallback_text and fallback_text.strip():
+                    log.debug(
+                        f"ASIN {asin} title extracted using last-resort fallback: {fallback_text.strip()[:50]}..."
+                    )
+                    return fallback_text.strip()
+        except Exception as e:
+            log.debug(f"Last-resort fallback title extraction failed for ASIN {asin}: {e}")
+
+        log.warning(f"Could not extract title for ASIN {asin} using any selector")
+        return "Unknown Title"
+
+    async def _extract_asin_from_element(self, element) -> Optional[str]:
+        """
+        Extract ASIN with 4 fallback methods for maximum reliability.
+
+        Based on Chrome DevTools analysis showing ASIN available in multiple locations:
+        - Fallback #1: data-asin attribute (current, sometimes empty)
+        - Fallback #2: href /dp/ASIN pattern (MOST RELIABLE, always present)
+        - Fallback #3: data-uuid attribute (alternative Amazon format)
+        - Fallback #4: Regex search in HTML (last resort)
+
+        Returns:
+            ASIN string (10 alphanumeric chars) or None if extraction fails
+        """
+        # Note: Using module-level 'log' directly (not self.log which doesn't exist)
+
+        # Fallback #1: data-asin attribute (current implementation)
+        try:
+            asin = await element.get_attribute("data-asin")
+            if asin and 8 <= len(asin) <= 12:
+                log.debug(f"ASIN extracted via Fallback #1 (data-asin): {asin}")
+                return asin
+        except Exception as e:
+            log.debug(f"Fallback #1 (data-asin) failed: {e}")
+
+        # Fallback #2: Extract from href /dp/ASIN (MOST RELIABLE from Chrome DevTools)
+        try:
+            # Find link with /dp/ in href
+            link = await element.query_selector('a[href*="/dp/"]')
+            if link:
+                href = await link.get_attribute("href")
+                if href:
+                    # Extract ASIN from /dp/B0BC28WRNL/ pattern
+                    match = re.search(r'/dp/([A-Z0-9]{10})', href)
+                    if match:
+                        asin = match.group(1)
+                        log.debug(f"ASIN extracted via Fallback #2 (href /dp/): {asin}")
+                        return asin
+        except Exception as e:
+            log.debug(f"Fallback #2 (href /dp/) failed: {e}")
+
+        # Fallback #3: data-uuid attribute
+        try:
+            uuid = await element.get_attribute("data-uuid")
+            if uuid and 8 <= len(uuid) <= 12:
+                log.debug(f"ASIN extracted via Fallback #3 (data-uuid): {uuid}")
+                return uuid
+        except Exception as e:
+            log.debug(f"Fallback #3 (data-uuid) failed: {e}")
+
+        # Fallback #4: Regex search in HTML (last resort)
+        try:
+            html = await element.inner_html()
+
+            # Try multiple ASIN patterns
+            asin_patterns = [
+                r'/dp/([A-Z0-9]{10})',  # Most common
+                r'data-asin["\']?[:=]["\']?([A-Z0-9]{10})',
+                r'asin["\']?[:=]["\']?([A-Z0-9]{10})',
+            ]
+
+            for pattern in asin_patterns:
+                match = re.search(pattern, html)
+                if match:
+                    asin = match.group(1)
+                    log.debug(f"ASIN extracted via Fallback #4 (regex '{pattern}'): {asin}")
+                    return asin
+        except Exception as e:
+            log.debug(f"Fallback #4 (regex) failed: {e}")
+
+        log.warning(f"ASIN extraction failed: All 4 fallbacks exhausted")
+        return None
+
+    def _normalize_ean(self, ean: str) -> str:
+        """
+        Normalize EAN for comparison (remove spaces, leading zeros).
+
+        Args:
+            ean: Raw EAN string
+
+        Returns:
+            Normalized EAN string for comparison
+        """
+        if not ean:
+            return ""
+        # Remove spaces, hyphens, and other separators
+        ean_clean = ean.replace(" ", "").replace("-", "").replace(".", "")
+        # Remove leading zeros for comparison (EAN-8 vs EAN-13 compatibility)
+        ean_normalized = ean_clean.lstrip("0")
+        return ean_normalized
+
+    async def _extract_ean_from_product_page(self, page) -> Optional[str]:
+        """
+        Extract EAN/Barcode from Amazon product details section.
+
+        Tries multiple methods to find EAN in product page:
+        1. Product Details table (#productDetails_detailBullets_sections1)
+        2. Technical Details section (#detailBullets_feature_div)
+        3. Additional Information section (#productDetails_db_sections)
+
+        Args:
+            page: Playwright page object on product detail page
+
+        Returns:
+            EAN string if found, None otherwise
+        """
+        # Note: Using module-level 'log' directly (not self.log which doesn't exist)
+
+        try:
+            # Method 1: Product Details table
+            try:
+                details_table = page.locator('#productDetails_detailBullets_sections1')
+                if await details_table.count() > 0:
+                    # Get the first element from the locator
+                    first_element = details_table.first
+                    text = await first_element.inner_text()
+                    if text:
+                        # Look for EAN, GTIN, Barcode patterns
+                        import re
+                        ean_match = re.search(r'(?:EAN|GTIN|Barcode)[:\s]+(\d{8,14})', text, re.IGNORECASE)
+                        if ean_match:
+                            log.debug(f"EAN found in Product Details table: {ean_match.group(1)}")
+                            return ean_match.group(1)
+            except Exception as e:
+                log.debug(f"Method 1 (Product Details table) failed: {e}")
+
+            # Method 2: Technical Details section
+            try:
+                tech_details = page.locator('#detailBullets_feature_div')
+                if await tech_details.count() > 0:
+                    # Get the first element from the locator
+                    first_element = tech_details.first
+                    text = await first_element.inner_text()
+                    if text:
+                        import re
+                        ean_match = re.search(r'(?:EAN|GTIN|Barcode)[:\s]+(\d{8,14})', text, re.IGNORECASE)
+                        if ean_match:
+                            log.debug(f"EAN found in Technical Details: {ean_match.group(1)}")
+                            return ean_match.group(1)
+            except Exception as e:
+                log.debug(f"Method 2 (Technical Details) failed: {e}")
+
+            # Method 3: Additional Information section
+            try:
+                additional_info = page.locator('#productDetails_db_sections')
+                if await additional_info.count() > 0:
+                    # Get the first element from the locator
+                    first_element = additional_info.first
+                    text = await first_element.inner_text()
+                    if text:
+                        import re
+                        ean_match = re.search(r'(?:EAN|GTIN|Barcode)[:\s]+(\d{8,14})', text, re.IGNORECASE)
+                        if ean_match:
+                            log.debug(f"EAN found in Additional Information: {ean_match.group(1)}")
+                            return ean_match.group(1)
+            except Exception as e:
+                log.debug(f"Method 3 (Additional Information) failed: {e}")
+
+            log.debug(f"No EAN found on product page after trying all methods")
+            return None
+
+        except Exception as e:
+            log.error(f"Error extracting EAN from product page: {e}")
+            return None
+
+    async def search_by_ean_and_extract_data(
+        self, ean: str, supplier_product_title: str, page: Optional[Page] = None
+    ) -> Dict[str, Any]:
+        """
+        Search Amazon by EAN and extract data for the best match.
+        Uses AI for disambiguation if multiple results are found.
+        Uses robust search result selection and sponsored ad detection.
+        """
+        if not self.browser or not self.browser.is_connected():
+            await self.connect()
+
+        log.info(
+            f"Searching Amazon by EAN: {ean} for supplier product: '{supplier_product_title}' (FixedAmazonExtractor)"
+        )
+
+        # Get page from parameter or use BrowserManager
+        if page is None:
+            from utils.browser_manager import get_page_for_url
+
+            log.info("No page provided to search_by_ean, getting one from BrowserManager.")
+            page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
+
+        try:
+            # Navigate to Amazon UK and search by typing EAN into search bar
+            log.info(f"Navigating to Amazon UK to search for EAN: {ean}")
+
+            await page.goto("https://www.amazon.co.uk", timeout=60000)
+
+            # Type EAN into search box and press Enter
+            await page.fill("input#twotabsearchtextbox", ean, timeout=5000)
+            await page.press("input#twotabsearchtextbox", "Enter")
+
+            # ✅ STABILIZATION FIX: Wait for page to stabilize BEFORE extraction
+            await page.wait_for_load_state('domcontentloaded', timeout=5000)
+            await asyncio.sleep(0.5)  # Minimal wait as observed/requested
+
+            # Wait for search results with enhanced multiple selector approach - REQUIREMENT 1
+            log.info(f"Waiting for search results page to load for EAN {ean}...")
+            search_result_containers_found = False
+            container_selectors = [
+                "div.s-search-results",
+                "div[data-component-type='s-search-results']",
+                "[data-cy='search-result-list]",
+                "div.s-result-list",
+                "div.s-main-slot",
+            ]
+
+            # Wait for any of the container selectors with a longer timeout
+            for container_selector in container_selectors:
+                try:
+                    await page.wait_for_selector(container_selector, timeout=20000)
+                    log.info(f"Found search results container with selector: {container_selector}")
+                    search_result_containers_found = True
+                    break
+                except Exception as container_error:
+                    log.debug(
+                        f"Container selector '{container_selector}' not found: {container_error}"
+                    )
+
+            if not search_result_containers_found:
+                # Check for a direct product page (Amazon sometimes redirects to product page for exact EAN match)
+                try:
+                    direct_product_selectors = ["div#dp-container", "div#ppd", "div#centerCol"]
+                    for direct_selector in direct_product_selectors:
+                        if await page.query_selector(direct_selector):
+                            log.info(
+                                f"EAN search redirected to a direct product page (selector: {direct_selector})"
+                            )
+                            # Extract ASIN from URL
+                            current_url = page.url
+                            asin_match = re.search(r"/dp/([A-Z0-9]{10})", current_url)
+                            if asin_match:
+                                direct_asin = asin_match.group(1)
+                                log.info(
+                                    f"Found direct product match for EAN {ean}: ASIN {direct_asin}"
+                                )
+                                # Return the data directly
+                                return await super().extract_data(direct_asin)
+                            break
+                except Exception as direct_page_error:
+                    log.debug(f"Error checking for direct product page: {direct_page_error}")
+
+                log.warning(f"No search results containers found for EAN {ean}")
+                return {"error": f"No search results found for EAN {ean}"}
+
+            # VISIBILITY FIX: Add stabilization phase to ensure page fully renders
+            # Small delay to allow JavaScript to complete rendering
+            await asyncio.sleep(0.4)
+            # Modest scroll to trigger lazy-loaded content
+            await page.evaluate('window.scrollBy(0, 600)')
+            # Brief wait after scroll
+            await asyncio.sleep(0.2)
+
+            # REQUIREMENT 2: Search Result Element (Tile) Selection with improved selectors
+            organic_results = []
+            search_result_elements = []
+
+            # Enhanced list of selectors for finding individual product tiles
+            # Enhanced list of selectors for finding individual product tiles
+            search_selectors = [
+                "div[data-component-type='s-search-result']",
+                "div.s-result-item", 
+                "div.s-main-slot > div",
+                "div[data-asin]",
+            ]
+
+            for selector in search_selectors:
+                try:
+                    elements = await page.query_selector_all(selector)
+                    if elements and len(elements) > 0:
+                        search_result_elements = elements
+                        log.info(
+                            f"Found {len(elements)} search result elements using selector: {selector}"
+                        )
+                        break
+                except Exception as e:
+
+                # ✅ PAGE LOADING STABILIZATION - Handled before loop now
+                    log.debug(f"Search selector '{selector}' failed: {e}")
+                    continue
+
+            if not search_result_elements:
+                log.warning(f"No search result elements found for EAN {ean}")
+                return {"error": "no_elements_found"}
+            else:
+                log.info(
+                    f"Processing {len(search_result_elements)} search result elements for EAN {ean}"
+                )
+
+                # Look at more elements (up to 15) to find organic results
+                for i, element in enumerate(search_result_elements[:15]):
+                    # ✅ CRITICAL FIX: Use robust extraction method (same as title search)
+                    # Handles data-asin, /dp/ links, data-uuid, and regex
+                    asin = await self._extract_asin_from_element(element)
+                    # FIX: Remove overly restrictive 10-character requirement for ASIN validation
+                    # ASINs can be valid with fewer than 10 characters
+                    if (
+                        not asin or len(asin) < 8 or len(asin) > 12
+                    ):  # More reasonable range for ASIN validation
+                        log.debug(f"Element {i+1}: Invalid or missing ASIN: {asin}")
+                        continue
+
+                    log.debug(f"Processing element {i+1}: ASIN {asin}")
+
+                    # VISIBILITY FILTERING FIX: Use AdBlocker visibility to detect sponsored products
+                    # AdBlocker (uBlock Origin) hides sponsored products using CSS
+                    # Simple visibility check replaces complex 5-check sponsored detection
+                    try:
+                        is_visible = await element.is_visible()
+
+                        if not is_visible:
+                            log.debug(f"Element {i+1}: Hidden by AdBlocker (likely sponsored)")
+                            continue  # Skip AdBlocker-hidden sponsored products
+
+                    except Exception as visibility_error:
+                        log.debug(f"Error checking visibility for element {i+1}: {visibility_error}")
+                        continue
+
+                    # Process organic result with improved title extraction from helper method
+                    title = await self._extract_title_from_element(element, asin)
+
+                    organic_results.append({"asin": asin, "title": title})
+                    log.info(f"Found organic result: ASIN {asin} - {title[:60]}...")
+
+                    # Break after finding a reasonable number of organic results to improve performance
+                    if len(organic_results) >= 5:
+                        log.info(
+                            f"Found {len(organic_results)} organic results, stopping search to improve performance."
+                        )
+                        break
+
+                # FIXED: Log sponsored filtering results for transparency
+                organic_count = len(organic_results)
+                sponsored_count = len(search_result_elements) - organic_count
+                log.info(
+                    f"📊 SPONSORED FILTERING RESULTS: {organic_count} organic products, "
+                    f"{sponsored_count} sponsored products filtered out"
+                )
+
+                # Check if we have any organic results
+                if not organic_results:
+                    log.warning(f"EAN {ean} returned no organic results - skipping")
+                    search_results_data = {"error": "no_organic_results"}
+                else:
+                    # ✅ SIMPLIFIED: Trust Amazon's first organic result (like working version)
+                    # EAN will be extracted by Keepa during full PDP extraction later
+                    # No need for manual verification - Amazon's search relevance is reliable
+
+                    if len(organic_results) > 0:
+                        chosen_result = organic_results[0]  # ✅ First organic result
+                        log.info(f"✅ EAN SEARCH: Selected first organic result - ASIN {chosen_result['asin']}")
+                        log.info(f"   Trusting Amazon's search relevance for EAN {ean}")
+                        log.info(f"   EAN will be extracted by Keepa during full product data extraction")
+
+                        search_results_data = {
+                            "results": [chosen_result],
+                            "search_method": "ean_search_first_organic",
+                        }
+                    else:
+                        # No organic results found - will fallback to title search
+                        log.warning(f"⚠️ NO ORGANIC RESULTS for EAN {ean}")
+                        log.info(f"🔄 FALLING BACK: Will use title-based search for this product")
+
+                        search_results_data = {
+                            "error": "no_organic_results_found",
+                            "search_method": "ean_search_no_results",
+                        }
+
+        except Exception as search_error:
+            log.error(f"Error during EAN search for {ean}: {search_error}")
+            search_results_data = {"error": f"Search error for EAN {ean}: {str(search_error)}"}
+
+        if "error" in search_results_data or not search_results_data.get("results"):
+            log.warning(
+                f"No Amazon results or error for EAN '{ean}'. Details: {search_results_data.get('error', 'No results list')}"
+            )
+            # FIX 1: EAN search → title match fallback
+            log.info(
+                f"Falling back to title search for supplier product: '{supplier_product_title}'"
+            )
+            title_search_results = await self.search_by_title_using_search_bar(
+                supplier_product_title, page=page
+            )
+            if (
+                title_search_results
+                and "error" not in title_search_results
+                and title_search_results.get("results")
+            ):
+                log.info(
+                    f"Title search successful for '{supplier_product_title}' after EAN '{ean}' failed"
+                )
+                # FIXED: Extract complete data for title search result instead of returning search result only
+                fallback_asin = title_search_results["results"][0].get("asin")
+                if fallback_asin:
+                    log.info(
+                        f"Extracting complete data for fallback ASIN {fallback_asin} from title search"
+                    )
+                    product_data = await super().extract_data(fallback_asin)
+                    if product_data and "error" not in product_data:
+                        # Set search method for linking map
+                        product_data["_search_method_used"] = "title"
+                    return product_data
+                else:
+                    return {"error": f"No ASIN found in title search result for EAN {ean}"}
+            else:
+                log.warning(
+                    f"Both EAN '{ean}' and title '{supplier_product_title}' searches failed"
+                )
+                return {"error": f"No results for EAN {ean} or title search"}
+
+        potential_asins_info = search_results_data["results"]
+        chosen_asin_data = None
+
+        if len(potential_asins_info) == 1:
+            chosen_asin_data = potential_asins_info[0]
+            log.info(f"Single ASIN {chosen_asin_data.get('asin')} found for EAN {ean}.")
+        elif len(potential_asins_info) > 1:
+            # FIX 1: EAN search → stop title scoring when search initiated by EAN
+            # Trust Amazon's search relevance ranking for EAN searches
+            chosen_asin_data = potential_asins_info[0]
+            log.info(
+                f"Multiple ASINs ({len(potential_asins_info)}) found for EAN {ean}. Using Amazon's first result: ASIN {chosen_asin_data.get('asin')}"
+            )
+            log.info(
+                f"FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking"
+            )
+
+            # EAN search complete - skip AI disambiguation to trust Amazon's ranking
+            # AI disambiguation removed to prevent title scoring on EAN results
+            if False:  # Disabled AI disambiguation for EAN searches
+                log.info(f"AI disambiguation disabled for EAN {ean} - trusting Amazon's ranking")
+                prompt = (
+                    f"The EAN '{ean}' (from supplier product '{supplier_product_title}') "
+                    f"returned multiple products on Amazon. Which of the following Amazon products is the most likely match to the supplier product title?\n"
+                )
+                for i, item in enumerate(potential_asins_info[:3]):  # Limit to top 3 for AI prompt
+                    prompt += f"{i+1}. ASIN: {item.get('asin')}, Title: {item.get('title')}\n"
+                prompt += "Respond with the ASIN of the best match, or 'NONE' if no good match."
+
+                try:
+                    # Ensure ai_client is not None before calling create
+                    if self.ai_client:
+                        chat_completion = await asyncio.to_thread(
+                            self.ai_client.chat.completions.create,  # type: ignore
+                            messages=[{"role": "user", "content": prompt}],
+                            model=OPENAI_MODEL_NAME,
+                        )
+                        ai_response = chat_completion.choices[0].message.content.strip()  # type: ignore
+                        log.info(f"AI response for EAN {ean} disambiguation: {ai_response}")
+
+                        # Find the item that matches the AI's chosen ASIN
+                        matched_item_by_ai = next(
+                            (
+                                item
+                                for item in potential_asins_info
+                                if item.get("asin") == ai_response
+                            ),
+                            None,
+                        )
+                        if matched_item_by_ai:
+                            chosen_asin_data = matched_item_by_ai
+                            log.info(
+                                f"AI selected ASIN {chosen_asin_data.get('asin')} for EAN {ean}."
+                            )
+                        elif ai_response != "NONE":
+                            log.warning(
+                                f"AI suggested ASIN {ai_response} not in search results. Using first result."
+                            )
+                        else:  # AI responded "NONE"
+                            log.warning(
+                                f"AI could not confidently match EAN {ean}. Using first result."
+                            )
+                    else:
+                        log.warning(
+                            "AI client not available for EAN disambiguation. Using first result."
+                        )
+                except Exception as ai_err:
+                    log.error(f"AI disambiguation failed for EAN {ean}: {ai_err}")
+
+        if not chosen_asin_data or not chosen_asin_data.get("asin"):
+            log.warning(f"No suitable ASIN found for EAN {ean} after search and disambiguation.")
+            return {"error": f"No suitable ASIN for EAN {ean}"}
+
+        chosen_asin = chosen_asin_data.get("asin")
+        log.info(f"Proceeding with ASIN: {chosen_asin} for EAN: {ean}")
+
+        # Extract detailed data for the chosen ASIN using the base class method
+        product_data = await super().extract_data(chosen_asin)  # type: ignore
+
+        # 🚨 CRITICAL FIX: Explicitly record that this was an EAN search
+        if "error" not in product_data:
+            product_data["_search_method_used"] = "EAN"
+            log.info(f"✅ Recorded search method 'EAN' for ASIN {chosen_asin}")
+        else:
+            log.warning(f"Failed to extract data for ASIN {chosen_asin}, cannot set search method")
+
+        # The base AmazonExtractor's extract_data method should now attempt to get 'ean_on_page'.
+        # No need for redundant EAN extraction here if the base class handles it.
+        if "error" not in product_data and product_data.get("title"):
+            log.info(
+                f"Successfully extracted data for ASIN {chosen_asin} (EAN on page: {product_data.get('ean_on_page', 'N/A')})"
+            )
+
+        return product_data
+
+    async def extract_data(self, asin: str) -> Dict[str, Any]:
+        """
+        Extract data for an Amazon product by ASIN.
+        This implementation reuses existing pages to ensure extensions work properly.
+        The base class method is called, which should handle EAN extraction.
+        """
+        # This method primarily relies on the superclass's extract_data.
+        # The FixedAmazonExtractor's role is more about specialized search (like by EAN)
+        # and ensuring the correct browser context is used.
+        if not self.browser or not self.browser.is_connected():
+            await self.connect()  # Ensure connection
+
+        # Call the parent's extract_data method
+        result = await super().extract_data(asin)  # type: ignore
+
+        # The base class's extract_data should now be responsible for finding 'ean_on_page'.
+        # Any additional EAN logic specific to FixedAmazonExtractor could go here if needed,
+        # but it's better if the base class is comprehensive.
+
+        # The stabilization wait is also part of the base class's extract_data
+        # log.info(f"Waiting {EXTENSION_DATA_WAIT}s for extensions to stabilize (FixedAmazonExtractor.extract_data)...")
+        # await asyncio.sleep(EXTENSION_DATA_WAIT) # This is in the base class
+        return result
+
+

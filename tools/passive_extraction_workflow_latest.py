@@ -131,7 +131,7 @@ sys.path.append(current_dir)
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
-from amazon_playwright_extractor import AmazonExtractor  # Base class for FixedAmazonExtractor
+from tools.amazon_playwright_extractor import AmazonExtractor, FixedAmazonExtractor  # FixedAmazonExtractor migrated Nov 17, 2025
 
 # MODIFIED: Use ConfigurableSupplierScraper
 from configurable_supplier_scraper import ConfigurableSupplierScraper
@@ -695,761 +695,712 @@ def is_battery_title(title: str) -> bool:
     return any(k in title.lower() for k in BATTERY_KEYWORDS)
 
 
-class FixedAmazonExtractor(AmazonExtractor):
-    """
-    Extension of AmazonExtractor.
-    Includes EAN search capabilities and attempts EAN extraction from product pages.
-    It reuses browser pages and avoids unnecessary page creation/closure for extension stability.
-    """
-
-    def __init__(self, chrome_debug_port: int, ai_client: Optional[OpenAI] = None):
-        super().__init__(chrome_debug_port, ai_client)
-        # self.ai_client is already set by parent constructor if ai_client is passed.
-
-    async def connect(self) -> Browser:  # type: ignore
-        """
-        Connect to browser using the centralized BrowserManager singleton.
-        All browser operations now go through the shared BrowserManager instance.
-        """
-        log.info(f"🔧 FixedAmazonExtractor connecting via BrowserManager singleton")
-        try:
-            # Use the browser manager singleton for centralized browser management
-            browser_manager = BrowserManager.get_instance()
-
-            # Ensure browser manager is properly launched
-            if not hasattr(browser_manager, "browser") or not browser_manager.browser:
-                await browser_manager.launch_browser(cdp_port=self.chrome_debug_port)
-
-            # Get the shared browser instance
-            self.browser = browser_manager.browser
-            log.info("✅ FixedAmazonExtractor connected via BrowserManager singleton")
-
-            return self.browser
-        except Exception as e:
-            log.error(f"❌ FixedAmazonExtractor failed to connect via BrowserManager: {e}")
-            log.error(
-                "Ensure Chrome is running with --remote-debugging-port=9222 and BrowserManager is properly initialized"
-            )
-            raise
-
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
-    async def search_by_title_using_search_bar(
-        self, title: str, page: Optional[Page] = None
-    ) -> Dict[str, Any]:
-        """Search Amazon by title using search bar interaction (not URL building)"""
-        if not self.browser or not self.browser.is_connected():
-            await self.connect()
-
-        log.info(f"Searching Amazon by title using search bar: '{title}'")
-
-        # Get page from parameter or use BrowserManager
-        if page is None:
-            from utils.browser_manager import get_page_for_url
-
-            log.info("No page provided to search_by_title, getting one from BrowserManager.")
-            page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
-
-        try:
-            # Navigate to Amazon UK and search by typing title into search bar
-            log.info(f"Navigating to Amazon UK to search for title: {title}")
-            await page.goto("https://www.amazon.co.uk", timeout=60000)
-
-            # Type title into search box and press Enter
-            await page.fill("input#twotabsearchtextbox", title, timeout=5000)
-            await page.press("input#twotabsearchtextbox", "Enter")
-
-            # Wait for search results
-            await page.wait_for_selector("div.s-search-results", timeout=15000)
-
-            # Parse search results - extract first few results with improved element selection
-            potential_asins_info = []
-
-            # Try multiple selectors for search result elements
-            search_result_elements = []
-            search_selectors = [
-                "div.s-search-results > div[data-asin]",
-                "div[data-component-type='s-search-result']",
-                "div[data-asin]:not([data-asin=''])",
-                "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
-            ]
-
-            for selector in search_selectors:
-                try:
-                    elements = await page.query_selector_all(selector)
-                    if elements:
-                        search_result_elements = elements
-                        log.info(
-                            f"Title search found {len(elements)} elements using selector: {selector}"
-                        )
-                        break
-                except Exception as e:
-                    log.debug(f"Title search selector '{selector}' failed: {e}")
-                    continue
-
-            for element in search_result_elements[:10]:  # More results for title search
-                # FIXED: Use 4-fallback ASIN extraction instead of single data-asin check
-                asin = await self._extract_asin_from_element(element)
-
-                if asin:  # Successfully extracted via any fallback method
-                    # Use improved title extraction
-                    result_title = await self._extract_title_from_element(element, asin)
-                    potential_asins_info.append({"asin": asin, "title": result_title})
-                else:
-                    log.warning(f"Could not extract ASIN from element (all fallbacks failed)")
-
-            # Create search_results_data in expected format
-            if potential_asins_info:
-                search_results_data = {
-                    "results": potential_asins_info,
-                    "search_method": "title_search_bar_interaction",
-                }
-                # FIXED: Enhanced logging for ASIN extraction success
-                log.info(
-                    f"🎯 ASIN EXTRACTION SUCCESS: Found {len(potential_asins_info)} ASINs "
-                    f"for title search: '{title}'"
-                )
-            else:
-                search_results_data = {"error": f"No valid ASINs found for title '{title}'"}
-                # FIXED: Enhanced logging for ASIN extraction failure
-                log.warning(
-                    f"⚠️ ASIN EXTRACTION FAILED: No ASINs found for title search: '{title}'. "
-                    f"Found {len(search_result_elements)} elements but couldn't extract ASINs."
-                )
-
-        except Exception as search_error:
-            log.error(f"Error during title search for '{title}': {search_error}")
-            search_results_data = {
-                "error": f"Search error for title '{title}': {str(search_error)}"
-            }
-
-        return search_results_data
-
-    async def _extract_title_from_element(self, element, asin: str) -> str:
-        """Extract title from search result element using multiple fallback selectors"""
-        title_selectors = [
-            "h2 a span.a-text-normal",
-            "h2 a span",
-            ".s-title-instructions-style span.a-text-normal",
-            "span.a-size-medium.a-color-base.a-text-normal",
-            "h2 span.a-size-base-plus",
-            "h2 a",
-            "h2",
-            "[data-cy='title-recipe-title']",
-            ".s-line-clamp-2 span",
-            ".s-line-clamp-3 span",
-            ".s-line-clamp-4 span",
-            ".s-size-mini .s-link-style a span",
-            ".s-size-mini .s-link-style span",
-            "span[data-a-text-type='title']",
-            "a.a-link-normal > span.a-text-normal",
-            "a span[aria-label]",
-            "a[href*='/dp/'] span",
-            ".a-link-normal span",
-        ]
-
-        for selector in title_selectors:
-            try:
-                title_element = await element.query_selector(selector)
-                if title_element:
-                    title_text = await title_element.inner_text()
-                    if title_text and title_text.strip() and title_text.strip() != "":
-                        log.debug(
-                            f"ASIN {asin} title extracted using selector '{selector}': {title_text.strip()[:50]}..."
-                        )
-                        return title_text.strip()
-            except Exception as e:
-                log.debug(f"Selector '{selector}' failed for ASIN {asin}: {e}")
-                continue
-
-        # Fallback level 1: Try any element with "title" in class or data attributes
-        try:
-            title_containing_selectors = [
-                "[class*='title']",
-                "[data-cy*='title']",
-                "[data-a-target*='title']",
-                ".a-size-base-plus",
-                ".a-size-medium",
-            ]
-
-            for fallback_selector in title_containing_selectors:
-                fallback_element = await element.query_selector(fallback_selector)
-                if fallback_element:
-                    fallback_text = await fallback_element.inner_text()
-                    if fallback_text and fallback_text.strip():
-                        log.debug(
-                            f"ASIN {asin} title extracted using fallback selector '{fallback_selector}': {fallback_text.strip()[:50]}..."
-                        )
-                        return fallback_text.strip()
-        except Exception as e:
-            log.debug(f"Fallback title extraction with selectors failed for ASIN {asin}: {e}")
-
-        # Fallback level 2: Try to get any text content from h2 or other common title containers
-        try:
-            fallback_element = await element.query_selector("h2, .a-text-normal, .a-link-normal")
-            if fallback_element:
-                fallback_text = await fallback_element.inner_text()
-                if fallback_text and fallback_text.strip():
-                    log.debug(
-                        f"ASIN {asin} title extracted using last-resort fallback: {fallback_text.strip()[:50]}..."
-                    )
-                    return fallback_text.strip()
-        except Exception as e:
-            log.debug(f"Last-resort fallback title extraction failed for ASIN {asin}: {e}")
-
-        log.warning(f"Could not extract title for ASIN {asin} using any selector")
-        return "Unknown Title"
-
-    async def _extract_asin_from_element(self, element) -> Optional[str]:
-        """
-        Extract ASIN with 4 fallback methods for maximum reliability.
-
-        Based on Chrome DevTools analysis showing ASIN available in multiple locations:
-        - Fallback #1: data-asin attribute (current, sometimes empty)
-        - Fallback #2: href /dp/ASIN pattern (MOST RELIABLE, always present)
-        - Fallback #3: data-uuid attribute (alternative Amazon format)
-        - Fallback #4: Regex search in HTML (last resort)
-
-        Returns:
-            ASIN string (10 alphanumeric chars) or None if extraction fails
-        """
-        log = self.log
-
-        # Fallback #1: data-asin attribute (current implementation)
-        try:
-            asin = await element.get_attribute("data-asin")
-            if asin and 8 <= len(asin) <= 12:
-                log.debug(f"ASIN extracted via Fallback #1 (data-asin): {asin}")
-                return asin
-        except Exception as e:
-            log.debug(f"Fallback #1 (data-asin) failed: {e}")
-
-        # Fallback #2: Extract from href /dp/ASIN (MOST RELIABLE from Chrome DevTools)
-        try:
-            # Find link with /dp/ in href
-            link = await element.query_selector('a[href*="/dp/"]')
-            if link:
-                href = await link.get_attribute("href")
-                if href:
-                    # Extract ASIN from /dp/B0BC28WRNL/ pattern
-                    match = re.search(r'/dp/([A-Z0-9]{10})', href)
-                    if match:
-                        asin = match.group(1)
-                        log.debug(f"ASIN extracted via Fallback #2 (href /dp/): {asin}")
-                        return asin
-        except Exception as e:
-            log.debug(f"Fallback #2 (href /dp/) failed: {e}")
-
-        # Fallback #3: data-uuid attribute
-        try:
-            uuid = await element.get_attribute("data-uuid")
-            if uuid and 8 <= len(uuid) <= 12:
-                log.debug(f"ASIN extracted via Fallback #3 (data-uuid): {uuid}")
-                return uuid
-        except Exception as e:
-            log.debug(f"Fallback #3 (data-uuid) failed: {e}")
-
-        # Fallback #4: Regex search in HTML (last resort)
-        try:
-            html = await element.inner_html()
-
-            # Try multiple ASIN patterns
-            asin_patterns = [
-                r'/dp/([A-Z0-9]{10})',  # Most common
-                r'data-asin["\']?[:=]["\']?([A-Z0-9]{10})',
-                r'asin["\']?[:=]["\']?([A-Z0-9]{10})',
-            ]
-
-            for pattern in asin_patterns:
-                match = re.search(pattern, html)
-                if match:
-                    asin = match.group(1)
-                    log.debug(f"ASIN extracted via Fallback #4 (regex '{pattern}'): {asin}")
-                    return asin
-        except Exception as e:
-            log.debug(f"Fallback #4 (regex) failed: {e}")
-
-        log.warning(f"ASIN extraction failed: All 4 fallbacks exhausted")
-        return None
-
-    async def search_by_ean_and_extract_data(
-        self, ean: str, supplier_product_title: str, page: Optional[Page] = None
-    ) -> Dict[str, Any]:
-        """
-        Search Amazon by EAN and extract data for the best match.
-        Uses AI for disambiguation if multiple results are found.
-        Uses robust search result selection and sponsored ad detection.
-        """
-        if not self.browser or not self.browser.is_connected():
-            await self.connect()
-
-        log.info(
-            f"Searching Amazon by EAN: {ean} for supplier product: '{supplier_product_title}' (FixedAmazonExtractor)"
-        )
-
-        # Get page from parameter or use BrowserManager
-        if page is None:
-            from utils.browser_manager import get_page_for_url
-
-            log.info("No page provided to search_by_ean, getting one from BrowserManager.")
-            page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
-
-        try:
-            # Navigate to Amazon UK and search by typing EAN into search bar
-            log.info(f"Navigating to Amazon UK to search for EAN: {ean}")
-
-            await page.goto("https://www.amazon.co.uk", timeout=60000)
-
-            # Type EAN into search box and press Enter
-            await page.fill("input#twotabsearchtextbox", ean, timeout=5000)
-            await page.press("input#twotabsearchtextbox", "Enter")
-
-            # Wait for search results with enhanced multiple selector approach - REQUIREMENT 1
-            log.info(f"Waiting for search results page to load for EAN {ean}...")
-            search_result_containers_found = False
-            container_selectors = [
-                "div.s-search-results",
-                "div[data-component-type='s-search-results']",
-                "[data-cy='search-result-list]",
-                "div.s-result-list",
-                "div.s-main-slot",
-            ]
-
-            # Wait for any of the container selectors with a longer timeout
-            for container_selector in container_selectors:
-                try:
-                    await page.wait_for_selector(container_selector, timeout=20000)
-                    log.info(f"Found search results container with selector: {container_selector}")
-                    search_result_containers_found = True
-                    break
-                except Exception as container_error:
-                    log.debug(
-                        f"Container selector '{container_selector}' not found: {container_error}"
-                    )
-
-            if not search_result_containers_found:
-                # Check for a direct product page (Amazon sometimes redirects to product page for exact EAN match)
-                try:
-                    direct_product_selectors = ["div#dp-container", "div#ppd", "div#centerCol"]
-                    for direct_selector in direct_product_selectors:
-                        if await page.query_selector(direct_selector):
-                            log.info(
-                                f"EAN search redirected to a direct product page (selector: {direct_selector})"
-                            )
-                            # Extract ASIN from URL
-                            current_url = page.url
-                            asin_match = re.search(r"/dp/([A-Z0-9]{10})", current_url)
-                            if asin_match:
-                                direct_asin = asin_match.group(1)
-                                log.info(
-                                    f"Found direct product match for EAN {ean}: ASIN {direct_asin}"
-                                )
-                                # Return the data directly
-                                return await super().extract_data(direct_asin)
-                            break
-                except Exception as direct_page_error:
-                    log.debug(f"Error checking for direct product page: {direct_page_error}")
-
-                log.warning(f"No search results containers found for EAN {ean}")
-                return {"error": f"No search results found for EAN {ean}"}
-
-            # Add a brief stabilization wait to ensure all elements are loaded
-            await asyncio.sleep(2)
-
-            # REQUIREMENT 2: Search Result Element (Tile) Selection with improved selectors
-            organic_results = []
-            search_result_elements = []
-
-            # Enhanced list of selectors for finding individual product tiles
-            search_selectors = [
-                # Try to exclude obvious ad containers at the selection stage
-                # FIXED: Added new Amazon 2025 sponsored classes (puis-sponsored, sp-sponsored-result)
-                "div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored']):not([class*='puis-sponsored']):not([data-component-type='sp-sponsored-result'])",
-                "div.s-result-item[data-asin]:not([data-asin=''])",
-                "div[data-component-type='s-search-result'][data-asin]:not([data-asin=''])",
-                "div.s-search-results > div[data-asin]",
-                "div[data-cel-widget*='search_result_'][data-asin]:not([data-asin=''])",
-                "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
-                "div[data-uuid][data-asin]:not([data-asin=''])",
-            ]
-
-            for selector in search_selectors:
-                try:
-                    elements = await page.query_selector_all(selector)
-                    if elements and len(elements) > 0:
-                        search_result_elements = elements
-                        log.info(
-                            f"Found {len(elements)} search result elements using selector: {selector}"
-                        )
-                        break
-                except Exception as e:
-                    log.debug(f"Search selector '{selector}' failed: {e}")
-                    continue
-
-            if not search_result_elements:
-                log.warning(f"No search result elements found for EAN {ean}")
-                return {"error": "no_elements_found"}
-            else:
-                log.info(
-                    f"Processing {len(search_result_elements)} search result elements for EAN {ean}"
-                )
-
-                # Look at more elements (up to 15) to find organic results
-                for i, element in enumerate(search_result_elements[:15]):
-                    asin = await element.get_attribute("data-asin")
-                    # FIX: Remove overly restrictive 10-character requirement for ASIN validation
-                    # ASINs can be valid with fewer than 10 characters
-                    if (
-                        not asin or len(asin) < 8 or len(asin) > 12
-                    ):  # More reasonable range for ASIN validation
-                        log.debug(f"Element {i+1}: Invalid or missing ASIN: {asin}")
-                        continue
-
-                    log.debug(f"Processing element {i+1}: ASIN {asin}")
-
-                    # --- REQUIREMENT 4: Enhanced sponsored detection logic (Iteration 3) ---
-                    is_sponsored = False
-                    sponsor_detection_reason = ""
-
-                    # Add debug logging for first few elements
-                    if i < 3:
-                        try:
-                            element_html_debug = await element.evaluate(
-                                "element => element.outerHTML"
-                            )
-                            log.debug(
-                                f"ASIN {asin} HTML structure sample: {element_html_debug[:600]}..."
-                            )
-                        except Exception as html_error:
-                            log.debug(f"Could not get HTML for element debug: {html_error}")
-
-                    # Check 1: Explicit "Sponsored" text + NEW Amazon 2025 sponsored indicators
-                    # FIXED: Replaced element.locator() with element.evaluate() (correct Playwright API)
-                    try:
-                        is_sponsored = await element.evaluate("""el => {
-                            // Check for "Sponsored" text in spans
-                            const spans = el.querySelectorAll('span');
-                            for (const span of spans) {
-                                if (/^\\s*Sponsored\\s*$/i.test(span.textContent)) return true;
-                            }
-
-                            // NEW: Amazon 2025 sponsored indicators (from Chrome DevTools analysis)
-                            if (el.querySelector('.puis-sponsored-label-text')) return true;
-                            if (el.querySelector('.puis-label-popover')) return true;
-                            if (el.querySelector('[data-ad-marker="true"]')) return true;
-
-                            return false;
-                        }""")
-
-                        if is_sponsored:
-                            sponsor_detection_reason = "visible 'Sponsored' text or puis-sponsored class"
-                    except Exception as e_badge:
-                        log.debug(f"Error checking sponsored badge for ASIN {asin}: {e_badge}")
-
-                    # Check 2: Aria-label on the element or a significant child
-                    # FIXED: Replaced element.locator() with element.evaluate()
-                    if not is_sponsored:
-                        try:
-                            is_sponsored = await element.evaluate("""el => {
-                                // Check aria-label on element itself
-                                if (el.getAttribute('aria-label')?.toLowerCase().includes('sponsored')) return true;
-
-                                // Check aria-label on children
-                                const sponsoredElements = el.querySelectorAll('[aria-label*="Sponsored" i], [aria-label*="sponsored" i]');
-                                return sponsoredElements.length > 0;
-                            }""")
-
-                            if is_sponsored:
-                                sponsor_detection_reason = "aria-label='Sponsored'"
-                        except Exception as e_aria:
-                            log.debug(f"Error checking aria-label for ASIN {asin}: {e_aria}")
-
-                    # Check 3: Data attributes on the element itself (tile)
-                    if not is_sponsored:
-                        try:
-                            is_sponsored = await element.evaluate(
-                                """el => {
-                                if (el.getAttribute('data-component-type') === 'sp-sponsored-result') return true;
-                                if (el.getAttribute('data-ad-marker') === 'true') return true;
-                                if (el.querySelector('[data-component-type="sp-sponsored-result"]')) return true;
-                                if (el.querySelector('[data-cel-widget*="advertising"]')) return true;
-                                if (el.querySelector('[data-ad-id]')) return true;
-                                return false;
-                            }"""
-                            )
-                            if is_sponsored:
-                                sponsor_detection_reason = (
-                                    "data attributes indicating sponsored content"
-                                )
-                        except Exception as e_data_attr:
-                            log.debug(
-                                f"Error checking data-attributes for ASIN {asin}: {e_data_attr}"
-                            )
-
-                    # Check 4: Presence of known ad-specific classes on the main element (tile)
-                    if not is_sponsored:
-                        try:
-                            element_classes = await element.get_attribute("class") or ""
-                            known_ad_classes = [
-                                # OLD (keep for backwards compatibility)
-                                "AdHolder",
-                                "s-widget-sponsored-product",
-                                "sponsored-results-padding",
-                                "s-result-item-sponsored-popup",
-                                "ad-feedback",
-
-                                # NEW: Amazon 2025 sponsored classes (from Chrome DevTools analysis)
-                                "puis-sponsored-label-text",
-                                "puis-sponsored-label-popover",
-                                "puis-sponsored-container",
-                                "sp-sponsored-result",
-                                "s-widget-sponsored",  # Broader match
-                            ]
-                            for ad_class in known_ad_classes:
-                                if ad_class in element_classes:
-                                    is_sponsored = True
-                                    sponsor_detection_reason = f"ad-specific class: '{ad_class}'"
-                                    break
-                        except Exception as e_class:
-                            log.debug(f"Error checking tile classes for ASIN {asin}: {e_class}")
-
-                    # Check 5: Text content contains typical ad indicators
-                    # FIXED: Replaced element.locator() with element.evaluate()
-                    if not is_sponsored:
-                        try:
-                            is_sponsored = await element.evaluate("""el => {
-                                const text = el.innerText?.toLowerCase() || '';
-                                return /sponsored|advertisement|ad for/i.test(text);
-                            }""")
-
-                            if is_sponsored:
-                                sponsor_detection_reason = "text containing ad indicators"
-                        except Exception as e_text:
-                            log.debug(
-                                f"Error checking text for ad indicators for ASIN {asin}: {e_text}"
-                            )
-
-                    if is_sponsored:
-                        log.info(
-                            f"Skipping sponsored result: ASIN {asin} (detected by {sponsor_detection_reason})"
-                        )
-                        continue
-
-                    # Process organic result with improved title extraction from helper method
-                    title = await self._extract_title_from_element(element, asin)
-
-                    organic_results.append({"asin": asin, "title": title})
-                    log.info(f"Found organic result: ASIN {asin} - {title[:60]}...")
-
-                    # Break after finding a reasonable number of organic results to improve performance
-                    if len(organic_results) >= 5:
-                        log.info(
-                            f"Found {len(organic_results)} organic results, stopping search to improve performance."
-                        )
-                        break
-
-                # FIXED: Log sponsored filtering results for transparency
-                organic_count = len(organic_results)
-                sponsored_count = len(search_result_elements) - organic_count
-                log.info(
-                    f"📊 SPONSORED FILTERING RESULTS: {organic_count} organic products, "
-                    f"{sponsored_count} sponsored products filtered out"
-                )
-
-                # Check if we have any organic results
-                if not organic_results:
-                    log.warning(f"EAN {ean} returned no organic results - skipping")
-                    search_results_data = {"error": "no_organic_results"}
-                else:
-                    # FIX 1: EAN search should use exact EAN matching, NOT title scoring
-                    # When EAN search returns results, use the first organic result (highest relevance)
-                    if len(organic_results) == 1:
-                        chosen_result = organic_results[0]
-                        log.info(
-                            f"Single organic result found for EAN {ean}: ASIN {chosen_result['asin']}"
-                        )
-                    else:
-                        # Multiple EAN search results - use first organic result (most relevant by Amazon's ranking)
-                        chosen_result = organic_results[0]
-                        log.info(
-                            f"Multiple organic results ({len(organic_results)}) found for EAN {ean}. Using first organic result (most relevant): ASIN {chosen_result['asin']}"
-                        )
-                        log.info(
-                            f"FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking"
-                        )
-
-                    search_results_data = {
-                        "results": [chosen_result],  # Single chosen result
-                        "search_method": "ean_search_bar_with_verification",
-                    }
-                    log.info(f"EAN search selected ASIN {chosen_result['asin']} for {ean}")
-
-        except Exception as search_error:
-            log.error(f"Error during EAN search for {ean}: {search_error}")
-            search_results_data = {"error": f"Search error for EAN {ean}: {str(search_error)}"}
-
-        if "error" in search_results_data or not search_results_data.get("results"):
-            log.warning(
-                f"No Amazon results or error for EAN '{ean}'. Details: {search_results_data.get('error', 'No results list')}"
-            )
-            # FIX 1: EAN search → title match fallback
-            log.info(
-                f"Falling back to title search for supplier product: '{supplier_product_title}'"
-            )
-            title_search_results = await self.search_by_title_using_search_bar(
-                supplier_product_title, page=page
-            )
-            if (
-                title_search_results
-                and "error" not in title_search_results
-                and title_search_results.get("results")
-            ):
-                log.info(
-                    f"Title search successful for '{supplier_product_title}' after EAN '{ean}' failed"
-                )
-                # FIXED: Extract complete data for title search result instead of returning search result only
-                fallback_asin = title_search_results["results"][0].get("asin")
-                if fallback_asin:
-                    log.info(
-                        f"Extracting complete data for fallback ASIN {fallback_asin} from title search"
-                    )
-                    product_data = await super().extract_data(fallback_asin)
-                    if product_data and "error" not in product_data:
-                        # Set search method for linking map
-                        product_data["_search_method_used"] = "title"
-                    return product_data
-                else:
-                    return {"error": f"No ASIN found in title search result for EAN {ean}"}
-            else:
-                log.warning(
-                    f"Both EAN '{ean}' and title '{supplier_product_title}' searches failed"
-                )
-                return {"error": f"No results for EAN {ean} or title search"}
-
-        potential_asins_info = search_results_data["results"]
-        chosen_asin_data = None
-
-        if len(potential_asins_info) == 1:
-            chosen_asin_data = potential_asins_info[0]
-            log.info(f"Single ASIN {chosen_asin_data.get('asin')} found for EAN {ean}.")
-        elif len(potential_asins_info) > 1:
-            # FIX 1: EAN search → stop title scoring when search initiated by EAN
-            # Trust Amazon's search relevance ranking for EAN searches
-            chosen_asin_data = potential_asins_info[0]
-            log.info(
-                f"Multiple ASINs ({len(potential_asins_info)}) found for EAN {ean}. Using Amazon's first result: ASIN {chosen_asin_data.get('asin')}"
-            )
-            log.info(
-                f"FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking"
-            )
-
-            # EAN search complete - skip AI disambiguation to trust Amazon's ranking
-            # AI disambiguation removed to prevent title scoring on EAN results
-            if False:  # Disabled AI disambiguation for EAN searches
-                log.info(f"AI disambiguation disabled for EAN {ean} - trusting Amazon's ranking")
-                prompt = (
-                    f"The EAN '{ean}' (from supplier product '{supplier_product_title}') "
-                    f"returned multiple products on Amazon. Which of the following Amazon products is the most likely match to the supplier product title?\n"
-                )
-                for i, item in enumerate(potential_asins_info[:3]):  # Limit to top 3 for AI prompt
-                    prompt += f"{i+1}. ASIN: {item.get('asin')}, Title: {item.get('title')}\n"
-                prompt += "Respond with the ASIN of the best match, or 'NONE' if no good match."
-
-                try:
-                    # Ensure ai_client is not None before calling create
-                    if self.ai_client:
-                        chat_completion = await asyncio.to_thread(
-                            self.ai_client.chat.completions.create,  # type: ignore
-                            messages=[{"role": "user", "content": prompt}],
-                            model=OPENAI_MODEL_NAME,
-                        )
-                        ai_response = chat_completion.choices[0].message.content.strip()  # type: ignore
-                        log.info(f"AI response for EAN {ean} disambiguation: {ai_response}")
-
-                        # Find the item that matches the AI's chosen ASIN
-                        matched_item_by_ai = next(
-                            (
-                                item
-                                for item in potential_asins_info
-                                if item.get("asin") == ai_response
-                            ),
-                            None,
-                        )
-                        if matched_item_by_ai:
-                            chosen_asin_data = matched_item_by_ai
-                            log.info(
-                                f"AI selected ASIN {chosen_asin_data.get('asin')} for EAN {ean}."
-                            )
-                        elif ai_response != "NONE":
-                            log.warning(
-                                f"AI suggested ASIN {ai_response} not in search results. Using first result."
-                            )
-                        else:  # AI responded "NONE"
-                            log.warning(
-                                f"AI could not confidently match EAN {ean}. Using first result."
-                            )
-                    else:
-                        log.warning(
-                            "AI client not available for EAN disambiguation. Using first result."
-                        )
-                except Exception as ai_err:
-                    log.error(f"AI disambiguation failed for EAN {ean}: {ai_err}")
-
-        if not chosen_asin_data or not chosen_asin_data.get("asin"):
-            log.warning(f"No suitable ASIN found for EAN {ean} after search and disambiguation.")
-            return {"error": f"No suitable ASIN for EAN {ean}"}
-
-        chosen_asin = chosen_asin_data.get("asin")
-        log.info(f"Proceeding with ASIN: {chosen_asin} for EAN: {ean}")
-
-        # Extract detailed data for the chosen ASIN using the base class method
-        product_data = await super().extract_data(chosen_asin)  # type: ignore
-
-        # 🚨 CRITICAL FIX: Explicitly record that this was an EAN search
-        if "error" not in product_data:
-            product_data["_search_method_used"] = "EAN"
-            log.info(f"✅ Recorded search method 'EAN' for ASIN {chosen_asin}")
-        else:
-            log.warning(f"Failed to extract data for ASIN {chosen_asin}, cannot set search method")
-
-        # The base AmazonExtractor's extract_data method should now attempt to get 'ean_on_page'.
-        # No need for redundant EAN extraction here if the base class handles it.
-        if "error" not in product_data and product_data.get("title"):
-            log.info(
-                f"Successfully extracted data for ASIN {chosen_asin} (EAN on page: {product_data.get('ean_on_page', 'N/A')})"
-            )
-
-        return product_data
-
-    async def extract_data(self, asin: str) -> Dict[str, Any]:
-        """
-        Extract data for an Amazon product by ASIN.
-        This implementation reuses existing pages to ensure extensions work properly.
-        The base class method is called, which should handle EAN extraction.
-        """
-        # This method primarily relies on the superclass's extract_data.
-        # The FixedAmazonExtractor's role is more about specialized search (like by EAN)
-        # and ensuring the correct browser context is used.
-        if not self.browser or not self.browser.is_connected():
-            await self.connect()  # Ensure connection
-
-        # Call the parent's extract_data method
-        result = await super().extract_data(asin)  # type: ignore
-
-        # The base class's extract_data should now be responsible for finding 'ean_on_page'.
-        # Any additional EAN logic specific to FixedAmazonExtractor could go here if needed,
-        # but it's better if the base class is comprehensive.
-
-        # The stabilization wait is also part of the base class's extract_data
-        # log.info(f"Waiting {EXTENSION_DATA_WAIT}s for extensions to stabilize (FixedAmazonExtractor.extract_data)...")
-        # await asyncio.sleep(EXTENSION_DATA_WAIT) # This is in the base class
-        return result
-
-
+# =============================================================================
+# FIXEDAMAZONEXTRACTOR CLASS COMMENTED OUT - MIGRATED TO amazon_playwright_extractor.py
+# Date: November 17, 2025
+# Reason: Architectural cleanup - Amazon-specific logic moved to proper location
+# This class has been moved to tools/amazon_playwright_extractor.py with fixes applied:
+#   - FIX 1: Visibility stabilization with scroll trigger
+#   - FIX 2: Simple visibility-based sponsored filtering (replaces complex 5-check logic)
+# Import statement added below. Do NOT delete this commented code yet - kept for reference.
+# =============================================================================
+#
+# class FixedAmazonExtractor(AmazonExtractor):
+#     """
+#     Extension of AmazonExtractor.
+#     Includes EAN search capabilities and attempts EAN extraction from product pages.
+#     It reuses browser pages and avoids unnecessary page creation/closure for extension stability.
+#     """
+# 
+#     def __init__(self, chrome_debug_port: int, ai_client: Optional[OpenAI] = None):
+#         super().__init__(chrome_debug_port, ai_client)
+#         # self.ai_client is already set by parent constructor if ai_client is passed.
+# 
+#         # FIX: Initialize logger for this class (required by _extract_asin_from_element and _extract_title_from_element)
+#         self.log = logging.getLogger(self.__class__.__name__)
+# 
+#     async def connect(self) -> Browser:  # type: ignore
+#         """
+#         Connect to browser using the centralized BrowserManager singleton.
+#         All browser operations now go through the shared BrowserManager instance.
+#         """
+#         log.info(f"🔧 FixedAmazonExtractor connecting via BrowserManager singleton")
+#         try:
+#             # Use the browser manager singleton for centralized browser management
+#             browser_manager = BrowserManager.get_instance()
+# 
+#             # Ensure browser manager is properly launched
+#             if not hasattr(browser_manager, "browser") or not browser_manager.browser:
+#                 await browser_manager.launch_browser(cdp_port=self.chrome_debug_port)
+# 
+#             # Get the shared browser instance
+#             self.browser = browser_manager.browser
+#             log.info("✅ FixedAmazonExtractor connected via BrowserManager singleton")
+# 
+#             return self.browser
+#         except Exception as e:
+#             log.error(f"❌ FixedAmazonExtractor failed to connect via BrowserManager: {e}")
+#             log.error(
+#                 "Ensure Chrome is running with --remote-debugging-port=9222 and BrowserManager is properly initialized"
+#             )
+#             raise
+# 
+#     
+#     def _overlap_score(self, title_a: str, title_b: str) -> float:
+#         """Calculate word overlap score between two titles"""
+#         a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
+#         b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
+#         return len(a & b) / max(1, len(a))
+# 
+#     def _validate_product_match(
+#         self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
+#     ) -> Dict[str, Any]:
+#         """Validate the match between supplier and Amazon products using configurable thresholds."""
+#         matching_thresholds = self.system_config.get("performance", {}).get(
+#             "matching_thresholds", {}
+#         )
+#         title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
+#         medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
+#         high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
+# 
+#         title_overlap_score = self._overlap_score(
+#             supplier_product.get("title", ""), amazon_product.get("title", "")
+#         )
+# 
+#         match_quality = "low"
+#         confidence = 0.0
+#         if title_overlap_score >= high_title_similarity:
+#             match_quality = "high"
+#             confidence = 0.9
+#         elif title_overlap_score >= medium_title_similarity:
+#             match_quality = "medium"
+#             confidence = 0.6
+#         elif title_overlap_score >= title_similarity_threshold:
+#             match_quality = "low"
+#             confidence = 0.3
+#         else:
+#             match_quality = "very_low"
+#             confidence = 0.1
+# 
+#         self.log.debug(
+#             f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs "
+#             f"'{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} "
+#             f"({match_quality}, {confidence:.1%})"
+#         )
+#         return {
+#             "match_quality": match_quality,
+#             "confidence": confidence,
+#             "title_overlap_score": title_overlap_score,
+#         }
+# 
+#     async def search_by_title_using_search_bar(
+#         self, title: str, page: Optional[Page] = None
+#     ) -> Dict[str, Any]:
+#         """Search Amazon by title using search bar interaction (not URL building)"""
+#         if not self.browser or not self.browser.is_connected():
+#             await self.connect()
+# 
+#         log.info(f"Searching Amazon by title using search bar: '{title}'")
+# 
+#         # Get page from parameter or use BrowserManager
+#         if page is None:
+#             from utils.browser_manager import get_page_for_url
+# 
+#             log.info("No page provided to search_by_title, getting one from BrowserManager.")
+#             page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
+# 
+#         try:
+#             # Navigate to Amazon UK and search by typing title into search bar
+#             log.info(f"Navigating to Amazon UK to search for title: {title}")
+#             await page.goto("https://www.amazon.co.uk", timeout=60000)
+# 
+#             # Type title into search box and press Enter
+#             await page.fill("input#twotabsearchtextbox", title, timeout=5000)
+#             await page.press("input#twotabsearchtextbox", "Enter")
+# 
+#             # Wait for search results
+#             await page.wait_for_selector("div.s-search-results", timeout=15000)
+# 
+#             # VISIBILITY FIX: Add stabilization phase to ensure page fully renders
+#             # Small delay to allow JavaScript to complete rendering
+#             await asyncio.sleep(0.4)
+#             # Modest scroll to trigger lazy-loaded content
+#             await page.evaluate('window.scrollBy(0, 600)')
+#             # Brief wait after scroll
+#             await asyncio.sleep(0.2)
+# 
+#             # Parse search results - extract first few results with improved element selection
+#             potential_asins_info = []
+# 
+#             # Try multiple selectors for search result elements
+#             search_result_elements = []
+#             search_selectors = [
+#                 "div.s-search-results > div[data-asin]",
+#                 "div[data-component-type='s-search-result']",
+#                 "div[data-asin]:not([data-asin=''])",
+#                 "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
+#             ]
+# 
+#             for selector in search_selectors:
+#                 try:
+#                     elements = await page.query_selector_all(selector)
+#                     if elements:
+#                         search_result_elements = elements
+#                         log.info(
+#                             f"Title search found {len(elements)} elements using selector: {selector}"
+#                         )
+#                         break
+#                 except Exception as e:
+#                     log.debug(f"Title search selector '{selector}' failed: {e}")
+#                     continue
+# 
+#             # OPTION B FIX: Apply visibility filtering to title search as well
+#             # TITLE SCORING FIX: Select first visible candidate and apply scoring gate
+#             first_visible_element = None
+#             first_visible_title = None
+# 
+#             for i, element in enumerate(search_result_elements[:10]):  # More results for title search
+#                 try:
+#                     # Check if element is visible (AdBlocker filtering)
+#                     is_visible = await element.is_visible()
+# 
+#                     if not is_visible:
+#                         log.debug(f"Title search element {i+1}: Hidden by AdBlocker (likely sponsored)")
+#                         continue
+# 
+#                     # Extract title from first visible element (don't extract ASIN yet - will do on PDP)
+#                     try:
+#                         candidate_title = await self._extract_title_from_element(element, "CANDIDATE")
+#                         first_visible_element = element
+#                         first_visible_title = candidate_title
+#                         log.info(f"✅ Found first visible candidate: '{first_visible_title[:80]}...'")
+#                         break  # Stop after finding first visible candidate
+#                     except Exception as title_error:
+#                         log.debug(f"Error extracting title from element {i+1}: {title_error}")
+#                         continue
+# 
+#                 except Exception as elem_error:
+#                     log.debug(f"Error processing title search element {i+1}: {elem_error}")
+#                     continue
+# 
+#             # TITLE SCORING GATE: Validate match quality before proceeding
+#             if first_visible_element and first_visible_title:
+#                 # Compute title similarity score
+#                 supplier_product_data = {"title": title}
+#                 amazon_product_data = {"title": first_visible_title}
+# 
+#                 validation = self._validate_product_match(supplier_product_data, amazon_product_data)
+#                 score = validation.get("title_overlap_score", 0.0)
+#                 confidence = validation.get("confidence", 0.0)
+# 
+#                 # Read threshold from config
+#                 matching_thresholds = self.system_config.get("performance", {}).get("matching_thresholds", {})
+#                 confidence_threshold = matching_thresholds.get("medium_title_similarity", 0.5)
+# 
+#                 log.info(
+#                     f"📊 TITLE SCORING: '{title}' vs '{first_visible_title[:60]}...' = {score:.3f} "
+#                     f"(confidence={confidence:.1%}, threshold={confidence_threshold:.1%})"
+#                 )
+# 
+#                 if confidence >= confidence_threshold:
+#                     # Score passes - extract ASIN from element directly
+#                     log.info(f"✅ Title score PASSED ({confidence:.1%} >= {confidence_threshold:.1%}) - proceeding to extract ASIN from element")
+# 
+#                     # Extract ASIN from visible element using data-asin attribute
+#                     try:
+#                         asin = await first_visible_element.get_attribute("data-asin")
+#                         if asin and len(asin) >= 8:
+#                             potential_asins_info.append({"asin": asin, "title": first_visible_title})
+#                             log.info(f"✅ Extracted ASIN {asin} from element after title score validation")
+#                         else:
+#                             log.warning(f"No valid ASIN found in visible element")
+#                     except Exception as extract_error:
+#                         log.error(f"Error extracting ASIN from element: {extract_error}")
+#                 else:
+#                     # Score too low - treat as no-match
+#                     log.warning(
+#                         f"❌ Title score FAILED ({confidence:.1%} < {confidence_threshold:.1%}) - skipping product (no match)"
+#                     )
+# 
+#             # Create search_results_data in expected format
+#             if potential_asins_info:
+#                 search_results_data = {
+#                     "results": potential_asins_info,
+#                     "search_method": "title_search_bar_interaction",
+#                 }
+#                 log.info(
+#                     f"🎯 TITLE SEARCH SUCCESS: Found ASIN after score validation for '{title}'"
+#                 )
+#             else:
+#                 search_results_data = {"error": f"No valid match found for title '{title}' (failed scoring or no visible results)"}
+#                 log.warning(
+#                     f"⚠️ TITLE SEARCH FAILED: No match found for '{title}' after scoring gate"
+#                 )
+# 
+#         except Exception as search_error:
+#             log.error(f"Error during title search for '{title}': {search_error}")
+#             search_results_data = {
+#                 "error": f"Search error for title '{title}': {str(search_error)}"
+#             }
+# 
+#         return search_results_data
+# 
+#   
+#     def _normalize_ean(self, ean: str) -> str:
+#         """
+#         Normalize EAN for comparison (remove spaces, leading zeros).
+# 
+#         Args:
+#             ean: Raw EAN string
+# 
+#         Returns:
+#             Normalized EAN string for comparison
+#         """
+#         if not ean:
+#             return ""
+#         # Remove spaces, hyphens, and other separators
+#         ean_clean = ean.replace(" ", "").replace("-", "").replace(".", "")
+#         # Remove leading zeros for comparison (EAN-8 vs EAN-13 compatibility)
+#         ean_normalized = ean_clean.lstrip("0")
+#         return ean_normalized
+# 
+#     async def _extract_ean_from_product_page(self, page) -> Optional[str]:
+#         """
+#         Extract EAN/Barcode from Amazon product details section.
+# 
+#         Tries multiple methods to find EAN in product page:
+#         1. Product Details table (#productDetails_detailBullets_sections1)
+#         2. Technical Details section (#detailBullets_feature_div)
+#         3. Additional Information section (#productDetails_db_sections)
+#         4. keepa-extracted product codes
+# 
+#         Args:
+#             page: Playwright page object on product detail page
+# 
+#         Returns:
+#             EAN string if found, None otherwise
+#         """
+#         log = self.log
+# 
+#         try:
+#             # Method 1: Product Details table
+#             try:
+#                 details_table = await page.locator('#productDetails_detailBullets_sections1').first
+#                 if await details_table.count() > 0:
+#                     text = await details_table.text_content()
+#                     if text:
+#                         # Look for EAN, GTIN, Barcode patterns
+#                         import re
+#                         ean_match = re.search(r'(?:EAN|GTIN|Barcode)[:\s]+(\d{8,14})', text, re.IGNORECASE)
+#                         if ean_match:
+#                             log.debug(f"EAN found in Product Details table: {ean_match.group(1)}")
+#                             return ean_match.group(1)
+#             except Exception as e:
+#                 log.debug(f"Method 1 (Product Details table) failed: {e}")
+# 
+#             # Method 2: Technical Details section
+#             try:
+#                 tech_details = await page.locator('#detailBullets_feature_div').first
+#                 if await tech_details.count() > 0:
+#                     text = await tech_details.text_content()
+#                     if text:
+#                         import re
+#                         ean_match = re.search(r'(?:EAN|GTIN|Barcode)[:\s]+(\d{8,14})', text, re.IGNORECASE)
+#                         if ean_match:
+#                             log.debug(f"EAN found in Technical Details: {ean_match.group(1)}")
+#                             return ean_match.group(1)
+#             except Exception as e:
+#                 log.debug(f"Method 2 (Technical Details) failed: {e}")
+# 
+#             # Method 3: Additional Information section
+#             try:
+#                 additional_info = await page.locator('#productDetails_db_sections').first
+#                 if await additional_info.count() > 0:
+#                     text = await additional_info.text_content()
+#                     if text:
+#                         import re
+#                         ean_match = re.search(r'(?:EAN|GTIN|Barcode)[:\s]+(\d{8,14})', text, re.IGNORECASE)
+#                         if ean_match:
+#                             log.debug(f"EAN found in Additional Information: {ean_match.group(1)}")
+#                             return ean_match.group(1)
+#             except Exception as e:
+#                 log.debug(f"Method 3 (Additional Information) failed: {e}")
+# 
+#             # Method 4: Look for UPC/EAN in any table rows
+#             try:
+#                 all_text = await page.content()
+#                 if all_text:
+#                     import re
+#                     # More aggressive pattern matching
+#                     ean_patterns = [
+#                         r'(?:EAN|GTIN|Barcode|UPC)[:\s]+(\d{8,14})',
+#                         r'"ean"[:\s]+"(\d{8,14})"',
+#                         r'"gtin"[:\s]+"(\d{8,14})"',
+#                     ]
+#                     for pattern in ean_patterns:
+#                         ean_match = re.search(pattern, all_text, re.IGNORECASE)
+#                         if ean_match:
+#                             log.debug(f"EAN found via pattern '{pattern}': {ean_match.group(1)}")
+#                             return ean_match.group(1)
+#             except Exception as e:
+#                 log.debug(f"Method 4 (page content search) failed: {e}")
+# 
+#             log.debug(f"No EAN found on product page after trying all methods")
+#             return None
+# 
+#         except Exception as e:
+#             log.error(f"Error extracting EAN from product page: {e}")
+#             return None
+# 
+#     async def search_by_ean_and_extract_data(
+#         self, ean: str, supplier_product_title: str, page: Optional[Page] = None
+#     ) -> Dict[str, Any]:
+#         """
+#         Search Amazon by EAN and extract data for the best match.
+#         Uses AI for disambiguation if multiple results are found.
+#         Uses robust search result selection and sponsored ad detection.
+#         """
+#         if not self.browser or not self.browser.is_connected():
+#             await self.connect()
+# 
+#         log.info(
+#             f"Searching Amazon by EAN: {ean} for supplier product: '{supplier_product_title}' (FixedAmazonExtractor)"
+#         )
+# 
+#         # Get page from parameter or use BrowserManager
+#         if page is None:
+#             from utils.browser_manager import get_page_for_url
+# 
+#             log.info("No page provided to search_by_ean, getting one from BrowserManager.")
+#             page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
+# 
+#         try:
+#             # Navigate to Amazon UK and search by typing EAN into search bar
+#             log.info(f"Navigating to Amazon UK to search for EAN: {ean}")
+# 
+#             await page.goto("https://www.amazon.co.uk", timeout=60000)
+# 
+#             # Type EAN into search box and press Enter
+#             await page.fill("input#twotabsearchtextbox", ean, timeout=5000)
+#             await page.press("input#twotabsearchtextbox", "Enter")
+# 
+#             # Wait for search results with enhanced multiple selector approach - REQUIREMENT 1
+#             log.info(f"Waiting for search results page to load for EAN {ean}...")
+#             search_result_containers_found = False
+#             container_selectors = [
+#                 "div.s-search-results",
+#                 "div[data-component-type='s-search-results']",
+#                 "[data-cy='search-result-list]",
+#                 "div.s-result-list",
+#                 "div.s-main-slot",
+#             ]
+# 
+#             # Wait for any of the container selectors with a longer timeout
+#             for container_selector in container_selectors:
+#                 try:
+#                     await page.wait_for_selector(container_selector, timeout=20000)
+#                     log.info(f"Found search results container with selector: {container_selector}")
+#                     search_result_containers_found = True
+#                     break
+#                 except Exception as container_error:
+#                     log.debug(
+#                         f"Container selector '{container_selector}' not found: {container_error}"
+#                     )
+# 
+#             if not search_result_containers_found:
+#                 # Check for a direct product page (Amazon sometimes redirects to product page for exact EAN match)
+#                 try:
+#                     direct_product_selectors = ["div#dp-container", "div#ppd", "div#centerCol"]
+#                     for direct_selector in direct_product_selectors:
+#                         if await page.query_selector(direct_selector):
+#                             log.info(
+#                                 f"EAN search redirected to a direct product page (selector: {direct_selector})"
+#                             )
+#                             # Extract ASIN from URL
+#                             current_url = page.url
+#                             asin_match = re.search(r"/dp/([A-Z0-9]{10})", current_url)
+#                             if asin_match:
+#                                 direct_asin = asin_match.group(1)
+#                                 log.info(
+#                                     f"Found direct product match for EAN {ean}: ASIN {direct_asin}"
+#                                 )
+#                                 # Return the data directly
+#                                 return await super().extract_data(direct_asin)
+#                             break
+#                 except Exception as direct_page_error:
+#                     log.debug(f"Error checking for direct product page: {direct_page_error}")
+# 
+#                 log.warning(f"No search results containers found for EAN {ean}")
+#                 return {"error": f"No search results found for EAN {ean}"}
+# 
+#             # VISIBILITY FIX: Add stabilization phase to ensure page fully renders
+#             # Small delay to allow JavaScript to complete rendering
+#             await asyncio.sleep(0.4)
+#             # Modest scroll to trigger lazy-loaded content
+#             await page.evaluate('window.scrollBy(0, 600)')
+#             # Brief wait after scroll
+#             await asyncio.sleep(0.2)
+# 
+#             # REQUIREMENT 2: Search Result Element (Tile) Selection with improved selectors
+#             organic_results = []
+#             search_result_elements = []
+# 
+#             # Enhanced list of selectors for finding individual product tiles
+#             search_selectors = [
+#                 # Try to exclude obvious ad containers at the selection stage
+#                 "div[data-asin]:not([data-asin='']):not(.AdHolder):not([class*='s-widget-sponsored-product'])",
+#                 "div.s-result-item[data-asin]:not([data-asin=''])",
+#                 "div[data-component-type='s-search-result'][data-asin]:not([data-asin=''])",
+#                 "div.s-search-results > div[data-asin]",
+#                 "div[data-cel-widget*='search_result_'][data-asin]:not([data-asin=''])",
+#                 "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
+#                 "div[data-uuid][data-asin]:not([data-asin=''])",
+#             ]
+# 
+#             for selector in search_selectors:
+#                 try:
+#                     elements = await page.query_selector_all(selector)
+#                     if elements and len(elements) > 0:
+#                         search_result_elements = elements
+#                         log.info(
+#                             f"Found {len(elements)} search result elements using selector: {selector}"
+#                         )
+#                         break
+#                 except Exception as e:
+#                     log.debug(f"Search selector '{selector}' failed: {e}")
+#                     continue
+# 
+#             if not search_result_elements:
+#                 log.warning(f"No search result elements found for EAN {ean}")
+#                 return {"error": "no_elements_found"}
+#             else:
+#                 log.info(
+#                     f"Processing {len(search_result_elements)} search result elements for EAN {ean}"
+#                 )
+# 
+#                 # OPTION B FIX: Use visibility check to leverage AdBlocker filtering
+#                 # AdBlocker (uBlock) hides sponsored products with CSS, so we only extract visible elements
+#                 # This eliminates need for complex sponsored detection and verification loops
+#                 log.info(f"🔍 VISIBILITY FILTER: Extracting only visible products (AdBlocker-aware)")
+# 
+#                 # ASIN EXTRACTION POLICY FIX: Select first visible element, navigate to PDP, extract ASIN from URL
+#                 # Do NOT extract ASIN from search result tiles
+#                 first_visible_element = None
+#                 first_visible_title = None
+# 
+#                 for i, element in enumerate(search_result_elements[:15]):
+#                     try:
+#                         # Check if element is visible (AdBlocker hides sponsored products)
+#                         is_visible = await element.is_visible()
+# 
+#                         if not is_visible:
+#                             log.debug(f"Element {i+1}: Hidden by AdBlocker (likely sponsored)")
+#                             continue
+# 
+#                         # Extract title from first visible element (don't extract ASIN yet - will do on PDP)
+#                         try:
+#                             candidate_title = await self._extract_title_from_element(element, "CANDIDATE")
+#                             first_visible_element = element
+#                             first_visible_title = candidate_title
+#                             log.info(f"✅ Found first visible candidate for EAN {ean}: '{first_visible_title[:80]}...'")
+#                             break  # Stop after finding first visible candidate
+#                         except Exception as title_error:
+#                             log.debug(f"Error extracting title from element {i+1}: {title_error}")
+#                             continue
+# 
+#                     except Exception as elem_error:
+#                         log.debug(f"Error processing element {i+1}: {elem_error}")
+#                         continue
+# 
+#                 # Log visibility filtering results
+#                 if first_visible_element:
+#                     log.info(f"📊 VISIBILITY FILTERING: Found first visible product for EAN {ean}")
+#                 else:
+#                     log.warning(f"📊 VISIBILITY FILTERING: No visible products found for EAN {ean}")
+# 
+#                 # Check if we have a visible result
+#                 if not first_visible_element:
+#                     log.warning(f"EAN {ean} returned no visible results - skipping")
+#                     search_results_data = {"error": "no_organic_results"}
+#                 else:
+#                     # Extract ASIN from visible element using data-asin attribute
+#                     try:
+#                         asin = await first_visible_element.get_attribute("data-asin")
+#                         if asin and len(asin) >= 8:
+#                             log.info(f"✅ Extracted ASIN {asin} from visible element for EAN {ean}")
+#                             search_results_data = {
+#                                 "results": [{"asin": asin, "title": first_visible_title}],
+#                                 "search_method": "ean_visibility",
+#                             }
+#                         else:
+#                             log.warning(f"No valid ASIN found in visible element for EAN {ean}")
+#                             search_results_data = {"error": "no_asin_in_element"}
+#                     except Exception as extract_error:
+#                         log.error(f"Error extracting ASIN from element for EAN {ean}: {extract_error}")
+#                         search_results_data = {"error": f"extraction_failed: {str(extract_error)}"}
+# 
+#         except Exception as search_error:
+#             log.error(f"Error during EAN search for {ean}: {search_error}")
+#             search_results_data = {"error": f"Search error for EAN {ean}: {str(search_error)}"}
+# 
+#         if "error" in search_results_data or not search_results_data.get("results"):
+#             log.warning(
+#                 f"No Amazon results or error for EAN '{ean}'. Details: {search_results_data.get('error', 'No results list')}"
+#             )
+#             # FIX 1: EAN search → title match fallback
+#             log.info(
+#                 f"Falling back to title search for supplier product: '{supplier_product_title}'"
+#             )
+#             title_search_results = await self.search_by_title_using_search_bar(
+#                 supplier_product_title, page=page
+#             )
+#             if (
+#                 title_search_results
+#                 and "error" not in title_search_results
+#                 and title_search_results.get("results")
+#             ):
+#                 log.info(
+#                     f"Title search successful for '{supplier_product_title}' after EAN '{ean}' failed"
+#                 )
+#                 # FIXED: Extract complete data for title search result instead of returning search result only
+#                 fallback_asin = title_search_results["results"][0].get("asin")
+#                 if fallback_asin:
+#                     log.info(
+#                         f"Extracting complete data for fallback ASIN {fallback_asin} from title search"
+#                     )
+#                     product_data = await super().extract_data(fallback_asin)
+#                     if product_data and "error" not in product_data:
+#                         # Set search method for linking map
+#                         product_data["_search_method_used"] = "title"
+#                     return product_data
+#                 else:
+#                     return {"error": f"No ASIN found in title search result for EAN {ean}"}
+#             else:
+#                 log.warning(
+#                     f"Both EAN '{ean}' and title '{supplier_product_title}' searches failed"
+#                 )
+#                 return {"error": f"No results for EAN {ean} or title search"}
+# 
+#         potential_asins_info = search_results_data["results"]
+#         chosen_asin_data = None
+# 
+#         if len(potential_asins_info) == 1:
+#             chosen_asin_data = potential_asins_info[0]
+#             log.info(f"Single ASIN {chosen_asin_data.get('asin')} found for EAN {ean}.")
+#         elif len(potential_asins_info) > 1:
+#             # FIX 1: EAN search → stop title scoring when search initiated by EAN
+#             # Trust Amazon's search relevance ranking for EAN searches
+#             chosen_asin_data = potential_asins_info[0]
+#             log.info(
+#                 f"Multiple ASINs ({len(potential_asins_info)}) found for EAN {ean}. Using Amazon's first result: ASIN {chosen_asin_data.get('asin')}"
+#             )
+#             log.info(
+#                 f"FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking"
+#             )
+# 
+#             # EAN search complete - skip AI disambiguation to trust Amazon's ranking
+#             # AI disambiguation removed to prevent title scoring on EAN results
+#             if False:  # Disabled AI disambiguation for EAN searches
+#                 log.info(f"AI disambiguation disabled for EAN {ean} - trusting Amazon's ranking")
+#                 prompt = (
+#                     f"The EAN '{ean}' (from supplier product '{supplier_product_title}') "
+#                     f"returned multiple products on Amazon. Which of the following Amazon products is the most likely match to the supplier product title?\n"
+#                 )
+#                 for i, item in enumerate(potential_asins_info[:3]):  # Limit to top 3 for AI prompt
+#                     prompt += f"{i+1}. ASIN: {item.get('asin')}, Title: {item.get('title')}\n"
+#                 prompt += "Respond with the ASIN of the best match, or 'NONE' if no good match."
+# 
+#                 try:
+#                     # Ensure ai_client is not None before calling create
+#                     if self.ai_client:
+#                         chat_completion = await asyncio.to_thread(
+#                             self.ai_client.chat.completions.create,  # type: ignore
+#                             messages=[{"role": "user", "content": prompt}],
+#                             model=OPENAI_MODEL_NAME,
+#                         )
+#                         ai_response = chat_completion.choices[0].message.content.strip()  # type: ignore
+#                         log.info(f"AI response for EAN {ean} disambiguation: {ai_response}")
+# 
+#                         # Find the item that matches the AI's chosen ASIN
+#                         matched_item_by_ai = next(
+#                             (
+#                                 item
+#                                 for item in potential_asins_info
+#                                 if item.get("asin") == ai_response
+#                             ),
+#                             None,
+#                         )
+#                         if matched_item_by_ai:
+#                             chosen_asin_data = matched_item_by_ai
+#                             log.info(
+#                                 f"AI selected ASIN {chosen_asin_data.get('asin')} for EAN {ean}."
+#                             )
+#                         elif ai_response != "NONE":
+#                             log.warning(
+#                                 f"AI suggested ASIN {ai_response} not in search results. Using first result."
+#                             )
+#                         else:  # AI responded "NONE"
+#                             log.warning(
+#                                 f"AI could not confidently match EAN {ean}. Using first result."
+#                             )
+#                     else:
+#                         log.warning(
+#                             "AI client not available for EAN disambiguation. Using first result."
+#                         )
+#                 except Exception as ai_err:
+#                     log.error(f"AI disambiguation failed for EAN {ean}: {ai_err}")
+# 
+#         if not chosen_asin_data or not chosen_asin_data.get("asin"):
+#             log.warning(f"No suitable ASIN found for EAN {ean} after search and disambiguation.")
+#             return {"error": f"No suitable ASIN for EAN {ean}"}
+# 
+#         chosen_asin = chosen_asin_data.get("asin")
+#         log.info(f"Proceeding with ASIN: {chosen_asin} for EAN: {ean}")
+# 
+#         # Extract detailed data for the chosen ASIN using the base class method
+#         product_data = await super().extract_data(chosen_asin)  # type: ignore
+# 
+#         # 🚨 CRITICAL FIX: Explicitly record that this was an EAN search
+#         if "error" not in product_data:
+#             product_data["_search_method_used"] = "EAN"
+#             log.info(f"✅ Recorded search method 'EAN' for ASIN {chosen_asin}")
+#         else:
+#             log.warning(f"Failed to extract data for ASIN {chosen_asin}, cannot set search method")
+# 
+#         # The base AmazonExtractor's extract_data method should now attempt to get 'ean_on_page'.
+#         # No need for redundant EAN extraction here if the base class handles it.
+#         if "error" not in product_data and product_data.get("title"):
+#             log.info(
+#                 f"Successfully extracted data for ASIN {chosen_asin} (EAN on page: {product_data.get('ean_on_page', 'N/A')})"
+#             )
+# 
+#         return product_data
+# 
+#     async def extract_data(self, asin: str) -> Dict[str, Any]:
+#         """
+#         Extract data for an Amazon product by ASIN.
+#         This implementation reuses existing pages to ensure extensions work properly.
+#         The base class method is called, which should handle EAN extraction.
+#         """
+#         # This method primarily relies on the superclass's extract_data.
+#         # The FixedAmazonExtractor's role is more about specialized search (like by EAN)
+#         # and ensuring the correct browser context is used.
+#         if not self.browser or not self.browser.is_connected():
+#             await self.connect()  # Ensure connection
+# 
+#         # Call the parent's extract_data method
+#         result = await super().extract_data(asin)  # type: ignore
+# 
+#         # The base class's extract_data should now be responsible for finding 'ean_on_page'.
+#         # Any additional EAN logic specific to FixedAmazonExtractor could go here if needed,
+#         # but it's better if the base class is comprehensive.
+# 
+#         # The stabilization wait is also part of the base class's extract_data
+#         # log.info(f"Waiting {EXTENSION_DATA_WAIT}s for extensions to stabilize (FixedAmazonExtractor.extract_data)...")
+#         # await asyncio.sleep(EXTENSION_DATA_WAIT) # This is in the base class
+#         return result
+# 
+# 
 class PassiveExtractionWorkflow:
     @staticmethod
     def _valid_ean_for_key(ean: str) -> str | None:
@@ -2038,6 +1989,10 @@ class PassiveExtractionWorkflow:
         self._active_category_urls = category_urls
         cfg_hash = self.state_manager.compute_supplier_config_hash(category_urls)
 
+        # 🚨 FIX: Initialize session FIRST to load previous state
+        # This ensures we have the correct persistent index before any saves
+        self.state_manager.initialize_workflow_session()
+
         # Freeze total categories and mark frozen BEFORE any resume logic
         self.state_manager.set_total_categories(len(category_urls), cfg_hash)
         self.state_manager.save_state_atomic()
@@ -2556,7 +2511,7 @@ class PassiveExtractionWorkflow:
                             "supplier_price": product_data.get("price"),
                             "amazon_price": None,
                             "match_method": "none",  # NEW: Indicates no match found
-                            "confidence": 0,  # NEW: No confidence for failed matches
+                            "confidence": "0",  # NEW: No confidence for failed matches (string for consistency)
                             "created_at": datetime.now().isoformat(),
                             "supplier_url": product_data.get("url"),
                             "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
@@ -2604,18 +2559,23 @@ class PassiveExtractionWorkflow:
                         filename_identifier = supplier_ean
 
                     asin = amazon_data.get("asin", "NO_ASIN")
-                    amazon_cache_path = str(
-                        path_manager.get_output_path(
-                            "FBA_ANALYSIS",
-                            "amazon_cache",
-                            f"amazon_{asin}_{filename_identifier}.json",
+
+                    # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                    if asin and asin not in ("NO_ASIN", "None", None):
+                        amazon_cache_path = str(
+                            path_manager.get_output_path(
+                                "FBA_ANALYSIS",
+                                "amazon_cache",
+                                f"amazon_{asin}_{filename_identifier}.json",
+                            )
                         )
-                    )
-                    success = self.save_guardian.save_json_atomic(amazon_cache_path, amazon_data)
-                    if success:
-                        self.log.info(f"Saved Amazon data to {amazon_cache_path}")
+                        success = self.save_guardian.save_json_atomic(amazon_cache_path, amazon_data)
+                        if success:
+                            self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                        else:
+                            self.log.error(f"❌ Failed to save Amazon data to {amazon_cache_path}")
                     else:
-                        self.log.error(f"❌ Failed to save Amazon data to {amazon_cache_path}")
+                        self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                     self.log.info(
                         f"🔍 DEBUG: supplier_ean='{supplier_ean}', asin='{asin}', product_ean='{product_data.get('ean')}'"
@@ -2641,13 +2601,33 @@ class PassiveExtractionWorkflow:
                     )
 
                     if (supplier_ean or product_data.get("title")) and asin and asin != "NO_ASIN":
-                        # Determine confidence based on actual search success, not just supplier data availability
-                        if actual_search_method == "EAN":
-                            confidence = "high"  # EAN search actually worked
+                        # CRITICAL FIX: Confidence based on search method (visibility or verification)
+                        if actual_search_method == "ean_visibility":
+                            # NEW: EAN search with visibility filtering (Option B) - high confidence
+                            match_method = "EAN"
+                            confidence = "high"
+                        elif actual_search_method == "ean_verified":
+                            # OLD: EAN was verified on product page - highest confidence
+                            match_method = "EAN"
+                            confidence = "high"
+                        elif actual_search_method == "EAN" or actual_search_method == "ean_search_bar_with_verification":
+                            # Old method - EAN search succeeded but NOT verified (shouldn't happen with new code)
+                            match_method = "EAN"
+                            confidence = "medium"  # Downgrade since not verified
+                            self.log.warning(f"⚠️ EAN search without verification - this should not happen with new code")
                         elif actual_search_method == "title":
-                            confidence = "medium"  # Title search worked
+                            # Title search worked
+                            match_method = "title"
+                            confidence = "medium"
+                        elif actual_search_method == "ean_verification_failed":
+                            # Had to fall back to title after EAN verification failed
+                            match_method = "title"
+                            confidence = "low"
+                            self.log.info(f"📊 Using title fallback after EAN verification failed")
                         else:
-                            confidence = "low"  # Unknown method
+                            # Unknown method
+                            match_method = actual_search_method
+                            confidence = "low"
 
                         linking_entry = {
                             "supplier_ean": supplier_ean,
@@ -2656,7 +2636,7 @@ class PassiveExtractionWorkflow:
                             "amazon_title": amazon_data.get("title"),
                             "supplier_price": product_data.get("price"),
                             "amazon_price": amazon_data.get("current_price"),
-                            "match_method": actual_search_method,  # Use actual method, not assumption
+                            "match_method": match_method,  # FIXED: Use normalized match_method (EAN vs title)
                             "confidence": confidence,
                             "created_at": datetime.now().isoformat(),
                             "supplier_url": product_data.get("url"),
@@ -3033,11 +3013,23 @@ class PassiveExtractionWorkflow:
                         supplier_ean = None
 
                     actual_search_method = amazon_data.get("_search_method_used", "unknown")
-                    if actual_search_method == "EAN":
+
+                    # CRITICAL FIX: Confidence based on VERIFIED EAN matching
+                    if actual_search_method == "ean_verified":
+                        match_method = "EAN"
                         confidence = "high"
-                    elif actual_search_method == "title":
+                    elif actual_search_method == "EAN" or actual_search_method == "ean_search_bar_with_verification":
+                        match_method = "EAN"
                         confidence = "medium"
+                        self.log.warning(f"⚠️ EAN search without verification for ASIN {amazon_data.get('asin')}")
+                    elif actual_search_method == "title":
+                        match_method = "title"
+                        confidence = "medium"
+                    elif actual_search_method == "ean_verification_failed":
+                        match_method = "title"
+                        confidence = "low"
                     else:
+                        match_method = actual_search_method
                         confidence = "low"
 
                     linking_entry = {
@@ -3047,7 +3039,7 @@ class PassiveExtractionWorkflow:
                         "amazon_title": amazon_data.get("title"),
                         "supplier_price": product_data.get("price"),
                         "amazon_price": amazon_data.get("current_price"),
-                        "match_method": actual_search_method,
+                        "match_method": match_method,
                         "confidence": confidence,
                         "created_at": datetime.now().isoformat(),
                         "supplier_url": product_data.get("url"),
@@ -6420,33 +6412,24 @@ Return ONLY valid JSON, no additional text."""
             ):
                 self.log.info(f"✅ Title search successful for '{product_data['title']}'")
                 # Process title search results with existing logic
-                best_result = None
-                best_confidence = 0.0
-
-                # Use configurable confidence threshold instead of hardcoded value
-                matching_thresholds = self.system_config.get("performance", {}).get(
-                    "matching_thresholds", {}
-                )
-                min_confidence = matching_thresholds.get("title_similarity", 0.6)
-
-                for result in amazon_search_results["results"][:3]:  # Check top 3 results
-                    validation = self._validate_product_match(product_data, result)
-                    confidence = validation.get("confidence", 0.0)
-                    if confidence > best_confidence and confidence >= min_confidence:
-                        best_confidence = confidence
-                        best_result = result
-
-                if best_result:
-                    asin = best_result.get("asin")
-                    if asin:
-                        self.log.info(
-                            f"🎯 Title match found: {best_result.get('title')} (confidence: {best_confidence:.2f})"
-                        )
-                        amazon_product_data = await self.extractor.extract_data(asin)
-                        if amazon_product_data:
-                            amazon_product_data["_search_method_used"] = "title"
-                            amazon_product_data["_match_confidence"] = best_confidence
-                            return amazon_product_data
+                # SIMPLIFIED LOGIC: Select first result (Scoring disabled by user)
+                if amazon_search_results["results"]:
+                    best_result = amazon_search_results["results"][0]
+                    self.log.info(
+                        f"✅ Title search: Selected first visible organic product - ASIN {best_result.get('asin')}"
+                    )
+                    
+                    if best_result:
+                        asin = best_result.get("asin")
+                        if asin:
+                            self.log.info(
+                                f"🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: '{product_data['title']}'"
+                            )
+                            amazon_product_data = await self.extractor.extract_data(asin)
+                            if amazon_product_data:
+                                amazon_product_data["_search_method_used"] = "title"
+                                amazon_product_data["_match_confidence"] = 1.0 # Default high confidence for first match
+                                return amazon_product_data
             else:
                 self.log.warning(
                     f"❌ Both EAN and title searches failed for '{product_data['title']}'"
@@ -6665,89 +6648,67 @@ Return ONLY valid JSON, no additional text."""
                 else:
                     return None
 
-            best_result = None
-            best_confidence = 0.0
+            # LEGACY CODE CLEANUP: Since both EAN and title search now return single pre-validated candidates,
+            # this top-N selection block is no longer needed. Use first result directly (trusting search methods).
+            # The search methods already applied scoring gates and visibility filtering.
 
-            # Use configurable confidence threshold instead of hardcoded value
-            matching_thresholds = self.system_config.get("performance", {}).get(
-                "matching_thresholds", {}
-            )
-            confidence_threshold = matching_thresholds.get(
-                "medium_title_similarity", 0.5
-            )  # More conservative than old 0.4
+            # Trust the single-candidate approach from search methods
+            if len(amazon_search_results['results']) == 1:
+                # Single result from EAN or title search - already validated by search method
+                best_result = amazon_search_results['results'][0]
+                self.log.info(
+                    f"✅ USING PRE-VALIDATED RESULT: ASIN {best_result.get('asin')} from single-candidate search"
+                )
+                asin = best_result.get("asin")
+            else:
+                # LEGACY PATH: Multiple results (should not happen with new search methods, but defensive)
+                # This block is preserved for backward compatibility but should rarely execute
+                self.log.warning(
+                    f"⚠️ LEGACY PATH ACTIVATED: Received {len(amazon_search_results['results'])} results "
+                    f"(expected 1 from single-candidate search). Using top-N fallback."
+                )
 
-            self.log.info(
-                f"🔍 PRODUCT VALIDATION: Evaluating {len(amazon_search_results['results'])} Amazon results for '{product_data['title']}'"
-            )
+                best_result = None
+                best_confidence = 0.0
 
-            for i, result in enumerate(amazon_search_results["results"][:5]):  # Check top 5 results
-                # Use existing _validate_product_match method (now fixed)
-                amazon_product_data = {"title": result.get("title", "")}
-                validation = self._validate_product_match(product_data, amazon_product_data)
-
-                confidence = validation.get("confidence", 0.0)
-                match_quality = validation.get("match_quality", "low")
-                overlap_score = validation.get("title_overlap_score", 0.0)
+                # Use configurable confidence threshold
+                matching_thresholds = self.system_config.get("performance", {}).get(
+                    "matching_thresholds", {}
+                )
+                confidence_threshold = matching_thresholds.get(
+                    "medium_title_similarity", 0.5
+                )
 
                 self.log.info(
-                    f"📊 Result {i+1}: ASIN {result.get('asin')} - Confidence: {confidence:.3f} ({match_quality}) - Overlap: {overlap_score:.3f} - '{result.get('title', 'No title')[:60]}...'"
+                    f"🔍 PRODUCT VALIDATION: Evaluating {len(amazon_search_results['results'])} Amazon results for '{product_data['title']}'"
                 )
 
-                if confidence > best_confidence and confidence >= confidence_threshold:
-                    best_confidence = confidence
-                    best_result = result
+                for i, result in enumerate(amazon_search_results["results"][:5]):  # Check top 5 results
+                    amazon_product_data = {"title": result.get("title", "")}
+                    validation = self._validate_product_match(product_data, amazon_product_data)
 
-            if not best_result:
-                # 🚨 SURGICAL FIX #4: ENHANCED NO-MATCH HANDLING
-                self.log.warning(
-                    f"🚨 NO CONFIDENT MATCH: All Amazon results below {confidence_threshold:.1%} confidence threshold for '{product_data['title']}'. Skipping to prevent irrational matches."
-                )
+                    confidence = validation.get("confidence", 0.0)
+                    match_quality = validation.get("match_quality", "low")
+                    overlap_score = validation.get("title_overlap_score", 0.0)
 
-                # 🚀 ENHANCEMENT: Log detailed analysis for debugging
-                self.log.info(f"📊 CONFIDENCE ANALYSIS SUMMARY:")
-                self.log.info(f"   🎯 Threshold: {confidence_threshold:.1%}")
-                self.log.info(f"   📈 Best confidence achieved: {best_confidence:.1%}")
-                self.log.info(f"   📉 Results analyzed: {len(amazon_search_results['results'][:5])}")
+                    self.log.info(
+                        f"📊 Result {i+1}: ASIN {result.get('asin')} - Confidence: {confidence:.3f} ({match_quality}) - Overlap: {overlap_score:.3f} - '{result.get('title', 'No title')[:60]}...'"
+                    )
 
-                # 💫 ADDITIONAL FALLBACK: Try with even more simplified title if confidence is close
-                if best_confidence > (confidence_threshold * 0.8):  # Within 80% of threshold
-                    # Extract brand or key product identifier
-                    title_words = product_data["title"].split()
-                    if len(title_words) >= 2:
-                        brand_search = title_words[0]  # Assume first word is brand
-                        self.log.info(
-                            f"🎯 BRAND FALLBACK: Trying brand-only search: '{brand_search}'"
-                        )
-
-                        brand_results = await self.extractor.search_by_title_using_search_bar(
-                            brand_search
-                        )
-                        if (
-                            brand_results
-                            and "error" not in brand_results
-                            and brand_results.get("results")
-                        ):
-                            # Quick confidence check on brand results
-                            for result in brand_results["results"][:3]:  # Check top 3 brand results
-                                amazon_product_data = {"title": result.get("title", "")}
-                                validation = self._validate_product_match(
-                                    product_data, amazon_product_data
-                                )
-                                if validation.get("confidence", 0.0) >= confidence_threshold:
-                                    self.log.info(
-                                        f"✅ BRAND SEARCH SUCCESS: Found match with {validation.get('confidence', 0.0):.1%} confidence"
-                                    )
-                                    best_result = result
-                                    best_confidence = validation.get("confidence", 0.0)
-                                    break
+                    if confidence > best_confidence and confidence >= confidence_threshold:
+                        best_confidence = confidence
+                        best_result = result
 
                 if not best_result:
+                    self.log.warning(
+                        f"🚨 NO CONFIDENT MATCH: All Amazon results below {confidence_threshold:.1%} confidence threshold"
+                    )
                     return None
 
-            self.log.info(
-                f"✅ BEST MATCH: ASIN {best_result.get('asin')} with {best_confidence:.1%} confidence"
-            )
-            asin = best_result.get("asin")
+                self.log.info(
+                    f"✅ BEST MATCH: ASIN {best_result.get('asin')} with {best_confidence:.1%} confidence"
+                )
+                asin = best_result.get("asin")
             if not asin:
                 self.log.warning(
                     f"Could not determine ASIN for '{product_data['title']}'. Skipping."
@@ -6815,12 +6776,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -6830,50 +6786,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -7714,6 +7627,138 @@ Return ONLY valid JSON, no additional text."""
         self.log.info(f"📦 CATEGORY QUEUE: url={ncat} size={len(queue)} allowed_gate={'on' if allowed else 'off'}")
         return queue
 
+    async def _analyze_with_amazon(self, product_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Analyze a single product with Amazon: search, cache, financial analysis.
+        Used by _run_amazon_phase_from_resume for granular resumption.
+        """
+        # Check if already processed
+        if self.state_manager.is_product_processed(product_data.get("url")):
+            self.log.info(f"Product already processed: {product_data.get('url')}. Skipping.")
+            return None
+
+        self.log.info(f"🔍 Analyzing product: '{product_data.get('title')}'")
+
+        # Amazon data extraction and analysis
+        amazon_data = await self._get_amazon_data(product_data)
+        
+        if not amazon_data or "error" in amazon_data:
+            self.log.warning(
+                f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
+            )
+
+            # Create no-match linking entry
+            supplier_ean = product_data.get("ean") or product_data.get("barcode")
+            if supplier_ean == "None" or supplier_ean is None:
+                supplier_ean = None
+
+            # Determine the reason for no match
+            error_info = (
+                amazon_data.get("error")
+                if isinstance(amazon_data, dict)
+                else "No Amazon data returned"
+            )
+            no_match_reason = f"Resumption processing - Amazon search failed: {error_info}"
+
+            # Create no-match linking entry
+            no_match_entry = {
+                "supplier_ean": supplier_ean,
+                "amazon_asin": None,
+                "supplier_title": product_data.get("title"),
+                "amazon_title": None,
+                "supplier_price": product_data.get("price"),
+                "amazon_price": None,
+                "match_method": "none",
+                "confidence": 0,
+                "created_at": datetime.now().isoformat(),
+                "supplier_url": product_data.get("url"),
+                "no_match_reason": no_match_reason,
+            }
+
+            # Add no-match entry to linking map using optimized method
+            self._add_linking_map_entry_optimized(no_match_entry)
+            self.log.info(
+                f"✅ Added NO-MATCH linking entry: {supplier_ean or 'NO_EAN'} → NO MATCH"
+            )
+
+            self.state_manager.mark_product_processed(
+                product_data.get("url"), "failed_amazon_extraction"
+            )
+            return None
+
+        # Save Amazon cache and create linking map
+        supplier_ean = product_data.get("ean") or product_data.get("barcode")
+        asin = amazon_data.get("asin", "NO_ASIN")
+
+        # CACHE POLICY: Only save Amazon cache file when ASIN is valid
+        if asin and asin not in ("NO_ASIN", "None", None):
+            # Save Amazon data
+            filename_identifier = (
+                supplier_ean
+                if supplier_ean
+                else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+            )
+            amazon_cache_path = str(
+                path_manager.get_output_path(
+                    "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                )
+            )
+            with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+            self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+        else:
+            self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
+
+        # Financial analysis
+        try:
+            supplier_price = float(product_data.get("price", 0))
+            current_price = amazon_data.get("current_price", 0)
+
+            if supplier_price > 0 and current_price > 0:
+                financials = calc_financials(
+                    product_data,
+                    amazon_data,
+                    supplier_price
+                )
+
+                # Check profitability
+                if (
+                    financials.get("ROI", 0) > MIN_ROI_PERCENT
+                    and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+                ):
+                    self.log.info(
+                        f"✅ PROFITABLE: ROI {financials['ROI']:.1f}%, Profit £{financials['NetProfit']:.2f}"
+                    )
+
+                    combined_data = self._combine_supplier_amazon_data(
+                        product_data, amazon_data, "hybrid_resume"
+                    )
+                    combined_data["financials"] = financials
+                    
+                    self.state_manager.update_success_metrics(
+                        True, True, financials.get("NetProfit", 0)
+                    )
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "completed_profitable"
+                    )
+                    return combined_data
+                else:
+                    self.log.info(
+                        f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit £{financials.get('NetProfit', 0):.2f}"
+                    )
+                    self.state_manager.update_success_metrics(True, False)
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "completed_not_profitable"
+                    )
+                    return None
+
+        except Exception as e:
+            self.log.error(f"Financial calculation failed: {e}")
+            self.state_manager.mark_product_processed(
+                product_data.get("url"), "failed_financial_calculation"
+            )
+            return None
+
     async def _run_amazon_phase_from_resume(self, rp) -> int:
         """
         Resume Amazon analysis from saved pointer. Queue is category-scoped and deterministic.
@@ -7725,7 +7770,7 @@ Return ONLY valid JSON, no additional text."""
         total_cats = int(self.state_manager._authoritative_total_categories() or 0)
 
         # Current category URL: prefer state, fall back to index mapping if needed
-        category_url = (self.state_manager.current_category_url() 
+        category_url = (self.state_manager.get_current_category_info().get("cat_url") 
                         or self._get_category_url_by_index(cat_idx))
 
         products = self._rebuild_category_amazon_queue(category_url)
@@ -7815,7 +7860,7 @@ Return ONLY valid JSON, no additional text."""
             self._finalize_category_completion(category_url, int(cat_idx))
 
             # Phase switch back to supplier
-            self.state_manager.commit_phase_switch("supplier")
+            self.state_manager.commit_phase_switch(new_phase="supplier")
             self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier (via resume finalizer)")
 
         return 0
@@ -7981,19 +8026,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -8096,12 +8146,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -8111,50 +8156,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -8364,19 +8366,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -8479,12 +8486,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -8494,50 +8496,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -8747,19 +8706,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -8862,12 +8826,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -8877,50 +8836,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -9130,19 +9046,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -9245,12 +9166,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -9260,50 +9176,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -9513,19 +9386,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -9628,12 +9506,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -9643,50 +9516,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -9896,19 +9726,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -10011,12 +9846,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -10026,50 +9856,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -10279,19 +10066,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -10394,12 +10186,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -10409,50 +10196,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -10662,19 +10406,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -10777,12 +10526,7 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    def _overlap_score(self, title_a: str, title_b: str) -> float:
-        """Calculate word overlap score between two titles"""
-        a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
-        b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
-        return len(a & b) / max(1, len(a))
-
+    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -10792,50 +10536,7 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    def _validate_product_match(
-        self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Validate the match between supplier and Amazon products using configurable thresholds."""
-        matching_thresholds = self.system_config.get("performance", {}).get(
-            "matching_thresholds", {}
-        )
-
-        # Get configurable thresholds with fallback to more conservative defaults
-        title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
-        medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
-        high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-
-        title_overlap_score = self._overlap_score(
-            supplier_product.get("title", ""), amazon_product.get("title", "")
-        )
-
-        match_quality = "low"
-        confidence = 0.0
-
-        # Use configurable thresholds - much more strict than previous hardcoded values
-        if title_overlap_score >= high_title_similarity:
-            match_quality = "high"
-            confidence = 0.9
-        elif title_overlap_score >= medium_title_similarity:
-            match_quality = "medium"
-            confidence = 0.6
-        elif title_overlap_score >= title_similarity_threshold:
-            match_quality = "low"
-            confidence = 0.3
-        else:
-            match_quality = "very_low"
-            confidence = 0.1
-
-        self.log.debug(
-            f"🔍 MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs '{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} ({match_quality}, {confidence:.1%})"
-        )
-
-        return {
-            "match_quality": match_quality,
-            "confidence": confidence,
-            "title_overlap_score": title_overlap_score,
-        }
-
+    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -11045,19 +10746,24 @@ Return ONLY valid JSON, no additional text."""
                 supplier_ean = product_data.get("ean") or product_data.get("barcode")
                 asin = amazon_data.get("asin", "NO_ASIN")
 
-                # Save Amazon data
-                filename_identifier = (
-                    supplier_ean
-                    if supplier_ean
-                    else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                )
-                amazon_cache_path = str(
-                    path_manager.get_output_path(
-                        "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
                     )
-                )
-                with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                    json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={asin})")
 
                 # Financial analysis
                 try:
@@ -11272,22 +10978,27 @@ Return ONLY valid JSON, no additional text."""
                             .replace("|", "_")
                             .replace('"', "_")
                         )
-                    amazon_cache_path = str(
-                        path_manager.get_output_path(
-                            "FBA_ANALYSIS",
-                            "amazon_cache",
-                            f"amazon_{amazon_asin}_{filename_identifier}.json",
+
+                    # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                    if amazon_asin and amazon_asin not in ("NO_ASIN", "None", None):
+                        amazon_cache_path = str(
+                            path_manager.get_output_path(
+                                "FBA_ANALYSIS",
+                                "amazon_cache",
+                                f"amazon_{amazon_asin}_{filename_identifier}.json",
+                            )
                         )
-                    )
-                    success = self.save_guardian.save_json_atomic(amazon_cache_path, amazon_data)
-                    if success:
-                        self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                        success = self.save_guardian.save_json_atomic(amazon_cache_path, amazon_data)
+                        if success:
+                            self.log.info(f"💾 Saved Amazon data to {amazon_cache_path}")
+                        else:
+                            self.log.error(f"❌ Failed to save Amazon data to {amazon_cache_path}")
                     else:
-                        self.log.error(f"❌ Failed to save Amazon data to {amazon_cache_path}")
+                        self.log.debug(f"🚫 Skipping Amazon cache save for no-match case (ASIN={amazon_asin})")
 
                     # Create linking map entry
 
-                    if amazon_asin:  # Only require ASIN, EAN can be None for title matches
+                    if amazon_asin and amazon_asin not in ("NO_ASIN", "None", None):  # Only require valid ASIN
                         # DEBUG: Check linking_map type before assignment
                         self.log.debug(
                             f"🔍 DEBUG: linking_map type: {type(self.linking_map)}, size: {len(self.linking_map)} entries"
