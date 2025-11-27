@@ -329,7 +329,7 @@ class MetricsLoader:
             }
 
     def load_financial_metrics(self, financial_dir: str) -> Dict[str, Any]:
-        """Load financial metrics with robust column inference and chunked processing"""
+        """Load financial metrics from the LATEST report only"""
         if not financial_dir or not os.path.exists(financial_dir):
             return {
                 "files_scanned": 0,
@@ -344,6 +344,7 @@ class MetricsLoader:
             # Root-only: exclude subdirectories
             csv_files = [f for f in os.listdir(financial_dir) 
                         if f.endswith('.csv') and os.path.isfile(os.path.join(financial_dir, f))]
+            
             if not csv_files:
                 return {
                     "files_scanned": 0,
@@ -354,34 +355,30 @@ class MetricsLoader:
                     "notes": ["No CSV files found in financial reports directory"]
                 }
 
+            # Find the LATEST file by modification time
+            latest_file = max(csv_files, key=lambda f: os.path.getmtime(os.path.join(financial_dir, f)))
+            file_path = os.path.join(financial_dir, latest_file)
+            
             total_rows = 0
             profitable_count = 0
-            total_roi_sum = 0.0
+            avg_roi = 0.0
             total_profit_sum = 0.0
-            notes = []
+            notes = [f"Loaded latest report: {latest_file}"]
 
-            roi_col = None
-            profit_col = None
+            try:
+                # Read CSV with dtype=str first to avoid type inference issues
+                df = pd.read_csv(file_path, dtype=str, nrows=5)  # Sample first for column detection
 
-            for csv_file in csv_files:
-                file_path = os.path.join(financial_dir, csv_file)
+                # Detect columns
+                roi_col = self._find_column(df.columns, self.ROI_COLUMNS)
+                profit_col = self._find_column(df.columns, self.PROFIT_COLUMNS)
 
-                try:
-                    # Read CSV with dtype=str first to avoid type inference issues
-                    df = pd.read_csv(file_path, dtype=str, nrows=5)  # Sample first for column detection
-
-                    # Detect columns once (assuming consistent format across files)
-                    if roi_col is None:
-                        roi_col = self._find_column(df.columns, self.ROI_COLUMNS)
-                        profit_col = self._find_column(df.columns, self.PROFIT_COLUMNS)
-
-                    if roi_col is None and profit_col is None:
-                        notes.append(f"Could not infer ROI/profit columns from {csv_file}")
-                        continue
-
+                if roi_col is None and profit_col is None:
+                    notes.append(f"Could not infer ROI/profit columns from {latest_file}")
+                else:
                     # Read full file with detected columns
                     df_full = pd.read_csv(file_path, dtype=str)
-                    total_rows += len(df_full)
+                    total_rows = len(df_full)
 
                     if roi_col:
                         # Convert ROI values (handle both decimal and percentage formats)
@@ -389,9 +386,8 @@ class MetricsLoader:
                             df_full[roi_col].astype(str).str.replace('%', '').astype(float) / 100,
                             errors='coerce'
                         )
-
-                        # Sum ROI for average calculation
-                        total_roi_sum += roi_values.sum()
+                        # Average ROI
+                        avg_roi = roi_values.mean() * 100 if not roi_values.empty else 0.0
 
                     if profit_col:
                         # Convert profit values with explicit numeric coercion
@@ -399,24 +395,22 @@ class MetricsLoader:
                         profit_values = df_full[profit_col]
                         
                         # Profitable products: NetProfit > 0 (explicit definition)
-                        profitable_count += int((profit_values > 0).sum())
+                        profitable_count = int((profit_values > 0).sum())
                         
                         # Total profit sum
-                        total_profit_sum += profit_values.sum()
+                        total_profit_sum = profit_values.sum()
 
-                except Exception as e:
-                    notes.append(f"Error processing {csv_file}: {str(e)}")
-                    continue
-
-            avg_roi = (total_roi_sum / total_rows * 100) if total_rows > 0 else 0.0
+            except Exception as e:
+                notes.append(f"Error processing {latest_file}: {str(e)}")
 
             return {
-                "files_scanned": len(csv_files),
+                "files_scanned": 1, # Only one file is relevant now
                 "rows_total": total_rows,
                 "count_profitable": int(profitable_count),
                 "avg_roi": round(avg_roi, 2),
                 "total_profit": round(total_profit_sum, 2),
-                "notes": notes if notes else ["Successfully processed all files"]
+                "notes": notes,
+                "latest_file": latest_file # Return filename for UI display
             }
 
         except Exception as e:

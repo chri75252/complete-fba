@@ -1,0 +1,79 @@
+================================================================================
+TRIANGULAR PROTOCOL ANALYSIS: NOV 25 LOGS
+================================================================================
+
+TARGET: All-Baby-and-child category
+LOG 1 (First run): run_custom_poundwholesale_20251125_154127.log
+LOG 2 (Resume run): run_custom_poundwholesale_20251125_155617.log
+
+--------------------------------------------------------------------------------
+SOURCE 1: ACTUAL FILE COUNTS (Ground Truth)
+--------------------------------------------------------------------------------
+Cache file:
+  Total products: 3343
+  For target category: 397
+  Sample URLs: ['https://angelwholesale.co.uk/Item/Muslinz-6pk-Blue-Quality-Muslin-Squares-Cotton-bac05399', 'https://angelwholesale.co.uk/Item/Bottle-and-Teat-Brush-by-First-Steps-toy01231', 'https://angelwholesale.co.uk/Item/Shiny-PU-Shoes-with-Shiny-Heart--Double-Velcro-Fastener-by-Soft-Touch-bac03210']
+
+Linking map:
+  Total entries: 351
+  Matching manifest: 285
+
+Manifest:
+  Total URLs: 401
+
+INVARIANT CHECK:
+  401 (manifest) = 285 (skip) + 397 (cached) + -281 (remaining)
+  Sum: 401 == 401? True
+
+--------------------------------------------------------------------------------
+SOURCE 2: FIRST RUN LOG (154127)
+--------------------------------------------------------------------------------
+Denominators found: [401]
+Resume pointers: []
+Cache counts: []
+Skip counts: []
+Amazon extractions: 0
+
+--------------------------------------------------------------------------------
+SOURCE 3: RESUME RUN LOG (155617)
+--------------------------------------------------------------------------------
+Denominators found: []
+Resume pointers: []
+Cache counts: []
+Skip counts: []
+Amazon extractions: 0
+
+================================================================================
+CROSS-VERIFICATION: Claims vs Reality
+================================================================================
+
+--------------------------------------------------------------------------------
+REPROCESSING DETECTION
+--------------------------------------------------------------------------------
+ASINs extracted:
+  First run: 72 unique ASINs
+  Resume run: 14 unique ASINs
+  Duplicates: 10 ASINs
+
+  WARNING: 10 ASINs were reprocessed!
+  Sample duplicates: ['B0CTTQ5MWR', 'EXTRACTION', 'B01N702CNN', 'B0D56YB8TC', 'B0BQJHGCM9']
+
+================================================================================
+ROOT CAUSE ANALYSIS
+================================================================================
+
+ISSUE 1: Denominator Mismatch (401 -> 397)
+  Observation: First run uses 401, resume uses 397
+  Impact: 4 products are lost in transition
+  Likely cause: Filtering logic differs between initial and resume
+
+ISSUE 2: Cache Count Variation
+
+ISSUE 3: Amazon Reprocessing
+  Observation: 10 ASINs (13.9%) were extracted twice
+  Impact: Wasted API calls and time
+  Likely cause: Resume pointer doesn't align with processed products
+
+================================================================================
+ANALYSIS COMPLETE
+================================================================================

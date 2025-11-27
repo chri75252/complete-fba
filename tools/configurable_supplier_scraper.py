@@ -551,18 +551,23 @@ class ConfigurableSupplierScraper:
                 f"🚀 URL Linking Map: Loaded {linking_loaded_count} processed URLs from {linking_map_path}"
             )
 
-            # Filter URLs to only include those not in cache OR linking map
+            # 🚨 SURGICAL FIX: Full List Retention Strategy
+            # Instead of removing known URLs, we identify them so we can return "Stub" products.
+            # This ensures the product list length (e.g. 401) matches the discovered count.
+            
+            # 1. Identify which URLs are new vs known
+            new_urls_list = url_manager.filter_new_urls(all_product_urls) # This method returns only new ones
+            new_urls_set = set(new_urls_list)
+            
+            filtered_count = len(new_urls_set)
             original_count = len(all_product_urls)
-            all_product_urls = url_manager.filter_new_urls(all_product_urls)
-            filtered_count = len(all_product_urls)
-
+            
             log.info(
-                f"✅ URL Pre-filtering: {filtered_count} new URLs need processing, {original_count - filtered_count} already cached"
+                f"✅ URL Classification: {filtered_count} new URLs to scrape, {original_count - filtered_count} already cached (will be returned as Stubs)"
             )
-
-            if filtered_count == 0:
-                log.info("🎯 All URLs are already cached/processed - no new products to scrape!")
-                return []  # Return empty list if all URLs are cached
+            
+            # We continue with the FULL list of URLs (all_product_urls)
+            # The loop below will decide whether to scrape or create a stub.
 
         except Exception as filter_error:
             log.warning(f"⚠️ URL pre-filtering failed: {filter_error} - continuing with all URLs")
@@ -573,57 +578,51 @@ class ConfigurableSupplierScraper:
         # Use product_accumulator for real-time updates if provided
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
 
-        # MEMORY LEAK FIX: Track memory and implement cleanup intervals
-        memory_check_interval = 50  # Check memory every 50 products
-        cleanup_interval = 100  # Force cleanup every 100 products
-
         for i, product_url in enumerate(all_product_urls[:max_products]):
+            # 🚨 STUB GENERATION: If URL is known, create Stub and skip scraping
+            if product_url not in new_urls_set:
+                products.append({
+                    "url": product_url,
+                    "title": "Already Processed",
+                    "price": 0,
+                    "source_url": url,
+                    "_skipped": True  # Marker for Workflow to skip processing
+                })
+                continue
+
             try:
-                # 🚨 PROACTIVE AUTHENTICATION CHECK: Verify login every 25 products to prevent pricing failures
-                if i > 0 and i % 25 == 0:
-                    try:
-                        if hasattr(self, "browser_manager") and self.browser_manager:
-                            # Import the correct per-supplier authentication service dynamically
-                            import importlib
-                            from urllib.parse import urlparse
-                            supplier_domain = urlparse(base_url).netloc.replace('www.', '')
-                            supplier_slug = supplier_domain.split('.')[0].replace('-', '_')
-                            module_path = f"tools.{supplier_slug}.supplier_authentication_service"
-                            auth_module = importlib.import_module(module_path)
-                            SupplierAuthenticationService = getattr(
-                                auth_module, "SupplierAuthenticationService",
-                                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
-                            )
-                            from config.system_config_loader import SystemConfigLoader
-
-                            page = await self.browser_manager.get_page()
-                            if page:
-                                # ✅ Pass Page object, not BrowserManager
-                                auth_service = SupplierAuthenticationService(page)
-                                config_loader = SystemConfigLoader()
-                                credentials = config_loader.get_credentials(supplier_domain)
-
-                                if credentials:
-                                    log.info(
-                                        f"🔐 PROACTIVE AUTH CHECK: Verifying login at product {i+1}"
-                                    )
-                                    # Helper is page-based; no need to pass page param
-                                    authenticated = await auth_service.ensure_authenticated_session(
-                                        credentials
-                                    )
-
-                                    if not authenticated:
-                                        log.error(
-                                            f"❌ PROACTIVE AUTH FAILED: Login expired at product {i+1} - attempting re-authentication"
-                                        )
-                                    else:
-                                        log.debug(
-                                            f"✅ PROACTIVE AUTH OK: Login verified at product {i+1}"
-                                        )
-                    except Exception as proactive_auth_error:
-                        log.warning(
-                            f"⚠️ Proactive authentication check failed: {proactive_auth_error}"
-                        )
+                # 🚨 PROACTIVE AUTHENTICATION CHECK: Disabled as per user request (login verified at start of category)
+                # if i > 0 and i % 25 == 0:
+                #     try:
+                #         if hasattr(self, "browser_manager") and self.browser_manager:
+                #             # Import the correct per-supplier authentication service dynamically
+                #             import importlib
+                #             from urllib.parse import urlparse
+                #             supplier_domain = urlparse(base_url).netloc.replace('www.', '')
+                #             supplier_slug = supplier_domain.split('.')[0].replace('-', '_')
+                #             module_path = f"tools.{supplier_slug}.supplier_authentication_service"
+                #             auth_module = importlib.import_module(module_path)
+                #             SupplierAuthenticationService = getattr(
+                #                 auth_module, "SupplierAuthenticationService",
+                #                 getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+                #             )
+                #             from config.system_config_loader import SystemConfigLoader
+                #
+                #             page = await self.browser_manager.get_page()
+                #             if page:
+                #                 auth_service = SupplierAuthenticationService(page)
+                #                 # Load fresh config to get credentials
+                #                 config_loader = SystemConfigLoader()
+                #                 system_config = config_loader.load_config()
+                #                 supplier_config = system_config.get("supplier_configs", {}).get(supplier_domain, {})
+                #                 
+                #                 if supplier_config:
+                #                     log.info(f"🔐 PROACTIVE CHECK: Verifying login status for {supplier_domain}...")
+                #                     await auth_service.login(supplier_config)
+                #                 else:
+                #                     log.warning(f"⚠️ No config found for {supplier_domain}, skipping proactive login check")
+                #     except Exception as auth_error:
+                #          log.warning(f"⚠️ Proactive login check failed: {auth_error} - continuing scraping")
 
                 # 🚨 FIX A-2: REMOVED MEMORY GUARD - Allow infinite processing
                 # Regular memory monitoring and cleanup (without stopping)

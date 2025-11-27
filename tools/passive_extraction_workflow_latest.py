@@ -2039,7 +2039,15 @@ class PassiveExtractionWorkflow:
                     self.phase = phase
             
             resume_ptr = ResumePtr(start_category_index, product_resume_index, resume_phase)
-            return await self._run_amazon_phase_from_resume(resume_ptr)
+            await self._run_amazon_phase_from_resume(resume_ptr)
+            
+            # Reload authoritative pointers after resume finalizer
+            sp_after = self.state_manager.state_data.get("system_progression", {}) or {}
+            start_category_index = sp_after.get("persistent_category_index", start_category_index)
+            resume_phase = sp_after.get("current_phase", "supplier")
+            self.log.info(
+                f"➡️ RESUME COMPLETE: continuing main loop at cat_idx={start_category_index} phase={resume_phase}"
+            )
         if resume_phase != "supplier":
             self.log.info("🔄 PHASE-AWARE GATING: Defaulting to supplier extraction phase")
         else:
@@ -2279,16 +2287,20 @@ class PassiveExtractionWorkflow:
             )
 
             # Filter products based on price and validity
+            # 🚨 FIX: Allow Stubs (_skipped=True) to pass through filters
             valid_supplier_products = [
                 p
                 for p in supplier_products
-                if p.get("title")
-                and isinstance(p.get("price"), (float, int))
-                and p.get("price", 0) > 0
-                and p.get("url")
+                if p.get("_skipped") or (
+                    p.get("title")
+                    and isinstance(p.get("price"), (float, int))
+                    and p.get("price", 0) > 0
+                    and p.get("url")
+                )
             ]
             price_filtered_products = [
-                p for p in valid_supplier_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
+                p for p in valid_supplier_products 
+                if p.get("_skipped") or (MIN_PRICE <= p.get("price", 0) <= MAX_PRICE)
             ]
             self.log.info(
                 f"Found {len(valid_supplier_products)} valid supplier products, {len(price_filtered_products)} within price range [£{MIN_PRICE}-£{MAX_PRICE}]"
@@ -2297,6 +2309,15 @@ class PassiveExtractionWorkflow:
             # Clamp resume index against the actual product list length (avoid empty slices)
             n = len(price_filtered_products)
             upper = max(0, n - 1)
+
+            # 🚨 FIX: Prevent Double-Skip. 
+            # If we just extracted products (supplier phase), the list is already filtered/fresh.
+            # We must start from 0, otherwise we slice off valid products using the *previous* category's index.
+            # The _extract_supplier_products method ALREADY handled the resumption logic and returned only the needed products.
+            if current_phase == "supplier":
+                self.log.info(f"🔄 SUPPLIER PHASE: Forcing resume index to 0 (list already filtered by extraction logic)")
+                self.last_processed_index = 0
+            
             if self.last_processed_index > upper:
                 self.log.info(
                     f"📋 Resume index {self.last_processed_index} > max {upper}; clamping to {upper}."
@@ -2323,6 +2344,28 @@ class PassiveExtractionWorkflow:
             total_products_for_state = getattr(
                 self, "total_cache_count", len(price_filtered_products)
             )
+
+            # 🚨 FIX: Authoritative Denominator Update & User Display Metrics
+            # Update state with correct denominator (filtered count) for logic
+            # AND save original denominator (discovered count) for user display
+            if hasattr(self, "state_manager") and self.state_manager:
+                # 1. Save the "Real" denominator for logic (filtered count)
+                # Unfreeze temporarily to allow update
+                self.state_manager.state_data["system_progression"]["category_denominator_frozen"] = False
+                self.state_manager.set_frozen_denominator(
+                    category_url=self.workflow_config.get("supplier_url"),
+                    discovered_count=total_products_for_state
+                )
+                
+                # 2. Save the "Original" denominator for display (User Request)
+                # We use 'last_discovered_count' from scraper which holds the raw total value
+                original_count = getattr(self.supplier_scraper, "last_discovered_count", total_products_for_state)
+                
+                self.state_manager.state_data.setdefault("user_display_metrics", {})
+                self.state_manager.state_data["user_display_metrics"]["original_discovered_count"] = original_count
+                self.state_manager.state_data["user_display_metrics"]["filtered_worklist_count"] = total_products_for_state
+                
+                self.log.info(f"📉 DENOMINATOR UPDATED: Logic={total_products_for_state} (filtered), Display={original_count} (original)")
             
             # Initialize Amazon analysis phase using atomic commit
             if hasattr(self, "state_manager") and self.state_manager:
@@ -2380,6 +2423,25 @@ class PassiveExtractionWorkflow:
                 for i, product_data in enumerate(batch_products):
                     # Calculate the absolute index in the full product list (considering resume index)
                     current_index = self.last_processed_index + start_idx + i + 1
+
+                    # 🚨 FIX 2: Show correct total in log messages
+                    total_for_display = getattr(
+                        self, "total_cache_count", len(price_filtered_products)
+                    )
+
+                    # 🚨 STUB HANDLING: Fast-forward skipped products
+                    if product_data.get("_skipped"):
+                        self.log.info(f"⏩ SKIPPING STUB: {current_index}/{total_for_display} (Already Processed)")
+                        # Ensure state is updated for this index
+                        if hasattr(self, "state_manager") and self.state_manager:
+                             self.state_manager.commit_amazon_progress(
+                                cat_idx=amz_cat_idx,
+                                queue_idx=i + 1, # Update progress
+                                total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
+                                cat_url=category_url,
+                                queue_len=len(batch_products)
+                            )
+                        continue
                     # 🚨 FIX 2: Show correct total in log messages
                     total_for_display = getattr(
                         self, "total_cache_count", len(price_filtered_products)
@@ -5043,6 +5105,8 @@ Return ONLY valid JSON, no additional text."""
         # CRITICAL FIX: Track filtered URLs across all categories to return only correct products
         all_needs_full_extraction_urls = []
         all_needs_amazon_only_urls = []
+        
+
 
         # 🚨 CRITICAL FIX: Load existing cached products and filter against linking map
         actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(
@@ -5442,6 +5506,31 @@ Return ONLY valid JSON, no additional text."""
                 cached_count = len(needs_amazon_only_urls)  # In cache (amazon-only)
                 full_count = len(needs_full_extraction_urls)  # Need full extraction
 
+                # 🚨 FAST-FORWARD FIX: Explicitly update state for skipped/cached items to fix resumption index
+                # This ensures that 'completed' counters reflect reality (skips = processed) without running them through the pipeline
+                
+                # 1. Amazon Phase Fast-Forward (ALWAYS run this check)
+                # Items in 'skip_entirely_urls' are skipped for BOTH phases.
+                # We must ensure amazon_products_completed accounts for them, even if we are currently in the supplier phase.
+                if skip_count > 0:
+                    current_amz_completed = int(sp.get("amazon_products_completed", 0) or 0)
+                    # Only update if the current count is less than the skip count (avoid regressing if we are further ahead)
+                    if current_amz_completed < skip_count:
+                        self.log.info(f"⏩ FAST-FORWARD (Amazon): Updating completed count {current_amz_completed} -> {skip_count} (skips)")
+                        sp["amazon_products_completed"] = skip_count
+                        self.state_manager.save_state_atomic("fast-forward-amazon")
+
+                # 2. Supplier Phase Fast-Forward
+                if persisted_phase == "supplier":
+                    # Supplier Phase: Both 'skip_entirely' AND 'cached' items are skipped for extraction
+                    total_skipped_supplier = skip_count + cached_count
+                    if total_skipped_supplier > 0:
+                        current_sup_completed = int(sp.get("supplier_products_completed", 0) or 0)
+                        if current_sup_completed < total_skipped_supplier:
+                            self.log.info(f"⏩ FAST-FORWARD (Supplier): Updating completed count {current_sup_completed} -> {total_skipped_supplier} (skips + cache)")
+                            sp["supplier_products_completed"] = total_skipped_supplier
+                            self.state_manager.save_state_atomic("fast-forward-supplier")
+
                 # ✅ VALIDATION: Filter invariant check (enhanced with pass/fail)
                 filter_invariant_holds = (in_count == skip_count + cached_count + full_count)
 
@@ -5668,6 +5757,25 @@ Return ONLY valid JSON, no additional text."""
                     f"📊 EXTRACTION NEEDED: {total_needs_extraction}/{total_urls} = {(total_needs_extraction/total_urls*100) if total_urls > 0 else 0:.1f}% need fresh extraction"
                 )
 
+                # 🚨 CRITICAL FIX: Rehydrate cached products for Amazon analysis (ALWAYS, for both mixed and cache-only cases)
+                # This ensures that products skipped for extraction (because they are in cache) are still passed to the next phase.
+                products = []
+                if needs_amazon_only_urls:
+                    self.log.info(f"💧 REHYDRATING {len(needs_amazon_only_urls)} products from cache for Amazon analysis")
+                    for url in needs_amazon_only_urls:
+                        nurl = normalize_url(url)
+                        cached_data = self.product_cache_url_index.get(nurl)
+                        if cached_data:
+                            # Create a copy to avoid mutating cache state inadvertently
+                            p_copy = cached_data.copy()
+                            if "source_url" not in p_copy:
+                                p_copy["source_url"] = url
+                            products.append(p_copy)
+                            # Ensure they are in the main accumulator
+                            all_products.append(p_copy)
+                        else:
+                            self.log.warning(f"⚠️ Cache miss during rehydration for {url}")
+
                 # 🚨 CRITICAL FIX: Only extract products that need full extraction
                 if needs_full_extraction_urls:
                     # Resume gating: read current progress from system_progression
@@ -5733,6 +5841,13 @@ Return ONLY valid JSON, no additional text."""
                     
                     # Case 3: We're past the resume category - only skip if no work needed
                     elif absolute_cat_index > cat_ptr:
+                        # 🚨 FIX: Ensure we are starting fresh for this new category
+                        if prod_ptr > 0:
+                             self.log.warning(f"⚠️ State Mismatch: New category {absolute_cat_index} but prod_ptr={prod_ptr}. Resetting to 0.")
+                             prod_ptr = 0
+                             # Update state to prevent 'Double Skip' logic downstream
+                             sp["supplier_products_completed"] = 0
+
                         if needs_full_extraction_count == 0:
                             self.log.info(
                                 f"📋 Resume skip: category {absolute_cat_index} > {cat_ptr} (past resume point) and no new extractions needed."
@@ -5808,9 +5923,12 @@ Return ONLY valid JSON, no additional text."""
                         )
 
                     # Use pre-filtered extraction method that respects filtering contract and resume slice
-                    products = await self.supplier_scraper.scrape_products_from_prefiltered_urls(
+                    # 🚨 FIX: Extend the existing 'products' list (which may contain rehydrated items)
+                    scraped_products = await self.supplier_scraper.scrape_products_from_prefiltered_urls(
                         work_urls, category_url, all_products
                     )
+                    if scraped_products:
+                        products.extend(scraped_products)
 
                     # Backstop: ensure every product has source_url (defense-in-depth)
                     missing_src = 0
@@ -5832,7 +5950,7 @@ Return ONLY valid JSON, no additional text."""
                         )
 
                     # 🚨 CONTRACT VERIFICATION: Ensure we extracted what we promised
-                    actual_extraction_count = len(products)
+                    actual_extraction_count = len(scraped_products) if scraped_products else 0
                     contract_fulfilled = actual_extraction_count == promised_extraction_count
 
                     self.log.info(f"📝 EXTRACTION CONTRACT VERIFICATION:")
@@ -5865,12 +5983,13 @@ Return ONLY valid JSON, no additional text."""
                     self.log.info(
                         f"✅ NO EXTRACTION NEEDED: All products are either already processed or have cached supplier data"
                     )
-                    products = []
-                    # Do NOT continue: we still need bookkeeping and to hydrate Amazon queue from cache
+                    # products list already populated with rehydrated items if any
 
                 # CRITICAL FIX: Accumulate filtered URLs across all categories
                 all_needs_full_extraction_urls.extend(needs_full_extraction_urls)
                 all_needs_amazon_only_urls.extend(needs_amazon_only_urls)
+                
+
 
                 # Log the filtered results for this category
                 if needs_amazon_only_urls:
@@ -6047,73 +6166,7 @@ Return ONLY valid JSON, no additional text."""
                 f"✅ Completed batch {batch_num}: {len(all_products)} total products extracted so far"
             )
 
-        # CRITICAL FIX: Return ONLY products identified by pre-extraction filtering as needing work
-        # Build filtered product list from the correctly identified URLs across all categories
-        filtered_products = []
-
-        # Convert URL lists to sets for O(1) lookup
-        full_extraction_set = set(all_needs_full_extraction_urls)
-        amazon_only_set = set(all_needs_amazon_only_urls)
-
-        # Process products scraped this run that match the filtered URLs
-        for product in all_products:
-            product_url = product.get("url", "")
-            if product_url in full_extraction_set or product_url in amazon_only_set:
-                filtered_products.append(product)
-
-        # 🔧 Backfill cached "amazon-only" products the scraper did not touch (no supplier re-scrape)
-        try:
-            _norm_url = normalize_url
-            _stable_key = stable_key
-        except Exception:  # fail-safe normalizers
-            _norm_url = lambda u: (u or "").strip()
-            _stable_key = lambda u, e: f"url:{u}|ean:{e or ''}"
-
-        def _cache_key(url, ean):
-            return _stable_key(_norm_url(url), ean)
-
-        seen_keys = { _cache_key(p.get("url"), p.get("ean")) for p in filtered_products }
-
-        cache_index = getattr(self, "product_cache_url_index", {}) or {}
-        cached_backfill = []
-        for url in amazon_only_set:
-            nurl = _norm_url(url)
-            cached = cache_index.get(nurl)
-            if not cached:
-                continue
-            cache_key = _cache_key(cached.get("url") or nurl, cached.get("ean"))
-            if cache_key in seen_keys:
-                continue  # already present via live scrape
-            # enforce same price policy as live-scraped items
-            price = cached.get("price", 0) or 0
-            if not isinstance(price, (int, float)) or price <= 0:
-                continue
-            if not (MIN_PRICE <= price <= MAX_PRICE):
-                continue
-            # ensure minimal required fields for downstream
-            cached_copy = dict(cached)
-            cached_copy.setdefault("url", nurl)
-            cached_copy.setdefault("source_url", cached_copy.get("category_url") or nurl)
-            filtered_products.append(cached_copy)
-            seen_keys.add(cache_key)
-            cached_backfill.append(cached_copy)
-
-        if cached_backfill:
-            cached_backfill.sort(key=lambda p: _norm_url(p.get("url")))
-            self.log.info(
-                f"🧩 AMAZON-ONLY BACKFILL: added {len(cached_backfill)} cached products for Amazon analysis"
-            )
-        else:
-            self.log.info("🧩 AMAZON-ONLY BACKFILL: no cached additions required")
-
-        self.log.info(
-            f"🔍 FILTERED EXTRACTION COMPLETE: {len(filtered_products)} products from pre-extraction filtering (not {len(all_products)} total)"
-        )
-        self.log.info(
-            f"📊 FILTERING SUMMARY: {len(all_needs_full_extraction_urls)} full + {len(all_needs_amazon_only_urls)} amazon-only = {len(all_needs_full_extraction_urls) + len(all_needs_amazon_only_urls)} expected"
-        )
-
-        return filtered_products
+        return all_products
 
     def _create_product_progress_callback(
         self,
@@ -7856,12 +7909,26 @@ Return ONLY valid JSON, no additional text."""
         done = int(sp.get("amazon_products_completed", 0) or 0)
 
         # If queue is complete, finalize category using new method
-        if total == 0 or done >= total:
+        # SURGICAL FIX: Prevent premature completion when cache < frozen/manifest denominator
+        supplier_count = int(sp.get("supplier_products_needing_extraction", 0))
+        frozen_denom = self.state_manager.get_frozen_denominator(category_url) or 0
+
+        if frozen_denom and total < frozen_denom:
+            self.log.error(
+                f"🚨 CRITICAL: Cache queue {total} < frozen denominator {frozen_denom} for {category_url}. Aborting completion; rerun supplier extraction for this category."
+            )
+            raise RuntimeError(
+                f"Cache queue {total} < frozen denominator {frozen_denom} for {category_url}"
+            )
+
+        if (total == 0 and supplier_count == 0) or (total > 0 and done >= total):
             self._finalize_category_completion(category_url, int(cat_idx))
 
             # Phase switch back to supplier
             self.state_manager.commit_phase_switch(new_phase="supplier")
             self.log.info("🔀 PHASE SWITCH: amazon_analysis → supplier (via resume finalizer)")
+        elif total == 0 and supplier_count > 0:
+            self.log.error(f"🚨 CRITICAL: Amazon queue is empty (total=0) but supplier count is {supplier_count}. Cache mismatch or file missing. ABORTING COMPLETION.")
 
         return 0
 
@@ -8636,6 +8703,8 @@ Return ONLY valid JSON, no additional text."""
             for i, product_data in enumerate(batch_products):
                 current_index = start_idx + i + 1
                 self.log.info(f"🔍 Analyzing product {current_index}: '{product_data.get('title')}'")
+
+
 
                 # Check if already processed
                 if self.state_manager.is_product_processed(product_data.get("url")):
@@ -11649,6 +11718,18 @@ Return ONLY valid JSON, no additional text."""
             return True  # Assume authenticated on error
 
     # Helper methods for CRITICAL FIX 1 integration
+    def _combine_supplier_amazon_data(self, supplier_product: Dict, amazon_product: Dict, financials: Dict) -> Dict:
+        """
+        Helper to combine data sources into a single result object.
+        Restores missing functionality to prevent AttributeError.
+        """
+        return {
+            **supplier_product,
+            "amazon_data": amazon_product,
+            "financials": financials,
+            "combined_at": self.state_manager.get_timestamp() if hasattr(self.state_manager, "get_timestamp") else None
+        }
+
     async def _load_cached_supplier_products(self) -> List[Dict[str, Any]]:
         """Load cached supplier products"""
         try:

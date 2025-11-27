@@ -10,11 +10,11 @@ import time
 import sys
 from datetime import datetime
 from pathlib import Path
+import plotly.express as px
+import pandas as pd
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
-
-import os  # Add missing import
 
 try:
     from metrics_core import MetricsLoader, load_metrics
@@ -179,7 +179,7 @@ def render_error_panel(issues, paths):
     st.write("4. Check file permissions and accessibility")
 
 
-def render_health_panel(state_metrics):
+def render_health_panel(state_metrics, linking_metrics=None, supplier_cache_metrics=None):
     """Render the health status panel"""
     st.subheader("🏥 System Health")
 
@@ -190,37 +190,55 @@ def render_health_panel(state_metrics):
     cols = st.columns(3)
 
     with cols[0]:
-        total_products = state_metrics.get("total_products", 0)
-        successful_products = state_metrics.get("successful_products", 0)
+        # System Progression (Phase & Category)
+        phase = state_metrics.get("processing_status", "Unknown")
+        cat_idx = state_metrics.get("persistent_category_index", 0)
+        total_cats = state_metrics.get("total_categories", 0)
+        
+        # Current category name
+        cc = state_metrics.get("current_category_url", "")
+        short_cat = "—"
+        if cc:
+            parts = cc.split("://", 1)[-1]
+            short_cat = parts.split("/", 1)[-1] if "/" in parts else parts
 
         st.markdown(f"""
-        <div class="metric-container health-ok">
-            <h4>Total Products</h4>
-            <h2>{format_number(total_products)}</h2>
-            <p>Successful: {format_number(successful_products)}</p>
+        <div class="metric-container">
+            <h4>System Progression</h4>
+            <p>Phase: <strong>{phase}</strong></p>
+            <p>Category: <strong>{cat_idx}</strong> / <strong>{total_cats}</strong></p>
+            <p>Current: {short_cat}</p>
         </div>
         """, unsafe_allow_html=True)
 
     with cols[1]:
-        status = state_metrics.get("processing_status", "Unknown")
-        last_updated = state_metrics.get("last_updated")
+        # Extraction & Analysis Progress
+        cp = state_metrics.get("category_progress") or {}
+        sup_done = cp.get("supplier_products_completed", 0)
+        sup_need = cp.get("supplier_products_needing_extraction", 0)
+        amz_done = cp.get("amazon_products_completed", 0)
+        amz_need = cp.get("amazon_products_needing_analysis", 0)
 
         st.markdown(f"""
         <div class="metric-container">
-            <h4>Processing Status</h4>
-            <h2>{status}</h2>
-            <p>Updated: {last_updated.strftime('%Y-%m-%d %H:%M') if last_updated else 'Never'}</p>
+            <h4>Category Progress</h4>
+            <p>Supplier Extracted: <strong>{format_number(sup_done)}</strong> / <strong>{format_number(sup_need)}</strong></p>
+            <p>Amazon Analyzed: <strong>{format_number(amz_done)}</strong> / <strong>{format_number(amz_need)}</strong></p>
         </div>
         """, unsafe_allow_html=True)
 
     with cols[2]:
+        # Total Stats
+        linking_total = linking_metrics.get("total_matches", 0) if linking_metrics else 0
+        # Use total_products from state as "Total Extracted" if available, else fallback
+        total_extracted = state_metrics.get("total_products", 0)
         fresh_starts = state_metrics.get("fresh_starts", 0)
-        last_index = state_metrics.get("last_processed_index", 0)
 
         st.markdown(f"""
         <div class="metric-container">
-            <h4>Processing Stats</h4>
-            <p>Last Index: <strong>{format_number(last_index)}</strong></p>
+            <h4>Total Stats</h4>
+            <p>Total Extracted: <strong>{format_number(total_extracted)}</strong></p>
+            <p>Total Processed: <strong>{format_number(linking_total)}</strong></p>
             <p>Fresh Starts: <strong>{format_number(fresh_starts)}</strong></p>
         </div>
         """, unsafe_allow_html=True)
@@ -322,6 +340,92 @@ def render_logs_panel(log_data):
     st.code(log_text, language="text")
 
 
+def create_roi_histogram(df):
+    """Histogram of ROI values with sensible bins."""
+    try:
+        tmp = df.copy()
+        tmp['ROI'] = pd.to_numeric(tmp.get('ROI'), errors='coerce')
+        tmp = tmp[tmp['ROI'].notna()]
+        if tmp.empty:
+            return None
+        fig = px.histogram(tmp, x='ROI', nbins=50, title="ROI Histogram (All Products)")
+        fig.update_layout(xaxis_title="ROI (%)", yaxis_title="Count")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating ROI histogram: {str(e)}")
+        return None
+
+def create_profit_vs_price_chart(df):
+    """Scatter: NetProfit vs SellingPrice, sized by offer count if available."""
+    try:
+        tmp = df.copy()
+        tmp['SellingPrice_incVAT'] = pd.to_numeric(tmp.get('SellingPrice_incVAT'), errors='coerce')
+        tmp['NetProfit'] = pd.to_numeric(tmp.get('NetProfit'), errors='coerce')
+        size_col = None
+        for c in ['total_offer_count', 'fba_seller_count', 'fbm_seller_count']:
+            if c in tmp.columns:
+                tmp[c] = pd.to_numeric(tmp[c], errors='coerce')
+                size_col = c
+                break
+        tmp = tmp[tmp['SellingPrice_incVAT'].notna() & tmp['NetProfit'].notna()]
+        if tmp.empty:
+            return None
+        color_col = 'MatchQuality' if 'MatchQuality' in tmp.columns else None
+        fig = px.scatter(tmp, x='SellingPrice_incVAT', y='NetProfit',
+                         color=color_col, size=size_col,
+                         title="Net Profit vs Selling Price",
+                         labels={'SellingPrice_incVAT': "Selling Price", 'NetProfit': "Net Profit"} )
+        return fig
+    except Exception as e:
+        st.error(f"Error creating Profit vs Price chart: {str(e)}")
+        return None
+
+def create_price_ratio_histogram(df):
+    """Histogram of price ratio (Amazon/Supplier)."""
+    try:
+        tmp = df.copy()
+        sp = pd.to_numeric(tmp.get('SupplierPrice_incVAT'), errors='coerce')
+        ap = pd.to_numeric(tmp.get('SellingPrice_incVAT'), errors='coerce')
+        ratio = ap / sp
+        tmp = tmp[ratio.notna() & (sp > 0)]
+        if tmp.empty:
+            return None
+        tmp = tmp.assign(Price_Ratio=ratio[ratio.notna() & (sp > 0)])
+        fig = px.histogram(tmp, x='Price_Ratio', nbins=50, title="Price Ratio (Amazon/Supplier)")
+        fig.update_layout(xaxis_title="Price Ratio (x)", yaxis_title="Count")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating price ratio histogram: {str(e)}")
+        return None
+
+def create_match_quality_bar(df):
+    """Bar chart of MatchQuality distribution if available."""
+    try:
+        if 'MatchQuality' not in df.columns:
+            return None
+        vc = df['MatchQuality'].value_counts().reset_index()
+        vc.columns = ['MatchQuality', 'Count']
+        fig = px.bar(vc, x='MatchQuality', y='Count', title="Match Quality Distribution")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating MatchQuality bar chart: {str(e)}")
+        return None
+
+def create_seller_mix_bar(df):
+    """Stacked bar of FBA vs FBM seller counts (aggregated)."""
+    try:
+        cols = [c for c in ['fba_seller_count','fbm_seller_count'] if c in df.columns]
+        if len(cols) == 0:
+            return None
+        agg = {c: pd.to_numeric(df[c], errors='coerce').fillna(0).sum() for c in cols}
+        plot_df = pd.DataFrame({'Type': list(agg.keys()), 'Count': list(agg.values())})
+        fig = px.bar(plot_df, x='Type', y='Count', title="Seller Mix (Aggregated)")
+        return fig
+    except Exception as e:
+        st.error(f"Error creating Seller Mix chart: {str(e)}")
+        return None
+
+
 def render_sidebar():
     """Render the sidebar controls"""
     st.sidebar.header("⚙️ Configuration")
@@ -403,17 +507,73 @@ def main():
 
         # Render panels only if data is available
         if not metrics_data.get("error"):
+            # Live Progress Ticker
+            link = metrics_data.get('linking_metrics', {})
+            now_m = link.get('total_matches', 0)
+            prev_m = st.session_state.get('prev_matches', now_m)
+            delta_m = now_m - prev_m
+            st.session_state['prev_matches'] = now_m
+            
+            st.markdown(f"**Live Progress** — Matches: {now_m} ({delta_m:+})")
+
             # Render panels
             col1, col2 = st.columns([1, 1])
 
             with col1:
-                render_health_panel(metrics_data.get("state_metrics"))
+                render_health_panel(
+                    metrics_data.get("state_metrics"),
+                    metrics_data.get("linking_metrics"),
+                    metrics_data.get("supplier_cache_metrics")
+                )
 
             with col2:
                 render_matching_panel(metrics_data.get("linking_metrics"))
 
             # Financial panel (full width)
             render_financial_panel(metrics_data.get("financial_metrics"))
+
+            # Analytics Charts section
+            st.markdown("---")
+            st.markdown("## 📊 Analytics Charts")
+            
+            fin_metrics = metrics_data.get("financial_metrics", {})
+            fin_dir = metrics_data.get("paths", {}).get("financial_dir")
+            
+            # Check if we have a latest file identified by metrics_core
+            latest_file = fin_metrics.get("latest_file")
+            
+            if fin_dir and latest_file and os.path.exists(os.path.join(fin_dir, latest_file)):
+                try:
+                    df = pd.read_csv(os.path.join(fin_dir, latest_file))
+                    
+                    # Render charts in grid
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        fig = create_roi_histogram(df)
+                        if fig:
+                            st.plotly_chart(fig, use_container_width=True)
+                    with c2:
+                        fig = create_price_ratio_histogram(df)
+                        if fig:
+                            st.plotly_chart(fig, use_container_width=True)
+                    
+                    c3, c4 = st.columns(2)
+                    with c3:
+                        fig = create_profit_vs_price_chart(df)
+                        if fig:
+                            st.plotly_chart(fig, use_container_width=True)
+                    with c4:
+                        fig = create_match_quality_bar(df)
+                        if fig:
+                            st.plotly_chart(fig, use_container_width=True)
+                    
+                    fig_mix = create_seller_mix_bar(df)
+                    if fig_mix:
+                        st.plotly_chart(fig_mix, use_container_width=True)
+                except Exception as e:
+                    st.error(f"⚠️ Error loading chart data: {str(e)}")
+            else:
+                st.info("📁 No financial CSV files available for charting")
 
             # Logs panel (full width)
             render_logs_panel(metrics_data.get("log_data"))

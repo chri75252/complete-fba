@@ -1675,7 +1675,7 @@ class FixedEnhancedStateManager:
                 self.log.warning(f"🧯 CLAMPED AMAZON PTR: idx={queue_idx} → {queue_len} (total={queue_len})")
                 queue_idx = queue_len
         sp["current_phase"] = "amazon_analysis"
-        sp["amazon_products_completed"] = int(queue_idx)   # ADDED
+        sp["amazon_products_completed"] = int(queue_idx) + 1   # ADDED (Fix 0-based index mismatch)
         sp["total_categories"] = int(total_cats)
         try:
             nurl = normalize_url(cat_url)

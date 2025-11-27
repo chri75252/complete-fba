@@ -1,0 +1,318 @@
+# EXTRACTED SECTIONS FROM: run_custom_poundwholesale_20251125_154127.log
+# Description: Initial run ending at product 297
+# Total lines in original: 2504
+
+================================================================================
+
+
+================================================================================
+SECTION: startup
+================================================================================
+
+     1: 2025-11-25 15:41:27,557 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251125_154127.log
+     2: 2025-11-25 15:41:27,558 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale_20251125_154127.log
+     3: 2025-11-25 15:41:27,558 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+     4: 2025-11-25 15:41:27,559 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+     5: 2025-11-25 15:41:27,559 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+     6: 2025-11-25 15:41:28,080 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+     7: 2025-11-25 15:41:28,080 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+     8: 2025-11-25 15:41:30,120 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]
+     9: 2025-11-25 15:41:30,132 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/142.0.7444.176
+    10: 2025-11-25 15:41:30,132 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+    11: 2025-11-25 15:41:32,161 - utils.browser_manager - DEBUG - ?? Using IPv4 endpoint for CDP connection
+    12: 2025-11-25 15:41:32,162 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+    13: 2025-11-25 15:41:32,224 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+    14: 2025-11-25 15:41:32,224 - utils.browser_manager - INFO - ?? Using existing context with 1 pages
+    15: 2025-11-25 15:41:32,225 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 142.0.7444.176
+    16: 2025-11-25 15:41:32,225 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+    17: 2025-11-25 15:41:32,225 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+    18: 2025-11-25 15:41:32,225 - __main__ - INFO - ℹ️ No authentication required for angelwholesale.co.uk
+    19: 2025-11-25 15:41:32,226 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+    20: 2025-11-25 15:41:32,227 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+    21: 2025-11-25 15:41:32,227 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+    22: 2025-11-25 15:41:32,227 - PassiveExtractionWorkflow - INFO - ✅ Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+    23: 2025-11-25 15:41:32,228 - PassiveExtractionWorkflow - INFO - ✅ Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+    24: 2025-11-25 15:41:32,228 - PassiveExtractionWorkflow - INFO - ✅ Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\angelwholesale.co.uk
+    25: 2025-11-25 15:41:32,239 - PassiveExtractionWorkflow - INFO - ✅ CACHE FOUND: expected pattern - 3331 products in angelwholesale-co-uk_products_cache.json
+    26: 2025-11-25 15:41:32,240 - PassiveExtractionWorkflow - INFO - ✅ State manager initialized with accurate totals: 3331 products, 0 categories
+    27: 2025-11-25 15:41:32,241 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+    28: 2025-11-25 15:41:32,241 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+    29: 2025-11-25 15:41:32,241 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+    30: 2025-11-25 15:41:32,242 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+    31: 2025-11-25 15:41:32,242 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+    32: 2025-11-25 15:41:32,242 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+    33: 2025-11-25 15:41:32,242 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+    34: 2025-11-25 15:41:32,242 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+    35: 2025-11-25 15:41:32,243 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+    36: 2025-11-25 15:41:32,243 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+    37: 2025-11-25 15:41:32,243 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+    38: 2025-11-25 15:41:32,243 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+    39: 2025-11-25 15:41:32,244 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'list'>
+    40: 2025-11-25 15:41:32,244 - PassiveExtractionWorkflow - INFO - ?? HashLookupOptimizer initialized - ready for O(1) lookups
+    41: 2025-11-25 15:41:32,245 - PassiveExtractionWorkflow - INFO - 🚀 Hash-based lookup optimization system initialized
+    42: 2025-11-25 15:41:32,245 - PassiveExtractionWorkflow - INFO - 🚨 SENTINEL MONITORING: Proactive monitoring system initialized
+    43: 2025-11-25 15:41:32,245 - PassiveExtractionWorkflow - INFO - 🛡️ WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+    44: 2025-11-25 15:41:32,246 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+    45: 2025-11-25 15:41:32,246 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+    46: 2025-11-25 15:41:32,246 - __main__ - INFO - 🚀 Starting workflow for angelwholesale.co.uk...
+    47: 2025-11-25 15:41:32,246 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: angelwholesale.co.uk ---
+    48: 2025-11-25 15:41:32,246 - PassiveExtractionWorkflow - INFO - Session ID: angelwholesale.co.uk_20251125_154132
+    49: 2025-11-25 15:41:32,247 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for angelwholesale.co.uk
+    50: 2025-11-25 15:41:32,247 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 328 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\angelwholesale_categories.json
+    51: 2025-11-25 15:41:32,247 - utils.fixed_enhanced_state_manager - INFO - 🚀 INITIALIZING WORKFLOW SESSION...
+    52: 2025-11-25 15:41:32,248 - utils.fixed_enhanced_state_manager - INFO - No existing state file found for angelwholesale.co.uk, starting fresh
+    53: 2025-11-25 15:41:32,248 - utils.fixed_enhanced_state_manager - INFO - ✅ State loaded from disk.
+    54: 2025-11-25 15:41:32,248 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...
+    55: 2025-11-25 15:41:32,259 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 3331 actual products in cache (total entries: 3331)
+    56: 2025-11-25 15:41:32,262 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 350 processed products in linking map
+    57: 2025-11-25 15:41:32,276 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 35 categories
+    58: 2025-11-25 15:41:32,277 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+    59: 2025-11-25 15:41:32,278 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=350 (reason: system_progression)
+    60: 2025-11-25 15:41:32,278 - utils.fixed_enhanced_state_manager - INFO - 🔍 STARTUP CHECK: is_fresh_start flag is 'True'
+    61: 2025-11-25 15:41:32,279 - utils.fixed_enhanced_state_manager - INFO - 📂 Loaded 328 category URLs from config
+    62: 2025-11-25 15:41:32,280 - utils.fixed_enhanced_state_manager - INFO - 🎯 START MODE: is_fresh_start=True, pci=1, session_cursor=1, url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale...
+    63: 2025-11-25 15:41:32,280 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=350 (reason: system_progression)
+    64: 2025-11-25 15:41:32,281 - utils.fixed_enhanced_state_manager - INFO - 📂 Loaded 328 category URLs from config
+    65: 2025-11-25 15:41:32,281 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+    66: 2025-11-25 15:41:32,281 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+    67: 2025-11-25 15:41:32,282 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+    68: 2025-11-25 15:41:32,282 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+    69: 2025-11-25 15:41:32,282 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+    70: 2025-11-25 15:41:32,283 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+    71: 2025-11-25 15:41:32,288 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk_processing_state.json (27 entries) saved successfully
+    72: 2025-11-25 15:41:32,289 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+    73: 2025-11-25 15:41:32,289 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk_processing_state.json
+    74: 2025-11-25 15:41:32,289 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+    75: 2025-11-25 15:41:32,289 - utils.fixed_enhanced_state_manager - INFO - 🎯 AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+    76: 2025-11-25 15:41:32,289 - utils.fixed_enhanced_state_manager - INFO - 🎯 STARTUP GATING COMPLETE: session_cursor=1, startup_completed=True
+    77: 2025-11-25 15:41:32,289 - utils.fixed_enhanced_state_manager - INFO - ✅ STARTUP ANALYSIS: Completed comprehensive state analysis
+    78: 2025-11-25 15:41:32,290 - utils.fixed_enhanced_state_manager - INFO - ✅ Startup analysis complete.
+    79: 2025-11-25 15:41:32,290 - utils.fixed_enhanced_state_manager - INFO - 🎯 AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+    80: 2025-11-25 15:41:32,290 - utils.fixed_enhanced_state_manager - DEBUG - 💾 save_debounced: runtime mode (no file-grounded recompute)
+    81: 2025-11-25 15:41:32,290 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+    82: 2025-11-25 15:41:32,290 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+    83: 2025-11-25 15:41:32,290 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+    84: 2025-11-25 15:41:32,291 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+    85: 2025-11-25 15:41:32,291 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+    86: 2025-11-25 15:41:32,291 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+    87: 2025-11-25 15:41:32,294 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk_processing_state.json (27 entries) saved successfully
+    88: 2025-11-25 15:41:32,295 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+    89: 2025-11-25 15:41:32,295 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk_processing_state.json
+    90: 2025-11-25 15:41:32,296 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+    91: 2025-11-25 15:41:32,296 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE (manifest)
+    92: 2025-11-25 15:41:32,296 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+    93: 2025-11-25 15:41:32,296 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+    94: 2025-11-25 15:41:32,297 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+    95: 2025-11-25 15:41:32,297 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+    96: 2025-11-25 15:41:32,297 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+    97: 2025-11-25 15:41:32,298 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+    98: 2025-11-25 15:41:32,301 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk_processing_state.json (27 entries) saved successfully
+    99: 2025-11-25 15:41:32,302 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+   100: 2025-11-25 15:41:32,302 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk_processing_state.json
+
+
+================================================================================
+SECTION: end_at_298
+================================================================================
+
+  2305: 2025-11-25 15:51:25,759 - utils.browser_manager - INFO - ?? Reusing cached page for https://www.amazon.co.uk
+  2306: 2025-11-25 15:51:25,759 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5023797302350
+  2307: 2025-11-25 15:51:32,051 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5023797302350...
+  2308: 2025-11-25 15:51:32,324 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+  2309: 2025-11-25 15:51:32,955 - tools.amazon_playwright_extractor - INFO - Found 6 search result elements using selector: div[data-component-type='s-search-result']
+  2310: 2025-11-25 15:51:32,955 - tools.amazon_playwright_extractor - INFO - Processing 6 search result elements for EAN 5023797302350
+  2311: 2025-11-25 15:51:32,963 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B019E2X8WG
+  2312: 2025-11-25 15:51:32,963 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN B019E2X8WG
+  2313: 2025-11-25 15:51:32,973 - tools.amazon_playwright_extractor - DEBUG - Element 1: Hidden by AdBlocker (likely sponsored)
+  2314: 2025-11-25 15:51:32,983 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0BHLH15HR
+  2315: 2025-11-25 15:51:32,984 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0BHLH15HR
+  2316: 2025-11-25 15:51:32,998 - tools.amazon_playwright_extractor - DEBUG - Element 2: Hidden by AdBlocker (likely sponsored)
+  2317: 2025-11-25 15:51:33,009 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0BHC6SNQ5
+  2318: 2025-11-25 15:51:33,010 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0BHC6SNQ5
+  2319: 2025-11-25 15:51:33,017 - tools.amazon_playwright_extractor - DEBUG - Element 3: Hidden by AdBlocker (likely sponsored)
+  2320: 2025-11-25 15:51:33,026 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DYF12RHS
+  2321: 2025-11-25 15:51:33,027 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN B0DYF12RHS
+  2322: 2025-11-25 15:51:33,035 - tools.amazon_playwright_extractor - DEBUG - Element 4: Hidden by AdBlocker (likely sponsored)
+  2323: 2025-11-25 15:51:33,044 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0C5CX31BF
+  2324: 2025-11-25 15:51:33,044 - tools.amazon_playwright_extractor - DEBUG - Processing element 5: ASIN B0C5CX31BF
+  2325: 2025-11-25 15:51:33,053 - tools.amazon_playwright_extractor - DEBUG - Element 5: Hidden by AdBlocker (likely sponsored)
+  2326: 2025-11-25 15:51:33,062 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0FRT9HQRY
+  2327: 2025-11-25 15:51:33,062 - tools.amazon_playwright_extractor - DEBUG - Processing element 6: ASIN B0FRT9HQRY
+  2328: 2025-11-25 15:51:33,071 - tools.amazon_playwright_extractor - DEBUG - Element 6: Hidden by AdBlocker (likely sponsored)
+  2329: 2025-11-25 15:51:33,071 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 0 organic products, 6 sponsored products filtered out
+  2330: 2025-11-25 15:51:33,072 - tools.amazon_playwright_extractor - WARNING - EAN 5023797302350 returned no organic results - skipping
+  2331: 2025-11-25 15:51:33,072 - tools.amazon_playwright_extractor - WARNING - No Amazon results or error for EAN '5023797302350'. Details: no_organic_results
+  2332: 2025-11-25 15:51:33,072 - tools.amazon_playwright_extractor - INFO - Falling back to title search for supplier product: 'Soft Touch Baby Girl Tutu Skirt Fuchsia (0 - 3 Years)'
+  2333: 2025-11-25 15:51:33,072 - tools.amazon_playwright_extractor - INFO - Searching Amazon by title using search bar: 'Soft Touch Baby Girl Tutu Skirt Fuchsia (0 - 3 Years)'
+  2334: 2025-11-25 15:51:33,073 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for title: Soft Touch Baby Girl Tutu Skirt Fuchsia (0 - 3 Years)
+  2335: 2025-11-25 15:51:39,214 - tools.amazon_playwright_extractor - INFO - Title search found 70 elements using selector: div.s-search-results > div[data-asin]
+  2336: 2025-11-25 15:51:39,671 - tools.amazon_playwright_extractor - DEBUG - Title search element 1: Hidden by AdBlocker (likely sponsored)
+  2337: 2025-11-25 15:51:40,095 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+  2338: 2025-11-25 15:51:40,096 - tools.amazon_playwright_extractor - DEBUG - Title search element 2: No valid ASIN found
+  2339: 2025-11-25 15:51:40,105 - tools.amazon_playwright_extractor - DEBUG - Title search element 3: Hidden by AdBlocker (likely sponsored)
+  2340: 2025-11-25 15:51:40,113 - tools.amazon_playwright_extractor - DEBUG - Title search element 4: Hidden by AdBlocker (likely sponsored)
+  2341: 2025-11-25 15:51:40,124 - tools.amazon_playwright_extractor - DEBUG - Title search element 5: Hidden by AdBlocker (likely sponsored)
+  2342: 2025-11-25 15:51:40,135 - tools.amazon_playwright_extractor - DEBUG - Title search element 6: Hidden by AdBlocker (likely sponsored)
+  2343: 2025-11-25 15:51:40,147 - tools.amazon_playwright_extractor - DEBUG - Title search element 7: Hidden by AdBlocker (likely sponsored)
+  2344: 2025-11-25 15:51:40,163 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0BVLYVQGD
+  2345: 2025-11-25 15:51:40,230 - tools.amazon_playwright_extractor - DEBUG - ASIN B0BVLYVQGD title extracted using selector 'h2 span.a-size-base-plus': Baby Amabc...
+  2346: 2025-11-25 15:51:40,230 - tools.amazon_playwright_extractor - INFO - ✅ Title search: Selected first visible organic product - ASIN B0BVLYVQGD
+  2347: 2025-11-25 15:51:40,230 - tools.amazon_playwright_extractor - INFO - 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Soft Touch Baby Girl Tutu Skirt Fuchsia (0 - 3 Years)'
+  2348: 2025-11-25 15:51:40,231 - tools.amazon_playwright_extractor - INFO - Title search successful for 'Soft Touch Baby Girl Tutu Skirt Fuchsia (0 - 3 Years)' after EAN '5023797302350' failed
+  2349: 2025-11-25 15:51:40,231 - tools.amazon_playwright_extractor - INFO - Extracting complete data for fallback ASIN B0BVLYVQGD from title search
+  2350: 2025-11-25 15:51:40,231 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0BVLYVQGD. Getting a new one from BrowserManager.
+  2351: 2025-11-25 15:51:40,232 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=Soft+Touch+Baby+Girl+Tutu+Skirt+Fuchsia+%280+-+3+Years%29&ref=nb_sb_noss
+  2352: 2025-11-25 15:51:43,332 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+  2353: 2025-11-25 15:51:44,012 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+  2354: 2025-11-25 15:51:45,016 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+  2355: 2025-11-25 15:51:48,024 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+  2356: 2025-11-25 15:51:48,025 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+  2357: 2025-11-25 15:51:48,105 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+  2358: 2025-11-25 15:51:48,105 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+  2359: 2025-11-25 15:51:53,107 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+  2360: 2025-11-25 15:52:00,111 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0BVLYVQGD
+  2361: 2025-11-25 15:52:00,111 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+  2362: 2025-11-25 15:52:00,152 - tools.amazon_playwright_extractor - INFO - Title found: 'Baby Girls Tutu Skirt with Diaper Cover Toddler Birthday Party Dance Pettiskirt' via #productTitle
+  2363: 2025-11-25 15:52:00,152 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+  2364: 2025-11-25 15:52:00,181 - tools.amazon_playwright_extractor - INFO - Current price: 9.99 via #corePrice_feature_div .a-offscreen
+  2365: 2025-11-25 15:52:00,292 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+  2366: 2025-11-25 15:52:00,333 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/618RTHFyo-L._AC_SL1500_.jpg via #landingImage
+  2367: 2025-11-25 15:52:00,431 - tools.amazon_playwright_extractor - INFO - Found 6 thumbnails.
+  2368: 2025-11-25 15:52:00,438 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+  2369: 2025-11-25 15:52:01,105 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+  2370: 2025-11-25 15:52:01,564 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+  2371: 2025-11-25 15:52:01,582 - tools.amazon_playwright_extractor - INFO - Rating: 4.4 via #acrPopover[title*='out of 5 stars']
+  2372: 2025-11-25 15:52:01,602 - tools.amazon_playwright_extractor - INFO - Review count: 34 via #acrCustomerReviewText
+  2373: 2025-11-25 15:52:01,602 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+  2374: 2025-11-25 15:52:01,629 - tools.amazon_playwright_extractor - INFO - Availability text: 'Only 1 left in stock.' via #availability span.a-color-price
+  2375: 2025-11-25 15:52:01,630 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+  2376: 2025-11-25 15:52:01,654 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+  2377: 2025-11-25 15:52:01,751 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+  2378: 2025-11-25 15:52:01,788 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+  2379: 2025-11-25 15:52:01,788 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+  2380: 2025-11-25 15:52:01,788 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+  2381: 2025-11-25 15:52:01,788 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+  2382: 2025-11-25 15:52:04,798 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+  2383: Call log:
+  2384:   - waiting for locator("iframe[id*='keepaGraph']")
+  2385: 
+  2386: 2025-11-25 15:52:07,808 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+  2387: Call log:
+  2388:   - waiting for locator("iframe#keepaExtension")
+  2389: 
+  2390: 2025-11-25 15:52:07,885 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+  2391: 2025-11-25 15:52:08,000 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+  2392: 2025-11-25 15:52:08,000 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+  2393: 2025-11-25 15:52:08,034 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+  2394: 2025-11-25 15:52:08,034 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+  2395: 2025-11-25 15:52:10,448 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+  2396: 2025-11-25 15:52:12,107 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+  2397: 2025-11-25 15:52:12,325 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+  2398: 2025-11-25 15:52:12,378 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+  2399: 2025-11-25 15:52:13,421 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 148 rows found
+  2400: 2025-11-25 15:52:13,444 - tools.amazon_playwright_extractor - INFO - Processing 148 rows in Keepa Product Details AG Grid.
+  2401: 2025-11-25 15:52:14,973 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.51' in Keepa AG Grid.
+  2402: 2025-11-25 15:52:15,111 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.80' in Keepa AG Grid.
+  2403: 2025-11-25 15:52:18,166 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 42 items from Keepa Product Details AG Grid.
+  2404: 2025-11-25 15:52:18,167 - tools.amazon_playwright_extractor - INFO - ASIN B0BVLYVQGD: Attempting to extract EANs from Keepa product_details_tab_data.
+  2405: 2025-11-25 15:52:18,167 - tools.amazon_playwright_extractor - INFO - ASIN B0BVLYVQGD: EAN '0702909327355' found in Keepa details via key 'Product Codes - EAN'.
+  2406: 2025-11-25 15:52:18,167 - tools.amazon_playwright_extractor - INFO - ASIN B0BVLYVQGD: BSR not found or invalid from page. Attempting fallback from Keepa.
+  2407: 2025-11-25 15:52:18,168 - tools.amazon_playwright_extractor - INFO - ASIN B0BVLYVQGD: BSR 52904 in 'Fashion 1.3' from Keepa SalesRankDetailsTable.
+  2408: 2025-11-25 15:52:18,168 - PassiveExtractionWorkflow - INFO - ✅ EAN search successful for 5023797302350. Using EAN result without title fallback.
+  2409: 2025-11-25 15:52:18,171 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0BVLYVQGD_5023797302350.json (29 entries) saved successfully
+  2410: 2025-11-25 15:52:18,172 - PassiveExtractionWorkflow - INFO - 💾 Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0BVLYVQGD_5023797302350.json
+  2411: 2025-11-25 15:52:18,173 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map type: <class 'list'>, size: 359 entries
+  2412: 2025-11-25 15:52:18,173 - PassiveExtractionWorkflow - DEBUG - ? Added entry to hash indexes: 5023797302350
+  2413: 2025-11-25 15:52:18,173 - PassiveExtractionWorkflow - DEBUG - 🚀 HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 5023797302350, URL: https://angelwholesale.co.uk/Item/Soft-Touch-Baby-Girl-White-Tutu-Skirt-0---3-Years-gdr0740
+  2414: 2025-11-25 15:52:18,173 - PassiveExtractionWorkflow - INFO - 💡 FINANCIAL REPORT TRIGGER: Next trigger at 400 linking map entries (current: 360, trigger frequency: 50)
+  2415: 2025-11-25 15:52:18,174 - PassiveExtractionWorkflow - INFO - ❌ Not profitable product: Soft Touch Baby Girl Tutu Skirt Fuchsia (0 - 3 Years)
+  2416: 2025-11-25 15:52:18,174 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+  2417: 2025-11-25 15:52:18,174 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+  2418: 2025-11-25 15:52:18,174 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+  2419: 2025-11-25 15:52:18,174 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+  2420: 2025-11-25 15:52:18,175 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+  2421: 2025-11-25 15:52:18,176 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+  2422: 2025-11-25 15:52:18,181 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk_processing_state.json (29 entries) saved successfully
+  2423: 2025-11-25 15:52:18,182 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+  2424: 2025-11-25 15:52:18,182 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk_processing_state.json
+  2425: 2025-11-25 15:52:18,182 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=2/328 url=https://angelwholesale.co.uk/Category/All-Baby-and-child prod_idx=297/401
+  2426: 2025-11-25 15:52:18,182 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: _save_linking_map called with 360 entries for supplier angelwholesale.co.uk
+  2427: 2025-11-25 15:52:18,187 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: linking_map type: <class 'list'>, entries: 360, sample: {'supplier_ean': '028503050674', 'amazon_asin': 'B085X93ZJN', 'supplier_title': 'Assorted Alphabet and Number Flash Cards', 'amazon_title': 'LITTLE BUD KIDS Spin-and-Read Phonics Toy, Rotatin...', 'supplier_price': 2.65, 'amazon_price': 25.99, 'match_method': 'title', 'confidence': 'medium', 'created_at': '2025-11-18T00:41:42.218377', 'supplier_url': 'https://angelwholesale.co.uk/Item/Alphabet-Blocks-...'}
+  2428: 2025-11-25 15:52:18,187 - PassiveExtractionWorkflow - INFO - 🔍 DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\angelwholesale.co.uk\linking_map.json
+  2429: 2025-11-25 15:52:18,187 - PassiveExtractionWorkflow - INFO - 🔧 ATOMIC SAVE: Attempting to save 360 entries using atomic strategy...
+  2430: 2025-11-25 15:52:18,199 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (360 entries) saved successfully
+  2431: 2025-11-25 15:52:18,199 - PassiveExtractionWorkflow - INFO - ✅ Successfully saved linking map with 360 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\angelwholesale.co.uk\linking_map.json
+  2432: 2025-11-25 15:52:18,200 - PassiveExtractionWorkflow - INFO - ✅ VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\angelwholesale.co.uk\linking_map.json with size 203387 bytes
+  2433: 2025-11-25 15:52:18,203 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 294 EANs, 360 URLs, 277 ASINs in 0.003s
+  2434: 2025-11-25 15:52:18,203 - PassiveExtractionWorkflow - INFO - 🚀 HASH INDEXES REBUILT: Updated indexes for 360 entries
+  2435: 2025-11-25 15:52:18,204 - SentinelMonitor[angelwholesale.co.uk] - INFO - Sentinel: linking map size verified (359 -> 360)
+  2436: 2025-11-25 15:52:18,204 - SentinelMonitor[angelwholesale.co.uk] - INFO - Sentinel: windows_save_guardian save succeeded on attempt 1
+  2437: 2025-11-25 15:52:18,204 - PassiveExtractionWorkflow - INFO - 📊 Periodic save at product 10 (linking_map_batch_size: 1)
+  2438: 2025-11-25 15:52:18,204 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 11/109: 'Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)' ---
+  2439: 2025-11-25 15:52:18,205 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+  2440: 2025-11-25 15:52:18,205 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+  2441: 2025-11-25 15:52:18,205 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking atomic writer availability
+  2442: 2025-11-25 15:52:18,205 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Checking legacy atomic operations
+  2443: 2025-11-25 15:52:18,205 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+  2444: 2025-11-25 15:52:18,206 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+  2445: 2025-11-25 15:52:18,209 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk_processing_state.json (29 entries) saved successfully
+  2446: 2025-11-25 15:52:18,210 - utils.fixed_enhanced_state_manager - DEBUG - 💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+  2447: 2025-11-25 15:52:18,210 - utils.fixed_enhanced_state_manager - DEBUG - ✅ Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk_processing_state.json
+  2448: 2025-11-25 15:52:18,210 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=2/328 url=https://angelwholesale.co.uk/Category/All-Baby-and-child prod_idx=298/401
+  2449: 2025-11-25 15:52:18,211 - utils.fixed_enhanced_state_manager - INFO - 💾 ATOMIC SAVE
+  2450: 2025-11-25 15:52:18,211 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5035320611129
+  2451: 2025-11-25 15:52:18,211 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5035320611129 for supplier product: 'Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)' (FixedAmazonExtractor)
+  2452: 2025-11-25 15:52:18,211 - tools.amazon_playwright_extractor - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+  2453: 2025-11-25 15:52:18,212 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+  2454: 2025-11-25 15:52:18,212 - utils.browser_manager - INFO - ?? Reusing cached page for https://www.amazon.co.uk
+  2455: 2025-11-25 15:52:18,212 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5035320611129
+  2456: 2025-11-25 15:52:24,056 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5035320611129...
+  2457: 2025-11-25 15:52:24,354 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+  2458: 2025-11-25 15:52:25,020 - tools.amazon_playwright_extractor - INFO - Found 6 search result elements using selector: div[data-component-type='s-search-result']
+  2459: 2025-11-25 15:52:25,020 - tools.amazon_playwright_extractor - INFO - Processing 6 search result elements for EAN 5035320611129
+  2460: 2025-11-25 15:52:25,039 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0FJG2LC3W
+  2461: 2025-11-25 15:52:25,039 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN B0FJG2LC3W
+  2462: 2025-11-25 15:52:25,049 - tools.amazon_playwright_extractor - DEBUG - Element 1: Hidden by AdBlocker (likely sponsored)
+  2463: 2025-11-25 15:52:25,058 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DB5MZKN1
+  2464: 2025-11-25 15:52:25,058 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0DB5MZKN1
+  2465: 2025-11-25 15:52:25,066 - tools.amazon_playwright_extractor - DEBUG - Element 2: Hidden by AdBlocker (likely sponsored)
+  2466: 2025-11-25 15:52:25,076 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0BRYGM9R1
+  2467: 2025-11-25 15:52:25,076 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0BRYGM9R1
+  2468: 2025-11-25 15:52:25,083 - tools.amazon_playwright_extractor - DEBUG - Element 3: Hidden by AdBlocker (likely sponsored)
+  2469: 2025-11-25 15:52:25,093 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0CWH3FX31
+  2470: 2025-11-25 15:52:25,093 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN B0CWH3FX31
+  2471: 2025-11-25 15:52:25,121 - tools.amazon_playwright_extractor - DEBUG - Element 4: Hidden by AdBlocker (likely sponsored)
+  2472: 2025-11-25 15:52:25,306 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0CWH221ZS
+  2473: 2025-11-25 15:52:25,306 - tools.amazon_playwright_extractor - DEBUG - Processing element 5: ASIN B0CWH221ZS
+  2474: 2025-11-25 15:52:25,331 - tools.amazon_playwright_extractor - DEBUG - Element 5: Hidden by AdBlocker (likely sponsored)
+  2475: 2025-11-25 15:52:25,340 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0F59W492M
+  2476: 2025-11-25 15:52:25,340 - tools.amazon_playwright_extractor - DEBUG - Processing element 6: ASIN B0F59W492M
+  2477: 2025-11-25 15:52:25,349 - tools.amazon_playwright_extractor - DEBUG - Element 6: Hidden by AdBlocker (likely sponsored)
+  2478: 2025-11-25 15:52:25,349 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 0 organic products, 6 sponsored products filtered out
+  2479: 2025-11-25 15:52:25,350 - tools.amazon_playwright_extractor - WARNING - EAN 5035320611129 returned no organic results - skipping
+  2480: 2025-11-25 15:52:25,350 - tools.amazon_playwright_extractor - WARNING - No Amazon results or error for EAN '5035320611129'. Details: no_organic_results
+  2481: 2025-11-25 15:52:25,350 - tools.amazon_playwright_extractor - INFO - Falling back to title search for supplier product: 'Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)'
+  2482: 2025-11-25 15:52:25,351 - tools.amazon_playwright_extractor - INFO - Searching Amazon by title using search bar: 'Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)'
+  2483: 2025-11-25 15:52:25,351 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for title: Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)
+  2484: 2025-11-25 15:52:32,599 - tools.amazon_playwright_extractor - INFO - Title search found 67 elements using selector: div.s-search-results > div[data-asin]
+  2485: 2025-11-25 15:52:33,237 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+  2486: 2025-11-25 15:52:33,237 - tools.amazon_playwright_extractor - DEBUG - Title search element 1: No valid ASIN found
+  2487: 2025-11-25 15:52:33,254 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DCPB7VW1
+  2488: 2025-11-25 15:52:33,312 - tools.amazon_playwright_extractor - DEBUG - ASIN B0DCPB7VW1 title extracted using selector 'h2 span.a-size-base-plus': Snegyu...
+  2489: 2025-11-25 15:52:33,313 - tools.amazon_playwright_extractor - INFO - ✅ Title search: Selected first visible organic product - ASIN B0DCPB7VW1
+  2490: 2025-11-25 15:52:33,313 - tools.amazon_playwright_extractor - INFO - 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)'
+  2491: 2025-11-25 15:52:33,313 - tools.amazon_playwright_extractor - INFO - Title search successful for 'Sequin Deep Lace White Ankle Socks with Bow (0-12 Months)' after EAN '5035320611129' failed
+  2492: 2025-11-25 15:52:33,313 - tools.amazon_playwright_extractor - INFO - Extracting complete data for fallback ASIN B0DCPB7VW1 from title search
+  2493: 2025-11-25 15:52:33,314 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0DCPB7VW1. Getting a new one from BrowserManager.
+  2494: 2025-11-25 15:52:33,314 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=Sequin+Deep+Lace+White+Ankle+Socks+with+Bow+%280-12+Months%29&ref=nb_sb_noss
+  2495: 2025-11-25 15:52:36,161 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+  2496: 2025-11-25 15:52:36,807 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+  2497: 2025-11-25 15:52:37,814 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+  2498: 2025-11-25 15:52:40,817 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+  2499: 2025-11-25 15:52:40,817 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+  2500: 2025-11-25 15:52:40,890 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+  2501: 2025-11-25 15:52:40,890 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+  2502: 2025-11-25 15:52:45,903 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+  2503: 2025-11-25 15:52:47,781 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not calling close()
+  2504: 2025-11-25 15:52:47,789 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
+
