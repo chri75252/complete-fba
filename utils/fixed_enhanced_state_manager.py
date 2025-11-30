@@ -207,8 +207,8 @@ class FixedEnhancedStateManager:
             },
             "system_progression": {
                 "current_phase": "supplier",
-                "persistent_category_index": 1,  # 🔍 CATEGORY_INDEX_TRACKER: 1-based system
-                "current_category_index": 0,  # 🔍 CATEGORY_INDEX_TRACKER: Legacy field for compatibility
+                "persistent_category_index": 1,  #  CATEGORY_INDEX_TRACKER: 1-based system
+                "current_category_index": 0,  #  CATEGORY_INDEX_TRACKER: Legacy field for compatibility
                 "current_category_url": "",
                 "original_category_url": "",
                 "total_categories": 0,
@@ -234,12 +234,12 @@ class FixedEnhancedStateManager:
         """Alias for _initialize_state to satisfy load_state calls"""
         return self._initialize_state()
 
-      # 🚨 REVERTED: The _detect_actual_fresh_start method was fundamentally flawed.
+      #  REVERTED: The _detect_actual_fresh_start method was fundamentally flawed.
     # Fresh start detection is now handled directly and simply within load_state().
 
     def initialize_workflow_session(self) -> int:
         """
-        🚨 PRIMARY ENTRY POINT: Single, authoritative method for starting or resuming a workflow.
+         PRIMARY ENTRY POINT: Single, authoritative method for starting or resuming a workflow.
 
         This is the ONLY method that should be called at workflow startup. It:
         1. Loads state from disk
@@ -251,18 +251,18 @@ class FixedEnhancedStateManager:
         Returns:
             int: The category index to start/resume from (1-based)
         """
-        log.info("🚀 INITIALIZING WORKFLOW SESSION...")
+        log.info(" INITIALIZING WORKFLOW SESSION...")
 
         # Block any pointer writes until startup analysis is finished
         self.state_data["startup_completed"] = False
 
         # Step 1: Load the state from disk. This sets the is_fresh_start flag.
         self.load_state()
-        log.info("✅ State loaded from disk.")
+        log.info(" State loaded from disk.")
 
         # Step 2: Perform startup analysis on the now-loaded data.
         self.perform_startup_analysis()
-        log.info("✅ Startup analysis complete.")
+        log.info(" Startup analysis complete.")
 
         # Step 3: Return the authoritative starting point
         sp = self.state_data.get("system_progression", {})
@@ -270,7 +270,7 @@ class FixedEnhancedStateManager:
         current_phase = sp.get("current_phase", "supplier")
 
         log.info(
-            f"🎯 AUTHORITATIVE START POSITION: Category {start_category_index} in phase '{current_phase}'"
+            f" AUTHORITATIVE START POSITION: Category {start_category_index} in phase '{current_phase}'"
         )
 
         return start_category_index
@@ -302,14 +302,14 @@ class FixedEnhancedStateManager:
             log.info(
                 f"Loaded state for {self.supplier_name} - resumption from index {self.state_data.get('resumption_index', 0)}"
             )
-            # 🧹 MIGRATION SCRUB: remove legacy subtree if present
+            #  MIGRATION SCRUB: remove legacy subtree if present
             if isinstance(self.state_data, dict) and "supplier_extraction_progress" in self.state_data:
                 try:
                     del self.state_data["supplier_extraction_progress"]
-                    log.info("🧹 Removed legacy 'supplier_extraction_progress' from state on load")
+                    log.info(" Removed legacy 'supplier_extraction_progress' from state on load")
                     self.save_state_atomic()
                 except Exception as e:
-                    log.warning(f"⚠️ Could not remove legacy subtree: {e}")
+                    log.warning(f" Could not remove legacy subtree: {e}")
 
             self.state_data['is_fresh_start'] = False  # Authoritative flag
             return True
@@ -322,7 +322,7 @@ class FixedEnhancedStateManager:
 
     def _migrate_legacy_state(self, legacy_data: Dict[str, Any]):
         """Migrate legacy state format to fixed enhanced format"""
-        # 🚨 CRITICAL FIX: Properly migrate legacy index to resumption_index
+        #  CRITICAL FIX: Properly migrate legacy index to resumption_index
         legacy_index = legacy_data.get("last_processed_index", 0)
         self.state_data["last_processed_index"] = legacy_index
         self.state_data["resumption_index"] = legacy_index
@@ -348,28 +348,28 @@ class FixedEnhancedStateManager:
         self.state_data = deep_merge(self.state_data, loaded_data)
         self.state_data["last_updated"] = datetime.now(timezone.utc).isoformat()
 
-        # 🚨 CRITICAL FIX: Ensure new fields exist even in merged data
+        #  CRITICAL FIX: Ensure new fields exist even in merged data
         if "progress_index" not in self.state_data:
             self.state_data["progress_index"] = 0
         if "session_products_processed" not in self.state_data:
             self.state_data["session_products_processed"] = 0
 
-        # 🔍 CATEGORY_INDEX_TRACKER: Ensure persistent_category_index exists and is synced
+        #  CATEGORY_INDEX_TRACKER: Ensure persistent_category_index exists and is synced
         sp = self.state_data.setdefault("system_progression", {})
         if "persistent_category_index" not in sp and "current_category_index" in sp:
             # Migrate from current_category_index to persistent_category_index
             sp["persistent_category_index"] = sp["current_category_index"]
-            log.info(f"🔍 CATEGORY_INDEX_TRACKER: Migrated current_category_index ({sp['current_category_index']}) to persistent_category_index")
+            log.info(f" CATEGORY_INDEX_TRACKER: Migrated current_category_index ({sp['current_category_index']}) to persistent_category_index")
         elif "persistent_category_index" not in sp:
-            # 🚨 FIX B: PCI hardening - only default to 1 on fresh start
+            #  FIX B: PCI hardening - only default to 1 on fresh start
             if self.state_data.get("is_fresh_start", False):
                 sp["persistent_category_index"] = 1
                 sp["current_category_index"] = 1
-                log.info("🔍 CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (fresh start)")
+                log.info(" CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (fresh start)")
             else:
-                log.warning("⚠️ PCI MISSING ON RESUME: Preserving existing state and not defaulting to 1")
+                log.warning(" PCI MISSING ON RESUME: Preserving existing state and not defaulting to 1")
 
-        # 🚨 CROSS-RUN MONOTONICITY GUARD: Validate resumption pointer never decreases between runs
+        #  CROSS-RUN MONOTONICITY GUARD: Validate resumption pointer never decreases between runs
         self._validate_cross_run_monotonicity()
 
     def _validate_cross_run_monotonicity(self) -> None:
@@ -399,13 +399,13 @@ class FixedEnhancedStateManager:
         # Check for corruption (validation-only; do not auto-repair)
         if current_cat_idx < last_known_cat:
             self.log.error(
-                f"🚨 STATE CORRUPTION DETECTED: pci={current_cat_idx} < hwm={last_known_cat}. Manual intervention required."
+                f" STATE CORRUPTION DETECTED: pci={current_cat_idx} < hwm={last_known_cat}. Manual intervention required."
             )
             # Validation-only: do NOT auto-repair; single-writer rule applies.
 
         if current_cat_idx == last_known_cat and current_prod_idx < last_known_prod:
             self.log.error(
-                f"🚨 STATE CORRUPTION DETECTED: prod_idx={current_prod_idx} < hwm={last_known_prod}. Manual intervention required."
+                f" STATE CORRUPTION DETECTED: prod_idx={current_prod_idx} < hwm={last_known_prod}. Manual intervention required."
             )
             # Validation-only: do NOT auto-repair; single-writer rule applies.
 
@@ -431,7 +431,7 @@ class FixedEnhancedStateManager:
                     regression_detected = True
                 if not sp.get("_supplier_progress_clamp_emitted"):
                     log.warning(
-                        f"?? CLAMPED SUPPLIER PROGRESS: completed={prod_completed} → {new_prod} (total_needed={total_needed})"
+                        f"?? CLAMPED SUPPLIER PROGRESS: completed={prod_completed}  {new_prod} (total_needed={total_needed})"
                     )
                     sp["_supplier_progress_clamp_emitted"] = True
 
@@ -449,7 +449,7 @@ class FixedEnhancedStateManager:
                     regression_detected = True
                 if not sp.get("_amazon_progress_clamp_emitted"):
                     log.warning(
-                        f"?? CLAMPED AMAZON PROGRESS: completed={prod_completed} → {new_prod} (total_needed={total_needed})"
+                        f"?? CLAMPED AMAZON PROGRESS: completed={prod_completed}  {new_prod} (total_needed={total_needed})"
                     )
                     sp["_amazon_progress_clamp_emitted"] = True
 
@@ -461,17 +461,53 @@ class FixedEnhancedStateManager:
 
     def perform_startup_analysis(self) -> Dict[str, Any]:
         """
-        🚨 CRITICAL FIX: Perform reverse gap detection and category analysis ONLY on startup
+         CRITICAL FIX: Perform reverse gap detection and category analysis ONLY on startup
         This method should be called ONCE at the beginning of a session, not on every save
         """
         if self._startup_completed:
             log.info("Startup analysis already completed for this session")
             return self.state_data.get("gap_processing", {}).get("category_completion_status", {})
 
-        log.info("🔍 STARTUP ANALYSIS: Beginning comprehensive state analysis...")
+        log.info(" STARTUP ANALYSIS: Beginning comprehensive state analysis...")
 
         # Calculate file-grounded totals
         file_grounded_data = self._calculate_file_grounded_totals()
+        
+        # ?? FIX ISS-007: Reconcile all counters using linking_map as single source of truth
+        # Evidence: gap_processing.processed=392, amazon_completed=394, resume_ptr=298, linking_map=0
+        linking_map_count = file_grounded_data.get("linking_map_count", 0)
+        
+        sp = self.state_data.get("system_progression", {})
+        amazon_completed = sp.get("amazon_products_completed", 0)
+        
+        gap = self.state_data.get("gap_processing", {})
+        gap_processed = gap.get("gap_products_processed", 0)
+        
+        # Detect counter mismatches
+        # Detect counter mismatches
+        #  FIX: Skip global alignment if using category-local counters (Hybrid Mode)
+        # If total_categories > 1, we assume hybrid/chunked mode where counters are local
+        is_hybrid = file_grounded_data.get("total_categories", 0) > 1
+        
+        counters_match = (linking_map_count == amazon_completed == gap_processed)
+        if not counters_match and not is_hybrid:
+            log.warning(
+                f"?? ISS-007 COUNTER MISMATCH DETECTED:\n"
+                f"   linking_map_count:        {linking_map_count}\n"
+                f"   amazon_products_completed: {amazon_completed}\n"
+                f"   gap_products_processed:    {gap_processed}\n"
+                f"   Action: Aligning all counters to linking_map ({linking_map_count})"
+            )
+            # Align all counters to linking_map (single source of truth)
+            sp["amazon_products_completed"] = linking_map_count
+            gap["gap_products_processed"] = linking_map_count
+            
+            # Also update category completion status
+            ccs = gap.get("category_completion_status", {})
+            if ccs:
+                ccs["processed"] = linking_map_count
+        elif not counters_match and is_hybrid:
+            log.info(f"?? ISS-007: Counter mismatch detected but ignored in Hybrid Mode (local counters)")
 
         # Toggle: allow disabling reverse gap heuristic entirely via config
         use_reverse_gap_heuristic = (
@@ -489,10 +525,10 @@ class FixedEnhancedStateManager:
             self.state_data["resume_reason"] = "system_progression"
             log.info(f"RESUME DECISION: START_AT_INDEX={start_at} (reason: system_progression)")
 
-            # 🚨 FINAL FIX: Use the authoritative flag from load_state() to gate category calculation.
+            #  FINAL FIX: Use the authoritative flag from load_state() to gate category calculation.
             sp = self.state_data.setdefault("system_progression", {})
             is_fresh_start = self.state_data.get('is_fresh_start', False)
-            log.info(f"🔍 STARTUP CHECK: is_fresh_start flag is '{is_fresh_start}'")
+            log.info(f" STARTUP CHECK: is_fresh_start flag is '{is_fresh_start}'")
 
             # NEW: never mutate PCI from counts; compute only a session cursor by URL status
             # NEW: never mutate PCI from counts; compute only a session cursor by URL status
@@ -501,15 +537,15 @@ class FixedEnhancedStateManager:
                 completion = file_grounded_data.get("category_completion_status", {})
                 self.state_data["session_resume_cursor"] = self._first_incomplete_index_by_url(manifest_urls, completion, hint=sp.get("persistent_category_index", 1))
                 cursor_url = manifest_urls[self.state_data["session_resume_cursor"]-1] if self.state_data["session_resume_cursor"] <= len(manifest_urls) else "N/A"
-                log.info(f"🎯 START MODE: is_fresh_start=False, pci={sp.get('persistent_category_index', 1)}, session_cursor={self.state_data['session_resume_cursor']}, url={cursor_url[:80]}...")
+                log.info(f" START MODE: is_fresh_start=False, pci={sp.get('persistent_category_index', 1)}, session_cursor={self.state_data['session_resume_cursor']}, url={cursor_url[:80]}...")
             else:
                 self.state_data["session_resume_cursor"] = 1
                 cursor_url = manifest_urls[0] if manifest_urls else "N/A"
-                log.info(f"🎯 START MODE: is_fresh_start=True, pci={sp.get('persistent_category_index', 1)}, session_cursor={self.state_data['session_resume_cursor']}, url={cursor_url[:80]}...")
-            # 🚨 REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
+                log.info(f" START MODE: is_fresh_start=True, pci={sp.get('persistent_category_index', 1)}, session_cursor={self.state_data['session_resume_cursor']}, url={cursor_url[:80]}...")
+            #  REVERSE GAP POLICY FIX: Only perform reverse gap detection on startup
         elif file_grounded_data["linking_map_count"] > file_grounded_data["total_products"]:
             log.info(
-                f"🔄 REVERSE GAP DETECTED: Linking map ({file_grounded_data['linking_map_count']}) > Cache ({file_grounded_data['total_products']})"
+                f" REVERSE GAP DETECTED: Linking map ({file_grounded_data['linking_map_count']}) > Cache ({file_grounded_data['total_products']})"
             )
 
             # Check if we should preserve existing resume index or reset
@@ -521,19 +557,19 @@ class FixedEnhancedStateManager:
                 self.state_data["resumption_index"] = 0
                 self.state_data["resume_reason"] = "reverse_gap_cache_rebuild"
                 log.info(
-                    f"✅ REVERSE GAP: Reset resumption_index = 0 (explicit cache rebuild requested)"
+                    f" REVERSE GAP: Reset resumption_index = 0 (explicit cache rebuild requested)"
                 )
             elif current_resumption_index == 0:
                 # If resumption_index is 0, check if this is truly a fresh start or a restart
-                # 🚨 REVERTED: This logic was using the flawed _detect_actual_fresh_start method
+                #  REVERTED: This logic was using the flawed _detect_actual_fresh_start method
                 # Simple approach: if resumption_index is 0, treat as fresh start for reverse gap processing
                 self.state_data["resumption_index"] = 0
                 self.state_data["resume_reason"] = "reverse_gap_fresh_start"
-                log.info(f"✅ REVERSE GAP: Fresh start confirmed - resumption_index = 0")
+                log.info(f" REVERSE GAP: Fresh start confirmed - resumption_index = 0")
             else:
                 # Preserve existing resume index to avoid restarting from first category
                 log.warning(
-                    f"🔄 REVERSE GAP: Preserving existing resumption_index = {current_resumption_index} (no explicit rebuild)"
+                    f" REVERSE GAP: Preserving existing resumption_index = {current_resumption_index} (no explicit rebuild)"
                 )
                 self.state_data["resume_reason"] = "reverse_gap_preserved_resume"
 
@@ -550,7 +586,7 @@ class FixedEnhancedStateManager:
             self.state_data["resume_reason"] = "normal_startup"
 
             log.info(
-                f"✅ Normal startup - resumption_index = {file_grounded_data['linking_map_count']}"
+                f" Normal startup - resumption_index = {file_grounded_data['linking_map_count']}"
             )
 
         # Log final resume decision for observability (if not already logged)
@@ -575,7 +611,7 @@ class FixedEnhancedStateManager:
         self._startup_completed = True
         self.state_data["gap_processing"]["startup_analysis_completed"] = True
 
-        # 🎯 FINAL STARTUP AUTHORIZATION: Now allow pointer fields to be persisted
+        #  FINAL STARTUP AUTHORIZATION: Now allow pointer fields to be persisted
         sp = self.state_data.setdefault("system_progression", {})
         cursor = int(self.state_data.get("session_resume_cursor", 1) or 1)
         urls = self._get_frozen_or_live_manifest_urls()
@@ -590,18 +626,18 @@ class FixedEnhancedStateManager:
         # Final safe save with pointer fields
         self.save_state(preserve_interruption_state=False)
 
-        log.info(f"🎯 AUTHORITATIVE START POSITION: Category {cursor} in phase '{sp.get('current_phase','supplier')}'")
-        log.info(f"🎯 STARTUP GATING COMPLETE: session_cursor={cursor}, startup_completed=True")
+        log.info(f" AUTHORITATIVE START POSITION: Category {cursor} in phase '{sp.get('current_phase','supplier')}'")
+        log.info(f" STARTUP GATING COMPLETE: session_cursor={cursor}, startup_completed=True")
 
-        log.info("✅ STARTUP ANALYSIS: Completed comprehensive state analysis")
+        log.info(" STARTUP ANALYSIS: Completed comprehensive state analysis")
         return self.state_data.get("gap_processing", {}).get("category_completion_status", {})
 
     def force_cache_rebuild(self, reason: str = "manual_request"):
         """
-        🚨 REVERSE GAP POLICY: Explicitly force cache rebuild and reset resume index
+         REVERSE GAP POLICY: Explicitly force cache rebuild and reset resume index
         This should only be called when intentionally rebuilding the cache
         """
-        log.info(f"🔄 FORCE CACHE REBUILD: {reason}")
+        log.info(f" FORCE CACHE REBUILD: {reason}")
         self.state_data["force_cache_rebuild"] = True
         self.state_data["resumption_index"] = 0
         self.state_data["progress_index"] = 0
@@ -612,11 +648,11 @@ class FixedEnhancedStateManager:
         self._startup_completed = False
         self.state_data["gap_processing"]["startup_analysis_completed"] = False
 
-        log.info("✅ Cache rebuild forced - resumption_index reset to 0")
+        log.info(" Cache rebuild forced - resumption_index reset to 0")
 
     def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
         """
-        🚨 STATE VALIDATION: Validate state consistency and repair issues
+         STATE VALIDATION: Validate state consistency and repair issues
         Returns (is_valid, repairs_made)
         """
         repairs_made = []
@@ -688,7 +724,7 @@ class FixedEnhancedStateManager:
 
     def update_discovered_products_in_category(self, category_url: str, discovered_count: int):
         """
-        🚨 CRITICAL FIX 4: Update category totals with real-time scraping discoveries
+         CRITICAL FIX 4: Update category totals with real-time scraping discoveries
         This method should be called when the scraper discovers more products than expected
         """
         sp = self.state_data.get("system_progression", {})
@@ -696,7 +732,7 @@ class FixedEnhancedStateManager:
 
         if discovered_count > current_total:
             log.info(
-                f"🔍 REAL-TIME DISCOVERY: Category {category_url[:50]}... discovered {discovered_count} products (was {current_total})"
+                f" REAL-TIME DISCOVERY: Category {category_url[:50]}... discovered {discovered_count} products (was {current_total})"
             )
 
             # Use normalized URL for consistent key comparison (using module-level import)
@@ -735,12 +771,12 @@ class FixedEnhancedStateManager:
             # Save the updated discovery using atomic write for safety
             self.save_state_atomic()
 
-            log.info(f"✅ REAL-TIME UPDATE: Category total updated to {discovered_count} products")
+            log.info(f" REAL-TIME UPDATE: Category total updated to {discovered_count} products")
 
     def update_current_category_url(self, normalized_url: str) -> None:
         """Authoritatively set the current category URL in system_progression."""
         sp = self.state_data.setdefault("system_progression", {})
-        # 🚨 FIX #2: Use module-level import instead of function-scoped to avoid UnboundLocalError
+        #  FIX #2: Use module-level import instead of function-scoped to avoid UnboundLocalError
         try:
             nurl = normalize_url(normalized_url)
         except Exception:
@@ -783,11 +819,11 @@ class FixedEnhancedStateManager:
         Raises:
             ValueError: If category denominator is already frozen (LAYER_2_FIX)
         """
-        # ✅ LAYER_2_FIX: Strengthen freeze guard - enforce with exception instead of advisory return
+        #  LAYER_2_FIX: Strengthen freeze guard - enforce with exception instead of advisory return
         # Original guard logged warning but returned False (advisory only)
         # Now raises ValueError to prevent silent corruption
         if self.is_category_denominator_frozen(category_url):
-            error_msg = f"🔒 FREEZE_GUARD_VIOLATION: Category {category_url} already frozen - denominator is immutable"
+            error_msg = f" FREEZE_GUARD_VIOLATION: Category {category_url} already frozen - denominator is immutable"
             self.log.error(error_msg)
             raise ValueError(error_msg)
 
@@ -830,24 +866,24 @@ class FixedEnhancedStateManager:
                     "hash": self.canonical_manifest_hash(manifest_urls),
                     "frozen_at": datetime.now(timezone.utc).isoformat(),
                 }
-                log.info(f"🧊 FROZEN CATEGORY MANIFEST: {len(manifest_urls)} URLs (hash: {sp['categories_manifest']['hash'][:8]}...)")
+                log.info(f" FROZEN CATEGORY MANIFEST: {len(manifest_urls)} URLs (hash: {sp['categories_manifest']['hash'][:8]}...)")
             else:
                 # Check for manifest drift
                 live_hash = self.canonical_manifest_hash(manifest_urls)
                 frozen_hash = sp["categories_manifest"].get("hash")
                 if live_hash != frozen_hash:
-                    log.warning("⚠️ Category manifest drift detected; honoring frozen order for resumption.")
-                    log.info(f"🧊 FROZEN HASH: {frozen_hash[:8]}... vs LIVE HASH: {live_hash[:8]}...")
+                    log.warning(" Category manifest drift detected; honoring frozen order for resumption.")
+                    log.info(f" FROZEN HASH: {frozen_hash[:8]}... vs LIVE HASH: {live_hash[:8]}...")
                 else:
-                    log.debug(f"✅ Manifest hash consistent: {frozen_hash[:8]}...")
+                    log.debug(f" Manifest hash consistent: {frozen_hash[:8]}...")
 
         self.save_state_atomic("freeze-category")
-        self.log.info(f"🔒 FROZEN DENOMINATOR: Category {nurl} → {discovered_count} products (LOCKED)")
+        self.log.info(f" FROZEN DENOMINATOR: Category {nurl}  {discovered_count} products (LOCKED)")
         return True
 
     def validate_three_source_consistency(self, category_url: str, manifest_path: Optional[str] = None) -> bool:
         """
-        ✅ LAYER_3_FIX: Validate denominator consistency across all three sources.
+         LAYER_3_FIX: Validate denominator consistency across all three sources.
 
         Ensures alignment between:
         1. Manifest file (source of truth for discovered URLs)
@@ -888,9 +924,9 @@ class FixedEnhancedStateManager:
                     manifest_data = json.load(f)
                     manifest_total = len(manifest_data.get('urls', []))
             except Exception as e:
-                self.log.warning(f"⚠️ Could not read manifest at {manifest_path}: {e}")
+                self.log.warning(f" Could not read manifest at {manifest_path}: {e}")
         else:
-            self.log.warning(f"⚠️ Manifest not found at {manifest_path}")
+            self.log.warning(f" Manifest not found at {manifest_path}")
 
         # Source 2: Frozen denominator in state (stored at top level, not in system_progression)
         frozen_denominators = self.state_data.get("frozen_category_denominators", {})
@@ -906,7 +942,7 @@ class FixedEnhancedStateManager:
         if manifest_total > 0:  # Only validate if manifest exists
             if not (manifest_total == state_denom == resume_denom):
                 error_msg = (
-                    f"❌ THREE-SOURCE VALIDATION FAILED for {nurl}:\n"
+                    f" THREE-SOURCE VALIDATION FAILED for {nurl}:\n"
                     f"  Source 1 (Manifest): {manifest_total} URLs\n"
                     f"  Source 2 (State frozen_category_denominators): {state_denom}\n"
                     f"  Source 3 (Resume supplier_products_needing_extraction): {resume_denom}\n"
@@ -916,7 +952,7 @@ class FixedEnhancedStateManager:
                 raise ValueError(error_msg)
 
         self.log.info(
-            f"✅ THREE-SOURCE VALIDATION PASSED: {nurl} → "
+            f" THREE-SOURCE VALIDATION PASSED: {nurl}  "
             f"manifest={manifest_total}, state={state_denom}, resume={resume_denom}"
         )
         return True
@@ -978,22 +1014,29 @@ class FixedEnhancedStateManager:
 
     def update_processing_progress(self, increment: int = 1, product_url: Optional[str] = None):
         """
-        🚨 CRITICAL FIX 5: Update progress tracking AND resumption index for exact recovery
+        CRITICAL FIX 5: Update progress tracking AND resumption index for exact recovery
         This method updates both session progress and resumption point for interruption recovery
         """
         # Update progress counters
-        # 🚨 CRITICAL FIX: Update ONLY system_progression as single source of truth
+        # CRITICAL FIX: Update ONLY system_progression as single source of truth
         sp = self.state_data.setdefault("system_progression", {})
         sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0)) + int(increment)
 
+        # FIX ISS-005: Validate Supplier Index Overflow
+        current_completed = int(sp.get("supplier_products_completed", 0))
+        total_needing = int(sp.get("supplier_products_needing_extraction", 0))
+        if total_needing > 0 and current_completed > total_needing:
+            log.error(f"ISS-005 SUPPLIER INDEX OVERFLOW: {current_completed} > {total_needing}. Clamping.")
+            sp["supplier_products_completed"] = total_needing
+            current_completed = total_needing
+
         self.state_data["session_products_processed"] += increment
 
-        current_completed = int(sp.get("supplier_products_completed", 0))
         self.state_data["resumption_index"] = current_completed
         self.state_data["last_processed_index"] = current_completed
 
         log.debug(
-            f"📊 PROGRESS UPDATE: system_progression.supplier_products_completed={sp['supplier_products_completed']}, resumption={self.state_data['resumption_index']}, session={self.state_data['session_products_processed']}"
+            f"PROGRESS UPDATE: system_progression.supplier_products_completed={sp['supplier_products_completed']}, resumption={self.state_data['resumption_index']}, session={self.state_data['session_products_processed']}"
         )
 
     # === NEW PROGRESSION METHODS ===
@@ -1006,28 +1049,28 @@ class FixedEnhancedStateManager:
 
         sp = self.state_data.setdefault("system_progression", {})
         
-        # 🔍 CATEGORY_INDEX_TRACKER: ENHANCED MONOTONIC ADVANCEMENT with regression protection
+        #  CATEGORY_INDEX_TRACKER: ENHANCED MONOTONIC ADVANCEMENT with regression protection
         # The workflow's chunked processing continuously calls this method, but we must preserve 
         # the correctly incremented values from mark_category_completed() and prevent any backward movement
         current_persistent_index = sp.get("persistent_category_index")
         current_phase = sp.get("current_phase", "supplier")
         
-        # 🚨 FIXED: Enhanced monotonic category index advancement with validation
+        #  FIXED: Enhanced monotonic category index advancement with validation
         if current_persistent_index is None:
             # First time - set initial index (1-based expected by all phases)
             sp["persistent_category_index"] = int(category_index)
-            log.info(f"🔍 CATEGORY_INDEX_TRACKER: Setting initial category index to {category_index}")
+            log.info(f" CATEGORY_INDEX_TRACKER: Setting initial category index to {category_index}")
         else:
             # Enhanced monotonic rule with regression detection and validation
             incoming = int(category_index)
             current  = int(current_persistent_index)
             
-            # 🚨 STRICT MONOTONIC ENFORCEMENT: NEVER allow backward movement
+            #  STRICT MONOTONIC ENFORCEMENT: NEVER allow backward movement
             if incoming < current:
-                # ✅ CRITICAL: Explicitly preserve current PCI
+                #  CRITICAL: Explicitly preserve current PCI
                 sp["persistent_category_index"] = current
                 log.warning(
-                    f"🔒 PCI PRESERVED: Display counters were session-scoped; authoritative progress comes from files (linking map + cache). "
+                    f" PCI PRESERVED: Display counters were session-scoped; authoritative progress comes from files (linking map + cache). "
                     f"Resume derived 'completed' from files, not from these counters. PCI preserved at {current}"
                 )
             elif incoming == current:
@@ -1035,7 +1078,7 @@ class FixedEnhancedStateManager:
             else:  # incoming > current
                 # Forward advancement - always allowed
                 sp["persistent_category_index"] = incoming
-                log.info(f"✅ Category advanced: {current} → {incoming}")
+                log.info(f" Category advanced: {current}  {incoming}")
         
         frozen_now = bool(sp.get("category_denominator_frozen"))
         active_idx = int(sp.get("persistent_category_index", 1))
@@ -1043,25 +1086,25 @@ class FixedEnhancedStateManager:
         # RESUME iff we are on the active category OR it was already frozen last run.
         is_resumption = active_category or frozen_now
 
-        # ✅ FIX: Conditional phase initialization (preserve loaded phase)
+        #  FIX: Conditional phase initialization (preserve loaded phase)
         if not sp.get("current_phase"):
             sp["current_phase"] = "supplier"
-            log.info("🆕 INITIAL PHASE: Set to 'supplier' (fresh start)")
+            log.info(" INITIAL PHASE: Set to 'supplier' (fresh start)")
         else:
-            log.info(f"✅ PHASE PRESERVED: '{sp['current_phase']}' (loaded from state)")
+            log.info(f" PHASE PRESERVED: '{sp['current_phase']}' (loaded from state)")
 
-        # ✅ FIX: Update ONLY category context fields (not phase/PCI)
+        #  FIX: Update ONLY category context fields (not phase/PCI)
         sp["current_category_url"] = normalized_category_url
         sp["original_category_url"] = category_url
         sp["total_categories"] = total_categories
         if is_resumption:
-            log.info(f"🔄 RESUMPTION: Preserving per-category counters (reason: active_category={active_category}, frozen={frozen_now}) for {normalized_category_url}")
+            log.info(f" RESUMPTION: Preserving per-category counters (reason: active_category={active_category}, frozen={frozen_now}) for {normalized_category_url}")
         else:
-            log.info(f"🆕 NEW CATEGORY: No counter clearing needed for {normalized_category_url}")
+            log.info(f" NEW CATEGORY: No counter clearing needed for {normalized_category_url}")
 
-        # ✅ VERIFICATION: Log final state to prove preservation
+        #  VERIFICATION: Log final state to prove preservation
         log.info(
-            f"📋 CATEGORY INIT COMPLETE:\n"
+            f" CATEGORY INIT COMPLETE:\n"
             f"  PCI (persistent_category_index): {sp.get('persistent_category_index')}\n"
             f"  Phase (current_phase): {sp.get('current_phase')}\n"
             f"  Category URL: {normalized_category_url}"
@@ -1072,21 +1115,28 @@ class FixedEnhancedStateManager:
     def update_supplier_progress_new(self, product_url: str, increment: int = 1):
         """Update progress during supplier extraction phase"""
         sp = self.state_data.setdefault("system_progression", {})
-        # 🚨 FIX A (Location 1): Phase guard - only set if not already in amazon_analysis
+        #  FIX A (Location 1): Phase guard - only set if not already in amazon_analysis
         prior = sp.get("current_phase")
         if prior in (None, "", "supplier"):
             sp["current_phase"] = "supplier"
         sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0)) + int(increment)
 
-        # Mirror legacy display counters from system_progression without influencing control flow
+        #  FIX ISS-005: Validate Supplier Index Overflow
         current_completed = int(sp.get("supplier_products_completed", 0))
+        total_needing = int(sp.get("supplier_products_needing_extraction", 0))
+        if total_needing > 0 and current_completed > total_needing:
+            log.error(f" ISS-005 SUPPLIER INDEX OVERFLOW: {current_completed} > {total_needing}. Clamping.")
+            sp["supplier_products_completed"] = total_needing
+            current_completed = total_needing
+
+        # Mirror legacy display counters from system_progression without influencing control flow
         self.state_data["resumption_index"] = current_completed
         self.state_data["last_processed_index"] = current_completed
 
         self.state_data["session_products_processed"] += increment
 
         log.debug(
-            f"📊 PROGRESS UPDATE: system_progression.supplier_products_completed={sp['supplier_products_completed']}, resumption={self.state_data['resumption_index']}, session={self.state_data['session_products_processed']}"
+            f" PROGRESS UPDATE: system_progression.supplier_products_completed={sp['supplier_products_completed']}, resumption={self.state_data['resumption_index']}, session={self.state_data['session_products_processed']}"
         )
 
     def update_amazon_analysis_progress_new(self, product_url: str, increment: int = 1):
@@ -1100,21 +1150,21 @@ class FixedEnhancedStateManager:
         ud = self.state_data.setdefault("user_display_metrics", {})
         ud["session_products_processed"] = ud.get("session_products_processed", 0) + increment
 
-        # 🚨 REMOVED: processed_products tracking - completion is tracked in linking map only
+        #  REMOVED: processed_products tracking - completion is tracked in linking map only
         # Amazon analysis completion creates linking map entry (source of truth)
 
         self.save_state_atomic()
 
     def save_state(self, preserve_interruption_state: bool = True):
         """
-        🚨 THREAD-SAFE ATOMIC SAVE: Save state with file locking and thread safety
+        THREAD-SAFE ATOMIC SAVE: Save state with file locking and thread safety
         Args:
             preserve_interruption_state: If True, preserves current state for resumption
         """
         if self._write_lock:
             acquired = self._write_lock.acquire(timeout=getattr(self, "lock_timeout", 5.0))
             if not acquired:
-                log.error("🧯 DEADLOCK GUARD: save_state() failed to acquire write lock within timeout; "
+                log.error(" DEADLOCK GUARD: save_state() failed to acquire write lock within timeout; "
                           "skipping save to avoid hang")
                 return False
             try:
@@ -1130,90 +1180,90 @@ class FixedEnhancedStateManager:
         Perform the actual atomic save operation with comprehensive error handling.
         """
         try:
-            # 🚨 HARDEN STATE: Ensure critical keys are always present
+            #  HARDEN STATE: Ensure critical keys are always present
             if "system_progression" in self.state_data:
                 sp = self.state_data["system_progression"]
                 sp.setdefault("supplier_products_completed", 0)
                 sp.setdefault("amazon_products_completed", 0)
-                log.debug(f"💾 ATOMIC SAVE: State hardening completed (critical keys guaranteed)")
+                log.debug(f" ATOMIC SAVE: State hardening completed (critical keys guaranteed)")
 
-            # 🚨 STARTUP GUARD: Block premature saves unless explicitly authorized
+            #  STARTUP GUARD: Block premature saves unless explicitly authorized
             # This prevents the "Index 1 Overwrite" bug if workflow init order is wrong
             if not self._startup_completed and preserve_interruption_state:
-                log.warning("🛑 SAVE BLOCKED: Attempted to save state before startup completion")
+                log.warning(" SAVE BLOCKED: Attempted to save state before startup completion")
                 return False
 
-            # 🚨 CRITICAL: Do NOT perform file-grounded recalculation here during processing
+            #  CRITICAL: Do NOT perform file-grounded recalculation here during processing
             # Only update from file-grounded data if this is not preserving interruption state
             # AND startup has not been completed (i.e., only during startup or explicit recalculation)
             if not preserve_interruption_state and not self._startup_completed:
-                # 🚨 PERFORMANCE CRITICAL: This path should ONLY be taken during startup analysis
+                #  PERFORMANCE CRITICAL: This path should ONLY be taken during startup analysis
                 # Add explicit logging to detect if this expensive path is being triggered incorrectly
-                log.warning(f"🚨 EXPENSIVE PATH TRIGGERED: File-grounded calculation during save (preserve={preserve_interruption_state}, startup_completed={self._startup_completed})")
+                log.warning(f" EXPENSIVE PATH TRIGGERED: File-grounded calculation during save (preserve={preserve_interruption_state}, startup_completed={self._startup_completed})")
                 file_grounded_data = self._calculate_file_grounded_totals()
                 self.state_data["total_products"] = file_grounded_data["total_products"]
                 self.state_data["successful_products"] = file_grounded_data["processed_products"]
-                log.debug(f"💾 ATOMIC SAVE: File-grounded calculation completed")
+                log.debug(f" ATOMIC SAVE: File-grounded calculation completed")
             else:
                 # Startup saves allowed; after runtime begins we never recompute file-grounded totals here
                 if self._startup_completed:
-                    log.debug("💾 ATOMIC SAVE: runtime mode; skipping file-grounded recompute")
+                    log.debug(" ATOMIC SAVE: runtime mode; skipping file-grounded recompute")
                 else:
-                    log.debug(f"💾 ATOMIC SAVE: Skipping expensive file-grounded calculation (correct behavior)")
+                    log.debug(f" ATOMIC SAVE: Skipping expensive file-grounded calculation (correct behavior)")
 
             # Use thread-safe atomic writer if available
-            log.debug(f"💾 ATOMIC SAVE: Checking atomic writer availability")
+            log.debug(f" ATOMIC SAVE: Checking atomic writer availability")
             if self._atomic_writer:
-                log.debug(f"💾 ATOMIC SAVE: Using thread-safe atomic writer")
+                log.debug(f" ATOMIC SAVE: Using thread-safe atomic writer")
                 success = self._atomic_writer.save_atomic(self.state_data)
                 if success:
-                    log.debug(f"✅ Thread-safe atomic save completed: {self.state_file_path}")
+                    log.debug(f" Thread-safe atomic save completed: {self.state_file_path}")
                     self._emit_resume_breadcrumbs()
                     return True
                 else:
-                    log.error(f"❌ Thread-safe atomic save failed: {self.state_file_path}")
+                    log.error(f" Thread-safe atomic save failed: {self.state_file_path}")
                     return False
 
             # Fallback to legacy atomic operations
-            log.debug(f"💾 ATOMIC SAVE: Checking legacy atomic operations")
+            log.debug(f" ATOMIC SAVE: Checking legacy atomic operations")
             if save_json_atomic:
-                log.debug(f"💾 ATOMIC SAVE: Using legacy save_json_atomic")
+                log.debug(f" ATOMIC SAVE: Using legacy save_json_atomic")
                 success = save_json_atomic(self.state_file_path, self.state_data, timeout=self.lock_timeout)
                 if success:
-                    log.debug(f"✅ Fallback atomic save completed: {self.state_file_path}")
+                    log.debug(f" Fallback atomic save completed: {self.state_file_path}")
                     self._emit_resume_breadcrumbs()
                     return True
                 else:
-                    log.warning(f"⚠️ Fallback atomic save failed: {self.state_file_path}")
+                    log.warning(f" Fallback atomic save failed: {self.state_file_path}")
                     return False
 
             # Final fallback using existing WindowsSaveGuardian
-            log.debug(f"💾 ATOMIC SAVE: Using WindowsSaveGuardian as final fallback")
+            log.debug(f" ATOMIC SAVE: Using WindowsSaveGuardian as final fallback")
             try:
                 from utils.windows_save_guardian import WindowsSaveGuardian
                 guardian = WindowsSaveGuardian()
-                log.debug(f"💾 ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic")
+                log.debug(f" ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic")
                 success = guardian.save_json_atomic(str(self.state_file_path), self.state_data)
-                log.debug(f"💾 ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: {success}")
+                log.debug(f" ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: {success}")
 
                 if success:
-                    log.debug(f"✅ Guardian fallback save completed: {self.state_file_path}")
+                    log.debug(f" Guardian fallback save completed: {self.state_file_path}")
                     self._emit_resume_breadcrumbs()
                     return True
                 else:
-                    log.error(f"❌ Guardian fallback save failed: {self.state_file_path}")
+                    log.error(f" Guardian fallback save failed: {self.state_file_path}")
                     return False
 
             except ImportError:
-                log.debug(f"💾 ATOMIC SAVE: WindowsSaveGuardian import failed, using basic fallback")
+                log.debug(f" ATOMIC SAVE: WindowsSaveGuardian import failed, using basic fallback")
                 # Ultimate fallback: basic temp-then-replace
                 return self._basic_atomic_fallback()
             except Exception as guardian_error:
-                log.error(f"❌ WindowsSaveGuardian error: {guardian_error}")
+                log.error(f" WindowsSaveGuardian error: {guardian_error}")
                 return self._basic_atomic_fallback()
 
         except Exception as e:
-            log.error(f"❌ Critical error in atomic save: {e}")
+            log.error(f" Critical error in atomic save: {e}")
             # Try basic fallback as last resort
             return self._basic_atomic_fallback()
 
@@ -1231,12 +1281,12 @@ class FixedEnhancedStateManager:
                 with os.fdopen(fd, "w", encoding="utf-8") as tmp:
                     json.dump(self.state_data, tmp, indent=2, ensure_ascii=False)
                 os.replace(tmp_path, str(self.state_file_path))
-                log.debug(f"✅ Basic fallback save completed: {self.state_file_path}")
+                log.debug(f" Basic fallback save completed: {self.state_file_path}")
                 self._emit_resume_breadcrumbs()
                 return True
 
             except Exception as e:
-                log.error(f"❌ Basic fallback save failed: {e}")
+                log.error(f" Basic fallback save failed: {e}")
                 try:
                     os.remove(tmp_path)
                 except Exception:
@@ -1244,7 +1294,7 @@ class FixedEnhancedStateManager:
                 return False
 
         except Exception as e:
-            log.error(f"❌ Could not perform basic fallback save: {e}")
+            log.error(f" Could not perform basic fallback save: {e}")
             return False
 
     def _emit_resume_breadcrumbs(self):
@@ -1279,7 +1329,7 @@ class FixedEnhancedStateManager:
         Emit FIRST_AFTER_RESUME_KEY banner once per phase.
         Stores flag in diagnostics section to avoid polluting control state.
         """
-        # 🚨 STARTUP GATING: Prevent premature pointer writes during startup analysis
+        #  STARTUP GATING: Prevent premature pointer writes during startup analysis
         if not self.state_data.get("startup_completed", False):
             if hasattr(self, "_log") and self._log:
                 logger = self._log
@@ -1287,7 +1337,7 @@ class FixedEnhancedStateManager:
                 import logging
                 logger = logging.getLogger(__name__)
 
-            logger.debug(f"⏸️ Startup gating: suppressed FIRST_AFTER_RESUME_KEY during '{phase}'")
+            logger.debug(f" Startup gating: suppressed FIRST_AFTER_RESUME_KEY during '{phase}'")
             return
 
         # Additional gating: ensure totals are committed and active-phase denominator is available
@@ -1360,7 +1410,7 @@ class FixedEnhancedStateManager:
             else:
                 prod_idx = 0
 
-            self.log.info(f"✅ RESUME HONORED: phase={phase} cat={cat_idx} prod={prod_idx}")
+            self.log.info(f" RESUME HONORED: phase={phase} cat={cat_idx} prod={prod_idx}")
             self._phase_resume_honored_emitted[phase] = True
             self.metrics.inc("resume_proof_emitted_total", phase=phase, type="honored")
 
@@ -1389,9 +1439,9 @@ class FixedEnhancedStateManager:
         sp["_writer_note"] = note
         self.save_state(preserve_interruption_state=True)
         if note:
-            log.info(f"💾 ATOMIC SAVE ({note})")
+            log.info(f" ATOMIC SAVE ({note})")
         else:
-            log.info("💾 ATOMIC SAVE")
+            log.info(" ATOMIC SAVE")
 
     def save_state_atomic(self, note: str = "") -> None:
         """
@@ -1404,7 +1454,7 @@ class FixedEnhancedStateManager:
     def save_debounced(self, note: str = "", min_interval: float = 2.0) -> None:
         # Startup saves are allowed; after runtime begins we must not recalc file-grounded totals
         if self._startup_completed:
-            log.debug("💾 save_debounced: runtime mode (no file-grounded recompute)")
+            log.debug(" save_debounced: runtime mode (no file-grounded recompute)")
 
         now = time.time()
         if now - getattr(self, "_last_save_time", 0) < min_interval:
@@ -1415,10 +1465,10 @@ class FixedEnhancedStateManager:
 
     def log_resume_proof_after_commit(self, context: str) -> None:
         """Log resume proof banner after atomic commits for audit trail."""
-        # 🚨 STARTUP GATING: Prevent premature pointer logging during startup analysis
+        #  STARTUP GATING: Prevent premature pointer logging during startup analysis
         if not self.state_data.get("startup_completed", False):
             # During startup, only log safe commits without pointer fields
-            log.debug(f"⏸️ Startup gating: {context} saved without pointer logging")
+            log.debug(f" Startup gating: {context} saved without pointer logging")
             return
 
         sp = self.state_data.get("system_progression", {})
@@ -1438,12 +1488,12 @@ class FixedEnhancedStateManager:
 
         # Check if this is the first commit after a resume
         if not getattr(self, '_first_resume_logged', False):
-            log.info(f"🎆 FIRST AFTER-RESUME KEY: phase={phase} cat={cat_idx} prod={prod_idx} context={context}")
+            log.info(f" FIRST AFTER-RESUME KEY: phase={phase} cat={cat_idx} prod={prod_idx} context={context}")
             self._first_resume_logged = True
         else:
-            log.info(f"📝 RESUME HONORED: phase={phase} cat={cat_idx} prod={prod_idx} context={context}")
+            log.info(f" RESUME HONORED: phase={phase} cat={cat_idx} prod={prod_idx} context={context}")
 
-        log.debug(f"📝 RESUME PROOF ({context}): State committed successfully")
+        log.debug(f" RESUME PROOF ({context}): State committed successfully")
 
     def set_total_categories(self, total:int, manifest_hash:str) -> None:
         """Set frozen total categories and manifest hash; mirror into system_progression."""
@@ -1455,7 +1505,7 @@ class FixedEnhancedStateManager:
         sp["total_categories"] = total_int
         sp["current_manifest_hash"] = manifest_hash
         if sp.get("_last_manifest_hash") and sp["_last_manifest_hash"] != manifest_hash:
-            log.warning(f"🧬 MANIFEST HASH CHANGED: {sp['_last_manifest_hash']} → {manifest_hash}")
+            log.warning(f" MANIFEST HASH CHANGED: {sp['_last_manifest_hash']}  {manifest_hash}")
         sp["_last_manifest_hash"] = manifest_hash
         self.save_debounced("manifest")
 
@@ -1464,15 +1514,15 @@ class FixedEnhancedStateManager:
         if not sp.get("category_denominator_frozen", False):
             sp["supplier_products_needing_extraction"] = int(total)
             sp["category_denominator_frozen"] = True
-            log.info(f"🔒 DENOM FREEZE: url={cat_url} total={total}")
+            log.info(f" DENOM FREEZE: url={cat_url} total={total}")
             return
         prev = int(sp.get("supplier_products_needing_extraction", 0))
         if int(total) != prev:
             if os.getenv(self._ALLOW_OVERWRITE_ENV, "false").lower() == "true":
-                log.warning(f"⚠️ DENOM OVERWRITE (allowed via env): {prev} → {total} url={cat_url}")
+                log.warning(f" DENOM OVERWRITE (allowed via env): {prev}  {total} url={cat_url}")
                 sp["supplier_products_needing_extraction"] = int(total)
             else:
-                log.error(f"🚫 DENOM CHANGE BLOCKED: frozen={prev} attempted={total} url={cat_url}")
+                log.error(f" DENOM CHANGE BLOCKED: frozen={prev} attempted={total} url={cat_url}")
 
     def mark_frozen_totals_committed(self) -> None:
         """Mark frozen totals as committed, enabling RESUME PTR logs."""
@@ -1536,13 +1586,13 @@ class FixedEnhancedStateManager:
             total_needed = 0
 
         self.log.info(
-            f"✅ RESUME HONORED: phase={phase} "
+            f" RESUME HONORED: phase={phase} "
             f"cat={cat_idx}/{total_cats} "
             f"prod={prod_idx}/{total_needed} "
             f"commit_type={commit_type}"
         )
         self.log.info(
-            f"📋 RESUME PROOF ({commit_type.upper()}): "
+            f" RESUME PROOF ({commit_type.upper()}): "
             f"cat={cat_idx}/{total_cats} "
             f"prod={prod_idx}/{total_needed} "
             f"phase={phase}"
@@ -1594,7 +1644,7 @@ class FixedEnhancedStateManager:
             sp["category_denominator_frozen"] = True
             sp["category_freeze_timestamp"] = datetime.now(timezone.utc).isoformat()
             self.emit_first_after_resume_once("supplier")
-            self.log.info(f"🔒 DENOMINATOR FROZEN: {nurl} -> {sp['supplier_products_needing_extraction']} products")
+            self.log.info(f" DENOMINATOR FROZEN: {nurl} -> {sp['supplier_products_needing_extraction']} products")
 
         # Apply atomic state updates
         # Defensive normalize + bounds clamp (robust against non-ints)
@@ -1603,22 +1653,22 @@ class FixedEnhancedStateManager:
         except Exception:
             prod_idx = 0
         if prod_idx < 0:
-            self.log.warning(f"🔧 CLAMPED: negative supplier prod_idx {prod_idx} → 0")
+            self.log.warning(f" CLAMPED: negative supplier prod_idx {prod_idx}  0")
             prod_idx = 0
         try:
             if total_prod_in_cat is not None and prod_idx > int(total_prod_in_cat):
-                self.log.warning(f"🔧 CLAMPED: supplier prod_idx {prod_idx} → {int(total_prod_in_cat)}")
+                self.log.warning(f" CLAMPED: supplier prod_idx {prod_idx}  {int(total_prod_in_cat)}")
                 prod_idx = int(total_prod_in_cat)
         except Exception:
             # If total_prod_in_cat can't be coerced, skip the upper clamp but keep going
             pass
 
-        # 🚨 FIX A (Location 2): Phase guard - only set if not already in amazon_analysis
+        #  FIX A (Location 2): Phase guard - only set if not already in amazon_analysis
         prior = sp.get("current_phase")
         if prior in (None, "", "supplier"):
             sp["current_phase"] = "supplier"
         if sp.get("current_category_url") and sp["current_category_url"] != nurl:
-            self.log.warning(f"⚠️ CAT-URL MISMATCH: idx={cat_idx} url={nurl} current_url={sp['current_category_url']}")
+            self.log.warning(f" CAT-URL MISMATCH: idx={cat_idx} url={nurl} current_url={sp['current_category_url']}")
         sp["supplier_products_completed"] = int(prod_idx)
         sp["total_categories"] = int(total_cats)
         sp["current_category_url"] = nurl
@@ -1635,6 +1685,19 @@ class FixedEnhancedStateManager:
     def commit_amazon_progress(self, *, cat_idx: int, queue_idx: int,
                                total_cats: int, cat_url: str, queue_len: int) -> None:
         """Thread-safe atomic Amazon-phase commit (queue-relative cursor)."""
+        
+        # ?? FIX ISS-005: Detect impossible index values BEFORE processing
+        # Evidence: Log showed prod_idx=576/15 (mathematically impossible)
+        # This catches bulk mode corruption (ISS-004) that causes index overflow
+        if queue_len is not None and queue_len > 0 and queue_idx >= queue_len:
+            self.log.error(
+                f"?? ISS-005 INVALID INDEX DETECTED:\n"
+                f"   prod_idx={queue_idx} but queue_len={queue_len}\n"
+                f"   This indicates bulk mode corruption (ISS-004)\n"
+                f"   Clamping to last valid index: {queue_len - 1}"
+            )
+            queue_idx = queue_len - 1
+        
         # Emit a clear progress line with clamp preview and normalized URL
         original_idx = int(queue_idx)
         clamped_idx = original_idx
@@ -1648,7 +1711,7 @@ class FixedEnhancedStateManager:
         except Exception:
             nurl = str(cat_url)
         self.log.info(
-            f"🔧 AMAZON PROGRESS: cat={cat_idx}/{total_cats} "
+            f" AMAZON PROGRESS: cat={cat_idx}/{total_cats} "
             f"idx={original_idx}->{clamped_idx} (frozen_queue_len={queue_len}) url={nurl}"
         )
         if self._write_lock:
@@ -1662,17 +1725,17 @@ class FixedEnhancedStateManager:
         sp = self.state_data.setdefault("system_progression", {})
         # Bounds clamp per memory spec
         if queue_idx < 0:
-            self.log.warning(f"🔧 CLAMPED: negative amazon queue_idx {queue_idx} → 0")
+            self.log.warning(f" CLAMPED: negative amazon queue_idx {queue_idx}  0")
             queue_idx = 0
         if queue_len is not None and queue_idx > int(queue_len):
-            self.log.warning(f"🔧 CLAMPED: amazon queue_idx {queue_idx} → {int(queue_len)}")
+            self.log.warning(f" CLAMPED: amazon queue_idx {queue_idx}  {int(queue_len)}")
             queue_idx = int(queue_len)
         # Clamp to queue bounds
         if queue_len is not None and queue_len >= 0:
             if queue_idx < 0:
                 queue_idx = 0
             elif queue_idx > queue_len:
-                self.log.warning(f"🧯 CLAMPED AMAZON PTR: idx={queue_idx} → {queue_len} (total={queue_len})")
+                self.log.warning(f" CLAMPED AMAZON PTR: idx={queue_idx}  {queue_len} (total={queue_len})")
                 queue_idx = queue_len
         sp["current_phase"] = "amazon_analysis"
         sp["amazon_products_completed"] = int(queue_idx) + 1   # ADDED (Fix 0-based index mismatch)
@@ -1692,14 +1755,14 @@ class FixedEnhancedStateManager:
         if denom > 0 and done >= denom:
             # Use the current PCI as the absolute index for this category
             abs_idx = int(sp.get("persistent_category_index", 1))
-            log.info(" AMAZON FINALIZER: queue done (done=%s denom=%s) → completing category %s (idx=%s)",
+            log.info(" AMAZON FINALIZER: queue done (done=%s denom=%s)  completing category %s (idx=%s)",
                      done, denom, nurl, abs_idx)
             try:
                 self.mark_category_completed(cat_url, abs_idx)
                 # save immediately so the increment cannot be lost
                 self.save_state_atomic("category-complete-amazon-finalizer")
             except Exception as e:
-                log.warning("⚠️ AMAZON FINALIZER: completion failed: %s", e)
+                log.warning(" AMAZON FINALIZER: completion failed: %s", e)
 
         # Keep denominators frozen from workflow; don't overwrite with queue_len
         # (queue_len can be 0 after filtering, causing "N of 0" display issues)
@@ -1732,14 +1795,14 @@ class FixedEnhancedStateManager:
         sp = self.state_data.setdefault("system_progression", {})
         old = sp.get("current_phase", "supplier")
 
-        # Guard: do not allow amazon_analysis → supplier unless Amazon queue is complete
+        # Guard: do not allow amazon_analysis  supplier unless Amazon queue is complete
         want = str(new_phase)
         if old == "amazon_analysis" and want == "supplier":
             total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
             done = int(sp.get("amazon_products_completed", 0) or 0)
             if total > 0 and done < total:
                 log.warning(
-                    f"🛑 PHASE SWITCH BLOCKED: amazon_analysis incomplete (done={done}/{total})."
+                    f" PHASE SWITCH BLOCKED: amazon_analysis incomplete (done={done}/{total})."
                 )
                 return  # refuse unsafe handover
 
@@ -1750,7 +1813,7 @@ class FixedEnhancedStateManager:
                 sp["supplier_products_completed"] = 0
             elif new_phase == "amazon_analysis":
                 sp["amazon_products_completed"] = 0
-        self.log.info(f"🔄 PHASE TRANSITION: {old} → {new_phase}")
+        self.log.info(f" PHASE TRANSITION: {old}  {new_phase}")
         self.save_state_atomic()
         self.log_resume_proof_after_commit("PHASE_SWITCH")
 
@@ -1777,7 +1840,7 @@ class FixedEnhancedStateManager:
         if _total_needed <= 0:
             return
 
-        self.log.info(f"📋 ATOMIC COMMIT [{commit_type}]: cat={cat_idx}/{total_cats} prod={prod_idx} phase={phase}")
+        self.log.info(f" ATOMIC COMMIT [{commit_type}]: cat={cat_idx}/{total_cats} prod={prod_idx} phase={phase}")
 
     # === DEPRECATED LEGACY WRITER METHODS ===
 
@@ -2050,16 +2113,16 @@ class FixedEnhancedStateManager:
             if repairs_applied:
                 success = self.save_state_atomic()
                 if success:
-                    log.info(f"✅ State corruption repaired: {len(repairs_applied)} fixes applied")
+                    log.info(f" State corruption repaired: {len(repairs_applied)} fixes applied")
                     return True, repairs_applied
                 else:
-                    log.error("❌ Failed to save repaired state")
+                    log.error(" Failed to save repaired state")
                     return False, []
 
             return True, []  # No repairs needed
 
         except Exception as e:
-            log.error(f"❌ State repair failed: {e}")
+            log.error(f" State repair failed: {e}")
             return False, []
 
     def _repair_impossible_index_states(self) -> List[str]:
@@ -2082,8 +2145,8 @@ class FixedEnhancedStateManager:
         total_cats = sp.get("total_categories", 0)
 
         if total_cats > 0 and current_cat_idx >= total_cats:
-            # 🔍 CATEGORY_INDEX_TRACKER: Allow index to exceed bounds - don't reset incremented values
-            log.warning(f"🔍 CATEGORY_INDEX_TRACKER: Category index {current_cat_idx} >= total {total_cats} - preserving incremented value")
+            #  CATEGORY_INDEX_TRACKER: Allow index to exceed bounds - don't reset incremented values
+            log.warning(f" CATEGORY_INDEX_TRACKER: Category index {current_cat_idx} >= total {total_cats} - preserving incremented value")
             # sp["persistent_category_index"] = max(0, total_cats - 1)  # DISABLED - preserve increments
             # repairs.append(f"Clamped category index from {current_cat_idx} to {max(0, total_cats - 1)}")  # DISABLED
 
@@ -2103,13 +2166,13 @@ class FixedEnhancedStateManager:
                 repairs.append(f"Fixed negative category index {current_cat_idx} to 1 (1-based system)")
 
         elif "persistent_category_index" not in sp:
-            # 🚨 FIX B: PCI hardening - only default to 1 on fresh start
+            #  FIX B: PCI hardening - only default to 1 on fresh start
             if self.state_data.get("is_fresh_start", False):
                 sp["persistent_category_index"] = 1
                 sp["current_category_index"] = 1
-                log.info("🔍 CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (fresh start)")
+                log.info(" CATEGORY_INDEX_TRACKER: Initialized both category index fields to 1 (fresh start)")
             else:
-                log.warning("⚠️ PCI MISSING ON RESUME: Preserving existing state and not defaulting to 1")
+                log.warning(" PCI MISSING ON RESUME: Preserving existing state and not defaulting to 1")
 
         return repairs
 
@@ -2190,7 +2253,7 @@ class FixedEnhancedStateManager:
         # Update provided fields
         # PCI is advanced only by mark_category_completed(...). Do not write here.
         if persistent_category_index is not None:
-            log.debug("📎 PROGRESSION UPDATE: ignoring incoming PCI (completion path is authoritative)")
+            log.debug(" PROGRESSION UPDATE: ignoring incoming PCI (completion path is authoritative)")
 
         if supplier_products_completed is not None:
             sp["supplier_products_completed"] = supplier_products_completed
@@ -2202,16 +2265,16 @@ class FixedEnhancedStateManager:
             old_phase = sp.get("current_phase")
             sp["current_phase"] = current_phase
             if old_phase != current_phase:
-                log.info(f"🔄 PHASE TRANSITION: {old_phase} → {current_phase}")
+                log.info(f" PHASE TRANSITION: {old_phase}  {current_phase}")
 
-        # 🚨 FIX 3: NEW - Phase-specific resumption indices
+        #  FIX 3: NEW - Phase-specific resumption indices
         if supplier_resumption_index is not None:
             sp["supplier_products_completed"] = int(supplier_resumption_index)
-            log.debug(f"?? SUPPLIER RESUME INDEX → COMPLETED: {supplier_resumption_index}")
+            log.debug(f"?? SUPPLIER RESUME INDEX  COMPLETED: {supplier_resumption_index}")
 
         if amazon_resumption_index is not None:
             sp["amazon_products_completed"] = int(amazon_resumption_index)
-            log.debug(f"?? AMAZON RESUME INDEX → COMPLETED: {amazon_resumption_index}")
+            log.debug(f"?? AMAZON RESUME INDEX  COMPLETED: {amazon_resumption_index}")
 
         if current_category_url is not None:
             # Normalize URL for consistent tracking (using module-level import)
@@ -2228,7 +2291,7 @@ class FixedEnhancedStateManager:
         # Update timestamp
         sp["last_updated"] = datetime.now(timezone.utc).isoformat()
 
-        # 🚨 FIX 2: Cross-validate and mirror legacy view from system
+        #  FIX 2: Cross-validate and mirror legacy view from system
         drift_magnitude = self._validate_state_synchronization()
 
         # Log the progression update for observability
@@ -2239,7 +2302,7 @@ class FixedEnhancedStateManager:
         phase = sp.get("current_phase", "unknown")
 
         log.debug(
-            f"📊 PROGRESSION UPDATE: cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prods} phase={phase}"
+            f" PROGRESSION UPDATE: cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prods} phase={phase}"
         )
 
         return drift_magnitude
@@ -2268,9 +2331,9 @@ class FixedEnhancedStateManager:
         max_cat_index = max(0, total_cats - 1)
         if ci > max_cat_index:
             log.warning(
-                f"⚠️ State validation: persistent_category_index {ci} > max_index {max_cat_index}; preserving incremented value"
+                f" State validation: persistent_category_index {ci} > max_index {max_cat_index}; preserving incremented value"
             )
-            # 🔍 CATEGORY_INDEX_TRACKER: Don't clamp - preserve incremented values
+            #  CATEGORY_INDEX_TRACKER: Don't clamp - preserve incremented values
             # sp["persistent_category_index"] = max_cat_index  # DISABLED
 
         # Clamp product index within category (0..tp-1)
@@ -2285,7 +2348,7 @@ class FixedEnhancedStateManager:
         max_prod_index = max(0, tp - 1) if tp > 0 else 0
         if pi > max_prod_index:
             log.warning(
-                f"⚠️ State validation: product_index {pi} > max_index {max_prod_index}; capping"
+                f" State validation: product_index {pi} > max_index {max_prod_index}; capping"
             )
             sp["supplier_products_completed"] = max_prod_index
 
@@ -2296,7 +2359,7 @@ class FixedEnhancedStateManager:
             or (sp.get("supplier_products_completed", 0) or 0) > 0
         ):
             log.warning(
-                "⚠️ Contradiction: is_fresh_start=True with non-zero progress; normalizing is_fresh_start=False"
+                " Contradiction: is_fresh_start=True with non-zero progress; normalizing is_fresh_start=False"
             )
             self.state_data["is_fresh_start"] = False
 
@@ -2309,7 +2372,7 @@ class FixedEnhancedStateManager:
             "completed": {"supplier"},
         }
         if last and cur and last != cur and last in allowed and cur not in allowed[last]:
-            log.warning(f"⚠️ Phase transition {last} → {cur} not in allowed set")
+            log.warning(f" Phase transition {last}  {cur} not in allowed set")
         sp["last_phase"] = cur
 
         # Persist once - use atomic commit instead of legacy save_state()
@@ -2319,7 +2382,7 @@ class FixedEnhancedStateManager:
         legacy_key = "_".join(["supplier", "extraction", "progress"])  # scrub without literal
         if isinstance(self.state_data, dict) and legacy_key in self.state_data:
             self.state_data.pop(legacy_key, None)
-            log.debug("🧹 LEGACY SUBTREE REMOVED on load")
+            log.debug(" LEGACY SUBTREE REMOVED on load")
 
     def validate_and_repair_state(self) -> Tuple[bool, List[str]]:
         """
@@ -2367,8 +2430,8 @@ class FixedEnhancedStateManager:
         persistent_category_index = sp.get("persistent_category_index", 1)
 
         if persistent_category_index > total_categories and total_categories > 0:
-            # 🔍 CATEGORY_INDEX_TRACKER: Allow index to exceed bounds - preserve incremented values
-            log.warning(f"🔍 CATEGORY_INDEX_TRACKER: Category index {persistent_category_index} > total {total_categories} - preserving incremented value")
+            #  CATEGORY_INDEX_TRACKER: Allow index to exceed bounds - preserve incremented values
+            log.warning(f" CATEGORY_INDEX_TRACKER: Category index {persistent_category_index} > total {total_categories} - preserving incremented value")
             # sp["persistent_category_index"] = total_categories  # DISABLED - preserve increments
             # repairs_made.append(f"Fixed category index bounds: {persistent_category_index} -> {sp['persistent_category_index']}")  # DISABLED
             # is_valid = False  # DISABLED
@@ -2450,7 +2513,7 @@ class FixedEnhancedStateManager:
                 / "linking_map.json"
             )
 
-            # 🚨 CRITICAL FIX: Exclude metadata entries from product count
+            #  CRITICAL FIX: Exclude metadata entries from product count
             if cache_file_path.exists():
                 file_grounded_data["cache_file_exists"] = True
                 try:
@@ -2557,7 +2620,7 @@ class FixedEnhancedStateManager:
                 extracted_categories[src].append(product["url"])
 
             if missing:
-                log.warning(f"⚠️ Cache entries missing source_url: {missing} (ignored in category analysis)")
+                log.warning(f" Cache entries missing source_url: {missing} (ignored in category analysis)")
                 try:
                     self._metrics["missing_source_url_ignored_total"] = (
                         self._metrics.get("missing_source_url_ignored_total", 0) + missing
@@ -2606,7 +2669,7 @@ class FixedEnhancedStateManager:
         self, file_grounded_data: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        🚨 CRITICAL FIX 7: Calculate current category metrics with correct indexing
+         CRITICAL FIX 7: Calculate current category metrics with correct indexing
         Returns metrics for the current category with proper index calculation
         """
         try:
@@ -2617,7 +2680,7 @@ class FixedEnhancedStateManager:
             current_category_url = ""
             persistent_category_index = 1
 
-            # 🚨 CRITICAL FIX: Load config file to get proper category order and index
+            #  CRITICAL FIX: Load config file to get proper category order and index
             current_dir = Path(__file__).parent.parent
             config_path = current_dir / "config" / "poundwholesale_categories.json"
 
@@ -2645,7 +2708,7 @@ class FixedEnhancedStateManager:
                             ):
                                 current_category_url = config_url
                                 persistent_category_index = (
-                                    i  # 🚨 FIXED: Use actual index from config file
+                                    i  #  FIXED: Use actual index from config file
                                 )
                                 break
                         if current_category_url:
@@ -2677,7 +2740,7 @@ class FixedEnhancedStateManager:
 
             return {
                 "current_category_url": current_category_url,
-                "persistent_category_index": persistent_category_index,  # 🚨 FIXED: Correct index from config
+                "persistent_category_index": persistent_category_index,  #  FIXED: Correct index from config
                 "total_categories": total_categories,
                 "supplier_products_needing_extraction": supplier_products_needing_extraction,
                 "supplier_products_completed": supplier_products_completed,
@@ -2695,9 +2758,9 @@ class FixedEnhancedStateManager:
         """Advance PCI if completing the CURRENT category; prep state for the next category."""
         sp = self.state_data.setdefault("system_progression", {})
 
-        # 🚨 CRITICAL DEBUG: TESTING IF THIS METHOD IS CALLED AT ALL
-        log.error(f"🚨🚨🚨 MARK_CATEGORY_COMPLETED CALLED 🚨🚨🚨")
-        log.error(f"🔍 CATEGORY_COMPLETION_CALL: url={category_url[:50]}... absolute_cat_index={absolute_cat_index}")
+        #  CRITICAL DEBUG: TESTING IF THIS METHOD IS CALLED AT ALL
+        log.error(f" MARK_CATEGORY_COMPLETED CALLED ")
+        log.error(f" CATEGORY_COMPLETION_CALL: url={category_url[:50]}... absolute_cat_index={absolute_cat_index}")
 
         # Normalize for strict equality (using module-level import)
         try:
@@ -2729,9 +2792,9 @@ class FixedEnhancedStateManager:
             sp["current_category_url"] = ""
 
             self.save_state_atomic("category-complete")
-            log.info(f"✅ CATEGORY_INDEX_TRACKER: Category completed {nurl} → next pci={candidate}")
+            log.info(f" CATEGORY_INDEX_TRACKER: Category completed {nurl}  next pci={candidate}")
         else:
-            log.info(f"ℹ️ CATEGORY_INDEX_TRACKER: Ignored completion; current={sp.get('current_category_url','')} new={nurl}")
+            log.info(f" CATEGORY_INDEX_TRACKER: Ignored completion; current={sp.get('current_category_url','')} new={nurl}")
 
     def get_resumption_index(self) -> int:
         """Get the current progress index for backward compatibility."""
@@ -2773,22 +2836,22 @@ class FixedEnhancedStateManager:
 
     def is_product_processed(self, product_url: str) -> bool:
         """
-        🚨 DEPRECATED: This method should not be used - linking map is the source of truth
+         DEPRECATED: This method should not be used - linking map is the source of truth
         Hash lookup should check linking map directly, not processing state
 
         Returns False to ensure products flow through correct filtering workflow
         """
-        # 🚨 Always return False - linking map filtering is the correct approach
+        #  Always return False - linking map filtering is the correct approach
         return False
 
     def mark_product_processed(self, product_url: str, status: str):
         """
-        🚨 DEPRECATED: This method should not be used - linking map entries are the completion signal
+         DEPRECATED: This method should not be used - linking map entries are the completion signal
         Processing completion is tracked via linking map entries, not processing state
 
         This method is now a no-op to prevent incorrect state tracking
         """
-        # 🚨 No-op: completion tracking happens in linking map, not processing state
+        #  No-op: completion tracking happens in linking map, not processing state
         pass
 
     def get_state_summary(self) -> Dict[str, Any]:
@@ -2799,7 +2862,7 @@ class FixedEnhancedStateManager:
             "resumption_index": self.state_data.get("resumption_index", 0),
             "progress_index": self.state_data.get("progress_index", 0),
             "session_products_processed": self.state_data.get("session_products_processed", 0),
-            # 🚨 REMOVED: processed_products count - linking map is source of truth
+            #  REMOVED: processed_products count - linking map is source of truth
             "last_update": self.state_data.get("last_update"),
         }
 
@@ -2845,7 +2908,7 @@ class FixedEnhancedStateManager:
         sp = self.state_data.setdefault("system_progression", {})
         if category_index is not None:
             # PCI is advanced only by mark_category_completed(...). Do not write here.
-            log.debug("📎 SUPPLIER PROGRESS UPDATE: ignoring incoming category_index (completion path is authoritative)")
+            log.debug(" SUPPLIER PROGRESS UPDATE: ignoring incoming category_index (completion path is authoritative)")
         if extraction_phase is not None:
             phase_map = {
                 "fresh_categories": "supplier",
@@ -2886,7 +2949,7 @@ class FixedEnhancedStateManager:
 
     def log_resume_proof_after_commit(self, commit_type: str) -> None:
         """RESUME PROOF LOG: Log with specific banners for audit trail verification."""
-        # 🚨 STARTUP GATING: Prevent premature pointer writes during startup analysis
+        #  STARTUP GATING: Prevent premature pointer writes during startup analysis
         if not self.state_data.get("startup_completed", False):
             # During startup, only log safe commits without pointer fields
             if hasattr(self, "_log") and self._log:
@@ -2896,9 +2959,9 @@ class FixedEnhancedStateManager:
                 logger = logging.getLogger(__name__)
 
             if commit_type == "manifest":
-                logger.debug("⏸️ Startup gating: manifest saved without pointer fields")
+                logger.debug(" Startup gating: manifest saved without pointer fields")
             else:
-                logger.debug(f"⏸️ Startup gating: {commit_type} saved without pointer fields")
+                logger.debug(f" Startup gating: {commit_type} saved without pointer fields")
             return
 
         sp = self.state_data.setdefault("system_progression", {})
@@ -2929,14 +2992,14 @@ class FixedEnhancedStateManager:
 
         if is_first_after_resume:
             # Log the specific "FIRST AFTER-RESUME KEY" banner
-            logger.info(f"🚨 FIRST AFTER-RESUME KEY: phase={phase} cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} commit_type={commit_type}")
+            logger.info(f" FIRST AFTER-RESUME KEY: phase={phase} cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} commit_type={commit_type}")
             self._first_commit_logged = True
         else:
             # Log "RESUME HONORED" for subsequent commits
-            logger.info(f"✅ RESUME HONORED: phase={phase} cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} commit_type={commit_type}")
+            logger.info(f" RESUME HONORED: phase={phase} cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} commit_type={commit_type}")
 
         # Standard resume proof log
-        logger.info(f"📋 RESUME PROOF ({commit_type}): cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} phase={phase}")
+        logger.info(f" RESUME PROOF ({commit_type}): cat={cat_idx}/{total_cats} prod={prod_idx}/{total_prod} phase={phase}")
 
     def _calculate_category_from_product_index(self, product_index, category_completion):
         """
@@ -2954,7 +3017,7 @@ class FixedEnhancedStateManager:
 
         # Edge case: empty category completion data
         if not category_list:
-            log.warning("⚠️ CATEGORY CALCULATION: Empty category_completion, returning index 1")
+            log.warning(" CATEGORY CALCULATION: Empty category_completion, returning index 1")
             return 1
 
         for cat_idx, category_url in enumerate(category_list, 1):
@@ -2983,22 +3046,12 @@ class FixedEnhancedStateManager:
         if proposed_index >= current_index:
             return proposed_index
         else:
-            log.warning(f"🛡️ MONOTONIC PROTECTION: Preserved index {current_index} over regressed {proposed_index}")
+            log.warning(f" MONOTONIC PROTECTION: Preserved index {current_index} over regressed {proposed_index}")
             return current_index
 
     def _first_incomplete_index_by_url(self, manifest_urls, completion, hint=1):
-        """
-        Returns 1-based index of the first URL whose status != FULLY_PROCESSED,
-        scanning forward from 'hint' (wraps once). Never mutates PCI.
 
-        Args:
-            manifest_urls: List of category URLs in frozen order
-            completion: Category completion status dict
-            hint: Starting position hint (1-based)
-
-        Returns:
-            1-based index of first incomplete category
-        """
+        # Returns 1-based index of first incomplete category
         n = max(1, len(manifest_urls))
         start = max(1, int(hint or 1))
         order = list(range(start-1, n)) + list(range(0, start-1))
@@ -3010,10 +3063,8 @@ class FixedEnhancedStateManager:
         return n  # all done; point to last
 
     def _get_frozen_or_live_manifest_urls(self) -> List[str]:
-        """
-        Get category URLs from frozen manifest if available, otherwise load from config.
-        Used for URL-based session cursor calculation.
-        """
+        # Get category URLs from frozen manifest if available, otherwise load from config.
+        # Used for URL-based session cursor calculation.
         from pathlib import Path
         import json
 
@@ -3023,7 +3074,7 @@ class FixedEnhancedStateManager:
 
         if manifest_info and manifest_info.get("urls"):
             # Use frozen manifest URLs if available
-            log.info(f"🧊 Using frozen manifest with {len(manifest_info['urls'])} URLs (hash: {manifest_info.get('hash', 'unknown')[:8]}...)")
+            log.info(f" Using frozen manifest with {len(manifest_info['urls'])} URLs (hash: {manifest_info.get('hash', 'unknown')[:8]}...)")
             return manifest_info["urls"]
 
         # Fall back to loading from config file
@@ -3038,13 +3089,13 @@ class FixedEnhancedStateManager:
                 with open(config_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     category_urls = data.get("category_urls", [])
-                    log.info(f"📂 Loaded {len(category_urls)} category URLs from config")
+                    log.info(f" Loaded {len(category_urls)} category URLs from config")
                     return category_urls
             else:
-                log.warning(f"⚠️ Category config file not found: {config_path}")
+                log.warning(f" Category config file not found: {config_path}")
                 return []
         except Exception as e:
-            log.error(f"❌ Failed to load category URLs: {e}")
+            log.error(f" Failed to load category URLs: {e}")
             return []
 
 # Backward-compatible aliases without embedding legacy identifier in source

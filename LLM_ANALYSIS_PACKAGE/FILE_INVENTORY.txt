@@ -1,0 +1,212 @@
+LLM ANALYSIS PACKAGE - FILE INVENTORY
+Generated: 2025-11-27
+================================================================================
+
+TOTAL FILES: 13
+TOTAL SIZE: ~1.3 MB (compressed from 20MB+ originals)
+
+================================================================================
+DIRECTORY STRUCTURE:
+================================================================================
+
+LLM_ANALYSIS_PACKAGE/
+├── README.md (5.2 KB) - Package overview and analysis instructions
+├── ISSUE_REPORT.md (12 KB) - Comprehensive observation report
+├── FILE_INVENTORY.txt (this file) - Complete file listing
+│
+├── logs/ (4 files, 182 KB total) - EXTRACTED log sections
+│   ├── EXTRACTED_run_custom_poundwholesale_20251125_083638.log (45 KB)
+│   ├── EXTRACTED_run_custom_poundwholesale_20251125_154127.log (45 KB)
+│   ├── EXTRACTED_run_custom_poundwholesale_20251125_155617.log (31 KB)
+│   └── EXTRACTED_run_custom_poundwholesale_20251125_201223.log (61 KB)
+│
+├── scripts/ (2 files, 732 KB total) - Core workflow logic
+│   ├── passive_extraction_workflow_latest.py (588 KB)
+│   └── fixed_enhanced_state_manager.py (142 KB)
+│
+├── state_files/ (2 files, 24 KB total) - Processing state
+│   ├── angelwholesale_co_uk_processing_state.json (11 KB)
+│   └── enhanced_category_tracking.json (8.9 KB)
+│
+└── output_files/ (5 files, 1.1 MB total) - System outputs
+    ├── manifest_All-Baby-and-child.json (42 KB) **ISSUE: Only 5 URLs**
+    ├── linking_map.json (364 KB)
+    ├── cache_summary_all_products.json (614 KB)
+    ├── cache_products_by_category.json (1.3 KB)
+    └── angelwholesale_categories.json (23 KB)
+
+================================================================================
+FILE DESCRIPTIONS:
+================================================================================
+
+DOCUMENTATION:
+--------------
+README.md
+  - Package overview
+  - Chronology verification
+  - Key issues summary
+  - Analysis approach guide
+  - Questions for investigation
+
+ISSUE_REPORT.md
+  - Comprehensive observation report
+  - 7 issues identified with numerical evidence
+  - Log chronology verified
+  - NO cause/consequence analysis (observations only)
+  - Questions for LLM to investigate
+
+FILE_INVENTORY.txt
+  - This file
+  - Complete file listing
+  - File sizes and descriptions
+
+LOGS (EXTRACTED SECTIONS):
+--------------------------
+All logs have repetitive Amazon extraction steps removed.
+Only startup, category processing, resume logic, and workflow changes included.
+
+EXTRACTED_run_custom_poundwholesale_20251125_083638.log
+  - Timestamp: 08:36 AM
+  - Size: 45 KB (from 1.9 MB original)
+  - Sections: Startup (100 lines), End of run (200 lines)
+  - Shows: Early reprocessing behavior
+
+EXTRACTED_run_custom_poundwholesale_20251125_154127.log
+  - Timestamp: 03:41 PM
+  - Size: 45 KB (from 361 KB original)
+  - Sections: Startup (100 lines), End at product 298 (200 lines)
+  - Shows: Run ending with denominator 401
+
+EXTRACTED_run_custom_poundwholesale_20251125_155617.log
+  - Timestamp: 03:56 PM (15 min after previous)
+  - Size: 31 KB (from 44 KB original)
+  - Sections: Startup and resume (200 lines)
+  - Shows: Resume with denominator changed to 397
+
+EXTRACTED_run_custom_poundwholesale_20251125_201223.log
+  - Timestamp: 08:12 PM
+  - Size: 61 KB (from 17 MB original)
+  - Sections: Startup (100 lines), End showing workflow switch (300 lines)
+  - Shows: Workflow deviation at category 8 (15 products → 3312 bulk mode)
+
+SCRIPTS:
+--------
+passive_extraction_workflow_latest.py
+  - Size: 588 KB
+  - Main workflow orchestrator
+  - Key functions:
+    * _run_amazon_phase_from_resume() - Resume logic
+    * _rebuild_category_amazon_queue() - Product queue building
+    * Manifest saving logic
+    * Category initialization
+  - Lines to investigate:
+    * Resume logic: ~2100-2300
+    * Queue rebuilding: ~1800-2000
+    * Manifest saving: ~600-800
+
+fixed_enhanced_state_manager.py
+  - Size: 142 KB
+  - State management and persistence
+  - Key functions:
+    * Resume pointer calculation
+    * File-grounded state calculations
+    * Freeze-mark-resume sequence
+    * Atomic save operations
+
+STATE FILES:
+------------
+angelwholesale_co_uk_processing_state.json
+  - Size: 11 KB
+  - Current processing state
+  - Key data:
+    * system_progression.current_category_index: 2
+    * system_progression.amazon_products_needing_analysis: 401
+    * frozen_category_denominators: {"All-Baby-and-child": 401}
+    * gap_processing.category_completion_status: Shows 392 processed
+  - **ISSUE**: Shows 392 processed but resume pointer at 298
+
+enhanced_category_tracking.json
+  - Size: 8.9 KB
+  - Category completion tracking
+  - Historical category performance data
+
+OUTPUT FILES:
+-------------
+manifest_All-Baby-and-child.json
+  - Size: 42 KB
+  - Contains: 401 URLs (matches frozen denominator)
+  - Scraped at: 2025-11-27T06:56:23
+  - Category: All-Baby-and-child
+  - **ISSUE**: Cache only has 397 products (4 missing)
+
+linking_map.json
+  - Size: 364 KB
+  - Total entries: 658
+  - EAN→ASIN mappings
+  - **ISSUE**: 0 entries from "All-Baby-and-child" category
+  - First 10 entries are from other categories
+
+cache_summary_all_products.json
+  - Size: 614 KB
+  - Summary of all 3343 cached products
+  - Format: {"ean": "", "title": "", "source_url": ""}
+  - Created for LLM analysis (reduced from full cache)
+
+cache_products_by_category.json
+  - Size: 1.3 KB
+  - Product counts per category
+  - Shows "All-Baby-and-child": 397 products
+  - Total: 37 categories with cached products
+
+angelwholesale_categories.json
+  - Size: 23 KB
+  - Configuration with all 328 category URLs
+  - Category order definition
+
+================================================================================
+KEY NUMERICAL EVIDENCE:
+================================================================================
+
+CATEGORY 2 (All-Baby-and-child):
+  Manifest file:         401 URLs
+  Cache file:            397 products  (-4 from manifest)
+  State frozen:          401 products
+  State processed:       392 products  (-5 from cache)
+  Resume pointer:        298 products  (-94 from processed count)
+  Linking map entries:     0 entries  (-392 from processed count)
+
+DENOMINATOR CHANGES:
+  Run #2 (154127):       401
+  Run #3 (155617):       397  (changed -4)
+
+INDEX REGRESSION:
+  State shows:           392 processed
+  Resume shows:          298 pointer  (regressed -94)
+
+WORKFLOW DEVIATION:
+  Categories 1-7:        Category-by-category
+  Category 8 start:      15 products (normal)
+  Category 8 switch:     3312 products (bulk mode)
+
+================================================================================
+VERIFICATION CHECKSUMS:
+================================================================================
+
+File counts verified:
+  - Manifest URLs: python script counted 5 URLs
+  - Cache products: python script counted 3343 total, 397 for category 2
+  - Linking map: python script counted 658 entries, 0 from category 2
+  - State denominators: verified 401 in frozen_category_denominators
+
+Log chronology verified:
+  - File timestamps checked via ls -lht
+  - Order: 083638 → 154127 → 155617 → 201223
+  - Time gaps: 7h → 15min → 4.25h
+
+All files are COPIES (not originals)
+All counts independently verified via Python scripts
+All observations based on actual file contents (no assumptions)
+
+================================================================================
+END OF FILE INVENTORY
+================================================================================
