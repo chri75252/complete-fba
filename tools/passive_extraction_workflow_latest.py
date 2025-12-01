@@ -5681,6 +5681,14 @@ Return ONLY valid JSON, no additional text."""
                         f" STEP-2 ALLOWED KEYS (category): {len(cat_allowed_keys)} "
                         f"(amazon-only={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)})"
                     )
+                    # Persist allowlist for this category so resumed runs can honour Step-2 gating
+                    sp_allow = self.state_manager.state_data.setdefault("system_progression", {})
+                    allow_map = sp_allow.setdefault("category_allowed_keys", {})
+                    try:
+                        ncat = normalize_url(category_url)
+                    except Exception:
+                        ncat = str(category_url)
+                    allow_map[ncat] = list(cat_allowed_keys)
                 except Exception as _e:
                     self._category_allowed_keys = set()
                     self.log.warning(f"[ALLOWLIST] build failed: {_e}")
@@ -7175,8 +7183,8 @@ Return ONLY valid JSON, no additional text."""
                         sp = self.state_manager.state_data.setdefault("system_progression", {})
                         sp["current_category_url"] = category_url
 
-                        # Mark category as complete in state manager
-                        self.state_manager.mark_category_completed(category_url, absolute_cat_index)
+                        # Mark category as complete in state manager using the global category index
+                        self.state_manager.mark_category_completed(category_url, category_index)
                         
                         # Save state after each category
                         self.state_manager.save_state(preserve_interruption_state=True)
@@ -7713,27 +7721,57 @@ Return ONLY valid JSON, no additional text."""
                         or self._get_category_url_by_index(cat_idx))
 
         products = self._rebuild_category_amazon_queue(category_url)
-        # Safety: ensure strictly category-scoped and Step-2 allowed
+        # Safety: ensure strictly category-scoped. Step-2 allowlist is a hint, not a hard gate on resume.
         try:
             ncat = normalize_url(category_url) if category_url else ""
         except Exception:
             ncat = category_url or ""
+
+        # Prefer in-memory allowlist when present; otherwise restore from state,
+        # but treat it as a *hint* on resume, not a hard gate.
         allowed = set(getattr(self, "_category_allowed_keys", set()))
+        if not allowed:
+            sp_restore = self.state_manager.state_data.get("system_progression", {})
+            allow_map = sp_restore.get("category_allowed_keys", {}) or {}
+            restored = set(allow_map.get(ncat, []))
+            if restored:
+                self.log.info(
+                    f" STEP-2 ALLOWLIST RESTORED: {len(restored)} keys for category {ncat}"
+                )
+                allowed = restored
+
         before = len(products)
         filtered, rc, rk = [], 0, 0
         for p in products:
             src = p.get("source_url") or p.get("category_url") or ""
-            try: n_src = normalize_url(src) if src else ""
-            except Exception: n_src = src
+            try:
+                n_src = normalize_url(src) if src else ""
+            except Exception:
+                n_src = src
+
+            # Enforce category scope (ISS-004 semantics)
             if ncat and n_src != ncat:
-                rc += 1; continue
+                rc += 1
+                continue
+
+            # On resume, do NOT drop items purely because they are not in the allowlist.
+            # Instead, count them for diagnostics.
             if allowed:
                 k = stable_key(p.get("url"), p.get("ean"))
                 if k not in allowed:
-                    rk += 1; continue
+                    rk += 1
+
             filtered.append(p)
-        if rc or rk:
-            self.log.warning(f"[SAFETY] category_queue_enforced removed_non_category={rc} removed_not_allowed={rk}")
+
+        if rc:
+            self.log.warning(
+                f"[SAFETY] category_queue_enforced removed_non_category={rc} removed_not_allowed={rk}"
+            )
+        elif rk:
+            self.log.info(
+                f"[ALLOWLIST_MISMATCH] {rk} queue items not present in restored allowlist for category {ncat}; proceeding with category-only gating"
+            )
+
         products = filtered
         total = len(products)
 
@@ -7760,14 +7798,32 @@ Return ONLY valid JSON, no additional text."""
             sp_update["supplier_products_needing_extraction"] = total
 
         sp = self.state_manager.state_data.get("system_progression", {})
-        saved_amazon_offset = int(sp.get("amazon_products_completed", 0)) if isinstance(sp.get("amazon_products_completed", 0), (int, float)) else int(sp.get("amazon_products_completed", 0) or 0)
+        raw_completed = sp.get("amazon_products_completed", 0)
+        saved_amazon_offset = int(raw_completed) if isinstance(raw_completed, (int, float)) else int(raw_completed or 0)
         clamped_amazon_offset = min(max(saved_amazon_offset, 0), total)
-        if saved_amazon_offset != clamped_amazon_offset:
+
+        if total == 0:
+            # Empty queue: nothing to resume; keep offset at 0 and let finalizer handle completion.
+            prod_offset = 0
+            sp["amazon_products_completed"] = 0
+        elif saved_amazon_offset >= total:
+            # Queue has shrunk or aligns with saved offset; restart this category's Amazon queue from 0
+            # to avoid skipping remaining products.
+            self.log.warning(
+                f" AMAZON RESUME SAFETY: saved offset {saved_amazon_offset} >= queue length {total}; restarting from 0"
+            )
+            prod_offset = 0
+            sp["amazon_products_completed"] = 0
+        elif saved_amazon_offset != clamped_amazon_offset:
+            # Slight mismatch (e.g., negative or just beyond bounds): clamp and continue from clamped offset.
             self.log.warning(
                 f" Clamp amazon offset: saved={saved_amazon_offset}  start={clamped_amazon_offset} (len={total})"
             )
             prod_offset = clamped_amazon_offset
             sp["amazon_products_completed"] = clamped_amazon_offset
+        else:
+            # Saved offset is valid within the current queue; honour it.
+            prod_offset = saved_amazon_offset
 
         batch_size = int(self.system_config.get("amazon_batch_size", 0)) or int(self.system_config.get("max_products_per_cycle", 10)) or 10
         start_batch = prod_offset // max(1, batch_size)
