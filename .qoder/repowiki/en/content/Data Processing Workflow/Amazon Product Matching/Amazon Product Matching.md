@@ -2,10 +2,18 @@
 
 <cite>
 **Referenced Files in This Document**   
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py)
-- [linking_map_test.json](file://OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map_test.json)
-- [hash_lookup_methods.py](file://hash_lookup_methods.py)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py)
+- [amazon_playwright_extractor.py](file://tools\amazon_playwright_extractor.py)
+- [system_config.json](file://config\system_config.json)
 </cite>
+
+## Update Summary
+**Changes Made**   
+- Updated documentation to reflect the simplified matching strategy that selects the first visible organic product result from Amazon search.
+- Added detailed information about the four-fallback method for ASIN extraction.
+- Enhanced description of visibility filtering to skip sponsored products using AdBlocker detection.
+- Documented the implementation of the FixedAmazonExtractor class and its EAN-based search functionality.
+- Updated product match validation section to reflect removal of title similarity scoring for EAN searches.
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -21,28 +29,29 @@
 The Amazon product matching sub-feature is a critical component of the FBA agent system, responsible for identifying corresponding products on Amazon.co.uk for supplier items from poundwholesale.co.uk. This document details the implementation of the dual-pronged matching strategy, the FixedAmazonExtractor class, and the integration between supplier product extraction, Amazon search, and financial analysis. The system employs sophisticated techniques to ensure accurate product matching while optimizing performance through caching and batch processing.
 
 ## Core Matching Strategy
-The product matching system implements a dual-pronged approach that prioritizes EAN-based matching and falls back to title similarity scoring when EAN is unavailable. This strategy ensures high-confidence matches while maintaining flexibility for products without standardized identifiers.
+The product matching system implements a dual-pronged approach that prioritizes EAN-based matching and falls back to title-based matching when EAN is unavailable. This strategy ensures high-confidence matches while maintaining flexibility for products without standardized identifiers.
 
 The primary matching workflow begins with EAN-based search using the `search_by_ean_and_extract_data` method. When an EAN is present in the supplier product data, the system searches Amazon.co.uk using the EAN as the query parameter. If the EAN search fails or no EAN is available, the system automatically falls back to title-based matching by invoking `search_by_title_using_search_bar` with the supplier product title.
 
 This fallback mechanism is implemented in the `_get_amazon_data` method, which first attempts EAN search and only proceeds to title search if the EAN search returns no valid results. The system records the search method used in the `_search_method_used` field of the product data, providing an audit trail of the matching process.
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2437-L2525)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L6470-L6538)
 
 ## FixedAmazonExtractor Implementation
 The FixedAmazonExtractor class extends the base AmazonExtractor to provide specialized functionality for EAN-based product matching on Amazon.co.uk. This class implements the `search_by_ean_and_extract_data` method, which orchestrates the entire EAN search and data extraction process.
 
 The method begins by connecting to the browser through the centralized BrowserManager singleton, ensuring consistent browser state across the application. It then navigates to Amazon.co.uk and inputs the EAN into the search bar, simulating user behavior to avoid detection. The search results are processed using multiple selectors to identify product tiles, with robust error handling to accommodate Amazon's dynamic page structure.
 
-A critical feature of this implementation is the filtering of sponsored results. The system employs a multi-layered detection strategy that examines:
-- Visible "Sponsored" text badges
-- Aria-label attributes indicating sponsored content
-- Data attributes specific to sponsored results
-- Known ad-specific CSS classes
-- Text content containing ad indicators
+A critical feature of this implementation is the filtering of sponsored results. The system employs a visibility-based detection strategy that examines whether search result elements are visible in the DOM. Sponsored products hidden by AdBlocker (uBlock Origin) are automatically filtered out, as they are typically concealed using CSS. This approach replaces the previous complex five-check sponsored detection system with a simpler, more reliable method.
 
-Organic results are prioritized, and sponsored products are excluded from consideration. When multiple organic results are found, the system selects the first result based on Amazon's relevance ranking rather than applying title similarity scoring, as EAN matches are considered authoritative.
+When organic results are found, the system selects the first visible organic product based on Amazon's relevance ranking rather than applying title similarity scoring, as EAN matches are considered authoritative. This simplified strategy trusts Amazon's search algorithm to return the most relevant product first.
+
+The system implements a four-fallback method for ASIN extraction to ensure maximum reliability:
+1. **data-asin attribute**: Extracts ASIN from the `data-asin` HTML attribute
+2. **href /dp/ASIN pattern**: Extracts ASIN from product link URLs containing `/dp/` patterns
+3. **data-uuid attribute**: Uses alternative Amazon format identifiers
+4. **Regex search in HTML**: Performs pattern matching on the element's inner HTML as a last resort
 
 ```mermaid
 sequenceDiagram
@@ -57,18 +66,18 @@ Extractor->>Amazon : Navigate to amazon.co.uk
 Extractor->>Amazon : Fill search box with EAN
 Extractor->>Amazon : Press Enter
 Amazon-->>Extractor : Search results
-Extractor->>Extractor : Filter sponsored results
-Extractor->>Extractor : Extract organic results
-Extractor->>Extractor : Select first organic result
+Extractor->>Extractor : Filter sponsored results by visibility
+Extractor->>Extractor : Apply 4-fallback ASIN extraction
+Extractor->>Extractor : Select first visible organic result
 Extractor->>Extractor : extract_data(asin)
 Extractor-->>Workflow : Amazon product data
 ```
 
 **Diagram sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L625-L795)
+- [amazon_playwright_extractor.py](file://tools\amazon_playwright_extractor.py#L2141-L2349)
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L625-L795)
+- [amazon_playwright_extractor.py](file://tools\amazon_playwright_extractor.py#L2141-L2349)
 
 ## Linking Map and Persistent Associations
 The linking map in `linking_maps/poundwholesale.co.uk` maintains persistent associations between supplier products and Amazon ASINs, serving as the system's memory for product matching decisions. This JSON file contains entries that map supplier EANs to Amazon ASINs along with metadata about the match.
@@ -105,47 +114,27 @@ string no_match_reason
 ```
 
 **Diagram sources**
-- [linking_map_test.json](file://OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map_test.json)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L2400-L2600)
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2400-L2600)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L2400-L2600)
 
 ## Product Match Validation
-The system validates product matches using title overlap scoring, particularly in the fallback title-based matching scenario. The `_validate_product_match` function calculates a confidence score based on the word overlap between supplier and Amazon product titles.
+The system has been updated to simplify the product match validation process. For EAN-based searches, the system now trusts Amazon's search relevance ranking and selects the first visible organic result without applying title similarity scoring. This change eliminates the need for confidence scoring based on title overlap for EAN matches, as the EAN provides a definitive product identifier.
 
-The validation process uses configurable thresholds to determine match quality:
+The `_validate_product_match` function has been effectively bypassed for EAN-based matches, as the match quality is considered high by default when an EAN is successfully matched. For title-based fallback searches, the system still uses title overlap scoring to validate matches, but this is now only applied when EAN is unavailable.
+
+The validation thresholds remain configurable through the system configuration:
 - High similarity (≥0.75): High confidence (0.9)
 - Medium similarity (≥0.5): Medium confidence (0.6)
 - Low similarity (≥0.25): Low confidence (0.3)
 - Below threshold: Very low confidence (0.1)
 
-The `_overlap_score` method tokenizes both titles into word sets, normalizes them by removing punctuation and converting to lowercase, then calculates the Jaccard similarity coefficient as the ratio of intersection to union of the word sets. This approach is robust to word order variations and focuses on shared vocabulary.
-
-The validation function returns a comprehensive result object containing the match quality, confidence score, and raw overlap score, which is used to make decisions about whether to accept the match and proceed with financial analysis.
-
-```mermaid
-flowchart TD
-Start([Start Validation]) --> Normalize["Normalize Titles\nLowercase, Remove Punctuation"]
-Normalize --> Tokenize["Tokenize into Word Sets"]
-Tokenize --> Calculate["Calculate Overlap Score\n|A ∩ B| / |A ∪ B|"]
-Calculate --> CheckHigh{"Score ≥ 0.75?"}
-CheckHigh --> |Yes| HighConfidence["Match Quality: High\nConfidence: 0.9"]
-CheckHigh --> |No| CheckMedium{"Score ≥ 0.5?"}
-CheckMedium --> |Yes| MediumConfidence["Match Quality: Medium\nConfidence: 0.6"]
-CheckMedium --> |No| CheckLow{"Score ≥ 0.25?"}
-CheckLow --> |Yes| LowConfidence["Match Quality: Low\nConfidence: 0.3"]
-CheckLow --> |No| VeryLowConfidence["Match Quality: Very Low\nConfidence: 0.1"]
-HighConfidence --> End([Return Result])
-MediumConfidence --> End
-LowConfidence --> End
-VeryLowConfidence --> End
-```
-
-**Diagram sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L6470-L6503)
+However, these thresholds are only applied in the title-based fallback scenario, not for EAN-based matches.
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L6470-L6503)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L6602-L6628)
+- [system_config.json](file://config\system_config.json#L144-L148)
 
 ## Integration with Financial Analysis
 The product matching system is tightly integrated with the financial analysis pipeline, forming a critical link between product identification and profitability assessment. Once a product match is validated, the system passes the combined supplier and Amazon data to the FBA_Financial_calculator for ROI and profit margin analysis.
@@ -157,14 +146,14 @@ Products that meet the configured profitability criteria (minimum ROI percentage
 The linking map serves as the bridge between these systems, storing the matched product data in a format that can be easily consumed by the financial analyzer. The atomic write pattern used for updating the linking map ensures data integrity even if the process is interrupted.
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1970-L2316)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L1970-L2316)
 
 ## Common Issues and Solutions
 The product matching system addresses several common challenges in e-commerce product matching:
 
-**False Matches**: The system mitigates false matches through sponsored result filtering and title similarity validation. By excluding sponsored products and requiring minimum title overlap, the system reduces the risk of matching to incorrect or irrelevant products.
+**False Matches**: The system mitigates false matches through sponsored result filtering and the simplified matching strategy. By excluding sponsored products and selecting the first organic result for EAN searches, the system reduces the risk of matching to incorrect or irrelevant products.
 
-**Sponsored Product Interference**: The multi-layered sponsored detection system examines text badges, aria-labels, data attributes, CSS classes, and ad indicators to reliably identify and filter sponsored results. This prevents the system from selecting promoted products that may not represent the best organic match.
+**Sponsored Product Interference**: The visibility-based sponsored detection system examines whether search result elements are visible in the DOM. Products hidden by AdBlocker (uBlock Origin) are automatically filtered out, as they are typically concealed using CSS. This prevents the system from selecting promoted products that may not represent the best organic match.
 
 **Missing EANs**: When EANs are unavailable, the system falls back to title-based matching with similarity scoring. For products without EANs, the system uses a sanitized version of the product title as the filename identifier in the Amazon cache, enabling retrieval and reuse of previously matched data.
 
@@ -173,7 +162,7 @@ The product matching system addresses several common challenges in e-commerce pr
 **State Corruption**: The EnhancedStateManager with atomic write operations prevents state corruption during interruptions. The system can resume from the last processed index, avoiding duplicate processing and data inconsistencies.
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L992-L1020)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L992-L1020)
 
 ## Performance Optimization Techniques
 The system employs several performance optimization techniques to handle large product catalogs efficiently:
@@ -205,7 +194,7 @@ F --> K[Atomic File Operations]
 ```
 
 **Diagram sources**
-- [hash_lookup_methods.py](file://hash_lookup_methods.py)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L2400-L2600)
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2400-L2600)
+- [passive_extraction_workflow_latest.py](file://tools\passive_extraction_workflow_latest.py#L2400-L2600)

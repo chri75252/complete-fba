@@ -183,6 +183,27 @@ class FixedEnhancedStateManager:
                 "total_runtime_seconds": 0,
                 "average_time_per_product": 0,
                 "products_per_hour": 0,
+                # Read-only duplicates for human progress inspection
+                "total_products": 0,
+                "successful_products": 0,
+            },
+            # Read-only tracking ratios for current category; updated at runtime
+            "category_progress": "",
+            "supplier_progress_ratio_readable": "",
+            "amazon_progress_ratio_readable": "",
+            "system_progression": {
+                "current_phase": "supplier",
+                "persistent_category_index": 1,  #  CATEGORY_INDEX_TRACKER: 1-based system
+                "current_category_index": 0,  #  CATEGORY_INDEX_TRACKER: Legacy field for compatibility
+                "current_category_url": "",
+                "original_category_url": "",
+                "total_categories": 0,
+                "category_denominator_frozen": False,
+                "category_freeze_timestamp": None,
+                "supplier_products_needing_extraction": 0,
+                "supplier_products_completed": 0,
+                "amazon_products_needing_analysis": 0,
+                "amazon_products_completed": 0,
             },
             "metadata": {
                 "version": "3.8+_THREAD_SAFE",
@@ -204,20 +225,6 @@ class FixedEnhancedStateManager:
                 "category_completion_status": {},
                 "reverse_gap_detected": False,
                 "startup_analysis_completed": False,
-            },
-            "system_progression": {
-                "current_phase": "supplier",
-                "persistent_category_index": 1,  #  CATEGORY_INDEX_TRACKER: 1-based system
-                "current_category_index": 0,  #  CATEGORY_INDEX_TRACKER: Legacy field for compatibility
-                "current_category_url": "",
-                "original_category_url": "",
-                "total_categories": 0,
-                "category_denominator_frozen": False,
-                "category_freeze_timestamp": None,
-                "supplier_products_needing_extraction": 0,
-                "supplier_products_completed": 0,
-                "amazon_products_needing_analysis": 0,
-                "amazon_products_completed": 0,
             },
             "user_display_metrics": {
                 "total_products": 0,

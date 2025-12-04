@@ -1977,6 +1977,125 @@ class PassiveExtractionWorkflow:
             categories = []
         return len(categories)
 
+    async def _re_evaluate_resume_phase_from_files(
+        self,
+        start_category_index: int,
+        initial_phase: str,
+    ) -> str:
+        """
+        Perform a lightweight, file-grounded phase check for the resume category.
+
+        The goal is to avoid resuming directly in Amazon phase when there is
+        still supplier backlog for the category where the previous run stopped.
+
+        This method is intentionally conservative and only ever overrides
+        'amazon_analysis' -> 'supplier'. In all other cases it preserves the
+        persisted phase.
+        """
+        sp = self.state_manager.state_data.get("system_progression", {}) or {}
+        current_phase = initial_phase or "supplier"
+
+        # Only consider overriding when we are about to route into Amazon.
+        # For all other phases we honour the persisted value.
+        if current_phase != "amazon_analysis":
+            return current_phase
+
+        # Interpret supplier / Amazon totals as file-derived denominators for the
+        # resume category (these are set by the pre-extraction filtering block).
+        supplier_total = max(0, int(sp.get("supplier_products_needing_extraction", 0) or 0))
+        supplier_completed = max(0, int(sp.get("supplier_products_completed", 0) or 0))
+        amazon_total = max(0, int(sp.get("amazon_products_needing_analysis", 0) or 0))
+        amazon_completed = max(0, int(sp.get("amazon_products_completed", 0) or 0))
+
+        # Clamp completed counters to their denominators for decision purposes,
+        # so we don't invert X/Y when reasoning about backlog.
+        if supplier_total > 0 and supplier_completed > supplier_total:
+            supplier_completed = supplier_total
+        if amazon_total > 0 and amazon_completed > amazon_total:
+            amazon_completed = amazon_total
+
+        # Read-only human-readable ratios in state for debugging.
+        # NOTE: Write into root state so these appear next to system_progression
+        # in the processing_state file.
+        try:
+            root_state = self.state_manager.state_data
+
+            # Category progress as cat_idx/total_categories
+            cat_idx = int(
+                sp.get("current_category_index")
+                or sp.get("persistent_category_index")
+                or start_category_index
+                or 1
+            )
+
+            # Prefer the total_categories already stored in system_progression.
+            total_cats = int(sp.get("total_categories", 0) or 0)
+            if total_cats <= 0:
+                # Fallback: compute from predefined category list if available.
+                try:
+                    total_cats = int(self._authoritative_total_categories())
+                except Exception:
+                    total_cats = 0
+
+            if total_cats < 0:
+                total_cats = 0
+
+            root_state["category_progress"] = (
+                f"{cat_idx}/{total_cats}" if total_cats > 0 else f"{cat_idx}/0"
+            )
+
+            # These ratios mirror the clamped values used above.
+            root_state["supplier_progress_ratio_readable"] = (
+                f"{supplier_completed}/{supplier_total}"
+            )
+            root_state["amazon_progress_ratio_readable"] = (
+                f"{amazon_completed}/{amazon_total}"
+            )
+        except Exception:
+            # Never let display-only fields break resume logic.
+            pass
+
+        # If there is no recorded work for either phase, keep the persisted phase.
+        if supplier_total <= 0 and amazon_total <= 0:
+            return current_phase
+
+        # Supplier backlog exists when the completed count is strictly less than
+        # the denominator. In that case, supplier must run before Amazon.
+        if supplier_total > supplier_completed:
+            try:
+                cat_url = sp.get("current_category_url") or ""
+                self.log.info(
+                    " [RESUME_PHASE_OVERRIDDEN] File-based supplier backlog detected for "
+                    f"category index {start_category_index}: "
+                    f"supplier={supplier_completed}/{supplier_total}, "
+                    f"amazon={amazon_completed}/{amazon_total}, url={cat_url}. "
+                    "Overriding phase 'amazon_analysis' -> 'supplier' for safe resumption."
+                )
+            except Exception:
+                self.log.info(
+                    " [RESUME_PHASE_OVERRIDDEN] File-based supplier backlog detected; "
+                    "overriding phase 'amazon_analysis' -> 'supplier' for safe resumption."
+                )
+            return "supplier"
+
+        # No supplier backlog: respect the persisted Amazon phase.
+        try:
+            cat_url = sp.get("current_category_url") or ""
+            self.log.info(
+                " [RESUME_PHASE_CONFIRMED] Supplier backlog complete for resume category "
+                f"index {start_category_index}: "
+                f"supplier={supplier_completed}/{supplier_total}, "
+                f"amazon={amazon_completed}/{amazon_total}, url={cat_url}. "
+                "Proceeding with 'amazon_analysis' as persisted."
+            )
+        except Exception:
+            self.log.info(
+                " [RESUME_PHASE_CONFIRMED] Supplier backlog complete for resume category; "
+                "proceeding with 'amazon_analysis' as persisted."
+            )
+
+        return current_phase
+
     async def run(self):
         """Main execution loop for the workflow."""
         profitable_results: List[Dict[str, Any]] = []
@@ -2027,6 +2146,14 @@ class PassiveExtractionWorkflow:
         self.log.info(
             f" RESUMPTION POINT CONFIRMED: Starting from category index {start_category_index} at product {product_resume_index} in phase '{resume_phase}'."
         )
+
+        # Phase re-evaluation based on file-grounded supplier backlog for the resume category.
+        # This prevents premature routing to Amazon when supplier work is still pending.
+        resume_phase = await self._re_evaluate_resume_phase_from_files(
+            start_category_index=start_category_index,
+            initial_phase=resume_phase,
+        )
+        self._resume_phase = resume_phase
 
         # Enhanced phase-aware gating logic
         if resume_phase == "amazon_analysis":
@@ -3739,10 +3866,11 @@ class PassiveExtractionWorkflow:
         log.info(f"Attempting to load predefined categories for {supplier_name}")
         try:
             # Robust path construction using pathlib
+            base_name = supplier_name.split('.')[0]
             config_path = (
                 Path(__file__).parent.parent
                 / "config"
-                / f"{supplier_name.replace('.co.uk', '')}_categories.json"
+                / f"{base_name}_categories.json"
             )
 
             if config_path.exists():
@@ -6309,6 +6437,41 @@ Return ONLY valid JSON, no additional text."""
                         f"?? PROGRESS: Product {supplier_display} processed (total in cache: {len(self._current_all_products)})"
                     )
 
+                # Read-only, per-category supplier/Amazon progress status for logging
+                sp_local = self.state_manager.state_data.get("system_progression", {}) or {}
+                supplier_need = int(sp_local.get("supplier_products_needing_extraction", 0) or 0)
+                amazon_need = int(sp_local.get("amazon_products_needing_analysis", 0) or 0)
+                amazon_done_raw = int(sp_local.get("amazon_products_completed", 0) or 0)
+
+                # Per-category supplier progress uses the same display pair we just logged
+                s_done = supplier_display
+                s_total = denom_display
+
+                # Clamp Amazon done for ratio display only (does not change state)
+                a_total = max(0, amazon_need)
+                if a_total > 0:
+                    a_done = max(0, min(amazon_done_raw, a_total))
+                else:
+                    a_done = 0
+
+                try:
+                    cat_url_for_slug = sp_local.get("current_category_url") or category_url_local
+                    slug = self._generate_category_slug(cat_url_for_slug)
+                except Exception:
+                    slug = ""
+
+                if s_total > 0:
+                    self.log.info(
+                        f" SUPPLIER PROGRESS STATUS [{slug}]: {s_done}/{s_total} "
+                        f"(remaining={max(s_total - s_done, 0)})"
+                    )
+
+                if a_total > 0:
+                    self.log.info(
+                        f" AMAZON PROGRESS STATUS [{slug}]: {a_done}/{a_total} "
+                        f"(global_done={amazon_done_raw}, remaining≈{max(a_total - a_done, 0)})"
+                    )
+
                 if progress_config.get("progress_display", {}).get("show_product_progress", True):
                     self.log.info(
                         f"?? SUPPLIER EXTRACTION: Processing product {supplier_display}"
@@ -7353,7 +7516,11 @@ Return ONLY valid JSON, no additional text."""
     async def _ensure_phase_integrity(self):
         """Ensure we don't start supplier work while Amazon is incomplete"""
         sp = self.state_manager.state_data.get("system_progression", {})
-        if sp.get("current_phase") == "amazon_analysis":
+        # Use the effective resume phase when available so that an explicit
+        # supplier-first override at startup is honoured and not immediately
+        # cancelled by this guard.
+        effective_phase = getattr(self, "_resume_phase", sp.get("current_phase"))
+        if effective_phase == "amazon_analysis":
             total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
             done = int(sp.get("amazon_products_completed", 0) or 0)
             if total > 0 and done < total:
@@ -7833,6 +8000,21 @@ Return ONLY valid JSON, no additional text."""
         self.log.info(f" AMAZON RESUME: cat_idx={cat_idx} total={total} start_batch={start_batch} first_offset={first_offset}")
         self.log.info(f"[RESUME_ENTER] cat_idx={cat_idx} total={total} ptr={prod_offset} start_batch={start_batch} first_offset={first_offset}")
 
+        # Read-only per-category Amazon progress status on resume
+        sp_local = self.state_manager.state_data.get("system_progression", {}) or {}
+        try:
+            cat_url_for_slug = sp_local.get("current_category_url") or category_url
+            slug = self._generate_category_slug(cat_url_for_slug)
+        except Exception:
+            slug = ""
+
+        if total > 0:
+            self.log.info(
+                f" AMAZON CATEGORY PROGRESS [{slug}]: {prod_offset}/{total} "
+                f"(remaining={max(total - prod_offset, 0)}, "
+                f"global_done={int(sp_local.get('amazon_products_completed', 0) or 0)})"
+            )
+
         for batch_num in range(start_batch, total_batches):
             start_idx = batch_num * batch_size
             end_idx   = min(start_idx + batch_size, total)
@@ -7854,6 +8036,16 @@ Return ONLY valid JSON, no additional text."""
                 self.log.info(f"[PROGRESS_COMMIT] queue_idx={queue_idx}/{total} cat_idx={cat_idx}")
                 if queue_idx == prod_offset:
                     self.log.info(f"[RESUME_HONORED] queue_idx={queue_idx}")
+
+                # Read-only per-category queue progress in 1-based form
+                try:
+                    slug = self._generate_category_slug(category_url)
+                except Exception:
+                    slug = ""
+                self.log.info(
+                    f" AMAZON CATEGORY PROGRESS [{slug}]: {queue_idx + 1}/{total} "
+                    f"(remaining={max(total - (queue_idx + 1), 0)})"
+                )
 
         # --- AMAZON RESUME FINALIZER ---
         # Check if Amazon queue is complete and finalize category

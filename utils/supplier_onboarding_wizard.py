@@ -561,8 +561,8 @@ def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForm
     # 2. Categories - Create SINGLE correct filename for both system and state manager
     staged_categories = staging_dir / "categories.json"
 
-    # Use state manager compatible naming (without _workflow suffix)
-    supplier_name_clean = forms.domain.replace('.co.uk', '').replace('.com', '').replace('.', '')
+    # Use state manager compatible naming (strips ALL TLDs: .com, .co.uk, .org, etc.)
+    supplier_name_clean = forms.domain.split('.')[0]
     categories_filename = f"{supplier_name_clean}_categories.json"
     final_categories = repo_root / "config" / categories_filename
     final_categories.parent.mkdir(parents=True, exist_ok=True)

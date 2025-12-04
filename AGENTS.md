@@ -1,292 +1,433 @@
 # AGENTS.md
 
-Authoritative agent/contributor guide for the Amazon FBA Agent System. Mirrors prior AGENTS.md/CLAUDE.md with updated, exhaustive, file‑grounded instructions. MCP/Serena‑specific items intentionally excluded.
+Authoritative contributor guide for the Amazon FBA Agent System. This file consolidates the December 3rd wiki (`wiki-dec-3`), legacy CLAUDE guidance, and the current codebase into a single, file-grounded reference. References to automation tooling are intentionally excluded; this document is for humans working in this repository.
 
 ---
 
-## 🚨 Agent Directives — Execute Immediately
+## 1. Verification, Backup, and Update Protocols
 
-### Mandatory Verification Protocols
-- ✅ NO_CLAIMS_WITHOUT_VERIFICATION: Never mark done without reproducible, file‑grounded proof.
-- ✅ FILE_VERIFICATION: For every referenced path:
-  1) VERIFY_EXISTENCE (list/inspect path), 2) CHECK_TIMESTAMP (recent), 3) VERIFY_CONTENT (read/analyze),
-  4) CONFIRM_SUPPLIER (default poundwholesale.co.uk), 5) USE_ABSOLUTE_PATHS in explanations, 6) NO_ASSUMPTIONS.
+### 1.1 Mandatory Verification Protocols
 
-### Backup Protocol — Critical
-1) CREATE_BACKUP_DIR `backup/<reason>_<YYYYMMDD>/` 2) COPY_ALL_AFFECTED 3) VERIFY_BACKUP (size/time) before edits.
+- **NO_CLAIMS_WITHOUT_VERIFICATION**  
+  Never claim that a task is done without reproducible, file-grounded proof.
 
-### Update Protocol — Cascading Changes
-1) CASCADE_UPDATES across code/tests/docs/dashboard 2) DOC_SYNC (AGENTS.md, CLAUDE.md, docs/) 3) PATH_CONSISTENCY (system_config.json, path helpers).
+- **FILE_VERIFICATION** – For any path you reference in code review, docs, or analysis:
+  1. **VERIFY_EXISTENCE** – Check that the file/directory actually exists (e.g. `Get-ChildItem`).
+  2. **CHECK_TIMESTAMP** – Confirm that timestamps are consistent with the workflow you are describing.
+  3. **VERIFY_CONTENT** – Read and analyze the file content before making assertions about behaviour.
+  4. **CONFIRM_SUPPLIER** – Ensure you are reasoning about the correct supplier (default: `poundwholesale.co.uk`).
+  5. **USE_ABSOLUTE_PATHS** – When describing locations, use full paths rooted at  
+     `C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`.
+  6. **NO ASSUMPTIONS** – Do not reference files or settings you have not actually opened.
 
-### Atomic Save & Resume Semantics
-- All state is file‑grounded; resume pointers are monotonic and must only advance. Do not “reset” without explicit backup + approval. Use WindowsSaveGuardian patterns for critical writes.
+### 1.2 Backup Protocol (Critical)
 
----
+Before editing code, configuration, or key documentation:
 
-## 📦 Architecture Overview
+1. **CREATE_BACKUP_DIR** – Under the repo root, create  
+   `backup/<reason>_<YYYYMMDD>/`.  
+   Example for documentation edits:  
+   `backup\agents_update_20251203\AGENTS.md`.
+2. **COPY_ALL_AFFECTED** – Copy every file you plan to modify into that directory.
+3. **VERIFY_BACKUP** – Confirm the backup file(s) exist and have non-zero length before editing.
 
-- Entry runner: `run_custom_poundwholesale.py` — initializes logging, loads `config/system_config.json`, attaches to Chrome CDP via BrowserManager, orchestrates PassiveExtractionWorkflow.
-- Core engine: `tools/passive_extraction_workflow_latest.py` (PassiveExtractionWorkflow) — deterministic, config‑driven scrape/match/financials with batched saves and resumable state.
-- Browser attach: `utils/browser_manager.py` — attaches to existing Chrome (v139+), IPv6/IPv4 auto‑detect, health checks, single‑page LRU policy.
-- Authentication: `tools/poundwholesale/supplier_authentication_service.py` (selector checks), `tools/standalone_playwright_login.py` (config‑driven login + price access verification).
-- State safety: `utils/fixed_enhanced_state_manager.py` (resume pointers), `utils/windows_save_guardian.py` (atomic writes + telemetry).
-- UI/monitoring: `dashboard/` (Streamlit), `tools/run_monitor.py` (state/log tail to DIAGNOSTICS).
+This mirrors the behaviour described in `wiki-dec-3\6. State Management System\6.2. Fixedenhancedstatemanager Implementation.md` and `utils\fixed_enhanced_state_manager.py`, which always create safe, atomic snapshots before modifying processing state files.
 
-Chrome v139+ Note — Use existing Chrome only; BrowserManager resolves `[::1]`/`localhost`. Verify CDP: `curl http://localhost:9222/json/version`.
+### 1.3 Update Protocol – Cascading Changes
 
----
+When you change any code, path, or configuration:
 
-## 🧭 End‑to‑End Workflow (Authoritative Trace)
+1. **CASCADING UPDATES**  
+   - Check all files that reference the modified symbol or path (use `rg` + `diagnostics_output\workflow_files.json`).  
+   - Update acceptance tests and integration tests if behaviour changes.
+2. **DOCUMENTATION SYNC**  
+   - Update `AGENTS.md` when high-level workflow or structure changes.  
+   - Update `CLAUDE.md` and `CLAUDE_STANDARDS.md` to keep human and tool guidance coherent.  
+   - Update relevant `wiki-dec-3` pages if they have diverged from the actual code paths.
+3. **PATH CONSISTENCY**  
+   - Verify that `utils\path_manager.py` and `config\system_config.json` reflect any path changes.  
+   - Check that the dashboard still resolves the same output locations.
 
-1) Initialization
-- Launch Chrome with CDP: Windows `chrome --remote-debugging-port=9222 --user-data-dir=C:\\ChromeDebugProfile`; Linux/WSL `google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome_debug &`.
-- Verify endpoint, then runner loads config, sets up BrowserManager/logging.
+### 1.4 Atomic Save and Resume Semantics
 
-2) Authentication
-- Verify current session via selectors; login if needed with config‑driven selectors (no vision required). Optional price‑access verification.
+The system is intentionally designed to be **file-grounded** and **resumable**, as detailed in:
 
-3) Supplier Scraping (Deterministic)
-- Predefined categories (AI disabled). Processed in batches controlled by `supplier_extraction_batch_size`. Product cache saved atomically.
+- `wiki-dec-3\6. State Management System\6.1. Processing State Tracking.md`  
+- `wiki-dec-3\6. State Management System\6.3. Resumption Logic And Recovery.md`  
+- `utils\fixed_enhanced_state_manager.py`  
+- `utils\windows_save_guardian.py`
 
-4) Amazon Matching
-- EAN‑first, title fallback with similarity check; exclude sponsored/invalid results. Cache JSON per ASIN.
+Key rules:
 
-5) Financial Analysis
-- Compute net profit, ROI, margins; VAT/referral/FBA/prep/ship handled explicitly.
-
-6) Atomic State & Resume
-- Write linking maps and processing state atomically; store resume pointers `{phase, cat_idx, prod_idx}`.
-
-7) Finalization & Reports
-- Save final CSV under `financial_reports`. Optionally print top 5 by ROI.
-
-ASCII
-```
-run_custom_poundwholesale.py -> BrowserManager.attach(CDP) -> PassiveExtractionWorkflow.run()
-  -> scrape supplier (batched) -> match amazon -> financials
-  -> cache + linking_map + processing_state (atomic) -> reports
-```
-
----
-
-## 🗃️ Active Component Inventory (Files, Scripts, Logs)
-
-Runner
-- `run_custom_poundwholesale.py` — main orchestrator; prints platform info, sets up logger, loads SystemConfigLoader, launches BrowserManager, calls PassiveExtractionWorkflow.run().
-
-Core Workflow (tools)
-- `tools/passive_extraction_workflow_latest.py` — engine. Key methods: `run()`, `_extract_supplier_products()` (batched), `_get_amazon_data()` (EAN‑first/title‑fallback), state saves, report generation.
-- `tools/configurable_supplier_scraper.py` — supplier scraping. Key APIs: `scrape_products_from_url(...)`, `scrape_products_from_prefiltered_urls(...)`, extraction helpers (`extract_title/price/url/image/identifier/ean/...`).
-- `tools/amazon_playwright_extractor.py` — Amazon extraction. Classes: `AmazonExtractor`, `FixedAmazonExtractor`. APIs: `search_by_ean_and_extract_data(...)`, `search_by_title(...)`, `extract_data(asin)`.
-- `tools/FBA_Financial_calculator.py` — financials. Functions: `financials(supplier, amazon, supplier_price)`, `run_calculations(...)` → CSV. Reads VAT and fee config; extracts Keepa‑derived fees when present.
-- `tools/standalone_playwright_login.py` — selector‑based login, price‑access verification; supports supplier_config JSON.
-- `tools/run_monitor.py` — tails `OUTPUTS/DIAGNOSTICS/save_telemetry.log` and processing state; writes `OUTPUTS/DIAGNOSTICS/monitor_trace.log`.
-
-Utilities (utils)
-- `utils/browser_manager.py` — attach over CDP to existing Chrome; IPv6/IPv4 resolution; health checks; LRU page reuse; navigation via circuit breaker.
-- `utils/fixed_enhanced_state_manager.py` — resume pointers, high water marks, progress indexes (file‑grounded semantics).
-- `utils/windows_save_guardian.py` — atomic writes with telemetry (`OUTPUTS/DIAGNOSTICS/save_telemetry.log`), fallback strategies for WinError 5, temp‑then‑replace.
-- `utils/sentinel_monitor.py` — divergence detection between linking map and caches; records shrink events; tracks retries.
-- `utils/path_manager.py` — path normalization and cross‑platform helpers.
-- `utils/logger.py` — logger setup (debug/info). Prefer logging over prints.
-
-Configuration (config)
-- `config/system_config_loader.py` — typed loader around `config/system_config.json` with helpers (system/amazon/supplier/workflow getters).
-- `config/system_config.json` — single source of truth for limits, batching, timeouts, output roots, and feature toggles.
-- `config/supplier_configs/<domain>.json` — supplier‑specific base_url, login selectors, test product URL, and price selectors. Secrets excluded.
-
-Dashboard (dashboard)
-- `dashboard/run_dashboard.py` — launcher, dependency checks, base dir env set, chooses `app_fixed.py` when present.
-- `dashboard/app.py` / `dashboard/app_fixed.py` — Streamlit app; reads processing state, linking map, financial CSVs, and logs.
-- `dashboard/metrics_core.py` / `metrics_core_fixed.py` — aggregation helpers for KPIs.
-- `dashboard/samples/` — example CSV/JSON/logs for demo.
-
-Tests (tests)
-- Not exhaustive here; key acceptance/flow tests include: `tests/test_acceptance_gate.py`, `tests/test_login_step.py`, `tests/test_integration.py`, plus unit suites.
-
-Logs & Diagnostics
-- `logs/application/*.log` — historical runs and system logs.
-- `logs/api_calls/*.jsonl` — API call logs (legacy/optional; AI features disabled by default).
-- `OUTPUTS/DIAGNOSTICS/save_telemetry.log` — atomic save telemetry (WindowsSaveGuardian).
-- `OUTPUTS/DIAGNOSTICS/monitor_trace.log` — monitor tail output.
-
-Generated Outputs (never commit)
-- `OUTPUTS/CACHE/processing_states/<supplier>_processing_state.json`
-- `OUTPUTS/FBA_ANALYSIS/linking_maps/<supplier>/linking_map.json`
-- `OUTPUTS/FBA_ANALYSIS/amazon_cache/*.json`
-- `OUTPUTS/FBA_ANALYSIS/financial_reports/*.csv`
+- Resume pointers (e.g. `system_progression.resumption_ptr`, `persistent_category_index`) **must only advance**; do not reduce them manually in state files.
+- All critical writes to:
+  - `OUTPUTS\CACHE\processing_states\*`  
+  - `OUTPUTS\FBA_ANALYSIS\linking_maps\*`  
+  - `OUTPUTS\FBA_ANALYSIS\amazon_cache\*`  
+  must go through atomic write patterns (WindowsSaveGuardian, `save_json_atomic`, or equivalent temp-then-replace logic in code).
+- When repairing or migrating state, always:
+  - Back up the original file under `backup\state_repair_<YYYYMMDD>\`.  
+  - Record what changed and why in a small markdown note under `docs\` or `wiki-dec-3\11. Troubleshooting Guide\11.3. State Management Issues\`.
 
 ---
 
-## 🧮 Financial Reports — Expected Columns (CSV)
+## 2. Architecture Overview (Code-Grounded)
 
-Produced by `tools/FBA_Financial_calculator.py` (sorted by ROI when present):
-- Identification: `ASIN`, `EAN`, `SupplierTitle` (when available)
-- Prices: `SupplierPrice_incVAT`, `SupplierPrice_exVAT`, `SellingPrice_incVAT`
-- Fees & VAT: `ReferralFee`, `FBAFee`, `PrepHouseFee`, `OutputVAT`, `InputVAT`
-- Profitability: `NetProfit`, `ROI` (percent), `ProfitMargin` (percent)
-- Notes: ROI computed on ex‑VAT cash tied up; margin computed against selling price ex‑VAT. Fees may be overridden by Keepa‑derived values when detected.
+This section aligns with `wiki-dec-3\1. Project Overview.md` and `3. Core Architecture\3.1. Workflow Engine.md`, but is constrained to what the current code actually does.
 
-Top‑line stats (printed by calculator when run): counts over ROI thresholds and `top_5_by_roi` including `ASIN`, `EAN`, `SupplierTitle`, `ROI`, `NetProfit`, `SellingPrice_incVAT`, `SupplierPrice_incVAT`.
+### 2.1 Primary Entry Points
+
+- **PoundWholesale runner** – `run_custom_poundwholesale.py`  
+  - Initializes logging via `utils\logger.py`.  
+  - Loads configuration from `config\system_config.json` through `SystemConfigLoader`.  
+  - Connects to an existing Chrome instance via `utils\browser_manager.BrowserManager`.  
+  - Performs authentication using `tools\poundwholesale\supplier_authentication_service.py` and `tools\standalone_playwright_login.py`.  
+  - Invokes `tools\passive_extraction_workflow_latest.PassiveExtractionWorkflow.run()`.
+
+- **Clearance King runner** – `run_custom_clearance_king.py`  
+  - Same structure as PoundWholesale, but uses `clearance_king_workflow` and `tools\clearance_king\supplier_authentication_service.py`.  
+  - Performs browser cleanup via `BrowserManager.cleanup()` at the end of the run.
+
+- **Legacy master runner** – `run_complete_fba_system.py`  
+  - Older orchestration script that still sets a hard-coded OpenAI key and uses `tools\output_verification_node` and `tools\supplier_guard`.  
+  - Behaviour differs from the per-supplier runners documented in `wiki-dec-3`; treat it as **legacy** unless you have a specific reason to use it.
+
+### 2.2 Core Workflow Engine
+
+The central orchestrator is:
+
+- `tools\passive_extraction_workflow_latest.py` → class `PassiveExtractionWorkflow`
+
+Responsibilities (as confirmed by the wiki and code):
+
+- Loads the full configuration via `SystemConfigLoader.get_full_config()` and derives the `system` section into `self.system_config`.
+- Initializes:
+  - State management via `utils\fixed_enhanced_state_manager.FixedEnhancedStateManager` (imported as `EnhancedStateManager` in code).  
+  - Supplier scraping via `tools\configurable_supplier_scraper.ConfigurableSupplierScraper`.  
+  - Amazon data extraction via `tools\amazon_playwright_extractor.FixedAmazonExtractor`.  
+  - Atomic persistence via `utils\windows_save_guardian.WindowsSaveGuardian`.  
+  - Path handling via `utils\path_manager.path_manager`.  
+  - Monitoring via `utils\sentinel_monitor.SentinelMonitor`.
+- Coordinates the full loop:
+  1. Load predefined category URLs from `config\*_categories.json` using `_get_predefined_categories`.
+  2. Initialize or resume state using the `FixedEnhancedStateManager` and `system_progression` fields.
+  3. Run supplier extraction and Amazon analysis in **hybrid mode** (see `hybrid_processing` in `config\system_config.json`) so long as the config enables it.
+  4. Save supplier caches, Amazon caches, linking maps, and processing state using atomic operations.
+  5. Trigger financial calculations in `tools\FBA_Financial_calculator.run_calculations` once sufficient linking map entries exist.
+
+For detailed sequence diagrams and method-level breakdowns, see:
+
+- `wiki-dec-3\3. Core Architecture\3.1. Workflow Engine.md`
+- `wiki-dec-3\5. Data Processing Workflow\5.2. Amazon Product Matching\`
+
+### 2.3 Browser Management
+
+Browser lifecycle is centralized in:
+
+- `utils\browser_manager.py`  
+- `wiki-dec-3\8. Browser Automation\8.1. Browser Management.md`
+
+Key facts:
+
+- Uses Playwright’s `chromium.connect_over_cdp` to attach to an **existing** Chrome instance. It does not launch Chromium on its own.  
+- Supports IPv6 (`[::1]`) and IPv4 (`127.0.0.1`) endpoints for CDP.  
+- Maintains a single, shared browser instance with an LRU page cache (`MAX_CACHED_PAGES = 1`) to keep extension behaviour stable.  
+- Implements health monitoring, restart intervals, and memory thresholds to protect long-running sessions.
+
+When running locally:
+
+- Start Chrome explicitly, for example:  
+  `chrome --remote-debugging-port=9222 --user-data-dir=C:\ChromeDebugProfile`
+- The connection port is currently hard-coded to `9222` in the runners and the workflow’s `_initialize_amazon_extractor`, regardless of the `"chrome"` block in `system_config.json`. Changing `chrome.debug_port` alone will not change the actual port without code changes.
 
 ---
 
-## 🧩 Multi‑Supplier Architecture
+## 3. Configuration Management (system_config.json and Supplier Configs)
 
-Supplier Normalization
-- Supplier names normalize between `domain.tld`, `domain_tld`, and `domain-tld`. Output directories follow normalized naming (both hyphen/underscore variants are tolerated by dashboards/tools).
+This section is aligned with `wiki-dec-3\4. Configuration Management\4.1. System Configuration.md` and `4.2. Supplier Configuration.md`, adjusted for the current code.
 
-Adding/Enabling a Supplier
-1) Create `config/supplier_configs/<domain>.json` with:
-   - `base_url` (no trailing slash)
-   - `login_config`: `login_path`, `test_product_url`, `price_selectors`, `authentication.login_selectors`
-2) Update `config/system_config.json` supplier sections if limits/paths differ.
-3) Validate login with `tools/standalone_playwright_login.py` using the supplier config (price access check).
-4) Run `run_custom_poundwholesale.py` (or a supplier‑specific runner) with categories for that supplier (predefined list; AI category discovery disabled).
-5) Verify OUTPUTS trees (processing_state, linking_map, financial_reports) under normalized supplier folder.
+### 3.1 System Configuration Structure
 
-Per‑Supplier State & Output Paths
-- `OUTPUTS/CACHE/processing_states/<supplier>_processing_state.json`
-- `OUTPUTS/FBA_ANALYSIS/linking_maps/<supplier>/linking_map.json`
-- `OUTPUTS/FBA_ANALYSIS/financial_reports/<...>.csv`
-- `OUTPUTS/FBA_ANALYSIS/amazon_cache/*.json`
+Primary configuration file:
+
+- `config\system_config.json`
+
+Important top-level sections (as used by current code):
+
+- `"system"` – Global processing settings:
+  - `max_products`, `max_products_per_category`, `max_products_per_cycle`, `max_analyzed_products`.  
+  - `supplier_extraction_batch_size`, `linking_map_batch_size`, `financial_report_batch_size`.  
+  - `reuse_browser`, `max_tabs`, `output_root`.
+- `"processing_limits"` – Price and quantity limits:
+  - `min_price_gbp`, `max_price_gbp` (the £20 upper bound documented in wiki-dec-3).
+- `"performance"` – Request concurrency, timeouts, and rate limiting.
+- `"chrome"` – Browser-related settings (currently **not wired** to the actual CDP port in runners or workflow).
+- `"analysis"` – ROI and profitability thresholds.
+- `"amazon"` – Marketplace, currency, VAT, and fee defaults.
+- `"supplier"` – Flags such as `prices_include_vat`.
+- `"workflows"` – Per-supplier workflow definitions (PoundWholesale, Clearance King, etc.).
+- `"hybrid_processing"` – Controls whether supplier extraction and Amazon analysis are interleaved.
+
+The wiki’s configuration mermaid diagram in `4.1. System Configuration.md` accurately reflects these blocks and how they are intended to be used.
+
+### 3.2 Configuration Loader Usage
+
+File: `config\system_config_loader.py`
+
+- `get_system_config()` – Returns the `"system"` block.  
+- `get_full_config()` – Returns the entire parsed JSON; use this when you need access to `"chrome"`, `"performance"`, `"hybrid_processing"`, etc.  
+- `get_workflow_config(key)` – Returns `full_config["workflows"][key]`.  
+- `get_supplier_config(supplier_name)` and `get_credentials(supplier_name)` – Provide supplier defaults and credentials.
+
+Important nuance:
+
+- The workflow engine uses `get_full_config()` for root-level settings like `"hybrid_processing"` and `"processing_limits"`, but still attempts to read the CDP port from `self.system_config.get("chrome_debug_port", 9222)`. That key does not exist in the current `"system"` block; the default of `9222` is therefore always used.
+
+### 3.3 Supplier Configuration Files
+
+Directory:
+
+- `config\supplier_configs\`
+
+Examples:
+
+- `poundwholesale.co.uk.json`  
+- `clearance-king.co.uk.json`
+
+Each supplier config typically includes:
+
+- `base_url` – e.g. `https://www.poundwholesale.co.uk`  
+- `login_config`:
+  - `login_path`  
+  - `test_product_url`  
+  - `price_selectors`  
+  - `authentication.login_selectors`
+
+These are consumed by:
+
+- `tools\standalone_playwright_login.py`  
+- Supplier-specific authentication helpers under `tools\poundwholesale\` and `tools\clearance_king\`.
+
+When adding a supplier, follow `wiki-dec-3\12. Supplier Integration Guide\` and ensure the new config aligns with these patterns.
 
 ---
 
-## 🖥️ Dashboard (Streamlit)
+## 4. Data Processing Workflow (Supplier → Amazon → Financials)
 
-Launch
-```
+Reference wiki: `wiki-dec-3\5. Data Processing Workflow\`.
+
+High-level sequence (mirrors the diagrams in `1. Project Overview.md` and `5. Data Processing Workflow`):
+
+1. **Initialization**
+   - Runners prepare logging and connect to Chrome via `BrowserManager`.
+   - `PassiveExtractionWorkflow` loads configuration and state.
+
+2. **Supplier Scraping**
+   - `ConfigurableSupplierScraper` uses predefined category lists to scrape products in batches (`supplier_extraction_batch_size`).  
+   - Products are cached under `OUTPUTS\cached_products\<supplier-normalized>_products_cache.json`.
+
+3. **Amazon Matching**
+   - `FixedAmazonExtractor` uses EAN-first, then title-based search to find candidate products on Amazon.  
+   - Matching uses configurable similarity thresholds (see `"performance.matching_thresholds"` in `system_config.json`).
+   - Results are cached to `OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_<ASIN>_<identifier>.json`.
+
+4. **Linking and State Updates**
+   - Each supplier product is associated with one Amazon ASIN in a linking map:  
+     `OUTPUTS\FBA_ANALYSIS\linking_maps\<supplier>\linking_map.json`.  
+   - `FixedEnhancedStateManager` updates:
+     - `system_progression` (phase, persistent category index, resume pointers).  
+     - Product and category counters.  
+   - All writes are done atomically via WindowsSaveGuardian or equivalent.
+
+5. **Financial Analysis**
+   - `tools\FBA_Financial_calculator.run_calculations(supplier_name)` reads:
+     - Supplier cache (`OUTPUTS\cached_products\...`).  
+     - Amazon cache (`OUTPUTS\FBA_ANALYSIS\amazon_cache\`).  
+     - Supplier-specific linking map.  
+   - Computes ROI, net profit, margins, and writes CSVs under:  
+     `OUTPUTS\FBA_ANALYSIS\financial_reports\<supplier-normalized>\*.csv`.
+
+6. **Reports and Dashboard**
+   - The Streamlit dashboard (`dashboard\app_fixed.py`) reads:
+     - Processing state files under `OUTPUTS\CACHE\processing_states\`.  
+     - Linking maps and financial reports under `OUTPUTS\FBA_ANALYSIS\`.  
+     - Logs under `logs\debug\` and `OUTPUTS\DIAGNOSTICS\`.
+
+For full diagrams, see:
+
+- `wiki-dec-3\1. Project Overview.md` (workflow mermaid graph)  
+- `wiki-dec-3\5. Data Processing Workflow\5.2. Amazon Product Matching\`  
+- `wiki-dec-3\7. Financial Analysis Module\7.1. Profitability Analysis.md`
+
+---
+
+## 5. State Management System
+
+Reference wiki: `wiki-dec-3\6. State Management System\`.
+
+### 5.1 Processing State Files
+
+Primary state paths (per `utils\path_manager.get_processing_state_path`):
+
+- `OUTPUTS\CACHE\processing_states\<supplier-with-dots-replaced-by-underscores>_processing_state.json`
+
+The state schema is documented in `6.1. Processing State Tracking.md` and implemented in `utils\fixed_enhanced_state_manager.py`. Key fields include:
+
+- `schema_version` – e.g. `"1.2_THREAD_SAFE"`.  
+- `created_at`, `last_updated` – ISO timestamps.  
+- `supplier_name`.  
+- `system_progression` – the authoritative resume pointer structure.  
+- `supplier_extraction_progress` – per-category progress.  
+- `metadata` – configuration hashes and fix markers.
+
+### 5.2 FixedEnhancedStateManager Behaviour
+
+`FixedEnhancedStateManager` (see `6.2. Fixedenhancedstatemanager Implementation.md`) is responsible for:
+
+- Separating resumption indices from session progress so that interruptions do not reset progress.  
+- Freezing category denominators once at startup and guarding against accidental overwrites.  
+- Ensuring that `persistent_category_index` and other indices advance monotonically.  
+- Providing atomic save methods to commit state safely on Windows.
+
+Whenever you work on this area:
+
+- Use the helper methods already present (e.g. `initialize_workflow_session`, `set_total_categories`, `save_state_atomic`).  
+- Do not write ad-hoc JSON writes directly to processing state files.
+
+---
+
+## 6. Browser Automation and Diagnostics
+
+Reference wiki: `wiki-dec-3\8. Browser Automation\`.
+
+Key files:
+
+- `utils\browser_manager.py` – browser lifecycle, CDP attachment, health checks.  
+- `utils\browser_circuit_breaker.py` – circuit breaker for repeated failures.  
+- `utils\sentinel_monitor.py` – monitors divergence between linking maps and caches.  
+- `wiki-dec-3\8. Browser Automation\8.3. Chrome Devtools Protocol Diagnostics.md` – CDP troubleshooting.
+
+Operational notes:
+
+- Always use an existing Chrome instance with `--remote-debugging-port`.  
+- Use the wiki troubleshooting guides if:
+  - The workflow cannot connect to CDP.  
+  - Keepa or SellerAmp extensions are not visible.  
+  - The browser becomes unstable during long runs.
+
+---
+
+## 7. Financial Analysis and Reporting
+
+Reference wiki: `wiki-dec-3\7. Financial Analysis Module\`.
+
+Primary implementation:
+
+- `tools\FBA_Financial_calculator.py`
+
+Important details:
+
+- Reads VAT and fee settings from `config\system_config.json` (`"amazon"` and `"supplier"` blocks).  
+- Uses `get_supplier_specific_paths(supplier_name)` to:
+  - Resolve supplier caches under `OUTPUTS\cached_products\`.  
+  - Resolve linking maps under `OUTPUTS\FBA_ANALYSIS\linking_maps\<supplier>\`.  
+  - Create supplier-specific financial reports under `OUTPUTS\FBA_ANALYSIS\financial_reports\<supplier-normalized>\`.
+- Surfaces CSV fields described in `AGENTS.md`’s original financial section and elaborated in the wiki’s `7.1. Profitability Analysis.md`.
+
+---
+
+## 8. Coding Standards and Development Practices
+
+These standards combine the existing `CLAUDE_STANDARDS.md` expectations with the repo’s formatting and typing rules.
+
+- **Python version** – Target 3.12+ (3.13 is used in tests and examples).  
+- **Style** – 4-space indentation, 100-character lines, imports ordered per `pyproject.toml` (Black + Ruff/isort).  
+- **Typing** – Public functions should include type hints; avoid implicit `Any`.  
+- **Logging** – Use `logging.getLogger(__name__)` and the shared logger configuration in `utils\logger.py`. Avoid bare `print` for runtime events.  
+- **Minimal blast radius** – Keep changes as small and focused as possible; follow the update and backup protocols above.  
+- **No committed secrets** – Credentials and API keys must be moved into environment variables or ignored configuration files; do not introduce new secrets into tracked files.
+
+For detailed standards, see:
+
+- `CLAUDE_STANDARDS.md` – development guidelines.  
+- `wiki-dec-3\2. Installation And Setup.md` – environment and dependency expectations.
+
+---
+
+## 9. Testing, Quality Gates, and Tooling
+
+Quality gates (mirroring earlier AGENTS content, still valid):
+
+- **Static checks**
+  - `ruff check .`  
+  - `black --check .`  
+  - `mypy tools config utils`
+- **Tests**
+  - `pytest -q`  
+  - `pytest -m "requires_browser"` (with Chrome CDP running)  
+  - `pytest --cov=tools --cov=config --cov=utils -q`
+- **Optional tox**
+  - `tox -e py312,lint,type-check,coverage-report`  
+  - `tox -e security` (safety, pip-audit, bandit)
+
+When modifying core workflow, state management, or configuration:
+
+- Prefer targeted tests under `tests\` when available.  
+- For configuration changes, run a short dry run (limit categories/products), then inspect:
+  - `OUTPUTS\CACHE\processing_states\...`  
+  - `OUTPUTS\FBA_ANALYSIS\linking_maps\...`  
+  - `OUTPUTS\FBA_ANALYSIS\financial_reports\...`
+
+---
+
+## 10. Dashboard and Monitoring
+
+Reference wiki: `wiki-dec-3\13. Dashboard.md`, plus `11. Troubleshooting Guide\`.
+
+### 10.1 Dashboard
+
+- Entry point: `dashboard\run_dashboard.py`.  
+- Main app: `dashboard\app_fixed.py`.  
+- Requires `streamlit` and `pandas`.
+
+Launch examples:
+
+```bash
 python dashboard/run_dashboard.py
 # or
-python -m streamlit run dashboard/app.py --server.port 8501
+python -m streamlit run dashboard/app_fixed.py --server.port 8501
 ```
 
-Environment
-- Optional `FBA_BASE_DIR` to point to repo root.
+The dashboard reads:
 
-Data Sources (read‑only)
-- Processing state, linking map, financial CSVs, and recent logs as listed in Active Component Inventory.
+- Processing state files from `OUTPUTS\CACHE\processing_states\`.  
+- Linking maps and financial CSVs from `OUTPUTS\FBA_ANALYSIS\`.  
+- Debug logs from `logs\debug\`.
 
-Features
-- Live category/progress view, matching KPIs, ROI distributions, and streaming log tail.
+### 10.2 Diagnostics
+
+- `OUTPUTS\DIAGNOSTICS\save_telemetry.log` – WindowsSaveGuardian telemetry.  
+- `OUTPUTS\DIAGNOSTICS\monitor_trace.log` – run monitor output.  
+- `logs\application\*.log`, `logs\debug\*.log`, `logs\api_calls\*.jsonl` – historical behaviour and API traces.
+
+When investigating issues:
+
+- Consult the relevant wiki troubleshooting section under `wiki-dec-3\11. Troubleshooting Guide\`.  
+- Cross-check state files and linking maps for consistency (SentinelMonitor logs divergence).
 
 ---
 
-## 🔧 Commands & Quality Gates
+## 11. References and Knowledge Base
 
-Environment (Windows)
-```
-python -m venv .venv
-.venv\Scripts\activate
-pip install -e ".[dev]"
-```
+- High-level guidance: `CLAUDE.md`, `CLAUDE_STANDARDS.md`  
+- Installation and setup: `wiki-dec-3\2. Installation And Setup.md`  
+- Core architecture and workflow: `wiki-dec-3\1. Project Overview.md`, `3. Core Architecture\3.1. Workflow Engine.md`  
+- State management: `wiki-dec-3\6. State Management System\`  
+- Financial analysis: `wiki-dec-3\7. Financial Analysis Module\`  
+- Browser automation: `wiki-dec-3\8. Browser Automation\`  
+- Caching and deduplication: `wiki-dec-3\9. Caching And Deduplication\`  
+- Dashboard and monitoring: `wiki-dec-3\13. Dashboard.md`  
+- Tooling and project layout: `PROJECT_INDEX.md`, `PROJECT_INDEX.json`, `pyproject.toml`, `tox.ini`
 
-Run & Verify
-```
-chrome --remote-debugging-port=9222 --user-data-dir=C:\ChromeDebugProfile
-curl http://localhost:9222/json/version
-python run_custom_poundwholesale.py --debug
-```
-
-Quality Gates
-```
-ruff check .
-black --check .
-mypy tools config utils
-pytest -q
-pytest -m "requires_browser"
-pytest --cov=tools --cov=config --cov=utils -q
-```
-
-Optional tox
-```
-tox -e py312,lint,type-check,coverage-report
-tox -e security   # safety, pip-audit, bandit
-```
-
----
-
-## 📝 Coding Standards & Agent Conduct
-
-- Python 3.12; 4‑space indent; 100 char lines (Black/Ruff). Keep imports ordered (Ruff/isort rules in pyproject).
-- Public functions/type hints expected; avoid implicit Any; explicit returns preferred.
-- Logging over prints; use `logging.getLogger(__name__)` and repo logger helpers.
-- Agent Conduct (STRICT):
-  - Read code/configs before proposing changes. Avoid generic claims.
-  - Perform minimal‑blast‑radius edits; keep style consistent with surrounding code.
-  - Never hardcode credentials/URLs that belong in config; update docs/dashboards when paths change.
-
----
-
-## ✅ Testing Guidelines
-
-- Pytest markers (pyproject): `unit`, `integration`, `requires_browser`, `slow`.
-- Structure: `tests/test_*.py`; classes `Test*`; functions `test_*`.
-- Keep browser‑dependent paths guarded; ensure CDP is running for `requires_browser`.
-- Coverage on `tools`, `config`, `utils`; maintain acceptance suites (e.g., `tests/test_acceptance_gate.py`, `tests/test_login_step.py`).
-
----
-
-## ⚙️ Configuration & Environment
-
-- `config/system_config.json` is source of truth for limits, batching, price ranges, paths; read via `SystemConfigLoader`.
-- Environment examples:
-```
-CHROME_REMOTE_PORT=9222
-OUTPUTS_BASE_PATH=./OUTPUTS
-output_root=./OUTPUTS
-```
-- Supplier credentials via environment or external, untracked secrets files. Do not commit secrets.
-
-Change Validation
-- For config edits, run a short dry run (limit products/categories), then inspect processing_state, linking_map, and financial CSVs for regressions.
-
----
-
-## 📈 Monitoring & Diagnostics
-
-- `tools/run_monitor.py` → `OUTPUTS/DIAGNOSTICS/monitor_trace.log` with state/log tails.
-- WindowsSaveGuardian telemetry: `OUTPUTS/DIAGNOSTICS/save_telemetry.log`.
-- Historical logs: `logs/application/*.log`, `logs/api_calls/*.jsonl` (legacy/optional).
-
----
-
-## 🔒 Security & Safety
-
-- Never commit secrets. Prefer env vars / ignored configs.
-- Use atomic save helpers for critical state (temp‑then‑replace; WindowsSaveGuardian). Backup before recovery steps.
-
----
-
-## 🔁 Commit & PR Workflow
-
-- Commits: imperative; Conventional prefixes (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`). One logical change per commit.
-- PRs: pass Ruff/Black/MyPy/Pytest; update docs/dashboards for path/schema changes; include reproduction & verification steps; attach short logs/screenshots for browser/dashboard changes; exclude OUTPUTS/ and large logs.
-
----
-
-## 🧩 Troubleshooting (Quick Reference)
-
-CDP Fails
-```
-curl http://localhost:9222/json/version
-netstat -an | findstr :9222   # Windows
-taskkill /F /IM chrome.exe     # if needed, relaunch with CDP flags
-```
-
-Resume/State Issues
-- Inspect latest processing_state and linking_map; ensure pointers only advance; back up before repairs.
-
-Dashboard Empty
-- Verify required OUTPUTS and logs exist; set `FBA_BASE_DIR` if running outside root.
-
----
-
-## 📚 References
-
-- CLAUDE guidance: `CLAUDE.md`, `CLAUDE_STANDARDS.md`
-- Troubleshooting: `docs/TROUBLESHOOTING.md`
-- Knowledge base: `wiki repo 19 nov/`
-- Tooling: `pyproject.toml`, `tox.ini`
+When in doubt, treat `wiki-dec-3` and this `AGENTS.md` as the primary documentation sources and reconcile any older documents (e.g. archived reports under `archive\` or older wiki folders) against the current code paths before relying on them.
 

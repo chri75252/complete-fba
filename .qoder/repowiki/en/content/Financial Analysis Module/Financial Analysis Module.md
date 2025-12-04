@@ -7,7 +7,20 @@
 - [FBA_PROFITABILITY_ANALYSIS_REPORT.md](file://OUTPUTS/FBA_ANALYSIS/financial_reports/FBA_PROFITABILITY_ANALYSIS_REPORT.md)
 - [UK_VAT_INVESTMENT_SCREENING_EXECUTIVE_SUMMARY.md](file://OUTPUTS/FBA_ANALYSIS/financial_reports/UK_VAT_INVESTMENT_SCREENING_EXECUTIVE_SUMMARY.md)
 - [linking_map_test.json](file://OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map_test.json)
+- [app_fixed.py](file://dashboard/app_fixed.py) - *Updated for Streamlit dashboard integration*
+- [metrics_core_fixed.py](file://dashboard/metrics_core_fixed.py) - *Enhanced metrics visualization capabilities*
+- [angelwholesale_workflow](file://config/system_config.json#L276-L283) - *Configuration-driven workflow*
+- [kdwholesale_workflow](file://config/system_config.json#L284-L292) - *Configuration-driven workflow*
+- [laceywholesale_workflow](file://config/system_config.json#L293-L301) - *Configuration-driven workflow*
 </cite>
+
+## Update Summary
+**Changes Made**   
+- Added detailed documentation for configuration-driven workflow configurations for multiple suppliers including angelwholesale_workflow, kdwholesale_workflow, and laceywholesale_workflow
+- Added comprehensive information about Streamlit dashboard integration and its metrics visualization capabilities
+- Updated configuration options section to reflect new workflow configurations
+- Added new section on dashboard integration and visualization
+- Enhanced document sources to include dashboard-related files and workflow configurations
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -15,12 +28,15 @@
 3. [Financial Metrics and Data Sources](#financial-metrics-and-data-sources)
 4. [Integration Between Product Data and Financial Modeling](#integration-between-product-data-and-financial-modeling)
 5. [Configuration Options for Financial Analysis](#configuration-options-for-financial-analysis)
-6. [Common Issues and Solutions in Financial Analysis](#common-issues-and-solutions-in-financial-analysis)
-7. [Executive Summary Reports and Business Value](#executive-summary-reports-and-business-value)
-8. [Conclusion](#conclusion)
+6. [Dashboard Integration and Visualization](#dashboard-integration-and-visualization)
+7. [Common Issues and Solutions in Financial Analysis](#common-issues-and-solutions-in-financial-analysis)
+8. [Executive Summary Reports and Business Value](#executive-summary-reports-and-business-value)
+9. [Conclusion](#conclusion)
 
 ## Introduction
 The Financial Analysis Module is responsible for conducting FBA profitability analysis, investment screening, and generating financial reports based on supplier and Amazon product data. This module transforms supplier prices into comprehensive profitability estimates by calculating key financial metrics such as ROI, net profit, and breakeven points. The system integrates product data extraction with financial modeling to provide actionable investment insights, with a particular focus on UK VAT compliance. The analysis is driven by the FBA_Financial_calculator.py module, which processes product data from supplier caches and Amazon scrapes to generate detailed financial reports.
+
+The module has been enhanced with configuration-driven workflow configurations for multiple suppliers, including angelwholesale_workflow, kdwholesale_workflow, and laceywholesale_workflow, allowing for flexible and scalable financial analysis across different supplier platforms. Additionally, the system now features a comprehensive Streamlit dashboard integration that provides real-time metrics visualization and monitoring capabilities.
 
 **Section sources**
 - [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L1-L50)
@@ -226,8 +242,8 @@ class FinancialConfig {
 +float min_roi_percent
 +float min_profit_per_unit
 +float min_rating
-+int min_reviews
-+int max_sales_rank
++float min_reviews
++int min_sales_rank
 +int min_monthly_sales
 +int max_competition_level
 }
@@ -261,6 +277,23 @@ InvestmentScreening <|-- ProfitThresholds : "extends"
 **Section sources**
 - [system_config.json](file://config/system_config.json#L250-L300)
 
+### Configuration-Driven Workflow Configurations
+The system now supports configuration-driven workflow configurations for multiple suppliers, enabling flexible and scalable financial analysis across different supplier platforms. These workflows are defined in the `workflows` section of system_config.json and include:
+
+- **angelwholesale_workflow**: Configuration for Angelwholesale.Co.Uk supplier with specific field mappings and pagination methods
+- **kdwholesale_workflow**: Configuration for KDWholesale.Co.Uk supplier with tailored selectors and authentication settings
+- **laceywholesale_workflow**: Configuration for Laceywholesale.Co.Uk supplier with custom pagination patterns and field mappings
+
+Each workflow configuration includes essential parameters such as supplier name, base URL, categories configuration path, and authentication requirements. The system uses these configurations to dynamically adapt the scraping and financial analysis processes to each supplier's unique structure and requirements.
+
+The workflow configurations enable the system to handle different supplier websites with varying HTML structures, pagination methods, and data field locations. This modular approach allows for easy addition of new suppliers by simply creating a new workflow configuration without modifying the core codebase.
+
+**Section sources**
+- [system_config.json](file://config/system_config.json#L256-L310)
+- [angelwholesale.co.uk.json](file://config/supplier_configs/angelwholesale.co.uk.json)
+- [kdwholesale.co.uk.json](file://config/supplier_configs/kdwholesale.co.uk.json)
+- [laceywholesale.co.uk.json](file://config/supplier_configs/laceywholesale.co.uk.json)
+
 ### Auto-Run Configuration
 The system can be configured to automatically run the financial calculator after new linking map entries are created. This behavior is controlled by the pipeline configuration in system_config.json, particularly the `linking_map_batch_size` parameter which determines when the financial analysis is triggered. With a batch size of 1, the calculator runs after each new linking map entry, enabling near real-time profitability analysis.
 
@@ -269,6 +302,44 @@ Additional configuration options in the `system` section control the overall exe
 **Section sources**
 - [system_config.json](file://config/system_config.json#L10-L50)
 - [system_config.json](file://config/system_config.json#L50-L100)
+
+## Dashboard Integration and Visualization
+
+### Streamlit Dashboard Integration
+The system now features a comprehensive Streamlit dashboard integration that provides real-time monitoring and visualization of financial analysis metrics. The dashboard, implemented in `app_fixed.py` and `metrics_core_fixed.py`, offers a user-friendly interface for tracking the progress and results of the financial analysis process.
+
+The dashboard displays key performance indicators including system health, processing status, matching performance, and financial metrics. It provides real-time updates through auto-refresh functionality with configurable refresh intervals, allowing users to monitor the analysis process as it progresses.
+
+Key features of the dashboard include:
+- Real-time system health monitoring with visual indicators
+- Processing progress tracking with category and product-level details
+- Financial performance metrics with profit potential visualization
+- Log monitoring with the latest system messages
+- Interactive charts for ROI distribution, profit vs. price, and other financial metrics
+
+**Section sources**
+- [app_fixed.py](file://dashboard/app_fixed.py)
+- [metrics_core_fixed.py](file://dashboard/metrics_core_fixed.py)
+- [run_dashboard.py](file://dashboard/run_dashboard.py)
+
+### Metrics Visualization Capabilities
+The dashboard provides comprehensive metrics visualization capabilities that transform raw financial data into actionable insights. The system uses Plotly to create interactive charts that help users understand the financial performance of their investment opportunities.
+
+Visualization features include:
+- **ROI Histogram**: Distribution of ROI values across all analyzed products
+- **Profit vs. Price Chart**: Scatter plot showing net profit against selling price, with optional sizing by seller count
+- **Price Ratio Histogram**: Distribution of Amazon-to-supplier price ratios
+- **Match Quality Bar Chart**: Distribution of product match quality levels
+- **Seller Mix Bar Chart**: Aggregated view of FBA vs. FBM seller counts
+
+The dashboard also includes a live progress ticker that shows the current number of matches and cache files, providing immediate feedback on the system's activity. The sidebar configuration panel allows users to select the base directory, supplier, and auto-refresh interval, making the dashboard adaptable to different analysis scenarios.
+
+The metrics visualization system is designed to handle large datasets efficiently, with sampling mechanisms for very large files to ensure responsive performance. The system also includes comprehensive error handling and diagnostic information to help users troubleshoot any issues with data loading or processing.
+
+**Section sources**
+- [app_fixed.py](file://dashboard/app_fixed.py#L536-L572)
+- [metrics_core_fixed.py](file://dashboard/metrics_core_fixed.py#L320-L413)
+- [test_dashboard_integration.py](file://test_dashboard_integration.py)
 
 ## Common Issues and Solutions in Financial Analysis
 
@@ -340,6 +411,8 @@ The investment screening process filters products into clear categories, allowin
 
 The system's ability to handle UK VAT compliance ensures accurate net profit calculations for VAT-registered businesses, a critical factor in determining true profitability. By identifying that only 19 out of 1,814 products (1.0%) meet investment criteria, the system prevents potentially costly investments in marginally profitable or unprofitable products.
 
+The addition of the Streamlit dashboard enhances business value by providing real-time visibility into the analysis process, enabling stakeholders to monitor progress and make informed decisions based on up-to-date financial metrics and visualizations.
+
 **Section sources**
 - [UK_VAT_INVESTMENT_SCREENING_EXECUTIVE_SUMMARY.md](file://OUTPUTS/FBA_ANALYSIS/financial_reports/UK_VAT_INVESTMENT_SCREENING_EXECUTIVE_SUMMARY.md#L1-L225)
 - [FBA_PROFITABILITY_ANALYSIS_REPORT.md](file://OUTPUTS/FBA_ANALYSIS/financial_reports/FBA_PROFITABILITY_ANALYSIS_REPORT.md#L1-L103)
@@ -348,6 +421,8 @@ The system's ability to handle UK VAT compliance ensures accurate net profit cal
 The Financial Analysis Module provides a comprehensive solution for FBA profitability analysis and investment screening. By integrating product data extraction with sophisticated financial modeling, the system transforms supplier prices into detailed profitability estimates, enabling data-driven investment decisions. The module's implementation of ROI, net profit, and investment screening calculations accounts for critical factors such as VAT compliance and fee structures, ensuring accurate financial analysis.
 
 Key strengths of the system include its robust product matching via the linking map, flexible configuration options, and comprehensive executive reporting. The analysis reveals significant market challenges, with only 1.0% of products meeting investment criteria, highlighting the importance of rigorous financial analysis in the competitive Amazon FBA marketplace.
+
+Recent enhancements have significantly improved the system's capabilities with the introduction of configuration-driven workflow configurations for multiple suppliers (angelwholesale_workflow, kdwholesale_workflow, and laceywholesale_workflow) and a comprehensive Streamlit dashboard integration with advanced metrics visualization capabilities. These additions make the system more flexible, scalable, and user-friendly, enabling efficient financial analysis across multiple supplier platforms with real-time monitoring and insights.
 
 The system's modular design and clear separation of concerns make it maintainable and extensible, with opportunities for enhancement in areas such as improved sales data verification and expanded international currency support.
 

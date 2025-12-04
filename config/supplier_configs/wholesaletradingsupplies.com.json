@@ -1,0 +1,136 @@
+{
+  "supplier_id": "wholesaletradingsupplies.co.uk",
+  "supplier_name": "Wholesale Trading Supplies UK",
+  "base_url": "https://wholesaletradingsupplies.com/",
+  "login_config": {
+    "login_path": null,
+    "test_product_url": "https://wholesaletradingsupplies.com/product/a-e-dinosaur-pirate-plasters-20s/",
+    "price_selectors": [
+      "StaticText:contains('£')",
+      "span.price",
+      "div.price",
+      "p.price",
+      ".price",
+      "meta[property=\"product:price:amount\"]",
+      "[data-price-amount]",
+      "meta[itemprop='price']"
+    ]
+  },
+  "api_config": {
+    "base_url": "https://wholesaletradingsupplies.com"
+  },
+  "scraping_config": {
+    "enabled": true,
+    "rate_limit": {
+      "requests_per_minute": 30,
+      "delay_between_requests": 2.0
+    }
+  },
+  "authentication": {
+    "login_url": null,
+    "login_selectors": {},
+    "authentication_check_selectors": []
+  },
+  "field_mappings": {
+    "product_item": [
+      "div.w-full.md\\:w-1\\/2.lg\\:w-1\\/3.px-8.mb-16"
+    ],
+    "title": [
+      "a[href*='product/']"
+    ],
+    "price": [
+      "div.p-4.w-full.mt-auto"
+    ],
+    "price_login_required": [],
+    "url": [
+      "a[href*='product/']"
+    ],
+    "image": [
+      "img"
+    ],
+    "ean": [
+      "span:contains('EAN')",
+      "div:contains('EAN')",
+      "p:contains('EAN')",
+      "[data-ean]",
+      "meta[itemprop='gtin13']",
+      "meta[property='product:ean']",
+      "script[type='application/ld+json']"
+    ],
+    "barcode": [
+      "span:contains('Barcode')",
+      "div:contains('Barcode')",
+      "p:contains('Barcode')",
+      "[data-barcode]",
+      "meta[itemprop='gtin13']"
+    ],
+    "product_code": [
+      "[data-product-sku]",
+      ".sku",
+      "meta[itemprop='sku']",
+      "span:contains('SKU')",
+      "div:contains('SKU')"
+    ],
+    "sku": [
+      "[data-product-sku]",
+      ".sku",
+      "meta[itemprop='sku']"
+    ],
+    "out_of_stock": [
+      "span:contains('Out of stock')",
+      "div:contains('Out of stock')",
+      "p:contains('Out of stock')",
+      ".out-of-stock",
+      ".stock.out",
+      "[class*='out-of-stock']",
+      "span:contains('DISCONTINUED')",
+      "div:contains('DISCONTINUED')"
+    ],
+    "stock_status": [
+      ".stock",
+      ".in-stock",
+      ".out-of-stock",
+      "[class*='stock']"
+    ],
+    "product_detail_title": [
+      "h1",
+      ".product-title",
+      "h1.product-title",
+      ".entry-title",
+      "h1.entry-title"
+    ],
+    "product_detail_price": [
+      ".price",
+      "span.price",
+      "div.price",
+      "[class*='price']",
+      "meta[itemprop='price']"
+    ]
+  },
+  "navigation_configuration": {
+    "navigation_strategy": "predefined_categories",
+    "homepage_products_unreliable": true,
+    "use_predefined_categories": true,
+    "predefined_categories": []
+  },
+  "pagination": {
+    "pattern": "https://wholesaletradingsupplies.com/shop/?_product_categories={category}&paged={page}",
+    "use_url_navigation": true,
+    "next_button_selector": [
+      "a.facetwp-page.next",
+      "a[rel='next']",
+      "a:contains('Next')",
+      "a:contains('»')"
+    ],
+    "next_button_javascript": "const nextButton = document.querySelector('a.facetwp-page.next, a[rel=\"next\"]'); if (nextButton) { nextButton.click(); } else { console.error('Next button not found'); }"
+  },
+  "page_limiter": {
+    "selector": "select[name='per_page']",
+    "value": "200",
+    "note": "Sets products per page to maximum for efficiency"
+  },
+  "auto_discovered": false,
+  "discovery_timestamp": "2025-12-01T12:00:00.000000",
+  "success": true,
+  "use_ai_category_progression": false
+}

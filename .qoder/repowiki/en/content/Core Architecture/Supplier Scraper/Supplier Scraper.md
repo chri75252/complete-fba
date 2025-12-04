@@ -5,9 +5,19 @@
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py)
 - [supplier_config_loader.py](file://config/supplier_config_loader.py)
 - [url_cache_filter.py](file://utils/url_cache_filter.py)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py)
 - [www.poundwholesale.co.uk.json](file://config/supplier_configs/www.poundwholesale.co.uk.json)
+- [poundwholesale\supplier_authentication_service.py](file://tools/poundwholesale/supplier_authentication_service.py) - *Dynamically imported per supplier*
 </cite>
+
+## Update Summary
+**Changes Made**   
+- Updated documentation to reflect configuration-driven design enhancements
+- Added details on dynamic authentication handling with per-supplier authentication services
+- Documented button-based pagination support in supplier configurations
+- Reversed EAN extraction priority to prioritize EAN over barcode
+- Added information about the Full List Retention Strategy for consistent product counts
+- Updated proactive authentication checks to occur every 25 products
+- Enhanced memory management techniques including periodic cleanup and garbage collection
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -228,7 +238,7 @@ The configuration for poundwholesale.co.uk demonstrates the structure and capabi
 }
 ```
 
-This configuration defines multiple selectors for each data field, allowing the scraper to attempt extraction with alternative selectors if the primary ones fail. The system uses a cascading approach, trying selectors in order until successful extraction is achieved.
+This configuration defines multiple selectors for each data field, allowing the scraper to attempt extraction with alternative selectors if the primary ones fail. The system uses a cascading approach, trying selectors in order until successful extraction is achieved. Notably, the EAN extraction priority has been reversed to prioritize EAN over barcode, ensuring more accurate product matching.
 
 **Section sources**
 - [www.poundwholesale.co.uk.json](file://config/supplier_configs/www.poundwholesale.co.uk.json#L1-L66)
@@ -261,7 +271,7 @@ Scraper-->>Client : HTML content or None
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L500-L600)
 
 ### scrape_products_from_url() Method
-The `scrape_products_from_url()` method orchestrates the complete product scraping process. It handles pagination, individual product page visits, data extraction, and filtering. The method implements URL pre-filtering to avoid reprocessing cached products and includes proactive authentication checks every 25 products to maintain session validity.
+The `scrape_products_from_url()` method orchestrates the complete product scraping process. It handles pagination, individual product page visits, data extraction, and filtering. The method implements URL pre-filtering to avoid reprocessing cached products and includes proactive authentication checks every 25 products to maintain session validity. It also implements the Full List Retention Strategy, which returns "Stub" products for already-processed URLs to maintain consistent product list lengths.
 
 ```mermaid
 flowchart TD
@@ -287,7 +297,7 @@ style ReturnResults fill:#9f9,stroke:#333
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L600-L1000)
 
 ### extract_price() Method
-The `extract_price()` method handles financial information extraction with special consideration for authentication requirements. It first attempts to extract price information using configured selectors, then checks for login requirements, and can trigger authentication processes when necessary.
+The `extract_price()` method handles financial information extraction with special consideration for authentication requirements. It first attempts to extract price information using configured selectors, then checks for login requirements, and can trigger authentication processes when necessary. When price extraction fails, it triggers an authentication check to verify session validity.
 
 ```mermaid
 flowchart TD
@@ -340,7 +350,7 @@ BrowserManager --> "Chrome CDP" : "connects via"
 
 **Diagram sources**
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L300-L400)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L50)
+- [poundwholesale\supplier_authentication_service.py](file://tools/poundwholesale/supplier_authentication_service.py#L1-L211)
 
 The scraper implements several anti-bot evasion techniques:
 - Realistic user agent strings and browser fingerprints
@@ -427,12 +437,12 @@ end
 
 **Diagram sources**
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L750-L780)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L50)
+- [poundwholesale\supplier_authentication_service.py](file://tools/poundwholesale/supplier_authentication_service.py#L1-L211)
 
 **Section sources**
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L700-L900)
 - [url_cache_filter.py](file://utils/url_cache_filter.py#L1-L272)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [poundwholesale\supplier_authentication_service.py](file://tools/poundwholesale/supplier_authentication_service.py#L1-L211)
 
 ## Conclusion
 The ConfigurableSupplierScraper module represents a sophisticated and robust solution for web scraping supplier product data. Its configuration-driven design allows for easy adaptation to different supplier websites, while its integration with Playwright provides advanced browser automation capabilities with anti-bot evasion. The module's use of external selector configurations, centralized browser management, and proactive authentication checks make it highly effective for long-running scraping operations. Additionally, its comprehensive memory management and URL pre-filtering systems ensure efficient resource utilization and prevent redundant processing. This combination of features makes the ConfigurableSupplierScraper a critical component of the Amazon FBA Agent System, enabling reliable and scalable data extraction from supplier websites.

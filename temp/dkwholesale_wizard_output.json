@@ -1,0 +1,64 @@
+{
+  "success": false,
+  "files_generated": [
+    "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\config\\supplier_configs\\dkwholesale.com.json",
+    "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\config\\dkwholesale_workflow_categories.json",
+    "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\run_custom_dkwholesale-com.py",
+    "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\config\\system_config.json"
+  ],
+  "sanity_results": {
+    "scraping_rate": false,
+    "amazon_cache": false,
+    "linking_map": false,
+    "financial_csv": false,
+    "processing_state": false,
+    "no_critical_errors": true
+  },
+  "remediation": {
+    "scraping_rate": {
+      "issue": "Less than 20 products scraped",
+      "actions": [
+        "Verify selectors are correct (product_item, title, price, ean, url, image)",
+        "Check C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\config\\supplier_configs\\dkwholesale.com.json",
+        "Use browser DevTools to verify CSS selectors match actual page structure",
+        "Ensure no login required or authentication is properly configured"
+      ]
+    },
+    "amazon_cache": {
+      "issue": "No Amazon cache files generated",
+      "actions": [
+        "Verify EAN extraction is working (check selectors)",
+        "Ensure Amazon API connectivity",
+        "Check test product URL has valid EAN",
+        "Manually test: check OUTPUTS/FBA_ANALYSIS/amazon_cache/ exists"
+      ]
+    },
+    "linking_map": {
+      "issue": "Linking map not generated or empty",
+      "actions": [
+        "Check hyphen-form directory: OUTPUTS/FBA_ANALYSIS/linking_maps/dkwholesale-com/",
+        "Verify workflow completed amazon_analysis phase",
+        "Ensure EAN matching succeeded for at least some products"
+      ]
+    },
+    "financial_csv": {
+      "issue": "Financial CSV not generated",
+      "actions": [
+        "Check financial_report_batch_size in system_config.json",
+        "Verify ROI calculations completed",
+        "Check OUTPUTS/FBA_ANALYSIS/financial_reports/ directory"
+      ]
+    },
+    "processing_state": {
+      "issue": "Processing state file not updated",
+      "actions": [
+        "Check underscore-form file: OUTPUTS/CACHE/processing_states/dkwholesale_com_processing_state.json",
+        "Verify workflow completed without crashes",
+        "Check logs for interruptions"
+      ]
+    }
+  },
+  "sanity_stdout": "",
+  "sanity_stderr": "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\run_custom_dkwholesale-com.py\", line 28\n    from tools.dkwholesale-com.supplier_authentication_service import DkwholesaleAuthenticationHelper\n                          ^\nSyntaxError: invalid syntax\n",
+  "full_run_result": null
+}

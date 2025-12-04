@@ -2,9 +2,9 @@
 
 <cite>
 **Referenced Files in This Document**   
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
-- [atomic_file_operations.py](file://utils/atomic_file_operations.py)
-- [windows_save_guardian.py](file://utils/windows_save_guardian.py)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py) - *Updated with comprehensive state management features*
+- [atomic_file_operations.py](file://utils\atomic_file_operations.py) - *Atomic operations implementation*
+- [windows_save_guardian.py](file://utils\windows_save_guardian.py) - *Windows-specific save protection*
 </cite>
 
 ## Table of Contents
@@ -25,7 +25,7 @@
 The FixedEnhancedStateManager class serves as the central coordinator for state persistence, progress tracking, and resumption logic within the Amazon FBA Agent System. This implementation addresses critical issues in state management by providing thread-safe atomic operations, robust file locking, and comprehensive validation mechanisms. The state manager ensures data integrity during long-running processes, enabling reliable resumption from interruptions while maintaining accurate progress counting. Designed with a focus on zero-risk operations, this component implements seven distinct methods for ensuring always-accurate progress tracking through atomic file operations, write validation, and checksum verification.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Core Architecture
 The FixedEnhancedStateManager implements a sophisticated architecture that separates resumption logic from progress tracking, ensuring precise recovery after interruptions. The system maintains a clear distinction between different state components, with the `system_progression` field serving as the single source of truth for all progression metrics. This architectural approach prevents the phase semantic mixing that previously caused state corruption. The state manager employs a thread-safe design using re-entrant locks (RLock) to prevent deadlocks during nested saves, while maintaining backward compatibility with legacy systems through careful migration strategies.
@@ -64,11 +64,11 @@ FixedEnhancedStateManager --> atomic_file_operations : "utilizes"
 ```
 
 **Diagram sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
-- [atomic_file_operations.py](file://utils/atomic_file_operations.py#L152-L188)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
+- [atomic_file_operations.py](file://utils\atomic_file_operations.py#L152-L188)
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## State Persistence and Resumption Logic
 The FixedEnhancedStateManager implements a robust resumption logic system that separates the resumption index from progress tracking, addressing a critical flaw in previous implementations. The `resumption_index` field tracks the exact point from which processing should resume after an interruption, while the `progress_index` monitors current session progress independently. This separation ensures that session-specific progress does not interfere with the resumption point, enabling precise recovery even after partial processing.
@@ -78,7 +78,7 @@ The system employs a startup analysis phase that performs reverse gap detection 
 Resumption pointers are implemented with monotonicity validation to prevent backward movement. The system tracks a high-water mark of the maximum resumption pointer across runs, ensuring that the pointer never regresses. When a resumption is detected, the system emits specific logging banners like "FIRST AFTER-RESUME KEY" and "RESUME HONORED" to provide audit trail verification. These markers help in debugging and confirming that the resumption logic is functioning correctly.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Zero-Risk Progress Counting Methods
 The FixedEnhancedStateManager implements seven zero-risk methods for always-accurate progress counting, each designed to eliminate specific failure modes in state persistence. These methods work together to create a comprehensive safety net that ensures data integrity under various conditions.
@@ -105,8 +105,8 @@ The state manager maintains a high-water mark of the maximum resumption pointer 
 The system actively detects and prevents contamination from legacy writer patterns. The `validate_state_integrity()` method checks for signs of legacy writer usage and recommends migration to the atomic commit methods. This prevents the mixing of old and new state management patterns that could lead to corruption.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
-- [windows_save_guardian.py](file://utils/windows_save_guardian.py#L78-L94)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
+- [windows_save_guardian.py](file://utils\windows_save_guardian.py#L78-L94)
 
 ## Key Method Implementations
 The FixedEnhancedStateManager provides several key methods that form the foundation of its state management capabilities. These methods are designed to be thread-safe, atomic, and resilient to various failure modes.
@@ -127,7 +127,7 @@ The comprehensive integrity validation method checks for multiple corruption pat
 When corruption is detected, this method attempts automatic repair based on the validation report. It addresses impossible index states by clamping values to valid ranges, repairs phase contamination by resetting contaminated fields, and corrects invalid resumption pointers. After repairs, it saves the state atomically and updates the schema version to indicate that repairs were applied.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Integration with Main Workflow
 The FixedEnhancedStateManager integrates seamlessly with the main workflow through well-defined checkpoints at critical stages. The integration follows a pattern of initializing category processing, updating progress during extraction phases, and marking completion when appropriate.
@@ -186,7 +186,7 @@ state_manager.complete_processing()
 ```
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Sliding Window Memory Management
 The FixedEnhancedStateManager implements a sliding window memory management approach that balances performance with memory efficiency. This approach is particularly important in long-running processes where memory usage could otherwise grow unbounded.
@@ -200,7 +200,7 @@ The sliding window concept is implemented through the selective preservation of 
 This memory management approach ensures that the state manager can operate efficiently even with large datasets, maintaining consistent performance throughout extended processing sessions. The bounded memory usage also makes the system more predictable and less susceptible to memory-related failures.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Singleton Pattern for State Access
 The FixedEnhancedStateManager implements a de facto singleton pattern through its design and usage patterns, ensuring consistent state access across components. While not enforcing a strict singleton at the class level, the system architecture encourages the creation of a single instance per supplier, which is then shared across all components that require state access.
@@ -215,7 +215,7 @@ The singleton-like behavior is achieved through the state manager's initializati
 Thread safety mechanisms, including the re-entrant lock and atomic operations, are essential for maintaining data integrity when multiple components access the state manager concurrently. The design ensures that even with multiple access points, the state remains consistent and corruption-free.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Concurrency and Race Condition Handling
 The FixedEnhancedStateManager implements comprehensive solutions for handling race conditions during concurrent access, which were a significant source of state corruption in previous implementations.
@@ -246,7 +246,7 @@ ComponentB->>StateManager : commit_supplier_progress()
 StateManager-->>ComponentB : Wait for lock
 StateManager->>StateManager : Update state & save atomically
 StateManager-->>ComponentA : Return success
-StateManager->>StateManager : Release write lock
+StateManager-->>StateManager : Release write lock
 StateManager->>StateManager : Acquire write lock
 StateManager->>StateManager : Update state & save atomically
 StateManager-->>ComponentB : Return success
@@ -254,10 +254,10 @@ StateManager-->>StateManager : Release write lock
 ```
 
 **Diagram sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## State Integrity Validation
 The FixedEnhancedStateManager includes a comprehensive state integrity validation system that detects and repairs corruption patterns. This multi-layered validation approach ensures data reliability throughout the processing lifecycle.
@@ -267,7 +267,7 @@ The `validate_state_integrity()` method performs five key checks:
 1. **Impossible Index States**: Detects scenarios where current indices exceed totals, such as a product index greater than the total products in a category.
 2. **Phase Semantic Consistency**: Identifies phase contamination where category-relative fields are overwritten with global values.
 3. **Resumption Pointer Validity**: Verifies that resumption pointers are within valid bounds and have appropriate structure.
-4. **Frozen Totals Consistency**: Checks for drift between different total sources after totals have been frozen.
+4. **Frozen Totals Consistency**: Checks for drift between different total sources after totals are frozen.
 5. **Legacy Writer Contamination**: Detects signs of legacy writer usage that could lead to corruption.
 
 ### Corruption Pattern Detection
@@ -288,7 +288,7 @@ When corruption is detected, the `repair_state_corruption()` method attempts aut
 The validation system generates detailed reports that include timestamps, detected issues, and recommendations for preventing future corruption. This comprehensive approach transforms state management from a potential point of failure into a robust, self-healing component.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Extensibility and Custom Use Cases
 The FixedEnhancedStateManager is designed with extensibility in mind, allowing for custom use cases while maintaining data integrity. The architecture supports extension through several mechanisms:
@@ -311,7 +311,7 @@ The state manager provides hooks for integration with external systems through l
 When extending the state manager, it's essential to maintain the core principles of atomic operations, thread safety, and data integrity. New methods should follow the pattern of using the write lock for state modifications and employing atomic save operations to ensure reliability.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)
 
 ## Troubleshooting Common Issues
 This section addresses common implementation issues and their solutions for the FixedEnhancedStateManager.
@@ -341,4 +341,4 @@ This section addresses common implementation issues and their solutions for the 
 **Solution**: The sliding window memory management should prevent unbounded growth. If memory usage is still problematic, ensure that state manager instances are properly cleaned up when no longer needed and consider implementing periodic state serialization to disk.
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L99-L2401)
+- [fixed_enhanced_state_manager.py](file://utils\fixed_enhanced_state_manager.py#L99-L2401)

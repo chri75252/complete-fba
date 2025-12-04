@@ -1,0 +1,19 @@
+{
+  "supplier_url": "https://dkwholesale.com",
+  "field_mappings": {
+    "product_item": [".card.card--card"],
+    "title": ["h3"],
+    "price": [".product-price"],
+    "url": ["a[href*=\"/products/\"]"],
+    "image": ["img"],
+    "ean": ["[data-ean]", ".ean", ".barcode"],
+    "next_page_selector": ["a[href*=\"page=\"]"]
+  },
+  "authentication": {
+    "login_url": "https://dkwholesale.com/account/login",
+    "email_selector": "#RecoverEmail",
+    "password_selector": "#CustomerPassword",
+    "login_button_selector": ".menu-drawer__close-button.link.link--text.focus-inset"
+  },
+  "authentication_required": true
+}
