@@ -110,9 +110,11 @@ except ImportError:
     except ImportError:
         # Fallback function
         def normalize_url(url: str) -> str:
-            return url.lower().rstrip('/')
+            return url.lower().rstrip("/")
+
         def normalize_ean(ean: str) -> str:
             return str(ean).strip() if ean else None
+
 
 # Import required custom modules
 # FIXED: Change relative imports to absolute imports when running as standalone script
@@ -131,7 +133,10 @@ sys.path.append(current_dir)
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
-from tools.amazon_playwright_extractor import AmazonExtractor, FixedAmazonExtractor  # FixedAmazonExtractor migrated Nov 17, 2025
+from tools.amazon_playwright_extractor import (
+    AmazonExtractor,
+    FixedAmazonExtractor,
+)  # FixedAmazonExtractor migrated Nov 17, 2025
 
 # MODIFIED: Use ConfigurableSupplierScraper
 from configurable_supplier_scraper import ConfigurableSupplierScraper
@@ -149,7 +154,10 @@ try:
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if parent_dir not in sys.path:
         sys.path.insert(0, parent_dir)
-    from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager as EnhancedStateManager, SimpleMetrics
+    from utils.fixed_enhanced_state_manager import (
+        FixedEnhancedStateManager as EnhancedStateManager,
+        SimpleMetrics,
+    )
 except ImportError:
     pass
 
@@ -175,7 +183,7 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-#    Enhanced FBA Priority Patterns (Research-Based) 
+#    Enhanced FBA Priority Patterns (Research-Based)
 FBA_FRIENDLY_PATTERNS = {
     "home_kitchen": [
         "home",
@@ -349,7 +357,7 @@ FBA_NEUTRAL_PATTERNS = {
 }
 
 
-#  BACKUP UTILITY FUNCTIONS 
+#  BACKUP UTILITY FUNCTIONS
 def create_backup_with_experiment_number(file_path: str, experiment_number: int) -> str:
     """Create backup with .bakN suffix for experiment tracking"""
     if not os.path.exists(file_path):
@@ -387,7 +395,7 @@ def create_backup_with_experiment_number(file_path: str, experiment_number: int)
 #
 #     return backup_results
 
-#    Add OpenAI client initialization (after imports) 
+#    Add OpenAI client initialization (after imports)
 
 # Battery filtering patterns - products containing these will be excluded
 BATTERY_KEYWORDS = [
@@ -711,14 +719,14 @@ def is_battery_title(title: str) -> bool:
 #     Includes EAN search capabilities and attempts EAN extraction from product pages.
 #     It reuses browser pages and avoids unnecessary page creation/closure for extension stability.
 #     """
-# 
+#
 #     def __init__(self, chrome_debug_port: int, ai_client: Optional[OpenAI] = None):
 #         super().__init__(chrome_debug_port, ai_client)
 #         # self.ai_client is already set by parent constructor if ai_client is passed.
-# 
+#
 #         # FIX: Initialize logger for this class (required by _extract_asin_from_element and _extract_title_from_element)
 #         self.log = logging.getLogger(self.__class__.__name__)
-# 
+#
 #     async def connect(self) -> Browser:  # type: ignore
 #         """
 #         Connect to browser using the centralized BrowserManager singleton.
@@ -728,15 +736,15 @@ def is_battery_title(title: str) -> bool:
 #         try:
 #             # Use the browser manager singleton for centralized browser management
 #             browser_manager = BrowserManager.get_instance()
-# 
+#
 #             # Ensure browser manager is properly launched
 #             if not hasattr(browser_manager, "browser") or not browser_manager.browser:
 #                 await browser_manager.launch_browser(cdp_port=self.chrome_debug_port)
-# 
+#
 #             # Get the shared browser instance
 #             self.browser = browser_manager.browser
 #             log.info(" FixedAmazonExtractor connected via BrowserManager singleton")
-# 
+#
 #             return self.browser
 #         except Exception as e:
 #             log.error(f" FixedAmazonExtractor failed to connect via BrowserManager: {e}")
@@ -744,14 +752,14 @@ def is_battery_title(title: str) -> bool:
 #                 "Ensure Chrome is running with --remote-debugging-port=9222 and BrowserManager is properly initialized"
 #             )
 #             raise
-# 
-#     
+#
+#
 #     def _overlap_score(self, title_a: str, title_b: str) -> float:
 #         """Calculate word overlap score between two titles"""
 #         a = set(re.sub(r"[^\w\s]", " ", title_a.lower()).split())
 #         b = set(re.sub(r"[^\w\s]", " ", title_b.lower()).split())
 #         return len(a & b) / max(1, len(a))
-# 
+#
 #     def _validate_product_match(
 #         self, supplier_product: Dict[str, Any], amazon_product: Dict[str, Any]
 #     ) -> Dict[str, Any]:
@@ -762,11 +770,11 @@ def is_battery_title(title: str) -> bool:
 #         title_similarity_threshold = matching_thresholds.get("title_similarity", 0.25)
 #         medium_title_similarity = matching_thresholds.get("medium_title_similarity", 0.5)
 #         high_title_similarity = matching_thresholds.get("high_title_similarity", 0.75)
-# 
+#
 #         title_overlap_score = self._overlap_score(
 #             supplier_product.get("title", ""), amazon_product.get("title", "")
 #         )
-# 
+#
 #         match_quality = "low"
 #         confidence = 0.0
 #         if title_overlap_score >= high_title_similarity:
@@ -781,7 +789,7 @@ def is_battery_title(title: str) -> bool:
 #         else:
 #             match_quality = "very_low"
 #             confidence = 0.1
-# 
+#
 #         self.log.debug(
 #             f" MATCH VALIDATION: '{supplier_product.get('title', 'Unknown')}' vs "
 #             f"'{amazon_product.get('title', 'Unknown')}' = {title_overlap_score:.2f} "
@@ -792,35 +800,35 @@ def is_battery_title(title: str) -> bool:
 #             "confidence": confidence,
 #             "title_overlap_score": title_overlap_score,
 #         }
-# 
+#
 #     async def search_by_title_using_search_bar(
 #         self, title: str, page: Optional[Page] = None
 #     ) -> Dict[str, Any]:
 #         """Search Amazon by title using search bar interaction (not URL building)"""
 #         if not self.browser or not self.browser.is_connected():
 #             await self.connect()
-# 
+#
 #         log.info(f"Searching Amazon by title using search bar: '{title}'")
-# 
+#
 #         # Get page from parameter or use BrowserManager
 #         if page is None:
 #             from utils.browser_manager import get_page_for_url
-# 
+#
 #             log.info("No page provided to search_by_title, getting one from BrowserManager.")
 #             page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
-# 
+#
 #         try:
 #             # Navigate to Amazon UK and search by typing title into search bar
 #             log.info(f"Navigating to Amazon UK to search for title: {title}")
 #             await page.goto("https://www.amazon.co.uk", timeout=60000)
-# 
+#
 #             # Type title into search box and press Enter
 #             await page.fill("input#twotabsearchtextbox", title, timeout=5000)
 #             await page.press("input#twotabsearchtextbox", "Enter")
-# 
+#
 #             # Wait for search results
 #             await page.wait_for_selector("div.s-search-results", timeout=15000)
-# 
+#
 #             # VISIBILITY FIX: Add stabilization phase to ensure page fully renders
 #             # Small delay to allow JavaScript to complete rendering
 #             await asyncio.sleep(0.4)
@@ -828,10 +836,10 @@ def is_battery_title(title: str) -> bool:
 #             await page.evaluate('window.scrollBy(0, 600)')
 #             # Brief wait after scroll
 #             await asyncio.sleep(0.2)
-# 
+#
 #             # Parse search results - extract first few results with improved element selection
 #             potential_asins_info = []
-# 
+#
 #             # Try multiple selectors for search result elements
 #             search_result_elements = []
 #             search_selectors = [
@@ -840,7 +848,7 @@ def is_battery_title(title: str) -> bool:
 #                 "div[data-asin]:not([data-asin=''])",
 #                 "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
 #             ]
-# 
+#
 #             for selector in search_selectors:
 #                 try:
 #                     elements = await page.query_selector_all(selector)
@@ -853,21 +861,21 @@ def is_battery_title(title: str) -> bool:
 #                 except Exception as e:
 #                     log.debug(f"Title search selector '{selector}' failed: {e}")
 #                     continue
-# 
+#
 #             # OPTION B FIX: Apply visibility filtering to title search as well
 #             # TITLE SCORING FIX: Select first visible candidate and apply scoring gate
 #             first_visible_element = None
 #             first_visible_title = None
-# 
+#
 #             for i, element in enumerate(search_result_elements[:10]):  # More results for title search
 #                 try:
 #                     # Check if element is visible (AdBlocker filtering)
 #                     is_visible = await element.is_visible()
-# 
+#
 #                     if not is_visible:
 #                         log.debug(f"Title search element {i+1}: Hidden by AdBlocker (likely sponsored)")
 #                         continue
-# 
+#
 #                     # Extract title from first visible element (don't extract ASIN yet - will do on PDP)
 #                     try:
 #                         candidate_title = await self._extract_title_from_element(element, "CANDIDATE")
@@ -878,34 +886,34 @@ def is_battery_title(title: str) -> bool:
 #                     except Exception as title_error:
 #                         log.debug(f"Error extracting title from element {i+1}: {title_error}")
 #                         continue
-# 
+#
 #                 except Exception as elem_error:
 #                     log.debug(f"Error processing title search element {i+1}: {elem_error}")
 #                     continue
-# 
+#
 #             # TITLE SCORING GATE: Validate match quality before proceeding
 #             if first_visible_element and first_visible_title:
 #                 # Compute title similarity score
 #                 supplier_product_data = {"title": title}
 #                 amazon_product_data = {"title": first_visible_title}
-# 
+#
 #                 validation = self._validate_product_match(supplier_product_data, amazon_product_data)
 #                 score = validation.get("title_overlap_score", 0.0)
 #                 confidence = validation.get("confidence", 0.0)
-# 
+#
 #                 # Read threshold from config
 #                 matching_thresholds = self.system_config.get("performance", {}).get("matching_thresholds", {})
 #                 confidence_threshold = matching_thresholds.get("medium_title_similarity", 0.5)
-# 
+#
 #                 log.info(
 #                     f" TITLE SCORING: '{title}' vs '{first_visible_title[:60]}...' = {score:.3f} "
 #                     f"(confidence={confidence:.1%}, threshold={confidence_threshold:.1%})"
 #                 )
-# 
+#
 #                 if confidence >= confidence_threshold:
 #                     # Score passes - extract ASIN from element directly
 #                     log.info(f" Title score PASSED ({confidence:.1%} >= {confidence_threshold:.1%}) - proceeding to extract ASIN from element")
-# 
+#
 #                     # Extract ASIN from visible element using data-asin attribute
 #                     try:
 #                         asin = await first_visible_element.get_attribute("data-asin")
@@ -921,7 +929,7 @@ def is_battery_title(title: str) -> bool:
 #                     log.warning(
 #                         f" Title score FAILED ({confidence:.1%} < {confidence_threshold:.1%}) - skipping product (no match)"
 #                     )
-# 
+#
 #             # Create search_results_data in expected format
 #             if potential_asins_info:
 #                 search_results_data = {
@@ -936,23 +944,23 @@ def is_battery_title(title: str) -> bool:
 #                 log.warning(
 #                     f" TITLE SEARCH FAILED: No match found for '{title}' after scoring gate"
 #                 )
-# 
+#
 #         except Exception as search_error:
 #             log.error(f"Error during title search for '{title}': {search_error}")
 #             search_results_data = {
 #                 "error": f"Search error for title '{title}': {str(search_error)}"
 #             }
-# 
+#
 #         return search_results_data
-# 
-#   
+#
+#
 #     def _normalize_ean(self, ean: str) -> str:
 #         """
 #         Normalize EAN for comparison (remove spaces, leading zeros).
-# 
+#
 #         Args:
 #             ean: Raw EAN string
-# 
+#
 #         Returns:
 #             Normalized EAN string for comparison
 #         """
@@ -963,25 +971,25 @@ def is_battery_title(title: str) -> bool:
 #         # Remove leading zeros for comparison (EAN-8 vs EAN-13 compatibility)
 #         ean_normalized = ean_clean.lstrip("0")
 #         return ean_normalized
-# 
+#
 #     async def _extract_ean_from_product_page(self, page) -> Optional[str]:
 #         """
 #         Extract EAN/Barcode from Amazon product details section.
-# 
+#
 #         Tries multiple methods to find EAN in product page:
 #         1. Product Details table (#productDetails_detailBullets_sections1)
 #         2. Technical Details section (#detailBullets_feature_div)
 #         3. Additional Information section (#productDetails_db_sections)
 #         4. keepa-extracted product codes
-# 
+#
 #         Args:
 #             page: Playwright page object on product detail page
-# 
+#
 #         Returns:
 #             EAN string if found, None otherwise
 #         """
 #         log = self.log
-# 
+#
 #         try:
 #             # Method 1: Product Details table
 #             try:
@@ -997,7 +1005,7 @@ def is_battery_title(title: str) -> bool:
 #                             return ean_match.group(1)
 #             except Exception as e:
 #                 log.debug(f"Method 1 (Product Details table) failed: {e}")
-# 
+#
 #             # Method 2: Technical Details section
 #             try:
 #                 tech_details = await page.locator('#detailBullets_feature_div').first
@@ -1011,7 +1019,7 @@ def is_battery_title(title: str) -> bool:
 #                             return ean_match.group(1)
 #             except Exception as e:
 #                 log.debug(f"Method 2 (Technical Details) failed: {e}")
-# 
+#
 #             # Method 3: Additional Information section
 #             try:
 #                 additional_info = await page.locator('#productDetails_db_sections').first
@@ -1025,7 +1033,7 @@ def is_battery_title(title: str) -> bool:
 #                             return ean_match.group(1)
 #             except Exception as e:
 #                 log.debug(f"Method 3 (Additional Information) failed: {e}")
-# 
+#
 #             # Method 4: Look for UPC/EAN in any table rows
 #             try:
 #                 all_text = await page.content()
@@ -1044,14 +1052,14 @@ def is_battery_title(title: str) -> bool:
 #                             return ean_match.group(1)
 #             except Exception as e:
 #                 log.debug(f"Method 4 (page content search) failed: {e}")
-# 
+#
 #             log.debug(f"No EAN found on product page after trying all methods")
 #             return None
-# 
+#
 #         except Exception as e:
 #             log.error(f"Error extracting EAN from product page: {e}")
 #             return None
-# 
+#
 #     async def search_by_ean_and_extract_data(
 #         self, ean: str, supplier_product_title: str, page: Optional[Page] = None
 #     ) -> Dict[str, Any]:
@@ -1062,28 +1070,28 @@ def is_battery_title(title: str) -> bool:
 #         """
 #         if not self.browser or not self.browser.is_connected():
 #             await self.connect()
-# 
+#
 #         log.info(
 #             f"Searching Amazon by EAN: {ean} for supplier product: '{supplier_product_title}' (FixedAmazonExtractor)"
 #         )
-# 
+#
 #         # Get page from parameter or use BrowserManager
 #         if page is None:
 #             from utils.browser_manager import get_page_for_url
-# 
+#
 #             log.info("No page provided to search_by_ean, getting one from BrowserManager.")
 #             page = await get_page_for_url("https://www.amazon.co.uk", reuse_existing=True)
-# 
+#
 #         try:
 #             # Navigate to Amazon UK and search by typing EAN into search bar
 #             log.info(f"Navigating to Amazon UK to search for EAN: {ean}")
-# 
+#
 #             await page.goto("https://www.amazon.co.uk", timeout=60000)
-# 
+#
 #             # Type EAN into search box and press Enter
 #             await page.fill("input#twotabsearchtextbox", ean, timeout=5000)
 #             await page.press("input#twotabsearchtextbox", "Enter")
-# 
+#
 #             # Wait for search results with enhanced multiple selector approach - REQUIREMENT 1
 #             log.info(f"Waiting for search results page to load for EAN {ean}...")
 #             search_result_containers_found = False
@@ -1094,7 +1102,7 @@ def is_battery_title(title: str) -> bool:
 #                 "div.s-result-list",
 #                 "div.s-main-slot",
 #             ]
-# 
+#
 #             # Wait for any of the container selectors with a longer timeout
 #             for container_selector in container_selectors:
 #                 try:
@@ -1106,7 +1114,7 @@ def is_battery_title(title: str) -> bool:
 #                     log.debug(
 #                         f"Container selector '{container_selector}' not found: {container_error}"
 #                     )
-# 
+#
 #             if not search_result_containers_found:
 #                 # Check for a direct product page (Amazon sometimes redirects to product page for exact EAN match)
 #                 try:
@@ -1129,10 +1137,10 @@ def is_battery_title(title: str) -> bool:
 #                             break
 #                 except Exception as direct_page_error:
 #                     log.debug(f"Error checking for direct product page: {direct_page_error}")
-# 
+#
 #                 log.warning(f"No search results containers found for EAN {ean}")
 #                 return {"error": f"No search results found for EAN {ean}"}
-# 
+#
 #             # VISIBILITY FIX: Add stabilization phase to ensure page fully renders
 #             # Small delay to allow JavaScript to complete rendering
 #             await asyncio.sleep(0.4)
@@ -1140,11 +1148,11 @@ def is_battery_title(title: str) -> bool:
 #             await page.evaluate('window.scrollBy(0, 600)')
 #             # Brief wait after scroll
 #             await asyncio.sleep(0.2)
-# 
+#
 #             # REQUIREMENT 2: Search Result Element (Tile) Selection with improved selectors
 #             organic_results = []
 #             search_result_elements = []
-# 
+#
 #             # Enhanced list of selectors for finding individual product tiles
 #             search_selectors = [
 #                 # Try to exclude obvious ad containers at the selection stage
@@ -1156,7 +1164,7 @@ def is_battery_title(title: str) -> bool:
 #                 "[cel_widget_id*='MAIN-SEARCH_RESULTS'] div[data-asin]",
 #                 "div[data-uuid][data-asin]:not([data-asin=''])",
 #             ]
-# 
+#
 #             for selector in search_selectors:
 #                 try:
 #                     elements = await page.query_selector_all(selector)
@@ -1169,7 +1177,7 @@ def is_battery_title(title: str) -> bool:
 #                 except Exception as e:
 #                     log.debug(f"Search selector '{selector}' failed: {e}")
 #                     continue
-# 
+#
 #             if not search_result_elements:
 #                 log.warning(f"No search result elements found for EAN {ean}")
 #                 return {"error": "no_elements_found"}
@@ -1177,26 +1185,26 @@ def is_battery_title(title: str) -> bool:
 #                 log.info(
 #                     f"Processing {len(search_result_elements)} search result elements for EAN {ean}"
 #                 )
-# 
+#
 #                 # OPTION B FIX: Use visibility check to leverage AdBlocker filtering
 #                 # AdBlocker (uBlock) hides sponsored products with CSS, so we only extract visible elements
 #                 # This eliminates need for complex sponsored detection and verification loops
 #                 log.info(f" VISIBILITY FILTER: Extracting only visible products (AdBlocker-aware)")
-# 
+#
 #                 # ASIN EXTRACTION POLICY FIX: Select first visible element, navigate to PDP, extract ASIN from URL
 #                 # Do NOT extract ASIN from search result tiles
 #                 first_visible_element = None
 #                 first_visible_title = None
-# 
+#
 #                 for i, element in enumerate(search_result_elements[:15]):
 #                     try:
 #                         # Check if element is visible (AdBlocker hides sponsored products)
 #                         is_visible = await element.is_visible()
-# 
+#
 #                         if not is_visible:
 #                             log.debug(f"Element {i+1}: Hidden by AdBlocker (likely sponsored)")
 #                             continue
-# 
+#
 #                         # Extract title from first visible element (don't extract ASIN yet - will do on PDP)
 #                         try:
 #                             candidate_title = await self._extract_title_from_element(element, "CANDIDATE")
@@ -1207,17 +1215,17 @@ def is_battery_title(title: str) -> bool:
 #                         except Exception as title_error:
 #                             log.debug(f"Error extracting title from element {i+1}: {title_error}")
 #                             continue
-# 
+#
 #                     except Exception as elem_error:
 #                         log.debug(f"Error processing element {i+1}: {elem_error}")
 #                         continue
-# 
+#
 #                 # Log visibility filtering results
 #                 if first_visible_element:
 #                     log.info(f" VISIBILITY FILTERING: Found first visible product for EAN {ean}")
 #                 else:
 #                     log.warning(f" VISIBILITY FILTERING: No visible products found for EAN {ean}")
-# 
+#
 #                 # Check if we have a visible result
 #                 if not first_visible_element:
 #                     log.warning(f"EAN {ean} returned no visible results - skipping")
@@ -1238,11 +1246,11 @@ def is_battery_title(title: str) -> bool:
 #                     except Exception as extract_error:
 #                         log.error(f"Error extracting ASIN from element for EAN {ean}: {extract_error}")
 #                         search_results_data = {"error": f"extraction_failed: {str(extract_error)}"}
-# 
+#
 #         except Exception as search_error:
 #             log.error(f"Error during EAN search for {ean}: {search_error}")
 #             search_results_data = {"error": f"Search error for EAN {ean}: {str(search_error)}"}
-# 
+#
 #         if "error" in search_results_data or not search_results_data.get("results"):
 #             log.warning(
 #                 f"No Amazon results or error for EAN '{ean}'. Details: {search_results_data.get('error', 'No results list')}"
@@ -1280,10 +1288,10 @@ def is_battery_title(title: str) -> bool:
 #                     f"Both EAN '{ean}' and title '{supplier_product_title}' searches failed"
 #                 )
 #                 return {"error": f"No results for EAN {ean} or title search"}
-# 
+#
 #         potential_asins_info = search_results_data["results"]
 #         chosen_asin_data = None
-# 
+#
 #         if len(potential_asins_info) == 1:
 #             chosen_asin_data = potential_asins_info[0]
 #             log.info(f"Single ASIN {chosen_asin_data.get('asin')} found for EAN {ean}.")
@@ -1297,7 +1305,7 @@ def is_battery_title(title: str) -> bool:
 #             log.info(
 #                 f"FIXED: No title scoring on EAN search results - using Amazon's search relevance ranking"
 #             )
-# 
+#
 #             # EAN search complete - skip AI disambiguation to trust Amazon's ranking
 #             # AI disambiguation removed to prevent title scoring on EAN results
 #             if False:  # Disabled AI disambiguation for EAN searches
@@ -1309,7 +1317,7 @@ def is_battery_title(title: str) -> bool:
 #                 for i, item in enumerate(potential_asins_info[:3]):  # Limit to top 3 for AI prompt
 #                     prompt += f"{i+1}. ASIN: {item.get('asin')}, Title: {item.get('title')}\n"
 #                 prompt += "Respond with the ASIN of the best match, or 'NONE' if no good match."
-# 
+#
 #                 try:
 #                     # Ensure ai_client is not None before calling create
 #                     if self.ai_client:
@@ -1320,7 +1328,7 @@ def is_battery_title(title: str) -> bool:
 #                         )
 #                         ai_response = chat_completion.choices[0].message.content.strip()  # type: ignore
 #                         log.info(f"AI response for EAN {ean} disambiguation: {ai_response}")
-# 
+#
 #                         # Find the item that matches the AI's chosen ASIN
 #                         matched_item_by_ai = next(
 #                             (
@@ -1349,33 +1357,33 @@ def is_battery_title(title: str) -> bool:
 #                         )
 #                 except Exception as ai_err:
 #                     log.error(f"AI disambiguation failed for EAN {ean}: {ai_err}")
-# 
+#
 #         if not chosen_asin_data or not chosen_asin_data.get("asin"):
 #             log.warning(f"No suitable ASIN found for EAN {ean} after search and disambiguation.")
 #             return {"error": f"No suitable ASIN for EAN {ean}"}
-# 
+#
 #         chosen_asin = chosen_asin_data.get("asin")
 #         log.info(f"Proceeding with ASIN: {chosen_asin} for EAN: {ean}")
-# 
+#
 #         # Extract detailed data for the chosen ASIN using the base class method
 #         product_data = await super().extract_data(chosen_asin)  # type: ignore
-# 
+#
 #         #  CRITICAL FIX: Explicitly record that this was an EAN search
 #         if "error" not in product_data:
 #             product_data["_search_method_used"] = "EAN"
 #             log.info(f" Recorded search method 'EAN' for ASIN {chosen_asin}")
 #         else:
 #             log.warning(f"Failed to extract data for ASIN {chosen_asin}, cannot set search method")
-# 
+#
 #         # The base AmazonExtractor's extract_data method should now attempt to get 'ean_on_page'.
 #         # No need for redundant EAN extraction here if the base class handles it.
 #         if "error" not in product_data and product_data.get("title"):
 #             log.info(
 #                 f"Successfully extracted data for ASIN {chosen_asin} (EAN on page: {product_data.get('ean_on_page', 'N/A')})"
 #             )
-# 
+#
 #         return product_data
-# 
+#
 #     async def extract_data(self, asin: str) -> Dict[str, Any]:
 #         """
 #         Extract data for an Amazon product by ASIN.
@@ -1387,20 +1395,20 @@ def is_battery_title(title: str) -> bool:
 #         # and ensuring the correct browser context is used.
 #         if not self.browser or not self.browser.is_connected():
 #             await self.connect()  # Ensure connection
-# 
+#
 #         # Call the parent's extract_data method
 #         result = await super().extract_data(asin)  # type: ignore
-# 
+#
 #         # The base class's extract_data should now be responsible for finding 'ean_on_page'.
 #         # Any additional EAN logic specific to FixedAmazonExtractor could go here if needed,
 #         # but it's better if the base class is comprehensive.
-# 
+#
 #         # The stabilization wait is also part of the base class's extract_data
 #         # log.info(f"Waiting {EXTENSION_DATA_WAIT}s for extensions to stabilize (FixedAmazonExtractor.extract_data)...")
 #         # await asyncio.sleep(EXTENSION_DATA_WAIT) # This is in the base class
 #         return result
-# 
-# 
+#
+#
 class PassiveExtractionWorkflow:
     @staticmethod
     def _valid_ean_for_key(ean: str) -> str | None:
@@ -1409,10 +1417,12 @@ class PassiveExtractionWorkflow:
             return None
         try:
             from utils.normalization import normalize_ean as _norm_ean
+
             ne = _norm_ean(ean)
         except Exception:
             ne = "".join(ch for ch in str(ean) if ch and ch.isdigit())
         return ne if ne and len(ne) in (8, 12, 13) and ne.isdigit() else None
+
     def __init__(self, config_loader, workflow_config, browser_manager=None, ai_client=None):
         """Initialize the Passive Extraction Workflow with configuration and services."""
         # Configuration and services
@@ -1420,7 +1430,7 @@ class PassiveExtractionWorkflow:
         self.workflow_config = workflow_config
         self.browser_manager = browser_manager
         self.ai_client = ai_client
-        
+
         # dYs" CRITICAL FIX: Initialize state manager and perform startup analysis
         self.log = logging.getLogger(self.__class__.__name__)
         self._current_all_products = []
@@ -1617,7 +1627,7 @@ class PassiveExtractionWorkflow:
         self.product_cache_key_index = set()
         for p in self.cached_products:
             try:
-                k = stable_key(normalize_url(p.get('url')), self._valid_ean_for_key(p.get('ean')))
+                k = stable_key(normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean")))
                 if k:
                     self.product_cache_key_index.add(k)
             except Exception:
@@ -1628,6 +1638,7 @@ class PassiveExtractionWorkflow:
         }
         try:
             from utils.normalization import normalize_ean as _norm_ean
+
             self.product_cache_ean_index = {
                 _norm_ean(p.get("ean")): p for p in self.cached_products if p.get("ean")
             }
@@ -1704,9 +1715,7 @@ class PassiveExtractionWorkflow:
             # Timing Analysis
             if stats["hash_lookups"] > 0:
                 self.log.info(f" TIMING ANALYSIS:")
-                self.log.info(
-                    f"    Avg Hash Lookup Time: {stats['avg_hash_lookup_time_ms']:.3f}ms"
-                )
+                self.log.info(f"    Avg Hash Lookup Time: {stats['avg_hash_lookup_time_ms']:.3f}ms")
                 if stats["linear_lookups"] > 0:
                     self.log.info(
                         f"    Avg Linear Lookup Time: {stats['avg_linear_lookup_time_ms']:.3f}ms"
@@ -1811,7 +1820,8 @@ class PassiveExtractionWorkflow:
         """Initializes the Amazon extractor with the shared browser manager."""
         chrome_debug_port = self.system_config.get("chrome_debug_port", 9222)
         return FixedAmazonExtractor(
-            chrome_debug_port=chrome_debug_port, ai_client=None  # AI features disabled
+            chrome_debug_port=chrome_debug_port,
+            ai_client=None,  # AI features disabled
         )
 
     def _initialize_supplier_scraper(self):
@@ -1902,8 +1912,12 @@ class PassiveExtractionWorkflow:
             categories_config_path = self.workflow_config.get("categories_config_path")
             if not categories_config_path:
                 # Backwards compatibility fallback
-                categories_config_path = f"config/{self.supplier_name.replace('.', '_')}_categories.json"
-                self.log.warning(f" categories_config_path not in config, using fallback: {categories_config_path}")
+                categories_config_path = (
+                    f"config/{self.supplier_name.replace('.', '_')}_categories.json"
+                )
+                self.log.warning(
+                    f" categories_config_path not in config, using fallback: {categories_config_path}"
+                )
 
             config_path = Path(categories_config_path)
             if config_path.exists():
@@ -2014,46 +2028,9 @@ class PassiveExtractionWorkflow:
         if amazon_total > 0 and amazon_completed > amazon_total:
             amazon_completed = amazon_total
 
-        # Read-only human-readable ratios in state for debugging.
-        # NOTE: Write into root state so these appear next to system_progression
-        # in the processing_state file.
-        try:
-            root_state = self.state_manager.state_data
-
-            # Category progress as cat_idx/total_categories
-            cat_idx = int(
-                sp.get("current_category_index")
-                or sp.get("persistent_category_index")
-                or start_category_index
-                or 1
-            )
-
-            # Prefer the total_categories already stored in system_progression.
-            total_cats = int(sp.get("total_categories", 0) or 0)
-            if total_cats <= 0:
-                # Fallback: compute from predefined category list if available.
-                try:
-                    total_cats = int(self._authoritative_total_categories())
-                except Exception:
-                    total_cats = 0
-
-            if total_cats < 0:
-                total_cats = 0
-
-            root_state["category_progress"] = (
-                f"{cat_idx}/{total_cats}" if total_cats > 0 else f"{cat_idx}/0"
-            )
-
-            # These ratios mirror the clamped values used above.
-            root_state["supplier_progress_ratio_readable"] = (
-                f"{supplier_completed}/{supplier_total}"
-            )
-            root_state["amazon_progress_ratio_readable"] = (
-                f"{amazon_completed}/{amazon_total}"
-            )
-        except Exception:
-            # Never let display-only fields break resume logic.
-            pass
+        # Ensure human-readable progress fields reflect the current counters.
+        # This is display-only and must never affect resume logic.
+        self._refresh_human_progress_fields()
 
         # If there is no recorded work for either phase, keep the persisted phase.
         if supplier_total <= 0 and amazon_total <= 0:
@@ -2096,6 +2073,55 @@ class PassiveExtractionWorkflow:
 
         return current_phase
 
+    def _refresh_human_progress_fields(self) -> None:
+        """
+        Mirror the current numeric counters in system_progression into the
+        human-readable ratio fields in both system_progression and at the
+        top level of the processing state.
+
+        This is display-only and must never affect workflow logic.
+        """
+        try:
+            root_state = self.state_manager.state_data
+            sp = root_state.get("system_progression", {}) or {}
+
+            # Category index and total categories
+            cat_idx = int(
+                sp.get("current_category_index") or sp.get("persistent_category_index") or 1
+            )
+            total_cats = int(sp.get("total_categories", 0) or 0)
+            if total_cats < 0:
+                total_cats = 0
+
+            # Live counters (already maintained elsewhere)
+            supplier_total = int(sp.get("supplier_products_needing_extraction", 0) or 0)
+            supplier_completed = int(sp.get("supplier_products_completed", 0) or 0)
+            amazon_total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
+            amazon_completed = int(sp.get("amazon_products_completed", 0) or 0)
+
+            # Clamp completed for display only (do not mutate the counters)
+            if supplier_total > 0 and supplier_completed > supplier_total:
+                supplier_completed = supplier_total
+            if amazon_total > 0 and amazon_completed > amazon_total:
+                amazon_completed = amazon_total
+
+            cat_ratio = f"{cat_idx}/{total_cats}" if total_cats > 0 else f"{cat_idx}/0"
+            supplier_ratio = f"{supplier_completed}/{supplier_total}"
+            amazon_ratio = f"{amazon_completed}/{amazon_total}"
+
+            # Canonical copies live inside system_progression
+            sp["category_progress"] = cat_ratio
+            sp["supplier_progress_ratio_readable"] = supplier_ratio
+            sp["amazon_progress_ratio_readable"] = amazon_ratio
+
+            # Mirror to top-level convenience fields for easier manual inspection
+            root_state["category_progress"] = cat_ratio
+            root_state["supplier_progress_ratio_readable"] = supplier_ratio
+            root_state["amazon_progress_ratio_readable"] = amazon_ratio
+        except Exception:
+            # Never let display-only updates break the workflow.
+            return
+
     async def run(self):
         """Main execution loop for the workflow."""
         profitable_results: List[Dict[str, Any]] = []
@@ -2123,24 +2149,31 @@ class PassiveExtractionWorkflow:
         self._cached_config_hash = cfg_hash
 
         # RESUME PROOF LOG 1: LOG at startup if frozen totals are committed
-        if hasattr(self.state_manager, "is_frozen_totals_committed") and self.state_manager.is_frozen_totals_committed():
-            self.log.info(" RESUME PROOF: Frozen totals are committed, safe to calculate resume pointers")
+        if (
+            hasattr(self.state_manager, "is_frozen_totals_committed")
+            and self.state_manager.is_frozen_totals_committed()
+        ):
+            self.log.info(
+                " RESUME PROOF: Frozen totals are committed, safe to calculate resume pointers"
+            )
         else:
-            self.log.warning(" RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable")
+            self.log.warning(
+                " RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable"
+            )
 
         self.log.info("Requesting authoritative resumption point from State Manager...")
         # Read current phase and corresponding progress directly from system_progression
         sp = self.state_manager.state_data.get("system_progression", {})
         start_category_index = sp.get("persistent_category_index", 1)
         resume_phase = sp.get("current_phase", "supplier")
-        
+
         if resume_phase == "supplier":
             product_resume_index = sp.get("supplier_products_completed", 0)
         elif resume_phase == "amazon_analysis":
             product_resume_index = sp.get("amazon_products_completed", 0)
         else:
             product_resume_index = 0
-        
+
         self._start_category_index = start_category_index
         self._resume_phase = resume_phase
         self.log.info(
@@ -2158,16 +2191,17 @@ class PassiveExtractionWorkflow:
         # Enhanced phase-aware gating logic
         if resume_phase == "amazon_analysis":
             self.log.info(" PHASE-AWARE GATING: Routing to Amazon analysis phase")
+
             # Create resume pointer object for compatibility with _run_amazon_phase_from_resume
             class ResumePtr:
                 def __init__(self, cat_idx, prod_idx, phase):
                     self.cat_idx = cat_idx
                     self.prod_idx = prod_idx
                     self.phase = phase
-            
+
             resume_ptr = ResumePtr(start_category_index, product_resume_index, resume_phase)
             await self._run_amazon_phase_from_resume(resume_ptr)
-            
+
             # Reload authoritative pointers after resume finalizer
             sp_after = self.state_manager.state_data.get("system_progression", {}) or {}
             start_category_index = sp_after.get("persistent_category_index", start_category_index)
@@ -2242,12 +2276,16 @@ class PassiveExtractionWorkflow:
         sp = self.state_manager.state_data.get("system_progression", {})
         pci = int(sp.get("persistent_category_index", 1) or 1)
         cursor = int(self.state_manager.state_data.get("session_resume_cursor") or pci or 1)
-        self._start_category_index = max(pci, cursor)  # FIX C: Use MAX for monotonicity preservation
+        self._start_category_index = max(
+            pci, cursor
+        )  # FIX C: Use MAX for monotonicity preservation
 
         resume_phase = sp.get("current_phase", "supplier")
 
         #  FIX E: Enhanced observability - show both PCI and cursor
-        self.log.info(f" WORKFLOW START CURSOR: category_index={self._start_category_index} (pci={pci}, cursor={cursor}, max={max(pci, cursor)})")
+        self.log.info(
+            f" WORKFLOW START CURSOR: category_index={self._start_category_index} (pci={pci}, cursor={cursor}, max={max(pci, cursor)})"
+        )
         self.log.info(
             f" WORKFLOW INITIALIZED: Starting from category {self._start_category_index} in phase '{resume_phase}'"
         )
@@ -2348,13 +2386,15 @@ class PassiveExtractionWorkflow:
             hybrid_config = full_config.get("hybrid_processing", {})
             #  Resume context detection (for logging only - does NOT block hybrid mode)
             sp_h = self.state_manager.state_data.get("system_progression", {}) or {}
-            is_resuming = any([
-                int(sp_h.get("persistent_category_index", 1)) > 1,
-                int(sp_h.get("supplier_products_completed", 0) or 0) > 0,
-                int(sp_h.get("amazon_products_completed", 0) or 0) > 0,
-                sp_h.get("current_phase") in ("amazon_analysis",),
-                bool(sp_h.get("category_denominator_frozen", False)),
-            ])
+            is_resuming = any(
+                [
+                    int(sp_h.get("persistent_category_index", 1)) > 1,
+                    int(sp_h.get("supplier_products_completed", 0) or 0) > 0,
+                    int(sp_h.get("amazon_products_completed", 0) or 0) > 0,
+                    sp_h.get("current_phase") in ("amazon_analysis",),
+                    bool(sp_h.get("category_denominator_frozen", False)),
+                ]
+            )
             if hybrid_config.get("enabled", False):
                 #  FIX: Hybrid mode now ALWAYS runs when enabled in config
                 # Resume logic is handled inside _extract_supplier_products (lines 5780-5920)
@@ -2377,7 +2417,9 @@ class PassiveExtractionWorkflow:
             except Exception:
                 current_phase = "supplier"
             if current_phase == "amazon_analysis":
-                self.log.info(" START DISPATCH: Resuming into Amazon phase; loading supplier cache snapshot")
+                self.log.info(
+                    " START DISPATCH: Resuming into Amazon phase; loading supplier cache snapshot"
+                )
                 supplier_products = self._load_supplier_cache(self.supplier_name) or []
             else:
                 supplier_products = await self._extract_supplier_products(
@@ -2419,7 +2461,8 @@ class PassiveExtractionWorkflow:
             valid_supplier_products = [
                 p
                 for p in supplier_products
-                if p.get("_skipped") or (
+                if p.get("_skipped")
+                or (
                     p.get("title")
                     and isinstance(p.get("price"), (float, int))
                     and p.get("price", 0) > 0
@@ -2427,7 +2470,8 @@ class PassiveExtractionWorkflow:
                 )
             ]
             price_filtered_products = [
-                p for p in valid_supplier_products 
+                p
+                for p in valid_supplier_products
                 if p.get("_skipped") or (MIN_PRICE <= p.get("price", 0) <= MAX_PRICE)
             ]
             self.log.info(
@@ -2438,14 +2482,16 @@ class PassiveExtractionWorkflow:
             n = len(price_filtered_products)
             upper = max(0, n - 1)
 
-            #  FIX: Prevent Double-Skip. 
+            #  FIX: Prevent Double-Skip.
             # If we just extracted products (supplier phase), the list is already filtered/fresh.
             # We must start from 0, otherwise we slice off valid products using the *previous* category's index.
             # The _extract_supplier_products method ALREADY handled the resumption logic and returned only the needed products.
             if current_phase == "supplier":
-                self.log.info(f" SUPPLIER PHASE: Forcing resume index to 0 (list already filtered by extraction logic)")
+                self.log.info(
+                    f" SUPPLIER PHASE: Forcing resume index to 0 (list already filtered by extraction logic)"
+                )
                 self.last_processed_index = 0
-            
+
             if self.last_processed_index > upper:
                 self.log.info(
                     f" Resume index {self.last_processed_index} > max {upper}; clamping to {upper}."
@@ -2479,37 +2525,47 @@ class PassiveExtractionWorkflow:
             if hasattr(self, "state_manager") and self.state_manager:
                 # 1. Save the "Real" denominator for logic (filtered count)
                 # Unfreeze temporarily to allow update
-                self.state_manager.state_data["system_progression"]["category_denominator_frozen"] = False
+                self.state_manager.state_data["system_progression"][
+                    "category_denominator_frozen"
+                ] = False
                 self.state_manager.set_frozen_denominator(
                     category_url=self.workflow_config.get("supplier_url"),
-                    discovered_count=total_products_for_state
+                    discovered_count=total_products_for_state,
                 )
-                
+
                 # 2. Save the "Original" denominator for display (User Request)
                 # We use 'last_discovered_count' from scraper which holds the raw total value
-                original_count = getattr(self.supplier_scraper, "last_discovered_count", total_products_for_state)
-                
+                original_count = getattr(
+                    self.supplier_scraper, "last_discovered_count", total_products_for_state
+                )
+
                 self.state_manager.state_data.setdefault("user_display_metrics", {})
-                self.state_manager.state_data["user_display_metrics"]["original_discovered_count"] = original_count
-                self.state_manager.state_data["user_display_metrics"]["filtered_worklist_count"] = total_products_for_state
-                
-                self.log.info(f" DENOMINATOR UPDATED: Logic={total_products_for_state} (filtered), Display={original_count} (original)")
-            
+                self.state_manager.state_data["user_display_metrics"][
+                    "original_discovered_count"
+                ] = original_count
+                self.state_manager.state_data["user_display_metrics"]["filtered_worklist_count"] = (
+                    total_products_for_state
+                )
+
+                self.log.info(
+                    f" DENOMINATOR UPDATED: Logic={total_products_for_state} (filtered), Display={original_count} (original)"
+                )
+
             # Initialize Amazon analysis phase using atomic commit
             if hasattr(self, "state_manager") and self.state_manager:
                 self.state_manager.commit_phase_switch(
                     new_phase="amazon_analysis",
-                    reset_index=False  # Don't reset since we're resuming
+                    reset_index=False,  # Don't reset since we're resuming
                 )
-                
+
                 # Set category processing context for Amazon analysis
                 if len(products_to_analyze) > 0:
                     first_product = products_to_analyze[0]
                     category_url = first_product.get("source_url", "amazon_analysis_batch")
                     self.state_manager.initialize_category_processing(
-                        category_index=1,  # 1-based indexing, consistent with hybrid/supplier 
+                        category_index=1,  # 1-based indexing, consistent with hybrid/supplier
                         category_url=category_url,
-                        total_categories=1  # Single phase processing
+                        total_categories=1,  # Single phase processing
                     )
 
             # Batch processing logic - group products by max_products_per_cycle
@@ -2521,20 +2577,28 @@ class PassiveExtractionWorkflow:
 
             # 1.6: Phase already switched above (resume-aware); do NOT reset counters again
             # self.state_manager.commit_phase_switch(new_phase="amazon_analysis", reset_index=True)
-            category_url = products_to_analyze[0].get("source_url", "amazon_analysis") if products_to_analyze else "amazon_analysis"
+            category_url = (
+                products_to_analyze[0].get("source_url", "amazon_analysis")
+                if products_to_analyze
+                else "amazon_analysis"
+            )
             # Resolve authoritative category index for this Amazon group
             if not hasattr(self, "_category_index_map"):
-                src_urls = (locals().get("category_urls")
-                            or getattr(self, "_active_category_urls", [])
-                            or (self._get_predefined_categories(self.supplier_name) or []))
+                src_urls = (
+                    locals().get("category_urls")
+                    or getattr(self, "_active_category_urls", [])
+                    or (self._get_predefined_categories(self.supplier_name) or [])
+                )
                 self._category_index_map = {normalize_url(u): i + 1 for i, u in enumerate(src_urls)}
             amz_cat_idx = self._category_index_map.get(normalize_url(category_url), 1)
             self.state_manager.commit_amazon_progress(
                 cat_idx=amz_cat_idx,
                 queue_idx=0,
-                total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
+                total_cats=len(self._category_index_map)
+                if hasattr(self, "_category_index_map")
+                else 1,
                 cat_url=category_url,
-                queue_len=len(products_to_analyze)
+                queue_len=len(products_to_analyze),
             )
 
             # Process products in batches
@@ -2559,15 +2623,19 @@ class PassiveExtractionWorkflow:
 
                     #  STUB HANDLING: Fast-forward skipped products
                     if product_data.get("_skipped"):
-                        self.log.info(f" SKIPPING STUB: {current_index}/{total_for_display} (Already Processed)")
+                        self.log.info(
+                            f" SKIPPING STUB: {current_index}/{total_for_display} (Already Processed)"
+                        )
                         # Ensure state is updated for this index
                         if hasattr(self, "state_manager") and self.state_manager:
-                             self.state_manager.commit_amazon_progress(
+                            self.state_manager.commit_amazon_progress(
                                 cat_idx=amz_cat_idx,
-                                queue_idx=i + 1, # Update progress
-                                total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
+                                queue_idx=i + 1,  # Update progress
+                                total_cats=len(self._category_index_map)
+                                if hasattr(self, "_category_index_map")
+                                else 1,
                                 cat_url=category_url,
-                                queue_len=len(batch_products)
+                                queue_len=len(batch_products),
                             )
                         continue
                     #  FIX 2: Show correct total in log messages
@@ -2586,9 +2654,11 @@ class PassiveExtractionWorkflow:
                         self.state_manager.commit_amazon_progress(
                             cat_idx=amz_cat_idx,
                             queue_idx=i + 1,
-                            total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
+                            total_cats=len(self._category_index_map)
+                            if hasattr(self, "_category_index_map")
+                            else 1,
                             cat_url=category_url,
-                            queue_len=len(batch_products)
+                            queue_len=len(batch_products),
                         )
 
                         #  MIGRATION: Already replaced legacy writer with atomic commit above
@@ -2759,13 +2829,17 @@ class PassiveExtractionWorkflow:
                                 f"amazon_{asin}_{filename_identifier}.json",
                             )
                         )
-                        success = self.save_guardian.save_json_atomic(amazon_cache_path, amazon_data)
+                        success = self.save_guardian.save_json_atomic(
+                            amazon_cache_path, amazon_data
+                        )
                         if success:
                             self.log.info(f" Saved Amazon data to {amazon_cache_path}")
                         else:
                             self.log.error(f" Failed to save Amazon data to {amazon_cache_path}")
                     else:
-                        self.log.debug(f" Skipping Amazon cache save for no-match case (ASIN={asin})")
+                        self.log.debug(
+                            f" Skipping Amazon cache save for no-match case (ASIN={asin})"
+                        )
 
                     self.log.info(
                         f" DEBUG: supplier_ean='{supplier_ean}', asin='{asin}', product_ean='{product_data.get('ean')}'"
@@ -2800,11 +2874,16 @@ class PassiveExtractionWorkflow:
                             # OLD: EAN was verified on product page - highest confidence
                             match_method = "EAN"
                             confidence = "high"
-                        elif actual_search_method == "EAN" or actual_search_method == "ean_search_bar_with_verification":
+                        elif (
+                            actual_search_method == "EAN"
+                            or actual_search_method == "ean_search_bar_with_verification"
+                        ):
                             # Old method - EAN search succeeded but NOT verified (shouldn't happen with new code)
                             match_method = "EAN"
                             confidence = "medium"  # Downgrade since not verified
-                            self.log.warning(f" EAN search without verification - this should not happen with new code")
+                            self.log.warning(
+                                f" EAN search without verification - this should not happen with new code"
+                            )
                         elif actual_search_method == "title":
                             # Title search worked
                             match_method = "title"
@@ -3019,9 +3098,11 @@ class PassiveExtractionWorkflow:
                     self.state_manager.commit_amazon_progress(
                         cat_idx=amz_cat_idx,
                         queue_idx=i + 1,
-                        total_cats=len(self._category_index_map) if hasattr(self, "_category_index_map") else 1,
+                        total_cats=len(self._category_index_map)
+                        if hasattr(self, "_category_index_map")
+                        else 1,
                         cat_url=category_url,
-                        queue_len=len(batch_products)
+                        queue_len=len(batch_products),
                     )
 
             # Final save and completion
@@ -3208,10 +3289,15 @@ class PassiveExtractionWorkflow:
                     if actual_search_method == "ean_verified":
                         match_method = "EAN"
                         confidence = "high"
-                    elif actual_search_method == "EAN" or actual_search_method == "ean_search_bar_with_verification":
+                    elif (
+                        actual_search_method == "EAN"
+                        or actual_search_method == "ean_search_bar_with_verification"
+                    ):
                         match_method = "EAN"
                         confidence = "medium"
-                        self.log.warning(f" EAN search without verification for ASIN {amazon_data.get('asin')}")
+                        self.log.warning(
+                            f" EAN search without verification for ASIN {amazon_data.get('asin')}"
+                        )
                     elif actual_search_method == "title":
                         match_method = "title"
                         confidence = "medium"
@@ -3242,9 +3328,7 @@ class PassiveExtractionWorkflow:
 
                     if financial_result and financial_result.get("profitable", False):
                         profitable_results.append(financial_result)
-                        self.log.info(
-                            f" Profitable gap product found: {product_data.get('title')}"
-                        )
+                        self.log.info(f" Profitable gap product found: {product_data.get('title')}")
                     else:
                         self.log.info(f" Not profitable gap product: {product_data.get('title')}")
                 else:
@@ -3477,10 +3561,10 @@ class PassiveExtractionWorkflow:
             self.log.error(f" CRITICAL: Failed to create linking map path: {path_error}")
             return
 
-        #  ATOMIC SAVE: Use Windows Save Guardian with alt-temp strategy
-        self.log.info(
-            f" ATOMIC SAVE: Attempting to save {len(self.linking_map)} entries using atomic strategy..."
-        )
+            #  ATOMIC SAVE: Use Windows Save Guardian with alt-temp strategy
+            self.log.info(
+                f" ATOMIC SAVE: Attempting to save {len(self.linking_map)} entries using atomic strategy..."
+            )
 
         try:
             #  SENTINEL MONITORING: Track save attempt
@@ -3511,6 +3595,17 @@ class PassiveExtractionWorkflow:
                     self.log.info(
                         f" HASH INDEXES REBUILT: Updated indexes for {len(self.linking_map)} entries"
                     )
+
+                    # NEW: Mirror global successful_products into state using the same count.
+                    # This keeps dashboard/state totals aligned with the linking map file.
+                    try:
+                        if hasattr(self, "state_manager") and self.state_manager is not None:
+                            state = self.state_manager.state_data
+                            state["successful_products"] = len(self.linking_map)
+                            # Preserve interruption state; do not trigger startup recompute.
+                            self.state_manager.save_state(preserve_interruption_state=True)
+                    except Exception as e:
+                        self.log.warning(f" METRICS MIRROR FAILED (successful_products): {e}")
 
                     #  SENTINEL MONITORING: Check for linking map shrinkage
                     self.sentinel_monitor.check_linking_map_shrinkage(current_size, previous_size)
@@ -3581,7 +3676,7 @@ class PassiveExtractionWorkflow:
             "slug": slug,
         }
 
-    # _normalize_url_for_filtering no longer needed; use normalize_url everywhere in the pipeline
+        # _normalize_url_for_filtering no longer needed; use normalize_url everywhere in the pipeline
 
         # Use WindowsSaveGuardian for atomic write
         guardian = WindowsSaveGuardian()
@@ -3725,7 +3820,7 @@ class PassiveExtractionWorkflow:
 
         return await _inner()
 
-    #    Enhanced State tracking helpers 
+    #    Enhanced State tracking helpers
     def _load_history(self):
         """Load comprehensive scraping history to prevent duplicate processing"""
         if self.state_path and Path(self.state_path).exists():  # MODIFIED HERE
@@ -3850,9 +3945,9 @@ class PassiveExtractionWorkflow:
     def _config_manifest_hash(self) -> str:
         """Get configuration manifest hash for lineage tracking."""
         # Return cached hash if available
-        if hasattr(self, '_cached_config_hash'):
+        if hasattr(self, "_cached_config_hash"):
             return self._cached_config_hash
-        
+
         # Fallback: compute fresh hash if needed
         try:
             category_urls = self._get_predefined_categories(self.supplier_name) or []
@@ -3865,13 +3960,19 @@ class PassiveExtractionWorkflow:
         """Load predefined category URLs from a custom JSON file."""
         log.info(f"Attempting to load predefined categories for {supplier_name}")
         try:
-            # Robust path construction using pathlib
-            base_name = supplier_name.split('.')[0]
-            config_path = (
-                Path(__file__).parent.parent
-                / "config"
-                / f"{base_name}_categories.json"
-            )
+            categories_config_path = None
+            try:
+                categories_config_path = (self.workflow_config or {}).get("categories_config_path")
+            except Exception:
+                categories_config_path = None
+
+            if categories_config_path:
+                config_path = Path(categories_config_path)
+            else:
+                base_name = supplier_name.split(".")[0]
+                config_path = (
+                    Path(__file__).parent.parent / "config" / f"{base_name}_categories.json"
+                )
 
             if config_path.exists():
                 with open(config_path, "r", encoding="utf-8") as f:
@@ -4023,7 +4124,7 @@ class PassiveExtractionWorkflow:
 
         return "\n".join(summary_lines)
 
-    #  PHASE 3: SUBCATEGORY DEDUPLICATION 
+    #  PHASE 3: SUBCATEGORY DEDUPLICATION
     def _detect_parent_child_urls(self, urls: List[str]) -> Dict[str, List[str]]:
         """
         Detect parent-child URL relationships to prevent double processing.
@@ -4130,7 +4231,7 @@ class PassiveExtractionWorkflow:
 
         return filtered_urls
 
-    #    Enhanced AI method 
+    #    Enhanced AI method
     async def _get_ai_suggested_categories_enhanced(
         self,
         supplier_url: str,
@@ -4139,7 +4240,7 @@ class PassiveExtractionWorkflow:
         previous_categories: list[str] | None = None,
         processed_products: int | None = None,
     ) -> dict:
-        """ FBA-aware AI selection with UK business intelligence & enhanced memory."""
+        """FBA-aware AI selection with UK business intelligence & enhanced memory."""
         prev_cats = previous_categories or []
 
         #  ENHANCED: Filter out previously suggested categories more thoroughly
@@ -4656,7 +4757,7 @@ Return ONLY valid JSON, no additional text."""
             if not products:
                 self.log.info(" DEDUP SUMMARY: 0 new; skipped re-scan (empty batch)")
                 return 0
-                
+
             # --- PATH CORRECTION FIX V5 ---
             # Use pathlib for robust, cross-platform path handling.
             path_obj = Path(str(cache_file_path))
@@ -4676,9 +4777,7 @@ Return ONLY valid JSON, no additional text."""
             # Get cache control configuration
             cache_config = self.system_config.get("supplier_cache_control", {})
             if cache_config.get("enabled", True):
-                self.log.info(
-                    f" CACHE SAVE: Starting save of {len(products)} products to cache..."
-                )
+                self.log.info(f" CACHE SAVE: Starting save of {len(products)} products to cache...")
 
             self.log.info(f" DEBUG: Final path for file operations: {final_path}")
 
@@ -4698,11 +4797,14 @@ Return ONLY valid JSON, no additional text."""
 
                 #  ATOMIC FIX 2: Deterministic deduplication with a single stable key (EAN preferred, else normalized URL)
                 from utils.normalization import stable_key
+
                 seen = set()
 
                 # seed seen set from existing cache
                 for p in existing_products:
-                    k = stable_key(normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean")))
+                    k = stable_key(
+                        normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean"))
+                    )
                     if k:
                         seen.add(k)
 
@@ -4717,14 +4819,14 @@ Return ONLY valid JSON, no additional text."""
                         p.pop("sku", None)
                     except Exception:
                         pass
-                    k = stable_key(normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean")))
+                    k = stable_key(
+                        normalize_url(p.get("url")), self._valid_ean_for_key(p.get("ean"))
+                    )
                     scanned += 1
 
                     # Reduced logging: only periodic debug updates during scan
                     if self.log.isEnabledFor(logging.DEBUG) and scanned % 100 == 0:
-                        self.log.debug(
-                            f" DEDUP SCAN: scanned={scanned} dupes={dupes_skipped}"
-                        )
+                        self.log.debug(f" DEDUP SCAN: scanned={scanned} dupes={dupes_skipped}")
 
                     if k in seen:
                         dupes_skipped += 1
@@ -4735,19 +4837,23 @@ Return ONLY valid JSON, no additional text."""
                         seen.add(k)
 
                 new_count = len(new_products)
-                
+
                 # RC-6: Periodic scan policy - only log when new_count > 0 AND interval elapsed
                 current_time = time.time()
                 time_since_last_scan = current_time - self._last_full_scan_ts
-                
+
                 if new_count > 0 and time_since_last_scan >= self._full_scan_interval:
                     if dupes_skipped > 0:
-                        self.log.info(f" ATOMIC DEDUPLICATION: Skipped {dupes_skipped} duplicates (stable_key).")
+                        self.log.info(
+                            f" ATOMIC DEDUPLICATION: Skipped {dupes_skipped} duplicates (stable_key)."
+                        )
                     # Update last scan timestamp
                     self._last_full_scan_ts = current_time
                 elif new_count > 0:
                     # Interval not elapsed, but we have new products
-                    self.log.info(" DEDUP SUMMARY: New products found but scan interval not elapsed")
+                    self.log.info(
+                        " DEDUP SUMMARY: New products found but scan interval not elapsed"
+                    )
                 else:
                     self.log.info(" DEDUP SUMMARY: 0 new; dedup scan skipped")
 
@@ -4772,18 +4878,32 @@ Return ONLY valid JSON, no additional text."""
             if success:
                 file_size = os.path.getsize(final_path)
                 self.log.info(
-                    f" ATOMICALLY saved {len(all_products)} products ({new_count} new) to cache: {os.path.basename(final_path)} (size: {file_size} bytes)"
+                    f" ATOMICALLY saved {len(all_products)} products ({new_count} new) to cache: "
+                    f"{os.path.basename(final_path)} (size: {file_size} bytes)"
                 )
 
                 # ?? ATOMIC FIX 6: Update in-memory cache while preserving reference used by appends
-                if hasattr(self, '_current_all_products') and isinstance(self._current_all_products, list):
+                if hasattr(self, "_current_all_products") and isinstance(
+                    self._current_all_products, list
+                ):
                     try:
                         self._current_all_products[:] = all_products
                     except Exception:
                         self._current_all_products = list(all_products)
                     self.log.debug(
-                        f'?? SYNC: In-memory cache updated in-place ({len(all_products)} products)'
+                        f"?? SYNC: In-memory cache updated in-place ({len(all_products)} products)"
                     )
+
+                # NEW: Mirror global supplier total into state for dashboards/metrics.
+                # This uses the same count already logged above and does NOT touch resume pointers.
+                try:
+                    if hasattr(self, "state_manager") and self.state_manager is not None:
+                        state = self.state_manager.state_data
+                        state["total_products"] = len(all_products)
+                        # Preserve interruption state so no startup recalculation is triggered.
+                        self.state_manager.save_state(preserve_interruption_state=True)
+                except Exception as e:
+                    self.log.warning(f" METRICS MIRROR FAILED (total_products): {e}")
 
                 # Keep Step-2 deterministic within the same run: update key set immediately
                 try:
@@ -4792,7 +4912,10 @@ Return ONLY valid JSON, no additional text."""
                             product.pop("sku", None)
                         except Exception:
                             pass
-                        k_new = stable_key(normalize_url(product.get("url")), self._valid_ean_for_key(product.get("ean")))
+                        k_new = stable_key(
+                            normalize_url(product.get("url")),
+                            self._valid_ean_for_key(product.get("ean")),
+                        )
                         if k_new:
                             self.product_cache_key_index.add(k_new)
                 except Exception as e:
@@ -4845,7 +4968,7 @@ Return ONLY valid JSON, no additional text."""
             else ("neutral" if neutral_remaining > 0 else "complete"),
         }
 
-    #    Hierarchical selector 
+    #    Hierarchical selector
     async def _hierarchical_category_selection(self, supplier_url, supplier_name):
         # DEPRECATED: Replaced by EnhancedStateManager to prevent state conflicts
         # hist = self._load_history()
@@ -5221,8 +5344,12 @@ Return ONLY valid JSON, no additional text."""
         # (Phase switch logic now handled correctly in run() method at line ~2187)
 
         # Startup sequence visibility: warn if totals were never committed
-        if not self.state_manager.state_data.get("system_progression", {}).get("frozen_totals_committed"):
-            self.log.warning(" STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.")
+        if not self.state_manager.state_data.get("system_progression", {}).get(
+            "frozen_totals_committed"
+        ):
+            self.log.warning(
+                " STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit."
+            )
 
         self.log.info(f" PERFORMING SUPPLIER SCRAPING from {len(category_urls)} categories")
         self.log.info(f" Using supplier extraction batch size: {supplier_extraction_batch_size}")
@@ -5235,8 +5362,6 @@ Return ONLY valid JSON, no additional text."""
         # CRITICAL FIX: Track filtered URLs across all categories to return only correct products
         all_needs_full_extraction_urls = []
         all_needs_amazon_only_urls = []
-        
-
 
         #  CRITICAL FIX: Load existing cached products and filter against linking map
         actual_cache_file, existing_cache_count = self._find_actual_supplier_cache_file(
@@ -5248,7 +5373,9 @@ Return ONLY valid JSON, no additional text."""
                     existing_cached_products = json.load(f)
 
                 # Use cache for resumption tracking only, don't bypass scraping
-                self.log.info(f" CACHE FOUND: {len(existing_cached_products)} products available for progress tracking")
+                self.log.info(
+                    f" CACHE FOUND: {len(existing_cached_products)} products available for progress tracking"
+                )
                 all_products = []  # Let scraping loops populate this properly
 
             except Exception as e:
@@ -5329,14 +5456,18 @@ Return ONLY valid JSON, no additional text."""
                 # Authoritative global index from the source-of-truth list (normalized)
                 if not hasattr(self, "_category_index_map"):
                     # Prefer the authoritative global list over any per-chunk list
-                    src_urls = (getattr(self, "_active_category_urls", [])
-                                or category_urls
-                                or (self._get_predefined_categories(self.supplier_name) or []))
-                    self._category_index_map = {normalize_url(u): i + 1 for i, u in enumerate(src_urls)}
+                    src_urls = (
+                        getattr(self, "_active_category_urls", [])
+                        or category_urls
+                        or (self._get_predefined_categories(self.supplier_name) or [])
+                    )
+                    self._category_index_map = {
+                        normalize_url(u): i + 1 for i, u in enumerate(src_urls)
+                    }
                 absolute_cat_index = self._category_index_map.get(normalize_url(category_url), 1)
                 self._current_absolute_cat_index = absolute_cat_index
                 self._current_category_url = category_url
-                
+
                 #  FIX D: Category skip logic - skip already processed categories
                 if absolute_cat_index < getattr(self, "_start_category_index", 1):
                     self.log.info(
@@ -5363,13 +5494,19 @@ Return ONLY valid JSON, no additional text."""
                 pci = int(sp.get("persistent_category_index", 1))
                 # Convert 1-based PCI to 0-based list index for category_urls access
                 expected_pos = max(0, pci - 1)
-                expected_url = normalize_url(category_urls[expected_pos]) if 0 <= expected_pos < len(category_urls) else None
+                expected_url = (
+                    normalize_url(category_urls[expected_pos])
+                    if 0 <= expected_pos < len(category_urls)
+                    else None
+                )
                 if expected_url != entered_url:
                     self.log.warning(
                         f" PCI/URL mismatch at entry: pci={pci} expected={expected_url} actual={entered_url} (aligning PCI to i={i})"
                     )
                     #  CATEGORY_INDEX_TRACKER: DO NOT OVERRIDE - Let mark_category_completed() handle increments
-                    self.log.info(f" CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)")
+                    self.log.info(
+                        f" CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)"
+                    )
                     # self.state_manager.save_state_atomic("align-pci-to-url")  # Removed - no longer needed
                 # --- END ---
 
@@ -5382,8 +5519,10 @@ Return ONLY valid JSON, no additional text."""
                 if not urls_for_manifest:
                     self.log.warning(f"No product URLs found for {category_url}")
                     # Handle empty category: reset category index to 0 and mark as completed
-                    self.log.info(f" EMPTY CATEGORY HANDLING: Category {absolute_cat_index} has no products, resetting index to 0")
-                    
+                    self.log.info(
+                        f" EMPTY CATEGORY HANDLING: Category {absolute_cat_index} has no products, resetting index to 0"
+                    )
+
                     # Initialize category processing with 0 products
                     if progress_config.get("enabled", True):
                         self.state_manager.initialize_category_processing(
@@ -5391,32 +5530,42 @@ Return ONLY valid JSON, no additional text."""
                             category_url=category_url,
                             total_categories=self._authoritative_total_categories(),
                         )
-                    
+
                     # Set frozen denominator to 0 for empty category
                     self.state_manager.set_frozen_denominator(category_url, 0)
-                    self.log.info(f" FROZEN DENOMINATOR: Empty category {absolute_cat_index}  0 products")
-                    
+                    self.log.info(
+                        f" FROZEN DENOMINATOR: Empty category {absolute_cat_index}  0 products"
+                    )
+
                     # Mark frozen totals as committed to enable resume pointer calculation
                     self.state_manager.mark_frozen_totals_committed()
-                    self.log.info(f" TOTALS COMMITTED: Resume pointers now enabled for empty category")
-                    
+                    self.log.info(
+                        f" TOTALS COMMITTED: Resume pointers now enabled for empty category"
+                    )
+
                     # Mark category as completed since there's nothing to process
                     self.state_manager.mark_category_completed(category_url, absolute_cat_index)
-                    self.log.info(f" EMPTY CATEGORY COMPLETED: Category {absolute_cat_index} marked as completed")
-                    
+                    self.log.info(
+                        f" EMPTY CATEGORY COMPLETED: Category {absolute_cat_index} marked as completed"
+                    )
+
                     continue
 
                 # --- START OF MANIFEST AND FREEZING LOGIC (MOVED BEFORE CATEGORY INIT) ---
-                self.log.info(f"Discovered {len(urls_for_manifest)} product URLs for category: {category_url}")
+                self.log.info(
+                    f"Discovered {len(urls_for_manifest)} product URLs for category: {category_url}"
+                )
 
                 # 1. Generate and save the manifest atomically
                 manifest_urls = [url for url in urls_for_manifest if url]
-                
+
                 # Create manifest path using path_manager
-                category_slug = urlparse(category_url).path.strip('/').replace('/', '_') or 'root'
+                category_slug = urlparse(category_url).path.strip("/").replace("/", "_") or "root"
                 manifest_filename = f"{self.supplier_name}_{category_slug}_manifest.json"
-                manifest_path = path_manager.get_output_path("manifests", self.supplier_name, manifest_filename)
-                
+                manifest_path = path_manager.get_output_path(
+                    "manifests", self.supplier_name, manifest_filename
+                )
+
                 manifest_obj = {
                     "category_url": category_url,
                     "scraped_at": datetime.now(timezone.utc).isoformat(),
@@ -5428,7 +5577,9 @@ Return ONLY valid JSON, no additional text."""
                 #  FIX #4: Use Windows-safe WindowsSaveGuardian instead of Unix-specific fcntl
                 success = self.save_guardian.save_json_atomic(manifest_path, manifest_obj)
                 if success:
-                    self.log.info(f" MANIFEST CREATED: Saved {len(manifest_urls)} URLs to {manifest_path.name}")
+                    self.log.info(
+                        f" MANIFEST CREATED: Saved {len(manifest_urls)} URLs to {manifest_path.name}"
+                    )
                 else:
                     self.log.error(f" Failed to save manifest for {category_url}")
 
@@ -5436,7 +5587,9 @@ Return ONLY valid JSON, no additional text."""
                 discovered_count = len(manifest_urls)
                 if not self.state_manager.is_category_denominator_frozen(category_url):
                     self.state_manager.set_frozen_denominator(category_url, discovered_count)
-                    self.log.info(f" FROZEN DENOMINATOR: Category {absolute_cat_index}  {discovered_count} products (snapshot)")
+                    self.log.info(
+                        f" FROZEN DENOMINATOR: Category {absolute_cat_index}  {discovered_count} products (snapshot)"
+                    )
 
                 # 3. Mark frozen totals as committed to enable resume pointer calculation
                 self.state_manager.mark_frozen_totals_committed()
@@ -5445,7 +5598,9 @@ Return ONLY valid JSON, no additional text."""
                 # 4. Get the authoritative total for this category's progress
                 authoritative_total = self.state_manager.get_frozen_denominator(category_url)
                 if authoritative_total is None:
-                    self.log.error(f"FATAL: Could not retrieve a denominator for {category_url}. Using discovered count as fallback.")
+                    self.log.error(
+                        f"FATAL: Could not retrieve a denominator for {category_url}. Using discovered count as fallback."
+                    )
                     authoritative_total = discovered_count
 
                 # --- END OF MANIFEST AND FREEZING LOGIC ---
@@ -5454,7 +5609,7 @@ Return ONLY valid JSON, no additional text."""
                 if progress_config.get("enabled", True):
                     #  REVISED: Calculate category index with cursor offset
                     category_index = absolute_cat_index + 1
-                    display_category_index = (self._category_index_offset + subcategory_index)
+                    display_category_index = self._category_index_offset + subcategory_index
 
                     # Initialize category tracking for precise resumption
                     # MD refs: comprehensive_legacy_processing_and_phase_detection_analysis_report.md Category Indexing
@@ -5466,7 +5621,9 @@ Return ONLY valid JSON, no additional text."""
                     )
 
                     #  LOGGING: Add cursor-aware logging
-                    self.log.info(f" CATEGORY PROCESSING: abs_index={absolute_cat_index}, display_index={display_category_index}, url={category_url[:50]}...")
+                    self.log.info(
+                        f" CATEGORY PROCESSING: abs_index={absolute_cat_index}, display_index={display_category_index}, url={category_url[:50]}..."
+                    )
                     #  MIGRATION: Removed legacy writer - using atomic commits only
 
                     if progress_config.get("progress_display", {}).get(
@@ -5560,7 +5717,9 @@ Return ONLY valid JSON, no additional text."""
                             p.get("ean"): p for p in self.cached_products if p.get("ean")
                         }
                         self.product_cache_url_index = {
-                            normalize_url(p.get("url")): p for p in self.cached_products if p.get("url")  # Canonical normalization
+                            normalize_url(p.get("url")): p
+                            for p in self.cached_products
+                            if p.get("url")  # Canonical normalization
                         }
                         self.log.info(
                             f" Product cache URL/EAN indexes built: url_idx={len(self.product_cache_url_index)}, ean_idx={len(self.product_cache_ean_index)}"
@@ -5648,23 +5807,23 @@ Return ONLY valid JSON, no additional text."""
                     f"skip={len(skip_entirely_urls)} + cached={len(needs_amazon_only_urls)} + full={len(needs_full_extraction_urls)}"
                 )
 
-                # 
+                #
                 #  USER REQUIREMENT: RESUME POSITION CALCULATION (File-Based Authority)
-                # 
+                #
 
                 # Get persisted phase (AUTHORITY for resume routing)
                 sp = self.state_manager.state_data.get("system_progression", {})
                 persisted_phase = sp.get("current_phase", "supplier")
 
                 # Calculate counts from filter outputs (already computed above)
-                in_count = len(urls_for_manifest)          # Total extracted URLs
-                skip_count = len(skip_entirely_urls)       # In linking map (skip)
+                in_count = len(urls_for_manifest)  # Total extracted URLs
+                skip_count = len(skip_entirely_urls)  # In linking map (skip)
                 cached_count = len(needs_amazon_only_urls)  # In cache (amazon-only)
                 full_count = len(needs_full_extraction_urls)  # Need full extraction
 
                 #  FAST-FORWARD FIX: Explicitly update state for skipped/cached items to fix resumption index
                 # This ensures that 'completed' counters reflect reality (skips = processed) without running them through the pipeline
-                
+
                 # 1. Amazon Phase Fast-Forward (ALWAYS run this check)
                 # Items in 'skip_entirely_urls' are skipped for BOTH phases.
                 # We must ensure amazon_products_completed accounts for them, even if we are currently in the supplier phase.
@@ -5672,7 +5831,9 @@ Return ONLY valid JSON, no additional text."""
                     current_amz_completed = int(sp.get("amazon_products_completed", 0) or 0)
                     # Only update if the current count is less than the skip count (avoid regressing if we are further ahead)
                     if current_amz_completed < skip_count:
-                        self.log.info(f" FAST-FORWARD (Amazon): Updating completed count {current_amz_completed} -> {skip_count} (skips)")
+                        self.log.info(
+                            f" FAST-FORWARD (Amazon): Updating completed count {current_amz_completed} -> {skip_count} (skips)"
+                        )
                         sp["amazon_products_completed"] = skip_count
                         self.state_manager.save_state_atomic("fast-forward-amazon")
 
@@ -5683,12 +5844,14 @@ Return ONLY valid JSON, no additional text."""
                     if total_skipped_supplier > 0:
                         current_sup_completed = int(sp.get("supplier_products_completed", 0) or 0)
                         if current_sup_completed < total_skipped_supplier:
-                            self.log.info(f" FAST-FORWARD (Supplier): Updating completed count {current_sup_completed} -> {total_skipped_supplier} (skips + cache)")
+                            self.log.info(
+                                f" FAST-FORWARD (Supplier): Updating completed count {current_sup_completed} -> {total_skipped_supplier} (skips + cache)"
+                            )
                             sp["supplier_products_completed"] = total_skipped_supplier
                             self.state_manager.save_state_atomic("fast-forward-supplier")
 
                 #  VALIDATION: Filter invariant check (enhanced with pass/fail)
-                filter_invariant_holds = (in_count == skip_count + cached_count + full_count)
+                filter_invariant_holds = in_count == skip_count + cached_count + full_count
 
                 if not filter_invariant_holds:
                     self.log.error(
@@ -5824,7 +5987,9 @@ Return ONLY valid JSON, no additional text."""
                 supplier_total = len(needs_full_extraction_urls)
                 amazon_total = len(needs_amazon_only_urls) + supplier_total
                 if supplier_total == 0 and amazon_total == 0:
-                    self.log.info(" Empty category after filters  marking complete and advancing PCI")
+                    self.log.info(
+                        " Empty category after filters  marking complete and advancing PCI"
+                    )
                     self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     continue
 
@@ -5835,7 +6000,9 @@ Return ONLY valid JSON, no additional text."""
                 supplier_total = len(needs_full_extraction_urls)
                 amazon_total = len(needs_amazon_only_urls) + supplier_total
                 if supplier_total == 0 and amazon_total == 0:
-                    self.log.info(" Empty category after filters  marking complete and advancing PCI")
+                    self.log.info(
+                        " Empty category after filters  marking complete and advancing PCI"
+                    )
                     self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     continue
 
@@ -5847,17 +6014,25 @@ Return ONLY valid JSON, no additional text."""
                 # Both duplicate freezes have been removed - single freeze at line 5108 is authoritative
 
                 frozen = bool(sp.get("category_denominator_frozen", False))
-                prior_work = (int(sp.get("supplier_products_completed", 0)) > 0
-                              or int(sp.get("amazon_products_completed", 0)) > 0)
+                prior_work = (
+                    int(sp.get("supplier_products_completed", 0)) > 0
+                    or int(sp.get("amazon_products_completed", 0)) > 0
+                )
                 prior_freeze = bool(sp.get("frozen_totals_committed", False))
                 if not bool(sp.get("category_denominator_frozen", False)):
                     sp["supplier_products_needing_extraction"] = supplier_total
                     sp["amazon_products_needing_analysis"] = amazon_total
                     # DO NOT zero completed on resume; keep whatever was persisted
-                    sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0) or 0)
-                    sp["amazon_products_completed"]   = int(sp.get("amazon_products_completed", 0) or 0)
+                    sp["supplier_products_completed"] = int(
+                        sp.get("supplier_products_completed", 0) or 0
+                    )
+                    sp["amazon_products_completed"] = int(
+                        sp.get("amazon_products_completed", 0) or 0
+                    )
                     self.state_manager.save_state_atomic("denominators-set")
-                    self.log.info(f" WORK DEFINED: supplier_extract={supplier_total} amazon_analyze={amazon_total}")
+                    self.log.info(
+                        f" WORK DEFINED: supplier_extract={supplier_total} amazon_analyze={amazon_total}"
+                    )
                 else:
                     # RESUMPTION: Correct Amazon denominator if it's clearly wrong (0 when should be > 0)
                     current_amazon_denominator = int(sp.get("amazon_products_needing_analysis", 0))
@@ -5867,15 +6042,23 @@ Return ONLY valid JSON, no additional text."""
                     # 1. Current denominator is 0 (clearly wrong)
                     # 2. Calculated amazon_total > 0 (there is actual work)
                     # 3. No progress lost (completed <= new denominator)
-                    if (current_amazon_denominator == 0 and
-                        amazon_total > 0 and
-                        amazon_completed <= amazon_total):
+                    if (
+                        current_amazon_denominator == 0
+                        and amazon_total > 0
+                        and amazon_completed <= amazon_total
+                    ):
                         sp["amazon_products_needing_analysis"] = amazon_total
                         self.state_manager.save_state_atomic("amazon-denominator-corrected")
-                        self.log.info(f" AMAZON DENOMINATOR CORRECTED: 0  {amazon_total} (resume safety fix)")
-                        self.log.info(f" WORK DEFINED (resume): supplier={sp.get('supplier_products_needing_extraction', 0)}, amazon={amazon_total}")
+                        self.log.info(
+                            f" AMAZON DENOMINATOR CORRECTED: 0  {amazon_total} (resume safety fix)"
+                        )
+                        self.log.info(
+                            f" WORK DEFINED (resume): supplier={sp.get('supplier_products_needing_extraction', 0)}, amazon={amazon_total}"
+                        )
                     else:
-                        self.log.info(f" WORK DEFINED (resume): denominators frozen  supplier={sp.get('supplier_products_needing_extraction', 0)}, amazon={current_amazon_denominator}")
+                        self.log.info(
+                            f" WORK DEFINED (resume): denominators frozen  supplier={sp.get('supplier_products_needing_extraction', 0)}, amazon={current_amazon_denominator}"
+                        )
 
                 #  CONTRACT ENFORCEMENT: Fail fast if filtering contract is violated
                 if not filter_invariant_check:
@@ -5925,7 +6108,9 @@ Return ONLY valid JSON, no additional text."""
                 # This ensures that products skipped for extraction (because they are in cache) are still passed to the next phase.
                 products = []
                 if needs_amazon_only_urls:
-                    self.log.info(f" REHYDRATING {len(needs_amazon_only_urls)} products from cache for Amazon analysis")
+                    self.log.info(
+                        f" REHYDRATING {len(needs_amazon_only_urls)} products from cache for Amazon analysis"
+                    )
                     for url in needs_amazon_only_urls:
                         nurl = normalize_url(url)
                         cached_data = self.product_cache_url_index.get(nurl)
@@ -5947,7 +6132,7 @@ Return ONLY valid JSON, no additional text."""
                     #  1-BASED PCI SYSTEM: Default to 1 instead of 0
                     cat_ptr = sp.get("persistent_category_index", 1)
                     current_phase = sp.get("current_phase", "supplier")
-                    
+
                     if current_phase == "supplier":
                         prod_ptr = sp.get("supplier_products_completed", 0)
                     elif current_phase == "amazon_analysis":
@@ -5955,7 +6140,9 @@ Return ONLY valid JSON, no additional text."""
                     else:
                         prod_ptr = 0
 
-                    saved_supplier_offset = int(prod_ptr) if isinstance(prod_ptr, (int, float)) else int(prod_ptr or 0)
+                    saved_supplier_offset = (
+                        int(prod_ptr) if isinstance(prod_ptr, (int, float)) else int(prod_ptr or 0)
+                    )
                     worklist_len = len(needs_full_extraction_urls)
                     # ISS-008: Treat offsets beyond the filtered worklist as stale for this category
                     if worklist_len > 0:
@@ -5981,10 +6168,10 @@ Return ONLY valid JSON, no additional text."""
                     # 2. There are no products that need full extraction in this category
                     #  FIX: Enhanced logic to handle race conditions properly
                     needs_full_extraction_count = len(needs_full_extraction_urls)
-                    
+
                     # Get the total categories from state manager
                     total_cats = self.state_manager._authoritative_total_categories()
-                    
+
                     #  ENHANCED RESUME LOGIC: More comprehensive checks
                     # Case 1: Category is before resume point AND has no work
                     if absolute_cat_index < cat_ptr and needs_full_extraction_count == 0:
@@ -5992,7 +6179,7 @@ Return ONLY valid JSON, no additional text."""
                             f" Resume skip: category {absolute_cat_index} < {cat_ptr} and no new extractions needed."
                         )
                         continue
-                    
+
                     # Case 2: We're at the resume category - check if we've already processed all products
                     elif absolute_cat_index == cat_ptr:
                         # Get the actual number of products that still need to be processed
@@ -6002,7 +6189,7 @@ Return ONLY valid JSON, no additional text."""
                             f"total products={needs_full_extraction_count}, resume index={prod_ptr}, "
                             f"remaining={remaining_products}"
                         )
-                        
+
                         if remaining_products <= 0:
                             self.log.info(
                                 f" Resume skip: category {absolute_cat_index} at resume point but all {needs_full_extraction_count} products already processed."
@@ -6012,15 +6199,17 @@ Return ONLY valid JSON, no additional text."""
                             self.log.info(
                                 f" PROCEEDING: category {absolute_cat_index} at resume point with {remaining_products} products remaining."
                             )
-                    
+
                     # Case 3: We're past the resume category - only skip if no work needed
                     elif absolute_cat_index > cat_ptr:
                         #  FIX: Ensure we are starting fresh for this new category
                         if prod_ptr > 0:
-                             self.log.warning(f" State Mismatch: New category {absolute_cat_index} but prod_ptr={prod_ptr}. Resetting to 0.")
-                             prod_ptr = 0
-                             # Update state to prevent 'Double Skip' logic downstream
-                             sp["supplier_products_completed"] = 0
+                            self.log.warning(
+                                f" State Mismatch: New category {absolute_cat_index} but prod_ptr={prod_ptr}. Resetting to 0."
+                            )
+                            prod_ptr = 0
+                            # Update state to prevent 'Double Skip' logic downstream
+                            sp["supplier_products_completed"] = 0
 
                         if needs_full_extraction_count == 0:
                             self.log.info(
@@ -6031,7 +6220,7 @@ Return ONLY valid JSON, no additional text."""
                             self.log.info(
                                 f" PROCEEDING: category {absolute_cat_index} > {cat_ptr} (past resume point) with {needs_full_extraction_count} products to extract."
                             )
-                    
+
                     # Case 4: We're before resume category but it has work (should not happen in normal flow)
                     # This is a safety check to ensure we don't skip categories that might have work
                     elif absolute_cat_index < cat_ptr and needs_full_extraction_count > 0:
@@ -6039,26 +6228,34 @@ Return ONLY valid JSON, no additional text."""
                             f" UNEXPECTED: category {absolute_cat_index} < {cat_ptr} but has {needs_full_extraction_count} products to extract. "
                             f"This might indicate a state inconsistency. Proceeding with extraction."
                         )
-                    
+
                     # Default case - proceed with extraction
                     self.log.info(
                         f" PROCEEDING WITH EXTRACTION: category {absolute_cat_index} has work to do."
                     )
 
                     # Slice for resumed category
-                    start_offset = prod_ptr if absolute_cat_index == cat_ptr else 0  # base_completed
-                    work_urls = needs_full_extraction_urls                           # process remaining from 0
+                    start_offset = (
+                        prod_ptr if absolute_cat_index == cat_ptr else 0
+                    )  # base_completed
+                    work_urls = needs_full_extraction_urls  # process remaining from 0
                     first_resume_key = work_urls[0] if work_urls else None
                     if start_offset:
-                        self.log.info(f" RESUME: base_completed={start_offset}, remaining={len(work_urls)}")
+                        self.log.info(
+                            f" RESUME: base_completed={start_offset}, remaining={len(work_urls)}"
+                        )
                     else:
                         self.log.info(
                             f" FULL CATEGORY PROCESSING: Processing all {len(needs_full_extraction_urls)} products"
                         )
 
                     # Freeze per-category denominator
-                    cat_total = len(needs_full_extraction_urls)  # The frozen discovered count for THIS category
-                    self.log.info(f" LINEAGE: manifest={self._config_manifest_hash()} cat_url={category_url} total={cat_total}")
+                    cat_total = len(
+                        needs_full_extraction_urls
+                    )  # The frozen discovered count for THIS category
+                    self.log.info(
+                        f" LINEAGE: manifest={self._config_manifest_hash()} cat_url={category_url} total={cat_total}"
+                    )
                     # REMOVED: Early freeze disabled - freeze only once after all filtering/dedup is complete
                     # self.log.info(f" FROZEN DENOMINATOR: Category {absolute_cat_index}  {cat_total} products (snapshot)")
                     if hasattr(self.state_manager, "commit_supplier_progress"):
@@ -6066,11 +6263,11 @@ Return ONLY valid JSON, no additional text."""
                             #  IMPROVED: Use the correct prod_idx based on resume pointer
                             commit_prod_idx = prod_ptr if absolute_cat_index == cat_ptr else 0
                             self.state_manager.commit_supplier_progress(
-                                cat_idx=absolute_cat_index, 
+                                cat_idx=absolute_cat_index,
                                 prod_idx=commit_prod_idx,  # Use resume pointer for current category
                                 total_cats=self.state_manager._authoritative_total_categories(),
                                 cat_url=category_url,
-                                total_prod_in_cat=cat_total
+                                total_prod_in_cat=cat_total,
                             )
                             self.log.info(
                                 f" SUPPLIER PROGRESS COMMITTED: cat={absolute_cat_index}, prod_idx={commit_prod_idx}, total={cat_total}"
@@ -6098,8 +6295,10 @@ Return ONLY valid JSON, no additional text."""
 
                     # Use pre-filtered extraction method that respects filtering contract and resume slice
                     #  FIX: Extend the existing 'products' list (which may contain rehydrated items)
-                    scraped_products = await self.supplier_scraper.scrape_products_from_prefiltered_urls(
-                        work_urls, category_url, all_products
+                    scraped_products = (
+                        await self.supplier_scraper.scrape_products_from_prefiltered_urls(
+                            work_urls, category_url, all_products
+                        )
                     )
                     if scraped_products:
                         products.extend(scraped_products)
@@ -6111,7 +6310,9 @@ Return ONLY valid JSON, no additional text."""
                             _p["source_url"] = category_url
                             missing_src += 1
                     if missing_src:
-                        self.log.info(f"METRIC name=missing_source_url_guard_total value={missing_src} phase=supplier")
+                        self.log.info(
+                            f"METRIC name=missing_source_url_guard_total value={missing_src} phase=supplier"
+                        )
 
                     if first_resume_key and products:
                         self.log.info(
@@ -6162,16 +6363,13 @@ Return ONLY valid JSON, no additional text."""
                 # CRITICAL FIX: Accumulate filtered URLs across all categories
                 all_needs_full_extraction_urls.extend(needs_full_extraction_urls)
                 all_needs_amazon_only_urls.extend(needs_amazon_only_urls)
-                
-
 
                 # Log the filtered results for this category
                 if needs_amazon_only_urls:
                     self.log.info(
                         f" AMAZON ANALYSIS NEEDED: {len(needs_amazon_only_urls)} products (already filtered by pre-extraction)"
                     )
-                
-                
+
                 # (reverted) removed Amazon phase switch and initial commit injection
                 # Update state manager with current category URL being processed (single source of truth)
                 if hasattr(self, "state_manager") and self.state_manager:
@@ -6218,8 +6416,11 @@ Return ONLY valid JSON, no additional text."""
                         # Clamp supplier pointer to frozen denominator using new structure
                         sp = self.state_manager.state_data.get("system_progression", {})
                         current_phase = sp.get("current_phase", "supplier")
-                        frozen_total = self.state_manager.get_frozen_denominator(category_url) or discovered_count
-                        
+                        frozen_total = (
+                            self.state_manager.get_frozen_denominator(category_url)
+                            or discovered_count
+                        )
+
                         if current_phase == "supplier":
                             supplier_completed = int(sp.get("supplier_products_completed", 0))
                             frozen_total_int = int(frozen_total) if frozen_total is not None else 0
@@ -6234,8 +6435,14 @@ Return ONLY valid JSON, no additional text."""
                                     f"RESUME_CLAMP phase=supplier reason=exceeds_denominator saved={supplier_completed}{start_idx} frozen={frozen_total_int}"
                                 )
 
-                            if (supplier_completed < 0 or supplier_completed > frozen_total_int) and hasattr(self.state_manager, "metrics"):
-                                self.state_manager.metrics.inc("resume_clamps_total", phase="supplier", cat=sp.get('persistent_category_index', 1))
+                            if (
+                                supplier_completed < 0 or supplier_completed > frozen_total_int
+                            ) and hasattr(self.state_manager, "metrics"):
+                                self.state_manager.metrics.inc(
+                                    "resume_clamps_total",
+                                    phase="supplier",
+                                    cat=sp.get("persistent_category_index", 1),
+                                )
 
                         self.log.info(
                             f" LINEAGE: manifest={self._config_manifest_hash()} cat_url={normalize_url(category_url)} total={discovered_count}"
@@ -6243,21 +6450,25 @@ Return ONLY valid JSON, no additional text."""
                 else:
                     # Zero-product category: complete immediately and continue
                     cat_total = 0
-                    
+
                     # Single source of truth: complete category via state manager
                     self.state_manager.mark_category_completed(category_url, absolute_cat_index)
                     self.state_manager.save_state_atomic("freeze-queue-empty")
-                    
+
                     # Emit proof banners for zero-product fast-path
                     self.state_manager.emit_first_after_resume_if_needed("amazon_analysis")
                     self.state_manager.emit_resume_honored_if_needed("amazon_analysis")
-                    
+
                     # Complete the category and advance
                     if hasattr(self.state_manager, "commit_phase_switch"):
                         self.state_manager.commit_phase_switch(new_phase="supplier")
-                    self.state_manager.metrics.inc("zero_product_categories_total", cat=absolute_cat_index)
-                    
-                    self.log.info(f" ZERO-PRODUCT FAST-PATH: Category {category_url} has no products, skipping...")
+                    self.state_manager.metrics.inc(
+                        "zero_product_categories_total", cat=absolute_cat_index
+                    )
+
+                    self.log.info(
+                        f" ZERO-PRODUCT FAST-PATH: Category {category_url} has no products, skipping..."
+                    )
                     continue
 
                     self._set_current_category_index(category_index)
@@ -6286,11 +6497,17 @@ Return ONLY valid JSON, no additional text."""
                             sp["supplier_products_needing_extraction"] = len(urls_for_manifest)
                             sp["amazon_products_needing_analysis"] = len(urls_for_manifest)
                             #  Preserve completed counts on resume
-                            sp["supplier_products_completed"] = int(sp.get("supplier_products_completed", 0) or 0)
-                            sp["amazon_products_completed"]   = int(sp.get("amazon_products_completed", 0) or 0)
+                            sp["supplier_products_completed"] = int(
+                                sp.get("supplier_products_completed", 0) or 0
+                            )
+                            sp["amazon_products_completed"] = int(
+                                sp.get("amazon_products_completed", 0) or 0
+                            )
                             self.state_manager.save_state_atomic("denominators-set")
                         else:
-                            self.log.info(" WORK DEFINED (resume): denominators frozen  not overwriting totals/completed")
+                            self.log.info(
+                                " WORK DEFINED (resume): denominators frozen  not overwriting totals/completed"
+                            )
 
                 self.category_manifests[category_url] = urls_for_manifest
                 self.log.info(
@@ -6367,20 +6584,26 @@ Return ONLY valid JSON, no additional text."""
             total_cats = len(active_categories) or self._authoritative_total_categories() or 1
 
             if absolute_idx == -1:
-                self.log.error("FATAL: _current_absolute_cat_index not set; cannot commit progress.")
+                self.log.error(
+                    "FATAL: _current_absolute_cat_index not set; cannot commit progress."
+                )
                 return
 
             total_products_int = int(total_products) if isinstance(total_products, int) else 0
 
             # Get the authoritative total from the state manager
-            category_url_normalized = getattr(self, '_current_category_url', category_url)
+            category_url_normalized = getattr(self, "_current_category_url", category_url)
             sp = self.state_manager.state_data.get("system_progression", {})
             if operation_type == "amazon_analysis":
                 authoritative_total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
             else:
-                authoritative_total = self.state_manager.get_frozen_denominator(category_url_normalized)
+                authoritative_total = self.state_manager.get_frozen_denominator(
+                    category_url_normalized
+                )
             if authoritative_total is None:
-                self.log.warning(f"Could not find frozen denominator for {category_url_normalized}. Falling back to dynamic total.")
+                self.log.warning(
+                    f"Could not find frozen denominator for {category_url_normalized}. Falling back to dynamic total."
+                )
                 authoritative_total = total_products_int
             else:
                 authoritative_total = int(authoritative_total)
@@ -6395,7 +6618,12 @@ Return ONLY valid JSON, no additional text."""
                     total_prod_in_cat=authoritative_total,
                 )
             elif operation_type == "amazon_analysis":
-                base_amz = int(self.state_manager.state_data.get("system_progression", {}).get("amazon_products_completed", 0) or 0)
+                base_amz = int(
+                    self.state_manager.state_data.get("system_progression", {}).get(
+                        "amazon_products_completed", 0
+                    )
+                    or 0
+                )
                 queue_idx_commit = max(0, base_amz + int(product_index))
                 self.state_manager.commit_amazon_progress(
                     cat_idx=int(absolute_idx),
@@ -6407,7 +6635,9 @@ Return ONLY valid JSON, no additional text."""
 
             if operation_type == "supplier_extraction":
                 supplier_state = self.state_manager.state_data.get("system_progression", {})
-                supplier_completed = int(supplier_state.get("supplier_products_completed", prod_idx_commit) or 0)
+                supplier_completed = int(
+                    supplier_state.get("supplier_products_completed", prod_idx_commit) or 0
+                )
                 supplier_display = supplier_completed + 1
                 if isinstance(authoritative_total, int) and authoritative_total > 0:
                     supplier_display = min(supplier_display, authoritative_total)
@@ -6473,9 +6703,7 @@ Return ONLY valid JSON, no additional text."""
                     )
 
                 if progress_config.get("progress_display", {}).get("show_product_progress", True):
-                    self.log.info(
-                        f"?? SUPPLIER EXTRACTION: Processing product {supplier_display}"
-                    )
+                    self.log.info(f"?? SUPPLIER EXTRACTION: Processing product {supplier_display}")
 
                 cache_config = self.system_config.get("supplier_cache_control", {})
                 update_frequency = cache_config.get("update_frequency_products", 1)
@@ -6516,11 +6744,18 @@ Return ONLY valid JSON, no additional text."""
 
                     self._last_cache_count = current_count
 
+                # After supplier progress commit, keep ratio fields in sync.
+                self._refresh_human_progress_fields()
+
             elif operation_type == "amazon_analysis":
                 if progress_config.get("progress_display", {}).get("show_amazon_progress", True):
                     self.log.info(
                         f" AMAZON ANALYSIS: Processing queue index {product_index}/{authoritative_total}"
                     )
+
+                # Amazon and supplier progress both update shared counters in
+                # system_progression; keep the human-readable ratios in sync.
+                self._refresh_human_progress_fields()
 
         return progress_callback
         return progress_callback
@@ -6680,7 +6915,7 @@ Return ONLY valid JSON, no additional text."""
                     self.log.info(
                         f" Title search: Selected first visible organic product - ASIN {best_result.get('asin')}"
                     )
-                    
+
                     if best_result:
                         asin = best_result.get("asin")
                         if asin:
@@ -6690,7 +6925,9 @@ Return ONLY valid JSON, no additional text."""
                             amazon_product_data = await self.extractor.extract_data(asin)
                             if amazon_product_data:
                                 amazon_product_data["_search_method_used"] = "title"
-                                amazon_product_data["_match_confidence"] = 1.0 # Default high confidence for first match
+                                amazon_product_data["_match_confidence"] = (
+                                    1.0  # Default high confidence for first match
+                                )
                                 return amazon_product_data
             else:
                 self.log.warning(
@@ -6915,9 +7152,9 @@ Return ONLY valid JSON, no additional text."""
             # The search methods already applied scoring gates and visibility filtering.
 
             # Trust the single-candidate approach from search methods
-            if len(amazon_search_results['results']) == 1:
+            if len(amazon_search_results["results"]) == 1:
                 # Single result from EAN or title search - already validated by search method
-                best_result = amazon_search_results['results'][0]
+                best_result = amazon_search_results["results"][0]
                 self.log.info(
                     f" USING PRE-VALIDATED RESULT: ASIN {best_result.get('asin')} from single-candidate search"
                 )
@@ -6937,15 +7174,15 @@ Return ONLY valid JSON, no additional text."""
                 matching_thresholds = self.system_config.get("performance", {}).get(
                     "matching_thresholds", {}
                 )
-                confidence_threshold = matching_thresholds.get(
-                    "medium_title_similarity", 0.5
-                )
+                confidence_threshold = matching_thresholds.get("medium_title_similarity", 0.5)
 
                 self.log.info(
                     f" PRODUCT VALIDATION: Evaluating {len(amazon_search_results['results'])} Amazon results for '{product_data['title']}'"
                 )
 
-                for i, result in enumerate(amazon_search_results["results"][:5]):  # Check top 5 results
+                for i, result in enumerate(
+                    amazon_search_results["results"][:5]
+                ):  # Check top 5 results
                     amazon_product_data = {"title": result.get("title", "")}
                     validation = self._validate_product_match(product_data, amazon_product_data)
 
@@ -7038,7 +7275,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -7048,7 +7284,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -7186,9 +7421,7 @@ Return ONLY valid JSON, no additional text."""
                 )
                 return profitable_results
 
-            self.log.info(
-                f" HYBRID MODE: Chunked processing (chunk size: {chunk_size} categories)"
-            )
+            self.log.info(f" HYBRID MODE: Chunked processing (chunk size: {chunk_size} categories)")
 
             # Process categories in chunks
             for chunk_start in range(0, len(category_urls_to_scrape), chunk_size):
@@ -7270,77 +7503,89 @@ Return ONLY valid JSON, no additional text."""
                         self.log.info(
                             f" LEGACY FILTER BYPASSED: Using pre-extraction filter results for chunk {chunk_start + 1}"
                         )
-                        
+
                         #  FIX: Replace the continue statement with actual processing logic
                         # Apply the 2-step filtering to categorize products
-                        filtered = filter_urls(
-                            urls,
-                            self.linking_map,
-                            cached_products
-                        )
-                        
+                        filtered = filter_urls(urls, self.linking_map, cached_products)
+
                         # Validate filter invariant to ensure data integrity
-                        self._validate_filter_invariant(urls, filtered, category_index, 
-                                                      re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")[:30])
-                        
+                        self._validate_filter_invariant(
+                            urls,
+                            filtered,
+                            category_index,
+                            re.sub(r"[^a-z0-9]+", "-", category_url.lower()).strip("-")[:30],
+                        )
+
                         # Process products based on their categorization
                         category_analysis_products = []
-                        
+
                         # Supplier extraction phase: process products that need full extraction
-                        for url in filtered['needs_full_extraction']:
-                            prod = next((p for p in chunk_products if p.get('url') == url), None)
+                        for url in filtered["needs_full_extraction"]:
+                            prod = next((p for p in chunk_products if p.get("url") == url), None)
                             if prod:
                                 category_analysis_products.append(prod)
-                        
+
                         # Amazon phase: process products that have supplier data but need Amazon analysis
-                        for url in filtered['needs_amazon_only']:
-                            prod = next((p for p in cached_products if p.get('url') == url), None)
+                        for url in filtered["needs_amazon_only"]:
+                            prod = next((p for p in cached_products if p.get("url") == url), None)
                             if prod:
                                 category_analysis_products.append(prod)
-                        
+
                         # Process this category's products immediately (supplier  Amazon  complete)
                         if category_analysis_products:
-                            self.log.info(f" Processing category {category_index}: {len(category_analysis_products)} products")
+                            self.log.info(
+                                f" Processing category {category_index}: {len(category_analysis_products)} products"
+                            )
                             category_results = await self._process_chunk_with_main_workflow_logic(
                                 category_analysis_products,
                                 max_products_per_cycle,
                                 category_urls=[category_url],
                             )
                             profitable_results.extend(category_results)
-                            
+
                             # Log category completion
-                            self.log.info(f" Category {category_index} complete: {len(category_results)} profitable products found")
-                            
+                            self.log.info(
+                                f" Category {category_index} complete: {len(category_results)} profitable products found"
+                            )
+
                             #  PROJECT MEMORY COMPLIANCE: Category summary logging
-                            category_start_time = getattr(self, '_category_start_time', datetime.now() - timedelta(seconds=30))
+                            category_start_time = getattr(
+                                self, "_category_start_time", datetime.now() - timedelta(seconds=30)
+                            )
                             self._log_category_summary(
                                 category_index=category_index,
                                 category_url=category_url,
                                 discovered_count=len(urls),
-                                skip_count=len(filtered['skip_entirely']),
-                                amazon_count=len(filtered['needs_amazon_only']),
-                                full_count=len(filtered['needs_full_extraction']),
+                                skip_count=len(filtered["skip_entirely"]),
+                                amazon_count=len(filtered["needs_amazon_only"]),
+                                full_count=len(filtered["needs_full_extraction"]),
                                 start_time=category_start_time,
-                                profitable_count=len(category_results)
+                                profitable_count=len(category_results),
                             )
                         else:
                             # Log when Amazon phase is skipped due to empty queue
-                            self.log.info(f"Amazon skipped: nothing to analyze for category {category_index}")
-                            self.log.info(f" Category {category_index} complete: no products to process")
-                            
+                            self.log.info(
+                                f"Amazon skipped: nothing to analyze for category {category_index}"
+                            )
+                            self.log.info(
+                                f" Category {category_index} complete: no products to process"
+                            )
+
                             #  PROJECT MEMORY COMPLIANCE: Category summary logging for empty categories
-                            category_start_time = getattr(self, '_category_start_time', datetime.now() - timedelta(seconds=10))
+                            category_start_time = getattr(
+                                self, "_category_start_time", datetime.now() - timedelta(seconds=10)
+                            )
                             self._log_category_summary(
                                 category_index=category_index,
                                 category_url=category_url,
                                 discovered_count=len(urls),
-                                skip_count=len(filtered['skip_entirely']),
-                                amazon_count=len(filtered['needs_amazon_only']),
-                                full_count=len(filtered['needs_full_extraction']),
+                                skip_count=len(filtered["skip_entirely"]),
+                                amazon_count=len(filtered["needs_amazon_only"]),
+                                full_count=len(filtered["needs_full_extraction"]),
                                 start_time=category_start_time,
-                                profitable_count=0
+                                profitable_count=0,
                             )
-                        
+
                         #  CRITICAL FIX: Set current category URL before completion
                         # This ensures mark_category_completed() URL comparison succeeds
                         sp = self.state_manager.state_data.setdefault("system_progression", {})
@@ -7348,7 +7593,7 @@ Return ONLY valid JSON, no additional text."""
 
                         # Mark category as complete in state manager using the global category index
                         self.state_manager.mark_category_completed(category_url, category_index)
-                        
+
                         # Save state after each category
                         self.state_manager.save_state(preserve_interruption_state=True)
 
@@ -7509,7 +7754,9 @@ Return ONLY valid JSON, no additional text."""
 
         if is_complete:
             self.log.info(f" CATEGORY COMPLETION CHECK: {category_url} is fully processed")
-            self.log.info(f"   Supplier: {supplier_done}/{supplier_needed}, Amazon: {amazon_done}/{amazon_needed}")
+            self.log.info(
+                f"   Supplier: {supplier_done}/{supplier_needed}, Amazon: {amazon_done}/{amazon_needed}"
+            )
 
         return is_complete
 
@@ -7524,14 +7771,15 @@ Return ONLY valid JSON, no additional text."""
             total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
             done = int(sp.get("amazon_products_completed", 0) or 0)
             if total > 0 and done < total:
-                self.log.warning(f" PHASE INTEGRITY GUARD: Amazon phase incomplete (done={done}/{total})")
+                self.log.warning(
+                    f" PHASE INTEGRITY GUARD: Amazon phase incomplete (done={done}/{total})"
+                )
                 self.log.warning(" FORCING AMAZON RESUME to complete category first")
 
                 # Force Amazon resume to complete
-                rp = type("RP", (), {
-                    "cat_idx": sp.get("persistent_category_index", 1),
-                    "prod_idx": done
-                })()
+                rp = type(
+                    "RP", (), {"cat_idx": sp.get("persistent_category_index", 1), "prod_idx": done}
+                )()
                 # This should trigger category completion via CF3
                 await self._run_amazon_phase_from_resume(rp)
                 return False  # Signal to caller to stop supplier work
@@ -7704,6 +7952,7 @@ Return ONLY valid JSON, no additional text."""
         - Sort deterministically by normalized product URL
         """
         import json
+
         supplier_cache_file, _ = self._find_actual_supplier_cache_file(self.supplier_name)
         with open(supplier_cache_file, "r", encoding="utf-8") as f:
             all_cached = json.load(f) or []
@@ -7730,15 +7979,20 @@ Return ONLY valid JSON, no additional text."""
             queue.append(p)
 
         # Deterministic order
-        def _nurl(u): 
-            try: return normalize_url(u) if u else ""
-            except Exception: return u or ""
+        def _nurl(u):
+            try:
+                return normalize_url(u) if u else ""
+            except Exception:
+                return u or ""
+
         # ?? FIX ISS-003: REMOVED - Resume must use same discovery order as initial run
         # Sorting caused index N to point to different products between runs
         # Evidence: Log 154127 idx 298 ("Sequin Deep Lace...") ? Log 155617 idx 298 ("Lovely mixed design...")
         # queue.sort(key=lambda x: _nurl(x.get("url")))
 
-        self.log.info(f" CATEGORY QUEUE: url={ncat} size={len(queue)} allowed_gate={'on' if allowed else 'off'}")
+        self.log.info(
+            f" CATEGORY QUEUE: url={ncat} size={len(queue)} allowed_gate={'on' if allowed else 'off'}"
+        )
         return queue
 
     async def _analyze_with_amazon(self, product_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -7755,7 +8009,7 @@ Return ONLY valid JSON, no additional text."""
 
         # Amazon data extraction and analysis
         amazon_data = await self._get_amazon_data(product_data)
-        
+
         if not amazon_data or "error" in amazon_data:
             self.log.warning(
                 f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
@@ -7791,9 +8045,7 @@ Return ONLY valid JSON, no additional text."""
 
             # Add no-match entry to linking map using optimized method
             self._add_linking_map_entry_optimized(no_match_entry)
-            self.log.info(
-                f" Added NO-MATCH linking entry: {supplier_ean or 'NO_EAN'}  NO MATCH"
-            )
+            self.log.info(f" Added NO-MATCH linking entry: {supplier_ean or 'NO_EAN'}  NO MATCH")
 
             self.state_manager.mark_product_processed(
                 product_data.get("url"), "failed_amazon_extraction"
@@ -7829,11 +8081,7 @@ Return ONLY valid JSON, no additional text."""
             current_price = amazon_data.get("current_price", 0)
 
             if supplier_price > 0 and current_price > 0:
-                financials = calc_financials(
-                    product_data,
-                    amazon_data,
-                    supplier_price
-                )
+                financials = calc_financials(product_data, amazon_data, supplier_price)
 
                 # Check profitability
                 if (
@@ -7848,7 +8096,7 @@ Return ONLY valid JSON, no additional text."""
                         product_data, amazon_data, "hybrid_resume"
                     )
                     combined_data["financials"] = financials
-                    
+
                     self.state_manager.update_success_metrics(
                         True, True, financials.get("NetProfit", 0)
                     )
@@ -7879,13 +8127,15 @@ Return ONLY valid JSON, no additional text."""
         Commits after each item using commit_amazon_progress(...).
         """
         import math
+
         cat_idx = int(getattr(rp, "cat_idx", 1))
         prod_offset = int(getattr(rp, "prod_idx", 0))
         total_cats = int(self.state_manager._authoritative_total_categories() or 0)
 
         # Current category URL: prefer state, fall back to index mapping if needed
-        category_url = (self.state_manager.get_current_category_info().get("cat_url") 
-                        or self._get_category_url_by_index(cat_idx))
+        category_url = self.state_manager.get_current_category_info().get(
+            "cat_url"
+        ) or self._get_category_url_by_index(cat_idx)
 
         products = self._rebuild_category_amazon_queue(category_url)
         # Safety: ensure strictly category-scoped. Step-2 allowlist is a hint, not a hard gate on resume.
@@ -7957,7 +8207,9 @@ Return ONLY valid JSON, no additional text."""
                 nurl = normalize_url(category_url)
             except Exception:
                 nurl = category_url
-            frozen_cats = self.state_manager.state_data.setdefault("frozen_category_denominators", {})
+            frozen_cats = self.state_manager.state_data.setdefault(
+                "frozen_category_denominators", {}
+            )
             frozen_cats[nurl] = total
             # Also update system_progression
             sp_update = self.state_manager.state_data.setdefault("system_progression", {})
@@ -7965,8 +8217,14 @@ Return ONLY valid JSON, no additional text."""
             sp_update["supplier_products_needing_extraction"] = total
 
         sp = self.state_manager.state_data.get("system_progression", {})
+        # Ensure Amazon denominator for this resume category matches the rebuilt queue length
+        sp["amazon_products_needing_analysis"] = total
         raw_completed = sp.get("amazon_products_completed", 0)
-        saved_amazon_offset = int(raw_completed) if isinstance(raw_completed, (int, float)) else int(raw_completed or 0)
+        saved_amazon_offset = (
+            int(raw_completed)
+            if isinstance(raw_completed, (int, float))
+            else int(raw_completed or 0)
+        )
         clamped_amazon_offset = min(max(saved_amazon_offset, 0), total)
 
         if total == 0:
@@ -7992,13 +8250,21 @@ Return ONLY valid JSON, no additional text."""
             # Saved offset is valid within the current queue; honour it.
             prod_offset = saved_amazon_offset
 
-        batch_size = int(self.system_config.get("amazon_batch_size", 0)) or int(self.system_config.get("max_products_per_cycle", 10)) or 10
+        batch_size = (
+            int(self.system_config.get("amazon_batch_size", 0))
+            or int(self.system_config.get("max_products_per_cycle", 10))
+            or 10
+        )
         start_batch = prod_offset // max(1, batch_size)
-        first_offset = prod_offset %  max(1, batch_size)
+        first_offset = prod_offset % max(1, batch_size)
         total_batches = math.ceil(total / max(1, batch_size))
 
-        self.log.info(f" AMAZON RESUME: cat_idx={cat_idx} total={total} start_batch={start_batch} first_offset={first_offset}")
-        self.log.info(f"[RESUME_ENTER] cat_idx={cat_idx} total={total} ptr={prod_offset} start_batch={start_batch} first_offset={first_offset}")
+        self.log.info(
+            f" AMAZON RESUME: cat_idx={cat_idx} total={total} start_batch={start_batch} first_offset={first_offset}"
+        )
+        self.log.info(
+            f"[RESUME_ENTER] cat_idx={cat_idx} total={total} ptr={prod_offset} start_batch={start_batch} first_offset={first_offset}"
+        )
 
         # Read-only per-category Amazon progress status on resume
         sp_local = self.state_manager.state_data.get("system_progression", {}) or {}
@@ -8017,11 +8283,11 @@ Return ONLY valid JSON, no additional text."""
 
         for batch_num in range(start_batch, total_batches):
             start_idx = batch_num * batch_size
-            end_idx   = min(start_idx + batch_size, total)
+            end_idx = min(start_idx + batch_size, total)
             batch_products = products[start_idx:end_idx]
             start_i = first_offset if batch_num == start_batch else 0
             for i in range(start_i, len(batch_products)):
-                queue_idx = start_idx + i   # absolute within the category queue
+                queue_idx = start_idx + i  # absolute within the category queue
                 p = batch_products[i]
                 await self._analyze_with_amazon(p)
                 # Commit progress AFTER each item (state manager handles clamping & first-after-resume proof)
@@ -8054,8 +8320,12 @@ Return ONLY valid JSON, no additional text."""
             category_url = cat_info.get("cat_url")
             cat_idx = cat_info.get("cat_idx", 1)
         except Exception:
-            category_url = self.state_manager.state_data.get("system_progression", {}).get("current_category_url")
-            cat_idx = self.state_manager.state_data.get("system_progression", {}).get("persistent_category_index", 1)
+            category_url = self.state_manager.state_data.get("system_progression", {}).get(
+                "current_category_url"
+            )
+            cat_idx = self.state_manager.state_data.get("system_progression", {}).get(
+                "persistent_category_index", 1
+            )
 
         # Rebuild queue to check completion
         products = self._rebuild_category_amazon_queue(category_url)
@@ -8080,11 +8350,22 @@ Return ONLY valid JSON, no additional text."""
         if (total == 0 and supplier_count == 0) or (total > 0 and done >= total):
             self._finalize_category_completion(category_url, int(cat_idx))
 
+            # Persist linking map now that the resumed Amazon queue is complete
+            try:
+                self._save_linking_map(self.supplier_name)
+            except Exception as e:
+                self.log.error(
+                    " CRITICAL: Failed to persist linking map at Amazon resume finalizer",
+                    exc_info=True,
+                )
+
             # Phase switch back to supplier
             self.state_manager.commit_phase_switch(new_phase="supplier")
             self.log.info(" PHASE SWITCH: amazon_analysis  supplier (via resume finalizer)")
         elif total == 0 and supplier_count > 0:
-            self.log.error(f" CRITICAL: Amazon queue is empty (total=0) but supplier count is {supplier_count}. Cache mismatch or file missing. ABORTING COMPLETION.")
+            self.log.error(
+                f" CRITICAL: Amazon queue is empty (total=0) but supplier count is {supplier_count}. Cache mismatch or file missing. ABORTING COMPLETION."
+            )
 
         return 0
 
@@ -8121,15 +8402,15 @@ Return ONLY valid JSON, no additional text."""
                 pass
         else:
             self.log.info(" AMAZON PHASE: Already in amazon_analysis phase, no switch needed")
-        
+
         # Emit proof banner and clamp Amazon queue pointer
         if hasattr(self.state_manager, "emit_first_after_resume_if_needed"):
             self.state_manager.emit_first_after_resume_if_needed("amazon_analysis")
-        
+
         # Clamp Amazon pointer to queue length using new system_progression structure
         sp = self.state_manager.state_data.get("system_progression", {})
         current_phase = sp.get("current_phase", "supplier")
-        
+
         if current_phase == "amazon_analysis":
             amazon_completed = int(sp.get("amazon_products_completed", 0))
             total_len = len(price_filtered_products)
@@ -8144,8 +8425,14 @@ Return ONLY valid JSON, no additional text."""
                     f"RESUME_CLAMP phase=amazon_analysis reason=exceeds_queue saved={amazon_completed}{start_amz} queue={total_len}"
                 )
 
-            if (amazon_completed < 0 or amazon_completed > total_len) and hasattr(self.state_manager, "metrics"):
-                self.state_manager.metrics.inc("resume_clamps_total", phase="amazon_analysis", cat=sp.get('persistent_category_index', 1))
+            if (amazon_completed < 0 or amazon_completed > total_len) and hasattr(
+                self.state_manager, "metrics"
+            ):
+                self.state_manager.metrics.inc(
+                    "resume_clamps_total",
+                    phase="amazon_analysis",
+                    cat=sp.get("persistent_category_index", 1),
+                )
         else:
             start_amz = 0
 
@@ -8157,13 +8444,15 @@ Return ONLY valid JSON, no additional text."""
         total_batches = (total_len + batch_size - 1) // batch_size
 
         # Determine resume start position within the flattened queue
-        start_amz = 0 if 'start_amz' not in locals() else start_amz
+        start_amz = 0 if "start_amz" not in locals() else start_amz
         start_batch = start_amz // max(1, batch_size)
         first_offset = start_amz % max(1, batch_size)
-        
+
         # Add resume slice log for visibility
         if start_amz > 0:
-            self.log.info(f" Amazon resume slice: start={start_amz} total={total_len}  remaining={total_len - start_amz}")
+            self.log.info(
+                f" Amazon resume slice: start={start_amz} total={total_len}  remaining={total_len - start_amz}"
+            )
 
         for batch_num in range(start_batch, total_batches):
             start_idx = batch_num * batch_size
@@ -8231,7 +8520,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -8241,7 +8530,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=start_idx + i,  # global 0-based index within queue
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -8255,11 +8544,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -8328,7 +8621,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=start_idx + i,  # global 0-based index within queue
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -8369,7 +8662,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -8379,7 +8671,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -8571,7 +8862,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -8581,7 +8872,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -8595,11 +8886,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -8668,7 +8963,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -8709,7 +9004,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -8719,349 +9013,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
-    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
-        """Check if a product meets all defined business criteria."""
-        # This function is now largely redundant as profitability checks are done in the main loop.
-        # However, it can be used for other criteria like sales rank, reviews, etc.
-        amazon_data = combined_data.get("amazon_product_info", {})
-        financials = combined_data.get("financials", {})
-        # Check profitability (already done, but for completeness)
-        is_profitable = (
-            financials.get("ROI", 0) > MIN_ROI_PERCENT
-            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-        )
-        # Check Amazon listing quality
-        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
-        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
-        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
-        # Check for battery products (using the helper function)
-        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
-            combined_data["supplier_product_info"].get("title", "")
-        )
-        # Check for other non-FBA friendly keywords
-        is_non_fba_friendly = any(
-            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
-        ) or any(
-            k in combined_data["supplier_product_info"].get("title", "").lower()
-            for k in NON_FBA_FRIENDLY_KEYWORDS
-        )
-        # All criteria must be met
-        return (
-            is_profitable
-            and meets_rating
-            and meets_reviews
-            and meets_sales_rank
-            and not is_battery
-            and not is_non_fba_friendly
-        )
-
-    def _apply_batch_synchronization(
-        self,
-        max_products_per_cycle: int,
-        supplier_extraction_batch_size: int,
-        batch_sync_config: Dict[str, Any],
-    ) -> Tuple[int, int]:
-        """
-        Apply batch synchronization to align all batch sizes consistently.
-        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
-        """
-        target_batch_size = batch_sync_config.get("target_batch_size", 3)
-        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
-        validation_config = batch_sync_config.get("validation", {})
-
-        self.log.info(f" BATCH SYNCHRONIZATION: Enabled")
-        self.log.info(f"   target_batch_size: {target_batch_size}")
-        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
-
-        original_values = {
-            "max_products_per_cycle": max_products_per_cycle,
-            "supplier_extraction_batch_size": supplier_extraction_batch_size,
-            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
-            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
-        }
-
-        # Check for mismatched sizes and warn if configured
-        if validation_config.get("warn_on_mismatched_sizes", True):
-            unique_sizes = set(original_values.values())
-            if len(unique_sizes) > 1:
-                self.log.warning(
-                    f" BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
-                )
-                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
-
-        if synchronize_all:
-            # Synchronize all batch sizes to target
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            # Also update system config values in memory for consistency
-            if "system" in self.system_config:
-                self.system_config["max_products_per_cycle"] = target_batch_size
-                self.system_config["supplier_extraction_batch_size"] = target_batch_size
-                self.system_config["linking_map_batch_size"] = target_batch_size
-                # financial_report_batch_size managed by config_loader
-
-            self.log.info(f" BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        else:
-            # Only synchronize the two main processing batch sizes
-            new_max_products_per_cycle = target_batch_size
-            new_supplier_extraction_batch_size = target_batch_size
-
-            self.log.info(
-                f" BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
-            )
-            self.log.info(
-                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
-            )
-
-        return new_max_products_per_cycle, new_supplier_extraction_batch_size
-
-    async def _analyze_products_batch(
-        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
-    ) -> List[Dict[str, Any]]:
-        """Analyze a batch of supplier products for Amazon matching and profitability."""
-        profitable_results = []
-
-        # Filter and prepare products for analysis
-        valid_products = [
-            p
-            for p in products
-            if p.get("title")
-            and isinstance(p.get("price"), (float, int))
-            and p.get("price", 0) > 0
-            and p.get("url")
-        ]
-
-        price_filtered_products = [
-            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
-        ]
-
-        self.log.info(f" Analyzing {len(price_filtered_products)} products in batch mode")
-
-        # Process products in cycles
-        batch_size = max_products_per_cycle
-        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
-
-        for batch_num in range(total_batches):
-            start_idx = batch_num * batch_size
-            end_idx = min(start_idx + batch_size, len(price_filtered_products))
-            batch_products = price_filtered_products[start_idx:end_idx]
-
-            self.log.info(
-                f" Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
-            )
-
-            for i, product_data in enumerate(batch_products):
-                current_index = start_idx + i + 1
-                self.log.info(f" Analyzing product {current_index}: '{product_data.get('title')}'")
-
-
-
-                # Check if already processed
-                if self.state_manager.is_product_processed(product_data.get("url")):
-                    self.log.info(
-                        f"Product already processed: {product_data.get('url')}. Skipping."
-                    )
-                    continue
-
-                # Amazon data extraction and analysis
-                amazon_data = await self._get_amazon_data(product_data)
-                if not amazon_data or "error" in amazon_data:
-                    self.log.warning(
-                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
-                    )
-
-                    #  FIX: Create no-match linking entry for batch processing
-                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                    if supplier_ean == "None" or supplier_ean is None:
-                        supplier_ean = None
-
-                    # Determine the reason for no match
-                    error_info = (
-                        amazon_data.get("error")
-                        if isinstance(amazon_data, dict)
-                        else "No Amazon data returned"
-                    )
-                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
-
-                    # Create no-match linking entry
-                    no_match_entry = {
-                        "supplier_ean": supplier_ean,
-                        "amazon_asin": None,
-                        "supplier_title": product_data.get("title"),
-                        "amazon_title": None,
-                        "supplier_price": product_data.get("price"),
-                        "amazon_price": None,
-                        "match_method": "none",  # NEW: Indicates no match found
-                        "confidence": 0,  # NEW: No confidence for failed matches
-                        "created_at": datetime.now().isoformat(),
-                        "supplier_url": product_data.get("url"),
-                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
-                    }
-
-                    # Add no-match entry to linking map using optimized method
-                    self._add_linking_map_entry_optimized(no_match_entry)
-                    self.log.info(
-                        f" Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'}  NO MATCH"
-                    )
-
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_amazon_extraction"
-                    )
-                    
-                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
-                    if hasattr(self.state_manager, "commit_amazon_progress"):
-                        # Get current category info
-                        cat_info = self.state_manager.get_current_category_info()
-                        self.state_manager.commit_amazon_progress(
-                            cat_idx=cat_info["cat_idx"],
-                            queue_idx=i,  # 0-based index within batch
-                            total_cats=cat_info["total_cats"],
-                            cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
-                        )
-                    continue
-
-                # Save Amazon cache and create linking map
-                supplier_ean = product_data.get("ean") or product_data.get("barcode")
-                asin = amazon_data.get("asin", "NO_ASIN")
-
-                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
-                if asin and asin not in ("NO_ASIN", "None", None):
-                    # Save Amazon data
-                    filename_identifier = (
-                        supplier_ean
-                        if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
-                    )
-                    amazon_cache_path = str(
-                        path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
-                        )
-                    )
-                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
-                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
-                    self.log.info(f" Saved Amazon data to {amazon_cache_path}")
-                else:
-                    self.log.debug(f" Skipping Amazon cache save for no-match case (ASIN={asin})")
-
-                # Financial analysis
-                try:
-                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
-                    supplier_price = float(product_data.get("price", 0))
-                    current_price = amazon_data.get("current_price", 0)
-
-                    if supplier_price > 0 and current_price > 0:
-                        financials = calc_financials(
-                            supplier_price=supplier_price,
-                            amazon_price=current_price,
-                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
-                            amazon_rating=amazon_data.get("rating", 0),
-                            amazon_review_count=amazon_data.get("reviews", 0),
-                        )
-
-                        # Check profitability
-                        if (
-                            financials.get("ROI", 0) > MIN_ROI_PERCENT
-                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
-                        ):
-                            self.log.info(
-                                f" PROFITABLE: ROI {financials['ROI']:.1f}%, Profit {financials['NetProfit']:.2f}"
-                            )
-
-                            combined_data = self._combine_supplier_amazon_data(
-                                product_data, amazon_data, "hybrid_batch"
-                            )
-                            combined_data["financials"] = financials
-                            profitable_results.append(combined_data)
-
-                            self.state_manager.update_success_metrics(
-                                True, True, financials.get("NetProfit", 0)
-                            )
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_profitable"
-                            )
-                        else:
-                            self.log.info(
-                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit {financials.get('NetProfit', 0):.2f}"
-                            )
-                            self.state_manager.update_success_metrics(True, False)
-                            self.state_manager.mark_product_processed(
-                                product_data.get("url"), "completed_not_profitable"
-                            )
-
-                except Exception as e:
-                    self.log.error(f"Financial calculation failed: {e}")
-                    self.state_manager.mark_product_processed(
-                        product_data.get("url"), "failed_financial_calculation"
-                    )
-
-                # Inside the Amazon processing loop, after each item k (0-based) is processed
-                if hasattr(self.state_manager, "commit_amazon_progress"):
-                    # Get current category info
-                    cat_info = self.state_manager.get_current_category_info()
-                    self.state_manager.commit_amazon_progress(
-                        cat_idx=cat_info["cat_idx"],
-                        queue_idx=i,  # 0-based index within batch
-                        total_cats=cat_info["total_cats"],
-                        cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
-                    )
-
-        # After Amazon queue completion, mark category as truly complete
-        if hasattr(self.state_manager, "get_current_category_info"):
-            cat_info = self.state_manager.get_current_category_info()
-            try:
-                _nurl = normalize_url(cat_info["cat_url"])
-            except Exception:
-                _nurl = str(cat_info["cat_url"])
-            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
-            self.state_manager.save_state_atomic("category-complete-amazon-done")
-
-        # After Amazon queue completion, switch back to "supplier" phase
-        if hasattr(self.state_manager, "commit_phase_switch"):
-            self.state_manager.commit_phase_switch("supplier")
-            self.log.info(" PHASE SWITCH: amazon_analysis  supplier")
-
-        return profitable_results
-
-    def _get_cached_products_path(self, category_url: str):
-        """Helper to get the path for a category's product cache file."""
-        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
-        return str(path_manager.get_cache_path("supplier_cache", category_filename))
-
-    def _combine_data(
-        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
-        """Combine supplier and Amazon data and calculate financial metrics."""
-        combined = {
-            "supplier_product_info": supplier_data,
-            "amazon_product_info": amazon_data,
-            "analysis_timestamp": datetime.now().isoformat(),
-            "session_id": session_id,
-        }
-        # Financial calculation is now handled within the main run loop before this function is called
-        # This function is primarily for combining data and adding match validation
-        match_validation = self._validate_product_match(supplier_data, amazon_data)
-        combined["match_validation"] = match_validation
-        return combined
-
-    
-    def _sanitize_filename(self, title: str) -> str:
-        """Sanitize product title for use in filename"""
-        if not title:
-            return "unknown_title"
-        # Remove or replace problematic characters
-        sanitized = re.sub(r"[^\w\s-]", "", title)
-        sanitized = re.sub(r"\s+", "_", sanitized)
-        return sanitized[:50]  # Limit length to 50 chars
-
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -9253,7 +9204,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -9263,7 +9214,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -9277,11 +9228,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -9350,7 +9305,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -9391,7 +9346,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -9401,7 +9355,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -9593,7 +9546,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -9603,7 +9556,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -9617,11 +9570,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -9690,7 +9647,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -9731,7 +9688,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -9741,7 +9697,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -9933,7 +9888,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -9943,7 +9898,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -9957,11 +9912,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -10030,7 +9989,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -10071,7 +10030,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -10081,7 +10039,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -10273,7 +10230,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -10283,7 +10240,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -10297,11 +10254,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -10370,7 +10331,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -10411,7 +10372,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -10421,7 +10381,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -10613,7 +10572,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -10623,7 +10582,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -10637,11 +10596,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -10710,7 +10673,7 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -10751,7 +10714,6 @@ Return ONLY valid JSON, no additional text."""
         combined["match_validation"] = match_validation
         return combined
 
-    
     def _sanitize_filename(self, title: str) -> str:
         """Sanitize product title for use in filename"""
         if not title:
@@ -10761,7 +10723,6 @@ Return ONLY valid JSON, no additional text."""
         sanitized = re.sub(r"\s+", "_", sanitized)
         return sanitized[:50]  # Limit length to 50 chars
 
-    
     def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
         """Check if a product meets all defined business criteria."""
         # This function is now largely redundant as profitability checks are done in the main loop.
@@ -10953,7 +10914,7 @@ Return ONLY valid JSON, no additional text."""
                     self.state_manager.mark_product_processed(
                         product_data.get("url"), "failed_amazon_extraction"
                     )
-                    
+
                     # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
                     if hasattr(self.state_manager, "commit_amazon_progress"):
                         # Get current category info
@@ -10963,7 +10924,7 @@ Return ONLY valid JSON, no additional text."""
                             queue_idx=i,  # 0-based index within batch
                             total_cats=cat_info["total_cats"],
                             cat_url=cat_info["cat_url"],
-                            queue_len=cat_info["queue_len"]
+                            queue_len=cat_info["queue_len"],
                         )
                     continue
 
@@ -10977,11 +10938,15 @@ Return ONLY valid JSON, no additional text."""
                     filename_identifier = (
                         supplier_ean
                         if supplier_ean
-                        else re.sub(r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50])
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
                     )
                     amazon_cache_path = str(
                         path_manager.get_output_path(
-                            "FBA_ANALYSIS", "amazon_cache", f"amazon_{asin}_{filename_identifier}.json"
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
                         )
                     )
                     with open(amazon_cache_path, "w", encoding="utf-8") as f:
@@ -11050,7 +11015,349 @@ Return ONLY valid JSON, no additional text."""
                         queue_idx=i,  # 0-based index within batch
                         total_cats=cat_info["total_cats"],
                         cat_url=cat_info["cat_url"],
-                        queue_len=cat_info["queue_len"]
+                        queue_len=cat_info["queue_len"],
+                    )
+
+        # After Amazon queue completion, mark category as truly complete
+        if hasattr(self.state_manager, "get_current_category_info"):
+            cat_info = self.state_manager.get_current_category_info()
+            try:
+                _nurl = normalize_url(cat_info["cat_url"])
+            except Exception:
+                _nurl = str(cat_info["cat_url"])
+            self.state_manager.mark_category_completed(_nurl, cat_info["cat_idx"])
+            self.state_manager.save_state_atomic("category-complete-amazon-done")
+
+        # After Amazon queue completion, switch back to "supplier" phase
+        if hasattr(self.state_manager, "commit_phase_switch"):
+            self.state_manager.commit_phase_switch("supplier")
+            self.log.info(" PHASE SWITCH: amazon_analysis  supplier")
+
+        return profitable_results
+
+    def _get_cached_products_path(self, category_url: str):
+        """Helper to get the path for a category's product cache file."""
+        category_filename = f"{self.supplier_name}_{category_url.split('/')[-1]}_products.json"
+        return str(path_manager.get_cache_path("supplier_cache", category_filename))
+
+    def _combine_data(
+        self, supplier_data: Dict[str, Any], amazon_data: Dict[str, Any], session_id: str
+    ) -> Dict[str, Any]:
+        """Combine supplier and Amazon data and calculate financial metrics."""
+        combined = {
+            "supplier_product_info": supplier_data,
+            "amazon_product_info": amazon_data,
+            "analysis_timestamp": datetime.now().isoformat(),
+            "session_id": session_id,
+        }
+        # Financial calculation is now handled within the main run loop before this function is called
+        # This function is primarily for combining data and adding match validation
+        match_validation = self._validate_product_match(supplier_data, amazon_data)
+        combined["match_validation"] = match_validation
+        return combined
+
+    def _sanitize_filename(self, title: str) -> str:
+        """Sanitize product title for use in filename"""
+        if not title:
+            return "unknown_title"
+        # Remove or replace problematic characters
+        sanitized = re.sub(r"[^\w\s-]", "", title)
+        sanitized = re.sub(r"\s+", "_", sanitized)
+        return sanitized[:50]  # Limit length to 50 chars
+
+    def _is_product_meeting_criteria(self, combined_data: Dict[str, Any]) -> bool:
+        """Check if a product meets all defined business criteria."""
+        # This function is now largely redundant as profitability checks are done in the main loop.
+        # However, it can be used for other criteria like sales rank, reviews, etc.
+        amazon_data = combined_data.get("amazon_product_info", {})
+        financials = combined_data.get("financials", {})
+        # Check profitability (already done, but for completeness)
+        is_profitable = (
+            financials.get("ROI", 0) > MIN_ROI_PERCENT
+            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+        )
+        # Check Amazon listing quality
+        meets_rating = amazon_data.get("rating", 0) >= MIN_RATING
+        meets_reviews = amazon_data.get("reviews", 0) >= MIN_REVIEWS
+        meets_sales_rank = amazon_data.get("sales_rank", MAX_SALES_RANK + 1) <= MAX_SALES_RANK
+        # Check for battery products (using the helper function)
+        is_battery = is_battery_title(amazon_data.get("title", "")) or is_battery_title(
+            combined_data["supplier_product_info"].get("title", "")
+        )
+        # Check for other non-FBA friendly keywords
+        is_non_fba_friendly = any(
+            k in amazon_data.get("title", "").lower() for k in NON_FBA_FRIENDLY_KEYWORDS
+        ) or any(
+            k in combined_data["supplier_product_info"].get("title", "").lower()
+            for k in NON_FBA_FRIENDLY_KEYWORDS
+        )
+        # All criteria must be met
+        return (
+            is_profitable
+            and meets_rating
+            and meets_reviews
+            and meets_sales_rank
+            and not is_battery
+            and not is_non_fba_friendly
+        )
+
+    def _apply_batch_synchronization(
+        self,
+        max_products_per_cycle: int,
+        supplier_extraction_batch_size: int,
+        batch_sync_config: Dict[str, Any],
+    ) -> Tuple[int, int]:
+        """
+        Apply batch synchronization to align all batch sizes consistently.
+        Returns updated max_products_per_cycle and supplier_extraction_batch_size.
+        """
+        target_batch_size = batch_sync_config.get("target_batch_size", 3)
+        synchronize_all = batch_sync_config.get("synchronize_all_batch_sizes", False)
+        validation_config = batch_sync_config.get("validation", {})
+
+        self.log.info(f" BATCH SYNCHRONIZATION: Enabled")
+        self.log.info(f"   target_batch_size: {target_batch_size}")
+        self.log.info(f"   synchronize_all_batch_sizes: {synchronize_all}")
+
+        original_values = {
+            "max_products_per_cycle": max_products_per_cycle,
+            "supplier_extraction_batch_size": supplier_extraction_batch_size,
+            "linking_map_batch_size": self.system_config.get("linking_map_batch_size", 1),
+            "financial_report_batch_size": self.config_loader.get_financial_batch_size(),
+        }
+
+        # Check for mismatched sizes and warn if configured
+        if validation_config.get("warn_on_mismatched_sizes", True):
+            unique_sizes = set(original_values.values())
+            if len(unique_sizes) > 1:
+                self.log.warning(
+                    f" BATCH SYNC WARNING: Mismatched batch sizes detected: {original_values}"
+                )
+                self.log.warning(f"   Unique sizes found: {sorted(unique_sizes)}")
+
+        if synchronize_all:
+            # Synchronize all batch sizes to target
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            # Also update system config values in memory for consistency
+            if "system" in self.system_config:
+                self.system_config["max_products_per_cycle"] = target_batch_size
+                self.system_config["supplier_extraction_batch_size"] = target_batch_size
+                self.system_config["linking_map_batch_size"] = target_batch_size
+                # financial_report_batch_size managed by config_loader
+
+            self.log.info(f" BATCH SYNC: All batch sizes synchronized to {target_batch_size}")
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        else:
+            # Only synchronize the two main processing batch sizes
+            new_max_products_per_cycle = target_batch_size
+            new_supplier_extraction_batch_size = target_batch_size
+
+            self.log.info(
+                f" BATCH SYNC: Main processing batch sizes synchronized to {target_batch_size}"
+            )
+            self.log.info(
+                f"   Updated values: max_products_per_cycle={new_max_products_per_cycle}, supplier_extraction_batch_size={new_supplier_extraction_batch_size}"
+            )
+
+        return new_max_products_per_cycle, new_supplier_extraction_batch_size
+
+    async def _analyze_products_batch(
+        self, products: List[Dict[str, Any]], supplier_name: str, max_products_per_cycle: int
+    ) -> List[Dict[str, Any]]:
+        """Analyze a batch of supplier products for Amazon matching and profitability."""
+        profitable_results = []
+
+        # Filter and prepare products for analysis
+        valid_products = [
+            p
+            for p in products
+            if p.get("title")
+            and isinstance(p.get("price"), (float, int))
+            and p.get("price", 0) > 0
+            and p.get("url")
+        ]
+
+        price_filtered_products = [
+            p for p in valid_products if MIN_PRICE <= p.get("price", 0) <= MAX_PRICE
+        ]
+
+        self.log.info(f" Analyzing {len(price_filtered_products)} products in batch mode")
+
+        # Process products in cycles
+        batch_size = max_products_per_cycle
+        total_batches = (len(price_filtered_products) + batch_size - 1) // batch_size
+
+        for batch_num in range(total_batches):
+            start_idx = batch_num * batch_size
+            end_idx = min(start_idx + batch_size, len(price_filtered_products))
+            batch_products = price_filtered_products[start_idx:end_idx]
+
+            self.log.info(
+                f" Processing analysis batch {batch_num + 1}/{total_batches} ({len(batch_products)} products)"
+            )
+
+            for i, product_data in enumerate(batch_products):
+                current_index = start_idx + i + 1
+                self.log.info(f" Analyzing product {current_index}: '{product_data.get('title')}'")
+
+                # Check if already processed
+                if self.state_manager.is_product_processed(product_data.get("url")):
+                    self.log.info(
+                        f"Product already processed: {product_data.get('url')}. Skipping."
+                    )
+                    continue
+
+                # Amazon data extraction and analysis
+                amazon_data = await self._get_amazon_data(product_data)
+                if not amazon_data or "error" in amazon_data:
+                    self.log.warning(
+                        f"Could not retrieve Amazon data for '{product_data.get('title')}'. Creating no-match linking entry."
+                    )
+
+                    #  FIX: Create no-match linking entry for batch processing
+                    supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                    if supplier_ean == "None" or supplier_ean is None:
+                        supplier_ean = None
+
+                    # Determine the reason for no match
+                    error_info = (
+                        amazon_data.get("error")
+                        if isinstance(amazon_data, dict)
+                        else "No Amazon data returned"
+                    )
+                    no_match_reason = f"Batch processing - Amazon search failed: {error_info}"
+
+                    # Create no-match linking entry
+                    no_match_entry = {
+                        "supplier_ean": supplier_ean,
+                        "amazon_asin": None,
+                        "supplier_title": product_data.get("title"),
+                        "amazon_title": None,
+                        "supplier_price": product_data.get("price"),
+                        "amazon_price": None,
+                        "match_method": "none",  # NEW: Indicates no match found
+                        "confidence": 0,  # NEW: No confidence for failed matches
+                        "created_at": datetime.now().isoformat(),
+                        "supplier_url": product_data.get("url"),
+                        "no_match_reason": no_match_reason,  # NEW: Audit trail explaining why no match
+                    }
+
+                    # Add no-match entry to linking map using optimized method
+                    self._add_linking_map_entry_optimized(no_match_entry)
+                    self.log.info(
+                        f" Added NO-MATCH linking entry for batch product: {supplier_ean or 'NO_EAN'}  NO MATCH"
+                    )
+
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_amazon_extraction"
+                    )
+
+                    # Inside the Amazon processing loop, after each item k (0-based) is processed (no-match case)
+                    if hasattr(self.state_manager, "commit_amazon_progress"):
+                        # Get current category info
+                        cat_info = self.state_manager.get_current_category_info()
+                        self.state_manager.commit_amazon_progress(
+                            cat_idx=cat_info["cat_idx"],
+                            queue_idx=i,  # 0-based index within batch
+                            total_cats=cat_info["total_cats"],
+                            cat_url=cat_info["cat_url"],
+                            queue_len=cat_info["queue_len"],
+                        )
+                    continue
+
+                # Save Amazon cache and create linking map
+                supplier_ean = product_data.get("ean") or product_data.get("barcode")
+                asin = amazon_data.get("asin", "NO_ASIN")
+
+                # CACHE POLICY FIX: Only save Amazon cache file when ASIN is valid (not None, not "NO_ASIN")
+                if asin and asin not in ("NO_ASIN", "None", None):
+                    # Save Amazon data
+                    filename_identifier = (
+                        supplier_ean
+                        if supplier_ean
+                        else re.sub(
+                            r'[<>:"/\\|?*\s]+', "_", product_data.get("title", "NO_TITLE")[:50]
+                        )
+                    )
+                    amazon_cache_path = str(
+                        path_manager.get_output_path(
+                            "FBA_ANALYSIS",
+                            "amazon_cache",
+                            f"amazon_{asin}_{filename_identifier}.json",
+                        )
+                    )
+                    with open(amazon_cache_path, "w", encoding="utf-8") as f:
+                        json.dump(amazon_data, f, indent=2, ensure_ascii=False)
+                    self.log.info(f" Saved Amazon data to {amazon_cache_path}")
+                else:
+                    self.log.debug(f" Skipping Amazon cache save for no-match case (ASIN={asin})")
+
+                # Financial analysis
+                try:
+                    # Already imported at top of file: from FBA_Financial_calculator import financials as calc_financials
+                    supplier_price = float(product_data.get("price", 0))
+                    current_price = amazon_data.get("current_price", 0)
+
+                    if supplier_price > 0 and current_price > 0:
+                        financials = calc_financials(
+                            supplier_price=supplier_price,
+                            amazon_price=current_price,
+                            amazon_sales_rank=amazon_data.get("sales_rank", 999999),
+                            amazon_rating=amazon_data.get("rating", 0),
+                            amazon_review_count=amazon_data.get("reviews", 0),
+                        )
+
+                        # Check profitability
+                        if (
+                            financials.get("ROI", 0) > MIN_ROI_PERCENT
+                            and financials.get("NetProfit", 0) > MIN_PROFIT_PER_UNIT
+                        ):
+                            self.log.info(
+                                f" PROFITABLE: ROI {financials['ROI']:.1f}%, Profit {financials['NetProfit']:.2f}"
+                            )
+
+                            combined_data = self._combine_supplier_amazon_data(
+                                product_data, amazon_data, "hybrid_batch"
+                            )
+                            combined_data["financials"] = financials
+                            profitable_results.append(combined_data)
+
+                            self.state_manager.update_success_metrics(
+                                True, True, financials.get("NetProfit", 0)
+                            )
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_profitable"
+                            )
+                        else:
+                            self.log.info(
+                                f"Not profitable: ROI {financials.get('ROI', 0):.1f}%, Profit {financials.get('NetProfit', 0):.2f}"
+                            )
+                            self.state_manager.update_success_metrics(True, False)
+                            self.state_manager.mark_product_processed(
+                                product_data.get("url"), "completed_not_profitable"
+                            )
+
+                except Exception as e:
+                    self.log.error(f"Financial calculation failed: {e}")
+                    self.state_manager.mark_product_processed(
+                        product_data.get("url"), "failed_financial_calculation"
+                    )
+
+                # Inside the Amazon processing loop, after each item k (0-based) is processed
+                if hasattr(self.state_manager, "commit_amazon_progress"):
+                    # Get current category info
+                    cat_info = self.state_manager.get_current_category_info()
+                    self.state_manager.commit_amazon_progress(
+                        cat_idx=cat_info["cat_idx"],
+                        queue_idx=i,  # 0-based index within batch
+                        total_cats=cat_info["total_cats"],
+                        cat_url=cat_info["cat_url"],
+                        queue_len=cat_info["queue_len"],
                     )
 
         # After Amazon queue completion, mark category as truly complete
@@ -11082,17 +11389,17 @@ Return ONLY valid JSON, no additional text."""
     ) -> List[Dict[str, Any]]:
         """Process products using the same detailed logic as main workflow (not simplified batch processing)"""
         profitable_results = []
-        
+
         # ?? FIX ISS-004: Validate products belong to expected categories BEFORE processing
         # Evidence: Category 8 had frozen_denom=15 but processed 3312 products (bulk mode)
         if category_urls:
             normalized_cats = set()
-            for cu in (category_urls if isinstance(category_urls, list) else [category_urls]):
+            for cu in category_urls if isinstance(category_urls, list) else [category_urls]:
                 try:
                     normalized_cats.add(normalize_url(cu))
                 except Exception:
                     normalized_cats.add(str(cu))
-            
+
             # Filter to only products matching the expected categories
             original_count = len(products)
             category_filtered = []
@@ -11104,7 +11411,7 @@ Return ONLY valid JSON, no additional text."""
                     n_src = src
                 if not normalized_cats or n_src in normalized_cats:
                     category_filtered.append(p)
-            
+
             if len(category_filtered) != original_count:
                 self.log.warning(
                     f"?? ISS-004 CATEGORY SCOPE FILTER: {original_count}  {len(category_filtered)} products\n"
@@ -11242,17 +11549,25 @@ Return ONLY valid JSON, no additional text."""
                                 f"amazon_{amazon_asin}_{filename_identifier}.json",
                             )
                         )
-                        success = self.save_guardian.save_json_atomic(amazon_cache_path, amazon_data)
+                        success = self.save_guardian.save_json_atomic(
+                            amazon_cache_path, amazon_data
+                        )
                         if success:
                             self.log.info(f" Saved Amazon data to {amazon_cache_path}")
                         else:
                             self.log.error(f" Failed to save Amazon data to {amazon_cache_path}")
                     else:
-                        self.log.debug(f" Skipping Amazon cache save for no-match case (ASIN={amazon_asin})")
+                        self.log.debug(
+                            f" Skipping Amazon cache save for no-match case (ASIN={amazon_asin})"
+                        )
 
                     # Create linking map entry
 
-                    if amazon_asin and amazon_asin not in ("NO_ASIN", "None", None):  # Only require valid ASIN
+                    if amazon_asin and amazon_asin not in (
+                        "NO_ASIN",
+                        "None",
+                        None,
+                    ):  # Only require valid ASIN
                         # DEBUG: Check linking_map type before assignment
                         self.log.debug(
                             f" DEBUG: linking_map type: {type(self.linking_map)}, size: {len(self.linking_map)} entries"
@@ -11450,7 +11765,7 @@ Return ONLY valid JSON, no additional text."""
 
     def _check_authentication_fallback_needed(self) -> bool:
         """
-         AUTHENTICATION FALLBACK: Check if re-authentication is needed based on various triggers
+        AUTHENTICATION FALLBACK: Check if re-authentication is needed based on various triggers
         """
         # Trigger 1: Too many products without prices
         if (
@@ -11486,19 +11801,23 @@ Return ONLY valid JSON, no additional text."""
 
     async def _perform_authentication_fallback(self) -> bool:
         """
-         AUTHENTICATION FALLBACK: Perform re-authentication using SupplierAuthenticationService
+        AUTHENTICATION FALLBACK: Perform re-authentication using SupplierAuthenticationService
         """
         try:
             self.log.info(" Performing authentication fallback...")
 
             # Import the correct per-supplier authentication service dynamically
             import importlib
-            supplier_slug = self.supplier_name.split('.')[0].replace('-', '_')
+
+            supplier_slug = self.supplier_name.split(".")[0].replace("-", "_")
             module_path = f"tools.{supplier_slug}.supplier_authentication_service"
             auth_module = importlib.import_module(module_path)
             SupplierAuthenticationService = getattr(
-                auth_module, "SupplierAuthenticationService",
-                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+                auth_module,
+                "SupplierAuthenticationService",
+                getattr(
+                    auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper"
+                ),
             )
 
             # Get credentials from config
@@ -11552,7 +11871,7 @@ Return ONLY valid JSON, no additional text."""
 
     def _record_product_price_status(self, product_data: dict, has_price: bool):
         """
-         AUTHENTICATION FALLBACK: Record whether product has price for authentication monitoring
+        AUTHENTICATION FALLBACK: Record whether product has price for authentication monitoring
         """
         # Update product processing counter
         self.products_processed_since_auth += 1
@@ -11605,7 +11924,6 @@ Return ONLY valid JSON, no additional text."""
                     return file_path, count
                 except Exception as e:
                     self.log.warning(f" Could not read {pattern_name} cache file: {e}")
-
 
         # Pattern 3: Search for fallback files (cache_fallback_*.json)
         try:
@@ -11768,7 +12086,11 @@ Return ONLY valid JSON, no additional text."""
         """
         # Throttle frequent checks (skip if recent)
         from datetime import datetime, timedelta
-        if self.last_authentication_time and datetime.now() - self.last_authentication_time < timedelta(minutes=5):
+
+        if (
+            self.last_authentication_time
+            and datetime.now() - self.last_authentication_time < timedelta(minutes=5)
+        ):
             self.log.info(" Skipping auth check (within cooldown window)")
             return True
 
@@ -11777,18 +12099,24 @@ Return ONLY valid JSON, no additional text."""
 
             # Import the correct per-supplier authentication service dynamically
             import importlib
-            supplier_slug = self.supplier_name.split('.')[0].replace('-', '_')
+
+            supplier_slug = self.supplier_name.split(".")[0].replace("-", "_")
             module_path = f"tools.{supplier_slug}.supplier_authentication_service"
             auth_module = importlib.import_module(module_path)
             SupplierAuthenticationService = getattr(
-                auth_module, "SupplierAuthenticationService",
-                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+                auth_module,
+                "SupplierAuthenticationService",
+                getattr(
+                    auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper"
+                ),
             )
 
             if hasattr(self, "browser_manager") and self.browser_manager:
                 #  PATCH 1: Get a real Page first; never hand the helper a BrowserManager
                 # Use supplier_url from config or derive from supplier_name (no hardcoded defaults)
-                supplier_url = self.workflow_config.get("supplier_url") or f"https://{self.supplier_name}"
+                supplier_url = (
+                    self.workflow_config.get("supplier_url") or f"https://{self.supplier_name}"
+                )
                 page = await self.browser_manager.get_page(supplier_url, reuse_existing=True)
 
                 # Initialize authentication service with the Page object (not BrowserManager)
@@ -11806,9 +12134,7 @@ Return ONLY valid JSON, no additional text."""
                     }
 
                     # Helper is page-based; it already holds the Page (no need to pass page param)
-                    authenticated = await auth_service.ensure_authenticated_session(
-                        credentials
-                    )
+                    authenticated = await auth_service.ensure_authenticated_session(credentials)
 
                     if authenticated:
                         self.log.info(
@@ -11816,6 +12142,7 @@ Return ONLY valid JSON, no additional text."""
                         )
                         # Update authentication timestamp on success
                         from datetime import datetime
+
                         self.last_authentication_time = datetime.now()
                         return True
                     else:
@@ -11847,17 +12174,23 @@ Return ONLY valid JSON, no additional text."""
         try:
             # Import the correct per-supplier authentication service dynamically
             import importlib
-            supplier_slug = self.supplier_name.split('.')[0].replace('-', '_')
+
+            supplier_slug = self.supplier_name.split(".")[0].replace("-", "_")
             module_path = f"tools.{supplier_slug}.supplier_authentication_service"
             auth_module = importlib.import_module(module_path)
             SupplierAuthenticationService = getattr(
-                auth_module, "SupplierAuthenticationService",
-                getattr(auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper")
+                auth_module,
+                "SupplierAuthenticationService",
+                getattr(
+                    auth_module, f"{supplier_slug.title().replace('_','')}AuthenticationHelper"
+                ),
             )
 
             if hasattr(self, "browser_manager") and self.browser_manager:
                 #  Get Page first, then pass to auth service (not BrowserManager)
-                supplier_url = self.workflow_config.get("supplier_url") or f"https://{self.supplier_name}"
+                supplier_url = (
+                    self.workflow_config.get("supplier_url") or f"https://{self.supplier_name}"
+                )
                 page = await self.browser_manager.get_page(supplier_url, reuse_existing=True)
                 auth_service = SupplierAuthenticationService(page)
 
@@ -11872,13 +12205,15 @@ Return ONLY valid JSON, no additional text."""
                         from tools.standalone_playwright_login import StandalonePlaywrightLogin
 
                         # Get config-driven URLs for authentication testing
-                        supplier_url = self.workflow_config.get("supplier_url", f"https://{self.supplier_name}")
+                        supplier_url = self.workflow_config.get(
+                            "supplier_url", f"https://{self.supplier_name}"
+                        )
                         test_product_url = self.workflow_config.get("test_product_url")
 
                         login_handler = StandalonePlaywrightLogin(
                             self.browser_manager,
                             supplier_url=supplier_url,
-                            test_product_url=test_product_url
+                            test_product_url=test_product_url,
                         )
                         login_result = await login_handler.perform_login(self.supplier_name)
 
@@ -11903,7 +12238,9 @@ Return ONLY valid JSON, no additional text."""
             return True  # Assume authenticated on error
 
     # Helper methods for CRITICAL FIX 1 integration
-    def _combine_supplier_amazon_data(self, supplier_product: Dict, amazon_product: Dict, financials: Dict) -> Dict:
+    def _combine_supplier_amazon_data(
+        self, supplier_product: Dict, amazon_product: Dict, financials: Dict
+    ) -> Dict:
         """
         Helper to combine data sources into a single result object.
         Restores missing functionality to prevent AttributeError.
@@ -11912,7 +12249,9 @@ Return ONLY valid JSON, no additional text."""
             **supplier_product,
             "amazon_data": amazon_product,
             "financials": financials,
-            "combined_at": self.state_manager.get_timestamp() if hasattr(self.state_manager, "get_timestamp") else None
+            "combined_at": self.state_manager.get_timestamp()
+            if hasattr(self.state_manager, "get_timestamp")
+            else None,
         }
 
     async def _load_cached_supplier_products(self) -> List[Dict[str, Any]]:
@@ -11980,6 +12319,7 @@ Return ONLY valid JSON, no additional text."""
                     if e:
                         try:
                             from utils.normalization import normalize_ean
+
                             ne = normalize_ean(e)
                         except Exception:
                             ne = e

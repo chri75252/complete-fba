@@ -1,0 +1,121 @@
+{
+  "run_id": "20260108_010444",
+  "status": "OK",
+  "input_file": "RESERACH\\REPORT\\part 5 jan\\part 5 jan.xlsx",
+  "input_file_hash": "13b89ce7c8d14036",
+  "supplier": "test_fixed",
+  "skip_browser": true,
+  "preflight": {
+    "warnings": [],
+    "diagnostics": {
+      "mode": "openai_validated",
+      "model": "gpt-5-mini",
+      "base_url": "https://api.openai.com/v1"
+    }
+  },
+  "normalization_report": {
+    "original_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "NetProceeds",
+      "HMRC",
+      "NetProfit",
+      "ROI ( % )",
+      "Breakeven",
+      "ProfitMargin"
+    ],
+    "detected": {
+      "row_id": "RowID",
+      "supplier_title": "SupplierTitle",
+      "amazon_title": "AmazonTitle",
+      "supplier_ean": "EAN",
+      "amazon_ean": "EAN_OnPage",
+      "asin": "ASIN",
+      "supplier_price": "SupplierPrice_incVAT",
+      "selling_price": "SellingPrice_incVAT",
+      "net_profit": "NetProfit",
+      "roi": null,
+      "sales": "bought_in_past_month",
+      "supplier_url": "SupplierURL"
+    },
+    "stable_key_generated": true,
+    "stable_key_collision": false
+  },
+  "schema": {
+    "input_path": "RESERACH\\REPORT\\part 5 jan\\part 5 jan.xlsx",
+    "rows": 2789,
+    "detected_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "NetProceeds",
+      "HMRC",
+      "NetProfit",
+      "ROI ( % )",
+      "Breakeven",
+      "ProfitMargin"
+    ],
+    "warnings": []
+  },
+  "validation": {
+    "passed": true,
+    "errors": []
+  },
+  "bucket_counts": {
+    "FILTERED_OUT": 2664,
+    "HIGHLY_LIKELY": 80,
+    "VERIFIED": 41,
+    "NEEDS_VERIFICATION": 4
+  },
+  "global_traps_loaded": 3,
+  "ai_features": {
+    "enabled": true,
+    "provider": "openai",
+    "model": "gpt-5-mini"
+  },
+  "iterations": {
+    "max_iterations": 1,
+    "iterations_run": 1,
+    "mode": "iteration_loop"
+  },
+  "critique_summary": {
+    "recommended_action": "block",
+    "high_severity_issues": 3,
+    "proposed_changes": 4,
+    "overall_assessment": "This report contains a critical contradiction: 13 exact EAN matches were placed in FILTERED_OUT instead of VERIFIED. That violates core matching rules and indicates a systemic logic/precedence bug (likely in brand-penalty or pack parsing logic overriding exact EAN equality). Additionally, there are large numbers of low-confidence filtered rows and many extreme pack/bundle detections pointing to mis-parsing of measurement/dimension tokens as pack sizes. Because exact-EAN mismatches are present, the run should not be finalized until corrected and re-run."
+  },
+  "adjudication_count": 50
+}

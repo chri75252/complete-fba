@@ -1,0 +1,416 @@
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+
+from fba_agent.analysis import analyze_all_rows
+from fba_agent.atomic import write_json_atomic, write_text_atomic
+from fba_agent.io import load_report, normalize_columns_with_stable_keys
+from fba_agent.memory_store import (
+    load_global_traps,
+    load_supplier_memory,
+    merge_calibration,
+    persist_calibration,
+    persist_run_history,
+    supplier_id_from_name,
+)
+from fba_agent.preflight import run_preflight
+from fba_agent.render import render_phasea_report
+from fba_agent.stable_key import StableKeyCollisionError
+from fba_agent.types import MergedConfig
+from fba_agent.validate import validate_coverage, validate_profit
+
+
+def _now_run_id() -> str:
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+def _report_stamp() -> str:
+    """Return YYYYMMDD for canonical report filename."""
+    return datetime.now().strftime("%Y%m%d")
+
+
+def _report_stamp_with_time() -> str:
+    """Return YYYYMMDD_HHMM for archive report filename."""
+    return datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def _file_hash(path: Path) -> str:
+    """Compute file hash for run history tracking."""
+    content = path.read_bytes()
+    return hashlib.sha256(content).hexdigest()[:16]
+
+
+def _write_evidence_jsonl(path: Path, evidence: list[dict[str, Any]]) -> None:
+    lines = [json.dumps(obj, ensure_ascii=False) for obj in evidence]
+    write_text_atomic(path, "\n".join(lines) + "\n")
+
+
+def _write_csv_atomic(path: Path, df: pd.DataFrame) -> None:
+    write_text_atomic(path, df.to_csv(index=False))
+
+
+def run_analysis(
+    *,
+    input_path: Path,
+    supplier: str,
+    runs_dir: Path,
+    memory_dir: Path,
+    skip_browser: bool,
+    overrides_path: Path | None,
+    fee_rate: float,
+    max_iterations: int = 2,
+    enable_ai: bool = True,
+    provider_name: str | None = None,
+) -> Path:
+    """Run the FBA analysis pipeline.
+    
+    This is the main orchestration function that coordinates:
+    1. Data loading and normalization (with stable key generation)
+    2. Preflight calibration
+    3. Memory merging (with global traps)
+    4. Row analysis (with iteration loop and AI features)
+    5. Validation
+    6. Report generation
+    7. Memory persistence
+    
+    Args:
+        input_path: Path to input file (CSV/XLSX)
+        supplier: Supplier name/ID or "auto"
+        runs_dir: Directory for run outputs
+        memory_dir: Directory for memory/learning data
+        skip_browser: Skip browser verification (default True)
+        overrides_path: Optional path to overrides file
+        fee_rate: Fee rate for profit calculation
+        max_iterations: Maximum iterations (default 2)
+        enable_ai: Enable AI features (adjudication, critique)
+        provider_name: LLM provider name ("openai", "gemini", "moonshot") or None for auto-detect
+    
+    Returns:
+        Path to the run output directory
+    
+    Raises:
+        StableKeyCollisionError: If stable key collisions detected
+        SystemExit: If validation gates fail
+    """
+    # Create run directory early (for collision reports if needed)
+    run_id = _now_run_id()
+    run_dir = runs_dir / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+
+    # Enable LLM Tracing
+    os.environ["FBA_TRACE_FILE"] = str(run_dir / "llm_trace.jsonl")
+    
+    # Load and parse input file
+    df_raw, schema = load_report(input_path)
+    
+    # Normalize columns + generate stable keys (may raise StableKeyCollisionError)
+    try:
+        df, normalization_report = normalize_columns_with_stable_keys(
+            df_raw,
+            collision_report_dir=run_dir,
+        )
+    except StableKeyCollisionError as e:
+        # Write error summary before re-raising
+        error_summary = {
+            "run_id": run_id,
+            "status": "HARD_FAIL",
+            "error": "STABLE_KEY_COLLISION",
+            "collision_count": len(e.collisions),
+            "collision_report_path": str(e.collision_report_path) if e.collision_report_path else None,
+            "input_file": str(input_path),
+        }
+        write_json_atomic(run_dir / "run_summary.json", error_summary)
+        raise
+
+    supplier_id = supplier_id_from_name(supplier if supplier != "auto" else input_path.stem)
+    
+    # Load memory layers
+    memory_bundle = load_supplier_memory(memory_dir, supplier_id)
+    global_traps = load_global_traps(memory_dir)
+
+    # Run preflight calibration on sample
+    sample = df.head(50).copy()
+    preflight_naming, preflight_warnings, preflight_diag = run_preflight(sample)
+
+    # Merge calibration with memory layers (global traps + supplier memory + overrides)
+    naming, calibration_diff = merge_calibration(
+        supplier_id=supplier_id,
+        memory_bundle=memory_bundle,
+        preflight_naming=preflight_naming,
+        overrides_path=overrides_path,
+        global_traps=global_traps,
+    )
+
+    merged_config = MergedConfig(supplier_id=supplier_id, naming=naming, fee_rate=fee_rate)
+
+    brand_aliases = memory_bundle.get("brand_aliases") or {}
+
+    # Load AI provider if enabled
+    provider = None
+    provider_info = {"enabled": enable_ai, "provider": None, "model": None}
+    
+    if enable_ai:
+        try:
+            from fba_agent.providers import get_provider, load_provider_from_env
+            
+            trace_log_path = str(run_dir / "llm_trace.jsonl")
+            
+            if provider_name:
+                provider = get_provider(provider_name, trace_path=trace_log_path)
+            else:
+                provider = load_provider_from_env(trace_path=trace_log_path)
+            
+            if provider:
+                provider_info["provider"] = provider.config.name
+                provider_info["model"] = provider.current_model
+        except Exception as e:
+            preflight_warnings.append(f"AI provider failed to load: {type(e).__name__}: {e}")
+            provider_info["error"] = str(e)
+
+    # Run Brand Detection Step (extracts, validates, and stores brands)
+    # This runs BEFORE main analysis so brand_aliases is populated with validated brands
+    known_brands = {}
+    brand_detection_info = {"enabled": False, "new_candidates": 0, "known_brands": 0}
+    
+    if provider is not None:
+        try:
+            from fba_agent.brand_detector import run_brand_detection
+            
+            known_brands = run_brand_detection(
+                df=df,
+                memory_dir=memory_dir,
+                provider=provider,
+                title_column="SupplierTitle",
+            )
+            
+            # Merge known_brands into brand_aliases (known_brands takes precedence)
+            brand_aliases.update(known_brands)
+            
+            brand_detection_info = {
+                "enabled": True,
+                "known_brands": len(known_brands),
+            }
+            
+        except Exception as e:
+            print(f"⚠ Brand detection failed: {type(e).__name__}: {e}")
+            import traceback
+            traceback.print_exc()
+            brand_detection_info["error"] = str(e)
+
+    # Decide whether to use iteration loop or single-pass analysis
+    if max_iterations > 1 or provider is not None:
+        # Use iteration loop with AI features
+        ledger, evidence, iteration_info = _run_with_iteration(
+            df=df,
+            config=merged_config,
+            brand_aliases=brand_aliases,
+            max_iterations=max_iterations,
+            run_dir=run_dir,
+            memory_dir=memory_dir,
+            provider=provider,
+            input_path=input_path,
+        )
+        validation_passed = iteration_info.get("validation_passed", False)
+        validation_errors = iteration_info.get("validation_errors", [])
+        iterations_run = iteration_info.get("iterations_run", 1)
+    else:
+        # Single-pass analysis (original behavior, no AI)
+        ledger, evidence = analyze_all_rows(df, merged_config, brand_aliases=brand_aliases)
+        cov = validate_coverage(ledger, df)
+        prof = validate_profit(ledger)
+        validation_errors = cov.errors + prof.errors
+        validation_passed = cov.passed and prof.passed
+        iterations_run = 1
+        iteration_info = {"mode": "single_pass"}
+
+    # Build run summary
+    summary = {
+        "run_id": run_id,
+        "status": "OK" if validation_passed else "FAILED",
+        "input_file": str(input_path),
+        "input_file_hash": _file_hash(input_path),
+        "supplier": supplier_id,
+        "skip_browser": bool(skip_browser),
+        "preflight": {"warnings": preflight_warnings, "diagnostics": preflight_diag},
+        "normalization_report": normalization_report,
+        "schema": {
+            "input_path": schema.input_path,
+            "rows": schema.rows,
+            "detected_columns": schema.detected_columns,
+            "warnings": schema.warnings,
+        },
+        "validation": {"passed": validation_passed, "errors": validation_errors},
+        "bucket_counts": ledger["bucket"].value_counts().to_dict() if "bucket" in ledger.columns else {},
+        "global_traps_loaded": len(global_traps),
+        "ai_features": provider_info,
+        "iterations": {
+            "max_iterations": max_iterations,
+            "iterations_run": iterations_run,
+            "mode": iteration_info.get("mode", "iteration_loop" if max_iterations > 1 else "single_pass"),
+        },
+    }
+    
+    # Add iteration details if available
+    if "critique_summary" in iteration_info:
+        summary["critique_summary"] = iteration_info["critique_summary"]
+    if "adjudication_count" in iteration_info:
+        summary["adjudication_count"] = iteration_info["adjudication_count"]
+    
+    # Add brand detection info
+    summary["brand_detection"] = brand_detection_info
+
+    # Always write run_summary.json for debugging (even if gates fail)
+    write_json_atomic(run_dir / "run_summary.json", summary)
+    write_json_atomic(run_dir / "merged_calibration.json", naming.__dict__)
+    write_json_atomic(run_dir / "calibration_diff.json", calibration_diff)
+    
+    # Always persist calibration (even on failure, for diagnostics)
+    persist_calibration(memory_dir, supplier_id, naming, input_path)
+
+    if not validation_passed:
+        # Still write artifacts for debugging
+        _write_csv_atomic(run_dir / "coverage_ledger.csv", ledger)
+        _write_evidence_jsonl(run_dir / "evidence.jsonl", evidence)
+        raise SystemExit("Validation gates failed. See run_summary.json for details.")
+
+    # Write analysis artifacts
+    _write_csv_atomic(run_dir / "coverage_ledger.csv", ledger)
+    _write_evidence_jsonl(run_dir / "evidence.jsonl", evidence)
+
+    # Render report with canonical filename (PHASEA_MANUAL_REPORT_YYYYMMDD.md)
+    report_md = render_phasea_report(
+        ledger,
+        input_file=str(input_path),
+        supplier=supplier_id,
+        generated_date=datetime.now().date().isoformat(),
+    )
+    
+    # Canonical report (required by Main spec)
+    canonical_report_path = run_dir / f"PHASEA_MANUAL_REPORT_{_report_stamp()}.md"
+    write_text_atomic(canonical_report_path, report_md)
+    
+    # Timestamped archive copy
+    archive_report_path = run_dir / f"PHASEA_MANUAL_REPORT_{_report_stamp_with_time()}.md"
+    write_text_atomic(archive_report_path, report_md)
+
+    # Persist run history for regression guard
+    # NOTE: ledger_path is added so AI critique can load and compare full ledgers
+    ledger_path = run_dir / "coverage_ledger.csv"
+    run_entry = {
+        "run_id": run_id,
+        "timestamp": datetime.now().isoformat(),
+        "input_file": str(input_path),
+        "input_file_hash": _file_hash(input_path),
+        "bucket_counts": summary["bucket_counts"],
+        "gates_passed": validation_passed,
+        "artifacts_path": str(run_dir),
+        "ledger_path": str(ledger_path),  # NEW: Path to full ledger for comparison
+        "iterations_run": iterations_run,
+        "ai_enabled": provider is not None,
+    }
+    persist_run_history(memory_dir, supplier_id, run_entry)
+
+    return run_dir
+
+
+def _run_with_iteration(
+    df: pd.DataFrame,
+    config: MergedConfig,
+    brand_aliases: dict[str, str],
+    max_iterations: int,
+    run_dir: Path,
+    memory_dir: Path,
+    provider: Any | None,
+    input_path: Path,
+) -> tuple[pd.DataFrame, list[dict], dict]:
+    """
+    Run analysis with iteration loop and AI features.
+    
+    This function integrates:
+    - Iteration loop (iter_1 → critique → iter_2)
+    - AI adjudication for ambiguous rows
+    - AI critique for report-level review
+    
+    Args:
+        df: Normalized DataFrame with stable_key
+        config: Merged configuration
+        brand_aliases: Brand alias mappings
+        max_iterations: Maximum iterations
+        run_dir: Run output directory
+        memory_dir: Memory directory
+        provider: LLM provider instance (or None)
+        input_path: Original input file path
+    
+    Returns:
+        Tuple of (ledger, evidence, iteration_info)
+    """
+    try:
+        from fba_agent.iteration import run_iteration_loop, iteration_result_to_dict
+        
+        # Load past ledger path from run history for AI critique comparison
+        past_ledger_path = None
+        try:
+            history = load_run_history(memory_dir, config.supplier_id, k=1)
+            if history:
+                past_ledger_path = history[-1].get("ledger_path")
+        except Exception:
+            past_ledger_path = None  # Gracefully handle missing history
+        
+        best_result, all_passed, all_iterations = run_iteration_loop(
+            df=df,
+            config=config,
+            max_iterations=max_iterations,
+            run_dir=run_dir,
+            memory_dir=memory_dir,
+            provider=provider,
+            brand_aliases=brand_aliases,
+            past_ledger_path=past_ledger_path,  # NEW: Pass past ledger for AI critique comparison
+        )
+        
+        # Extract info from best iteration
+        iteration_info = {
+            "mode": "iteration_loop",
+            "validation_passed": best_result.validation_passed,
+            "validation_errors": best_result.validation_errors,
+            "iterations_run": len(all_iterations),
+            "best_iteration": best_result.iteration_number,
+            "adjudication_count": len(best_result.adjudication_results),
+        }
+        
+        # Add critique summary if available
+        if best_result.critique:
+            iteration_info["critique_summary"] = {
+                "recommended_action": best_result.critique.recommended_action,
+                "high_severity_issues": len(best_result.critique.high_severity_issues),
+                "proposed_changes": len(best_result.critique.proposed_changes),
+                "overall_assessment": best_result.critique.overall_assessment,
+            }
+        
+        # Write iteration details
+        iteration_details = [iteration_result_to_dict(r) for r in all_iterations]
+        write_json_atomic(run_dir / "iteration_details.json", iteration_details)
+        
+        return best_result.ledger, best_result.evidence, iteration_info
+        
+    except Exception as e:
+        # If iteration loop fails, fall back to single-pass analysis
+        from fba_agent.validate import validate_coverage, validate_profit
+        
+        ledger, evidence = analyze_all_rows(df, config, brand_aliases=brand_aliases)
+        cov = validate_coverage(ledger, df)
+        prof = validate_profit(ledger)
+        
+        return ledger, evidence, {
+            "mode": "fallback_single_pass",
+            "validation_passed": cov.passed and prof.passed,
+            "validation_errors": cov.errors + prof.errors,
+            "iterations_run": 1,
+            "fallback_reason": f"{type(e).__name__}: {e}",
+        }

@@ -1,0 +1,300 @@
+{
+  "project_name": "Amazon FBA Agent System v3.7+",
+  "generated_at": "2025-10-31T16:30:00Z",
+  "description": "Production-ready automation platform for FBA product sourcing from supplier websites to Amazon marketplace with file-grounded state management and resumable processing workflows",
+  "version": "v3.7+",
+  "primary_language": "Python",
+  "framework": "Playwright + SQLite + Chrome CDP",
+
+  "entry_points": [
+    {
+      "name": "Main PoundWholesale Runner",
+      "file": "run_custom_poundwholesale.py",
+      "line": 1,
+      "type": "cli",
+      "description": "Primary launcher for PoundWholesale supplier automation",
+      "usage": "python run_custom_poundwholesale.py",
+      "dependencies": ["Chrome CDP", "Playwright", "system_config.json"]
+    },
+    {
+      "name": "Clearance King Runner",
+      "file": "run_custom_clearance_king.py",
+      "line": 1,
+      "type": "cli",
+      "description": "Alternative launcher for ClearanceKing supplier automation",
+      "usage": "python run_custom_clearance_king.py",
+      "dependencies": ["Chrome CDP", "Playwright", "system_config.json"]
+    }
+  ],
+
+  "core_workflow_components": [
+    {
+      "name": "PassiveExtractionWorkflow",
+      "file": "tools/passive_extraction_workflow_latest.py",
+      "line": 851,
+      "type": "class",
+      "size_lines": 2650,
+      "description": "Main orchestrator class for the entire product sourcing workflow",
+      "key_methods": [
+        {
+          "name": "run",
+          "line": 1970,
+          "description": "Main execution entry point with configuration loading"
+        },
+        {
+          "name": "_extract_supplier_products",
+          "line": 2318,
+          "description": "Manages batched supplier product scraping"
+        },
+        {
+          "name": "_get_amazon_data",
+          "line": 2437,
+          "description": "EAN-first, title-fallback Amazon matching logic"
+        }
+      ]
+    },
+    {
+      "name": "FixedAmazonExtractor",
+      "file": "tools/passive_extraction_workflow_latest.py",
+      "line": 435,
+      "type": "class",
+      "description": "Specialized Amazon.co.uk interaction with Chrome extension support",
+      "key_methods": [
+        {
+          "name": "search_by_ean_and_extract_data",
+          "line": 625,
+          "description": "Primary high-confidence EAN search with ad filtering"
+        },
+        {
+          "name": "extract_data",
+          "line": 824,
+          "description": "ASIN data extraction with browser page reuse"
+        }
+      ]
+    }
+  ],
+
+  "critical_utilities": [
+    {
+      "name": "EnhancedStateManager",
+      "file": "utils/fixed_enhanced_state_manager.py",
+      "line": 1,
+      "type": "class",
+      "size_lines": 1418,
+      "description": "File-grounded state management with freeze-mark-resume sequence",
+      "critical_methods": [
+        {
+          "name": "load_state",
+          "line": 314,
+          "description": "Load state from persistent files with validation"
+        },
+        {
+          "name": "save_state_atomic",
+          "line": 450,
+          "description": "Atomic state persistence with WindowsSaveGuardian"
+        }
+      ]
+    },
+    {
+      "name": "BrowserManager",
+      "file": "utils/browser_manager.py",
+      "line": 1,
+      "type": "class",
+      "description": "Chrome CDP connection management with IPv6/IPv4 dual-stack support"
+    },
+    {
+      "name": "WindowsSaveGuardian",
+      "file": "utils/windows_save_guardian.py",
+      "line": 1,
+      "type": "class",
+      "description": "Atomic file operations for Windows compatibility"
+    },
+    {
+      "name": "PathManager",
+      "file": "utils/path_manager.py",
+      "line": 1,
+      "type": "class",
+      "description": "Cross-platform path management"
+    }
+  ],
+
+  "configuration_system": [
+    {
+      "name": "System Configuration",
+      "file": "config/system_config.json",
+      "type": "config",
+      "description": "Master operational settings and processing limits",
+      "critical_sections": [
+        "system.max_products",
+        "processing_limits.min_price_gbp",
+        "processing_limits.max_price_gbp",
+        "pipeline_toggles.frozen_category_denominator",
+        "authentication.enabled"
+      ]
+    },
+    {
+      "name": "PoundWholesale Categories",
+      "file": "config/poundwholesale_categories.json",
+      "type": "config",
+      "description": "Predefined category URLs for PoundWholesale supplier"
+    },
+    {
+      "name": "ClearanceKing Categories",
+      "file": "config/clearance_king_categories.json",
+      "type": "config",
+      "description": "Predefined category URLs for ClearanceKing supplier"
+    }
+  ],
+
+  "output_structure": [
+    {
+      "directory": "OUTPUTS/CACHE/processing_states",
+      "pattern": "*_processing_state.json",
+      "description": "State management files for resumable processing",
+      "critical_file": "poundwholesale_co_uk_processing_state.json",
+      "fields": ["created_at", "current_phase", "persistent_category_index", "frozen_category_denominators"]
+    },
+    {
+      "directory": "OUTPUTS/cached_products",
+      "pattern": "*_products_cache.json",
+      "description": "Supplier product data cache",
+      "example": "poundwholesale-co-uk_products_cache.json"
+    },
+    {
+      "directory": "OUTPUTS/FBA_ANALYSIS/amazon_cache",
+      "pattern": "amazon_{ASIN}_{identifier}.json",
+      "description": "Individual Amazon product data cache",
+      "size_estimate": "200+ cached products"
+    },
+    {
+      "directory": "OUTPUTS/FBA_ANALYSIS/linking_maps",
+      "pattern": "linking_map.json",
+      "description": "EAN→ASIN mapping files organized by supplier",
+      "structure": "supplier_name/linking_map.json"
+    },
+    {
+      "directory": "OUTPUTS/FBA_ANALYSIS/financial_reports",
+      "pattern": "fba_financial_report_{timestamp}.csv",
+      "description": "Comprehensive profitability analysis reports"
+    },
+    {
+      "directory": "logs/debug",
+      "pattern": "run_custom_poundwholesale_{timestamp}.log",
+      "description": "Detailed execution logs with forensic timestamps",
+      "retention": "48-day history available"
+    }
+  ],
+
+  "workflow_phases": [
+    {
+      "phase": "System Initialization",
+      "description": "Chrome CDP connection, authentication verification, configuration loading",
+      "components": ["BrowserManager", "SupplierAuthenticationService", "SystemConfigLoader"]
+    },
+    {
+      "phase": "Category Processing Sequence",
+      "description": "URL discovery → manifest generation → denominator freezing → product processing",
+      "critical_feature": "Freeze-Mark-Resume sequence prevents state loss"
+    },
+    {
+      "phase": "Supplier Data Extraction",
+      "description": "Deterministic selector-based scraping with O(1) duplicate prevention",
+      "components": ["ConfigurableSupplierScraper", "URLCacheFilter"]
+    },
+    {
+      "phase": "Amazon Analysis",
+      "description": "EAN-first matching with title fallback and similarity scoring",
+      "components": ["FixedAmazonExtractor", "FinancialCalculator"]
+    },
+    {
+      "phase": "Financial Analysis",
+      "description": "UK marketplace calculations with 20% VAT, 15% FBA fees",
+      "components": ["FBA_Financial_calculator.py"]
+    }
+  ],
+
+  "test_infrastructure": [
+    {
+      "directory": "tests/",
+      "pattern": "test_*.py",
+      "description": "Comprehensive test suite with unit, integration, and E2E tests",
+      "key_files": [
+        "test_atomic_operations.py",
+        "test_three_source_validation_fix.py",
+        "test_p0_regression_guard_fix.py"
+      ]
+    },
+    {
+      "directory": "testing/",
+      "pattern": "*.py",
+      "description": "Integration and validation testing utilities"
+    }
+  ],
+
+  "quick_start": {
+    "prerequisites": [
+      "Chrome with remote debugging port 9222",
+      "Python 3.8+ with requirements.txt installed",
+      "Playwright browsers installed"
+    ],
+    "commands": [
+      {
+        "step": 1,
+        "command": "chrome --remote-debugging-port=9222 --user-data-dir=C:\\temp\\chrome-debug",
+        "description": "Start Chrome with debug port"
+      },
+      {
+        "step": 2,
+        "command": "python run_custom_poundwholesale.py",
+        "description": "Launch main automation workflow"
+      }
+    ],
+    "verification": [
+      "Check OUTPUTS/CACHE/processing_states for state files",
+      "Monitor logs/debug/ for execution progress",
+      "Review OUTPUTS/FBA_ANALYSIS/financial_reports for results"
+    ]
+  },
+
+  "technical_debt": [
+    {
+      "type": "backup_files",
+      "count": 17,
+      "description": "Archived directories and duplicate versions consuming space",
+      "recommendation": "Clean up backup/ and archive/ directories after validation"
+    },
+    {
+      "type": "duplicate_tools",
+      "count": 8,
+      "description": "Multiple versions of core tools with -*good.py, -Copy.py suffixes",
+      "recommendation": "Consolidate to single production version"
+    }
+  ],
+
+  "key_architectural_patterns": [
+    {
+      "pattern": "File-Grounded State Management",
+      "description": "All state calculations based on actual files, not memory variables",
+      "benefit": "Enables true resumable processing across sessions"
+    },
+    {
+      "pattern": "Freeze-Mark-Resume Sequence",
+      "description": "Denominator frozen on first encounter, state committed atomically",
+      "benefit": "Prevents state corruption during initialization"
+    },
+    {
+      "pattern": "Chrome v139+ IPv6/IPv4 Dual-Stack",
+      "description": "Automatic endpoint detection with connection fallback",
+      "benefit": "Production reliability across network configurations"
+    }
+  ],
+
+  "health_metrics": {
+    "status": "production_ready",
+    "test_coverage": "comprehensive",
+    "documentation_quality": "enterprise_grade",
+    "cross_platform_support": ["Windows 10/11", "Linux", "WSL2"],
+    "chrome_compatibility": "v139+",
+    "last_updated": "2025-10-17"
+  }
+}

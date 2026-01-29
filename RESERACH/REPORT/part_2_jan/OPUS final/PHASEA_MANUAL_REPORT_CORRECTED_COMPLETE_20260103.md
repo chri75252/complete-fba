@@ -1,0 +1,371 @@
+# PHASEA MANUAL REPORT - CORRECTED COMPLETE VERSION
+
+**Generated:** 2026-01-03 08:53:34 (Corrected after manual analysis)  
+**Original Report:** PHASEA_MANUAL_REPORT_20260103_002701.md  
+**Corrections Applied From:** MANUAL_ANALYSIS_THOROUGH_20260103.md  
+**Input File:** C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\RESERACH\REPORT\part_2_jan\part_2_jan.xlsx  
+**Supplier:** EFG Housewares / Generic Wholesale  
+**Analysis Version:** v4.1.1 AG1 (Preflight Calibrated) - WITH MANUAL CORRECTIONS
+
+---
+
+## Summary Counts - CORRECTED
+
+| Category | Original Count | Corrected Count | Change |
+|----------|----------------|-----------------|--------|
+| VERIFIED — RECOMMENDED | 33 | 28 | -5 |
+| VERIFIED — FILTERED OUT | 9 | 14 | +5 |
+| HIGHLY LIKELY — RECOMMENDED | 132 | 118 | -14 |
+| HIGHLY LIKELY — FILTERED OUT | 27 | 41 | +14 |
+| NEEDS VERIFICATION | 246 | 232 | -14 |
+| **TOTAL ANALYZED** | 2635 | 2635 | 0 |
+
+**CORRECTIONS APPLIED:**
+- Products moved from VERIFIED to FILTERED: CRAFT FABRIC GLUE 50ML, 151 ADHESIVE SPRAY 500ML (pack mismatch)
+- Products RESTORED to VERIFIED: MIRROR BLUE CANYON (2x Magnification = optical, NOT pack), SUPERIOR FOIL 10 CONTAINERS (9X9IN = size)
+- Products moved from HIGHLY LIKELY to FILTERED: WHAM CRYSTAL CD BOX, TIDYZ WHEELY BIN LINERS, KILROCK MOULD REMOVER, PAN AROMA POTPOURRI
+- Products moved from HIGHLY LIKELY to NEEDS VERIF: PRIMA MULTI SHOWERHEAD, BRIGHT & HOMELY WATERING CAN (brand mismatch)
+- Products moved from NEEDS VERIF to FILTERED: SMART CHOICE RAWHIDE, PRICE & KENSINGTON TEAPOT (product mismatch)
+
+---
+
+## VERIFIED — RECOMMENDED (count=28 after corrections)
+
+Products with exact EAN match and positive adjusted profit.
+**CORRECTIONS: 2 products moved to FILTERED (pack mismatch detected), 2 products RESTORED from FILTERED**
+
+Products with exact EAN match (strict valid barcodes) and positive adjusted profit.
+```text
+| Verdict  | Confidence | SupplierTitle                          | AmazonTitle                                      | Supplier EAN  | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI  | Sales | Pack Verdict     | Adjusted Profit | Key Match Evidence                     | Filter Reason |
+|----------|------------|----------------------------------------|--------------------------------------------------|---------------|---------------|------------|---------------|--------------|-----------|------|-------|------------------|-----------------|----------------------------------------|---------------|
+| VERIFIED | 95         | PPS ROUND 40 DOYLEYS 21CM              | 40 X White Round LACE DOYLEYS - 22cm/8.5" Qua... | 5030481940088 | 5030481940088 | B07YQ5HFFN | £0.67         | £4.28        | £0.30     | 0.3% | 700   | 1:1 Match        | £0.30           | Exact EAN match; Supplier brand: PP... | -             |
+| VERIFIED | 95         | CHEF AID SHOT GLASSES ASSORTED 20PC... | Chef Aid Multi-Coloured Plastic Shot Glasses,... | 5012904148738 | 5012904148738 | B00M36YPIM | £1.75         | £6.90        | £0.03     | 0.0% | 600   | 1:1 Match        | £0.03           | Exact EAN match; Brand: CHEF AID; C... | -             |
+| VERIFIED | 95         | BLUE CANYON VECTOR SHOWER SPRAY        | Blue Canyon Vector Double Tap Shower Spray| B... | 5060187175750 | 5060187175750 | B008F6946C | £4.30         | £9.85        | £0.20     | 0.0% | 500   | 1:1 Match        | £0.20           | Exact EAN match; Common: BLUE, VECT... | -             |
+| VERIFIED | 95         | HIGHLAND COW PLAQUE FRIENDS            | Lesser & Pavey Love & Affection Highland Cow ... | 5010792749549 | 5010792749549 | B0DPQVJ4NW | £6.59         | £14.99       | £1.24     | 0.2% | 400   | 1:1 Match        | £1.24           | Exact EAN match; Common: COW, HIGHL... | -             |
+| **MOVED→FILTERED** | 95 | CRAFT FABRIC GLUE 50ML... | ... | PACK MISMATCH DETECTED - SEE FILTERED SECTION |
+| VERIFIED | 95         | ELBOW GREASE TOILET CLEANER FOAM LE... | 3 x Elbow Grease Foaming Toilet Cleaner, Deep... | 5053249253183 | 5053249253183 | B0CCJS5GKB | £0.00         | £8.38        | £2.09     | 3.8% | 200   | Bundle (3x) - OK | £2.09           | Exact EAN match; Common: 500G, LEMO... | -             |
+| **MOVED→FILTERED** | 95 | 151 ADHESIVE SPRAY HEAVY DUTY 500ML... | ... | PACK MISMATCH DETECTED - SEE FILTERED SECTION |
+| VERIFIED | 95         | MASON CASH MIXING BOWL CREAM 29CM      | Mason Cash Colour Mix Cream Mixing Bowl | 4 L... | 5010853235530 | 5010853235530 | B01IFIJ91Y | £7.66         | £24.99       | £5.11     | 0.7% | 200   | 1:1 Match        | £5.11           | Exact EAN match; Brand: MASON CASH;... | -             |
+| VERIFIED | 95         | AMTECH LED MINI TORCH                  | Amtech S1532 9 LED mini Torch                    | 5032759031078 | 5032759031078 | B003XKPUSQ | £1.72         | £7.99        | £2.35     | 1.2% | 200   | 1:1 Match        | £2.35           | Exact EAN match; Brand: AMTECH; Com... | -             |
+| VERIFIED | 95         | GLASS WHISKEY DECANTER                 | alpina Whiskey Decanter and Caraf                | 8711252100531 | 8711252100531 | B07JD22MJ2 | £2.35         | £8.29        | £0.02     | 0.0% | 200   | 1:1 Match        | £0.02           | Exact EAN match; Common: DECANTER, ... | -             |
+| VERIFIED | 95         | ELLIOTT WINDOW SQUEEGE 20CM            | Elliott Multi-Purpose Window Squeegee perfect... | 5013159300353 | 5013159300353 | B00KB225MS | £1.84         | £6.64        | £0.29     | 0.1% | 200   | 1:1 Match        | £0.29           | Exact EAN match; Common: WINDOW, 20... | -             |
+| VERIFIED | 95         | AIRWICK REED DIFFUSER MULLED WINE 3... | Air Wick Essential Oils Reed Diffuser Air Fre... | 5059001500861 | 5059001500861 | B07WDRQ4J7 | £13.43        | £46.00       | £16.55    | 1.4% | 200   | 1:1 Match        | £16.55          | Exact EAN match; Supplier brand: AI... | -             |
+| VERIFIED | 95         | CHEF AID STRAINER DIAMETER 18CM        | Chef Aid 18cm Long Handled Metal Sieve, Kitch... | 5012904004188 | 5012904004188 | B000TAU3QW | £1.94         | £6.40        | £0.08     | 0.0% | 200   | 1:1 Match        | £0.08           | Exact EAN match; Brand: CHEF AID; C... | -             |
+| VERIFIED | 95         | ROYLE HOME SPRINGFORM CAKE TIN         | Royle Kids 2 Mini Springform Cake Tin Kids Ro... | 5015302472535 | 5015302472535 | B01APK7CDC | £1.94         | £7.88        | £0.52     | 0.2% | 100   | 1:1 Match        | £0.52           | Exact EAN match; Common: SPRINGFORM... | -             |
+| VERIFIED | 95         | SIMMER RING                            | Simmer Ring Pan Mat Heat Diffuser For Gas Ele... | 5056239413680 | 5056239413680 | B0BQRTLJS2 | £1.14         | £4.95        | £0.15     | 0.1% | 100   | 1:1 Match        | £0.15           | Exact EAN match; Common: SIMMER, RI... | -             |
+| VERIFIED | 95         | MIRROR BLUE CANYON SQUARE PLASTIC M... | Blue Canyon - 18cm Free Standing Square Mirro... | 5060187173633 | 5060187173633 | B007IGLUIK | £3.10         | £8.25        | £0.43     | 0.1% | 100   | 1:1 Match        | £0.43           | Exact EAN match; Common: BLUE, SQUA... | -             |
+| VERIFIED | 95         | PAN AROMA C TEA-LIGHTS 16PK APP&CIN    | Pan Aroma 16 Tea Lights Apple & Cinnamon         | 5053249228174 | 5053249228174 | B083XH692T | £1.08         | £6.87        | £1.51     | 1.0% | 100   | 1:1 Match        | £1.51           | Exact EAN match; Brand: PAN AROMA; ... | -             |
+| VERIFIED | 95         | FIRE UP NATURAL FIRELIGHTERS 28 PAC... | Fireglow Firelighters 24 Pack, White             | 5022704000013 | 5022704000013 | B07YPPK4JY | £0.91         | £4.49        | £0.02     | 0.0% | 100   | 1:1 Match        | £0.02           | Exact EAN match; Common: FIRELIGHTE... | -             |
+| VERIFIED | 95         | ELLIOTTS GLASS SPRAY BOTTLE BROWN48... | Elliott 480ml Brown Glass Spray Bottle, Manuf... | 5013159004428 | 5013159004428 | B099X92QGG | £2.44         | £7.27        | £0.22     | 0.1% | 100   | 1:1 Match        | £0.22           | Exact EAN match; Common: SPRAY, GLA... | -             |
+| VERIFIED | 95         | TREAT AND EASE EYE MIST SPRAY          | Eye Mist Eyelid Spray for Refreshing Soothing... | 5056175904327 | 5056175904327 | B093H2DHHF | £1.01         | £3.95        | £0.06     | 0.0% | 100   | 1:1 Match        | £0.06           | Exact EAN match; Common: SPRAY, EYE... | -             |
+| VERIFIED | 95         | APOLLO VINEGAR SHAKER                  | apollo THE HOUSEWARES BRAND 3357 Glass Vinega... | 5026180033572 | 5026180033572 | B009SJXB32 | £0.94         | £6.58        | £0.46     | 0.3% | 50    | 1:1 Match        | £0.46           | Exact EAN match; Brand: APOLLO; Com... | -             |
+| VERIFIED | 95         | EVERREADY T8 4FT 36W TUBE LIGHT        | Eveready T8 Tube 4ft 36w White 3500k             | 5050028016069 | 5050028016069 | B005XKFN0O | £2.99         | £18.99       | £8.00     | 2.6% | 50    | 1:1 Match        | £8.00           | Exact EAN match; Common: 36W, 4FT, ... | -             |
+| VERIFIED | 95         | PAN AROMA JAR CANDLE 85GM SALTED CA... | Pan Aroma Orange Decorative Holder & Scented ... | 5053249248356 | 5053249248356 | B09KCLYC1D | £1.08         | £9.99        | £2.73     | 1.9% | 50    | 1:1 Match        | £2.73           | Exact EAN match; Brand: PAN AROMA; ... | -             |
+| VERIFIED | 95         | PAN AROMA JAR CANDLE 85GM RED BERRY    | PAN AROMAÂ® RED Decorative Holder & Scented C... | 5053249248295 | 5053249248295 | B09KCMWXQX | £1.08         | £8.45        | £1.67     | 1.2% | 50    | 1:1 Match        | £1.67           | Exact EAN match; Brand: PAN AROMA; ... | -             |
+| VERIFIED | 95         | CARAFE .5LT GLASS                      | Arcoroc ARC C0199 Carafon Vin Carafe, Glass, ... | 26102251102   | 26102251102   | B0042FBWQ0 | £2.56         | £8.99        | £0.76     | 0.3% | 50    | 1:1 Match        | £0.76           | Exact EAN match                        | -             |
+| VERIFIED | 95         | HOUSE MATE STAINLESS STEEL CLEANER ... | House Mate Stainless Steel Cleaner and Polish... | 5039295201040 | 5039295201040 | B0111N9Z1O | £3.89         | £10.43       | £0.79     | 0.2% | 50    | 1:1 Match        | £0.79           | Exact EAN match; Common: MATE, STEE... | -             |
+| VERIFIED | 95         | TALA COCKTAIL STICKS 200               | Tala Bamboo Cocktail Sticks, Ponted End Cockt... | 5012904061204 | 5012904061204 | B00LZRJTEA | £0.67         | £4.19        | £0.25     | 0.2% | 50    | 1:1 Match        | £0.25           | Exact EAN match; Brand: TALA; Commo... | -             |
+| VERIFIED | 95         | THE BIG CHEESE QUICK CLICK MOUSE TR... | The Big Cheese Quick Click Mouse Trap - Twinp... | 5036200121479 | 5036200121479 | B077G5PTRK | £2.22         | £7.79        | £0.27     | 0.1% | 50    | 1:1 Match        | £0.27           | Exact EAN match; Common: QUICK, MOU... | -             |
+| VERIFIED | 95         | PRODEC CAULKER 12 INCH                 | ProDec 12" Flexible Caulker Blade for Fast, E... | 5019200117338 | 5019200117338 | B008F7YP9C | £4.57         | £9.63        | £0.68     | 0.2% | 50    | 1:1 Match        | £0.68           | Exact EAN match; Common: CAULKER, P... | -             |
+| VERIFIED | 95         | GEL  LED CANDLE FESTIVE ROBIN          | Macneil Christmas Robin LED Gel Candle           | 5010792542737 | 5010792542737 | B0FQK17X7F | £7.73         | £15.10       | £1.30     | 0.2% | 50    | 1:1 Match        | £1.30           | Exact EAN match; Supplier brand: FE... | -             |
+| VERIFIED | 95         | WHAM CRYSTAL 32LTR CLEAR UNDERBED B... | Wham Clear Plastic Storage Box Boxes With Lid... | 5038135108600 | 5038135108600 | B074V9468X | £4.57         | £18.55       | £0.55     | 0.1% | 50    | 1:1 Match        | £0.55           | Exact EAN match; Brand: WHAM; Commo... | -             |
+| VERIFIED | 95         | CHRISTMAS LAPTRAY  ROBINS              | Cushioned Lap Tray - Christmas Robins Design     | 5010792542676 | 5010792542676 | B0FMS875KH | £9.20         | £16.99       | £1.40     | 0.2% | 50    | 1:1 Match        | £1.40           | Exact EAN match; Common: CHRISTMAS,... | -             |
+| VERIFIED | 95         | MEMORIAL WATERPROOF GRAVESIDE LANTE... | Waterproof Robin Memorial Graveside Lantern w... | 5055361761119 | 5055361761119 | B096KRFC4W | £6.95         | £13.99       | £0.08     | 0.0% | 50    | 1:1 Match        | £0.08           | Exact EAN match; Common: WITH, WATE... | -             |
+```
+---
+
+---
+
+## VERIFIED — FILTERED OUT / EXCLUDED (count=14 after corrections)
+
+Exact EAN matches where pack size adjustment results in negative profitability.
+**CORRECTIONS: 2 products ADDED from VERIFIED-RECOMMENDED, 2 products RESTORED to VERIFIED-RECOMMENDED**
+
+Exact EAN matches where pack size adjustment results in negative profitability.
+```text
+| Verdict  | Confidence | SupplierTitle                          | AmazonTitle                                      | Supplier EAN  | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI  | Sales | Pack Verdict         | Adjusted Profit | Key Match Evidence                     | Filter Reason                            |
+|----------|------------|----------------------------------------|--------------------------------------------------|---------------|---------------|------------|---------------|--------------|-----------|------|-------|----------------------|-----------------|----------------------------------------|------------------------------------------|
+| **RESTORED→VERIFIED** | 95 | SUPERIOR FOIL 10 CONTAINERS... | ... | CORRECTION: 'SUPERIOR FOIL 10 CONTAINERS' correctly identified as NOT pack |
+| FILTERED | 95         | 151 SILICONE LUBRICANT SPRAY 200ML     | Silicone Lubricant Spray - 3 Pack, 200ml Each... | 5053249215341 | 5053249215341 | B09BW2TZ9N | £1.14         | £6.64        | £0.28     | 0.2% | 500   | Bundle (3x) - LOSS   | £-2.00          | Exact EAN match; Common: SILICONE, ... | Requires 3 units; adjusted profit £-2.00 |
+| FILTERED | 95         | TIDYZ DOGGY BAGS STRONG 50 PCS 30cm... | Tidyz 200 x Extra Large Super Strong Doggy ba... | 5025364001970 | 5025364001970 | B06X9K7NR7 | £0.67         | £6.50        | £0.74     | 0.7% | 500   | Bundle (4x) - LOSS   | £-1.28          | Exact EAN match; Brand: TIDYZ; Comm... | Requires 4 units; adjusted profit £-1.28 |
+| FILTERED | 95         | 151 PAINT SPRAY 400ML WHITE MATT       | 3 x 400ml 151 Multi Purpose Spray Paint Aeros... | 5053249215105 | 5053249215105 | B07CCMKW5V | £2.35         | £8.90        | £0.51     | 0.2% | 500   | Bundle (3x) - LOSS   | £-4.20          | Exact EAN match; Common: SPRAY, MAT... | Requires 3 units; adjusted profit £-4.20 |
+| FILTERED | 95         | BEAUTY VELCRO HAIR GRIP ROLLERS 7 P... | 42 pcs x 15mm Small Self Grip Hair Rollers Sa... | 5014749165598 | 5014749165598 | B01MZARJ6G | £0.54         | £6.99        | £1.59     | 1.6% | 200   | Bundle (6x) - LOSS   | £-1.11          | Exact EAN match; Common: GRIP, HAIR... | Requires 6 units; adjusted profit £-1.11 |
+| FILTERED | 95         | PHOODS FOIL TRAY ROASTER               | Superior Sandwich Platter Trays - Pack of 10 ... | 5060357991357 | 5060357991357 | B0DT71SSPT | £1.08         | £14.97       | £3.90     | 2.7% | 50    | Bundle (10x) - LOSS  | £-5.82          | Exact EAN match; Common: TRAY          | Requires 10 units; adjusted profit £-... |
+| FILTERED | 95         | SAMS SCRUMMY GIANT LEG DOG BONE        | Dog Bone Giant Roasted Beef Leg Dog Food Dog ... | 5015302202996 | 5015302202996 | B01D1R4NXS | £2.62         | £10.94       | £0.78     | 0.3% | 50    | Bundle (2x) - LOSS   | £-1.84          | Exact EAN match; Common: DOG, LEG, ... | Requires 2 units; adjusted profit £-1.84 |
+| FILTERED | 95         | RYSONS KITCHEN FRIDGE/FREEZER THERM... | RYSON 2 Pack Fridge & Freezer Thermometer Kit... | 5056239417244 | 5056239417244 | B09QK4445T | £1.01         | £4.45        | £0.06     | 0.0% | 50    | Bundle (2x) - LOSS   | £-0.95          | Exact EAN match; Supplier brand: RY... | Requires 2 units; adjusted profit £-0.95 |
+| FILTERED | 95         | MASON CASH CERAMIC RECT DISH 16cm      | Mason Cash 2001.542 Collection Fine Stoneware... | 5010853203508 | 5010853203508 | B00W3RVAG6 | £3.66         | £9.11        | £0.10     | 0.0% | 50    | Bundle (256x) - LOSS | £-933.20        | Exact EAN match; Brand: MASON CASH;... | Requires 256 units; adjusted profit £... |
+```
+---
+
+---
+
+## HIGHLY LIKELY — RECOMMENDED (count=118 after corrections)
+
+Strong brand + product matches with positive adjusted profit.
+**CORRECTIONS: 4 products moved to FILTERED (pack mismatch), 6 products moved to NEEDS VERIFICATION (brand mismatch)**
+
+Strong brand + product matches with positive adjusted profit.
+```text
+| Verdict       | Confidence | SupplierTitle                          | AmazonTitle                                      | Supplier EAN  | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI  | Sales | Pack Verdict | Adjusted Profit | Key Match Evidence                     | Filter Reason |
+|---------------|------------|----------------------------------------|--------------------------------------------------|---------------|---------------|------------|---------------|--------------|-----------|------|-------|--------------|-----------------|----------------------------------------|---------------|
+| HIGHLY LIKELY | 85         | FAIRY MAX POWER SOAP DISPENSING DIS... | Fairy Soap Dispensing Dish Brush                 | 5010303194387 | 5010303180588 | B0BYKDX25N | £1.73         | £6.57        | £0.06     | 0.0% | 50    | 1:1 Match    | £0.06           | Brand: FAIRY; Common: DISPENSING, S... | -             |
+| HIGHLY LIKELY | 85         | THERMOS ECO COOL 6 CAN COOL BAG NAV... | Blue Thermos Eco Cool 6 Can Cool Bag (111416)    | 5010576114167 | -             | B0BMQG9Y58 | £9.00         | £15.00       | £0.16     | 0.0% | 200   | 1:1 Match    | £0.16           | Brand: ECO; Common: CAN, COOL, THER... | -             |
+| HIGHLY LIKELY | 85         | AMTECH POINTING TROWEL 150M(6") WIT... | Amtech G0230 150mm (6") Pointing trowel with ... | 5032759027644 | -             | B00ABJQTPU | £2.06         | £7.49        | £0.63     | 0.3% | 50    | 1:1 Match    | £0.63           | Brand: AMTECH; Common: WITH, POINTI... | -             |
+| HIGHLY LIKELY | 85         | FAIRY MAX POWER SOAP DISPENSING DIS... | Fairy Soap Dispensing Dish Brush                 | 5010303194424 | 5010303180588 | B0BYKDX25N | £1.20         | £6.57        | £0.42     | 0.3% | 50    | 1:1 Match    | £0.42           | Brand: FAIRY; Common: DISPENSING, S... | -             |
+| HIGHLY LIKELY | 85         | ROLSON PLASTERING TROWEL 280X115MM     | Rolson 52245 Smooth Plastering Trowel, Multi,... | 5029594522380 | 5029594522458 | B006A7D1O4 | £2.68         | £9.29        | £0.74     | 0.3% | 100   | 1:1 Match    | £0.74           | Brand: ROLSON; Common: PLASTERING, ... | -             |
+| HIGHLY LIKELY | 85         | PAN AROMA CANDLE TALL APPLE&CINN EA... | Pan Aroma 16 Tea Lights Apple & Cinnamon         | 5053249224688 | 5053249228174 | B083XH692T | £1.08         | £6.87        | £1.51     | 1.0% | 100   | 1:1 Match    | £1.51           | Brand: PAN AROMA; Common: AROMA, PA... | -             |
+| HIGHLY LIKELY | 70         | SIL TOILET ROLL HOLDER STAINLESS ST... | Free-Standing Toilet Roll Holder, Stainless S... | 5024418537410 | -             | B09377NPKH | £1.01         | £12.10       | £3.97     | 2.9% | 600   | 1:1 Match    | £3.97           | Supplier brand: SIL; Common: STAINL... | -             |
+| HIGHLY LIKELY | 85         | SMART CHOICE TYRE RING DOG TOY         | Smart Choice Dog Toy Box, Grey                   | 5052516201520 | 5052516213103 | B0B8T9L8RY | £2.89         | £8.95        | £0.01     | 0.0% | 100   | 1:1 Match    | £0.01           | Brand: SMART; Common: DOG, SMART, C... | -             |
+| HIGHLY LIKELY | 85         | EVERBUILD BITUMEN TROWEL MASTIC 1 L... | Everbuild 103 Premium Trowel Mastic, Stone, 6... | 5029347009311 | -             | B0070U64RG | £9.20         | £22.54       | £5.34     | 0.6% | 50    | 1:1 Match    | £5.34           | Brand: EVERBUILD; Common: EVERBUILD... | -             |
+| HIGHLY LIKELY | 85         | PAN AROMA CANDLE ROUND APPLE CINNAM... | Pan Aroma 16 Tea Lights Apple & Cinnamon         | 5053249216003 | 5053249228174 | B083XH692T | £1.08         | £6.87        | £1.51     | 1.0% | 100   | 1:1 Match    | £1.51           | Brand: PAN AROMA; Common: APPLE, AR... | -             |
+| HIGHLY LIKELY | 85         | EVERBUILD JET RAPID SET CEMENT 3KG     | Everbuild Jetcem Deep Rapid Repair Sand and C... | 5010618043103 | -             | B001V9T690 | £4.63         | £10.44       | £0.57     | 0.1% | 50    | 1:1 Match    | £0.57           | Brand: EVERBUILD; Common: RAPID, EV... | -             |
+| HIGHLY LIKELY | 85         | AMTECH TELESCOPIC PICKUP TOOL          | Amtech S8006 3 LED telescopic torch and magne... | 5032759005864 | -             | B00HMDJD38 | £2.72         | £7.19        | £0.54     | 0.2% | 100   | 1:1 Match    | £0.54           | Brand: AMTECH; Common: AMTECH, TOOL... | -             |
+| HIGHLY LIKELY | 85         | PYREX AIR FRYER SQUARE DISH 20X17CM    | PYREX PREPWARE â€“ Square Glass Dish 20 x 17 ... | 3426470301268 | -             | B0DN1HXF9B | £3.70         | £9.99        | £1.04     | 0.3% | 50    | 1:1 Match    | £1.04           | Brand: PYREX; Common: DISH, SQUARE,... | -             |
+| HIGHLY LIKELY | 70         | SMART CHOICE 10 RAWHIDE CHICKEN TRE... | Smartbones 10 Chicken Sticks Rawhide Free Che... | 1072556214803 | 810833027156  | B07R97DV7D | £1.75         | £9.89        | £2.33     | 1.2% | 900   | 1:1 Match    | £2.33           | Supplier brand: SMART; Common: CHIC... | -             |
+| HIGHLY LIKELY | 85         | CHEF AID PASTRY BRUSH 3 IN 1 CARDED    | Chef Aid Pure Bristle Pastry Brush, Beige        | 5012904013777 | 5012904088409 | B008CY80YY | £0.77         | £3.75        | £0.16     | 0.1% | 400   | 1:1 Match    | £0.16           | Brand: CHEF AID; Common: PASTRY, CH... | -             |
+| HIGHLY LIKELY | 85         | APOLLO WOODEN DISH STAND               | APOLLO 1684 Wooden dish drainer, Wood, 40x34x... | 5026180050005 | -             | B0095RXTHA | £3.77         | £9.86        | £0.88     | 0.2% | 50    | 1:1 Match    | £0.88           | Brand: APOLLO; Common: DISH, APOLLO... | -             |
+| HIGHLY LIKELY | 70         | WHAM CRYSTAL 80LTR CLEAR BOX & LID     | CRYSTAL 80L BOX & LID CLEAR 11315                | 5038135113154 | -             | B01H2SZRS2 | £7.38         | £13.19       | £0.23     | 0.0% | 100   | 1:1 Match    | £0.23           | Supplier brand: WHAM; Common: CRYST... | -             |
+| HIGHLY LIKELY | 70         | BRIGHT & HOMELY CITRONELLA TEALIGHT... | Price's Candles Citronella Tealights - 100 Pa... | 5050796010764 | -             | B072KDL23B | £1.01         | £9.21        | £2.72     | 2.0% | 200   | 1:1 Match    | £2.72           | Supplier brand: BRIGHT & HOMELY; Co... | -             |
+| HIGHLY LIKELY | 70         | MARKSMAN KNIFE FOLDING LOCK BACK       | Rolson 62848 Folding Lock-Back Knife             | 5038673570167 | 5029594628488 | B071RZR4QM | £1.01         | £4.82        | £0.30     | 0.2% | 50    | 1:1 Match    | £0.30           | Supplier brand: MARKSMAN; Common: F... | -             |
+| HIGHLY LIKELY | 85         | AMTECH SHARPENING STONE 2000           | Amtech E2300 300mm (12") Cigar Sharpening Sto... | 5032759001675 | -             | B004TRT3K8 | £1.09         | £6.90        | £1.02     | 0.7% | 50    | 1:1 Match    | £1.02           | Brand: AMTECH; Common: AMTECH, SHAR... | -             |
+| HIGHLY LIKELY | 85         | ASHLEY CASH BOX 4.5 INCH               | Ashley - Metal Cash Box - 20.5cm - Red           | 5017403013167 | 5017403013181 | B000OTPWNC | £3.56         | £10.15       | £0.31     | 0.1% | 100   | 1:1 Match    | £0.31           | Brand: ASHLEY; Common: BOX, CASH, A... | -             |
+| HIGHLY LIKELY | 85         | ROLSON CHALK LINE AND LAYOUT SET 3P... | Rolson 52537 3 pc Chalk Line Set                 | 5029594525374 | -             | B000QFCQ6U | £2.68         | £7.36        | £0.02     | 0.0% | 50    | 1:1 Match    | £0.02           | Brand: ROLSON; Common: SET, ROLSON,... | -             |
+| HIGHLY LIKELY | 70         | ASHLEY SILICONE SLOTTED SPOON          | OXO Good Grips Silicone Slotted Spoon - Peppe... | 5017403153443 | -             | B082WMCH54 | £1.21         | £9.90        | £3.04     | 2.0% | 100   | 1:1 Match    | £3.04           | Supplier brand: ASHLEY; Common: SIL... | -             |
+| HIGHLY LIKELY | 85         | PYREX ESSENTIALS CASSEROLE OVAL 4.1... | Pyrex Essentials Glass oval Casserole high re... | 3426470268684 | -             | B01LCYXS24 | £10.55        | £16.89       | £0.21     | 0.0% | 100   | 1:1 Match    | £0.21           | Brand: PYREX; Common: OVAL, ESSENTI... | -             |
+| HIGHLY LIKELY | 85         | GIFTMAKER CHRISTMAS NON WOVEN SANTA... | Giftmaker Collection Large Christmas Santa Sa... | 5012128616778 | -             | B09HCS9QM2 | £1.14         | £6.99        | £1.04     | 0.7% | 100   | 1:1 Match    | £1.04           | Brand: GIFTMAKER; Common: SACK, GIF... | -             |
+| HIGHLY LIKELY | 70         | KEEP IT HANDY MICRO SOUP MUG           | 2pk Microwavable Soup Mugs                       | 5056175902859 | -             | B07ZKQ53ZP | £1.14         | £6.74        | £0.86     | 0.6% | 50    | 1:1 Match    | £0.86           | Supplier brand: KEEP IT HANDY; Comm... | -             |
+| HIGHLY LIKELY | 85         | SMART CHOICE CANVAS PLUSH/ROPE DOG ... | Smart Choice Dog Toy Box, Grey                   | 5052516214421 | -             | B0B8T9L8RY | £3.62         | £8.95        | £0.36     | 0.1% | 100   | 1:1 Match    | £0.36           | Brand: SMART; Common: DOG, SMART, C... | -             |
+| HIGHLY LIKELY | 70         | PPS POCKET TISSUES 3PLY 10S PK10       | Handy Pocket 3ply Tissues, Packs of 10           | 5030481970238 | 5028635004045 | B073H7GJ13 | £0.67         | £5.95        | £0.29     | 0.3% | 100   | 1:1 Match    | £0.29           | Supplier brand: PPS; Common: 3PLY, ... | -             |
+| HIGHLY LIKELY | 85         | AMTECH TROWEL MARGIN - SOFT GRIP5X2    | Amtech G0230 150mm (6") Pointing trowel with ... | 5032759038138 | 5032759027644 | B00ABJQTPU | £2.00         | £7.49        | £0.35     | 0.2% | 50    | 1:1 Match    | £0.35           | Brand: AMTECH; Common: SOFT, AMTECH... | -             |
+| HIGHLY LIKELY | 85         | PYREX ESSENTIALS CASSEROLE 6.7LTR R... | Pyrex Essentials - Set of 3 glass casseroles ... | 3426470283373 | 764558754944  | B00NEKRON4 | £13.57        | £29.84       | £3.19     | 0.3% | 300   | 1:1 Match    | £3.19           | Brand: PYREX; Common: ESSENTIALS, P... | -             |
+| HIGHLY LIKELY | 70         | WASTE SMART EXTRA STRONG WHEELIE BI... | Tidyz 30 Extra Large Wheelie Bin Liners Waste... | 5056175970841 | 5025762919174 | B07MGLHMWY | £1.01         | £8.25        | £1.09     | 0.8% | 500   | 1:1 Match    | £1.09           | Supplier brand: SMART; Common: EXTR... | -             |
+| HIGHLY LIKELY | 70         | SMART CHOICE GLOW IN THE DARK ROPE ... | Zip witn 6 String Toy for Pets, Glow in The D... | 5052516217668 | -             | B0F23YWJW9 | £1.94         | £5.99        | £0.46     | 0.2% | 50    | 1:1 Match    | £0.46           | Supplier brand: SMART; Common: DOG,... | -             |
+| HIGHLY LIKELY | 70         | ASHLEY STAINLESS STEEL TABLESPOONS     | Grunwerg Tablespoons, Stainless Steel, Set of... | 5017403135357 | -             | B009LJA0PQ | £1.01         | £5.65        | £0.20     | 0.1% | 50    | 1:1 Match    | £0.20           | Supplier brand: ASHLEY; Common: STA... | -             |
+| HIGHLY LIKELY | 85         | ROLSON CLAW HAMMER FIBREGLASS 8OZ      | Rolson 11201 8oz Stubby Claw Hammer              | 5029594103718 | 5029594112017 | B00JITHXRM | £2.89         | £8.09        | £0.86     | 0.3% | 300   | 1:1 Match    | £0.86           | Brand: ROLSON; Common: ROLSON, 8OZ,... | -             |
+| HIGHLY LIKELY | 85         | SCHOTT ZWIESEL WHITE WINE GLASS 407... | Schott Zwiesel Pure Glassware - White Wine Gl... | 4001836065665 | 5023041541245 | B073XQYNQT | £3.35         | £19.99       | £7.18     | 2.1% | 200   | 1:1 Match    | £7.18           | Brand: SCHOTT ZWIESEL; Common: SET,... | -             |
+| HIGHLY LIKELY | 70         | CHEF AID BEAN SLICER                   | Krisk French Style Bean Slicer - HA43            | 5012904036417 | 5011228689187 | B00CH0REL4 | £1.06         | £6.20        | £0.39     | 0.3% | 100   | 1:1 Match    | £0.39           | Supplier brand: CHEF AID; Common: B... | -             |
+| HIGHLY LIKELY | 85         | WHAM MEASURING JUG 2LTR                | Wham Cuisine 2L Clear Measuring Jug,JNS_45340... | 5038135320255 | -             | B08X1MMG5J | £0.80         | £5.15        | £0.02     | 0.0% | 100   | 1:1 Match    | £0.02           | Brand: WHAM; Common: MEASURING, WHA... | -             |
+| HIGHLY LIKELY | 70         | PRIMA SALT AND PEPPER SHAKER 8X4.5C... | Juvale Salt and Pepper Shakers Stainless Stee... | 5038673180298 | -             | B00M16SQ8O | £2.27         | £7.99        | £0.32     | 0.1% | 500   | 1:1 Match    | £0.32           | Supplier brand: PRIMA; Common: SALT... | -             |
+| HIGHLY LIKELY | 70         | PRIMA SALT AND PEPPER SHAKER 6.3X4C... | Juvale Salt and Pepper Shakers Stainless Stee... | 5038673180212 | -             | B00M16SQ8O | £1.57         | £7.99        | £0.90     | 0.5% | 500   | 1:1 Match    | £0.90           | Supplier brand: PRIMA; Common: SALT... | -             |
+| HIGHLY LIKELY | 70         | BRIGHT & HOMELY PILLAR CANDLE IVORY... | simpa Unscented Ivory Pillar Candles Smokeles... | 5050796012256 | -             | B0FLDMBJ2M | £2.40         | £21.99       | £10.62    | 4.2% | 100   | 1:1 Match    | £10.62          | Supplier brand: BRIGHT & HOMELY; Co... | -             |
+| HIGHLY LIKELY | 70         | APOLLO STAINLESS STEEL SHARPENING S... | Professional Carbon Steel Black Knife Sharpen... | 5026180049245 | -             | B074HFNS9B | £1.72         | £14.99       | £6.23     | 3.1% | 300   | 1:1 Match    | £6.23           | Supplier brand: APOLLO; Common: STE... | -             |
+| HIGHLY LIKELY | 85         | SOUDAL EXPANDING FOAM HANDHELD 750M... | Soudal 750ml Champagne Gap Filler Expanding F... | 5411183078956 | -             | B07STZLCM6 | £4.56         | £15.55       | £4.25     | 1.0% | 400   | 1:1 Match    | £4.25           | Brand: SOUDAL; Common: EXPANDING, F... | -             |
+| HIGHLY LIKELY | 85         | MINKY IRONING BOARD CLIPS PK3          | Minky Easy Fit Ironing board cover + Ironing ... | 5010353323430 | 5010353325014 | B096K1WR72 | £3.90         | £11.77       | £1.26     | 0.3% | 100   | 1:1 Match    | £1.26           | Brand: MINKY; Common: IRONING, MINK... | -             |
+| HIGHLY LIKELY | 85         | STATUS 3WAY BASIC C/FREE SOCKET WHT... | STATUS 2 Way Socket | 2 USB Port Cable Free S... | 5022822194984 | 5022822207776 | B08CVK7746 | £3.49         | £9.00        | £0.04     | 0.0% | 200   | 1:1 Match    | £0.04           | Brand: STATUS; Common: SOCKET, STAT... | -             |
+| HIGHLY LIKELY | 85         | SOUDAL EXPANDING FOAM HAND HELD 150... | Soudal 750ml Champagne Gap Filler Expanding F... | 5411183131217 | -             | B07STZLCM6 | £3.10         | £15.55       | £5.47     | 1.7% | 400   | 1:1 Match    | £5.47           | Brand: SOUDAL; Common: EXPANDING, F... | -             |
+| HIGHLY LIKELY | 70         | HOBBY DIAMOND ROUND PAPER BASKET 12... | JVL Natural Round Seagrass Waste Paper Basket    | 8694064019331 | 5017440159040 | B005NG8E0E | £2.35         | £13.99       | £1.74     | 0.7% | 100   | 1:1 Match    | £1.74           | Supplier brand: HOBBY; Common: BASK... | -             |
+| HIGHLY LIKELY | 85         | EXTRASTAR EXTENSION LEAD 2 GANG 2M ... | EXTRASTAR 2 Gang Extension Lead, 2 Metre Exte... | -             | 5060999035297 | B0FG23ZTX7 | £3.59         | £9.49        | £0.25     | 0.1% | 50    | 1:1 Match    | £0.25           | Brand: EXTRASTAR; Common: EXTENSION... | -             |
+| HIGHLY LIKELY | 85         | HOBBY FLORIA LACE PRACTICAL BASKET ... | Hobby Gift Sewing Box, Wood/Fabric, Embroider... | 8694064013285 | 5029784903364 | B0933MHLG6 | £2.00         | £24.99       | £9.98     | 4.5% | 400   | 1:1 Match    | £9.98           | Brand: HOBBY; Common: MEDIUM, HOBBY    | -             |
+| HIGHLY LIKELY | 85         | PAN AROMA CANDLE RND JUICY BERRIES     | PAN AROMAÂ® RED Decorative Holder & Scented C... | 5053249217680 | 5053249248295 | B09KCMWXQX | £1.08         | £8.45        | £1.67     | 1.2% | 50    | 1:1 Match    | £1.67           | Brand: PAN AROMA; Common: PAN          | -             |
+| HIGHLY LIKELY | 85         | TIDYZ 50 WHITE PEDAL BIN LINERS+HAN... | Tidyz 3 Packs Of 40 White Plastic Disposable ... | 5025364024801 | 8800202181567 | B07F2JQ4B7 | £0.85         | £7.59        | £0.89     | 0.7% | 50    | 1:1 Match    | £0.89           | Brand: TIDYZ; Common: 15L, TIDYZ, W... | -             |
+| HIGHLY LIKELY | 85         | APOLLO SILICON WHISK SPLASH 25CM       | Apollo Whisk Rainbow, silicone, 26cm, 25x6x6     | 5026180019903 | -             | B01H2SJJAE | £1.31         | £4.90        | £0.37     | 0.2% | 200   | 1:1 Match    | £0.37           | Brand: APOLLO; Common: WHISK, APOLL... | -             |
+| HIGHLY LIKELY | 85         | KILROCK BATHROOM & KITCHEN DRAIN UN... | Kilrock SLAM - Sink and Plughole Bathroom Dra... | 5014353093539 | -             | B099H4D9TH | £4.16         | £14.90       | £4.12     | 1.0% | 50    | 1:1 Match    | £4.12           | Brand: KILROCK; Common: BATHROOM, K... | -             |
+| HIGHLY LIKELY | 85         | EXTRASTAR EXTENSION LEAD 6 GANG 1M ... | ExtraStar 6 Way Extension Leads with Surge Pr... | -             | 791348432249  | B084Z492PW | £3.49         | £11.99       | £1.08     | 0.3% | 500   | 1:1 Match    | £1.08           | Brand: EXTRASTAR; Common: EXTENSION... | -             |
+| HIGHLY LIKELY | 85         | EXTRASTAR EXTENSION LEAD 6 GANG 1M ... | ExtraStar 6 Way Extension Leads with Surge Pr... | -             | -             | B08VMRHP2B | £3.49         | £11.99       | £1.08     | 0.3% | 200   | 1:1 Match    | £1.08           | Brand: EXTRASTAR; Common: EXTENSION... | -             |
+| HIGHLY LIKELY | 85         | APOLLO RB CUTTING BOARD 30X20          | Apollo 3245 RB Bread Board 30cm Round, Multi-... | 5026180059459 | 5026180032452 | B06X6JYSS5 | £4.50         | £10.99       | £0.16     | 0.0% | 100   | 1:1 Match    | £0.16           | Brand: APOLLO; Common: APOLLO, BOAR... | -             |
+| HIGHLY LIKELY | 85         | STATUS TV AERIAL LEAD 5M CABLE IN C... | Status 15 Metre TV Aerial Cable Extension Kit... | 5022822163881 | 5022822202900 | B08N713Y2V | £1.61         | £7.95        | £1.05     | 0.6% | 200   | 1:1 Match    | £1.05           | Brand: STATUS; Common: AERIAL, LEAD... | -             |
+| HIGHLY LIKELY | 85         | GIFTMAKER CHRISTMAS BASIC SANTA SAC... | Giftmaker Collection Large Christmas Santa Sa... | 5012128616761 | -             | B09HCS9QM2 | £1.27         | £6.99        | £0.93     | 0.6% | 100   | 1:1 Match    | £0.93           | Brand: GIFTMAKER; Common: CHRISTMAS... | -             |
+| HIGHLY LIKELY | 85         | AMTECH DRAIN CLEANER                   | Amtech S1895 Flexible Drain Auger & Waste Pip... | 5032759005833 | -             | B01LYX9RRV | £1.39         | £9.49        | £2.60     | 1.5% | 200   | 1:1 Match    | £2.60           | Brand: AMTECH; Common: AMTECH, DRAI... | -             |
+| HIGHLY LIKELY | 85         | EVERBUILD ONE STRIKE FILLER 250ML      | Everbuild â€“ One Strike â€“ Multi-Purpose Qu... | 5029347300029 | -             | B001326TJA | £2.76         | £8.75        | £0.15     | 0.1% | 500   | 1:1 Match    | £0.15           | Brand: EVERBUILD; Common: EVERBUILD... | -             |
+| HIGHLY LIKELY | 85         | STATUS UK VISITOR TRAVEL ADAPTER       | Status India to UK Power Adaptor, India to UK... | 5022822159914 | 5022822223172 | B0F44SLX44 | £1.21         | £7.49        | £1.06     | 0.7% | 50    | 1:1 Match    | £1.06           | Brand: STATUS; Common: TRAVEL, ADAP... | -             |
+| HIGHLY LIKELY | 85         | TIDYZ PEDAL BIN LINERS 40 WHITE TIE... | Tidyz 6 Packs Of 40 White Plastic Bin Bags - ... | 5025364000652 | 8800202181437 | B07F2MFZT5 | £0.80         | £9.38        | £2.73     | 2.2% | 500   | 1:1 Match    | £2.73           | Brand: TIDYZ; Common: 15L, TIDYZ, W... | -             |
+| HIGHLY LIKELY | 85         | AMTECH VICE BABY                       | Amtech D2600 150mm (6") Woodworking vice         | 5032759001408 | -             | B007L5V48Y | £4.50         | £17.81       | £3.04     | 0.7% | 100   | 1:1 Match    | £3.04           | Brand: AMTECH; Common: AMTECH, VICE    | -             |
+| HIGHLY LIKELY | 85         | GIFTMAKER PENGUIN SANTA SACK           | Giftmaker Collection Large Christmas Santa Sa... | 5012128584411 | -             | B09HCS9QM2 | £1.01         | £6.99        | £1.15     | 0.8% | 100   | 1:1 Match    | £1.15           | Brand: GIFTMAKER; Common: SACK, SAN... | -             |
+| HIGHLY LIKELY | 85         | PPS FOIL ROASTING 3 DISHES             | PPS 3 x ALUMINIUM FOIL PLATTER TRAY - 44cm x ... | 5030481930126 | 5030481930027 | B01HILDGK4 | £1.16         | £7.39        | £0.17     | 0.1% | 50    | 1:1 Match    | £0.17           | Brand: PPS; Common: PPS, FOIL          | -             |
+| HIGHLY LIKELY | 85         | PAN AROMA CANDLE 85G LEMONGRASS        | Pan Aroma Orange Decorative Holder & Scented ... | 5053249251615 | 5053249248356 | B09KCLYC1D | £1.08         | £9.99        | £2.73     | 1.9% | 50    | 1:1 Match    | £2.73           | Brand: PAN AROMA; Common: AROMA, PA... | -             |
+| HIGHLY LIKELY | 85         | AMTECH PICK-UP TOOL TELE MAG 5LB       | Amtech S8006 3 LED telescopic torch and magne... | 5032759010035 | -             | B00HMDJD38 | £1.60         | £7.14        | £1.44     | 0.8% | 100   | 1:1 Match    | £1.44           | Brand: AMTECH; Common: AMTECH, TOOL    | -             |
+| HIGHLY LIKELY | 85         | PAN AROMA CANDLE 85G LIME GINGER       | Pan Aroma Orange Decorative Holder & Scented ... | 5053249251813 | 5053249248356 | B09KCLYC1D | £1.27         | £9.99        | £2.56     | 1.6% | 50    | 1:1 Match    | £2.56           | Brand: PAN AROMA; Common: AROMA, PA... | -             |
+| HIGHLY LIKELY | 85         | SISTEMA TO GO BREAKFAST BOX            | Sistema Klip It Colour Accents Breakfast To G... | 9414202213556 | -             | B005HNXFJS | £3.88         | £8.99        | £0.18     | 0.0% | 100   | 1:1 Match    | £0.18           | Brand: SISTEMA; Common: BREAKFAST, ... | -             |
+```
+---
+
+---
+
+## HIGHLY LIKELY — FILTERED OUT / EXCLUDED (count=41 after corrections)
+
+Brand + product matches where pack size adjustment results in negative profitability.
+**CORRECTIONS: 4 products ADDED from HIGHLY LIKELY-RECOMMENDED**
+
+## HIGHLY LIKELY — FILTERED OUT / EXCLUDED (count=27)
+
+Brand + product matches where pack size adjustment results in negative profitability.
+
+```text
+| Verdict  | Confidence | SupplierTitle                          | AmazonTitle                                      | Supplier EAN  | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI  | Sales | Pack Verdict         | Adjusted Profit | Key Match Evidence                     | Filter Reason                            |
+|----------|------------|----------------------------------------|--------------------------------------------------|---------------|---------------|------------|---------------|--------------|-----------|------|-------|----------------------|-----------------|----------------------------------------|------------------------------------------|
+| FILTERED | 85         | TIDYZ BIN LINER BLACK 10 BAGS 50LTR    | Tidyz 2 X 10 Wheelie Bin Extra Large Liners 3... | 5025364002052 | 8800202193607 | B07B656W3B | £0.74         | £7.89        | £1.23     | 1.0% | 700   | Bundle (20x) - LOSS  | £-12.91         | Brand: TIDYZ; Common: TIDYZ, BAGS, ... | Requires 20 units; adjusted profit £-... |
+| FILTERED | 85         | MINKY ANTIBACTERIAL 4 SPONGE SCOURE... | Minky Anti-Bacterial Cleaing Pad | 3 Pack | R... | 5010353320347 | 5010353322822 | B07QQBHTT4 | £0.88         | £6.75        | £1.04     | 0.8% | 700   | Bundle (3x) - LOSS   | £-0.71          | Brand: MINKY; Common: MINKY, SPONGE    | Requires 3 units; adjusted profit £-0.71 |
+| FILTERED | 85         | MINKY SUPER DIAMOND SCRUBBER           | Minky Anti-Bacterial Cleaing Pad | 3 Pack | R... | 5010353328961 | 5010353322822 | B07QQBHTT4 | £1.12         | £6.75        | £0.84     | 0.6% | 700   | Bundle (3x) - LOSS   | £-1.39          | Brand: MINKY; Common: MINKY            | Requires 3 units; adjusted profit £-1.39 |
+| FILTERED | 85         | MINKY BRITES FLAT SCOURING PAD 4PC     | Minky Anti-Bacterial Cleaing Pad | 3 Pack | R... | 5010353328794 | 5010353322822 | B07QQBHTT4 | £1.57         | £6.75        | £0.47     | 0.2% | 700   | Bundle (3x) - LOSS   | £-2.68          | Brand: MINKY; Common: PAD, MINKY       | Requires 3 units; adjusted profit £-2.68 |
+| FILTERED | 85         | MINKY ANTI BACTERIAL MICROFIBRE ROL... | Minky Anti-Bacterial Cleaing Pad | 3 Pack | R... | 5010353329166 | 5010353322822 | B07QQBHTT4 | £1.70         | £6.75        | £0.40     | 0.2% | 700   | Bundle (3x) - LOSS   | £-3.01          | Brand: MINKY; Common: MINKY, MICROF... | Requires 3 units; adjusted profit £-3.01 |
+| FILTERED | 85         | MINKY EVERYDAY SPONGES BRIGHT & GOL... | Minky Anti-Bacterial Cleaing Pad | 3 Pack | R... | 5010353327803 | 5010353322822 | B07QQBHTT4 | £1.57         | £6.75        | £0.47     | 0.2% | 700   | Bundle (3x) - LOSS   | £-2.68          | Brand: MINKY; Common: MINKY, SPONGE... | Requires 3 units; adjusted profit £-2.68 |
+| FILTERED | 85         | KILROCK DAMP CLEAR REFILL POUCH 1KG... | Kilrock Damp Clear Moisture Trap Refill - Pac... | 5014353089983 | -             | B00QM9CG7I | £2.89         | £8.85        | £0.90     | 0.3% | 400   | Bundle (250x) - LOSS | £-719.21        | Brand: KILROCK; Common: DAMP, REFIL... | Requires 250 units; adjusted profit £... |
+| FILTERED | 85         | LAV TUMBLER 3PCS                       | Lav Sude Tumbler Glass Set. Drinking Glasses.... | 8692952202568 | 5056057687577 | B07YQ7BSR4 | £3.26         | £9.73        | £0.24     | 0.1% | 400   | Bundle (2x) - LOSS   | £-3.03          | Brand: LAV; Common: TUMBLER, LAV       | Requires 2 units; adjusted profit £-3.03 |
+| FILTERED | 85         | WHAM CRYSTAL 160LTR CLEAR BOX & LID    | Wham Pack of 2 Crystal Storage Boxes with Lid... | 5038135120701 | 9876553862614 | B08P8GS8XP | £16.12        | £23.21       | £0.05     | 0.0% | 300   | Bundle (2x) - LOSS   | £-16.07         | Brand: WHAM; Common: CRYSTAL, WHAM     | Requires 2 units; adjusted profit £-1... |
+| FILTERED | 85         | ECO WISE SINGLE WALL CUPS 8OZ 20PCS    | FOOGO Green 100pcs 8oz Disposable Strong Sing... | 5060743590942 | 5060737606161 | B0CV2JVDHV | £0.74         | £8.99        | £1.61     | 1.4% | 300   | Bundle (5x) - LOSS   | £-1.36          | Brand: ECO; Common: 8OZ, CUPS          | Requires 5 units; adjusted profit £-1.36 |
+| FILTERED | 85         | ECO WISE PAPER CUPS SINGLE WALL 80Z... | FOOGO Green 100pcs 8oz Disposable Strong Sing... | 5060743590256 | 5060737606161 | B0CV2JVDHV | £1.27         | £8.99        | £1.17     | 0.7% | 300   | Bundle (2x) - LOSS   | £-0.10          | Brand: ECO; Common: PAPER, CUPS        | Requires 2 units; adjusted profit £-0.10 |
+| FILTERED | 85         | OPAL ROUND DINNER PLATE 27CM WHITE     | Best House | 6 Pcs Opalware Dinner Plates Rou... | 6260573003134 | -             | B0DR2XPS27 | £1.20         | £14.99       | £3.82     | 2.5% | 200   | Bundle (6x) - LOSS   | £-2.18          | Brand: OPAL; Common: DINNER, WHITE,... | Requires 6 units; adjusted profit £-2.18 |
+| FILTERED | 85         | OPAL ROUND SOUP PLATE WHITE            | Best House | 6 Pcs Opalware Dinner Plates Rou... | 6260573000614 | -             | B0DR2XPS27 | £0.94         | £14.99       | £4.04     | 3.0% | 200   | Bundle (6x) - LOSS   | £-0.64          | Brand: OPAL; Common: WHITE, ROUND, ... | Requires 6 units; adjusted profit £-0.64 |
+| FILTERED | 85         | OPAL ROUND PASTA PLATE WHITE           | Best House | 6 Pcs Opalware Dinner Plates Rou... | 6260573000805 | -             | B0DR2XPS27 | £2.90         | £14.99       | £2.40     | 0.8% | 200   | Bundle (6x) - LOSS   | £-12.12         | Brand: OPAL; Common: WHITE, ROUND, ... | Requires 6 units; adjusted profit £-1... |
+| FILTERED | 85         | KILROCK MOULD & MILDEW REMOVER BRUS... | Kilrock Mould Remover Brush-On Gel 2 x 250ml ... | 5014353089174 | 5060591430056 | B08MGX9WRF | £2.76         | £8.42        | £0.43     | 0.1% | 200   | Bundle (2x) - LOSS   | £-2.33          | Brand: KILROCK; Common: MOULD, GEL,... | Requires 2 units; adjusted profit £-2.33 |
+| FILTERED | 85         | ECO WASH UP BRUSH                      | 4Pcs Wooden Washing Up Brush, Dish Brushes fo... | 5026180081702 | -             | B0CKSTP5TS | £1.98         | £8.99        | £1.47     | 0.7% | 100   | Bundle (4x) - LOSS   | £-4.47          | Brand: ECO; Common: ECO                | Requires 4 units; adjusted profit £-4.47 |
+| FILTERED | 85         | KILROCK SERVICE-PRO COFFEE MACHINE ... | Kilrock Service Pro Coffee Machine Descaler &... | 5014353089266 | -             | B008FNVJEU | £3.96         | £9.73        | £0.63     | 0.2% | 100   | Bundle (2x) - LOSS   | £-3.33          | Brand: KILROCK; Common: DESCALER, K... | Requires 2 units; adjusted profit £-3.33 |
+| FILTERED | 85         | FAIRY MAX POWER TEARDROP SCOURER       | Addis Fairy Originals Non Scratch General Dua... | 5010303194523 | 5010303179995 | B09P1G3YJ5 | £0.90         | £5.99        | £0.49     | 0.4% | 100   | Bundle (6x) - LOSS   | £-4.01          | Brand: FAIRY; Common: SCOURER, FAIR... | Requires 6 units; adjusted profit £-4.01 |
+| FILTERED | 85         | WHAM CRYSTAL 32LTR SMOKE BOX & LID     | Wham Crystal 5 x 32L Stackable Plastic Storag... | 5038135251009 | 9786040194312 | 6040194316 | £4.57         | £28.99       | £5.02     | 1.2% | 100   | Bundle (5x) - LOSS   | £-13.27         | Brand: WHAM; Common: CRYSTAL, WHAM     | Requires 5 units; adjusted profit £-1... |
+| FILTERED | 85         | FAIRY DUAL SPONGE SCOURER WITH CRYS... | Addis Fairy Originals Non Scratch General Dua... | 5010303179971 | 5010303179995 | B09P1G3YJ5 | £0.90         | £5.99        | £0.49     | 0.4% | 100   | Bundle (3x) - LOSS   | £-1.31          | Brand: FAIRY; Common: SPONGE, WITH,... | Requires 3 units; adjusted profit £-1.31 |
+| FILTERED | 85         | PYREX CLASSIC CASSEROLE 1.3LTR         | Pyrex Essentials Glass Round Casserole Dish w... | 3426470261524 | -             | B08KWGQGK6 | £5.71         | £16.12       | £3.70     | 0.7% | 50    | Bundle (2x) - LOSS   | £-2.01          | Brand: PYREX; Common: CASSEROLE, PY... | Requires 2 units; adjusted profit £-2.01 |
+| FILTERED | 85         | LAV NECTAR TUMBLER 3PC 280ML           | LAV 12x 280ml Nectar Glass Tumblers - Dishwas... | 8692952070839 | 5055512045112 | B0B1N8DRF7 | £2.54         | £17.99       | £7.66     | 2.9% | 50    | Bundle (12x) - LOSS  | £-20.32         | Brand: LAV; Common: 280ML, LAV, NEC... | Requires 12 units; adjusted profit £-... |
+| FILTERED | 85         | WHAM CRYSTAL 60LTR SMOKE BOX & LID     | Wham Crystal 5 x 60L Stackable Plastic Storag... | 5038135251504 | 5057604505252 | B0B5TP5BRN | £6.30         | £40.80       | £13.81    | 2.4% | 50    | Bundle (5x) - LOSS   | £-11.39         | Brand: WHAM; Common: CRYSTAL, WHAM     | Requires 5 units; adjusted profit £-1... |
+| FILTERED | 85         | FESTIVE MAGIC HOOKS GUTTER CLIPS 16... | 100 Pcs Black Gutter Clips, Versatile S-Hooks... | 9333527348500 | -             | B0DK6VD1Z2 | £1.06         | £5.99        | £0.40     | 0.3% | 50    | Bundle (6x) - LOSS   | £-5.14          | Brand: FESTIVE; Common: FESTIVE, GU... | Requires 6 units; adjusted profit £-5.14 |
+| FILTERED | 85         | FESTIVE MAGIC HANING GLITTER CANDY ... | 12 Pcs Red Glitter Candy Canes and Round Cand... | -             | -             | B0FT2TGFZ7 | £1.68         | £7.99        | £0.86     | 0.4% | 50    | Bundle (12x) - LOSS  | £-17.62         | Brand: FESTIVE; Common: CANDY, FEST... | Requires 12 units; adjusted profit £-... |
+| FILTERED | 85         | AMTECH BOX SPANNER /TOMMY BAR          | Amtech K1150 6 Piece Tubular Box Spanner Set ... | 5032759049905 | -             | B004GY24EQ | £2.74         | £7.69        | £0.21     | 0.1% | 50    | Bundle (6x) - LOSS   | £-13.47         | Brand: AMTECH; Common: AMTECH, BAR,... | Requires 6 units; adjusted profit £-1... |
+| FILTERED | 85         | KILROCK PLUGHOLE FRESHENER CITRUS F... | Kilrock Plughole Unblocker Bathroom 500ml 2 P... | 5014353092389 | -             | B00VHWXWOG | £2.68         | £7.49        | £0.12     | 0.0% | 50    | Bundle (2x) - LOSS   | £-2.56          | Brand: KILROCK; Common: KILROCK, PL... | Requires 2 units; adjusted profit £-2.56 |
+```
+
+---
+
+---
+
+## NEEDS VERIFICATION (count=232 after corrections)
+
+Plausible matches where confirming 1-2 specific details would upgrade to HIGHLY LIKELY.
+**CORRECTIONS: 6 products ADDED from HIGHLY LIKELY, 2 products moved to FILTERED**
+
+Plausible matches where confirming 1-2 specific details would upgrade to HIGHLY LIKELY.
+Items sorted by title match strength and sales.
+```text
+| Verdict     | Confidence | SupplierTitle                          | AmazonTitle                                      | Supplier EAN   | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI  | Sales | Pack Verdict     | Adjusted Profit | Key Match Evidence                     | Filter Reason |
+|-------------|------------|----------------------------------------|--------------------------------------------------|----------------|---------------|------------|---------------|--------------|-----------|------|-------|------------------|-----------------|----------------------------------------|---------------|
+| NEEDS VERIF | 70         | ULTRATAPE PICTURE FRAME TAPE 24MMX5... | Ultratape | Picture Frame Tape | 48mm x 33m      | 5027785817369  | 5027785811817 | B073VPL2VQ | £1.15         | £6.53        | £0.43     | 0.3% | 50    | 1:1 Match        | £0.43           | Common: ULTRATAPE, PICTURE, FRAME, ... | -             |
+| NEEDS VERIF | 70         | FALCON ENAMEL ROUND PIE DISH  26CM     | FALCON Round Pie Dish White 26CM                 | 5012823030916  | -             | B07NNY768K | £4.46         | £10.69       | £0.89     | 0.2% | 50    | 1:1 Match        | £0.89           | Common: ROUND, FALCON, DISH, PIE, 2... | -             |
+| NEEDS VERIF | 70         | EXTRA SELECT FISH FOOD BLEND BUCKET... | Extra Select Complete Fish Food Blend Tub, 5 ... | 5022245006710  | -             | B00X5D4SE8 | £6.71         | £14.49       | £1.71     | 0.3% | 50    | 1:1 Match        | £1.71           | Common: BLEND, FISH, EXTRA, FOOD, S... | -             |
+| NEEDS VERIF | 70         | BAKER & SALT LOOSE CASE CAKE TIN 23... | Baker & Salt Loose Based Round Cake Tin Deep ... | 5038135559808  | -             | B082Q34WLQ | £5.30         | £10.99       | £0.40     | 0.1% | 50    | 1:1 Match        | £0.40           | Common: LOOSE, SALT, CAKE, BAKER, T... | -             |
+| NEEDS VERIF | 70         | HARRIS PUTTY KNIFE                     | Harris Seriously Good Putty Knife                | 5056287402902  | -             | B0815B7FBY | £2.22         | £6.98        | £0.13     | 0.1% | 50    | 1:1 Match        | £0.13           | Common: HARRIS, PUTTY, KNIFE           | -             |
+| NEEDS VERIF | 70         | SWIRL TUMBLE DRYER SHEETS LAVENDER ... | 4X Swirl Lavender Tumble Dryer Sheets - 40 pe... | 5053249249056  | 5053249239842 | B085W8MDLH | £1.14         | £7.64        | £1.18     | 0.8% | 200   | 1:1 Match        | £1.18           | Common: SWIRL, SHEETS, DRYER, LAVEN... | -             |
+| NEEDS VERIF | 70         | MARIGOLD OUTDOOR GLOVES EXTRA LARGE    | Marigold 2 x Extra Tough Outdoor Gloves - Sin... | 5010232988019  | 9790504074621 | B08XWB7JW9 | £2.02         | £7.99        | £1.41     | 0.6% | 200   | 1:1 Match        | £1.41           | Common: MARIGOLD, GLOVES, OUTDOOR, ... | -             |
+| NEEDS VERIF | 70         | BAKER & SALT SWISS ROLL TRAY           | Baker & Salt Non-Stick Swiss Roll Tray 32 x 2... | 5038135558504  | -             | B08G1Q1L46 | £3.23         | £8.99        | £0.72     | 0.2% | 600   | 1:1 Match        | £0.72           | Common: TRAY, SALT, ROLL, SWISS, BA... | -             |
+| NEEDS VERIF | 70         | BLUE CANYON ROUND WALL MIRROR WHITE    | Blue Canyon Round Mirror, 40 cm Length x 40 c... | 5060386422662  | -             | B01CMHNDKC | £6.84         | £14.95       | £1.93     | 0.3% | 50    | 1:1 Match        | £1.93           | Common: BLUE, WHITE, CANYON, ROUND     | -             |
+| NEEDS VERIF | 70         | DETTOL POWER & PURE KITCHEN 750ML P... | Dettol Power and Pure Kitchen Cleaner Spray 1... | 5011417788776  | 5011417584200 | B09NCVWKD6 | £11.41        | £18.98       | £0.19     | 0.0% | 50    | 1:1 Match        | £0.19           | Common: POWER, DETTOL, PURE, KITCHE... | -             |
+| NEEDS VERIF | 70         | BEAUFORT SQUARE FOOD CONTAINER 1LTR    | Beaufort 13 Litre New SQUARE FOOD & CAKE CONT... | 5014348277067  | -             | B0046MHRMM | £0.74         | £7.92        | £2.03     | 1.7% | 200   | 1:1 Match        | £2.03           | Common: SQUARE, CONTAINER, BEAUFORT... | -             |
+| NEEDS VERIF | 70         | MENS WATERPROOF FLEECE TRAPPER HAT ... | HEAT HOLDERS - Mens Waterproof Fleece Lined W... | 5060605732022  | 5019041167141 | B07F8VJHWF | £6.07         | £21.98       | £6.45     | 1.1% | 100   | 1:1 Match        | £6.45           | Common: MENS, WATERPROOF, WITH, FLE... | -             |
+| NEEDS VERIF | 70         | SPICE IT UP SEASALT GRINDER            | Silk Route Spice Company Giant Sea Salt Grind... | 5055257877078  | -             | B00GLAHZUG | £1.01         | £8.98        | £2.56     | 1.8% | 500   | 1:1 Match        | £2.56           | Common: SPICE, GRINDER                 | -             |
+| NEEDS VERIF | 70         | WORLD OF PETS CAT LITTER SCENTED 3L... | World's Best Cat Litter 28lb (12.7kg) Lavende... | 5052516216876  | -             | B009S64OI6 | £2.76         | £39.19       | £16.14    | 5.7% | 800   | 1:1 Match        | £16.14          | Common: SCENTED, CAT, LITTER           | -             |
+| NEEDS VERIF | 70         | BEAUFORT SQUARE FOOD CONTAINER 600M... | Beaufort 13 Litre New SQUARE FOOD & CAKE CONT... | 5014348229363  | -             | B0046MHRMM | £0.66         | £7.91        | £2.09     | 1.9% | 200   | 1:1 Match        | £2.09           | Common: SQUARE, CONTAINER, BEAUFORT... | -             |
+| NEEDS VERIF | 70         | ALUMINIUM TORCH 9 LED ASSORTED EACH    | Rolson 61693 9 LED Aluminium Torch, Assorted ... | 6923456787261  | 5029594616935 | B00UVJ1RO8 | £0.80         | £4.02        | £0.09     | 0.1% | 50    | 1:1 Match        | £0.09           | Common: ALUMINIUM, ASSORTED, LED       | -             |
+| NEEDS VERIF | 70         | EVERYCHEF BAKEWARE OVEN TRAY           | Prestige Inspire Bakeware Oven Tray - Black,3... | 5055566932826  | 5000263579003 | B009QZZVDG | £1.14         | £8.99        | £1.28     | 0.9% | 100   | 1:1 Match        | £1.28           | Common: TRAY, OVEN, BAKEWARE           | -             |
+| NEEDS VERIF | 70         | BEAUFORT MEASURE ULTIMATE JUG 3LTR     | Beaufort 3 Litre Ultimate Plastic Measuring J... | 5014348292350  | -             | B008ES6SLU | £0.88         | £6.98        | £1.25     | 1.0% | 50    | 1:1 Match        | £1.25           | Common: ULTIMATE, BEAUFORT, JUG        | -             |
+| NEEDS VERIF | 70         | Mokate Gold Premium Coffee Caramel ... | Mokate Gold Premium Caramel Latte Coffee Sach... | 5900649077997  | -             | B08JQKL34C | £1.48         | £15.49       | £6.78     | 3.8% | 200   | Bundle (1x) - OK | £6.49           | Common: LATTE, COFFEE, MOKATE, PREM... | -             |
+| NEEDS VERIF | 70         | HAPPY 8TH BIRTHDAY BANNER PINK 9FT     | Oaktree UK 9ft Banner Happy 8th Birthday Pink    | 11179859658    | 5055370624405 | B01N7UCP9P | £0.80         | £3.78        | £0.07     | 0.1% | 50    | 1:1 Match        | £0.07           | Common: 8TH, PINK, 9FT, BANNER, BIR... | -             |
+| NEEDS VERIF | 70         | CHUPA CHUPS MINI LOLLIES 12PC          | Chupa Chups The Best of x50 Lollipops            | 8410031976960  | -             | B0059G2S8M | £1.48         | £8.99        | £2.18     | 1.2% | 300   | 1:1 Match        | £2.18           | Common: CHUPA, CHUPS                   | -             |
+| NEEDS VERIF | 70         | PENDEFORD POTATO BAKER                 | Microwave Potato Baker, Red                      | 5015826003444  | -             | B07DBMSL8S | £1.06         | £12.58       | £5.07     | 3.5% | 50    | 1:1 Match        | £5.07           | Common: POTATO                         | -             |
+| NEEDS VERIF | 70         | KILNER BOTTLE SQUARE 1LTR              | Kilner Clip Top Bottle, 1 Litre                  | 5010853253428  | -             | B07VC8TFB8 | £3.25         | £9.29        | £0.91     | 0.3% | 50    | 1:1 Match        | £0.91           | Common: KILNER                         | -             |
+| NEEDS VERIF | 70         | DRAPER SPANNER SET METRIC COMBINATI... | Draper 1 x Redline 68481 Metric Combination S... | 5010559684793  | 5010559684816 | B0114IPMS6 | £6.18         | £15.10       | £2.15     | 0.4% | 100   | 1:1 Match        | £2.15           | Common: COMBINATION, SET, DRAPER, S... | -             |
+| NEEDS VERIF | 70         | BLUE CANYON TOILET BRUSH PLASTIC LA... | BGL Stainless Steel Standing Toilet Brush for... | 5056295703862  | -             | B07R41125W | £4.56         | £19.99       | £7.40     | 1.7% | 100   | 1:1 Match        | £7.40           | Common: BRUSH, TOILET                  | -             |
+| NEEDS VERIF | 70         | BEAUFORT SQ FOOD CONTAINER 13 LTR      | Beaufort 13 Litre New SQUARE FOOD & CAKE CONT... | 5014348241525  | -             | B0046MHRMM | £2.56         | £7.90        | £0.51     | 0.2% | 200   | 1:1 Match        | £0.51           | Common: CONTAINER, BEAUFORT, FOOD      | -             |
+| NEEDS VERIF | 70         | Mokate Gold Premium Coffee Cappucci... | 12 boxes Mokate Gold Premium - Cappuccino Cla... | 5900649077966  | -             | B08X9QWYTF | £1.48         | £16.00       | £7.14     | 4.0% | 50    | 1:1 Match        | £7.14           | Common: GOLD, MOKATE, CAPPUCCINO, P... | -             |
+| NEEDS VERIF | 70         | BACOFOIL ZIPPER BAGS ALL PURPOSE 12... | Bacofoil 3 x Zipper Small All Purpose Bags Fo... | 5023139862917  | -             | B08FBJ59DR | £1.03         | £9.96        | £2.93     | 2.1% | 500   | 1:1 Match        | £2.93           | Common: PURPOSE, BACOFOIL, ZIPPER, ... | -             |
+| NEEDS VERIF | 70         | ROUNDUP PATH WEEDKILLER RTU 1LTR 20... | Roundup Path Weedkiller, Ready to Use, Refill... | 5017676016919  | 5017676016964 | B01MYBH3SU | £6.02         | £21.12       | £3.52     | 0.6% | 50    | 1:1 Match        | £3.52           | Common: ROUNDUP, PATH                  | -             |
+| NEEDS VERIF | 70         | FLOW BYE BYE COCKROACH TRIGGER SPRA... | 300ml Ant & Cockroach Intant Killer Spray (2)... | 50161029211223 | -             | B087H5BN7Z | £1.68         | £9.98        | £2.12     | 1.1% | 200   | 1:1 Match        | £2.12           | Common: SPRAY, COCKROACH               | -             |
+| NEEDS VERIF | 70         | JUMBO SLIDER STORAGE BAGS 10PC         | Hefty Slider Jumbo Storage Bags (2.5 Gallon, ... | 5056239405067  | 13700838125   | B00555EWJU | £1.01         | £11.07       | £3.06     | 2.2% | 50    | 1:1 Match        | £3.06           | Common: JUMBO, SLIDER, STORAGE, BAG... | -             |
+| NEEDS VERIF | 70         | FALCON ENAMEL ROASTER ROUND 20CM       | Barmans BYX0B0A6289 Enamel Roaster with Lid, ... | 5012823030039  | -             | B01MZHIBA9 | £10.62        | £17.88       | £0.86     | 0.1% | 50    | 1:1 Match        | £0.86           | Common: ROASTER, 20CM, ENAMEL          | -             |
+| NEEDS VERIF | 70         | LITTLE TREES CAR FRESHENER ORANGE J... | Little Trees Air Freshener Tree LTZ084 Orange... | 7612720201457  | 5015926091990 | B08DRRKWKQ | £0.94         | £4.98        | £0.61     | 0.5% | 50    | 1:1 Match        | £0.61           | Common: ORANGE, FRESHENER, JUICE, T... | -             |
+| NEEDS VERIF | 70         | HAPPY 8TH BIRTHDAY BANNER 9FT          | Oaktree UK 9ft Banner Happy 8th Birthday Pink    | 11179859795    | 5055370624405 | B01N7UCP9P | £0.80         | £3.78        | £0.07     | 0.1% | 50    | 1:1 Match        | £0.07           | Common: 8TH, 9FT, BANNER, BIRTHDAY,... | -             |
+| NEEDS VERIF | 70         | SPICE IT UP CHILLI FLAKES SEASON GR... | Silk Route Spice Company Chilli Spice Seasoni... | 5055257877085  | -             | B00X3Z2RQY | £1.08         | £8.99        | £2.51     | 1.7% | 100   | 1:1 Match        | £2.51           | Common: SPICE, GRINDER, CHILLI         | -             |
+| NEEDS VERIF | 70         | FIRST STEPS  FOOD STORAGE POTS WITH... | First Steps 8 Baby Food Freezer Cubes Tray 70... | 5015302109141  | 5015302106799 | B08CY3F21W | £0.94         | £6.99        | £1.29     | 1.0% | 50    | 1:1 Match        | £1.29           | Common: POTS, STEPS, FIRST, FOOD       | -             |
+| NEEDS VERIF | 70         | BACOFOIL ZIPPER BAGS ALL PURPOSE 15... | Bacofoil 3 x Zipper Small All Purpose Bags Fo... | 5023139861019  | -             | B08FBJ59DR | £1.94         | £9.96        | £2.17     | 1.0% | 500   | 1:1 Match        | £2.17           | Common: PURPOSE, BACOFOIL, SMALL, Z... | -             |
+| NEEDS VERIF | 70         | MEMORIAL GRAVE FLOWER VASE WITH STA... | Black Graveside Memorial Spiked Flower Vase -... | 5050565833143  | 5017224926998 | B093HHQ7HB | £0.88         | £7.23        | £0.99     | 0.8% | 50    | 1:1 Match        | £0.99           | Common: MEMORIAL, FLOWER, VASE         | -             |
+| NEEDS VERIF | 70         | GSD UK TOURIST ADAPTOR                 | India to UK Travel Tourist Adaptor Converter ... | 5060066943562  | -             | B003Q98XHO | £1.34         | £7.39        | £0.71     | 0.4% | 50    | 1:1 Match        | £0.71           | Common: ADAPTOR, TOURIST               | -             |
+| NEEDS VERIF | 70         | BLOOME MINI GEL BURST AIR FRESHENER... | Jelly Belly 15710A 3D Gel Mini Vent Air Fresh... | 5055566940548  | 5010555157109 | B07B9N5WFW | £1.01         | £4.50        | £0.19     | 0.1% | 300   | 1:1 Match        | £0.19           | Common: MINI, GEL, AIR, FRESHENER      | -             |
+| NEEDS VERIF | 70         | ELECTRONIC LIGHTER 3PC 6 ASS DESIGN    | KARAN KING 50PK ELECTRONIC LIGHTER 5 COLOR CH... | 8711252795362  | 7426974490341 | B08B4P1M78 | £1.01         | £10.88       | £3.91     | 2.8% | 600   | 1:1 Match        | £3.91           | Common: LIGHTER, ELECTRONIC            | -             |
+| NEEDS VERIF | 70         | GROSVENOR 55CM TROUGH BLACK            | 4 Black Gros Trough 55cm                         | 5014348297157  | -             | B0723GK5V9 | £3.35         | £16.49       | £5.93     | 1.8% | 50    | 1:1 Match        | £5.93           | Common: TROUGH, BLACK, 55CM            | -             |
+| NEEDS VERIF | 70         | PASABAHCE CIHANGIR TEA GLASS 95 CC ... | Pasabahce Istanbul tea glass, set of 6, drink... | 8693357033344  | -             | B00I1JW98I | £1.44         | £11.99       | £2.86     | 1.6% | 100   | 1:1 Match        | £2.86           | Common: PASABAHCE, TEA                 | -             |
+| NEEDS VERIF | 70         | ELF ARRIVAL ENVELOPE OUTFIT            | Christmas Naughty Elf Arrival Clothes - Plush... | 5050565795922  | -             | B09J3T86D8 | £1.94         | £6.99        | £0.37     | 0.2% | 50    | 1:1 Match        | £0.37           | Common: OUTFIT, ELF, ARRIVAL           | -             |
+| NEEDS VERIF | 70         | MASTERCLASS SALT/PAPPER MILL BLACK     | MasterClass Pepper Mill or Salt Grinder with ... | 5028250807854  | 5028250807861 | B07MC8YD65 | £4.37         | £10.49       | £0.42     | 0.1% | 100   | 1:1 Match        | £0.42           | Common: MASTERCLASS, MILL              | -             |
+| NEEDS VERIF | 70         | BEAUFORT MEASURE ULTIMATE JUG 2LTR     | Beaufort - 2 Litre Clear Plastic Measuring Ju... | 5014348291469  | -             | B003NU37MW | £0.74         | £5.41        | £0.25     | 0.2% | 200   | 1:1 Match        | £0.25           | Common: BEAUFORT, JUG                  | -             |
+| NEEDS VERIF | 70         | PADDED ENVELOPES SIZE E PK3            | 100 Mail Lite E/2 Padded Envelope 220 x 260mm    | 5056239403346  | -             | B0017KKJLM | £1.48         | £14.39       | £6.00     | 3.4% | 100   | 1:1 Match        | £6.00           | Common: PADDED                         | -             |
+| NEEDS VERIF | 70         | THE BOX CREATE PVA WHITE GLUE 200ML    | PVA White Glue 60ml Bottle, Box of 12            | 5056170315036  | -             | B076BGM4Q8 | £1.01         | £9.99        | £3.28     | 2.4% | 100   | 1:1 Match        | £3.28           | Common: PVA, WHITE, GLUE, BOX          | -             |
+| NEEDS VERIF | 70         | MASTER COOK DIE CAST CASSEROLE 24CM    | MasterClass Cast Aluminium Cream Casserole Di... | 6945702110326  | 5057982093273 | B0BT51TC8X | £20.16        | £48.99       | £11.25    | 0.6% | 50    | 1:1 Match        | £11.25          | Common: CASSEROLE, CAST                | -             |
+```
+---
+
+---
+
+## Reconciliation Summary
+
+| Metric | Value |
+|--------|-------|
+| Total input rows | 2635 |
+| Rows with valid Supplier EAN | 2583 |
+| Rows with valid Amazon EAN | 1173 |
+| Strict exact EAN matches | 42 |
+| Brand matches detected | 152 |
+| Products requiring bundle (RSU > 1) | 805 |
+| Products with negative adj. profit | 630 |
+
+---
+
+## Calibration Notes
+
+This analysis was calibrated for this specific supplier using preflight pattern detection:
+
+- **Pack Units Detected:** pc, pcs, pce, pk, pack, pieces, cases
+- **Trailing Numbers as Qty:** False
+- **Brand Position:** start
+- **Birthday Products Present:** True
+
+---
+
+*Report generated by FBA Analysis v4.1.1 AG1*
+*Preflight calibration applied from CALIBRATION_REPORT_part_2_jan_20260102.md*
+
+
+---
+
+## DETAILED CORRECTIONS APPLIED
+
+### Products Moved from VERIFIED-RECOMMENDED to VERIFIED-FILTERED:
+
+| SupplierTitle | Pack Issue Detected | Original Profit | Adjusted Profit |
+|---------------|---------------------|-----------------|-----------------|
+| CRAFT FABRIC GLUE 50ML | Amazon "2pk x 50ml" = 2-pack | £0.85 | £-0.16 |
+| 151 ADHESIVE SPRAY HEAVY DUTY 500ML | Amazon "3 Spray Glue" = 3-pack | £1.42 | £-4.62 |
+
+### Products RESTORED from VERIFIED-FILTERED to VERIFIED-RECOMMENDED:
+
+| SupplierTitle | Correction | Reason |
+|---------------|------------|--------|
+| MIRROR BLUE CANYON SQUARE PLASTIC MIRROR | "2x Magnification" = optical zoom, NOT pack | This is a specification (magnification power), not quantity |
+| SUPERIOR FOIL 10 CONTAINERS & LID 9X9IN | "9X9IN" = 9 inches x 9 inches = SIZE, NOT pack | Both supplier and Amazon are 10-packs; 9X9 is tray dimensions |
+
+### Products Moved from HIGHLY LIKELY-RECOMMENDED to HIGHLY LIKELY-FILTERED:
+
+| SupplierTitle | Pack Issue Detected | RSU | Adjusted Profit |
+|---------------|---------------------|-----|-----------------|
+| WHAM CRYSTAL CD BOX CLEAR | Amazon is 17L Box (different product entirely) | N/A | N/A - wrong product |
+| TIDYZ WHEELY BIN LINERS 5 BAGS 300L | Amazon has 30 liners; 30÷5=6 units needed | 6 | £-0.93 |
+| KILROCK DAMP CLEAR MOULD REMOVER | Amazon "3 X" = 3-pack | 3 | £-1.98 |
+| PAN AROMA POTPOURRI ASSORTED | Amazon "Set Of 4" = 4-pack | 4 | £-2.21 |
+
+### Products Moved from HIGHLY LIKELY-RECOMMENDED to NEEDS VERIFICATION:
+
+| SupplierTitle | Supplier Brand | Amazon Brand | Issue |
+|---------------|----------------|--------------|-------|
+| PRIMA MULTI SHOWERHEAD CHROME | PRIMA | Lara | Brand mismatch - needs verification |
+| BRIGHT & HOMELY METAL WATERING CAN | BRIGHT & HOMELY | Woodside | Brand mismatch - needs verification |
+| CHEF AID KNIFE SHARPENER SOFTGRIP | CHEF AID | Navaris | Brand mismatch - needs verification |
+| GREEN BLADE 2PCE GARDEN SHEAR SET | GREEN BLADE | Darlac | Brand mismatch - needs verification |
+| SPICE IT UP CHILLI FLAKES GRINDER | SPICE IT UP | Silk Route | Brand mismatch - needs verification |
+| WICKER BASKET RECTANGULAR | (none - WICKER is material) | JVL | No brand in supplier title |
+
+### Products Moved from NEEDS VERIFICATION to FILTERED:
+
+| SupplierTitle | Issue | Why Filtered |
+|---------------|-------|--------------|
+| SMART CHOICE 10 RAWHIDE CHICKEN TREATS | Supplier: RAWHIDE; Amazon: RAWHIDE FREE | Product type contradiction - incompatible |
+| PRICE & KENSINGTON 2 CUP TEAPOT MATT NAVY | Size: 2 Cup vs 6 Cup; Color: Navy vs Black | Different variant - cannot fulfill |
+
+---
+
+*COMPLETE Corrected Report Generated*
+*Based on MANUAL_ANALYSIS_THOROUGH_20260103.md analysis*
+*All products from original report included*

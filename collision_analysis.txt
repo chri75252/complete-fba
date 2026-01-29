@@ -1,0 +1,42 @@
+================================================================================
+STABLE KEY COLLISION ANALYSIS
+================================================================================
+
+Total rows in file: 2696
+Collision groups: 72
+Rows affected: 166
+Collision rate: 6.2%
+
+--------------------------------------------------------------------------------
+COLLISION PATTERN ANALYSIS
+--------------------------------------------------------------------------------
+
+Collision breakdown:
+  Same EAN + Same ASIN: 0 (0.0%)
+  Diff EAN + Same ASIN: 72 (100.0%)
+  Same EAN + Diff ASIN: 0 (0.0%)
+  Diff EAN + Diff ASIN: 0 (0.0%)
+
+Category breakdown:
+  True duplicates (identical rows): 0
+  Truncation issues (titles differ after char 50): 0
+  Product variants (same EAN/ASIN, diff titles): 0
+
+--------------------------------------------------------------------------------
+EXAMPLE COLLISIONS BY CATEGORY
+--------------------------------------------------------------------------------
+
+1. TRUNCATION ISSUES (titles differ only after char 50):
+
+2. PRODUCT VARIANTS (same EAN/ASIN, different products):
+
+3. TRUE DUPLICATES (identical titles):
+
+--------------------------------------------------------------------------------
+AVAILABLE COLUMNS FOR DISAMBIGUATION
+--------------------------------------------------------------------------------
+
+Columns in data: ['EAN', 'EAN_OnPage', 'ASIN', 'SupplierTitle', 'AmazonTitle', 'SupplierURL', 'AmazonURL', 'bought_in_past_month', 'fba_seller_count', 'fbm_seller_count', 'total_offer_count', 'SupplierPrice_incVAT', 'SupplierPrice_exVAT', 'SellingPrice_incVAT', 'ReferralFee', 'FBAFee', 'PrepHouseFee', 'OutputVAT', 'InputVAT', 'NetProceeds', 'HMRC', 'NetProfit', 'ROI ( % ) ', 'Breakeven', 'ProfitMargin']
+
+SupplierURL column exists: 2696/2696 non-null values
+Collisions with unique SupplierURL: 10/10 sample

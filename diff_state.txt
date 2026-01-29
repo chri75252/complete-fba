@@ -1,0 +1,16 @@
+diff --git a/utils/fixed_enhanced_state_manager.py b/utils/fixed_enhanced_state_manager.py
+index fceec788..ce0db4c4 100644
+--- a/utils/fixed_enhanced_state_manager.py
++++ b/utils/fixed_enhanced_state_manager.py
+@@ -483,6 +483,11 @@ class FixedEnhancedStateManager:
+         # ?? FIX ISS-007: Reconcile all counters using linking_map as single source of truth
+         # Evidence: gap_processing.processed=392, amazon_completed=394, resume_ptr=298, linking_map=0
+         linking_map_count = file_grounded_data.get("linking_map_count", 0)
++
++        # NEW: Initialize successful_products + display metrics from linking map
++        self.state_data["successful_products"] = linking_map_count
++        ud = self.state_data.setdefault("user_display_metrics", {})
++        ud["successful_products"] = linking_map_count
+         
+         sp = self.state_data.get("system_progression", {})
+         amazon_completed = sp.get("amazon_products_completed", 0)

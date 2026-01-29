@@ -1,0 +1,57 @@
+{
+  "supplier_id": "efghousewares-co-uk",
+  "supplier_name": "Efghousewares.Co.Uk",
+  "base_url": "https://www.efghousewares.co.uk/",
+  "supplier_url": "https://www.efghousewares.co.uk",
+  "site_platform": "cloudfy",
+  "authentication_required": true,
+  "authentication": {
+    "login_url": "https://www.efghousewares.co.uk/Login",
+    "login_selectors": {
+      "email_field": "#UserName",
+      "password_field": "#Password",
+      "login_button": "#dupbtn"
+    }
+  },
+  "login_config": {
+    "login_path": "/Login",
+    "test_product_url": "https://www.efghousewares.co.uk/huggies-baby-wipes-pure-56s-pk10",
+    "price_selectors": [
+      "span.Price2",
+      "div.newprice",
+      "span.rrp_price"
+    ]
+  },
+  "field_mappings": {
+    "product_item": [
+      "div.productItem"
+    ],
+    "title": [
+      "h2.product-name a"
+    ],
+    "price": [
+      "span.Price2",
+      "div.newprice"
+    ],
+    "url": [
+      "h2.product-name a",
+      "div.product-image a"
+    ],
+    "image": [
+      "div.product-image img"
+    ]
+  },
+  "category_page": {
+    "_comment_pagination": "Cloudfy: pagination via JS SetPage(); use NEXT button click.",
+    "pagination_method": "button",
+    "next_page_button_selector": [
+      "a.Next"
+    ]
+  },
+  "pagination": {
+    "next_button_javascript": "(() => { const btn = document.querySelector('a.Next'); if (btn) { btn.click(); return true; } return false; })()"
+  },
+  "discovery_timestamp": "2025-12-14T12:44:58Z",
+  "auto_discovered": true,
+  "success": true
+}

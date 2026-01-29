@@ -1,0 +1,141 @@
+# Amazon FBA Agent System - AI Exclude
+# Goal: reduce context size for AI tools (Firebase Studio, etc.).
+# Keep the latest couple of artifacts by naming them with latest/current/previous/prev.
+# The keep rules at the bottom re-include those items inside ignored folders.
+
+# ============================================================================
+# Version control and tool metadata
+# ============================================================================
+.git/
+.github/
+.agent/
+.claude/
+.claude.bak*/
+.gemini/
+.kilocode/
+.kiro/
+.qoder/
+.qwen/
+.serena/
+
+# ============================================================================
+# Python caches and virtual environments
+# ============================================================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.venv/
+venv/
+env/
+ENV/
+
+# ============================================================================
+# Archives, backups, and old copies
+# ============================================================================
+archive/
+archive_new/
+backup/
+Recovered/
+B_run1/
+monitoring - OLD/
+DASHBOARD - old/
+older version/
+src-Copy*/
+src-Copy-old*/
+src-Copy-old-copy*/
+codex_sgent*/
+
+# ============================================================================
+# Large generated outputs and diagnostics
+# ============================================================================
+OUTPUTS/**
+logs/**
+diagnostics/**
+diagnostics_output/**
+processing_states/**
+results/**
+runs/**
+runs_phase*_test/**
+runs_phase*_balanced/**
+runs_phase*_highrecall/**
+report/**
+AGENT REPORT/**
+RESERACH/REPORT/**
+LLM_ANALYSIS_PACKAGE/**
+
+# ============================================================================
+# Large/binary file types
+# ============================================================================
+*.csv
+*.jsonl
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.svg
+*.pdf
+*.docx
+*.xlsx
+*.xls
+*.zip
+*.7z
+*.tar
+*.gz
+*.rar
+*.mp4
+*.mov
+*.avi
+*.mp3
+*.wav
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+*.old
+
+# ============================================================================
+# Keep latest/current/previous artifacts (place after ignores)
+# ============================================================================
+!OUTPUTS/
+!OUTPUTS/**/
+!logs/
+!logs/**/
+!diagnostics/
+!diagnostics/**/
+!diagnostics_output/
+!diagnostics_output/**/
+!runs/
+!runs/**/
+!report/
+!report/**/
+!AGENT REPORT/
+!AGENT REPORT/**/
+!RESERACH/
+!RESERACH/REPORT/
+!RESERACH/REPORT/**/
+!LLM_ANALYSIS_PACKAGE/
+!LLM_ANALYSIS_PACKAGE/**/
+
+!**/latest*/
+!**/latest*/**
+!**/current*/
+!**/current*/**
+!**/previous*/
+!**/previous*/**
+!**/prev*/
+!**/prev*/**
+!**/*latest*
+!**/*current*
+!**/*previous*
+!**/*prev*

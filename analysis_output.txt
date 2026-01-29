@@ -1,56 +1,46 @@
-Loading cache from: c:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk_products_cache.json
-Total products in cache: 3365
+================================================================================
+INDEPENDENT ANALYSIS OF REPORT PRODUCTS
+================================================================================
 
---- Category Counts ---
-https://angelwholesale.co.uk/Category/A-To-Z-wholesale: 62
-https://angelwholesale.co.uk/Category/All-Baby-and-child: 397
-https://angelwholesale.co.uk/Category/All-Bears: 54
-https://angelwholesale.co.uk/Category/All-Clothing-blanks: 69
-https://angelwholesale.co.uk/Category/All-Fabric-wrap: 25
-https://angelwholesale.co.uk/Category/All-Florist-Accessories-: 198
-https://angelwholesale.co.uk/Category/All-Gifts-for-children: 260
-https://angelwholesale.co.uk/Category/All-Hamper-Supplies: 125
-https://angelwholesale.co.uk/Category/All-Party-supplies: 66
-https://angelwholesale.co.uk/Category/All-Ribbons-and-bows: 380
-https://angelwholesale.co.uk/Category/All-School-bags: 19
-https://angelwholesale.co.uk/Category/All-Shop-by-age: 52
-https://angelwholesale.co.uk/Category/All-Suki-Gifts: 30
-https://angelwholesale.co.uk/Category/All-Summer-Time: 185
-https://angelwholesale.co.uk/Category/Angel-Wholesale-Pets-Grooming: 6
-https://angelwholesale.co.uk/Category/Anniversary-Gifts-wholesale: 62
-https://angelwholesale.co.uk/Category/Artificial-Flowers-wholesale: 374
-https://angelwholesale.co.uk/Category/Aurora: 61
-https://angelwholesale.co.uk/Category/Baby-Bathing-Hygiene/Angel-Wholesale: 42
-https://angelwholesale.co.uk/Category/Baby-Blankets-and-Bedding: 122
-https://angelwholesale.co.uk/Category/Baby-Clothing: 240
-https://angelwholesale.co.uk/Category/Baby-Clothing/Angel-Wholesale: 87
-https://angelwholesale.co.uk/Category/Baby-Clothing/Hair-Accessories: 9
-https://angelwholesale.co.uk/Category/Baby-Clothing/Hooded-Towels-and-Robes: 7
-https://angelwholesale.co.uk/Category/Baby-favours-wholesale: 10
-https://angelwholesale.co.uk/Category/Baby-Feeding/Angel-Wholesale: 63
-https://angelwholesale.co.uk/Category/Baby-Gifting/Angel-Wholesale: 121
-https://angelwholesale.co.uk/Category/Baby-Gifts-wholesale: 40
-https://angelwholesale.co.uk/Category/Baby-Nursery/Angel-Wholesale: 18
-https://angelwholesale.co.uk/Category/Baby-Shower/Angel-Wholesale: 91
-https://angelwholesale.co.uk/Category/Baby-Socks-and-Tights: 3
-https://angelwholesale.co.uk/Category/Baby-Town-wholesale: 9
-https://angelwholesale.co.uk/Category/Baby-Toys/Angel-Wholesale: 31
-https://angelwholesale.co.uk/Category/Baby-Toys/Rattles/Plush-Toys: 3
-https://angelwholesale.co.uk/Category/Baby-Toys/Soothers-and-Comforters: 3
-https://angelwholesale.co.uk/Category/Avengers-Theme-Party-wholesale: 4
-https://angelwholesale.co.uk/Category/All-Cake-crafts-and-sweet-trees: 8
-https://angelwholesale.co.uk/Category/All-Gift-bags: 27
-https://angelwholesale.co.uk/Category/Baby-Socks-and-Booties: 2
+Rows extracted from reports:
+  GPT Report: 245 rows
+  Gemini Report: 42 rows
+  Codex Report: 291 rows
 
---- Multi-Category Products: 0 ---
+================================================================================
+ANALYZING ALL SOURCE ROWS INDEPENDENTLY...
+================================================================================
 
---- Analysis: https://angelwholesale.co.uk/Category/Baby-Socks-and-Booties ---
-Products with source_url = target_cat: 2
-Product in target cat also in: ['https://angelwholesale.co.uk/Category/Baby-Socks-and-Booties']
-Product in target cat also in: ['https://angelwholesale.co.uk/Category/Baby-Socks-and-Booties']
+================================================================================
+INDEPENDENT ANALYSIS RESULTS (MY ASSESSMENT)
+================================================================================
 
---- Simulating Retrieval Bug ---
+Total Rows Analyzed: 1411
 
-Products in https://angelwholesale.co.uk/Category/Baby-Socks-and-Booties:
- - Soft Touch White Acrylic Knitted Bootees (0 -3 Months) (Assorted Designs) (https://angelwholesale.co.uk/Item/Soft-Acrylic-Cable-Knitted-Bootees--by-Soft-Touch-gac0801)
- - Soft Touch Printed Christmas Tights (0-12 Months) (Assorted Designs) (https://angelwholesale.co.uk/Item/Soft-Touch-Keep-Calm-Slip-On-Shoes-0---12-Months-gac0789)
+=== MY INDEPENDENT CATEGORIZATION ===
+  VALID (Confirmed Good): 18
+  HIGHLY_LIKELY: 33
+  NEEDS_VERIFICATION: 153
+  INVALID (No Match): 1207
+
+================================================================================
+REPORT COMPARISON (Based on MY Independent Analysis)
+================================================================================
+
+Report       | VALID Captured   | LIKELY Captured   | VERIFY Captured   | Total Listed
+--------------------------------------------------------------------------------
+GPT          | 18/18            | 33/33             | 77/153            | 245         
+Gemini       | 0/18            | 0/33             | 2/153            | 42          
+Codex        | 18/18            | 33/33             | 125/153            | 291         
+
+================================================================================
+VALID PRODUCTS (Confirmed Good Matches)
+================================================================================
+Traceback (most recent call last):
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\independent_analysis.py", line 301, in <module>
+    print(f"Row {row['RowID']:4d} [{gpt_mark}] [{gem_mark}] [{cod_mark}] | {row['Reason']}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 10: character maps to <undefined>

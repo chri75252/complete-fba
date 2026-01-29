@@ -1,0 +1,96 @@
+================================================================================
+INVESTIGATION: Missing Profit Data in final ver.xlsx
+================================================================================
+
+ALL COLUMNS: ['Verdict', 'Confidence', 'SupplierTitle', 'AmazonTitle', 'Supplier EAN', 'Amazon EAN', 'ASIN', 'SupplierPrice', 'SellingPrice', 'NetProfit', 'ROI', 'Sales', 'Pack Verdict', 'Adjusted Profit', 'Key Match Evidence', 'Filter Reason']
+
+ROWS WITH MISSING 'Adjusted Profit': 5
+--------------------------------------------------------------------------------
+Row 24: PAN AROMA C TEA-LIGHTS 16PK APP&CIN
+  ASIN: B083XH692T
+  ROI: 2.6
+  NetProfit (raw): 2.19
+  Adjusted Profit: MISSING
+  Verdict: VERIFIED - AUDITED OUT
+  Pack Verdict: nan
+  Filter Reason: nan
+
+Row 33: SUPERIOR FOIL 10 CONTAINERS & LID 9X9IN
+  ASIN: B0DJDH23JW
+  ROI: 0.54
+  NetProfit (raw): 2.0
+  Adjusted Profit: MISSING
+  Verdict: nan
+  Pack Verdict: nan
+  Filter Reason: nan
+
+Row 34: SUPERIOR FOIL 5 CONTAINERS & LID 9X13IN
+  ASIN: B07GZGXQYG
+  ROI: 0.67
+  NetProfit (raw): 2.5
+  Adjusted Profit: MISSING
+  Verdict: nan
+  Pack Verdict: nan
+  Filter Reason: nan
+
+Row 35: SUPERIOR FOIL 10 TRAY 9X13 INCH
+  ASIN: B074ZH6DXK
+  ROI: 0.46
+  NetProfit (raw): 1.7
+  Adjusted Profit: MISSING
+  Verdict: VERIFIED - AUDITED OUT
+  Pack Verdict: nan
+  Filter Reason: nan
+
+Row 36: SUPERIOR FOIL 10 CONTAINERS & LID 10X12
+  ASIN: B08L66NXB5
+  ROI: 0.63
+  NetProfit (raw): 3.0
+  Adjusted Profit: MISSING
+  Verdict: nan
+  Pack Verdict: nan
+  Filter Reason: nan
+
+--------------------------------------------------------------------------------
+ROOT CAUSE ANALYSIS
+--------------------------------------------------------------------------------
+
+SUPERIOR BRAND PRODUCTS: 5 total
+
+  SUPERIOR FOIL 10 CONTAINERS & LID 9X9IN
+    NetProfit: 2.13 | Adjusted Profit: 2.13 (OK)
+    Verdict: VERIFIED
+
+  SUPERIOR FOIL 10 CONTAINERS & LID 9X9IN
+    NetProfit: 2.0 | Adjusted Profit: nan (MISSING)
+    Verdict: nan
+
+  SUPERIOR FOIL 5 CONTAINERS & LID 9X13IN
+    NetProfit: 2.5 | Adjusted Profit: nan (MISSING)
+    Verdict: nan
+
+  SUPERIOR FOIL 10 TRAY 9X13 INCH
+    NetProfit: 1.7 | Adjusted Profit: nan (MISSING)
+    Verdict: VERIFIED - AUDITED OUT
+
+  SUPERIOR FOIL 10 CONTAINERS & LID 10X12
+    NetProfit: 3.0 | Adjusted Profit: nan (MISSING)
+    Verdict: nan
+
+--------------------------------------------------------------------------------
+CONCLUSION
+--------------------------------------------------------------------------------
+
+Missing profit breakdown:
+  - AUDITED OUT (excluded from analysis): 2
+  - No verdict (incomplete data): 3
+  - Other: 0
+
+EXPLANATION:
+The 'Adjusted Profit' column was NOT calculated for rows where:
+1. The product was marked as 'AUDITED OUT' (excluded during prior review)
+2. The row has no verdict (incomplete/missing source data)
+3. Pack quantity adjustment could not be determined
+
+These products have ROI values but the Adjusted Profit was intentionally
+left blank because the profit figure requires pack/quantity validation.

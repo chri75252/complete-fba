@@ -1,0 +1,221 @@
+diff --git a/tools/passive_extraction_workflow_latest.py b/tools/passive_extraction_workflow_latest.py
+index 27d55006..af6532ce 100644
+--- a/tools/passive_extraction_workflow_latest.py
++++ b/tools/passive_extraction_workflow_latest.py
+@@ -2014,46 +2014,9 @@ class PassiveExtractionWorkflow:
+         if amazon_total > 0 and amazon_completed > amazon_total:
+             amazon_completed = amazon_total
+ 
+-        # Read-only human-readable ratios in state for debugging.
+-        # NOTE: Write into root state so these appear next to system_progression
+-        # in the processing_state file.
+-        try:
+-            root_state = self.state_manager.state_data
+-
+-            # Category progress as cat_idx/total_categories
+-            cat_idx = int(
+-                sp.get("current_category_index")
+-                or sp.get("persistent_category_index")
+-                or start_category_index
+-                or 1
+-            )
+-
+-            # Prefer the total_categories already stored in system_progression.
+-            total_cats = int(sp.get("total_categories", 0) or 0)
+-            if total_cats <= 0:
+-                # Fallback: compute from predefined category list if available.
+-                try:
+-                    total_cats = int(self._authoritative_total_categories())
+-                except Exception:
+-                    total_cats = 0
+-
+-            if total_cats < 0:
+-                total_cats = 0
+-
+-            root_state["category_progress"] = (
+-                f"{cat_idx}/{total_cats}" if total_cats > 0 else f"{cat_idx}/0"
+-            )
+-
+-            # These ratios mirror the clamped values used above.
+-            root_state["supplier_progress_ratio_readable"] = (
+-                f"{supplier_completed}/{supplier_total}"
+-            )
+-            root_state["amazon_progress_ratio_readable"] = (
+-                f"{amazon_completed}/{amazon_total}"
+-            )
+-        except Exception:
+-            # Never let display-only fields break resume logic.
+-            pass
++        # Ensure human-readable progress fields reflect the current counters.
++        # This is display-only and must never affect resume logic.
++        self._refresh_human_progress_fields()
+ 
+         # If there is no recorded work for either phase, keep the persisted phase.
+         if supplier_total <= 0 and amazon_total <= 0:
+@@ -2096,6 +2059,59 @@ class PassiveExtractionWorkflow:
+ 
+         return current_phase
+ 
++    def _refresh_human_progress_fields(self) -> None:
++        """
++        Mirror the current numeric counters in system_progression into the
++        human-readable ratio fields in both system_progression and at the
++        top level of the processing state.
++
++        This is display-only and must never affect workflow logic.
++        """
++        try:
++            root_state = self.state_manager.state_data
++            sp = root_state.get("system_progression", {}) or {}
++
++            # Category index and total categories
++            cat_idx = int(
++                sp.get("current_category_index")
++                or sp.get("persistent_category_index")
++                or 1
++            )
++            total_cats = int(sp.get("total_categories", 0) or 0)
++            if total_cats < 0:
++                total_cats = 0
++
++            # Live counters (already maintained elsewhere)
++            supplier_total = int(sp.get("supplier_products_needing_extraction", 0) or 0)
++            supplier_completed = int(sp.get("supplier_products_completed", 0) or 0)
++            amazon_total = int(sp.get("amazon_products_needing_analysis", 0) or 0)
++            amazon_completed = int(sp.get("amazon_products_completed", 0) or 0)
++
++            # Clamp completed for display only (do not mutate the counters)
++            if supplier_total > 0 and supplier_completed > supplier_total:
++                supplier_completed = supplier_total
++            if amazon_total > 0 and amazon_completed > amazon_total:
++                amazon_completed = amazon_total
++
++            cat_ratio = (
++                f"{cat_idx}/{total_cats}" if total_cats > 0 else f"{cat_idx}/0"
++            )
++            supplier_ratio = f"{supplier_completed}/{supplier_total}"
++            amazon_ratio = f"{amazon_completed}/{amazon_total}"
++
++            # Canonical copies live inside system_progression
++            sp["category_progress"] = cat_ratio
++            sp["supplier_progress_ratio_readable"] = supplier_ratio
++            sp["amazon_progress_ratio_readable"] = amazon_ratio
++
++            # Mirror to top-level convenience fields for easier manual inspection
++            root_state["category_progress"] = cat_ratio
++            root_state["supplier_progress_ratio_readable"] = supplier_ratio
++            root_state["amazon_progress_ratio_readable"] = amazon_ratio
++        except Exception:
++            # Never let display-only updates break the workflow.
++            return
++
+     async def run(self):
+         """Main execution loop for the workflow."""
+         profitable_results: List[Dict[str, Any]] = []
+@@ -3477,10 +3493,10 @@ class PassiveExtractionWorkflow:
+             self.log.error(f" CRITICAL: Failed to create linking map path: {path_error}")
+             return
+ 
+-        #  ATOMIC SAVE: Use Windows Save Guardian with alt-temp strategy
+-        self.log.info(
+-            f" ATOMIC SAVE: Attempting to save {len(self.linking_map)} entries using atomic strategy..."
+-        )
++            #  ATOMIC SAVE: Use Windows Save Guardian with alt-temp strategy
++            self.log.info(
++                f" ATOMIC SAVE: Attempting to save {len(self.linking_map)} entries using atomic strategy..."
++            )
+ 
+         try:
+             #  SENTINEL MONITORING: Track save attempt
+@@ -3512,8 +3528,21 @@ class PassiveExtractionWorkflow:
+                         f" HASH INDEXES REBUILT: Updated indexes for {len(self.linking_map)} entries"
+                     )
+ 
++                    # NEW: Mirror global successful_products into state using the same count.
++                    # This keeps dashboard/state totals aligned with the linking map file.
++                    try:
++                        if hasattr(self, "state_manager") and self.state_manager is not None:
++                            state = self.state_manager.state_data
++                            state["successful_products"] = len(self.linking_map)
++                            # Preserve interruption state; do not trigger startup recompute.
++                            self.state_manager.save_state(preserve_interruption_state=True)
++                    except Exception as e:
++                        self.log.warning(f" METRICS MIRROR FAILED (successful_products): {e}")
++
+                     #  SENTINEL MONITORING: Check for linking map shrinkage
+-                    self.sentinel_monitor.check_linking_map_shrinkage(current_size, previous_size)
++                    self.sentinel_monitor.check_linking_map_shrinkage(
++                        current_size, previous_size
++                    )
+                     self.sentinel_monitor.track_save_retry(
+                         "windows_save_guardian", True, retry_count
+                     )
+@@ -4772,19 +4801,33 @@ Return ONLY valid JSON, no additional text."""
+             if success:
+                 file_size = os.path.getsize(final_path)
+                 self.log.info(
+-                    f" ATOMICALLY saved {len(all_products)} products ({new_count} new) to cache: {os.path.basename(final_path)} (size: {file_size} bytes)"
++                    f" ATOMICALLY saved {len(all_products)} products ({new_count} new) to cache: "
++                    f"{os.path.basename(final_path)} (size: {file_size} bytes)"
+                 )
+ 
+                 # ?? ATOMIC FIX 6: Update in-memory cache while preserving reference used by appends
+-                if hasattr(self, '_current_all_products') and isinstance(self._current_all_products, list):
++                if hasattr(self, "_current_all_products") and isinstance(
++                    self._current_all_products, list
++                ):
+                     try:
+                         self._current_all_products[:] = all_products
+                     except Exception:
+                         self._current_all_products = list(all_products)
+                     self.log.debug(
+-                        f'?? SYNC: In-memory cache updated in-place ({len(all_products)} products)'
++                        f"?? SYNC: In-memory cache updated in-place ({len(all_products)} products)"
+                     )
+ 
++                # NEW: Mirror global supplier total into state for dashboards/metrics.
++                # This uses the same count already logged above and does NOT touch resume pointers.
++                try:
++                    if hasattr(self, "state_manager") and self.state_manager is not None:
++                        state = self.state_manager.state_data
++                        state["total_products"] = len(all_products)
++                        # Preserve interruption state so no startup recalculation is triggered.
++                        self.state_manager.save_state(preserve_interruption_state=True)
++                except Exception as e:
++                    self.log.warning(f" METRICS MIRROR FAILED (total_products): {e}")
++
+                 # Keep Step-2 deterministic within the same run: update key set immediately
+                 try:
+                     for product in products:
+@@ -4792,7 +4835,10 @@ Return ONLY valid JSON, no additional text."""
+                             product.pop("sku", None)
+                         except Exception:
+                             pass
+-                        k_new = stable_key(normalize_url(product.get("url")), self._valid_ean_for_key(product.get("ean")))
++                        k_new = stable_key(
++                            normalize_url(product.get("url")),
++                            self._valid_ean_for_key(product.get("ean")),
++                        )
+                         if k_new:
+                             self.product_cache_key_index.add(k_new)
+                 except Exception as e:
+@@ -6516,12 +6562,19 @@ Return ONLY valid JSON, no additional text."""
+ 
+                     self._last_cache_count = current_count
+ 
++                # After supplier progress commit, keep ratio fields in sync.
++                self._refresh_human_progress_fields()
++
+             elif operation_type == "amazon_analysis":
+                 if progress_config.get("progress_display", {}).get("show_amazon_progress", True):
+                     self.log.info(
+                         f" AMAZON ANALYSIS: Processing queue index {product_index}/{authoritative_total}"
+                     )
+ 
++                # Amazon and supplier progress both update shared counters in
++                # system_progression; keep the human-readable ratios in sync.
++                self._refresh_human_progress_fields()
++
+         return progress_callback
+         return progress_callback
+ 

@@ -1,0 +1,498 @@
+# Amazon FBA Agent System - Project Index 2026
+
+> **Generated**: 2026-01-22
+> **Version**: 3.5.0
+> **Status**: Production Ready
+
+---
+
+## 📋 Executive Summary
+
+The **Amazon FBA Agent System** is a production-ready automation platform for FBA product sourcing from wholesale supplier websites to Amazon marketplace. It features file-grounded state management, Chrome v139+ compatibility, Streamlit dashboard monitoring, and resumable processing workflows using Playwright browser automation.
+
+**Key Characteristics:**
+- **Configurable Entry Point**: Launched via `run_custom_poundwholesale.py` with settings from `config/system_config.json`
+- **No AI Logic**: All AI features **disabled** - uses deterministic, selector-based scraping and matching
+- **Single-Phase Price Scraping**: Processes full price range (`min_price_gbp` to `max_price_gbp` from config)
+- **Complete Resumable Processing**: Full workflow implementation with state persistence after every operation
+- **Chrome v139+ Compatible**: IPv6/IPv4 dual-stack implementation with automatic endpoint detection
+- **File-Grounded State**: All state calculations based on actual files, not memory variables
+- **Real-Time Monitoring**: Streamlit dashboard for system health, matching performance, and financial analytics
+- **Multi-Supplier Support**: Can be configured for any wholesale supplier through guided onboarding skill
+
+---
+
+## 🏗️ Architecture Overview
+
+### System Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    ENTRY POINTS                                  │
+│  run_custom_poundwholesale.py | run_complete_fba_system.py     │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              PASSIVE EXTRACTION WORKFLOW                         │
+│         (tools/passive_extraction_workflow_latest.py)            │
+│                                                                   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  1. SYSTEM INITIALIZATION                                │   │
+│  │     • Chrome CDP connection (IPv6/IPv4 auto-detection)   │   │
+│  │     • Authentication verification                        │   │
+│  │     • Configuration loading (system_config.json)         │   │
+│  │     • Startup state analysis (file-grounded)             │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                              │                                    │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  2. CATEGORY PROCESSING SEQUENCE                         │   │
+│  │     For each category in config/poundwholesale_categories: │ │
+│  │     a. URL Discovery & Manifest Generation               │   │
+│  │     b. Category Initialization                           │   │
+│  │     c. Product Processing Loop                           │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                              │                                    │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  3. PRODUCT ANALYSIS PIPELINE                             │   │
+│  │     • Supplier data extraction                           │   │
+│  │     • Amazon analysis (EAN-first, title fallback)        │   │
+│  │     • Financial calculations (UK marketplace, 20% VAT)   │   │
+│  │     • Atomic state commits                               │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                              │                                    │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  4. OUTPUT GENERATION                                    │   │
+│  │     • Financial reports (CSV with ROI analysis)          │   │
+│  │     • Linking maps (EAN-to-ASIN mappings)                │   │
+│  │     • Amazon cache (individual product data)             │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    STREAMLIT DASHBOARD                           │
+│                   (dashboard/app.py)                              │
+│            Real-time monitoring and visualization                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📁 Directory Structure
+
+### Root Level
+
+```
+Amazon-FBA-Agent-System/
+├── run_custom_poundwholesale.py          # Main entry point
+├── run_complete_fba_system.py            # Alternative launcher
+├── CLAUDE.md                             # Project documentation
+├── README.md                             # Project overview
+├── requirements.txt                      # Python dependencies
+└── .env                                 # Environment variables
+```
+
+### Core Tools (`tools/`)
+
+| File | Purpose | Lines | Status |
+|------|---------|-------|--------|
+| `passive_extraction_workflow_latest.py` | Main orchestrator | 2,650 | ✅ Active |
+| `configurable_supplier_scraper.py` | Supplier data extraction | ~800 | ✅ Active |
+| `amazon_playwright_extractor.py` | Amazon product extraction | ~1,200 | ✅ Active |
+| `FBA_Financial_calculator.py` | Financial analysis & ROI | ~600 | ✅ Active |
+| `supplier_authentication_service.py` | Session management | ~400 | ✅ Active |
+
+### Utilities (`utils/`)
+
+| File | Purpose | Key Functionality |
+|------|---------|-------------------|
+| `fixed_enhanced_state_manager.py` | **CRITICAL**: File-grounded state management | Freeze-mark-resume architecture |
+| `browser_manager.py` | Chrome CDP connection management | IPv6/IPv4 dual-stack |
+| `windows_save_guardian.py` | Atomic file operations | Windows compatibility |
+| `path_manager.py` | Cross-platform path management | Consistent paths across OS |
+| `sentinel_monitor.py` | System monitoring & divergence detection | Health checks |
+| `windows_memory_manager.py` | Windows process monitoring | Memory tracking |
+| `wsl_memory_manager.py` | Linux/WSL memory management | Alternative memory backend |
+| `hash_lookup_optimizer.py` | O(1) duplicate prevention | Performance optimization |
+
+### Configuration (`config/`)
+
+| File | Purpose | Key Settings |
+|------|---------|--------------|
+| `system_config.json` | Main configuration | Processing limits, browser, API keys |
+| `poundwholesale_categories.json` | Category URLs | 233 predefined categories |
+| `supplier_configs/` | Supplier-specific configs | Authentication, selectors |
+
+### Dashboard (`dashboard/`)
+
+| File | Purpose | Technology |
+|------|---------|------------|
+| `app.py` / `app_fixed.py` | Main web interface | Streamlit |
+| `metrics_core.py` / `metrics_core_fixed.py` | Data processing engine | Pandas |
+| `run_dashboard.py` | Dashboard launcher | Python script |
+
+### Output Structure (`OUTPUTS/`)
+
+```
+OUTPUTS/
+├── cached_products/                              # Supplier product cache
+│   └── poundwholesale-co-uk_products_cache.json
+├── FBA_ANALYSIS/
+│   ├── amazon_cache/                             # Individual Amazon product data
+│   │   └── amazon_{ASIN}_{EAN_or_title}.json
+│   ├── linking_maps/                             # EAN→ASIN mappings
+│   │   └── poundwholesale.co.uk/
+│   │       └── linking_map.json
+│   └── financial_reports/                        # Profitability analysis
+│       └── fba_financial_report_{timestamp}.csv
+├── CACHE/
+│   └── processing_states/                        # State management
+│       └── poundwholesale-co-uk_processing_state.json
+├── DIAGNOSTICS/                                  # System diagnostics
+│   ├── save_telemetry.log
+│   ├── sentinels.log
+│   └── monitor_trace.log
+└── logs/
+    ├── debug/                                    # Detailed execution logs
+    │   └── run_custom_poundwholesale_{timestamp}.log
+    └── health/                                   # System health monitoring
+```
+
+---
+
+## 🔧 Core Components Reference
+
+### 1. PassiveExtractionWorkflow (Main Orchestrator)
+
+**File**: `tools/passive_extraction_workflow_latest.py` (Lines: 851-2650)
+
+**Key Methods**:
+- `__init__()` (Lines: 860-989): System initialization and configuration loading
+- `run()` (Lines: 1970-2316): Main execution entry point
+- `_extract_supplier_products()` (Lines: 2318-2435): Batched supplier scraping
+- `_get_amazon_data()` (Lines: 2437-2525): EAN-first, title-fallback logic
+
+**Dependencies**:
+- `config/system_config.json` for all operational parameters
+- `utils/fixed_enhanced_state_manager.py` for state management
+- `tools/configurable_supplier_scraper.py` for supplier data
+- `tools/amazon_playwright_extractor.py` for Amazon data
+- `tools/FBA_Financial_calculator.py` for ROI analysis
+
+### 2. EnhancedStateManager (State Management)
+
+**File**: `utils/fixed_enhanced_state_manager.py`
+
+**Architecture**: Freeze-Mark-Resume
+- **Freeze**: Write-once denominator (total URLs per category)
+- **Mark**: Atomic progress tracking after each operation
+- **Resume**: File-grounded calculations for continuation
+
+**Critical Methods**:
+- `update_progression_unified()`: ONLY correct method for state updates
+- `load_state()`: Reconstruct state from linking_map.json
+- `get_resume_point()`: Calculate next product to process
+
+**State Structure**:
+```json
+{
+  "system_progression": {
+    "current_phase": "supplier_extraction | amazon_analysis",
+    "category_index": 42,
+    "product_index": 1337,
+    "total_categories": 233,
+    "total_products": 45000
+  }
+}
+```
+
+### 3. FixedAmazonExtractor (Amazon Integration)
+
+**File**: `tools/passive_extraction_workflow_latest.py` (Lines: 435-830)
+
+**Key Methods**:
+- `search_by_ean_and_extract_data()` (Lines: 625-795): High-confidence EAN search
+- `extract_data()` (Lines: 824-848): ASIN data extraction
+
+**Matching Strategy**:
+1. **EAN Search**: Direct barcode lookup on Amazon
+2. **Sponsored Filter**: Remove promoted products
+3. **Title Similarity**: Score matches (threshold: 0.25)
+4. **Fallback**: Title search if EAN fails
+
+### 4. Streamlit Dashboard
+
+**File**: `dashboard/app.py` or `dashboard/app_fixed.py`
+
+**Key Panels**:
+- **Health Panel**: System status, Chrome connection, state validation
+- **Metrics Panel**: Products processed, match rates, financial summaries
+- **Progress Panel**: Category completion, resume point tracking
+- **Diagnostics Panel**: Recent logs, error tracking
+
+**Launch**:
+```bash
+streamlit run dashboard/app.py --server.port 8501
+```
+
+---
+
+## 🔄 Workflow Sequences
+
+### Startup Sequence
+
+```
+1. Chrome Debug Port Verification
+   ├─ Check IPv6: curl -6 http://localhost:9222/json/version
+   └─ Check IPv4: curl -4 http://localhost:9222/json/version
+
+2. BrowserManager Initialization
+   ├─ Auto-detect IPv6/IPv4 endpoint
+   └─ Establish CDP connection
+
+3. Authentication Verification
+   ├─ Check existing session
+   └─ Login if required (supplier-specific)
+
+4. Configuration Loading
+   ├─ Load system_config.json
+   ├─ Load supplier categories
+   └─ Initialize EnhancedStateManager
+
+5. State Analysis
+   ├─ Load processing_state.json
+   ├─ Calculate resume point
+   └─ Validate frozen denominators
+```
+
+### Category Processing Sequence
+
+```
+For each category in poundwholesale_categories.json:
+
+1. URL Discovery & Manifest Generation
+   ├─ Scrape category page for all product URLs
+   ├─ Save complete URL list atomically to manifest
+   └─ Freeze denominator (write-once, never changes)
+
+2. Category Initialization
+   ├─ Initialize with frozen denominator
+   ├─ Setup progress tracking
+   └─ Handle empty categories (denominator=0)
+
+3. Product Processing Loop
+   For each product:
+   ├─ Resume pointer validation
+   ├─ Supplier data extraction
+   ├─ Amazon analysis (EAN-first, title fallback)
+   ├─ Financial calculations
+   └─ Atomic state commit
+```
+
+### Interruption & Resume Sequence
+
+```
+INTERRUPTION (Ctrl+C, crash, network loss)
+         │
+         ▼
+Atomic State Persistence
+├─ WindowsSaveGuardian ensures write completion
+├─ Resume pointer saved as {phase, cat_idx, prod_idx}
+└─ All files validated before commit
+         │
+         ▼
+RESUME (System restart)
+├─ Load processing_state.json
+├─ Reconstruct progress from linking_map.json
+├─ Validate frozen denominators unchanged
+└─ Continue from last saved pointer
+```
+
+---
+
+## 🔐 Configuration System
+
+### system_config.json Structure
+
+```json
+{
+  "system": {
+    "name": "Amazon FBA Agent System",
+    "version": "3.5.0",
+    "max_products": 1000000,
+    "max_products_per_category": 2000,
+    "supplier_extraction_batch_size": 100
+  },
+  "processing_limits": {
+    "min_price_gbp": 0.01,
+    "max_price_gbp": 20.0,
+    "price_midpoint_gbp": 20.0
+  },
+  "pipeline_toggles": {
+    "separate_supplier_amazon_loops": true,
+    "frozen_category_denominator": true,
+    "resume_abs_index_math": true
+  },
+  "workflows": {
+    "poundwholesale_workflow": {
+      "supplier_name": "poundwholesale.co.uk",
+      "use_predefined_categories": true
+    }
+  },
+  "credentials": {
+    "poundwholesale.co.uk": {
+      "username": "...",
+      "password": "..."
+    }
+  }
+}
+```
+
+### Key Configuration Sections
+
+| Section | Purpose | Critical Settings |
+|---------|---------|-------------------|
+| `system` | Global settings | batch sizes, limits |
+| `processing_limits` | Price filtering | min/max_price_gbp |
+| `pipeline_toggles` | Feature flags | frozen_category_denominator |
+| `workflows` | Supplier configs | URLs, authentication |
+| `credentials` | Login credentials | username/password |
+| `analysis` | Financial criteria | ROI thresholds |
+
+---
+
+## 🚀 Running the System
+
+### Prerequisites
+
+1. **Start Chrome with debug port** (REQUIRED):
+   ```bash
+   # Windows
+   chrome --remote-debugging-port=9222 --user-data-dir=C:\temp\chrome-debug
+
+   # Linux
+   google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug &
+   ```
+
+2. **Verify Chrome connection**:
+   ```bash
+   curl http://localhost:9222/json/version
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   playwright install chromium
+   ```
+
+### Execution Commands
+
+```bash
+# Main workflow
+python run_custom_poundwholesale.py
+
+# Alternative entry point
+python run_complete_fba_system.py
+
+# Dashboard monitoring
+streamlit run dashboard/app.py
+
+# Dashboard via launcher
+python dashboard/run_dashboard.py
+```
+
+### Environment Variables
+
+```bash
+# Required
+CHROME_REMOTE_PORT=9222
+PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
+OUTPUTS_BASE_PATH=./OUTPUTS
+
+# Optional
+FBA_BASE_DIR=/path/to/project
+SUPPLIER_SESSION_TIMEOUT=3600
+```
+
+---
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+| Issue | Symptom | Solution |
+|-------|---------|----------|
+| Chrome connection | "Failed to connect to Chrome" | Start Chrome with `--remote-debugging-port=9222` |
+| Authentication | Login failures | Clear auth cache: `rm -rf OUTPUTS/CACHE/auth_sessions/` |
+| State corruption | Incorrect progress | Rebuild: `python utils/fixed_enhanced_state_manager.py --rebuild-from-cache` |
+| Dashboard blank | Missing data | Verify `FBA_BASE_DIR` and file structure |
+
+### Diagnostic Commands
+
+```bash
+# Chrome health check
+python utils/browser_manager.py --health-check --auto-restart
+
+# State validation
+python utils/fixed_enhanced_state_manager.py --validate-state --supplier=poundwholesale-co-uk
+
+# System audit
+python run_system_audit.py
+```
+
+---
+
+## 📊 Monitoring & Analytics
+
+### Dashboard Metrics
+
+- **Health Panel**: Chrome status, state validation, processing phase
+- **Metrics Panel**: Products processed, match rate, profitable products
+- **Progress Panel**: Category completion, estimated time remaining
+- **Financials**: Total profit, average ROI, best performing products
+
+### Log Files
+
+```
+OUTPUTS/logs/debug/          # Detailed execution logs
+OUTPUTS/logs/health/         # System health monitoring
+OUTPUTS/DIAGNOSTICS/         # Diagnostic telemetry
+```
+
+---
+
+## 🔗 Cross-References
+
+### Related Documentation
+
+- `README.md` - Project overview and quick start
+- `CLAUDE.md` - Comprehensive technical documentation
+- `docs/README.md` - Technical documentation index
+- `dashboard/README.md` - Dashboard setup and usage
+- `.claude/skills/supplier-onboarding/` - Multi-supplier integration guide
+
+### Implementation Guides
+
+- `docs/PULL_REQUEST_CHECKLIST.md` - Development standards
+- `latest_workflow.md` - Detailed workflow behavior
+- `AGENTS.md` - Multi-agent orchestration
+
+---
+
+## 📈 System Status
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Core Workflow | ✅ Production Ready | v3.5.0 |
+| State Management | ✅ File-Grounded | Freeze-mark-resume |
+| Chrome Integration | ✅ v139+ Compatible | IPv6/IPv4 dual-stack |
+| Dashboard | ✅ Active | Streamlit monitoring |
+| Multi-Supplier | ✅ Configurable | Guided onboarding skill |
+
+---
+
+**Last Updated**: 2026-01-22
+**System Version**: 3.5.0
+**Platform Support**: Windows 10/11, Linux, WSL2
+**Python Compatibility**: 3.8+

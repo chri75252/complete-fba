@@ -1,7 +1,6 @@
 {
   "asin_from_details": "B00F4L9LXW",
   "title": "20cm Deep Mixing Bowl 20cm Pack of 3",
-  "current_price": 8.99,
   "main_image": "https://m.media-amazon.com/images/I/51eL-HpIGZL._AC_SL1500_.jpg",
   "thumbnails": [
     "https://m.media-amazon.com/images/I/21-roWDxL+L._SL1500_.jpg",
@@ -18,11 +17,9 @@
   "date_first_available_from_details": "5 Jan. 2021",
   "prime_eligible": false,
   "fulfilled_by_amazon": false,
-  "seller_info_text": "Super Saving Bargains",
-  "sold_by_amazon": false,
   "rating": 4.6,
-  "availability_text": "Only 2 left in stock.",
-  "in_stock": true,
+  "availability_text": "P.when(\"A\", \"load\").execute(\"aod-assets-loaded\", function(A){\n        function logAssetsNotLoaded() {\n            if (window.ueLogError) {\n                var customError = { message: 'Failed to load AOD assets for WDG: home_display_on_website, Device: web' };\n                var additionalInfo = {\n                    logLevel : 'ERROR',\n                    attribution : 'aod_assets_not_loaded'\n                };\n                ueLogError (customError, additionalInfo);\n            }\n            if (window.ue && window.ue.count) {\n                window.ue.count(\"aod-assets-not-loaded\", 1);\n            }\n        }\n\n        function verifyAssetsLoaded() {\n            var assetsLoadedPageState = A.state('aod:assetsLoaded');\n            var logAssetsNotLoadedState = A.state('aod:logAssetsNotLoaded');\n\n            if((assetsLoadedPageState == null || !assetsLoadedPageState.isAodAssetsLoaded)\n                && (logAssetsNotLoadedState == null || !logAssetsNotLoadedState.isAodAssetsNotLoadedLogged)) {\n                A.state('aod:logAssetsNotLoaded', {isAodAssetsNotLoadedLogged: true});\n                logAssetsNotLoaded();\n            }\n        }\n\n        setTimeout(verifyAssetsLoaded, 50000)\n    });",
+  "in_stock": false,
   "features": [
     "Deep, easy to clean and a set of 3."
   ],
@@ -44,13 +41,13 @@
     "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled",
     "product_details_tab_data": {
       "Title": "20cm Deep Mixing Bowl 20cm Pack of 3",
-      "Last Price Change": "1 minute ago",
-      "Buy Box Seller": "Super Saving Bargains (69% positive over last 12 months)",
-      "FBA Pick&Pack Fee": 3.26,
+      "Last Price Change": "2 hours ago",
+      "Buy Box - Buy Box Seller": "Amazon",
+      "FBA Pick&Pack Fee": 3.36,
       "Referral Fee %": "15.03 %",
-      "Referral Fee based on current Buy Box price": 1.8,
-      "Lowest FBM Seller": "Super Saving Bargains (69% positive over last 12 months)",
-      "Total Offer Count": "1",
+      "Referral Fee based on current Buy Box price": 1.65,
+      "Lowest FBM Seller": "Super Saving Bargains (60% positive over last 12 months)",
+      "Total Offer Count": "2",
       "Tracking since": "2021/01/24",
       "Listed since": "2021/01/05",
       "Categories - Root": "Home & Kitchen",
@@ -60,13 +57,9 @@
       "ASIN": "B00F4L9LXW",
       "Product Codes - EAN": "5038673170282",
       "Product Codes - PartNumber": "17028CC",
-      "Freq. Bought Together": "B075MDQ977, B092LVTXM1",
       "Type": "DISHWARE_BOWL",
       "Manufacturer": "PRIMA",
       "Brand": "Prima",
-      "Brand Store Name": "Prima",
-      "Brand Store URL Name": "PRIMA",
-      "Brand Store URL": "https://www.amazon.com/stores/PRIMA/page/7487BF0C-F17D-4462-A922-8B0A14A43B2F",
       "Product Group": "Home",
       "Model": "17028CC",
       "Unit Details - Unit Value": "1",
@@ -90,5 +83,5 @@
   "asin_extracted_from_page": "B00F4L9LXW",
   "asin_queried": "B00F4L9LXW",
   "asin": "B00F4L9LXW",
-  "_search_method_used": "EAN_cached"
+  "_search_method_used": "EAN"
 }

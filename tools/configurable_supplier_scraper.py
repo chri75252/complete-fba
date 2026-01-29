@@ -1564,8 +1564,17 @@ class ConfigurableSupplierScraper:
 
             await page.goto(category_url, wait_until="networkidle", timeout=30000)
 
+            # Load pagination safety limit from system config
+            # Default to 100 if not specified (allows ~4000 products at 40/page)
+            # This replaces the previous hardcoded limit of 10
+            pagination_limit = 100
+            if hasattr(self, "system_config") and self.system_config:
+                pagination_limit = self.system_config.get("processing_limits", {}).get(
+                    "pagination_safety_limit", 100
+                )
+            
             clicks = 0
-            max_clicks = 10  # Safety limit
+            max_clicks = pagination_limit  # Use configured limit
 
             while len(all_product_urls) < max_products and clicks < max_clicks:
                 # Extract product URLs from current page state

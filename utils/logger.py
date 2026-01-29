@@ -4,21 +4,25 @@ from datetime import datetime
 from typing import Optional
 
 
-def setup_logger(log_level: int = logging.DEBUG, logs_root: str = "logs") -> Optional[str]:
-    """Initialise root logger that logs to console & rotating file.
-
-    Returns
-    -------
-    Optional[str]
-        Absolute path to the debug log file (if it could be created), otherwise None.
-    """
+def setup_logger(
+    log_level: int = logging.DEBUG,
+    logs_root: str = "logs",
+    *,
+    supplier_name: Optional[str] = None,
+    runner_name: Optional[str] = None,
+) -> Optional[str]:
     try:
-        # Prepare log directory
         debug_dir = os.path.join(logs_root, "debug")
         os.makedirs(debug_dir, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        debug_log_file = os.path.abspath(os.path.join(debug_dir, f"run_custom_poundwholesale_{timestamp}.log"))
+        if runner_name:
+            base = runner_name
+        elif supplier_name:
+            base = f"run_custom_{supplier_name.replace('.', '-')}"
+        else:
+            base = "run_custom"
+        debug_log_file = os.path.abspath(os.path.join(debug_dir, f"{base}_{timestamp}.log"))
 
         # Clear any root handlers so we don't duplicate logs if this function is called twice
         root_logger = logging.getLogger()
@@ -40,4 +44,4 @@ def setup_logger(log_level: int = logging.DEBUG, logs_root: str = "logs") -> Opt
     except Exception as exc:  # pragma: no cover – shouldn't happen but we guard anyway
         print(f"❌ Failed to set up logging: {exc}")
         logging.basicConfig(level=logging.INFO)
-        return None 
+        return None

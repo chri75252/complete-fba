@@ -1,0 +1,111 @@
+{
+  "SUPPLIER_NAMING_CONVENTION": {
+    "explicit_units": [
+      "pce",
+      "pc",
+      "pcs",
+      "pk",
+      "pack",
+      "piece",
+      "pieces",
+      "set",
+      "assorted"
+    ],
+    "allow_trailing_number_as_qty": true,
+    "leading_multiplier_check": false,
+    "dimension_shield_keywords": [
+      "cm",
+      "mm",
+      "ml",
+      "ml",
+      "ltr",
+      "l",
+      "lt",
+      "kg",
+      "g",
+      "oz",
+      "inch",
+      "'",
+      "\""
+    ],
+    "brand_position": "start",
+    "sales_column": "bought_in_past_month",
+    "capacity_pattern_as_rsu": true,
+    "spec_x_shield_keywords": [
+      "magnification",
+      "zoom",
+      "microscope",
+      "scope",
+      "times",
+      "processor"
+    ],
+    "table_pipe_sanitization": false,
+    "single_item_keywords": [
+      "each",
+      "sold each",
+      "per each"
+    ],
+    "model_number_patterns": [
+      "SDB\\d+",
+      "V\\d+",
+      "F\\d+",
+      "MK\\d+"
+    ],
+    "trailing_number_threshold": 100
+  },
+  "CALIBRATION_WARNINGS": [
+    "Row with SDB113, SDB249: Trailing 3-digit numbers are MODEL numbers, not quantities",
+    "ASSORTED keyword often appears without explicit quantity - may need manual review",
+    "EACH keyword indicates single item (RSU=1) even if other numbers present",
+    "Products with both dimensions AND quantity indicators (5 cases found) - dimension shielding critical",
+    "PK# pattern (PK6, PK8, etc) consistently indicates pack quantity",
+    "#PC pattern (10PC, 2PC, etc) consistently indicates piece count",
+    "No \"N x capacity\" patterns found in Amazon titles but should be handled for future data"
+  ],
+  "PATTERN_STATISTICS": {
+    "total_products_analyzed": 2696,
+    "explicit_unit_counts": {
+      "PC": 299,
+      "PK": 232,
+      "ASSORTED": 187,
+      "SET": 162,
+      "PACK": 110,
+      "PCE": 63,
+      "PIECE": 60,
+      "PIECES": 58,
+      "PCS": 43
+    },
+    "dimension_cases_with_quantity": 5,
+    "model_number_false_positives": [
+      "SDB113",
+      "SDB249",
+      "KCF1"
+    ],
+    "single_item_indicators_found": 3
+  },
+  "DETECTED_PATTERNS": {
+    "supplier_title_patterns": [
+      "{N}PC - N pieces (e.g., \"10PC\", \"2PC\")",
+      "PK{N} - Pack of N (e.g., \"PK6\", \"PK8\")",
+      "{N} PIECES - N pieces (e.g., \"12 PIECES\")",
+      "ASSORTED - Multi-pack, quantity may be specified elsewhere",
+      "{DIMENSION} - Product size (e.g., \"40CM\", \"500ML\")",
+      "EACH - Single item indicator"
+    ],
+    "amazon_title_patterns": [
+      "{N} PCS - N pieces (e.g., \"2250 PCS\")",
+      "Set of {N} - N items (e.g., \"Set of 2\")",
+      "pack of {N} - Pack size (e.g., \"pack of 6\")",
+      "Model numbers mixed with quantities (e.g., \"V8 Engine\")"
+    ],
+    "edge_cases": [
+      "Model numbers as trailing numbers: SDB113, SDB249",
+      "ASSORTED without explicit quantity",
+      "Dimension + Quantity in same title (e.g., \"PPS 26CM PLASTIC WHITE PLATE 6 PCS\")",
+      "EACH keyword overrides other quantity indicators"
+    ]
+  },
+  "calibration_timestamp": "2026-01-05T03:35:10.914831",
+  "source_file": "part 4 jan.xlsx",
+  "sample_size": 2696
+}

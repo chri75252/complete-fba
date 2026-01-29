@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "run_id": "04d79978-b2cd-400b-8362-6a8e5e745764",
+  "state": "done",
+  "supplier_domain": "poundwholesale.co.uk",
+  "started_at": "2026-01-25T08:00:02Z",
+  "ended_at": "2026-01-25T08:00:10Z",
+  "pid": 5568,
+  "resolved_paths": {
+    "processing_state": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\poundwholesale_co_uk_processing_state.json",
+    "linking_map": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\linking_maps\\poundwholesale.co.uk\\linking_map.json",
+    "financial_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\financial_reports\\poundwholesale-co-uk",
+    "logs_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\logs\\debug",
+    "runner_log": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\logs\\04d79978-b2cd-400b-8362-6a8e5e745764.log"
+  },
+  "progress": {
+    "current_phase": "amazon_analysis",
+    "persistent_category_index": 22,
+    "total_categories": 230,
+    "current_category_url": "https://www.poundwholesale.co.uk/pound-lines/leisure-hobbies-pound-lines"
+  },
+  "artifacts": {
+    "cached_products_exists": true,
+    "linking_map_exists": true,
+    "financial_report_exists": true
+  },
+  "error": {
+    "summary": "",
+    "last_log_lines": [
+      "2026-01-25 12:00:03,182 - WARNING - OPENAI_API_KEY not set  AI features disabled",
+      "2026-01-25 12:00:05,549 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\logs\\debug\\run_custom_poundwholesale_20260125_120005.log",
+      "2026-01-25 12:00:05,549 - __main__ - INFO - 📋 Debug log file: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\logs\\debug\\run_custom_poundwholesale_20260125_120005.log",
+      "2026-01-25 12:00:05,550 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured",
+      "2026-01-25 12:00:05,550 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s",
+      "2026-01-25 12:00:05,550 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management",
+      "2026-01-25 12:00:06,204 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222",
+      "2026-01-25 12:00:06,204 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only",
+      "2026-01-25 12:00:08,249 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]",
+      "2026-01-25 12:00:10,560 - utils.browser_manager - ERROR - ? Chrome debug port 9222 not accessible on IPv4 or IPv6: Cannot connect to host localhost:9222 ssl:default [The remote computer refused the network connection]",
+      "2026-01-25 12:00:10,580 - __main__ - CRITICAL - 💥 A critical error occurred in the main workflow: Chrome debug port 9222 not accessible. Please ensure Chrome is running with --remote-debugging-port=9222 --user-data-dir=C:\\ChromeDebugProfile",
+      "Traceback (most recent call last):",
+      "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\run_custom_poundwholesale.py\", line 70, in main",
+      "    await browser_manager.launch_browser(cdp_port=chrome_debug_port)",
+      "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\utils\\browser_manager.py\", line 97, in launch_browser",
+      "    raise Exception(f\"Chrome debug port {cdp_port} not accessible. Please ensure Chrome is running with --remote-debugging-port={cdp_port} --user-data-dir=C:\\\\ChromeDebugProfile\")",
+      "Exception: Chrome debug port 9222 not accessible. Please ensure Chrome is running with --remote-debugging-port=9222 --user-data-dir=C:\\ChromeDebugProfile",
+      "2026-01-25 12:00:10,581 - __main__ - INFO - 🌐 Keeping browser persistent for next run - not closing browser",
+      "WARNING: PassiveExtractionWorkflow imported from unexpected path: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\tools\\passive_extraction_workflow_latest.py",
+      "Expected path to end with: tools\\passive_extraction_workflow_latest.py",
+      "Using Windows ProactorEventLoop for Python 3.13+ compatibility",
+      "🪟 --- Starting Custom Pound Wholesale Extraction Workflow (Windows Native) ---",
+      "✅ Running on Windows - Enhanced memory management enabled",
+      "Platform: Windows",
+      "Python: 3.13.3",
+      "--- Starting Custom Pound Wholesale Extraction Workflow ---",
+      "--- Custom Pound Wholesale Extraction Workflow Finished ---",
+      "2026-01-25 12:00:10,587 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop"
+    ]
+  }
+}

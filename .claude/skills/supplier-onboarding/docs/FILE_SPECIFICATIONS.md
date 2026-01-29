@@ -97,13 +97,6 @@ print(f"Platform: {system_platform}")
 print(f"Python: {platform.python_version()}")
 ```
 
-**Logger Setup**:
-```python
-debug_log_file = setup_logger()
-log = logging.getLogger(__name__)
-log.info(f"📋 Debug log file: {debug_log_file}")
-```
-
 **Configuration Loading**:
 ```python
 config_loader = SystemConfigLoader()
@@ -112,6 +105,16 @@ supplier_name = workflow_config.get('supplier_name', '{domain}')
 credentials = config_loader.get_credentials(supplier_name)
 chrome_debug_port = config_loader.get_system_config().get('chrome_debug_port', 9222)
 ```
+
+**Logger Setup** (supplier-aware):
+```python
+debug_log_file = setup_logger(supplier_name=supplier_name)
+log = logging.getLogger(__name__)
+log.info(f"📋 Debug log file: {debug_log_file}")
+```
+
+**Expected Debug Log Filename**:
+- `logs/debug/run_custom_{supplier-id}_YYYYMMDD_HHMMSS.log`
 
 **Browser Manager Setup**:
 ```python

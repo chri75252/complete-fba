@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "google_auth": true,
+  "sisyphus_agent": {
+    "disabled": false,
+    "default_builder_enabled": true,
+    "planner_enabled": true,
+    "replace_plan": true
+  },
+  "categories": {
+    "visual": {
+      "model": "google/antigravity-gemini-3-pro-high",
+      "temperature": 0.4,
+      "prompt_append": "You are a UI/UX + frontend specialist. Produce accessible, responsive UI changes and concrete implementation details. Prefer Tailwind/shadcn-style patterns when applicable."
+    },
+    "business-logic": {
+      "model": "openai/gpt-5.2-codex",
+      "temperature": 0.2,
+      "prompt_append": "You are a backend/business-logic implementer. Optimize for correctness, minimal blast radius, and clear interfaces. Include edge cases and validation guidance."
+    },
+    "architecture-review": {
+      "model": "openai/gpt-5.2",
+      "temperature": 0.2,
+      "prompt_append": "You are an architecture reviewer. Identify risks, propose clean boundaries, and recommend an incremental plan. Call out security, reliability, and maintainability concerns."
+    },
+    "docs-lookup": {
+      "model": "opencode/glm-4.7-free",
+      "temperature": 0.2,
+      "prompt_append": "You are a documentation lookup agent. Prefer authoritative docs and concrete configuration/examples over speculation."
+    }
+  },
+  "agents": {
+    "Sisyphus": {
+      "model": "google/antigravity-gemini-3-flash",
+      "prompt_append": "Proactively delegate when the user request contains distinct concerns. Split into focused subtasks and use sisyphus_task to route: UI/UX/frontend -> category=\"visual\"; implementation/business rules -> category=\"business-logic\"; architecture/review -> agent=\"oracle\" or category=\"architecture-review\"; documentation lookup -> agent=\"librarian\" or category=\"docs-lookup\"; rapid codebase scanning/pattern finding -> agent=\"explore\". Then merge the subtask outputs into a single coherent response and proceed without requiring the user to explicitly request delegation."
+    },
+    "oracle": {
+      "model": "openai/gpt-5.2",
+      "reasoningEffort": "high"
+    },
+    "librarian": {
+      "model": "opencode/glm-4.7-free",
+      "prompt_append": "When you need documentation, prefer Context7 and quote the exact configuration keys/values and examples that answer the question."
+    },
+    "explore": {
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "frontend-ui-ux-engineer": {
+      "model": "google/antigravity-gemini-3-pro-high"
+    },
+    "document-writer": {
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "multimodal-looker": {
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "Planner-Sisyphus": {
+      "model": "openai/gpt-5.2-codex",
+      "reasoningEffort": "medium",
+      "prompt_append": "When planning, explicitly label which agent/category should handle each step (e.g., oracle, librarian, explore, visual, business-logic) so delegation is automatic and parallelizable."
+    },
+    "OpenCode-Builder": {
+      "model": "openai/gpt-5.2-codex"
+    }
+  }
+}

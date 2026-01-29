@@ -22,6 +22,43 @@
 ## Introduction
 This guide provides comprehensive documentation for integrating new suppliers into the Amazon FBA Agent System. The system uses a configurable scraping approach that allows for rapid onboarding of new suppliers through structured configuration files and automated script generation. The integration process focuses on defining supplier-specific parameters for URL patterns, authentication requirements, and product extraction rules. The system leverages the `configurable_supplier_scraper.py` module which adapts its behavior based on supplier configurations stored in the `supplier_configs` directory. This guide explains the structure and requirements of these configuration files, the process for creating new configurations, and how the system uses these configurations to extract product data from diverse supplier websites.
 
+## Quick Start: Supplier Onboarding Skill
+
+For automated supplier onboarding, use the **supplier-onboarding** skill located at `.claude/skills/supplier-onboarding/SKILL.md`. This provides a 7-step guided workflow:
+
+1. **Data Preprocessing** - LLM validates categories and selectors
+2. **Gather Information** - Collects domain, auth requirements, credentials
+3. **Prepare Configurations** - Creates JSON config files
+4. **Invoke Wizard** - Generates runner script via `utils/supplier_onboarding_wizard.py`
+5. **Validate Files** - Verifies generated files are correct
+6. **Pre-Run Verification** - Checks system readiness
+7. **User Decision** - Test run, main run, or fix issues
+
+### Quick Wizard Command
+
+```bash
+python utils/supplier_onboarding_wizard.py \
+  --domain "supplier.com" \
+  --categories-source "config/supplier_categories.json" \
+  --selectors-source "config/supplier_configs/supplier.com.json" \
+  --workflow-key "supplier_workflow" \
+  --mode generate \
+  --authentication-required false
+```
+
+### Naming Conventions
+
+The system uses three distinct naming forms:
+
+| Context | Form | Example |
+|---------|------|---------|
+| Config files | Dot-form | `supplier.com.json` |
+| System config | Dot-form | `"supplier_name": "supplier.com"` |
+| Runner scripts | Hyphen-form | `run_custom_supplier-com.py` |
+| Tool directories | Hyphen-form | `tools/supplier-com/` |
+| Workflow keys | Underscore-form | `supplier_workflow` |
+| State files | Underscore-form | `supplier_com_processing_state.json` |
+
 ## Supplier Configuration Files
 The supplier configuration system uses JSON files stored in the `config/supplier_configs` directory to define the scraping parameters for each supplier. These configuration files contain structured data that specifies how to navigate supplier websites, locate product information, and handle authentication requirements. The configuration files follow a standardized schema that includes field mappings for product data extraction, navigation settings, and pagination patterns.
 

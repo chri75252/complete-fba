@@ -17,8 +17,12 @@ class SystemConfigLoader:
         if config_path:
             self.config_path = config_path
         else:
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            self.config_path = os.path.join(base_dir, "config", "system_config.json")
+            env_path = os.environ.get("FBA_SYSTEM_CONFIG_PATH")
+            if env_path:
+                self.config_path = env_path
+            else:
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                self.config_path = os.path.join(base_dir, "config", "system_config.json")
         self._config: Dict[str, Any] = {}
         self._load()
 
@@ -44,7 +48,7 @@ class SystemConfigLoader:
 
     def get_workflow_config(self, workflow_key: str) -> Dict[str, Any]:
         return self._config.get("workflows", {}).get(workflow_key, {})
-    
+
     def get_financial_batch_size(self) -> int:
         """Single accessor for financial_report_batch_size with consistent default."""
         return self.get_system_config().get("financial_report_batch_size", 5)
@@ -80,4 +84,3 @@ class SystemConfigLoader:
         except Exception as exc:
             log.exception("Failed to parse system config JSON: %s", exc)
             self._config = {}
-

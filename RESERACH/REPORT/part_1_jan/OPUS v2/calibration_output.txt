@@ -1,0 +1,156 @@
+================================================================================
+TASK 1: PACK QUANTITY PATTERN ANALYSIS
+================================================================================
+
+--- 1a. Checking for EXPLICIT UNITS (pcs, pce, pk, pack, unit) ---
+Row 9: FESTIVE MAGIC BELLS 8PC ASSORTED - FOUND: pc 
+Row 21: AIRWICK CANDLE VANILLA & BROWN SUGAR 105G PK6 - FOUND: pk
+Row 29: LYNWOOD MINI ROLLER SET 5PACK - FOUND: pack
+Row 47: FAIRY WASHING UP LIQUID MAX POWER ORIGINAL 440ML PK8 - FOUND: pk
+
+--- 1b. Checking for TRAILING NUMBERS (potential pack qty) ---
+Row 0: "EUROWRAP GIANT BIRTHDAY BADGE GIRL 3" -> Trailing: 3
+Row 16: "PANASONIC UPRIGHT   SDB113" -> Trailing: 113
+Row 18: "PARTY CRAZY BALLOONS ASSORTED 20" -> Trailing: 20
+Row 21: "AIRWICK CANDLE VANILLA & BROWN SUGAR 105G PK6" -> Trailing: 6
+Row 34: "UNIQUE CANDLE NUMBER W/DECOR 6" -> Trailing: 6
+Row 47: "FAIRY WASHING UP LIQUID MAX POWER ORIGINAL 440ML PK8" -> Trailing: 8
+
+--- 1c. Checking for LEADING MULTIPLIERS (10x, 6 x, etc.) ---
+No leading multiplier patterns (Nx ...) found
+
+--- 1d. DIMENSION vs QUANTITY ANALYSIS ---
+Dimension patterns found in SupplierTitle:
+Row 2: "I LOVE YOU BALLOON 40CM" -> [('cm', '40cm')]
+Row 8: "ADORN PLACEMAT GOLD EMBOSSED 37CM ASSORTED" -> [('cm', '37cm')]
+Row 10: "EASY STORAGE VACUUM BAG 70X100CM" -> [('cm', '100cm')]
+Row 19: "PRIMA PET BALL LAUNCHER 50CM" -> [('cm', '50cm')]
+Row 20: "PAPER EASTER 10 PLATES 7 INCH" -> [('inch', '7 inch')]
+Row 21: "AIRWICK CANDLE VANILLA & BROWN SUGAR 105G PK6" -> [('g', '105g')]
+Row 25: "SQUARE CANISTER CLASSIC 1.6L SURT VRM" -> [('L', '6l')]
+Row 28: "PLATE 10.5 INCH ASSORTED" -> [('inch', '5 inch')]
+Row 32: "SPRAY ADHESIVE HEAVY DUTY 500ML" -> [('ml', '500ml')]
+Row 33: "PRIMA DINNER PLATE FLOWER DESIGN 26.5CM" -> [('cm', '5cm')]
+Row 36: "SECURPAK POZI COUNTERSUNK SCREWS ZP 5X60MM" -> [('mm', '60mm')]
+Row 37: "DEKTON MASONRY DRILL BIT 5MM X 85MM" -> [('mm', '5mm'), ('mm', '85mm')]
+Row 40: "DIWALI SOUP PLATE 20CM" -> [('cm', '20cm')]
+Row 44: "ABBEY HAND SPRAY 750ML" -> [('ml', '750ml')]
+Row 47: "FAIRY WASHING UP LIQUID MAX POWER ORIGINAL 440ML PK8" -> [('ml', '440ml')]
+Row 49: "PAINT FACTORY COLOUR IT SPRAY FLAT MATT WHITE 250ML" -> [('ml', '250ml')]
+
+--- 1e. Checking for PIECES/PC patterns ---
+Row 3: "DLUX PEGS WITH SOFT RUBBER GRIP PLASTIC LARGE 12 PIECES" -> 12 pieces
+Row 4: "MINKY CURVE SCOURER 2PC" -> 2pc
+Row 9: "FESTIVE MAGIC BELLS 8PC ASSORTED" -> 8pc
+Row 27: "CHRISTMAS VELVET COLOURING SET 2PC" -> 2pc
+Row 35: "BRIGHT & HOMELY STAINLESS STEEL SCOURER 4 PIECES" -> 4 pieces
+
+================================================================================
+TASK 2: SALES SIGNAL DETECTION
+================================================================================
+
+Columns available: ['EAN', 'EAN_OnPage', 'ASIN', 'SupplierTitle', 'AmazonTitle', 'SupplierURL', 'AmazonURL', 'bought_in_past_month', 'fba_seller_count', 'fbm_seller_count', 'total_offer_count', 'SupplierPrice_incVAT', 'SupplierPrice_exVAT', 'SellingPrice_incVAT', 'ReferralFee', 'FBAFee', 'PrepHouseFee', 'OutputVAT', 'InputVAT', 'NetProceeds', 'HMRC', 'NetProfit', 'ROI', 'Breakeven', 'ProfitMargin']
+
+Looking for sales-related columns...
+
+Found column: bought_in_past_month
+  Type: int64
+  Sample values: [100, 50, 50, 50, 100]
+  Contains text requiring parsing: False
+
+================================================================================
+TASK 3: BRAND PATTERN DETECTION
+================================================================================
+
+Analyzing first word of SupplierTitle as potential brand:
+
+Most common first words (potential brands):
+  DLUX: 3 occurrences
+  CHEF: 2 occurrences
+  PROKLEEN: 2 occurrences
+  PRIMA: 2 occurrences
+  BETTINA: 2 occurrences
+  EUROWRAP: 1 occurrences
+  LUXURY: 1 occurrences
+  I: 1 occurrences
+  MINKY: 1 occurrences
+  STARWASH: 1 occurrences
+  STATUS: 1 occurrences
+  ADORN: 1 occurrences
+  FESTIVE: 1 occurrences
+  EASY: 1 occurrences
+  CEMENT: 1 occurrences
+
+Sample SupplierTitles analyzed for brand position:
+Row 0: EUROWRAP GIANT BIRTHDAY BADGE GIRL 3
+Row 1: LUXURY CUPCAKE 100 CASES
+Row 2: I LOVE YOU BALLOON 40CM
+Row 3: DLUX PEGS WITH SOFT RUBBER GRIP PLASTIC LARGE 12 PIECES
+Row 4: MINKY CURVE SCOURER 2PC
+Row 5: STARWASH CLOTHES LINE 30M
+Row 6: STATUS LED G9 2W LED CAPSULE BULB EACH
+Row 7: CHEF AID LANC PEELER PLASTIC HAND
+Row 8: ADORN PLACEMAT GOLD EMBOSSED 37CM ASSORTED
+Row 9: FESTIVE MAGIC BELLS 8PC ASSORTED
+Row 10: EASY STORAGE VACUUM BAG 70X100CM
+Row 11: CEMENT FLOWER POT WITH SUCCULENT CIRCLE 3 ASSORTED
+Row 12: CHEF AID MINI SPOUT BRUSH
+Row 13: PROKLEEN SPUNLACE FLOOR MOP & HANDLE
+Row 14: TALA STAINLESS STEEL TOWEL HOLDER
+
+================================================================================
+TASK 4: CALIBRATION WARNINGS - POTENTIAL TRAPS
+================================================================================
+
+ANALYZING POTENTIAL TRAPS...
+
+POTENTIAL TRAP ROWS:
+Row 0: "EUROWRAP GIANT BIRTHDAY BADGE GIRL 3"
+         WARNING: '3' - single digit could be variant, not pack qty
+
+Row 21: "AIRWICK CANDLE VANILLA & BROWN SUGAR 105G PK6"
+         WARNING: '6' - single digit could be variant, not pack qty
+
+Row 34: "UNIQUE CANDLE NUMBER W/DECOR 6"
+         WARNING: '6' - single digit could be variant, not pack qty
+
+Row 47: "FAIRY WASHING UP LIQUID MAX POWER ORIGINAL 440ML PK8"
+         WARNING: '8' - single digit could be variant, not pack qty
+
+Row 2: "I LOVE YOU BALLOON 40CM"
+         WARNING: Contains dimensions: [('40', 'cm')] - NOT pack quantities
+
+Row 8: "ADORN PLACEMAT GOLD EMBOSSED 37CM ASSORTED"
+         WARNING: Contains dimensions: [('37', 'cm')] - NOT pack quantities
+
+Row 19: "PRIMA PET BALL LAUNCHER 50CM"
+         WARNING: Contains dimensions: [('50', 'cm')] - NOT pack quantities
+
+Row 20: "PAPER EASTER 10 PLATES 7 INCH"
+         WARNING: Contains dimensions: [('7', 'inch')] - NOT pack quantities
+
+Row 28: "PLATE 10.5 INCH ASSORTED"
+         WARNING: Contains dimensions: [('5', 'inch')] - NOT pack quantities
+
+Row 32: "SPRAY ADHESIVE HEAVY DUTY 500ML"
+         WARNING: Contains dimensions: [('500', 'ml')] - NOT pack quantities
+
+Row 33: "PRIMA DINNER PLATE FLOWER DESIGN 26.5CM"
+         WARNING: Contains dimensions: [('5', 'cm')] - NOT pack quantities
+
+Row 37: "DEKTON MASONRY DRILL BIT 5MM X 85MM"
+         WARNING: Contains dimensions: [('5', 'mm'), ('85', 'mm')] - NOT pack quantities
+
+Row 40: "DIWALI SOUP PLATE 20CM"
+         WARNING: Contains dimensions: [('20', 'cm')] - NOT pack quantities
+
+Row 44: "ABBEY HAND SPRAY 750ML"
+         WARNING: Contains dimensions: [('750', 'ml')] - NOT pack quantities
+
+Row 49: "PAINT FACTORY COLOUR IT SPRAY FLAT MATT WHITE 250ML"
+         WARNING: Contains dimensions: [('250', 'ml')] - NOT pack quantities
+
+
+================================================================================
+SUMMARY CONFIGURATION
+================================================================================

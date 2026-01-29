@@ -1,0 +1,29 @@
+Original DataFrame rows: 2696
+'SupplierURL' in original columns: True
+Detected supplier_url_col: 'SupplierURL'
+Added SupplierURL column. Sample: https://www.efghousewares.co.uk/151-white-no-drip-...
+
+'SupplierURL' in normalized columns BEFORE stable_key: True
+Non-null SupplierURL count: 2696
+
+Auto-detected has_supplier_url: True
+
+Test row:
+  SupplierURL: https://www.efghousewares.co.uk/151-white-no-drip-gloss-paint-300ml-103931
+  ASIN: B0D4N6R7YG
+  Stable key (with URL): f8a0cf8a92271abd
+
+--- Checking previously colliding rows 163 and 199 ---
+
+Row 163:
+  SupplierURL: https://www.efghousewares.co.uk/purebreed-knots-collagen-med...
+  ASIN: B08XY79K7Z
+
+Row 199:
+  SupplierURL: https://www.efghousewares.co.uk/purebreed-knots-collagen-sma...
+  ASIN: B08XY79K7Z
+
+Stable keys with SupplierURL:
+  Row 163: 2572d743e2782cfa
+  Row 199: 2572d743e2782cfa
+  UNIQUE: False

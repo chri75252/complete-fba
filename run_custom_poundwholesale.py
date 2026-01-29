@@ -8,10 +8,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Ensure Windows consoles can render Unicode log output
 try:
-    if hasattr(sys.stdout, 'reconfigure'):
-        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-    if hasattr(sys.stderr, 'reconfigure'):
-        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
     pass
 
@@ -26,43 +26,51 @@ from utils.browser_manager import BrowserManager
 
 # 🚨 IMPORT HYGIENE: Validate correct module is imported
 import inspect
+
 workflow_module_path = inspect.getfile(PassiveExtractionWorkflow)
 expected_path_suffix = os.path.join("tools", "passive_extraction_workflow_latest.py")
 if not workflow_module_path.endswith(expected_path_suffix.replace(os.sep, "/")):
-    print(f"WARNING: PassiveExtractionWorkflow imported from unexpected path: {workflow_module_path}")
+    print(
+        f"WARNING: PassiveExtractionWorkflow imported from unexpected path: {workflow_module_path}"
+    )
     print(f"Expected path to end with: {expected_path_suffix}")
 else:
-    print(f"IMPORT HYGIENE: PassiveExtractionWorkflow imported from correct path: {workflow_module_path}")
+    print(
+        f"IMPORT HYGIENE: PassiveExtractionWorkflow imported from correct path: {workflow_module_path}"
+    )
+
 
 async def main():
     """Main function to run the custom extraction workflow."""
     # Detect platform and display compatibility info
     import platform
+
     system_platform = platform.system()
-    
+
     if system_platform == "Windows":
         print("🪟 --- Starting Custom Pound Wholesale Extraction Workflow (Windows Native) ---")
         print("✅ Running on Windows - Enhanced memory management enabled")
     else:
         print("--- Starting Custom Pound Wholesale Extraction Workflow (Linux/WSL) ---")
         print("Running on Linux/WSL - Standard memory management")
-    
+
     print(f"Platform: {system_platform}")
     print(f"Python: {platform.python_version()}")
     print("--- Starting Custom Pound Wholesale Extraction Workflow ---")
-    
+
+    config_loader = SystemConfigLoader()
+    workflow_config = config_loader.get_workflow_config("poundwholesale_workflow")
+    supplier_name = workflow_config.get("supplier_name", "poundwholesale.co.uk")
+
     # Setup logging
-    debug_log_file = setup_logger()
+    debug_log_file = setup_logger(supplier_name=supplier_name)
     log = logging.getLogger(__name__)
     log.info(f"📋 Debug log file: {debug_log_file}")
     log.debug("Debug logging initialized - full system execution details will be captured")
 
-    config_loader = SystemConfigLoader()
-    workflow_config = config_loader.get_workflow_config('poundwholesale_workflow')
-    supplier_name = workflow_config.get('supplier_name', 'poundwholesale.co.uk')
     credentials = config_loader.get_credentials(supplier_name)
-    
-    chrome_debug_port = config_loader.get_system_config().get('chrome_debug_port', 9222)
+
+    chrome_debug_port = config_loader.get_system_config().get("chrome_debug_port", 9222)
 
     browser_manager = None
     try:
@@ -70,7 +78,7 @@ async def main():
         await browser_manager.launch_browser(cdp_port=chrome_debug_port)
         page = await browser_manager.get_page()
 
-        supplier_url = workflow_config.get('supplier_url', f"https://{supplier_name}")
+        supplier_url = workflow_config.get("supplier_url", f"https://{supplier_name}")
         supplier_config_path = os.path.join("config", "supplier_configs", f"{supplier_name}.json")
 
         log.info(f"🔐 Initializing Poundwholesale authentication helper...")
@@ -81,8 +89,10 @@ async def main():
             return
 
         log.info(f"✅ Using hardcoded credentials for {supplier_name}")
-        
-        log.info(f"🌐 Connecting to existing Chrome debug port {chrome_debug_port} for authentication...")
+
+        log.info(
+            f"🌐 Connecting to existing Chrome debug port {chrome_debug_port} for authentication..."
+        )
 
         # Check if already authenticated
         is_authenticated = await auth_helper.is_authenticated()
@@ -99,7 +109,7 @@ async def main():
         workflow = PassiveExtractionWorkflow(
             config_loader=config_loader,
             workflow_config=workflow_config,
-            browser_manager=browser_manager
+            browser_manager=browser_manager,
         )
         await workflow.run()
 
@@ -112,13 +122,15 @@ async def main():
             # No browser cleanup to maintain persistence
         print("--- Custom Pound Wholesale Extraction Workflow Finished ---")
 
+
 if __name__ == "__main__":
     # Windows-specific event loop configuration for Python 3.13+
     if sys.platform == "win32":
         # Fix for Python 3.13+ on Windows with Playwright
         import platform
-        python_version = tuple(map(int, platform.python_version().split('.')))
-        
+
+        python_version = tuple(map(int, platform.python_version().split(".")))
+
         if python_version >= (3, 13):
             # Python 3.13+ requires ProactorEventLoop for subprocess support on Windows
             asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
@@ -127,7 +139,7 @@ if __name__ == "__main__":
             # Python 3.12 and below use SelectorEventLoop
             asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
             print("Using Windows SelectorEventLoop for Python 3.12 compatibility")
-    
+
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
@@ -140,4 +152,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\nUnexpected error: {e}")
         import traceback
+
         traceback.print_exc()

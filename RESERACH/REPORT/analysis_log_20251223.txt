@@ -1,0 +1,1610 @@
+================================================================================
+FBA PRODUCT ANALYSIS - STAGE 1: DATA LOADING
+================================================================================
+Input file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\RESERACH\REPORT\part1.xlsx
+File exists: True
+
+📊 INITIAL DATA SHAPE: 2515 rows x 25 columns
+
+📋 COLUMNS AVAILABLE:
+  1. EAN
+  2. EAN_OnPage
+  3. ASIN
+  4. SupplierTitle
+  5. AmazonTitle
+  6. SupplierURL
+  7. AmazonURL
+  8. bought_in_past_month
+  9. fba_seller_count
+  10. fbm_seller_count
+  11. total_offer_count
+  12. SupplierPrice_incVAT
+  13. SupplierPrice_exVAT
+  14. SellingPrice_incVAT
+  15. ReferralFee
+  16. FBAFee
+  17. PrepHouseFee
+  18. OutputVAT
+  19. InputVAT
+  20. NetProceeds
+  21. HMRC
+  22. NetProfit
+  23. ROI
+  24. Breakeven
+  25. ProfitMargin
+
+📝 SAMPLE DATA (first 3 rows):
+            EAN    EAN_OnPage        ASIN                           SupplierTitle                                                                                                                                                                                               AmazonTitle                                                             SupplierURL                               AmazonURL  bought_in_past_month            fba_seller_count fbm_seller_count  total_offer_count  SupplierPrice_incVAT  SupplierPrice_exVAT  SellingPrice_incVAT  ReferralFee  FBAFee  PrepHouseFee  OutputVAT  InputVAT  NetProceeds   HMRC  NetProfit          ROI  Breakeven  ProfitMargin
+0  5.015302e+12  7.177105e+11  B0FGHZB8FM                LUXURY CUPCAKE 100 CASES           Oversize Turbo Dryer Blower,Car Accessories,Max Instantaneous Thrust 1.60KG,4 Speeds,64MM Super Big Electric Cordless Air Blower for Leaf,Patio Cleaning,Lawn Care & Car Drying (Shining Black)                https://www.efghousewares.co.uk/luxury-cupcake-100-cases  https://www.amazon.co.uk/dp/B0FGHZB8FM                    50  Available (see Keepa data)              NaN                1.0                 0.852                 0.71               129.00        19.35    3.44          0.55     21.500     4.810       84.000 -4.810     83.450  6623.015873     28.860     77.627907
+1  5.010353e+12  5.065019e+12  B0D3M53JGG                 MINKY CURVE SCOURER 2PC  Powerful 2200W Premium Garment Steamer with 3L Water Tank, Dual Steam Settings for Rapid Wrinkle Release, Suitable for All Fabrics Including Delicates, Updated Design, Fridja f1200 Clothes Steamer Pro          https://www.efghousewares.co.uk/minky-curve-scourer-2pc-114010  https://www.amazon.co.uk/dp/B0D3M53JGG                   100                         NaN              NaN                8.0                 1.524                 1.27               132.99        19.95    6.92          0.55     22.165     5.738       82.685 -5.738     82.135  4512.912088     34.428     74.112339
+2  5.022822e+12  8.893287e+11  B086ZJ8N2T  STATUS LED G9 2W LED CAPSULE BULB EACH          17.5" Portable DVD Player with 15.6" Large HD Swivel Screen, 6 Hours Rechargeable Battery, Support USB/SD Card/Sync TV and Multiple Disc Formats, No Region Restrict, High Volume Speaker, Black  https://www.efghousewares.co.uk/status-led-g9-2w-led-capsule-bulb-each  https://www.amazon.co.uk/dp/B086ZJ8N2T                   500  Available (see Keepa data)              NaN                2.0                 1.140                 0.95                94.02         6.58    5.42          0.55     15.670     2.700       65.400 -2.700     64.850  4323.333333     16.200     82.769623
+
+================================================================================
+STAGE 1: EAN CLEANING
+================================================================================
+EAN-related columns found: ['EAN', 'EAN_OnPage']
+
+📈 SALES COLUMN DETECTION:
+  Using 'bought_in_past_month' column
+
+================================================================================
+STAGE 2: TITLE SIMILARITY CALCULATION
+================================================================================
+Title-related columns found: ['SupplierTitle', 'AmazonTitle']
+  Title similarity calculated for 2515 rows
+
+================================================================================
+STAGE 3: STRICT EAN MATCHING
+================================================================================
+  ✅ Exact EAN matches found: 387
+
+================================================================================
+STAGE 4: PACK SIZE EXTRACTION
+================================================================================
+  Pack sizes extracted from: SupplierTitle, AmazonTitle
+  Price column: SupplierPrice_incVAT
+  Profit column: NetProfit
+
+================================================================================
+STAGE 5: PRODUCT CATEGORIZATION
+================================================================================
+
+📊 CATEGORY DISTRIBUTION:
+  EXACT_EAN_MATCH: 387
+  HIGH_LIKELIHOOD: 259
+  MODERATE_CONFIDENCE: 598
+  UNCERTAIN: 1271
+
+================================================================================
+📊 SUMMARY STATISTICS
+================================================================================
+Total rows: 2515
+Rows with Sales > 0: 2515
+Rows with NetProfit > 0: 1088
+Rows with Adjusted_Profit > 0: 817
+Rows meeting ALL criteria (sellable + profitable + pack-profitable): 780
+
+✅ RECOMMENDATION CANDIDATES: 780
+
+💾 Full analysis saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\RESERACH\REPORT\deep_analysis_20251223.csv
+
+================================================================================
+🔍 DETAILED BREAKDOWN FOR MANUAL REVIEW
+================================================================================
+
+================================================================================
+📌 VERIFIED (Exact EAN) - RECOMMENDED: 11
+================================================================================
+
+--- Row 919 ---
+  SupplierTitle: PPS ROUND 40 DOYLEYS 21CM
+  AmazonTitle: 40 X White Round LACE DOYLEYS - 22cm/8.5" Quality Disposable Paper mats Great for Entertaining and Parties
+  EAN: 5030481940088
+  EAN_OnPage: 5030481940088
+  ASIN: B07YQ5HFFN
+  sales: 700
+  NetProfit_numeric: 0.296666666666666
+  Adjusted_Profit: 0.296666666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2900763358778626
+  category: EXACT_EAN_MATCH
+
+--- Row 742 ---
+  SupplierTitle: TIDYZ DOGGY BAGS STRONG 50 PCS 30cm x 36cm
+  AmazonTitle: Tidyz 200 x Extra Large Super Strong Doggy bags (4 x 50),Black
+  EAN: 5025364001970
+  EAN_OnPage: 5025364001970
+  ASIN: B06X9K7NR7
+  sales: 500
+  NetProfit_numeric: 0.736666666666667
+  Adjusted_Profit: 0.736666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.40384615384615385
+  category: EXACT_EAN_MATCH
+
+--- Row 1057 ---
+  SupplierTitle: BLUE CANYON VECTOR SHOWER SPRAY
+  AmazonTitle: Blue Canyon Vector Double Tap Shower Spray| Bathroom Accessory| Premium Shower Attachment for Bath taps| Push-on-Fitting| Suitable for Round & Oval Taps| Shower Head for Bathroom| ~1.5 Meters| (White)
+  EAN: 5060187175750
+  EAN_OnPage: 5060187175750
+  ASIN: B008F6946C
+  sales: 500
+  NetProfit_numeric: 0.198333333333333
+  Adjusted_Profit: 0.198333333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2683982683982684
+  category: EXACT_EAN_MATCH
+
+--- Row 556 ---
+  SupplierTitle: AMTECH LED MINI TORCH
+  AmazonTitle: Amtech S1532 9 LED mini Torch
+  EAN: 5032759031078
+  EAN_OnPage: 5032759031078
+  ASIN: B003XKPUSQ
+  sales: 200
+  NetProfit_numeric: 2.34833333333333
+  Adjusted_Profit: 2.34833333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.84
+  category: EXACT_EAN_MATCH
+
+--- Row 709 ---
+  SupplierTitle: MASON CASH MIXING BOWL CREAM 29CM
+  AmazonTitle: Mason Cash Colour Mix Cream Mixing Bowl | 4 Litre Capacity | 29cm Earthenware Bowl with Classic Pattern Design | Lightweight & Dishwasher Safe | Ideal for Baking, Pastry, Dough, Cakes & Cookies
+  EAN: 5010853235530
+  EAN_OnPage: 5010853235530
+  ASIN: B01IFIJ91Y
+  sales: 200
+  NetProfit_numeric: 5.11499999999999
+  Adjusted_Profit: 5.11499999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2743362831858407
+  category: EXACT_EAN_MATCH
+
+--- Row 992 ---
+  SupplierTitle: ELLIOTT WINDOW SQUEEGE 20CM
+  AmazonTitle: Elliott Multi-Purpose Window Squeegee perfect for streak free cleaning on Windows, shower screens, cars and mirrors, Aluminium frame housing a 20cm rubber squeegee with an ergonomic Grey Handle.
+  EAN: 5013159300353
+  EAN_OnPage: 5013159300353
+  ASIN: B00KB225MS
+  sales: 200
+  NetProfit_numeric: 0.293333333333333
+  Adjusted_Profit: 0.293333333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.24434389140271492
+  category: EXACT_EAN_MATCH
+
+--- Row 1032 ---
+  SupplierTitle: ELLIOTTS GLASS SPRAY BOTTLE BROWN480ML
+  AmazonTitle: Elliott 480ml Brown Glass Spray Bottle, Manufactured from Recycled Glass and featuring a locking trigger action spray Mechanism, Ideal for use for Cleaning, Watering Plants and many other uses
+  EAN: 5013159004428
+  EAN_OnPage: 5013159004428
+  ASIN: B099X92QGG
+  sales: 100
+  NetProfit_numeric: 0.218333333333333
+  Adjusted_Profit: 0.218333333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2782608695652174
+  category: EXACT_EAN_MATCH
+
+--- Row 1077 ---
+  SupplierTitle: FIRE UP NATURAL FIRELIGHTERS 28 PACK
+  AmazonTitle: Fireglow Firelighters 24 Pack, White
+  EAN: 5022704000013
+  EAN_OnPage: 5022704000013
+  ASIN: B07YPPK4JY
+  sales: 100
+  NetProfit_numeric: 0.0216666666666669
+  Adjusted_Profit: 0.15195238095238123
+  Pack_Verdict: SPLIT (1/1) - OK
+  title_match: 0.6944444444444444
+  category: EXACT_EAN_MATCH
+
+--- Row 996 ---
+  SupplierTitle: MIRROR BLUE CANYON SQUARE PLASTIC MIRROR
+  AmazonTitle: Blue Canyon - 18cm Free Standing Square Mirror - White Colour - Perfect for Shaving and Applying Makeup - One Side with 2x Magnification - Double Sided Multipurpose Mirror - BA2046
+  EAN: 5060187173633
+  EAN_OnPage: 5060187173633
+  ASIN: B007IGLUIK
+  sales: 100
+  NetProfit_numeric: 0.434999999999999
+  Adjusted_Profit: 0.434999999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2909090909090909
+  category: EXACT_EAN_MATCH
+
+--- Row 304 ---
+  SupplierTitle: EVERREADY T8 4FT 36W TUBE LIGHT
+  AmazonTitle: Eveready T8 Tube 4ft 36w White 3500k
+  EAN: 5050028016069
+  EAN_OnPage: 5050028016069
+  ASIN: B005XKFN0O
+  sales: 50
+  NetProfit_numeric: 8.00124999999999
+  Adjusted_Profit: 8.00124999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6865671641791045
+  category: EXACT_EAN_MATCH
+
+--- Row 980 ---
+  SupplierTitle: PRODEC CAULKER 12 INCH
+  AmazonTitle: ProDec 12" Flexible Caulker Blade for Fast, Efficient Application of Fillers and Caulk and Smoothing of Wallpaper
+  EAN: 5019200117338
+  EAN_OnPage: 5019200117338
+  ASIN: B008F7YP9C
+  sales: 50
+  NetProfit_numeric: 0.684999999999999
+  Adjusted_Profit: 0.684999999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.26666666666666666
+  category: EXACT_EAN_MATCH
+
+================================================================================
+📌 HIGH LIKELIHOOD - RECOMMENDED: 33
+================================================================================
+
+--- Row 332 ---
+  SupplierTitle: TIDYZ WHEELY BIN LINERS 5 BAGS 300L
+  AmazonTitle: Tidyz 30 Extra Large Wheelie Bin Liners Waste Rubbish Bags 300L
+  EAN: 5025364005824
+  EAN_OnPage: 5025762919174
+  ASIN: B07MGLHMWY
+  sales: 500
+  NetProfit_numeric: 2.76666666666666
+  Adjusted_Profit: 3.36186666666666
+  Pack_Verdict: SPLIT (1/5) - OK
+  title_match: 0.673469387755102
+  category: HIGH_LIKELIHOOD
+
+--- Row 628 ---
+  SupplierTitle: BACOFOIL EASY CUT KITCHEN FOIL REFILL 15M
+  AmazonTitle: 3 x Easy Cut Refill Kitchen Foil 300mm, 15m
+  EAN: 5023139270705
+  EAN_OnPage: 9876553908060
+  ASIN: B08TCDBQTC
+  sales: 500
+  NetProfit_numeric: 2.90166666666666
+  Adjusted_Profit: 2.90166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6428571428571429
+  category: HIGH_LIKELIHOOD
+
+--- Row 369 ---
+  SupplierTitle: BACOFOIL ZIPPER BAGS ALL PURPOSE 12 PACK 1L (PM Â£2.19)
+  AmazonTitle: Bacofoil 3 x Zipper Small All Purpose Bags Food Freezing Storage Bags (45 Bags)
+  EAN: 5023139862917
+  EAN_OnPage: nan
+  ASIN: B08FBJ59DR
+  sales: 500
+  NetProfit_numeric: 2.93
+  Adjusted_Profit: 0.09200000000000008
+  Pack_Verdict: BUNDLE (3x) - OK
+  title_match: 0.5522388059701493
+  category: HIGH_LIKELIHOOD
+
+--- Row 420 ---
+  SupplierTitle: SOUDAL EXPANDING FOAM HAND HELD 150ML
+  AmazonTitle: Soudal 750ml Champagne Gap Filler Expanding Foam Handheld Spray with Nozzle & Gloves (3)
+  EAN: 5411183131217
+  EAN_OnPage: nan
+  ASIN: B07STZLCM6
+  sales: 400
+  NetProfit_numeric: 5.47458333333333
+  Adjusted_Profit: 5.47458333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.512
+  category: HIGH_LIKELIHOOD
+
+--- Row 618 ---
+  SupplierTitle: SOUDAL EXPANDING FOAM HANDHELD 750ML
+  AmazonTitle: Soudal 750ml Champagne Gap Filler Expanding Foam Handheld Spray with Nozzle & Gloves (3)
+  EAN: 5411183078956
+  EAN_OnPage: nan
+  ASIN: B07STZLCM6
+  sales: 400
+  NetProfit_numeric: 4.25458333333333
+  Adjusted_Profit: 4.25458333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5161290322580645
+  category: HIGH_LIKELIHOOD
+
+--- Row 900 ---
+  SupplierTitle: ROLSON CLAW HAMMER FIBREGLASS 8OZ
+  AmazonTitle: Rolson 11201 8oz Stubby Claw Hammer
+  EAN: 5029594103718
+  EAN_OnPage: 5029594112017
+  ASIN: B00JITHXRM
+  sales: 300
+  NetProfit_numeric: 0.861666666666667
+  Adjusted_Profit: 0.861666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5294117647058824
+  category: HIGH_LIKELIHOOD
+
+--- Row 1080 ---
+  SupplierTitle: STATUS 3WAY BASIC C/FREE SOCKET WHT 1PK CLAM
+  AmazonTitle: STATUS 2 Way Socket | 2 USB Port Cable Free Socket | S2W2USBCFS12
+  EAN: 5022822194984
+  EAN_OnPage: 5022822207776
+  ASIN: B08CVK7746
+  sales: 200
+  NetProfit_numeric: 0.0400000000000002
+  Adjusted_Profit: 0.0400000000000002
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5137614678899083
+  category: HIGH_LIKELIHOOD
+
+--- Row 752 ---
+  SupplierTitle: MARIGOLD OUTDOOR GLOVES EXTRA LARGE
+  AmazonTitle: Marigold 2 x Extra Tough Outdoor Gloves - Single Pair (Extra Large)
+  EAN: 5010232988019
+  EAN_OnPage: 9790504074621
+  ASIN: B08XWB7JW9
+  sales: 200
+  NetProfit_numeric: 1.40833333333333
+  Adjusted_Profit: 1.40833333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6862745098039216
+  category: HIGH_LIKELIHOOD
+
+--- Row 1081 ---
+  SupplierTitle: PRICE & KENSINGTON 2 CUP TEAPOT MATT NAVY
+  AmazonTitle: Price & Kensington Black 6 Cup Teapot
+  EAN: 5010853210520
+  EAN_OnPage: 5010853110851
+  ASIN: B0013IUIPA
+  sales: 100
+  NetProfit_numeric: 0.0466666666666657
+  Adjusted_Profit: 0.0466666666666657
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7692307692307693
+  category: HIGH_LIKELIHOOD
+
+--- Row 852 ---
+  SupplierTitle: DRAPER SPANNER SET METRIC COMBINATION
+  AmazonTitle: Draper 1 x Redline 68481 Metric Combination Spanner Set (11-Piece)
+  EAN: 5010559684793
+  EAN_OnPage: 5010559684816
+  ASIN: B0114IPMS6
+  sales: 100
+  NetProfit_numeric: 2.15333333333333
+  Adjusted_Profit: 2.15333333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5631067961165048
+  category: HIGH_LIKELIHOOD
+
+--- Row 567 ---
+  SupplierTitle: MENS WATERPROOF FLEECE TRAPPER HAT WITH MASK BLACK
+  AmazonTitle: HEAT HOLDERS - Mens Waterproof Fleece Lined Winter Thermal Trooper Trapper Hat with Ear Flaps
+  EAN: 5060605732022
+  EAN_OnPage: 5019041167141
+  ASIN: B07F8VJHWF
+  sales: 100
+  NetProfit_numeric: 6.44666666666666
+  Adjusted_Profit: 6.44666666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6153846153846154
+  category: HIGH_LIKELIHOOD
+
+--- Row 727 ---
+  SupplierTitle: GIFTMAKER CHRISTMAS NON WOVEN SANTA SACK SPECIAL DELIVERY
+  AmazonTitle: Giftmaker Collection Large Christmas Santa Sack Gift Stocking For Xmas Presents Special Delivery Bag
+  EAN: 5012128616778
+  EAN_OnPage: nan
+  ASIN: B09HCS9QM2
+  sales: 100
+  NetProfit_numeric: 1.04124999999999
+  Adjusted_Profit: 1.04124999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5987261146496815
+  category: HIGH_LIKELIHOOD
+
+--- Row 1028 ---
+  SupplierTitle: ASHLEY CASH BOX 4.5 INCH
+  AmazonTitle: Ashley - Metal Cash Box - 20.5cm - Red
+  EAN: 5017403013167
+  EAN_OnPage: 5017403013181
+  ASIN: B000OTPWNC
+  sales: 100
+  NetProfit_numeric: 0.308333333333333
+  Adjusted_Profit: 0.308333333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6129032258064516
+  category: HIGH_LIKELIHOOD
+
+--- Row 925 ---
+  SupplierTitle: PPS POCKET TISSUES 3PLY 10S PK10
+  AmazonTitle: Handy Pocket 3ply Tissues, Packs of 10
+  EAN: 5030481970238
+  EAN_OnPage: 5028635004045
+  ASIN: B073H7GJ13
+  sales: 100
+  NetProfit_numeric: 0.288333333333333
+  Adjusted_Profit: 0.288333333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5714285714285714
+  category: HIGH_LIKELIHOOD
+
+--- Row 956 ---
+  SupplierTitle: AMTECH TELESCOPIC PICKUP TOOL
+  AmazonTitle: Amtech S8006 3 LED telescopic torch and magnetic pick up tool
+  EAN: 5032759005864
+  EAN_OnPage: nan
+  ASIN: B00HMDJD38
+  sales: 100
+  NetProfit_numeric: 0.541666666666667
+  Adjusted_Profit: 0.541666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6444444444444445
+  category: HIGH_LIKELIHOOD
+
+--- Row 437 ---
+  SupplierTitle: BLUE CANYON TOILET BRUSH PLASTIC LACE BLACK
+  AmazonTitle: BGL Stainless Steel Standing Toilet Brush for Bath Decor (Black)
+  EAN: 5056295703862
+  EAN_OnPage: nan
+  ASIN: B07R41125W
+  sales: 100
+  NetProfit_numeric: 7.39958333333333
+  Adjusted_Profit: 7.39958333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5607476635514018
+  category: HIGH_LIKELIHOOD
+
+--- Row 138 ---
+  SupplierTitle: PRIMA MULTI SHOWERHEAD CHROME
+  AmazonTitle: Lara | Multi Spray Shower Head - Chrome
+  EAN: 5038673230474
+  EAN_OnPage: nan
+  ASIN: B00569FG1S
+  sales: 100
+  NetProfit_numeric: 10.365
+  Adjusted_Profit: 10.365
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7647058823529411
+  category: HIGH_LIKELIHOOD
+
+--- Row 78 ---
+  SupplierTitle: BRIGHT & HOMELY METAL WATERING CAN ROSE
+  AmazonTitle: Woodside Silver 9L Metal Garden and Plant Watering Can with Rose
+  EAN: 5050796010788
+  EAN_OnPage: 5055864219438
+  ASIN: B07WMYF37Z
+  sales: 50
+  NetProfit_numeric: 10.5295833333333
+  Adjusted_Profit: 10.5295833333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5242718446601942
+  category: HIGH_LIKELIHOOD
+
+--- Row 771 ---
+  SupplierTitle: DOFF CONCENTRATED MULTI PURPOSE FEED 1L
+  AmazonTitle: 2 X Doff 1L Liquid Seaweed Concentrated Multi-Purpose Feed
+  EAN: 5013655218435
+  EAN_OnPage: nan
+  ASIN: B073TZKMK9
+  sales: 50
+  NetProfit_numeric: 1.82499999999999
+  Adjusted_Profit: 1.82499999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7216494845360825
+  category: HIGH_LIKELIHOOD
+
+--- Row 725 ---
+  SupplierTitle: AMTECH SHARPENING STONE 2000
+  AmazonTitle: Amtech E2300 300mm (12") Cigar Sharpening Stone
+  EAN: 5032759001675
+  EAN_OnPage: nan
+  ASIN: B004TRT3K8
+  sales: 50
+  NetProfit_numeric: 1.0175
+  Adjusted_Profit: 1.0175
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6133333333333333
+  category: HIGH_LIKELIHOOD
+
+--- Row 746 ---
+  SupplierTitle: EVERBUILD BITUMEN TROWEL MASTIC 1 LITRE
+  AmazonTitle: Everbuild 103 Premium Trowel Mastic, Stone, 6 kg
+  EAN: 5029347009311
+  EAN_OnPage: nan
+  ASIN: B0070U64RG
+  sales: 50
+  NetProfit_numeric: 5.33583333333333
+  Adjusted_Profit: 5.33583333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6666666666666666
+  category: HIGH_LIKELIHOOD
+
+--- Row 418 ---
+  SupplierTitle: GROSVENOR 55CM TROUGH BLACK
+  AmazonTitle: 4 Black Gros Trough 55cm
+  EAN: 5014348297157
+  EAN_OnPage: nan
+  ASIN: B0723GK5V9
+  sales: 50
+  NetProfit_numeric: 5.93041666666666
+  Adjusted_Profit: 5.93041666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5098039215686274
+  category: HIGH_LIKELIHOOD
+
+--- Row 751 ---
+  SupplierTitle: ROUNDUP PATH WEEDKILLER RTU 1LTR 20% FREE
+  AmazonTitle: Roundup Path Weedkiller, Ready to Use, Refill for Pressure Sprayer, 5 Litre
+  EAN: 5017676016919
+  EAN_OnPage: 5017676016964
+  ASIN: B01MYBH3SU
+  sales: 50
+  NetProfit_numeric: 3.52
+  Adjusted_Profit: 3.52
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5517241379310345
+  category: HIGH_LIKELIHOOD
+
+--- Row 914 ---
+  SupplierTitle: FAIRY MAX POWER SOAP DISPENSING DISH BRUSH & REFILLS 3PCS
+  AmazonTitle: Fairy Soap Dispensing Dish Brush
+  EAN: 5010303194424
+  EAN_OnPage: 5010303180588
+  ASIN: B0BYKDX25N
+  sales: 50
+  NetProfit_numeric: 0.425
+  Adjusted_Profit: 1.225
+  Pack_Verdict: SPLIT (1/3) - OK
+  title_match: 0.7191011235955056
+  category: HIGH_LIKELIHOOD
+
+--- Row 906 ---
+  SupplierTitle: ULTRATAPE PICTURE FRAME TAPE 24MMX50M
+  AmazonTitle: Ultratape | Picture Frame Tape | 48mm x 33m
+  EAN: 5027785817369
+  EAN_OnPage: 5027785811817
+  ASIN: B073VPL2VQ
+  sales: 50
+  NetProfit_numeric: 0.431666666666667
+  Adjusted_Profit: 0.431666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.85
+  category: HIGH_LIKELIHOOD
+
+--- Row 978 ---
+  SupplierTitle: AMTECH TROWEL MARGIN - SOFT GRIP5X2
+  AmazonTitle: Amtech G0230 150mm (6") Pointing trowel with soft grip
+  EAN: 5032759038138
+  EAN_OnPage: 5032759027644
+  ASIN: B00ABJQTPU
+  sales: 50
+  NetProfit_numeric: 0.351666666666667
+  Adjusted_Profit: 0.351666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5617977528089888
+  category: HIGH_LIKELIHOOD
+
+--- Row 974 ---
+  SupplierTitle: ELF ARRIVAL ENVELOPE OUTFIT
+  AmazonTitle: Christmas Naughty Elf Arrival Clothes - Plush Snowman Outfit
+  EAN: 5050565795922
+  EAN_OnPage: nan
+  ASIN: B09J3T86D8
+  sales: 50
+  NetProfit_numeric: 0.371249999999999
+  Adjusted_Profit: 0.371249999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5057471264367817
+  category: HIGH_LIKELIHOOD
+
+--- Row 913 ---
+  SupplierTitle: AMTECH POINTING TROWEL 150M(6") WITH SOFT GRIP
+  AmazonTitle: Amtech G0230 150mm (6") Pointing trowel with soft grip
+  EAN: 5032759027644
+  EAN_OnPage: nan
+  ASIN: B00ABJQTPU
+  sales: 50
+  NetProfit_numeric: 0.625416666666666
+  Adjusted_Profit: 0.625416666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.74
+  category: HIGH_LIKELIHOOD
+
+--- Row 1001 ---
+  SupplierTitle: EVERBUILD JET RAPID SET CEMENT 3KG
+  AmazonTitle: Everbuild Jetcem Deep Rapid Repair Sand and Cement, Grey, 6 kg
+  EAN: 5010618043103
+  EAN_OnPage: nan
+  ASIN: B001V9T690
+  sales: 50
+  NetProfit_numeric: 0.574999999999999
+  Adjusted_Profit: 0.574999999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6458333333333334
+  category: HIGH_LIKELIHOOD
+
+--- Row 1050 ---
+  SupplierTitle: HARRIS PUTTY KNIFE
+  AmazonTitle: Harris Seriously Good Putty Knife
+  EAN: 5056287402902
+  EAN_OnPage: nan
+  ASIN: B0815B7FBY
+  sales: 50
+  NetProfit_numeric: 0.134166666666667
+  Adjusted_Profit: 0.134166666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7058823529411765
+  category: HIGH_LIKELIHOOD
+
+================================================================================
+📌 MODERATE CONFIDENCE - RECOMMENDED: 160
+================================================================================
+
+--- Row 942 ---
+  SupplierTitle: CHRISTMAS DIFFUSERS GINGERBREAD 30ML SET OF 3
+  AmazonTitle: SALUBRITO Christmas Essential Oils Set, Winter Holiday Fragrance Oil Gift Set for Diffuser, Candle, Soap Making, Candy Cane, Christmas Tree, Christmas Pudding, Apple Cinnamon, Gingerbread, Mistletoe
+  EAN: 5024418634232
+  EAN_OnPage: nan
+  ASIN: B0D97LYYDY
+  sales: 900
+  NetProfit_numeric: 0.81625
+  Adjusted_Profit: 3.4562500000000003
+  Pack_Verdict: SPLIT (1/3) - OK
+  title_match: 0.3045267489711934
+  category: MODERATE_CONFIDENCE
+
+--- Row 286 ---
+  SupplierTitle: ADORN PATTERN MANICURE SET WITH CASE
+  AmazonTitle: ZIZZON Manicure Set 18 in 1 Professional Pedicure Set Nail scissors Grooming Kit with Leather Travel Case Pink
+  EAN: 6923456822900
+  EAN_OnPage: nan
+  ASIN: B085MQZCLY
+  sales: 800
+  NetProfit_numeric: 4.43208333333333
+  Adjusted_Profit: 4.43208333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.3424657534246575
+  category: MODERATE_CONFIDENCE
+
+--- Row 429 ---
+  SupplierTitle: BLACKSPUR CAR HEADLIGHT BULB 12V 60W/55W H4
+  AmazonTitle: Bosch H4 (472) Pure Light Halogen Headlight Bulbs, 12 V 55 W, Original Quality - Socket Type P43t - Pack of 2 Replacement Car Light Bulbs
+  EAN: 5017403154174
+  EAN_OnPage: nan
+  ASIN: B0924XVD1J
+  sales: 800
+  NetProfit_numeric: 3.30583333333333
+  Adjusted_Profit: 1.6618333333333302
+  Pack_Verdict: BUNDLE (2x) - OK
+  title_match: 0.35555555555555557
+  category: MODERATE_CONFIDENCE
+
+--- Row 426 ---
+  SupplierTitle: ECO WISE PAPER CUPS RIPPLE DOTTED12OZ 6PCS
+  AmazonTitle: 100 Paper Cups - Disposable Paper Cups for Hot and Cold Drinks | Eco Freindly Drinking Coffee Cups Disposable | 8oz - 236ml
+  EAN: 5060743591604
+  EAN_OnPage: 5060659230154
+  ASIN: B07XLNJDY9
+  sales: 800
+  NetProfit_numeric: 2.18833333333333
+  Adjusted_Profit: 2.89833333333333
+  Pack_Verdict: SPLIT (1/6) - OK
+  title_match: 0.3515151515151515
+  category: MODERATE_CONFIDENCE
+
+--- Row 425 ---
+  SupplierTitle: ECO WISE PAPER CUPS LIDS 8OZ PK25
+  AmazonTitle: 100 Paper Cups - Disposable Paper Cups for Hot and Cold Drinks | Eco Freindly Drinking Coffee Cups Disposable | 8oz - 236ml
+  EAN: 5060743590874
+  EAN_OnPage: 5060659230154
+  ASIN: B07XLNJDY9
+  sales: 800
+  NetProfit_numeric: 2.18833333333333
+  Adjusted_Profit: 2.18833333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.358974358974359
+  category: MODERATE_CONFIDENCE
+
+--- Row 150 ---
+  SupplierTitle: PESTSHIELD CAT AND DOG REPELLENT 240GR
+  AmazonTitle: Karlsten Cat Repellent Anti Fouling Granules, Natural Humane Cat Deterrent Citronella
+  EAN: 5053249250830
+  EAN_OnPage: nan
+  ASIN: B088FX49GV
+  sales: 700
+  NetProfit_numeric: 7.35166666666666
+  Adjusted_Profit: 7.35166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.3252032520325203
+  category: MODERATE_CONFIDENCE
+
+--- Row 545 ---
+  SupplierTitle: SNOW WHITE CHRISTMAS PROJECTOR TORCH 16   PATTERNS
+  AmazonTitle: POPOYU 2Pcs Christmas Projector Torch for Kids,Christmas Slide Projector Torch with Realistic 24 Patterns Flashlight Projector,Kids Sleep Story Projector for Fun Christmas Stocking Eve Box Fillers
+  EAN: 5050565836939
+  EAN_OnPage: nan
+  ASIN: B0D9NPMVJZ
+  sales: 700
+  NetProfit_numeric: 2.17791666666666
+  Adjusted_Profit: 0.7019166666666599
+  Pack_Verdict: BUNDLE (2x) - OK
+  title_match: 0.3170731707317073
+  category: MODERATE_CONFIDENCE
+
+--- Row 596 ---
+  SupplierTitle: TIDYZ BIN LINER BLACK 10 BAGS 50LTR
+  AmazonTitle: Tidyz 2 X 10 Wheelie Bin Extra Large Liners 300L Black Dustbin Rubbish Tip Refuse Sacks Waste Garbage Thick Big Bags Super Strong Heavy Duty Fits Bins 230 x 143cm
+  EAN: 5025364002052
+  EAN_OnPage: 8800202193607
+  ASIN: B07B656W3B
+  sales: 700
+  NetProfit_numeric: 1.225
+  Adjusted_Profit: 1.225
+  Pack_Verdict: 1:1 Match
+  title_match: 0.30456852791878175
+  category: MODERATE_CONFIDENCE
+
+--- Row 412 ---
+  SupplierTitle: BLACKSPUR FACE MASK WITH VALVE 3PC
+  AmazonTitle: Face Masks - Breathable Face Masks with Filter - Cotton Face Mask â€“Reusable Face Mask with Adjustable Ear Straps and Nose Wire â€“ with Valve and Replaceable filters
+  EAN: 5017403071334
+  EAN_OnPage: 5060801700023
+  ASIN: B08BYZ98K4
+  sales: 600
+  NetProfit_numeric: 4.03166666666666
+  Adjusted_Profit: 4.03166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.30845771144278605
+  category: MODERATE_CONFIDENCE
+
+--- Row 753 ---
+  SupplierTitle: KINGAVON HEAD BAND WITH MOTION SENSOR & TORCH
+  AmazonTitle: Lumi Light Led Headband Ultra Bright 230Â° Adjustable Headlight with Motion Sensor, 7 Lighting Modes & IPX4 Head Torch for Camping, Running, Fishing Lumilight Head Torch
+  EAN: 5017403134572
+  EAN_OnPage: nan
+  ASIN: B0FJ74WBPQ
+  sales: 600
+  NetProfit_numeric: 3.64166666666666
+  Adjusted_Profit: 3.64166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.35514018691588783
+  category: MODERATE_CONFIDENCE
+
+--- Row 317 ---
+  SupplierTitle: QUEST EXPRESSO COFFEE EXPRESSO MACHINE WITH MILK FROTHER
+  AmazonTitle: Quest 36569 Espresso Coffee Machine With Milk Frother / 1.2L Water Tank and Drip Tray/Steam Ready and Temperature Indicator/For Ground Coffee Beans / 15 Bars of Pressure
+  EAN: 5025301365790
+  EAN_OnPage: nan
+  ASIN: B0B3F548G7
+  sales: 500
+  NetProfit_numeric: 33.6262499999999
+  Adjusted_Profit: 33.6262499999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.4088888888888889
+  category: MODERATE_CONFIDENCE
+
+--- Row 83 ---
+  SupplierTitle: DUNLOP CAR AIR FRESHENER 2.8ML ASSORTED
+  AmazonTitle: DONYER POWER Convector Radiator Heater 2000W Room Heating with Adjustable Thermostat
+  EAN: 871125223930
+  EAN_OnPage: nan
+  ASIN: B0773HXND3
+  sales: 500
+  NetProfit_numeric: 11.965
+  Adjusted_Profit: 11.965
+  Pack_Verdict: 1:1 Match
+  title_match: 0.37398373983739835
+  category: MODERATE_CONFIDENCE
+
+--- Row 1049 ---
+  SupplierTitle: INFAPOWER TOASTER 2  SLICE WHITE
+  AmazonTitle: Breville Bold 2 Slice Toaster with High-Lift and Wide Slots | White and Silver Chrome [VTR037]
+  EAN: 5060240212231
+  EAN_OnPage: nan
+  ASIN: B0C3JTR3NM
+  sales: 500
+  NetProfit_numeric: 0.784583333333331
+  Adjusted_Profit: 0.784583333333331
+  Pack_Verdict: 1:1 Match
+  title_match: 0.3492063492063492
+  category: MODERATE_CONFIDENCE
+
+--- Row 957 ---
+  SupplierTitle: ULTRA FLASHBAND LEAD FINISH 150MMX3M
+  AmazonTitle: Bostik Flashband Self Adhesive Flashing Tape Grey - 100mm x 10m - For Roofs - Provides an Instant Water tight Seal
+  EAN: 5027785811329
+  EAN_OnPage: 5010591998025
+  ASIN: B0001P03O2
+  sales: 500
+  NetProfit_numeric: 0.945000000000001
+  Adjusted_Profit: 0.945000000000001
+  Pack_Verdict: 1:1 Match
+  title_match: 0.3466666666666667
+  category: MODERATE_CONFIDENCE
+
+--- Row 887 ---
+  SupplierTitle: EXTRASTAR EXTENSION LEAD 6 GANG 1M WHITE
+  AmazonTitle: ExtraStar 6 Way Extension Leads with Surge Protection, Wall Mounted Power Strips with Individual Switches 13A UK Plug (1M, White)
+  EAN: nan
+  EAN_OnPage: 791348432249
+  ASIN: B084Z492PW
+  sales: 500
+  NetProfit_numeric: 1.08166666666666
+  Adjusted_Profit: 1.08166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.46153846153846156
+  category: MODERATE_CONFIDENCE
+
+--- Row 782 ---
+  SupplierTitle: POWERPLUS 1.7LTR JUG KETTLE BLACK
+  AmazonTitle: Swan SK31020N Brushed Stainless Steel Jug Kettle, Cordless Design, 2000W, 1 Litre, Silver
+  EAN: 5055203813228
+  EAN_OnPage: nan
+  ASIN: B00KLGPNUK
+  sales: 500
+  NetProfit_numeric: 3.94125
+  Adjusted_Profit: 3.94125
+  Pack_Verdict: 1:1 Match
+  title_match: 0.32786885245901637
+  category: MODERATE_CONFIDENCE
+
+--- Row 1052 ---
+  SupplierTitle: EVERBUILD ONE STRIKE FILLER 250ML
+  AmazonTitle: Everbuild â€“ One Strike â€“ Multi-Purpose Quick-Drying Filler â€“ One-Time Application â€“ White â€“ 1 Litre Tub
+  EAN: 5029347300029
+  EAN_OnPage: nan
+  ASIN: B001326TJA
+  sales: 500
+  NetProfit_numeric: 0.151666666666667
+  Adjusted_Profit: 0.151666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.410958904109589
+  category: MODERATE_CONFIDENCE
+
+--- Row 678 ---
+  SupplierTitle: DAEWOO ADAPTOR UK TO CHINA  AUSTRALIA AND NEW ZEALAND
+  AmazonTitle: 2 x UK to Australia Travel Adapter, Plug for visitors from UK to Australia, China and New Zealand (Pack of 2)
+  EAN: 5024996833058
+  EAN_OnPage: nan
+  ASIN: B07K82YBGS
+  sales: 500
+  NetProfit_numeric: 1.15124999999999
+  Adjusted_Profit: 0.14324999999998989
+  Pack_Verdict: BUNDLE (2x) - OK
+  title_match: 0.4074074074074074
+  category: MODERATE_CONFIDENCE
+
+--- Row 759 ---
+  SupplierTitle: ROLSON RECHARGEABLE 21 IN 1 PRECISION SCREWDRIVER KIT
+  AmazonTitle: Mini Electric Screwdriver, 68 in 1 Precision Screwdriver Set with 64 Magnetic Bits, 5 Torque Settings, 4 LED Lights, Rechargeable Repair Tool Kit for Electronics, Phone, Camera, Laptop, Watch
+  EAN: 5029594282000
+  EAN_OnPage: nan
+  ASIN: B0DFBMPLSS
+  sales: 500
+  NetProfit_numeric: 6.82166666666666
+  Adjusted_Profit: 6.82166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.3114754098360656
+  category: MODERATE_CONFIDENCE
+
+--- Row 700 ---
+  SupplierTitle: CHRISTMAS CRACKER 10 X 12" SANTA AND FRIENDS
+  AmazonTitle: Aisszhao 6 Pack Christmas Party Crackers,Christmas Crackers with Santa's Friends Building Block Xmas Cracker,Luxury Xmas Family Cracker with Novelty Gifts Party Hats
+  EAN: 5015302170288
+  EAN_OnPage: nan
+  ASIN: B0DDCFRKB4
+  sales: 500
+  NetProfit_numeric: 3.365
+  Adjusted_Profit: 5.681
+  Pack_Verdict: SPLIT (1/2) - OK
+  title_match: 0.3062200956937799
+  category: MODERATE_CONFIDENCE
+
+================================================================================
+❌ VERIFIED (Exact EAN) - FILTERED OUT (Audit): 376
+================================================================================
+
+--- Row 298 ---
+  SupplierTitle: PHOODS FOIL TRAY ROASTER
+  AmazonTitle: Superior Sandwich Platter Trays - Pack of 10 Catering Trays for Parties - Buffet Serving Tray with Spill Proof Lids - Catering Platters for Cakes, Parties & Events, Meal Prep Large Tray
+  EAN: 5060357991357
+  EAN_OnPage: 5060357991357
+  ASIN: B0DT71SSPT
+  sales: 50
+  NetProfit_numeric: 3.905
+  Adjusted_Profit: -5.815000000000001
+  Pack_Verdict: BUNDLE (10x) - LOSS
+  title_match: 0.19138755980861244
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: Adjusted_Profit<=0 (-5.82)
+
+--- Row 764 ---
+  SupplierTitle: SUPERIOR FOIL 10 CONTAINERS & LID 9X9IN
+  AmazonTitle: Superior 10-Pack Aluminium Foil Trays with Paper Lids, Heavy Duty Aluminium Takeaway Containers, Freezer & Oven Safe Tin Foil Trays For Baking, Cooking, Broiling, Storage Containers, 9 x 9 inch
+  EAN: 5060357990107
+  EAN_OnPage: 5060357990107
+  ASIN: B0DJDH23JW
+  sales: 700
+  NetProfit_numeric: 2.12833333333333
+  Adjusted_Profit: -27.15166666666659
+  Pack_Verdict: BUNDLE (9x) - LOSS
+  title_match: 0.3103448275862069
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: Adjusted_Profit<=0 (-27.15)
+
+--- Row 1069 ---
+  SupplierTitle: MASON CASH CERAMIC RECT DISH 16cm
+  AmazonTitle: Mason Cash 2001.542 Collection Fine Stoneware Square Roasting Baking and Serving Dish, Ceramic, White, 16 x 16 x 4.5 cm
+  EAN: 5010853203508
+  EAN_OnPage: 5010853203508
+  ASIN: B00W3RVAG6
+  sales: 50
+  NetProfit_numeric: 0.101666666666666
+  Adjusted_Profit: -54.79833333333318
+  Pack_Verdict: BUNDLE (16x) - LOSS
+  title_match: 0.32894736842105265
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: Adjusted_Profit<=0 (-54.80)
+
+--- Row 1078 ---
+  SupplierTitle: CHEF AID SHOT GLASSES ASSORTED 20PCE
+  AmazonTitle: Chef Aid Multi-Coloured Plastic Shot Glasses, Pack of 20 Reusable 30ml Party Cups, Bright, Colourful Drinking Glasses for Shots, Cocktails and Celebrations
+  EAN: 5012904148738
+  EAN_OnPage: 5012904148738
+  ASIN: B00M36YPIM
+  sales: 600
+  NetProfit_numeric: 0.0300000000000009
+  Adjusted_Profit: -33.257999999999996
+  Pack_Verdict: BUNDLE (20x) - LOSS
+  title_match: 0.33507853403141363
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: Adjusted_Profit<=0 (-33.26)
+
+--- Row 1100 ---
+  SupplierTitle: STATUS LUGGAGE SCALE 16.06
+  AmazonTitle: STATUS Mechanical Luggage Scale with 1â€¯m Tape Measure, Portable Analog Travel Weighing Scale up to 32â€¯kg Capacity for Suitcases & Bags, (SMLSCALE1PK4)
+  EAN: 5022822185012
+  EAN_OnPage: 5022822185012
+  ASIN: B010LFSDL6
+  sales: 500
+  NetProfit_numeric: -0.0366666666666659
+  Adjusted_Profit: -0.0366666666666659
+  Pack_Verdict: 1:1 Match
+  title_match: 0.24444444444444444
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.04), Adjusted_Profit<=0 (-0.04)
+
+--- Row 1117 ---
+  SupplierTitle: AMTECH DIAMOND STONE PORTABLE 2INCH X 10INC
+  AmazonTitle: Amtech E2522 Double Sided Folding Diamond File
+  EAN: 5032759041930
+  EAN_OnPage: 5032759041930
+  ASIN: B00XHT31GQ
+  sales: 50
+  NetProfit_numeric: -0.125
+  Adjusted_Profit: -0.125
+  Pack_Verdict: 1:1 Match
+  title_match: 0.38202247191011235
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.12), Adjusted_Profit<=0 (-0.12)
+
+--- Row 1131 ---
+  SupplierTitle: ELLIOTT HAND SCRUBING BRUSH WOODEN EFECT
+  AmazonTitle: Elliott Wood Effect Scrubbing Brush, Strong and Durable Scrub Brush with Easy Grip Handle and Synthetic Fibres, Perfect for indoor and outdoor cleaning on hard and soft surfaces
+  EAN: 5013159300810
+  EAN_OnPage: 5013159300810
+  ASIN: B0017SDAP6
+  sales: 100
+  NetProfit_numeric: -0.0983333333333331
+  Adjusted_Profit: -0.0983333333333331
+  Pack_Verdict: 1:1 Match
+  title_match: 0.29493087557603687
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.10), Adjusted_Profit<=0 (-0.10)
+
+--- Row 1144 ---
+  SupplierTitle: PRODEC DECORATORS BRUSH 12PC SET
+  AmazonTitle: ProDec Decorator's Dozen 12 Piece Synthetic Paint Brush Set for a Smooth Finish Painting with Emulsion, Gloss, Satin Paints on Walls, Ceilings, Wood, Metal - 2x 1, 5x 1.5, 4x 2, 1x 3 inch
+  EAN: 5019200286010
+  EAN_OnPage: 5019200286010
+  ASIN: B09VGYQJNC
+  sales: 600
+  NetProfit_numeric: -0.611666666666667
+  Adjusted_Profit: -133.53566666666669
+  Pack_Verdict: BUNDLE (12x) - LOSS
+  title_match: 0.2465753424657534
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.61), Adjusted_Profit<=0 (-133.54)
+
+--- Row 1166 ---
+  SupplierTitle: PRODEC PREMIER SYNTHETIC BRUSH 7PC SET
+  AmazonTitle: ProDec 7 piece Premier Trade Synthetic Paint Brush Set for a Smooth Finish with Emulsion, Gloss, Satin Paints on Walls, Ceilings, Wood, Metal, 2x 1.5, 2x 2, 1x 3 inch +2 Free Sash Brushes
+  EAN: 5019200288809
+  EAN_OnPage: 5019200288809
+  ASIN: B097HQV49P
+  sales: 200
+  NetProfit_numeric: -0.675
+  Adjusted_Profit: -60.650999999999996
+  Pack_Verdict: BUNDLE (7x) - LOSS
+  title_match: 0.3022222222222222
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.68), Adjusted_Profit<=0 (-60.65)
+
+--- Row 1175 ---
+  SupplierTitle: ROLSON COPPER PIPE CUTTER 15MM
+  AmazonTitle: Rolson 22406 15 mm Copper Pipe Cutter
+  EAN: 5029594224062
+  EAN_OnPage: 5029594224062
+  ASIN: B001KOTNM6
+  sales: 200
+  NetProfit_numeric: -0.298333333333332
+  Adjusted_Profit: -0.298333333333332
+  Pack_Verdict: 1:1 Match
+  title_match: 0.746268656716418
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.30), Adjusted_Profit<=0 (-0.30)
+
+--- Row 1185 ---
+  SupplierTitle: PPS FOIL 3 PLATTERS MEDIUM
+  AmazonTitle: PPS 3 x ALUMINIUM FOIL PLATTER TRAY - 44cm x 29cm disposable foil catering serving dish
+  EAN: 5030481930027
+  EAN_OnPage: 5030481930027
+  ASIN: B01HILDGK4
+  sales: 50
+  NetProfit_numeric: -0.171666666666667
+  Adjusted_Profit: -0.171666666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.35398230088495575
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.17), Adjusted_Profit<=0 (-0.17)
+
+--- Row 1190 ---
+  SupplierTitle: AMTECH COUNTERSINK 3PC SET
+  AmazonTitle: Amtech F0815 3 piece countersink set
+  EAN: 5032759044115
+  EAN_OnPage: 5032759044115
+  ASIN: B01L1XU7SE
+  sales: 50
+  NetProfit_numeric: -0.293333333333332
+  Adjusted_Profit: -6.365333333333312
+  Pack_Verdict: BUNDLE (3x) - LOSS
+  title_match: 0.7096774193548387
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.29), Adjusted_Profit<=0 (-6.37)
+
+--- Row 1202 ---
+  SupplierTitle: FAIRY SOAP DISPENSING DISH BRUSH
+  AmazonTitle: Fairy Soap Dispensing Dish Brush
+  EAN: 5010303180588
+  EAN_OnPage: 5010303180588
+  ASIN: B0BYKDX25N
+  sales: 50
+  NetProfit_numeric: -0.244999999999999
+  Adjusted_Profit: -0.244999999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 1.0
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.24), Adjusted_Profit<=0 (-0.24)
+
+--- Row 1204 ---
+  SupplierTitle: BELDRAY LINT REMOVER CORDLESS AND RECHARGABLE
+  AmazonTitle: Beldray Easy Empty Electric Lint Remover - Cordless, Rechargeable Fabric Shaver, Remove Bobbles & Pills, 2 Speeds, Includes USB C Cable & Cleaning Brush, Suitable for All Fabrics, Up To 2.5 Hours Use
+  EAN: 5054061513097
+  EAN_OnPage: 5054061513097
+  ASIN: B0FND6FR1T
+  sales: 50
+  NetProfit_numeric: -1.04166666666666
+  Adjusted_Profit: -1.04166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.3360655737704918
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-1.04), Adjusted_Profit<=0 (-1.04)
+
+--- Row 1222 ---
+  SupplierTitle: DEKTON MINI EXTRA LONG NOSE PLIERS
+  AmazonTitle: Dekton Mini Extra Long Nose Pliers-Precision Tools for Electronics, Craft Work| Anti-slip grips| Ideal for Tight Spaces, Wire Cutting, Precision Task| Heat treated carbon steel for Strength, Longevity
+  EAN: 5055441408996
+  EAN_OnPage: 5055441408996
+  ASIN: B00EBRS78A
+  sales: 50
+  NetProfit_numeric: -0.24
+  Adjusted_Profit: -0.24
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2905982905982906
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.24), Adjusted_Profit<=0 (-0.24)
+
+--- Row 1226 ---
+  SupplierTitle: PRODEC MINI ROLLER HIGH DENSITY FOAM 20PK
+  AmazonTitle: ProDec Big Box 20 Pack 4 inch High Density Foam Mini Paint Rollers for a Smooth Finish with Gloss and Satin Paints on Skirting Boards, Window Sills, Panel Doors, Cabinets, Metal and More
+  EAN: 5019200322992
+  EAN_OnPage: 5019200322992
+  ASIN: B0BK198M17
+  sales: 50
+  NetProfit_numeric: -1.04666666666666
+  Adjusted_Profit: -1.04666666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.2643171806167401
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-1.05), Adjusted_Profit<=0 (-1.05)
+
+--- Row 1227 ---
+  SupplierTitle: ADDIS HAND BRUSH STIFF SILVER
+  AmazonTitle: Addis Hand Brush with Stiff Bristles and an Extra-Sturdy Handle, Metallic Silver, 1,319236
+  EAN: 5010303059501
+  EAN_OnPage: 5010303059501
+  ASIN: B000TAR90A
+  sales: 50
+  NetProfit_numeric: -0.374999999999998
+  Adjusted_Profit: -0.374999999999998
+  Pack_Verdict: 1:1 Match
+  title_match: 0.48739495798319327
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.37), Adjusted_Profit<=0 (-0.37)
+
+--- Row 1233 ---
+  SupplierTitle: FUNTIME RAINBOW RAINMAKER  6 PLUS  MONTHS
+  AmazonTitle: Funtime 55914 Rainbow Rainmaker Toy,for 6 months to 3 years, 23cm
+  EAN: 28503059141
+  EAN_OnPage: 28503059141
+  ASIN: B076NVHQ1X
+  sales: 600
+  NetProfit_numeric: -0.568333333333334
+  Adjusted_Profit: -0.568333333333334
+  Pack_Verdict: 1:1 Match
+  title_match: 0.660377358490566
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.57), Adjusted_Profit<=0 (-0.57)
+
+--- Row 1235 ---
+  SupplierTitle: AMTECH BRADAWL/GIMLET SET
+  AmazonTitle: Amtech S2550 2 Piece bradawl and Gimlet Set
+  EAN: 5032759021413
+  EAN_OnPage: 5032759021413
+  ASIN: B0058CRUK8
+  sales: 50
+  NetProfit_numeric: -0.304999999999999
+  Adjusted_Profit: -2.308999999999999
+  Pack_Verdict: BUNDLE (2x) - LOSS
+  title_match: 0.7058823529411765
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-0.30), Adjusted_Profit<=0 (-2.31)
+
+--- Row 1237 ---
+  SupplierTitle: PREMIER 200 LED TIMER MULTI ACTION LIGHTS VINTAGE GOLD
+  AmazonTitle: Premier 200 Vintage Gold and Red Supabrights Multi Action LED String Lights with Timer
+  EAN: 5053844313954
+  EAN_OnPage: 5053844313954
+  ASIN: B09CNV5CC4
+  sales: 300
+  NetProfit_numeric: -1.08166666666666
+  Adjusted_Profit: -1.08166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5857142857142857
+  category: EXACT_EAN_MATCH
+  EXCLUSION REASON: NetProfit<=0 (-1.08), Adjusted_Profit<=0 (-1.08)
+
+================================================================================
+❌ HIGH LIKELIHOOD - FILTERED OUT (Audit): 226
+================================================================================
+
+--- Row 176 ---
+  SupplierTitle: DRAPER HSS DRILL BIT 1.5 MM
+  AmazonTitle: Draper 18551 Combined HSS and Masonry Drill Bit Set, Blue, 17 Pcs
+  EAN: 5059482059971
+  EAN_OnPage: nan
+  ASIN: B009RM6PGU
+  sales: 100
+  NetProfit_numeric: 5.155
+  Adjusted_Profit: -6.749
+  Pack_Verdict: BUNDLE (17x) - LOSS
+  title_match: 0.5
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-6.75)
+
+--- Row 381 ---
+  SupplierTitle: BRIGHT & HOMELY CITRONELLA TEALIGHT CANDLES LARGE 4 PACK
+  AmazonTitle: Price's Candles Citronella Tealights - 100 Pack
+  EAN: 5050796010764
+  EAN_OnPage: nan
+  ASIN: B072KDL23B
+  sales: 200
+  NetProfit_numeric: 2.72375
+  Adjusted_Profit: -21.46825
+  Pack_Verdict: BUNDLE (25x) - LOSS
+  title_match: 0.6213592233009708
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-21.47)
+
+--- Row 607 ---
+  SupplierTitle: BACOFOIL ZIPPER BAGS ALL PURPOSE 15 PACK SMALL 1L
+  AmazonTitle: Bacofoil 3 x Zipper Small All Purpose Bags Food Freezing Storage Bags (45 Bags)
+  EAN: 5023139861019
+  EAN_OnPage: nan
+  ASIN: B08FBJ59DR
+  sales: 500
+  NetProfit_numeric: 2.17
+  Adjusted_Profit: -1.718
+  Pack_Verdict: BUNDLE (3x) - LOSS
+  title_match: 0.53125
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-1.72)
+
+--- Row 850 ---
+  SupplierTitle: FAIRY DUAL SPONGE SCOURER WITH CRYSTALS PK2
+  AmazonTitle: Addis Fairy Originals Non Scratch General Dual Sponge Scourer with Crystals, Pack of 6, Green One Size
+  EAN: 5010303179971
+  EAN_OnPage: 5010303179995
+  ASIN: B09P1G3YJ5
+  sales: 100
+  NetProfit_numeric: 0.491666666666667
+  Adjusted_Profit: -4.008333333333333
+  Pack_Verdict: BUNDLE (6x) - LOSS
+  title_match: 0.5793103448275863
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-4.01)
+
+--- Row 861 ---
+  SupplierTitle: PLAYWRITE  CHRISTMAS CYO MASKS
+  AmazonTitle: Playwrite Pack of 12 Christmas design cardboard masks
+  EAN: 5016064115777
+  EAN_OnPage: nan
+  ASIN: B07R99H8KK
+  sales: 50
+  NetProfit_numeric: 0.294583333333333
+  Adjusted_Profit: -3.401416666666667
+  Pack_Verdict: BUNDLE (12x) - LOSS
+  title_match: 0.6987951807228916
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-3.40)
+
+--- Row 894 ---
+  SupplierTitle: BLUE CANYON ROUND WALL MIRROR WHITE
+  AmazonTitle: Blue Canyon Round Mirror, 40 cm Length x 40 cm Width, White
+  EAN: 5060386422662
+  EAN_OnPage: nan
+  ASIN: B01CMHNDKC
+  sales: 50
+  NetProfit_numeric: 1.92958333333333
+  Adjusted_Profit: -264.8304166666667
+  Pack_Verdict: BUNDLE (40x) - LOSS
+  title_match: 0.6382978723404256
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-264.83)
+
+--- Row 920 ---
+  SupplierTitle: ROLSON PLASTERING TROWEL 280X115MM
+  AmazonTitle: Rolson 52245 Smooth Plastering Trowel, Multi, 280 x 120 mm
+  EAN: 5029594522380
+  EAN_OnPage: 5029594522458
+  ASIN: B006A7D1O4
+  sales: 100
+  NetProfit_numeric: 0.741666666666666
+  Adjusted_Profit: -317.70233333333334
+  Pack_Verdict: BUNDLE (120x) - LOSS
+  title_match: 0.6956521739130435
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-317.70)
+
+--- Row 958 ---
+  SupplierTitle: SECURPAK NYLON LOCKING NUT ZINC PLATED M12 PACK OF 6
+  AmazonTitle: M12 Nyloc Hex Nut Locking Metal Steel Sheet Zinc Plated 12mm Nut Box of 10pcs
+  EAN: 5019923004670
+  EAN_OnPage: 5060589914773
+  ASIN: B0B3X8VCQ5
+  sales: 50
+  NetProfit_numeric: 0.231666666666667
+  Adjusted_Profit: -0.2963333333333331
+  Pack_Verdict: BUNDLE (1x) - LOSS
+  title_match: 0.5581395348837209
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-0.30)
+
+--- Row 1039 ---
+  SupplierTitle: AMTECH BOX SPANNER /TOMMY BAR
+  AmazonTitle: Amtech K1150 6 Piece Tubular Box Spanner Set with Tommy bar
+  EAN: 5032759049905
+  EAN_OnPage: nan
+  ASIN: B004GY24EQ
+  sales: 50
+  NetProfit_numeric: 0.207083333333334
+  Adjusted_Profit: -13.472916666666617
+  Pack_Verdict: BUNDLE (6x) - LOSS
+  title_match: 0.6363636363636364
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: Adjusted_Profit<=0 (-13.47)
+
+--- Row 1114 ---
+  SupplierTitle: PRO USER MAINS TESTER SCREWDRIVER
+  AmazonTitle: 2PC Electrical Mains Voltage Tester Electricians Insulated Screwdriver
+  EAN: 5012629012321
+  EAN_OnPage: 7599695838553
+  ASIN: B07R84Z1MD
+  sales: 500
+  NetProfit_numeric: -0.0449999999999999
+  Adjusted_Profit: -0.0449999999999999
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5242718446601942
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.04), Adjusted_Profit<=0 (-0.04)
+
+--- Row 1116 ---
+  SupplierTitle: APOLLO BEECH TOILET ROLL HOLDER
+  AmazonTitle: Apollo 20 x 10 x 7 cm Wooden Toilet Roll Holder, Multi-Colour, 8251
+  EAN: 5026180082518
+  EAN_OnPage: nan
+  ASIN: B004H5QCI8
+  sales: 100
+  NetProfit_numeric: -0.122083333333333
+  Adjusted_Profit: -32.738083333333336
+  Pack_Verdict: BUNDLE (10x) - LOSS
+  title_match: 0.5510204081632653
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.12), Adjusted_Profit<=0 (-32.74)
+
+--- Row 1123 ---
+  SupplierTitle: ROLSON COMBI PLIERS 150MM
+  AmazonTitle: Rolson 11207 150 Mm Width Combination Pliers - Multi Color
+  EAN: nan
+  EAN_OnPage: 5029594112079
+  ASIN: B071RZY8TP
+  sales: 50
+  NetProfit_numeric: -0.0983333333333325
+  Adjusted_Profit: -0.0983333333333325
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5060240963855421
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.10), Adjusted_Profit<=0 (-0.10)
+
+--- Row 1128 ---
+  SupplierTitle: MIRACLE GRO EVERGREEN COMPLETE 4IN1 BOX
+  AmazonTitle: Miracle-Gro Evergreen Complete 4-in-1 Lawn Food, Weed & Moss Control, 360 m2, Yellow
+  EAN: 5010272041989
+  EAN_OnPage: 5010272195248
+  ASIN: B0BS6373C7
+  sales: 100
+  NetProfit_numeric: -0.391666666666665
+  Adjusted_Profit: -0.391666666666665
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5853658536585366
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.39), Adjusted_Profit<=0 (-0.39)
+
+--- Row 1130 ---
+  SupplierTitle: WOODSTOCK INDOOR WATERING CAN 1LTR
+  AmazonTitle: Ward Enterprises WATERING CAN 1LTR GREEN GN357
+  EAN: 5021711038880
+  EAN_OnPage: nan
+  ASIN: B004V34AJO
+  sales: 700
+  NetProfit_numeric: -0.0849999999999995
+  Adjusted_Profit: -0.0849999999999995
+  Pack_Verdict: 1:1 Match
+  title_match: 0.525
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.08), Adjusted_Profit<=0 (-0.08)
+
+--- Row 1143 ---
+  SupplierTitle: ULTRATAPE WORKTOP PROTECTOR 600MMX25M
+  AmazonTitle: Unika Worktop Hot Protector Rods, Silver, Pack of 6
+  EAN: 5027785811916
+  EAN_OnPage: nan
+  ASIN: B01J1JZTBA
+  sales: 50
+  NetProfit_numeric: -0.458333333333332
+  Adjusted_Profit: -46.17833333333333
+  Pack_Verdict: BUNDLE (6x) - LOSS
+  title_match: 0.5
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.46), Adjusted_Profit<=0 (-46.18)
+
+--- Row 1152 ---
+  SupplierTitle: AMTECH PLASTERING TROWEL 11 INCH LIGHT WEIGHT
+  AmazonTitle: Amtech G1500 280mm (11") Plastering trowel
+  EAN: 5032759002191
+  EAN_OnPage: nan
+  ASIN: B004TRQU68
+  sales: 200
+  NetProfit_numeric: -0.160833333333333
+  Adjusted_Profit: -0.160833333333333
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5517241379310345
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.16), Adjusted_Profit<=0 (-0.16)
+
+--- Row 1167 ---
+  SupplierTitle: APOLLO SPIKE TOWEL TOILET ROLL HOLDER
+  AmazonTitle: Apollo 20 x 10 x 7 cm Wooden Toilet Roll Holder, Multi-Colour, 8251
+  EAN: 5026180099769
+  EAN_OnPage: nan
+  ASIN: B004H5QCI8
+  sales: 100
+  NetProfit_numeric: -0.292083333333333
+  Adjusted_Profit: -34.74408333333333
+  Pack_Verdict: BUNDLE (10x) - LOSS
+  title_match: 0.5192307692307693
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.29), Adjusted_Profit<=0 (-34.74)
+
+--- Row 1186 ---
+  SupplierTitle: REDWOOD  MULTI PURPOSE GAS TORCH HEAD
+  AmazonTitle: MARKSMAN Multi Purpose Gas Torch Head
+  EAN: 5017403133902
+  EAN_OnPage: 5038673685120
+  ASIN: B088VRZ7W8
+  sales: 200
+  NetProfit_numeric: -0.393333333333334
+  Adjusted_Profit: -0.393333333333334
+  Pack_Verdict: 1:1 Match
+  title_match: 0.8108108108108109
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.39), Adjusted_Profit<=0 (-0.39)
+
+--- Row 1188 ---
+  SupplierTitle: DEADFAST MOUSE & RAT KILLER 15 BLOCK
+  AmazonTitle: Deadfast Mouse and Rat Killer Plus Poison, 15 Block - Green
+  EAN: 5023377005589
+  EAN_OnPage: nan
+  ASIN: B07FRCMXRY
+  sales: 600
+  NetProfit_numeric: -0.67
+  Adjusted_Profit: -0.67
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7368421052631579
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.67), Adjusted_Profit<=0 (-0.67)
+
+--- Row 1193 ---
+  SupplierTitle: AMTECH POINTING TROWEL WITH SOFT GRIP 130MM
+  AmazonTitle: Amtech G0226 130mm (5") Pointing Trowel with Soft Grip
+  EAN: 5032759038091
+  EAN_OnPage: nan
+  ASIN: B00LQOZINS
+  sales: 100
+  NetProfit_numeric: -0.209166666666667
+  Adjusted_Profit: -0.209166666666667
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7628865979381443
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.21), Adjusted_Profit<=0 (-0.21)
+
+--- Row 1196 ---
+  SupplierTitle: MASON HEXAGON KEY WRENCHES MM 8 PIECES
+  AmazonTitle: Draper 33561 Metric Hexagon Key Wrench, 8 mm Size
+  EAN: 5060298505996
+  EAN_OnPage: nan
+  ASIN: B015GWAL1O
+  sales: 50
+  NetProfit_numeric: -0.141666666666666
+  Adjusted_Profit: 0.740333333333334
+  Pack_Verdict: SPLIT (1/8) - OK
+  title_match: 0.5977011494252874
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.14)
+
+--- Row 1207 ---
+  SupplierTitle: WHITEFURZE POT 10 INCH
+  AmazonTitle: Whitefurze G04024 25cm Garden Pot - Terracotta
+  EAN: 5016447000577
+  EAN_OnPage: nan
+  ASIN: B00537PA14
+  sales: 50
+  NetProfit_numeric: -0.245416666666665
+  Adjusted_Profit: -0.245416666666665
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.25), Adjusted_Profit<=0 (-0.25)
+
+--- Row 1210 ---
+  SupplierTitle: VFM  EMULSION MATT PRETTY PINK 2.5L
+  AmazonTitle: Dulux 500006 Matt Emulsion Paint For Walls And Ceilings - Pretty Pink 2.5L
+  EAN: 5023608423946
+  EAN_OnPage: 5010212494837
+  ASIN: B004R23I74
+  sales: 50
+  NetProfit_numeric: -0.886666666666666
+  Adjusted_Profit: -0.886666666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5504587155963303
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.89), Adjusted_Profit<=0 (-0.89)
+
+--- Row 1243 ---
+  SupplierTitle: RUSTINS STAINBLOCKER 500ML
+  AmazonTitle: Rustins Stain Blocker & Multi-Surface Primer 500ml
+  EAN: 5015332002214
+  EAN_OnPage: nan
+  ASIN: B09PLH5Y1H
+  sales: 300
+  NetProfit_numeric: -0.935416666666666
+  Adjusted_Profit: -0.935416666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.6842105263157895
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.94), Adjusted_Profit<=0 (-0.94)
+
+--- Row 1244 ---
+  SupplierTitle: EXTRASTAR EXTENSION LEAD SURGE PROTECTION 6 GANG 2M WHITE
+  AmazonTitle: ExtraStar 6 Way Extension Leads with Surge Protection, Wall Mounted Power Strips with Individual Switches 13A UK Plug (2M, White)
+  EAN: nan
+  EAN_OnPage: 791405396163
+  ASIN: B088FB464P
+  sales: 200
+  NetProfit_numeric: -0.824999999999998
+  Adjusted_Profit: -0.824999999999998
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5806451612903226
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.82), Adjusted_Profit<=0 (-0.82)
+
+--- Row 1247 ---
+  SupplierTitle: BEE HAPPY TEA FOR ONE
+  AmazonTitle: Sass & Belle Busy Bees Teapot for One
+  EAN: 5022183100556
+  EAN_OnPage: 5055992799949
+  ASIN: B0D1Y5Y28Z
+  sales: 50
+  NetProfit_numeric: -1.64166666666666
+  Adjusted_Profit: -1.64166666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5172413793103449
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-1.64), Adjusted_Profit<=0 (-1.64)
+
+--- Row 1264 ---
+  SupplierTitle: AMTECH BUILDERS LINE 2PC50M
+  AmazonTitle: Amtech G3990 50m (165ft) builder's line (2 Pack)
+  EAN: 5032759043460
+  EAN_OnPage: nan
+  ASIN: B0156NG9AK
+  sales: 100
+  NetProfit_numeric: -0.368333333333333
+  Adjusted_Profit: -2.5283333333333333
+  Pack_Verdict: BUNDLE (2x) - LOSS
+  title_match: 0.64
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.37), Adjusted_Profit<=0 (-2.53)
+
+--- Row 1271 ---
+  SupplierTitle: PPS PAPER STRAWS STRIPPED 6X260MM 250PCS
+  AmazonTitle: 8 Inch 6mm Bore Paper Straw - RED & White Striped Pk 250
+  EAN: 50304811800589
+  EAN_OnPage: 5020229109396
+  ASIN: B0CDLXWHFW
+  sales: 300
+  NetProfit_numeric: -0.488333333333333
+  Adjusted_Profit: 2.4518586666666673
+  Pack_Verdict: SPLIT (1/250) - OK
+  title_match: 0.5208333333333334
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.49)
+
+--- Row 1279 ---
+  SupplierTitle: ROLSON CROSSPEIN HAMMER 4OZ
+  AmazonTitle: Rolson 10117 4 oz Crosspein Pin Hammer
+  EAN: 5029594101172
+  EAN_OnPage: nan
+  ASIN: B001KOTNFS
+  sales: 200
+  NetProfit_numeric: -0.425416666666666
+  Adjusted_Profit: -0.425416666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.7076923076923077
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-0.43), Adjusted_Profit<=0 (-0.43)
+
+--- Row 1283 ---
+  SupplierTitle: VFM VINYL SILK BRILL WHITE 5LT
+  AmazonTitle: Johnstone's 306570 Vinyl Silk Emulsion - Brilliant White,5
+  EAN: 5023608411837
+  EAN_OnPage: 5010426736358
+  ASIN: B0038HPFIO
+  sales: 500
+  NetProfit_numeric: -1.53666666666666
+  Adjusted_Profit: -1.53666666666666
+  Pack_Verdict: 1:1 Match
+  title_match: 0.5454545454545454
+  category: HIGH_LIKELIHOOD
+  EXCLUSION REASON: NetProfit<=0 (-1.54), Adjusted_Profit<=0 (-1.54)
+
+================================================================================
+ANALYSIS COMPLETE - Log saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\RESERACH\REPORT\analysis_log_20251223.txt
+================================================================================

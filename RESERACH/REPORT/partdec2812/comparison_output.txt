@@ -1,0 +1,124 @@
+======================================================================
+GROUND TRUTH SUMMARY (IDs adjusted to 1-based)
+======================================================================
+VERIFIED: 25 - Sample IDs: [471, 786, 875, 1021, 1105]
+HIGHLY LIKELY: 29 - Sample IDs: [520, 580, 892, 1130, 1136]
+NEEDS VERIFICATION: 124 - Sample IDs: [121, 154, 155, 157, 191]
+FILTERED OUT: 8 - Sample IDs: [462, 1219, 1360, 1374, 1467]
+
+======================================================================
+CODEX v4.0 REPORT - EXTRACTED
+======================================================================
+VERIFIED: 27 items - Sample: [471, 786, 875, 1021, 1105]
+HIGHLY_LIKELY: 24 items - Sample: [399, 482, 492, 544, 563]
+NEEDS_VERIFICATION: 97 items - Sample: [147, 155, 164, 173, 175]
+FILTERED_OUT: 32 items - Sample: [233, 334, 462, 501, 542]
+
+======================================================================
+WEBAPP v4.0 REPORT - EXTRACTED
+======================================================================
+VERIFIED: 24 items - Sample: [471, 786, 875, 1021, 1105]
+HIGHLY_LIKELY: 116 items - Sample: [482, 498, 515, 520, 537]
+NEEDS_VERIFICATION: 9 items - Sample: [96, 114, 163, 227, 243]
+FILTERED_OUT: 33 items - Sample: [117, 263, 376, 391, 392]
+
+======================================================================
+CODEX v4.0 - DETAILED ACCURACY ANALYSIS
+======================================================================
+
+VERIFIED (27 items):
+  In GT VERIFIED: 25
+  In GT HIGHLY LIKELY: 0
+  In GT NEEDS VERIFICATION: 0
+  In GT FILTERED OUT: 2
+  In GT LOW_PRIORITY: 0
+  In GT OTHER: 0
+  ACCURACY: 25/27 = 92.6%
+
+HIGHLY_LIKELY (24 items):
+  In GT VERIFIED: 0
+  In GT HIGHLY LIKELY: 2
+  In GT NEEDS VERIFICATION: 3
+  In GT FILTERED OUT: 1
+  In GT LOW_PRIORITY: 6
+  In GT OTHER: 12
+  ACCURACY: 2/24 = 8.3%
+
+NEEDS_VERIFICATION (97 items):
+  In GT VERIFIED: 0
+  In GT HIGHLY LIKELY: 5
+  In GT NEEDS VERIFICATION: 11
+  In GT FILTERED OUT: 0
+  In GT LOW_PRIORITY: 22
+  In GT OTHER: 59
+  ACCURACY: 11/97 = 11.3%
+
+FILTERED_OUT (32 items):
+  In GT VERIFIED: 0
+  In GT HIGHLY LIKELY: 1
+  In GT NEEDS VERIFICATION: 2
+  In GT FILTERED OUT: 2
+  In GT LOW_PRIORITY: 7
+  In GT OTHER: 20
+  ACCURACY: 2/32 = 6.2%
+
+======================================================================
+WEBAPP v4.0 - DETAILED ACCURACY ANALYSIS
+======================================================================
+
+VERIFIED (24 items):
+  In GT VERIFIED: 23
+  In GT HIGHLY LIKELY: 0
+  In GT NEEDS VERIFICATION: 0
+  In GT FILTERED OUT: 1
+  In GT LOW_PRIORITY: 0
+  In GT OTHER: 0
+  ACCURACY: 23/24 = 95.8%
+
+HIGHLY_LIKELY (116 items):
+  In GT VERIFIED: 0
+  In GT HIGHLY LIKELY: 23
+  In GT NEEDS VERIFICATION: 29
+  In GT FILTERED OUT: 1
+  In GT LOW_PRIORITY: 27
+  In GT OTHER: 36
+  ACCURACY: 23/116 = 19.8%
+
+NEEDS_VERIFICATION (9 items):
+  In GT VERIFIED: 0
+  In GT HIGHLY LIKELY: 0
+  In GT NEEDS VERIFICATION: 0
+  In GT FILTERED OUT: 0
+  In GT LOW_PRIORITY: 0
+  In GT OTHER: 9
+  ACCURACY: 0/9 = 0.0%
+
+FILTERED_OUT (33 items):
+  In GT VERIFIED: 2
+  In GT HIGHLY LIKELY: 1
+  In GT NEEDS VERIFICATION: 7
+  In GT FILTERED OUT: 5
+  In GT LOW_PRIORITY: 7
+  In GT OTHER: 11
+  ACCURACY: 5/33 = 15.2%
+
+======================================================================
+FINAL COMPARISON SUMMARY
+======================================================================
+
+| Category | Ground Truth | Codex v4.0 | Codex Accuracy | WebApp v4.0 | WebApp Accuracy |
+|----------|--------------|------------|----------------|-------------|-----------------|
+| VERIFIED | 25 | 27 | 92.6% | 24 | 95.8% |
+| HIGHLY_LIKELY | 29 | 24 | 8.3% | 116 | 19.8% |
+| NEEDS_VERIFICATION | 124 | 97 | 11.3% | 9 | 0.0% |
+| FILTERED_OUT | 8 | 32 | 6.2% | 33 | 15.2% |
+
+======================================================================
+KEY FINDINGS
+======================================================================
+
+CODEX VERIFIED items breakdown:
+Counter({'VERIFIED': 25, 'FILTERED_OUT': 2})
+
+WEBAPP HIGHLY_LIKELY items breakdown:
+Counter({'OTHER': 36, 'NEEDS_VERIFICATION': 29, 'LOW_PRIORITY': 27, 'HIGHLY_LIKELY': 23, 'FILTERED_OUT': 1})

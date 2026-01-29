@@ -1,0 +1,22 @@
+{
+  "supplier_url": "https://www.efghousewares.co.uk",
+  "field_mappings": {
+    "product_item": [".product-item", ".product-grid-item", ".product"],
+    "title": ["h3", ".product-title", "a"],
+    "price": [".price", ".product-price", ".amount"],
+    "url": ["a[href]"],
+    "ean": [".product-code", "a + a", ".sku"],
+    "image": ["img", ".product-image img"],
+    "next_page_selector": ["a[href*='#']", ".pagination-next", ".next-page"]
+  },
+  "authentication_required": true,
+  "login_config": {
+    "login_url": "https://www.efghousewares.co.uk/Account/Login",
+    "username_field": "input[placeholder='Enter Email']",
+    "password_field": "input[placeholder='Enter Password']",
+    "login_button": "button:contains('login to your account')"
+  },
+  "pagination_type": "hash",
+  "page_param": "#",
+  "site_platform": "cloudfy"
+}

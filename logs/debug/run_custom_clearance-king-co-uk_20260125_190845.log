@@ -1,0 +1,354 @@
+2026-01-25 19:08:45,915 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_clearance-king-co-uk_20260125_190845.log
+2026-01-25 19:08:45,916 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_clearance-king-co-uk_20260125_190845.log
+2026-01-25 19:08:45,916 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2026-01-25 19:08:45,920 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-01-25 19:08:45,920 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2026-01-25 19:08:46,384 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2026-01-25 19:08:46,385 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-01-25 19:08:48,432 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]
+2026-01-25 19:08:48,438 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/144.0.7559.97
+2026-01-25 19:08:48,439 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2026-01-25 19:08:50,475 - utils.browser_manager - DEBUG - ?? Using IPv4 endpoint for CDP connection
+2026-01-25 19:08:50,475 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+2026-01-25 19:08:50,555 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2026-01-25 19:08:50,555 - utils.browser_manager - INFO - ?? Using existing context with 1 pages
+2026-01-25 19:08:50,556 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 144.0.7559.97
+2026-01-25 19:08:50,556 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 19:08:50,556 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 19:08:50,556 - __main__ - INFO - 🔐 Initializing Clearance King authentication helper...
+2026-01-25 19:08:50,556 - __main__ - INFO - ✅ Using configured credentials for clearance-king.co.uk
+2026-01-25 19:08:50,556 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2026-01-25 19:08:50,557 - tools.standalone_playwright_login - INFO - 🔍 Verifying price access...
+2026-01-25 19:09:07,098 - tools.standalone_playwright_login - ERROR - Navigation error during price verification: Timeout 8000ms exceeded.
+2026-01-25 19:09:07,098 - tools.clearance_king.supplier_authentication_service - INFO - ❌ No clear authentication indicators found
+2026-01-25 19:09:07,098 - __main__ - INFO - 🔐 Not authenticated, initiating login...
+2026-01-25 19:09:07,098 - tools.clearance_king.supplier_authentication_service - INFO - 🔐 Starting login process for Clearance King...
+2026-01-25 19:09:07,099 - tools.clearance_king.supplier_authentication_service - INFO - 🚀 Performing login via StandalonePlaywrightLogin...
+2026-01-25 19:09:07,099 - tools.standalone_playwright_login - DEBUG - ℹ️ Reusing provided Playwright Page; skipping CDP connect
+2026-01-25 19:09:07,109 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2026-01-25 19:09:22,061 - tools.standalone_playwright_login - ERROR - Error checking login status: Timeout 10000ms exceeded.
+2026-01-25 19:09:22,062 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2026-01-25 19:09:34,382 - tools.standalone_playwright_login - ERROR - Error checking login status: Timeout 10000ms exceeded.
+2026-01-25 19:09:34,383 - tools.standalone_playwright_login - INFO - 🔐 Starting Playwright login...
+2026-01-25 19:09:34,383 - tools.standalone_playwright_login - INFO - 🌐 Navigating to login page: https://www.clearance-king.co.uk/customer/account/login/
+2026-01-25 19:09:40,687 - tools.standalone_playwright_login - INFO - ✅ Filled email using selector: input#email
+2026-01-25 19:09:41,687 - tools.standalone_playwright_login - INFO - 🔍 Using config password selector: input#pass
+2026-01-25 19:09:41,859 - tools.standalone_playwright_login - INFO - ✅ Filled password using selector: input#pass (forced)
+2026-01-25 19:09:42,154 - tools.standalone_playwright_login - INFO - ↩️  Pressed Enter in password field as submit fallback
+2026-01-25 19:09:42,155 - tools.standalone_playwright_login - INFO - ⏳ Waiting for login to complete...
+2026-01-25 19:09:42,158 - tools.standalone_playwright_login - WARNING - Still on login page - login may have failed
+2026-01-25 19:09:42,159 - tools.standalone_playwright_login - INFO - 🔍 Verifying price access...
+2026-01-25 19:09:45,256 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £0.58
+2026-01-25 19:09:45,256 - tools.standalone_playwright_login - INFO - 🎉 Playwright login successful! Price access confirmed. (took 23.2s)
+2026-01-25 19:09:45,256 - tools.clearance_king.supplier_authentication_service - INFO - ✅ Login successful via StandalonePlaywrightLogin!
+2026-01-25 19:09:45,258 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2026-01-25 19:09:45,258 - PassiveExtractionWorkflow - INFO -  DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2026-01-25 19:09:45,258 - PassiveExtractionWorkflow - INFO -  DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2026-01-25 19:09:45,259 - PassiveExtractionWorkflow - INFO -  Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 19:09:45,259 - PassiveExtractionWorkflow - INFO -  Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-01-25 19:09:45,260 - PassiveExtractionWorkflow - INFO -  Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\clearance-king.co.uk
+2026-01-25 19:09:45,261 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 162 products in clearance-king-co-uk_products_cache.json
+2026-01-25 19:09:45,262 - PassiveExtractionWorkflow - INFO -  State manager initialized with accurate totals: 162 products, 0 categories
+2026-01-25 19:09:45,262 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2026-01-25 19:09:45,262 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-01-25 19:09:45,263 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-01-25 19:09:45,263 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2026-01-25 19:09:45,264 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-01-25 19:09:45,264 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-01-25 19:09:45,264 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2026-01-25 19:09:45,264 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2026-01-25 19:09:45,265 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2026-01-25 19:09:45,265 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-01-25 19:09:45,265 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2026-01-25 19:09:45,265 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2026-01-25 19:09:45,265 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map initialized as type: <class 'list'>
+2026-01-25 19:09:45,266 - PassiveExtractionWorkflow - INFO - ?? HashLookupOptimizer initialized - ready for O(1) lookups
+2026-01-25 19:09:45,266 - PassiveExtractionWorkflow - INFO -  Hash-based lookup optimization system initialized
+2026-01-25 19:09:45,266 - PassiveExtractionWorkflow - INFO -  SENTINEL MONITORING: Proactive monitoring system initialized
+2026-01-25 19:09:45,267 - PassiveExtractionWorkflow - INFO -  WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2026-01-25 19:09:45,267 - PassiveExtractionWorkflow - INFO -  Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2026-01-25 19:09:45,267 - PassiveExtractionWorkflow - INFO -  Initialization validation passed - all critical attributes verified
+2026-01-25 19:09:45,268 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: clearance-king.co.uk ---
+2026-01-25 19:09:45,268 - PassiveExtractionWorkflow - INFO - Session ID: clearance-king.co.uk_20260125_190945
+2026-01-25 19:09:45,268 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for clearance-king.co.uk
+2026-01-25 19:09:45,269 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 155 predefined category URLs from config\clearance-king_categories.json
+2026-01-25 19:09:45,269 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-01-25 19:09:45,270 - utils.fixed_enhanced_state_manager - INFO - Loaded state for clearance-king.co.uk - resumption from index 0
+2026-01-25 19:09:45,270 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-01-25 19:09:45,270 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2026-01-25 19:09:45,271 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 162 actual products in cache (total entries: 162)
+2026-01-25 19:09:45,272 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 8 categories
+2026-01-25 19:09:45,273 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2026-01-25 19:09:45,273 - utils.fixed_enhanced_state_manager - INFO - ?? ISS-007: Counter mismatch detected but ignored in Hybrid Mode (local counters)
+2026-01-25 19:09:45,274 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2026-01-25 19:09:45,274 - utils.fixed_enhanced_state_manager - INFO -  STARTUP CHECK: is_fresh_start flag is 'False'
+2026-01-25 19:09:45,274 - utils.fixed_enhanced_state_manager - INFO -  Loaded 155 category URLs from config
+2026-01-25 19:09:45,275 - utils.fixed_enhanced_state_manager - INFO -  START MODE: is_fresh_start=False, pci=8, session_cursor=8, url=https://www.clearance-king.co.uk/books/children-s-books.html...
+2026-01-25 19:09:45,275 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2026-01-25 19:09:45,275 - utils.fixed_enhanced_state_manager - INFO -  Loaded 155 category URLs from config
+2026-01-25 19:09:45,276 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:09:45,276 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:09:45,276 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:09:45,277 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:09:45,277 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:09:45,277 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:09:45,281 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:09:45,282 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:09:45,282 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:09:45,282 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=21/42
+2026-01-25 19:09:45,282 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 8 in phase 'amazon_analysis'
+2026-01-25 19:09:45,282 - utils.fixed_enhanced_state_manager - INFO -  STARTUP GATING COMPLETE: session_cursor=8, startup_completed=True
+2026-01-25 19:09:45,283 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Completed comprehensive state analysis
+2026-01-25 19:09:45,283 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-01-25 19:09:45,283 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 8 in phase 'amazon_analysis'
+2026-01-25 19:09:45,283 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 19:09:45,284 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:09:45,284 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:09:45,284 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:09:45,284 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:09:45,285 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:09:45,285 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:09:45,288 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:09:45,289 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:09:45,289 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:09:45,289 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=21/42
+2026-01-25 19:09:45,290 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (manifest)
+2026-01-25 19:09:45,290 - utils.fixed_enhanced_state_manager - INFO -  FIRST AFTER-RESUME KEY: phase=amazon_analysis cat=8/155 prod=21/42 commit_type=manifest
+2026-01-25 19:09:45,290 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (manifest): cat=8/155 prod=21/42 phase=amazon_analysis
+2026-01-25 19:09:45,291 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:09:45,291 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:09:45,291 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:09:45,291 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:09:45,291 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:09:45,292 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:09:45,295 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:09:45,296 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:09:45,296 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:09:45,296 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=21/42
+2026-01-25 19:09:45,296 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 19:09:45,297 - PassiveExtractionWorkflow - INFO -  FROZEN TOTAL CATEGORIES set to 155 (hash=19f4ffd1)
+2026-01-25 19:09:45,297 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:09:45,297 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:09:45,297 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:09:45,298 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:09:45,298 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:09:45,298 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:09:45,301 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:09:45,302 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:09:45,302 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:09:45,303 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=21/42
+2026-01-25 19:09:45,303 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 19:09:45,303 - PassiveExtractionWorkflow - WARNING -  RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2026-01-25 19:09:45,303 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2026-01-25 19:09:45,304 - PassiveExtractionWorkflow - INFO -  RESUMPTION POINT CONFIRMED: Starting from category index 8 at product 21 in phase 'amazon_analysis'.
+2026-01-25 19:09:45,304 - PassiveExtractionWorkflow - INFO -  [RESUME_PHASE_CONFIRMED] Supplier backlog complete for resume category index 8: supplier=42/42, amazon=21/42, url=https://www.clearance-king.co.uk/books/children-s-books.html. Proceeding with 'amazon_analysis' as persisted.
+2026-01-25 19:09:45,304 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to Amazon analysis phase
+2026-01-25 19:09:45,305 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 162 products in clearance-king-co-uk_products_cache.json
+2026-01-25 19:09:45,307 - PassiveExtractionWorkflow - INFO -  CATEGORY QUEUE: url=https://www.clearance-king.co.uk/books/children-s-books.html size=42 allowed_gate=off
+2026-01-25 19:09:45,307 - PassiveExtractionWorkflow - INFO -  STEP-2 ALLOWLIST RESTORED: 42 keys for category https://www.clearance-king.co.uk/books/children-s-books.html
+2026-01-25 19:09:45,308 - PassiveExtractionWorkflow - INFO - [ALLOWLIST_MISMATCH] 36 queue items not present in restored allowlist for category https://www.clearance-king.co.uk/books/children-s-books.html; proceeding with category-only gating
+2026-01-25 19:09:45,308 - PassiveExtractionWorkflow - INFO -  AMAZON RESUME: cat_idx=8 total=42 start_batch=0 first_offset=21
+2026-01-25 19:09:45,308 - PassiveExtractionWorkflow - INFO - [RESUME_ENTER] cat_idx=8 total=42 ptr=21 start_batch=0 first_offset=21
+2026-01-25 19:09:45,309 - PassiveExtractionWorkflow - INFO -  AMAZON CATEGORY PROGRESS [children-s-books-html]: 21/42 (remaining=21, global_done=21)
+2026-01-25 19:09:45,309 - PassiveExtractionWorkflow - INFO -  Analyzing product: 'TREE FU TOM SEARCH FOR THE SQUIZZLE'
+2026-01-25 19:09:45,309 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:09:45,309 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:09:45,310 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:09:45,310 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:09:45,310 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:09:45,311 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:09:45,314 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:09:45,314 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:09:45,315 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:09:45,315 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=22/42
+2026-01-25 19:09:45,315 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 19:09:45,316 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 9780857512741
+2026-01-25 19:09:45,316 - tools.amazon_playwright_extractor - INFO - 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-01-25 19:09:45,316 - tools.amazon_playwright_extractor - INFO - ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-01-25 19:09:45,317 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 9780857512741 for supplier product: 'TREE FU TOM SEARCH FOR THE SQUIZZLE' (FixedAmazonExtractor)
+2026-01-25 19:09:45,317 - tools.amazon_playwright_extractor - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2026-01-25 19:09:45,317 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 19:09:45,318 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 19:09:45,318 - utils.browser_manager - INFO - ?? Navigating to https://www.amazon.co.uk
+2026-01-25 19:09:46,979 - utils.browser_manager - INFO - ? Page ready for https://www.amazon.co.uk
+2026-01-25 19:09:46,979 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 9780857512741
+2026-01-25 19:09:51,101 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 9780857512741...
+2026-01-25 19:09:51,135 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-01-25 19:09:51,781 - tools.amazon_playwright_extractor - INFO - Found 7 search result elements using selector: div[data-component-type='s-search-result']
+2026-01-25 19:09:51,781 - tools.amazon_playwright_extractor - INFO - Processing 7 search result elements for EAN 9780857512741
+2026-01-25 19:09:51,790 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): 0857512749
+2026-01-25 19:09:51,790 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN 0857512749
+2026-01-25 19:09:51,830 - tools.amazon_playwright_extractor - DEBUG - ASIN 0857512749 title extracted using selector '.s-title-instructions-style span.a-text-normal': 31 Jan 2013...
+2026-01-25 19:09:51,831 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN 0857512749 - 31 Jan 2013...
+2026-01-25 19:09:51,837 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DGTGR1VQ
+2026-01-25 19:09:51,837 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0DGTGR1VQ
+2026-01-25 19:09:51,872 - tools.amazon_playwright_extractor - DEBUG - ASIN B0DGTGR1VQ title extracted using selector '.s-title-instructions-style span.a-text-normal': 11 Sept 2024...
+2026-01-25 19:09:51,873 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0DGTGR1VQ - 11 Sept 2024...
+2026-01-25 19:09:51,883 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0CNP2HVNN
+2026-01-25 19:09:51,883 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0CNP2HVNN
+2026-01-25 19:09:51,921 - tools.amazon_playwright_extractor - DEBUG - ASIN B0CNP2HVNN title extracted using selector '.s-title-instructions-style span.a-text-normal': 18 Nov 2023...
+2026-01-25 19:09:51,921 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0CNP2HVNN - 18 Nov 2023...
+2026-01-25 19:09:51,928 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): 1409347982
+2026-01-25 19:09:51,928 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN 1409347982
+2026-01-25 19:09:51,963 - tools.amazon_playwright_extractor - DEBUG - ASIN 1409347982 title extracted using selector '.s-title-instructions-style span.a-text-normal': 1 Apr 2015...
+2026-01-25 19:09:51,963 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN 1409347982 - 1 Apr 2015...
+2026-01-25 19:09:51,969 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0FRNGSTRL
+2026-01-25 19:09:51,969 - tools.amazon_playwright_extractor - DEBUG - Processing element 5: ASIN B0FRNGSTRL
+2026-01-25 19:09:51,999 - tools.amazon_playwright_extractor - DEBUG - ASIN B0FRNGSTRL title extracted using selector '.s-title-instructions-style span.a-text-normal': 1 Nov 2025...
+2026-01-25 19:09:51,999 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0FRNGSTRL - 1 Nov 2025...
+2026-01-25 19:09:51,999 - tools.amazon_playwright_extractor - INFO - Found 5 organic results, stopping search to improve performance.
+2026-01-25 19:09:51,999 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 5 organic products, 2 sponsored products filtered out
+2026-01-25 19:09:52,000 - tools.amazon_playwright_extractor - INFO - ✅ EAN SEARCH: Selected first organic result - ASIN 0857512749
+2026-01-25 19:09:52,000 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 9780857512741
+2026-01-25 19:09:52,000 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-01-25 19:09:52,000 - tools.amazon_playwright_extractor - INFO - Single ASIN 0857512749 found for EAN 9780857512741.
+2026-01-25 19:09:52,000 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: 0857512749 for EAN: 9780857512741
+2026-01-25 19:09:52,000 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN 0857512749. Getting a new one from BrowserManager.
+2026-01-25 19:09:52,001 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=9780857512741&ref=nb_sb_noss
+2026-01-25 19:09:54,682 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-01-25 19:09:54,787 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-01-25 19:09:55,803 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-01-25 19:09:58,811 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-01-25 19:09:58,811 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-01-25 19:09:58,874 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-01-25 19:09:58,874 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-01-25 19:10:03,888 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-01-25 19:10:10,900 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: 0857512749
+2026-01-25 19:10:10,900 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-01-25 19:10:10,927 - tools.amazon_playwright_extractor - INFO - Title found: 'Tree Fu Tom: Search for the Squizzle!: A Lift-The-Flap Adventure (Tree Fu Tom Lift the Flap)' via #productTitle
+2026-01-25 19:10:10,928 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-01-25 19:10:10,946 - tools.amazon_playwright_extractor - INFO - Current price: 5.87 via #corePrice_feature_div .a-offscreen
+2026-01-25 19:10:10,985 - tools.amazon_playwright_extractor - INFO - Original price: 16.99 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-01-25 19:10:11,020 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-01-25 19:10:11,047 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/71JxcmAL6BL._SL1000_.jpg via #landingImage
+2026-01-25 19:10:11,056 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-01-25 19:10:11,528 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-01-25 19:10:11,683 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-01-25 19:10:11,697 - tools.amazon_playwright_extractor - INFO - Rating: 4.4 via #acrPopover[title*='out of 5 stars']
+2026-01-25 19:10:11,710 - tools.amazon_playwright_extractor - INFO - Review count: 15 via #acrCustomerReviewText
+2026-01-25 19:10:11,710 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-01-25 19:10:11,731 - tools.amazon_playwright_extractor - INFO - Availability text: 'Only 2 left in stock.' via #availability span.a-color-price
+2026-01-25 19:10:11,731 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-01-25 19:10:11,744 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-01-25 19:10:11,809 - tools.amazon_playwright_extractor - INFO - Description found using selector: div#bookDescription_feature_div
+2026-01-25 19:10:11,809 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-01-25 19:10:11,841 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-01-25 19:10:11,841 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-01-25 19:10:11,841 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-01-25 19:10:11,842 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-01-25 19:10:14,850 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2026-01-25 19:10:17,863 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2026-01-25 19:10:17,914 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-01-25 19:10:17,988 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-01-25 19:10:17,988 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-01-25 19:10:18,008 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-01-25 19:10:18,008 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-01-25 19:10:20,229 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-01-25 19:10:25,268 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-01-25 19:10:25,314 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-01-25 19:10:25,354 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-01-25 19:10:26,398 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 136 rows found
+2026-01-25 19:10:26,412 - tools.amazon_playwright_extractor - INFO - Processing 136 rows in Keepa Product Details AG Grid.
+2026-01-25 19:10:27,510 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.73' in Keepa AG Grid.
+2026-01-25 19:10:27,606 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.88' in Keepa AG Grid.
+2026-01-25 19:10:29,711 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 43 items from Keepa Product Details AG Grid.
+2026-01-25 19:10:29,711 - tools.amazon_playwright_extractor - INFO - ASIN 0857512749: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-01-25 19:10:29,711 - tools.amazon_playwright_extractor - INFO - ASIN 0857512749: EAN '9780857512741' found in Keepa details via key 'Product Codes - EAN'.
+2026-01-25 19:10:29,712 - tools.amazon_playwright_extractor - INFO - ASIN 0857512749: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-01-25 19:10:29,712 - tools.amazon_playwright_extractor - INFO - ASIN 0857512749: BSR 1004334 in 'Books 0.7' from Keepa SalesRankDetailsTable.
+2026-01-25 19:10:29,712 - tools.amazon_playwright_extractor - INFO - ✅ Recorded search method 'EAN' for ASIN 0857512749
+2026-01-25 19:10:29,712 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN 0857512749 (EAN on page: 9780857512741)
+2026-01-25 19:10:29,713 - PassiveExtractionWorkflow - INFO -  EAN search successful for 9780857512741. Using EAN result without title fallback.
+2026-01-25 19:10:29,717 - PassiveExtractionWorkflow - INFO -  Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_0857512749_9780857512741.json
+2026-01-25 19:10:29,718 - PassiveExtractionWorkflow - INFO - Not profitable: ROI 159.3%, Profit 1.40
+2026-01-25 19:10:29,718 - utils.fixed_enhanced_state_manager - INFO -  AMAZON PROGRESS: cat=8/155 idx=21->21 (frozen_queue_len=42) url=https://www.clearance-king.co.uk/books/children-s-books.html
+2026-01-25 19:10:29,718 - utils.fixed_enhanced_state_manager - INFO - FIRST_AFTER_RESUME_KEY phase=amazon_analysis cat=8 prod=22 denom=42
+2026-01-25 19:10:29,718 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 19:10:29,718 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:10:29,718 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:10:29,719 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:10:29,719 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:10:29,719 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:10:29,719 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:10:29,723 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:10:29,723 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=22/42
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (amazon)
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=amazon_analysis cat=8/155 prod=22/42 commit_type=amazon
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (amazon): cat=8/155 prod=22/42 phase=amazon_analysis
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=amazon_analysis cat=8/155 prod=22/42 commit_type=AMAZON
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (AMAZON): cat=8/155 prod=22/42 phase=amazon_analysis
+2026-01-25 19:10:29,724 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=22/42
+2026-01-25 19:10:29,724 - PassiveExtractionWorkflow - INFO - [PROGRESS_COMMIT] queue_idx=21/42 cat_idx=8
+2026-01-25 19:10:29,725 - PassiveExtractionWorkflow - INFO - [RESUME_HONORED] queue_idx=21
+2026-01-25 19:10:29,725 - PassiveExtractionWorkflow - INFO -  AMAZON CATEGORY PROGRESS [children-s-books-html]: 22/42 (remaining=20)
+2026-01-25 19:10:29,725 - PassiveExtractionWorkflow - INFO -  Analyzing product: 'WIGU FOOTBALL NORTHERN IRELAND'
+2026-01-25 19:10:29,725 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 19:10:29,725 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 19:10:29,725 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 19:10:29,725 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 19:10:29,726 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 19:10:29,726 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 19:10:29,729 - windows_save_guardian - INFO - ? ATOMIC SAVE: clearance-king_co_uk_processing_state.json (32 entries) saved successfully
+2026-01-25 19:10:29,730 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 19:10:29,730 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\clearance-king_co_uk_processing_state.json
+2026-01-25 19:10:29,730 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=8/155 url=https://www.clearance-king.co.uk/books/children-s-books.html prod_idx=23/42
+2026-01-25 19:10:29,730 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 19:10:29,731 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 9781785532429
+2026-01-25 19:10:29,731 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 9781785532429 for supplier product: 'WIGU FOOTBALL NORTHERN IRELAND' (FixedAmazonExtractor)
+2026-01-25 19:10:29,731 - tools.amazon_playwright_extractor - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2026-01-25 19:10:29,731 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 19:10:29,731 - utils.browser_manager - INFO - ?? Reusing cached page for https://www.amazon.co.uk
+2026-01-25 19:10:29,731 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 9781785532429
+2026-01-25 19:10:33,702 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 9781785532429...
+2026-01-25 19:10:33,738 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-01-25 19:10:34,382 - tools.amazon_playwright_extractor - INFO - Found 7 search result elements using selector: div[data-component-type='s-search-result']
+2026-01-25 19:10:34,383 - tools.amazon_playwright_extractor - INFO - Processing 7 search result elements for EAN 9781785532429
+2026-01-25 19:10:34,389 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): 1785532421
+2026-01-25 19:10:34,390 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN 1785532421
+2026-01-25 19:10:34,425 - tools.amazon_playwright_extractor - DEBUG - ASIN 1785532421 title extracted using selector '.s-title-instructions-style span.a-text-normal': 1 Apr 2016...
+2026-01-25 19:10:34,425 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN 1785532421 - 1 Apr 2016...
+2026-01-25 19:10:34,431 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0F9ZP2M8K
+2026-01-25 19:10:34,432 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0F9ZP2M8K
+2026-01-25 19:10:34,518 - tools.amazon_playwright_extractor - DEBUG - ASIN B0F9ZP2M8K title extracted using selector '.s-title-instructions-style span.a-text-normal': 27 May 2025...
+2026-01-25 19:10:34,519 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0F9ZP2M8K - 27 May 2025...
+2026-01-25 19:10:34,524 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0C9S7RM49
+2026-01-25 19:10:34,525 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0C9S7RM49
+2026-01-25 19:10:34,530 - tools.amazon_playwright_extractor - DEBUG - Element 3: Hidden by AdBlocker (likely sponsored)
+2026-01-25 19:10:34,538 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0F21D2DT8
+2026-01-25 19:10:34,538 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN B0F21D2DT8
+2026-01-25 19:10:34,547 - tools.amazon_playwright_extractor - DEBUG - Element 4: Hidden by AdBlocker (likely sponsored)
+2026-01-25 19:10:34,552 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B07DJ8QXZ1
+2026-01-25 19:10:34,552 - tools.amazon_playwright_extractor - DEBUG - Processing element 5: ASIN B07DJ8QXZ1
+2026-01-25 19:10:34,557 - tools.amazon_playwright_extractor - DEBUG - Element 5: Hidden by AdBlocker (likely sponsored)
+2026-01-25 19:10:34,562 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): 1445647117
+2026-01-25 19:10:34,562 - tools.amazon_playwright_extractor - DEBUG - Processing element 6: ASIN 1445647117
+2026-01-25 19:10:34,567 - tools.amazon_playwright_extractor - DEBUG - Element 6: Hidden by AdBlocker (likely sponsored)
+2026-01-25 19:10:34,573 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): 0473699893
+2026-01-25 19:10:34,573 - tools.amazon_playwright_extractor - DEBUG - Processing element 7: ASIN 0473699893
+2026-01-25 19:10:34,578 - tools.amazon_playwright_extractor - DEBUG - Element 7: Hidden by AdBlocker (likely sponsored)
+2026-01-25 19:10:34,578 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 2 organic products, 5 sponsored products filtered out
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - INFO - ✅ EAN SEARCH: Selected first organic result - ASIN 1785532421
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 9781785532429
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - INFO - Single ASIN 1785532421 found for EAN 9781785532429.
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: 1785532421 for EAN: 9781785532429
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN 1785532421. Getting a new one from BrowserManager.
+2026-01-25 19:10:34,579 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=9781785532429&ref=nb_sb_noss
+2026-01-25 19:10:37,174 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-01-25 19:10:37,323 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-01-25 19:10:38,338 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-01-25 19:10:41,355 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-01-25 19:10:41,355 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-01-25 19:10:41,405 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-01-25 19:10:41,405 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-01-25 19:10:46,417 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-01-25 19:10:53,398 - __main__ - WARNING - ⚠️ Browser cleanup warning: 'BrowserManager' object has no attribute 'cleanup'
+2026-01-25 19:10:53,405 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

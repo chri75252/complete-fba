@@ -1,0 +1,126 @@
+{
+  "run_id": "20260109_012811",
+  "status": "OK",
+  "input_file": "report\\part1.xlsx",
+  "input_file_hash": "7b613be398402a2e",
+  "supplier": "test_v43_fix6",
+  "skip_browser": true,
+  "preflight": {
+    "warnings": [],
+    "diagnostics": {
+      "mode": "openai_validated",
+      "model": "gpt-5-mini",
+      "base_url": "https://api.openai.com/v1"
+    }
+  },
+  "normalization_report": {
+    "original_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "NetProceeds",
+      "HMRC",
+      "NetProfit",
+      "ROI",
+      "Breakeven",
+      "ProfitMargin"
+    ],
+    "detected": {
+      "row_id": "RowID",
+      "supplier_title": "SupplierTitle",
+      "amazon_title": "AmazonTitle",
+      "supplier_ean": "EAN",
+      "amazon_ean": "EAN_OnPage",
+      "asin": "ASIN",
+      "supplier_price": "SupplierPrice_incVAT",
+      "selling_price": "SellingPrice_incVAT",
+      "net_profit": "NetProfit",
+      "roi": "ROI",
+      "sales": "bought_in_past_month",
+      "supplier_url": "SupplierURL"
+    },
+    "stable_key_generated": true,
+    "stable_key_collision": false
+  },
+  "schema": {
+    "input_path": "report\\part1.xlsx",
+    "rows": 1060,
+    "detected_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "NetProceeds",
+      "HMRC",
+      "NetProfit",
+      "ROI",
+      "Breakeven",
+      "ProfitMargin"
+    ],
+    "warnings": []
+  },
+  "validation": {
+    "passed": true,
+    "errors": []
+  },
+  "bucket_counts": {
+    "FILTERED_OUT": 950,
+    "HIGHLY_LIKELY": 44,
+    "NEEDS_VERIFICATION": 31,
+    "NEEDS VERIFICATION": 25,
+    "VERIFIED": 10
+  },
+  "global_traps_loaded": 0,
+  "ai_features": {
+    "enabled": true,
+    "provider": "openai",
+    "model": "gpt-5-mini"
+  },
+  "iterations": {
+    "max_iterations": 2,
+    "iterations_run": 1,
+    "mode": "iteration_loop"
+  },
+  "critique_summary": {
+    "recommended_action": "block",
+    "high_severity_issues": 4,
+    "proposed_changes": 8,
+    "overall_assessment": "This report contains a critical contradiction: multiple exact EAN matches (34 total) are not being treated as VERIFIED — 24 of them are in FILTERED_OUT. That alone is a systemic integrity failure of the matching/categorization logic and must be blocked. In addition, pack-detection is producing extreme pack ratios and many anomalies (very high/very negative profit, extreme ROI), and there are a small number of malformed EANs. The comprehensive adjudication's findings (enforce exact EAN equality for auto-confirmation, normalize EANs, tighten pack rules) are well-founded and align with the issues observed. I recommend applying conservative config fixes that reduce false pack inferences (dimension shields, pack keyword additions) and a cap on pack_ratio used for automatic decisions, then re-running the pipeline after code-level investigation and fixes for EAN override logic."
+  },
+  "adjudication_count": 0,
+  "brand_detection": {
+    "enabled": true,
+    "known_brands": 754
+  }
+}

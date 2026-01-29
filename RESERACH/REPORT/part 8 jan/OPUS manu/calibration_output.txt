@@ -1,0 +1,114 @@
+============================================================
+AGENTIC FBA CALIBRATION ANALYSIS - PART 8 JAN
+============================================================
+
+============================================================
+TASK 1: PACK QUANTITY PATTERNS
+============================================================
+
+1. EXPLICIT UNIT KEYWORDS FOUND: {'PIECES', 'PK', 'PCS', 'PC', 'PACK'}
+
+2. TRAILING NUMBERS (3 found):
+   Row 1: '3' in 'EUROWRAP GIANT BIRTHDAY BADGE GIRL 3'
+   Row 25: '20' in 'PARTY CRAZY BALLOONS ASSORTED 20'
+   Row 43: '6' in 'UNIQUE CANDLE NUMBER W/DECOR 6'
+
+3. LEADING MULTIPLIERS (0 found):
+
+4. DIMENSION EXAMPLES (9 found):
+   Row 5: [('40', 'CM')] in 'I LOVE YOU BALLOON 40CM'
+   Row 6: [('62', 'CM')] in 'WORLD OF PETS TOY BALL LAUNCHER 62CM ASSORTED'
+   Row 14: [('37', 'CM')] in 'ADORN PLACEMAT GOLD EMBOSSED 37CM ASSORTED'
+   Row 16: [('100', 'CM')] in 'EASY STORAGE VACUUM BAG 70X100CM'
+   Row 26: [('50', 'CM')] in 'PRIMA PET BALL LAUNCHER 50CM'
+   Row 28: [('7', 'INCH')] in 'PAPER EASTER 10 PLATES 7 INCH'
+   Row 37: [('10.5', 'INCH')] in 'PLATE 10.5 INCH ASSORTED'
+   Row 42: [('26.5', 'CM')] in 'PRIMA DINNER PLATE FLOWER DESIGN 26.5CM'
+   Row 49: [('60', 'MM')] in 'SECURPAK POZI COUNTERSUNK SCREWS ZP 5X60MM'
+
+5. CAPACITY EXAMPLES (5 found):
+   Row 0: [('300', 'ML')] in '151 WHITE NO-DRIP GLOSS PAINT 300ML'
+   Row 33: [('1.6', 'L')] in 'SQUARE CANISTER CLASSIC 1.6L SURT VRM'
+   Row 38: [('105', 'G')] in 'AIRWICK CANDLE VANILLA & BROWN SUGAR 105G PK6'
+   Row 47: [('85', 'ML')] in 'REVITALISE ELIXIR EDT 85ML POUR FEMME EACH'
+   Row 48: [('100', 'ML')] in 'RED CROWN EDT100ML POUR FEMME EACH'
+
+============================================================
+TASK 1B: CAPACITY MULTIPACK PATTERNS
+============================================================
+
+Capacity Multipack Patterns Found (0):
+
+============================================================
+TASK 1C: NON-PACK 'Nx' SPEC/FEATURE PATTERNS
+============================================================
+
+Spec/Feature 'Nx' Patterns Found (0):
+
+============================================================
+TASK 2: SALES SIGNAL DETECTION
+============================================================
+
+Found column: 'bought_in_past_month'
+Sample values: [500, 100, 50, 100, 100, 50, 50, 50, 100, 50]
+Data type: int64
+
+============================================================
+TASK 3: BRAND PATTERN DETECTION
+============================================================
+
+Brand presence in Supplier Titles: 23/50 (46.0%)
+Brand presence in Amazon Titles: 0/50 (0.0%)
+Brand at START of Supplier Title: 23/50 (46.0%)
+
+============================================================
+CRITICAL: SUPPLIER vs AMAZON TITLE MISMATCH ANALYSIS
+============================================================
+
+Rows with NO word overlap (likely mismatches): 39/50 (78.0%)
+Rows with SOME word overlap (potential matches): 11/50 (22.0%)
+
+============================================================
+TASK 4: CALIBRATION WARNINGS
+============================================================
+
+WARNINGS:
+  - CRITICAL: 78.0% of rows have NO word overlap between SupplierTitle and AmazonTitle. This dataset has severe EAN-to-ASIN mapping issues. Most Amazon titles appear to be wrong products!
+  - Row 1: Trailing '3' might be part of model number in 'EUROWRAP GIANT BIRTHDAY BADGE GIRL 3'
+  - Row 25: Trailing '20' might be part of model number in 'PARTY CRAZY BALLOONS ASSORTED 20'
+  - Row 43: Trailing '6' might be part of model number in 'UNIQUE CANDLE NUMBER W/DECOR 6'
+
+============================================================
+FINAL CALIBRATION CONFIGURATION
+============================================================
+
+# --- CALIBRATION CONFIGURATION (part 8 jan.xlsx) ---
+SUPPLIER_NAMING_CONVENTION = {
+    "explicit_units": ['PIECES', 'PK', 'PCS', 'PC', 'PACK'],
+    "allow_trailing_number_as_qty": False,  # DANGEROUS - trailing numbers are often variant codes (e.g., "GIRL 3")
+    "leading_multiplier_check": False,
+    "dimension_shield_keywords": ["cm", "mm", "ml", "ltr", "kg", "g", "oz", "inch", "m"],
+    "brand_position": "start",  # Brands like MINKY, CHEF AID, TALA appear at start
+    "brand_in_supplier_usually_present": True,
+    "brand_in_amazon_usually_present": False,
+    "brand_format_patterns": ["ALL_CAPS_AT_START"],
+    "brand_sparse_supplier_mode": True,  # Amazon titles rarely have matching brand
+    "strong_similarity_threshold": 0.20,  # LOW due to high mismatch rate
+    "strong_shared_tokens_threshold": 2,  # LOW due to high mismatch rate
+    "very_strong_similarity_threshold": 0.30,
+    "very_strong_shared_tokens_threshold": 3,
+    "gate_mode": "C_brand_sparse",  # Use sparse mode due to title mismatches
+    "sales_column": "bought_in_past_month",
+    "capacity_pattern_as_rsu": True,  # "3 x 400ml" means RSU=3
+    "spec_x_shield_keywords": ["magnification", "zoom", "microscope", "scope", "times"],
+    "table_pipe_sanitization": True,
+    
+    # CRITICAL WARNING FLAGS
+    "high_mismatch_rate": True,  # 39/50 rows have no title overlap
+    "mismatch_percentage": 78.0,
+    "require_strict_ean_validation": True,  # EAN validity is the only reliable link
+}
+# ---------------------------------
+
+
+Configuration saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\RESERACH\REPORT\part 8 jan\OPUS manu\CALIBRATION_CONFIG.py

@@ -1,0 +1,183 @@
+"""Unified provider interface for LLM providers.
+
+This module provides a consistent interface for different LLM providers:
+- OpenAI (GPT-4o, GPT-4o-mini)
+- Gemini (via OpenAI-compatible endpoint)
+- Moonshot
+
+Features:
+- Common interface for chat_json()
+- Model escalation (small → large on failure)
+- Structured JSON output with schema validation
+"""
+from __future__ import annotations
+
+import os
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Protocol
+
+
+@dataclass
+class ProviderConfig:
+    """Configuration for an LLM provider."""
+
+    name: str
+    api_key: str | None = None
+    base_url: str | None = None
+    model_small: str = "gpt-4o-mini"
+    model_large: str = "gpt-4o"
+    current_model: str | None = None  # Set at runtime
+    max_escalations: int = 2
+    escalations_used: int = 0
+
+
+class ProviderInterface(Protocol):
+    """Protocol for LLM providers."""
+
+    def chat_json(
+        self,
+        system: str,
+        user: str,
+        schema: dict | None = None,
+    ) -> dict:
+        """
+        Send a chat request expecting JSON response.
+        
+        Args:
+            system: System prompt
+            user: User message
+            schema: Optional JSON schema for validation
+        
+        Returns:
+            Parsed JSON response as dict
+        """
+        ...
+
+    def escalate(self) -> bool:
+        """
+        Escalate to a larger model.
+        
+        Returns:
+            True if escalation succeeded, False if at max
+        """
+        ...
+
+    @property
+    def current_model(self) -> str:
+        """Return the current model being used."""
+        ...
+
+
+class BaseProvider(ABC):
+    """Base class for LLM providers."""
+
+    def __init__(self, config: ProviderConfig):
+        self.config = config
+        self.config.current_model = config.model_small
+
+    @property
+    def current_model(self) -> str:
+        return self.config.current_model or self.config.model_small
+
+    def escalate(self) -> bool:
+        """Escalate to larger model."""
+        if self.config.escalations_used >= self.config.max_escalations:
+            return False
+        if self.config.current_model == self.config.model_large:
+            return False
+        self.config.current_model = self.config.model_large
+        self.config.escalations_used += 1
+        return True
+
+    @abstractmethod
+    def chat_json(
+        self,
+        system: str,
+        user: str,
+        schema: dict | None = None,
+    ) -> dict:
+        """Send chat request and return parsed JSON."""
+        ...
+
+
+def get_provider(
+    name: str,
+    api_key: str | None = None,
+    model_small: str | None = None,
+    model_large: str | None = None,
+    base_url: str | None = None,
+) -> BaseProvider:
+    """
+    Get a provider instance by name.
+    
+    Args:
+        name: Provider name ("openai", "gemini", "moonshot")
+        api_key: API key (defaults to env var)
+        model_small: Small model name (for initial requests)
+        model_large: Large model name (for escalation)
+        base_url: Custom base URL (for proxies/compatible endpoints)
+    
+    Returns:
+        Provider instance
+    
+    Raises:
+        ValueError: If provider name not recognized
+    """
+    name = name.lower()
+    
+    if name == "openai":
+        from fba_agent.providers.openai_provider import OpenAIProvider
+        return OpenAIProvider(
+            config=ProviderConfig(
+                name="openai",
+                api_key=api_key or os.getenv("OPENAI_API_KEY"),
+                base_url=base_url,
+                model_small=model_small or "gpt-5-mini",
+                model_large=model_large or "gpt-5",
+            )
+        )
+    
+    if name == "gemini":
+        from fba_agent.providers.gemini_provider import GeminiProvider
+        return GeminiProvider(
+            config=ProviderConfig(
+                name="gemini",
+                api_key=api_key or os.getenv("GEMINI_API_KEY"),
+                base_url=base_url or "https://generativelanguage.googleapis.com/v1beta/openai/",
+                model_small=model_small or "gemini-2.0-flash-exp",
+                model_large=model_large or "gemini-2.0-flash-thinking-exp-01-21",
+            )
+        )
+    
+    if name == "moonshot":
+        from fba_agent.providers.moonshot_provider import MoonshotProvider
+        return MoonshotProvider(
+            config=ProviderConfig(
+                name="moonshot",
+                api_key=api_key or os.getenv("MOONSHOT_API_KEY"),
+                base_url=base_url or "https://api.moonshot.cn/v1",
+                model_small=model_small or "moonshot-v1-8k",
+                model_large=model_large or "moonshot-v1-32k",
+            )
+        )
+    
+    raise ValueError(f"Unknown provider: {name}. Supported: openai, gemini, moonshot")
+
+
+def load_provider_from_env() -> BaseProvider | None:
+    """
+    Load a provider from environment variables.
+    
+    Checks in order: OPENAI_API_KEY, GEMINI_API_KEY, MOONSHOT_API_KEY
+    
+    Returns:
+        Provider instance or None if no API key found
+    """
+    if os.getenv("OPENAI_API_KEY"):
+        return get_provider("openai")
+    if os.getenv("GEMINI_API_KEY"):
+        return get_provider("gemini")
+    if os.getenv("MOONSHOT_API_KEY"):
+        return get_provider("moonshot")
+    return None

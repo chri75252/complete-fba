@@ -1,0 +1,108 @@
+================================================================================
+FBA CALIBRATION ANALYSIS REPORT
+================================================================================
+
+SOURCE FILE: part 4 jan.xlsx
+PRODUCTS ANALYZED: 2,696
+ANALYSIS DATE: 2025-01-05
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+1. PACK QUANTITY PATTERNS DETECTED:
+
+Most Common Explicit Units:
+- PC (Pieces): 299 occurrences
+- PK (Pack): 232 occurrences
+- ASSORTED: 187 occurrences
+- SET: 162 occurrences
+- PACK: 110 occurrences
+- PCE: 63 occurrences
+- PIECE: 60 occurrences
+- PIECES: 58 occurrences
+- PCS: 43 occurrences
+
+2. TRAILING NUMBER ANALYSIS:
+
+- Trailing numbers ARE used for quantities
+- WARNING: Model numbers like SDB113, SDB249 are NOT quantities
+- Threshold: Only treat trailing numbers > 100 as quantities
+
+3. LEADING MULTIPLIER:
+
+- Leading "N x" format is RARE in SupplierTitle
+- Set leading_multiplier_check = FALSE
+
+4. CAPACITY MULTIPACK (Amazon):
+
+- No "N x capacity" patterns found in this dataset
+- Enable capacity_pattern_as_rsu = TRUE for future data
+- When found: RSU should be the FIRST number (N), not multiplied
+
+5. DIMENSION VS QUANTITY:
+
+- 5 cases found with BOTH dimension and quantity
+- Dimension shielding is essential
+
+6. SALES COLUMN:
+
+- Detected: "bought_in_past_month"
+- Format: Numeric values (no text parsing needed)
+
+7. BRAND POSITION:
+
+- Brand appears at START in ~98% of samples
+- Set brand_position = "start"
+
+8. SPECIAL KEYWORDS:
+
+- "EACH" keyword: Indicates single item (RSU=1)
+- "ASSORTED" keyword: Often without explicit quantity
+
+================================================================================
+CRITICAL EDGE CASES
+================================================================================
+
+1. Model Numbers as Quantities:
+   - SDB113, SDB249 (Panasonic vacuum models)
+   - KCF1 (King Fisher foil model)
+   - Must EXCLUDE from quantity extraction
+
+2. ASSORTED Without Quantity:
+   - May require manual review or default RSU=1
+
+3. Dimension + Quantity Conflicts:
+   - Example: "PPS 26CM PLASTIC WHITE PLATE 6 PCS"
+   - Solution: Dimension shielding prevents false matches
+
+4. EACH Keyword Override:
+   - "STATUS LED G9 2W LED CAPSULE BULB EACH" - RSU=1
+
+================================================================================
+CONFIGURATION OUTPUT
+================================================================================
+
+Generated Files:
+1. calibration_configuration.json - Machine-readable format
+2. calibration_config.py - Python dict for code
+3. CALIBRATION_REPORT.txt - This summary
+
+================================================================================
+KEY CONFIGURATION VALUES
+================================================================================
+
+- explicit_units: [pce, pc, pcs, pk, pack, piece, pieces, set, assorted]
+- allow_trailing_number_as_qty: True
+- leading_multiplier_check: False
+- dimension_shield_keywords: [cm, mm, ml, ltr, l, lt, kg, g, oz, inch]
+- sales_column: bought_in_past_month
+- capacity_pattern_as_rsu: True
+- spec_x_shield_keywords: [magnification, zoom, microscope, scope, times, processor]
+- single_item_keywords: [each, sold each, per each]
+- model_number_patterns: SDB digits, V digits, F digits, MK digits
+- trailing_number_threshold: 100
+
+================================================================================
+END OF CALIBRATION REPORT
+================================================================================

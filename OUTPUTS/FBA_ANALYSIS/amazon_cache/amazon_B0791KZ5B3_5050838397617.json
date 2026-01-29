@@ -1,114 +1,34 @@
-e
-                
-                output_columns = [
-                    'SupplierTitle', 'AmazonTitle', 'EAN', 'ASIN', 'SupplierURL', 'AmazonURL',
-                    'SupplierPrice_exVAT', 'SellingPrice_incVAT', 'NetProfit', 'ROI',
-                    'sales_count', 'total_offer_count', 'fba_seller_count', 'fbm_seller_count',
-                    'investment_tier', 'risk_level', 'action', 'reason', 'has_strong_brand', 'brand_detected',
-                    'MatchMethod', 'Confidence'
-                ]
-                
-                available_columns = [col for col in output_columns if col in df_tier.columns]
-                df_tier[available_columns].to_csv(filepath, index=False)
-                files_created.append(filename)
-                print(f"✅ Saved {len(df_tier):,} products to {filename}")
-        
-        # Save summary report
-        summary_file = output_dir / f"UK_VAT_Adjusted_Screening_SUMMARY_{self.analysis_date}.txt"
-        with open(summary_file, 'w', encoding='utf-8') as f:
-            f.write(self._format_adjusted_summary(summary))
-        
-        files_created.append(summary_file.name)
-        print(f"✅ Saved summary report to {summary_file.name}")
-        
-        return {
-            'output_directory': str(output_dir),
-            'files_created': files_created
-        }
-    
-    def _format_adjusted_summary(self, summary):
-        """Format adjusted comprehensive summary report"""
-        report = f"""
-UK VAT-AWARE INVESTMENT SCREENING ANALYSIS - ADJUSTED THRESHOLDS
-================================================================
-
-Analysis Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-Source: EXACT_MATCHES_20250902_054416.csv
-Perspective: UK VAT-registered NETP (Net Profit after VAT)
-
-⚠️  THRESHOLD ADJUSTMENT RATIONALE:
-Original thresholds (30-35% ROI) excluded 99.8% of products, indicating unrealistic expectations for wholesale margins.
-Adjusted thresholds reflect market reality while maintaining profitability standards.
-
-EXECUTIVE SUMMARY
-================
-
-Total Products Analyzed: {summary['total_products_analyzed']:,}
-
-ADJUSTED INVESTMENT CLASSIFICATION:
-"""
-        
-        for tier_name, data in summary['tier_breakdown'].items():
-            report += f"  {tier_name}: {data['count']:,} products ({data['percentage']:.1f}%)\n"
-        
-        report += f"""
-ADJUSTED THRESHOLDS APPLIED:
-===========================
-
-TIER 1 (IMMEDIATE BUY):
-  • ROI ≥ 25% (reduced from 35%)
-  • Net Profit ≥ £0.50 (reduced from £0.80) 
-  • Sales > 50/month
-  
-TIER 2 (STRONG CONSIDER):  
-  • ROI ≥ 20% (reduced from 30%)
-  • Net Profit ≥ £0.40 (reduced from £0.75)
-  • Sales > 30/month (reduced from 50)
-  
-TIER 3 (INVESTIGATE):
-  • ROI ≥ 15%
-  • Net Profit ≥ £0.30
-  • Sales > 20/month OR strong brand OR high ROI without sales data
-  
-TIER 4 (MONITOR):
-  • ROI ≥ 10%
-  • Net Profit ≥ £0.20
-  • Track for market improvements
-
-FINANCIAL ANALYSIS BY TIER:
-===========================
-"""
-        
-        for tier_name, financial_data in summary['financial_summary'].items():
-            report += f"""
-{tier_name}:
-  Products: {financial_data['product_count']:,}
-  Total Investment Required: £{financial_data['total_investment_required']:,.2f}
-  Total Potential Profit: £{financial_data['total_potential_profit']:,.2f}
-  Average ROI: {financial_data['average_roi']:.1f}%
-  Median ROI: {financial_data['median_roi']:.1f}%
-  ROI Range: {financial_data['roi_range']}
-  Average Profit per Unit: £{financial_data['average_profit_per_unit']:.2f}
-"""
-        
-        report += f"""
-MARKET REALITY ANALYSIS:
-=======================
-
-ROI Distribution Across All Products:
-  • 0-10% ROI: {summary['roi_distribution']['roi_0_10']:,} products
-  • 10-20% ROI: {summary['roi_distribution']['roi_10_20']:,} products  
-  • 20-30% ROI: {summary['roi_distribution']['roi_20_30']:,} products
-  • 30%+ ROI: {summary['roi_distribution']['roi_30_plus']:,} products
-  
-  Average ROI (All Products): {summary['roi_distribution']['average_roi_all_products']:.1f}%
-  Median ROI (All Products): {summary['roi_distribution']['median_roi_all_products']:.1f}%
-
-Sales Data Quality:
-  • Products with Sales Data: {summary['sales_data_analysis']['products_with_sales_data']:,} 
-  • Products without Sales Data: {summary['sales_data_analysis']['products_without_sales_data']:,}
-  • Sales Data Coverage: {summary['sales_data_analysis']['sales_data_coverage']}
-
-Brand Analysis:
-  • Products with Strong Brands: {summary['brand_analysis']['products_with_strong_brands']:,}
-  • Bra
+{
+  "asin_from_details": "B0791KZ5B3",
+  "title": "HTI Halsall Toys International Peppa Pig Recorder",
+  "current_price": 5.95,
+  "original_price": 17.67,
+  "amazon_monthly_sales_badge": 50,
+  "main_image": "https://m.media-amazon.com/images/I/71d9r-z6bsL._AC_SL1500_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/31DYvKQJD2L._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/41VT4TOvKVL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/31uVOTMoBfL._SL1500_.jpg",
+    "https://m.media-amazon.com/images/I/310tbqx6a3L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "prime_eligible": false,
+  "fulfilled_by_amazon": false,
+  "seller_info_text": "KlickNbuy",
+  "sold_by_amazon": false,
+  "rating": 4.0,
+  "review_count": 299,
+  "availability_text": "In stock",
+  "in_stock": true,
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Extraction process completed",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled"
+  },
+  "asin_extracted_from_page": "B0791KZ5B3",
+  "asin_queried": "B0791KZ5B3",
+  "asin": "B0791KZ5B3",
+  "_search_method_used": "EAN"
+}

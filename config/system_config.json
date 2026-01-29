@@ -24,10 +24,10 @@
     "force_ai_scraping": true,
     "max_products": 1000000,
     "max_analyzed_products": 1000000,
-    "max_products_per_category": 1000,
+    "max_products_per_category": 2000,
     "max_products_per_cycle": 100,
     "linking_map_batch_size": 1,
-    "financial_report_batch_size": 50,
+    "financial_report_batch_size": 3,
     "headless_probe_seconds": 0,
     "reuse_browser": true,
     "max_tabs": 2,
@@ -46,8 +46,9 @@
     "trigger_interval_products": 100
   },
   "processing_limits": {
-    "max_products_per_category": 1000,
+    "max_products_per_category": 2000,
     "max_products_per_run": 1000000,
+    "pagination_safety_limit": 100,
     "min_price_gbp": 0.01,
     "max_price_gbp": 20.0,
     "price_midpoint_gbp": 20.0,
@@ -255,6 +256,10 @@
     "dkwholesale.com": {
       "username": "info@theblacksmithmarket.com",
       "password": "0Dqixm9c&"
+    },
+    "efghousewares.co.uk": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
     }
   },
   "workflows": {
@@ -320,6 +325,15 @@
       "ai_client": null,
       "authentication_required": true,
       "test_product_url": "https://dkwholesale.com/products/lorus-ladies-automatic-fashion-day-date-analogue-quartz-silver-sunray-dial-with-blue-leather-strap-watch"
+    },
+    "efghousewares_workflow": {
+      "supplier_name": "efghousewares.co.uk",
+      "supplier_url": "https://www.efghousewares.co.uk",
+      "categories_config_path": "config/efghousewares_workflow_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": true,
+      "test_product_url": "https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50"
     }
   },
   "ai_features": {

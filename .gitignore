@@ -1,42 +1,26 @@
-# Environment variables
-.env
+# 1. THE MONSTERS (Blocking 100MB+ files strictly)
+logs/debug/run_custom_poundwholesale_*.log
+OUTPUTS/DIAGNOSTICS/save_telemetry.log
+.serena/cache/python/*.pkl
 
-# API Keys and secrets
-*.key
-secrets/
-
-# Cache directories
-cache/
-
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
+# 2. SYSTEM JUNK (Standard to exclude - these cause crashes like 'venv/bin/python')
 venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
+node_modules/
+.next/
 .DS_Store
-Thumbs.db
+**/*.pyc
+**/__pycache__/
 
-# Test artifacts
-.pytest_cache/
-htmlcov/
-.coverage
+# 3. WINDOWS RESERVED (Crashing Git)
+**/nul
+**/con
+**/prn
+**/aux
+**/com[1-9]
+**/lpt[1-9]
 
-test_wheels/  # For offline installation
-langraph_env/
+# 4. TEMP FILES
+**/*.patch
+~$*
 
+# NOTE: Everything else (OUTPUTS, src, utils, tools) is TRACKED and will be pushed.

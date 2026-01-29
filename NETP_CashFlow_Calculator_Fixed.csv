@@ -1,0 +1,50 @@
+﻿Amazon FBA NETP Cash Flow Calculator,,
+VAT-registered NETP (Amazon OMP deemed supplier),,
+,,
+Item,NETP,Notes
+,,
+INPUTS,,
+Selling Price (inc VAT),11.2,What customer pays Amazon
+Supplier Price (inc VAT),4.55,What you pay supplier
+FBA Fee (ex VAT),3.13,
+Referral Fee (ex VAT),1.65,
+Prep Cost (ex VAT),0.45,
+Shipping Cost (ex VAT),0,
+,,
+HELPER CALCULATIONS,,
+Selling Price (ex VAT),=B7/1.2,Revenue portion (VAT excluded)
+Total Fees (inc VAT),=(B9+B10+B11+B12)*1.2,Fees you actually pay Amazon
+,,
+VAT ANALYSIS,,
+VAT Amazon keeps (not yours),=B7-B15,Amazon handles this as deemed supplier
+Input VAT (supplier),=B8-B8/1.2,VAT paid to supplier
+Input VAT (fees),=(B9+B10+B11+B12)*0.2,VAT on Amazon fees
+Total Input VAT (you can reclaim),=B20+B21,HMRC refunds this after 3-6 months
+,,
+CASH FLOW BREAKDOWN,,
+,,
+IMMEDIATE CASH (Day 1),,
+Amazon pays you (ex-VAT only),=B15,Amazon keeps the £1.87 VAT
+Less: Supplier payment,=-B8,
+Less: Amazon fees,=-B16,
+IMMEDIATE CASH POSITION,=B27+B28+B29,NEGATIVE - you are down cash!
+,,
+DELAYED CASH (3-6 Months Later),,
+VAT refund from HMRC,=B22,After submitting VAT return
+,,
+TOTAL PROFIT (FINAL),,
+Net Profit per Unit,=B30+B33,Immediate cash + VAT refund
+Verification (alternative calc),=B27+B33+B28+B29,Should equal Net Profit above
+,,
+KEY METRICS,,
+ROI (on invested capital),=B36/(B8/1.2+B11+B12),Return on supplier + prep + ship
+Profit Margin (on revenue),=B36/B15,Profit as % of ex-VAT revenue
+Breakeven Price (inc VAT),=((B8/1.2)+(B9+B10+B11+B12))*1.2,Price to achieve zero profit
+,,
+CASH FLOW TIMING SUMMARY,,
+,,
+Day 1 (Sale Completes):,=B30,You are DOWN this amount in cash
+Working capital tied up:,=B22,Waiting for HMRC refund
+After 3-6 months:,=B36,Final profit (after VAT refund)
+,,
+KEY INSIGHT:,"Your final profit is the same as UK seller, but your cash flow is much worse!",

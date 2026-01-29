@@ -7,19 +7,6 @@ description: Guided supplier onboarding for Amazon FBA Agent System with determi
 
 Onboard wholesale suppliers to the Amazon FBA Agent System through automated configuration generation, runner script creation, and comprehensive validation.
 
-## 📚 Documentation Quick Reference
-
-| Document | Purpose | When to Use |
-|----------|---------|-------------|
-| **This file** (`SKILL.md`) | Complete workflow guide | Primary reference throughout onboarding |
-| **`docs/AUTHENTICATION_CUSTOMIZATION.md`** | **MANDATORY authentication guide** | **Step 4: CRITICAL for auth-enabled suppliers** |
-| **`docs/FILE_SPECIFICATIONS.md`** | File format specifications | When creating/configuring files |
-| **`docs/NAMING_CONVENTIONS.md`** | Naming convention rules | When naming files/workflows/directories |
-| **`docs/DOMAIN_VS_NAMING_GUIDE.md`** | Domain vs naming consistency | When .com sites use .co.uk in file names |
-| **`docs/TROUBLESHOOTING.md`** | Common issues and solutions | When encountering errors or failures |
-
-**⚠️ CRITICAL**: If supplier requires authentication (`authentication_required=true`), you **MUST** read `docs/AUTHENTICATION_CUSTOMIZATION.md` **BEFORE** proceeding to Step 5. This is not optional.
-
 ## Prerequisites
 
 Before starting, ensure:
@@ -30,75 +17,58 @@ Before starting, ensure:
 
 ## Workflow Overview
 
-This skill follows an **8-step workflow** (updated with mandatory authentication step):
-
+This skill follows a **7-step workflow**:
 0. **Data Preprocessing** (LLM manual validation - Read/Write tools only)
 1. **Gather Information** (Progressive discovery)
 2. **Prepare Configurations** (Create JSON files)
-3. **Invoke Wizard** (Generate runner + auth helper **TEMPLATE**)
-4. **🆕 CUSTOMIZE AUTHENTICATION HELPER** (**MANDATORY** when `authentication_required=true`)
-   - See: `docs/AUTHENTICATION_CUSTOMIZATION.md` for detailed instructions
-   - Use Chrome DevTools MCP to extract supplier-specific selectors
-   - Customize `is_authenticated()` and `login()` methods
-   - Test authentication in isolation **BEFORE** proceeding
-5. **Validate Files** (⚠️ CRITICAL: Read and analyze, not just check existence)
+3. **Invoke Wizard** (Generate runner + auth helper)
+4. **Validate Files** (⚠️ CRITICAL: Read and analyze, not just check existence)
+5. **Report Results** (Comprehensive summary)
 6. **Pre-Run Verification** (LLM manual checks before execution)
 7. **User Decision** (Test Run / Main Run / Fix Issues)
 
-**⚠️ CRITICAL NOTE**: If `authentication_required=true`, Step 4 is **NOT OPTIONAL**. Skipping authentication customization will cause the workflow to fail immediately.
-
 ---
 
-## Step 0: Initial Handshake & Information Gathering (FRONT-LOADED)
-
-**Purpose**: Establish immediate context and gather ALL necessary information before generating any files.
-
-**Action**: As soon as the user invokes the skill, **STOP** and analyze the request.
-
-### 0.1. Initial Interaction Protocol
-You MUST respond with the following specific questions to gather missing info:
-
-> "Hello! To configure **[domain]** correctly, I need the following details:
->
-> 1.  **Authentication**: Does this supplier require login? (Yes/No)
->     *   *If Yes*: Provide `login_url`, `username`, `password`.
-> 2.  **Category List**: Provide a list of category URLs (or path to JSON).
-> 3.  **Test Product URL**: **[CRITICAL]** Provide ONE valid product URL for selector verification.
-> 4.  **Selectors**: Do you have existing CSS selectors? (Yes/No)
->     *   *Note*: Selectors must be **BeautifulSoup-compatible** (Standard CSS only, no Playwright `text=` extensions).
-> 5.  **Pagination**: Does the site use `?page=N`, `/page/N/`, or a "Load More" button?
->
-> **Output**: I will generate the validated Config, Runner Script, and Auth Helper (if needed)."
-
-### 0.2. Handling Responses
-*   **User Provides Info**: Proceed to Step 1 (Validation).
-*   **User Asks You to Retrieve**: Use **Browser Tools** (or Chrome DevTools MCP) to inspect the site.
-
-> [!IMPORTANT]
-> **CRITICAL PAGINATION WARNING**:
-> The current scraper logic (`tools/configurable_supplier_scraper.py`) **HARDCODES** pagination as `?page=N`.
-> *   **IF** the supplier uses a different pattern (e.g., `/page/2/`, `p=2`), this **CANNOT** be fixed by config alone.
-> *   **ACTION**: You must note this limitation and inform the user that `tools/configurable_supplier_scraper.py` will need manual modification to support the specific pagination pattern.
-
----
-
-## Step 1: Data Preprocessing and Validation (LLM MANUAL WORK)
+## Step 0: Data Preprocessing and Validation (LLM MANUAL WORK)
 
 **🚨 CRITICAL**: This entire step is performed MANUALLY by Claude using Read/Write tools. NO Python scripts are executed during this phase.
 
 **Purpose**: Prepare and validate all input files BEFORE invoking the wizard script.
 
-### 1.1. Discover What User Provided
+**When**: ALWAYS execute this step first when user provides raw data files (.txt, .md) or inline data.
+
+---
+
+### 0.1. Discover What User Provided
+
 **Check user's message for**:
 - File paths: `"categories in setup/categories_{supplier}.txt"`
 - Inline data: URLs or JSON pasted in chat
-- Domain: e.g., `"supplier.co.uk"`
+- Domain: e.g., `"supplier.co.uk"`, `"supplier.com"`
 - Authentication: `"no login required"` or `"requires username/password"`
 
-**Action**: Use Read tool to examine any referenced files.
+**Action**: Use Read tool to examine any referenced files:
 
-### 1.2. Validate Categories Content (LLM Manual Inspection)
+```bash
+# User mentioned: "categories in setup/categories_supplier.txt"
+Read: setup/categories_supplier.txt
+
+# User mentioned: "selectors in setup/selectors_supplier.txt"
+Read: setup/selectors_supplier.txt
+```
+
+**Checklist**:
+- [ ] Found categories source (file or inline data)
+- [ ] Found selectors source (file or inline data)
+- [ ] Identified data format (plain text, markdown, JSON)
+- [ ] Confirmed supplier domain
+
+---
+
+### 0.2. Validate Categories Content (LLM Manual Inspection)
+
 **Read the categories file line by line and check**:
+
 1. **URL Format**: Each line must start with `http://` or `https://`
 2. **Domain Match**: Each URL must contain the correct supplier domain
 3. **No Wrong URLs**: Check for other suppliers' URLs
@@ -126,8 +96,11 @@ Line 10: # This is a comment ✅ Skip (comment line)
 - [ ] Removed or fixed any invalid URLs
 - [ ] Counted total valid URLs
 
-### 1.3. Validate Selectors Content (LLM Manual Inspection)
-**Read the selectors file and extract CSS selectors**.
+---
+
+### 0.3. Validate Selectors Content (LLM Manual Inspection)
+
+**Read the selectors file and extract CSS selectors**:
 
 **If markdown format**:
 ```markdown
@@ -135,6 +108,7 @@ Line 10: # This is a comment ✅ Skip (comment line)
 ```css
 .product-card
 ```
+
 ### Title
 ```css
 .product-card h3 a
@@ -145,11 +119,6 @@ Line 10: # This is a comment ✅ Skip (comment line)
 - Find all `### Header` lines
 - Extract CSS from following ` ```css ... ``` ` blocks
 - Map headers to selector keys (e.g., "Product Item" → `product_item`)
-
-**CRITICAL: Field Mappings Structure**
-The scraper expects selectors to be nested in `field_mappings`.
-*   *Bad (Flat)*: `{"price": ".price"}`
-*   *Good (Nested)*: `{"field_mappings": {"price": [".price"], ...}}`
 
 **Required Selectors** (must be present):
 - `product_item` - Container for each product card
@@ -167,70 +136,77 @@ The scraper expects selectors to be nested in `field_mappings`.
 ❌ Invalid: .product[data-id  (missing closing bracket)
 ❌ Invalid: span(price  (unbalanced parentheses)
 ❌ Invalid: :contains('Next'  (missing closing parentheses)
-❌ Invalid: :text("Foo") (Playwright extension - NOT ALLOWED)
 ```
 
 **Checklist**:
 - [ ] Extracted all selectors from source file
 - [ ] Verified required keys present
-- [ ] Checked CSS syntax (Standard CSS only)
-- [ ] Confirmed `field_mappings` structure is understood for JSON creation
+- [ ] Checked CSS syntax (balanced brackets/parentheses)
+- [ ] No empty values
 
-### 1.4. Selector Retrieval Protocol (Chrome DevTools)
-**IF** you need to retrieve selectors yourself, follow this strict prompt:
+---
 
-**Prompt for Agent**:
-"I am inspecting the page to find robust CSS selectors.
-**CAUTION**:
-1.  **Standard CSS Only**: I MUST use standard CSS selectors (e.g., `.class`, `#id`, `tag[attr='val']`).
-2.  **No Playwright Extensions**: I MUST NOT use `:text()`, `:has-text()`, or `xpath`. The scraper uses BeautifulSoup.
-3.  **Specificity**: I will avoid overly specific chains (e.g., `div > div > div`). I will prefer semantic classes (e.g., `.product-title`).
-4.  **Verification**: I will verify the selector in the Console using `document.querySelectorAll('selector')` to ensure it targets the correct element(s)."
+### 0.4. Create JSON Files (LLM Manual Work)
 
-### 1.5. Create JSON Files (LLM Manual Work)
 **Use Write tool to create TWO JSON files in setup/ folder**:
 
 #### **File 1**: `setup/{supplier_name}_categories.json`
+
 ```json
 {
   "category_urls": [
     "https://supplier.com/category/toys",
-    ...
+    "https://supplier.com/category/gifts",
+    ... paste all valid URLs from validation ...
   ],
   "total_categories": 150,
   "supplier": "supplier.com",
-  "source": "setup/categories_supplier.txt",
+  "source": "setup/categories_supplier.txt (LLM converted)",
   "validated_at": "2025-11-13T06:32:00Z"
 }
 ```
 
+**Action**:
+```bash
+Write: setup/{supplier_name}_categories.json
+# Paste the complete JSON with all validated URLs
+```
+
 #### **File 2**: `setup/{supplier_name}_selectors.json`
-**⚠️ MUST USE FIELD MAPPINGS STRUCTURE**
+
 ```json
 {
   "supplier_url": "https://supplier.com",
-  "field_mappings": {
-    "product_item": [".product-card"],
-    "title": [".product-card h3 a"],
-    "price": ["span.price"],
-    "url": [".product-card a[href]"],
-    "image": [".product-card img"],
-    "ean": [".product-info .barcode"],
-    "next_page_selector": ["a.pagination-next"]
-  },
-  "authentication_required": false
+  "product_item": ".product-card",
+  "title": ".product-card h3 a",
+  "price": "span.price",
+  "url": ".product-card a[href]",
+  "image": ".product-card img",
+  "ean": ".product-info .barcode",
+  "next_page_button": "a.pagination-next"
 }
+```
+
+**Action**:
+```bash
+Write: setup/{supplier_name}_selectors.json
+# Paste the complete JSON with all extracted selectors
 ```
 
 **Checklist**:
 - [ ] Created categories JSON in setup/ folder
 - [ ] Created selectors JSON in setup/ folder
-- [ ] **Selectors JSON uses `field_mappings` structure**
 - [ ] Both files have valid JSON syntax
+- [ ] All URLs and selectors included
 
-### 1.6. Create Wizard Input (LLM Manual Work)
+---
+
+### 0.5. Create Wizard Input (LLM Manual Work)
+
 **Use Write tool to create wizard input JSON in temp/ folder**:
+
 **File**: `temp/{supplier_name}_wizard_input.json`
+
 ```json
 {
   "domain": "supplier.com",
@@ -250,6 +226,12 @@ The scraper expects selectors to be nested in `field_mappings`.
 - `authentication_required`: Set to `true` if login needed, `false` otherwise
 - `repo_root`: Use absolute path to repository root
 
+**Action**:
+```bash
+Write: temp/{supplier_name}_wizard_input.json
+# Paste the wizard input JSON
+```
+
 **Checklist**:
 - [ ] Created wizard input in temp/ folder
 - [ ] `categories_source` points to setup/ JSON file
@@ -257,27 +239,100 @@ The scraper expects selectors to be nested in `field_mappings`.
 - [ ] `workflow_key` follows pattern: {supplier}_workflow
 - [ ] `repo_root` is absolute path
 
-### 1.7. Validation Report
-**Before proceeding to Step 2**, report completion:
+---
+
+### 0.6. Validation Report
+
+**Before proceeding to Step 1**, report completion:
+
 ```
 ================================
-STEP 1: DATA VALIDATION COMPLETE
+STEP 0: LLM MANUAL VALIDATION COMPLETE
 ================================
+
 ✅ Files Read:
    - setup/categories_{supplier}.txt (150 URLs)
    - setup/selectors_{supplier}.txt (markdown format)
+
 ✅ Content Validated:
    - 150 valid {supplier}.com URLs
    - All required selectors present
    - CSS syntax verified
+
 ✅ JSON Files Created (LLM Manual):
    - setup/{supplier_name}_categories.json (150 URLs)
    - setup/{supplier_name}_selectors.json (8 selectors)
+
 ✅ Wizard Input Created:
    - temp/{supplier_name}_wizard_input.json
-STATUS: ✅ READY FOR CONFIGURATION
+
+STATUS: ✅ READY FOR STEP 1
+
+Next: Proceed to Step 1 (Gather Information)
 ================================
 ```
+
+---
+
+## Step 1: Gather Required Information (Progressive Discovery)
+
+**IMPORTANT**: Ask ONLY for missing information. Don't repeat what user already provided.
+
+### 1.1. Check What User Has Provided
+
+Review user's message for:
+- ✅ Domain/URL mentioned (e.g., "supplier.co.uk", "https://supplier.com")
+- ✅ File paths referenced (e.g., "categories in setup/categories.txt")
+- ✅ Inline data provided (pasted URLs or selector JSON)
+- ✅ Authentication status mentioned ("no login needed", "requires login")
+- ✅ Credentials provided (username/password)
+
+### 1.2. Read Provided Files
+
+If user referenced file paths, read them:
+
+**Categories File**:
+```bash
+# User said: "categories in setup/categories_{supplier}.txt"
+# Action: Read the file
+```
+
+**Selectors File**:
+```bash
+# User said: "selectors in setup/selectors_{supplier}.txt"
+# Action: Read the file
+```
+
+### 1.3. Identify Missing Information
+
+Create checklist of what's still needed:
+- [ ] Domain/URL
+- [ ] Category URLs (list or file)
+- [ ] CSS Selectors (document or JSON)
+- [ ] Authentication requirement (yes/no)
+- [ ] If auth: Username
+- [ ] If auth: Password
+
+### 1.4. Ask ONLY for Missing Information
+
+Example response:
+```
+I have the following for {supplier_domain}:
+✅ Domain: {supplier_domain}
+✅ Categories: Found 150 URLs in setup/categories_{supplier}.txt
+✅ Selectors: Found detailed selectors in setup/selectors_{supplier}.txt
+
+I still need:
+❓ Authentication Requirement: Does {supplier_domain} require login to view product prices?
+   - If YES, please provide:
+     - Username (email)
+     - Password
+   - If NO, we can proceed without authentication
+
+Please confirm the authentication requirement.
+```
+
+**DO NOT ASK** for information already provided!
 
 ---
 
@@ -401,28 +456,27 @@ Run the command and monitor output for:
 
 ---
 
-## Step 4: Strict Manual Verification (MANDATORY)
+## Step 4: Validate Generated Files ⚠️ CRITICAL
 
-**Protocol**: You MUST read and verify EVERY generated file. Do not rely on the Wizard's success message.
+**🚨 YOU MUST READ AND ANALYZE FILES - NOT JUST CHECK EXISTENCE 🚨**
 
-**1. List of Files to Verify**:
-*   `run_custom_[supplier-id].py`
-*   `config/[supplier_name]_workflow_categories.json`
-*   `config/supplier_configs/[domain].json`
-*   `config/system_config.json`
-*   `tools/[supplier-id]/supplier_authentication_service.py` (If Auth=True)
-
-**2. Verification Actions**:
-For EACH file above:
+This is the most critical step. You must thoroughly validate all generated files.
 
 ### 4.1. Runner Script Validation
+
 **File Location**: `run_custom_{supplier-id}.py` (hyphen-form)
+- Example: `run_custom_supplier-com.py`
 
 **Read the file** and perform these checks:
 
-#### A. Structure Checks
-Verify generated runner against these requirements:
-- [ ] **Length**: APPROXIMATELY 117-143 lines (NEVER 26 lines)
+#### A. Structure Checks (Compare with Reference Implementations)
+
+Read reference implementations:
+- `sample_data/reference_runners/run_custom_poundwholesale.py` (143 lines, with auth)
+- `sample_data/reference_runners/run_custom_clearance_king.py` (117 lines, no auth)
+
+Verify generated runner:
+- [ ] **Length**: 117-143 lines (NEVER 26 lines)
   - If 26 lines → **CRITICAL ERROR** - This is a shim, not full implementation
   - Report: "❌ CRITICAL: Generated runner is only 26 lines - this is a shim forwarding to wrong base runner"
 
@@ -451,11 +505,14 @@ Verify generated runner against these requirements:
   ```
 
 #### B. Workflow Integration Checks
+
 **CRITICAL**: Verify workflow_key is correct:
+
 Search for this line:
 ```python
 workflow_config = config_loader.get_workflow_config('...')
 ```
+
 - [ ] Workflow key is CORRECT for this supplier
 - [ ] NOT referencing wrong supplier
 
@@ -464,19 +521,24 @@ If wrong workflow_key found:
 ❌ CRITICAL ERROR: Runner references wrong workflow
    Found: 'other_supplier_workflow'
    Expected: '{supplier_name}_workflow'
+
    This will cause sanity check to scrape wrong supplier!
 ```
 
 #### C. Authentication Integration Checks
+
 **If authentication_required=true**:
+
 - [ ] Auth helper import present:
   ```python
   from tools.{supplier-id}.supplier_authentication_service import {ClassName}AuthenticationHelper
   ```
+
 - [ ] Auth helper instantiated:
   ```python
   auth_helper = {ClassName}AuthenticationHelper(page)
   ```
+
 - [ ] Authentication logic present:
   ```python
   is_authenticated = await auth_helper.is_authenticated()
@@ -485,22 +547,36 @@ If wrong workflow_key found:
   ```
 
 **If authentication_required=false**:
+
 - [ ] NO auth helper imports
 - [ ] Comment stating: `# No authentication required` or similar
 
 #### D. Naming Convention Checks
+
 Reference: `docs/NAMING_CONVENTIONS.md`
+
 - [ ] **File Name**: Uses hyphen-form
   - ✅ Correct: `run_custom_supplier-com.py`
   - ❌ Wrong: `run_custom_supplier.com.py`
   - ❌ Wrong: `run_custom_supplier_com.py`
+
 - [ ] **Supplier ID** in imports/paths uses hyphen-form:
   - Example: `tools/supplier-com/`
+
+#### E. Output Filename Checks (Logs + Reports)
+
+- [ ] Runner calls `setup_logger(supplier_name=supplier_name)` (not `setup_logger()`)
+- [ ] Debug log filename includes supplier identifier (e.g. `run_custom_supplier-co-uk_YYYYMMDD_HHMMSS.log`)
+- [ ] Financial reports are generated under supplier folder AND include supplier identifier in filename
+
 
 ### 4.2. Configuration Files Validation
 
 #### A. Categories Configuration
+
 **Location**: `config/{workflow_key}_categories.json`
+- Example: `config/supplier_workflow_categories.json`
+
 **Read the file** and verify:
 - [ ] JSON format correct: `{"category_urls": [...]}`
 - [ ] URLs are complete (include protocol: `https://`)
@@ -509,11 +585,16 @@ Reference: `docs/NAMING_CONVENTIONS.md`
 - [ ] All URLs belong to correct supplier domain
 
 #### B. Selector Configuration
+
 **Location**: `config/supplier_configs/{domain}.json` (dot-form!)
+- Example: `config/supplier_configs/supplier.com.json`
+
 **Read the file** and verify:
+
 - [ ] **File Name**: Uses dot-form (NOT hyphen-form)
   - ✅ Correct: `supplier.com.json`
   - ❌ Wrong: `supplier-com.json`
+
 - [ ] **All Required Selectors Present**:
   - [ ] `supplier_url`
   - [ ] `product_card_selector`
@@ -525,13 +606,19 @@ Reference: `docs/NAMING_CONVENTIONS.md`
   - [ ] `image_selector`
   - [ ] `out_of_stock_selector`
   - [ ] `authentication_required` (boolean)
+
 - [ ] **Values are non-empty** (not null or "")
+
 - [ ] **authentication_required matches** what was provided
 
 #### C. System Config Update
+
 **Location**: `config/system_config.json`
+
 **Read the workflows section** and verify:
+
 - [ ] New workflow entry exists: `{workflow_key}: {...}`
+
 - [ ] Entry contains required fields:
   ```json
   "{supplier_name}_workflow": {
@@ -543,78 +630,72 @@ Reference: `docs/NAMING_CONVENTIONS.md`
     "authentication_required": false
   }
   ```
+
 - [ ] `supplier_name` uses dot-form
 - [ ] `supplier_url` is correct
 - [ ] `categories_config_path` is correct
 - [ ] `authentication_required` matches what was provided
 
 ### 4.3. Authentication Helper Validation (If Applicable)
+
 **If authentication_required=true**, validate auth helper:
 
 #### A. File Location
+
 **Directory**: `tools/{supplier-id}/` (hyphen-form)
 - Example: `tools/supplier-com/`
+
 **Files**:
 - [ ] Directory exists
 - [ ] `__init__.py` exists
 - [ ] `supplier_authentication_service.py` exists
 
 #### B. Auth Helper Content
+
 **Read** `tools/{supplier-id}/supplier_authentication_service.py`:
+
 - [ ] Class name correct (PascalCase, no dots/hyphens):
   ```python
   class SupplierComAuthenticationHelper:
   ```
+
 - [ ] Required methods present:
   ```python
   async def is_authenticated(self) -> bool:
       # ... implementation ...
+
   async def login(self, credentials: dict) -> bool:
       # ... implementation ...
   ```
+
 - [ ] Contains TODO comments (EXPECTED):
   ```python
   # TODO: Customize based on supplier's auth indicators
   # TODO: Customize based on supplier's login flow
   ```
 
-### 4.3. Authentication Helper Validation (CRITICAL)
+**⚠️ IMPORTANT**: Auth helper is a TEMPLATE requiring manual customization.
 
-**🚨 CRITICAL: AUTHENTICATION CUSTOMIZATION IS MANDATORY**
+**Warn user**:
+```
+⚠️ Authentication Helper Generated as TEMPLATE
 
-The auth helper generated by the wizard is a **TEMPLATE ONLY** and **WILL FAIL** without supplier-specific customization.
+The auth helper at tools/{supplier-id}/supplier_authentication_service.py
+requires manual customization:
 
-**⚠️ DO NOT SKIP THIS STEP** - See comprehensive guide:
-**📄 `docs/AUTHENTICATION_CUSTOMIZATION.md`**
+1. Update is_authenticated() selectors:
+   - Replace generic logout button check with actual auth indicators
+   - Test on actual supplier website
 
-**What Must Be Done BEFORE Proceeding to Step 5**:
+2. Update login() implementation:
+   - Add actual login form selectors
+   - Implement login flow specific to this supplier
 
-1. **Read the authentication customization guide** in full
-2. **Use Chrome DevTools MCP** to analyze supplier website
-3. **Identify platform type** (Shopify/Magento/WooCommerce/Custom)
-4. **Customize `is_authenticated()` method** with supplier-specific selectors
-5. **Customize `login()` method** with supplier-specific form handling
-6. **Fix Python import paths** (hyphens → underscores)
-7. **Test authentication in isolation** using provided test script
-8. **Verify both methods work** before running full workflow
-
-**Validation Checklist**:
-- [ ] Auth helper import uses underscore path (not hyphens)
-  - ✅ Correct: `from tools.dkwholesale_com.supplier_authentication_service import ...`
-  - ❌ Wrong: `from tools.dkwholesale-com.supplier_authentication_service import ...`
-- [ ] `is_authenticated()` customized with supplier-specific selectors
-- [ ] `login()` customized with supplier-specific form handling
-- [ ] No TODO comments remain in the implementation
-- [ ] Methods contain actual logic (not placeholder comments)
-- [ ] Platform pattern verified with Chrome DevTools MCP
-- [ ] Authentication test script created and ready
-
-**If ANY check fails**: Return to Step 4.3 and complete customization.
-
-**For detailed step-by-step instructions, examples, and troubleshooting**:
-**📄 READ: `docs/AUTHENTICATION_CUSTOMIZATION.md`**
+See sample_data/reference_auth/poundwholesale_auth.py for complete example.
+```
 
 ### 4.4. Naming Convention Compliance Summary
+
 **Verify all three naming forms used correctly**:
 
 | Context | Form | Example | Location |
@@ -629,6 +710,7 @@ The auth helper generated by the wizard is a **TEMPLATE ONLY** and **WILL FAIL**
 **Reference**: See `docs/NAMING_CONVENTIONS.md` for complete specification.
 
 ### 4.5. Validation Summary
+
 After completing all checks, create summary:
 
 **✅ PASSED Validations**:
@@ -646,7 +728,79 @@ After completing all checks, create summary:
 3. Provide remediation steps
 4. DO NOT proceed to Step 5 until resolved
 
-**Completion Condition**: You can only state "Skill Run Completed" after ALL files have been manually verified and confirmed correct.
+---
+
+## Step 5: Report Results
+
+Provide comprehensive summary to user:
+
+### 5.1. Success Summary
+
+```
+✅ Supplier Onboarding Complete: {SUPPLIER_DOMAIN}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 FILES GENERATED:
+
+1. Runner Script (Full Implementation)
+   Location: run_custom_{supplier-id}.py
+   Size: 117-143 lines
+   Status: ✅ Validated - Full implementation (NOT shim)
+   Workflow: {supplier_name}_workflow (correct)
+   Authentication: [Yes/No]
+
+2. Categories Configuration
+   Location: config/{supplier_name}_workflow_categories.json
+   URLs: [count] category URLs
+   Status: ✅ Validated - All URLs valid
+
+3. Selector Configuration
+   Location: config/supplier_configs/{domain}.json
+   Selectors: 9 required selectors present
+   Status: ✅ Validated - All selectors configured
+
+4. System Configuration
+   Location: config/system_config.json
+   Workflow: {supplier_name}_workflow registered
+   Status: ✅ Validated - Workflow registered correctly
+
+[If auth required:]
+5. Authentication Helper (TEMPLATE)
+   Location: tools/{supplier-id}/supplier_authentication_service.py
+   Status: ⚠️ Generated as template - Requires manual customization
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 VALIDATION RESULTS:
+
+Structure Checks:           ✅ PASSED (117-143 lines, full implementation)
+Workflow Integration:       ✅ PASSED (correct workflow_key)
+Naming Conventions:         ✅ PASSED (all three forms correct)
+Configuration Files:        ✅ PASSED (all required fields present)
+System Config Registration: ✅ PASSED (workflow registered)
+[Authentication Integration: ✅ PASSED (template generated)]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 SANITY CHECK RESULTS:
+
+Scraping Rate:          ✅ PASS ([count] products found)
+Amazon Cache:           ✅ PASS (cache files created)
+Linking Map:            ✅ PASS (EAN mappings generated)
+Financial CSV:          ✅ PASS (report generated)
+Processing State:       ✅ PASS (state file created)
+No Critical Errors:     ✅ PASS (no errors in logs)
+
+Overall: 6/6 Criteria Passed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 PROCEED TO STEP 6: PRE-RUN VERIFICATION
+
+Next: LLM will perform comprehensive pre-run verification
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ### 5.2. Failure Summary (If Issues Found)
 
@@ -854,61 +1008,7 @@ curl http://localhost:9222/json/version
 - [ ] Chrome responding to CDP connections
 - [ ] No port conflicts
 
-#### C. Dashboard Integration Verification
-
-**Action**: Verify supplier appears in Streamlit dashboard dropdown
-
-**How Dashboard Discovery Works**:
-The dashboard automatically discovers suppliers by scanning `config/supplier_configs/` directory. When the wizard creates `{supplier_name}.json` in this directory, the supplier automatically appears in the dashboard dropdown under "Websites".
-
-**Verification Steps**:
-
-```bash
-# 1. Verify config file created in correct location
-ls -la config/supplier_configs/{supplier_name}.json
-
-# 2. Check dashboard can discover the supplier
-# The dashboard uses MetricsLoader.resolve_paths() which scans:
-# - config/supplier_configs/ for supplier configs
-# - OUTPUTS/CACHE/processing_states/ for state files
-# - OUTPUTS/FBA_ANALYSIS/linking_maps/ for linking maps
-```
-
-**Check**:
-- [ ] `config/supplier_configs/{supplier_name}.json` exists
-- [ ] File contains valid JSON with "selectors" and "auth" sections
-- [ ] No syntax errors in config file
-- [ ] Dashboard will auto-discover on next refresh
-
-**Expected Dashboard Behavior**:
-```
-When you launch: streamlit run dashboard/app_fixed.py
-The supplier "{supplier_name}" will appear in:
-- "Website" dropdown (left sidebar)
-- "Supplier Details" section
-- All metrics and charts for that supplier
-```
-
-**If Supplier Does Not Appear**:
-```
-❌ Dashboard Discovery Issue
-
-Possible Causes:
-1. Config file not in config/supplier_configs/
-2. JSON syntax error in config file
-3. File permissions preventing read access
-4. Dashboard cache not refreshed (wait 120 seconds or restart)
-
-Remediation:
-1. Verify file location: ls -la config/supplier_configs/
-2. Validate JSON: python -m json.tool config/supplier_configs/{supplier_name}.json
-3. Check permissions: ls -la config/supplier_configs/
-4. Restart dashboard: pkill -f streamlit; streamlit run dashboard/app_fixed.py
-```
-
-**Reference**: See dashboard/README.md for complete dashboard setup and troubleshooting.
-
-#### D. Memory and Resource Assessment
+#### C. Memory and Resource Assessment
 
 **Check**:
 - [ ] Available RAM for processing (recommend 4GB+ free)
@@ -980,17 +1080,12 @@ State Manager:        ✅ Single-file approach verified
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-### 6.X. The Triangulation Protocol (ON DEMAND)
+🎯 OVERALL STATUS: ✅ READY FOR EXECUTION
 
-**IF** the user explicitly asks for analysis or if you encounter issues during verification, perform a **Triangulation Analysis**:
+All verification stages passed. System is ready to proceed.
 
-1.  **The Symptom**: What does the log say? (e.g., "No products found")
-2.  **The Logic**: Trace the *exact function* in `configurable_supplier_scraper.py` or `passive_extraction_workflow_latest.py`.
-    *   *Example*: "It returns empty list IF `selectors.get('field_mappings')` is missing."
-3.  **The Data**: Check the generated config file (`config/supplier_configs/{domain}.json`).
-    *   *Example*: "Does the JSON actually HAVE a `field_mappings` key?"
-
-**Rule**: NEVER assume a file is correct just because it exists. Verify the *structure* matches the *code expectations*.
+═══════════════════════════════════════════════════════════
+```
 
 ---
 
@@ -1039,37 +1134,9 @@ Please indicate your choice, and I will proceed accordingly.
 
 ---
 
-## 🚨 CRITICAL: Operational Naming vs Actual Domain
-
-**SUPPLIER-SPECIFIC DECISION**: When a supplier has a `.com` website (like wholesaletradingsupplies.com), you must:
-
-### ✅ **Configuration Files** (MUST match actual domain)
-- **Config filename**: `wholesaletradingsupplies.com.json`
-- **Config supplier_id**: `"wholesaletradingsupplies.com"`
-- **System config supplier_name**: `"wholesaletradingsupplies.com"`
-- **Config supplier_url**: `"https://wholesaletradingsupplies.com"`
-
-### ✅ **Operational Files** (Use .co.uk for consistency)
-- **Runner script**: `run_custom_wholesaletradingsupplies-co-uk.py` (stays .co.uk)
-- **Cache file**: `wholesaletradingsupplies-co-uk_products_cache.json` (stays .co.uk)
-- **Linking map**: `wholesaletradingsupplies.co.uk/linking_map.json` (stays .co.uk)
-- **State file**: `wholesaletradingsupplies_co_uk_processing_state.json` (stays .co.uk)
-
-**Why?** The system maintains operational consistency while allowing domain flexibility.
-
-**See**: [docs/DOMAIN_VS_NAMING_GUIDE.md](docs/DOMAIN_VS_NAMING_GUIDE.md) for complete explanation and examples.
-
----
-
 ## Reference Documentation
 
 Comprehensive documentation available:
-
-- **Domain vs Naming Consistency**: [docs/DOMAIN_VS_NAMING_GUIDE.md](docs/DOMAIN_VS_NAMING_GUIDE.md) ⭐ **CRITICAL - READ FIRST**
-  - **MUST READ**: Explains why .com websites use .co.uk in file names
-  - **Prevents**: "No selector config file found" errors
-  - **Shows**: What MUST match actual domain vs what stays .co.uk
-  - **Includes**: Real examples and validation decision tree
 
 - **Naming Conventions**: [docs/NAMING_CONVENTIONS.md](docs/NAMING_CONVENTIONS.md)
   - Three naming forms (dot, hyphen, underscore)
@@ -1085,6 +1152,27 @@ Comprehensive documentation available:
   - Common issues and solutions
   - Root cause analysis
   - Recovery procedures
+
+## Reference Implementations
+
+Use these for comparison during validation:
+
+- **Runner with Authentication**: [sample_data/reference_runners/run_custom_poundwholesale.py](sample_data/reference_runners/run_custom_poundwholesale.py)
+  - 143 lines
+  - Complete authentication integration
+  - Import hygiene validation
+
+- **Runner without Authentication**: [sample_data/reference_runners/run_custom_clearance_king.py](sample_data/reference_runners/run_custom_clearance_king.py)
+  - 117 lines
+  - Simple workflow execution
+  - No auth overhead
+
+- **Authentication Helper Example**: [sample_data/reference_auth/poundwholesale_auth.py](sample_data/reference_auth/poundwholesale_auth.py)
+  - Complete is_authenticated() implementation
+  - Complete login() implementation
+  - Magento-specific selectors
+
+## Templates
 
 Templates used by wizard for file generation:
 

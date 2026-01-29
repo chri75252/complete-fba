@@ -1,0 +1,144 @@
+# Amazon FBA Agent System - AI Exclude
+# Goal: reduce context size for AI tools (Firebase Studio, etc.).
+# Keep a small allowlist of recent artifacts in the section at the bottom.
+# Update that list when new reports are created.
+
+# ============================================================================
+# Version control and tool metadata
+# ============================================================================
+.git/
+.github/
+.agent/
+.claude/
+.claude.bak*/
+.gemini/
+.kilocode/
+.kiro/
+.qoder/
+.qwen/
+.serena/
+
+# ============================================================================
+# Python caches and virtual environments
+# ============================================================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.venv/
+venv/
+env/
+ENV/
+
+# ============================================================================
+# Archives, backups, and old copies
+# ============================================================================
+archive/
+archive_new/
+backup/
+Recovered/
+B_run1/
+monitoring - OLD/
+DASHBOARD - old/
+older version/
+src-Copy*/
+src-Copy-old*/
+src-Copy-old-copy*/
+codex_sgent*/
+
+# ============================================================================
+# Large generated outputs and diagnostics
+# ============================================================================
+OUTPUTS/**
+logs/**
+diagnostics/**
+diagnostics_output/**
+processing_states/**
+results/**
+runs/**
+runs_phase*_test/**
+runs_phase*_balanced/**
+runs_phase*_highrecall/**
+report/**
+AGENT REPORT/**
+RESERACH/REPORT/**
+LLM_ANALYSIS_PACKAGE/**
+
+# ============================================================================
+# Large/binary file types
+# ============================================================================
+*.csv
+*.jsonl
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.svg
+*.pdf
+*.docx
+*.xlsx
+*.xls
+*.zip
+*.7z
+*.tar
+*.gz
+*.rar
+*.mp4
+*.mov
+*.avi
+*.mp3
+*.wav
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+*.old
+
+# ============================================================================
+# Keep selected recent artifacts (explicit allowlist; update as needed)
+# ============================================================================
+!OUTPUTS/
+!OUTPUTS/**/
+!logs/
+!logs/**/
+!diagnostics/
+!diagnostics/**/
+!diagnostics_output/
+!diagnostics_output/**/
+!runs/
+!runs/**/
+!runs_phase*_test/
+!runs_phase*_test/**/
+!runs_phase*_balanced/
+!runs_phase*_balanced/**/
+!runs_phase*_highrecall/
+!runs_phase*_highrecall/**/
+!processing_states/
+!processing_states/**/
+!results/
+!results/**/
+!report/
+!report/**/
+!AGENT REPORT/
+!AGENT REPORT/**/
+!RESERACH/
+!RESERACH/REPORT/
+!RESERACH/REPORT/**/
+!LLM_ANALYSIS_PACKAGE/
+!LLM_ANALYSIS_PACKAGE/**/
+
+# Latest financial report per supplier (by LastWriteTime at 2026-01-23)
+!OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk/deep_analysis_20251212_ANTIGRAVITY_PROTECTED.csv
+!OUTPUTS/FBA_ANALYSIS/financial_reports/clearance-king-co-uk/fba_financial_report_20260117_131403.csv
+!OUTPUTS/FBA_ANALYSIS/financial_reports/efghousewares-co-uk/fba_financial_report_20260122_093706.csv
+!OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/combined_reports.csv

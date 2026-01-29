@@ -1,0 +1,1022 @@
+2026-01-25 18:32:19,874 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_efghousewares-co-uk_20260125_183219.log
+2026-01-25 18:32:19,875 - __main__ - INFO - 📄 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_efghousewares-co-uk_20260125_183219.log
+2026-01-25 18:32:19,875 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-01-25 18:32:19,880 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2026-01-25 18:32:20,335 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2026-01-25 18:32:20,335 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-01-25 18:32:22,364 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]
+2026-01-25 18:32:22,370 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/144.0.7559.97
+2026-01-25 18:32:22,371 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2026-01-25 18:32:24,400 - utils.browser_manager - DEBUG - ?? Using IPv4 endpoint for CDP connection
+2026-01-25 18:32:24,400 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+2026-01-25 18:32:24,574 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2026-01-25 18:32:24,575 - utils.browser_manager - INFO - ?? Using existing context with 1 pages
+2026-01-25 18:32:24,575 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 144.0.7559.97
+2026-01-25 18:32:24,576 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:32:24,576 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:32:24,577 - __main__ - INFO - 🔐 Checking supplier authentication status...
+2026-01-25 18:32:28,463 - tools.efghousewares.supplier_authentication_service - INFO - 🔎 Verifying price access via test product: https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50
+2026-01-25 18:32:35,893 - tools.efghousewares.supplier_authentication_service - INFO - ✅ Price access verified (p.price_text span.excUnitPrice -> '3.68')
+2026-01-25 18:32:35,894 - __main__ - INFO - ✅ Already authenticated
+2026-01-25 18:32:35,895 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2026-01-25 18:32:35,897 - PassiveExtractionWorkflow - INFO -  DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2026-01-25 18:32:35,897 - PassiveExtractionWorkflow - INFO -  DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2026-01-25 18:32:35,897 - PassiveExtractionWorkflow - INFO -  Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:32:35,898 - PassiveExtractionWorkflow - INFO -  Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-01-25 18:32:35,898 - PassiveExtractionWorkflow - INFO -  Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\efghousewares.co.uk
+2026-01-25 18:32:35,899 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,900 - PassiveExtractionWorkflow - INFO -  State manager initialized with accurate totals: 1 products, 0 categories
+2026-01-25 18:32:35,900 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2026-01-25 18:32:35,900 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-01-25 18:32:35,901 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-01-25 18:32:35,901 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2026-01-25 18:32:35,902 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-01-25 18:32:35,902 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-01-25 18:32:35,902 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2026-01-25 18:32:35,903 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2026-01-25 18:32:35,903 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2026-01-25 18:32:35,903 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-01-25 18:32:35,904 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2026-01-25 18:32:35,904 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2026-01-25 18:32:35,904 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map initialized as type: <class 'list'>
+2026-01-25 18:32:35,904 - PassiveExtractionWorkflow - INFO - ?? HashLookupOptimizer initialized - ready for O(1) lookups
+2026-01-25 18:32:35,905 - PassiveExtractionWorkflow - INFO -  Hash-based lookup optimization system initialized
+2026-01-25 18:32:35,905 - PassiveExtractionWorkflow - INFO -  SENTINEL MONITORING: Proactive monitoring system initialized
+2026-01-25 18:32:35,905 - PassiveExtractionWorkflow - INFO -  WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2026-01-25 18:32:35,906 - PassiveExtractionWorkflow - INFO -  Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2026-01-25 18:32:35,906 - PassiveExtractionWorkflow - INFO -  Initialization validation passed - all critical attributes verified
+2026-01-25 18:32:35,906 - __main__ - INFO - 🚀 Starting workflow for efghousewares.co.uk...
+2026-01-25 18:32:35,907 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: efghousewares.co.uk ---
+2026-01-25 18:32:35,907 - PassiveExtractionWorkflow - INFO - Session ID: efghousewares.co.uk_20260125_183235
+2026-01-25 18:32:35,907 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for efghousewares.co.uk
+2026-01-25 18:32:35,908 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 336 predefined category URLs from config\efghousewares_workflow_categories.json
+2026-01-25 18:32:35,908 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-01-25 18:32:35,909 - utils.fixed_enhanced_state_manager - INFO - Loaded state for efghousewares.co.uk - resumption from index 0
+2026-01-25 18:32:35,909 - utils.fixed_enhanced_state_manager - INFO -  Removed legacy 'supplier_extraction_progress' from state on load
+2026-01-25 18:32:35,909 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,910 - utils.fixed_enhanced_state_manager - WARNING -  SAVE BLOCKED: Attempted to save state before startup completion
+2026-01-25 18:32:35,910 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 18:32:35,910 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-01-25 18:32:35,910 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2026-01-25 18:32:35,911 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 1 actual products in cache (total entries: 1)
+2026-01-25 18:32:35,912 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 3 processed products in linking map
+2026-01-25 18:32:35,913 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 1 categories
+2026-01-25 18:32:35,913 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2026-01-25 18:32:35,914 - utils.fixed_enhanced_state_manager - INFO - ?? ISS-007: Counter mismatch detected but ignored in Hybrid Mode (local counters)
+2026-01-25 18:32:35,914 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=3 (reason: system_progression)
+2026-01-25 18:32:35,914 - utils.fixed_enhanced_state_manager - INFO -  STARTUP CHECK: is_fresh_start flag is 'False'
+2026-01-25 18:32:35,915 - utils.fixed_enhanced_state_manager - INFO -  Loaded 336 category URLs from config
+2026-01-25 18:32:35,916 - utils.fixed_enhanced_state_manager - INFO -  START MODE: is_fresh_start=False, pci=4, session_cursor=4, url=https://www.efghousewares.co.uk/newarrivals...
+2026-01-25 18:32:35,916 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=3 (reason: system_progression)
+2026-01-25 18:32:35,917 - utils.fixed_enhanced_state_manager - INFO -  Loaded 336 category URLs from config
+2026-01-25 18:32:35,917 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,917 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,918 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,918 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,918 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,919 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,923 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,924 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,924 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,925 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:35,925 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 4 in phase 'amazon_analysis'
+2026-01-25 18:32:35,925 - utils.fixed_enhanced_state_manager - INFO -  STARTUP GATING COMPLETE: session_cursor=4, startup_completed=True
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Completed comprehensive state analysis
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 4 in phase 'amazon_analysis'
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,926 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,927 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,927 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,927 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,929 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,930 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,930 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (manifest)
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,931 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,932 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,937 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,938 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,938 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,939 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:35,939 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 18:32:35,939 - PassiveExtractionWorkflow - INFO -  FROZEN TOTAL CATEGORIES set to 336 (hash=4f0091e9)
+2026-01-25 18:32:35,939 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,941 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,945 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,946 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,946 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,947 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (amazon_analysis)
+2026-01-25 18:32:35,947 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 18:32:35,947 - PassiveExtractionWorkflow - WARNING -  RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2026-01-25 18:32:35,947 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2026-01-25 18:32:35,948 - PassiveExtractionWorkflow - INFO -  RESUMPTION POINT CONFIRMED: Starting from category index 4 at product 0 in phase 'amazon_analysis'.
+2026-01-25 18:32:35,948 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to Amazon analysis phase
+2026-01-25 18:32:35,948 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,949 - PassiveExtractionWorkflow - INFO -  CATEGORY QUEUE: url=https://www.efghousewares.co.uk/newarrivals size=0 allowed_gate=off
+2026-01-25 18:32:35,949 - PassiveExtractionWorkflow - INFO -  AMAZON RESUME: cat_idx=4 total=0 start_batch=0 first_offset=0
+2026-01-25 18:32:35,949 - PassiveExtractionWorkflow - INFO - [RESUME_ENTER] cat_idx=4 total=0 ptr=0 start_batch=0 first_offset=0
+2026-01-25 18:32:35,950 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,950 - PassiveExtractionWorkflow - INFO -  CATEGORY QUEUE: url=https://www.efghousewares.co.uk/newarrivals size=0 allowed_gate=off
+2026-01-25 18:32:35,950 - utils.fixed_enhanced_state_manager - ERROR -  MARK_CATEGORY_COMPLETED CALLED 
+2026-01-25 18:32:35,950 - utils.fixed_enhanced_state_manager - ERROR -  CATEGORY_COMPLETION_CALL: url=https://www.efghousewares.co.uk/newarrivals... absolute_cat_index=4
+2026-01-25 18:32:35,951 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,951 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,951 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,951 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,952 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,952 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,956 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,957 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,957 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,958 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:35,958 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-complete)
+2026-01-25 18:32:35,958 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY_INDEX_TRACKER: Category completed https://www.efghousewares.co.uk/newarrivals  next pci=5
+2026-01-25 18:32:35,958 - PassiveExtractionWorkflow - INFO -  WORKFLOW: Category 4 completed and finalized
+2026-01-25 18:32:35,959 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,959 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,959 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,959 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,959 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,960 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,963 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,964 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,964 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,964 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:35,965 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (workflow-category-complete)
+2026-01-25 18:32:35,965 - PassiveExtractionWorkflow - INFO -  DEBUG: _save_linking_map called with 0 entries for supplier efghousewares.co.uk
+2026-01-25 18:32:35,967 - PassiveExtractionWorkflow - INFO -  DEBUG: linking_map type: <class 'list'>, entries: 0, sample: {}
+2026-01-25 18:32:35,967 - PassiveExtractionWorkflow - WARNING -  CRITICAL: Empty linking map - nothing to save. This suggests linking map entries are not being created!
+2026-01-25 18:32:35,967 - SentinelMonitor[efghousewares.co.uk] - WARNING - WARNING: linking map shrank by 3 entries (from 3 to 0)
+2026-01-25 18:32:35,967 - utils.fixed_enhanced_state_manager - INFO -  PHASE TRANSITION: amazon_analysis  supplier
+2026-01-25 18:32:35,968 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:35,968 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:35,968 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:35,968 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:35,968 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:35,969 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:35,971 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:35,972 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:35,973 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:35,973 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:35,973 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 18:32:35,973 - PassiveExtractionWorkflow - INFO -  PHASE SWITCH: amazon_analysis  supplier (via resume finalizer)
+2026-01-25 18:32:35,973 - PassiveExtractionWorkflow - INFO -  RESUME COMPLETE: continuing main loop at cat_idx=5 phase=supplier
+2026-01-25 18:32:35,974 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to supplier extraction phase
+2026-01-25 18:32:35,974 - PassiveExtractionWorkflow - DEBUG - PTR print suppressed at workflow; state manager will emit gated proofs
+2026-01-25 18:32:35,974 - PassiveExtractionWorkflow - INFO -  CONFIGURATION VALUES:
+2026-01-25 18:32:35,974 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2026-01-25 18:32:35,975 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 2000
+2026-01-25 18:32:35,975 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2026-01-25 18:32:35,975 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2026-01-25 18:32:35,975 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2026-01-25 18:32:35,976 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2026-01-25 18:32:35,976 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-01-25 18:32:35,976 - utils.fixed_enhanced_state_manager - INFO - Loaded state for efghousewares.co.uk - resumption from index 3
+2026-01-25 18:32:35,977 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-01-25 18:32:35,977 - utils.fixed_enhanced_state_manager - INFO - Startup analysis already completed for this session
+2026-01-25 18:32:35,977 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-01-25 18:32:35,977 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 5 in phase 'supplier'
+2026-01-25 18:32:35,977 - PassiveExtractionWorkflow - INFO -  WORKFLOW START CURSOR: category_index=5 (pci=5, cursor=4, max=5)
+2026-01-25 18:32:35,978 - PassiveExtractionWorkflow - INFO -  WORKFLOW INITIALIZED: Starting from category 5 in phase 'supplier'
+2026-01-25 18:32:35,978 - PassiveExtractionWorkflow - INFO -  Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\efghousewares.co.uk\linking_map.json with 3 entries
+2026-01-25 18:32:35,979 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 2 EANs, 3 URLs, 3 ASINs in 0.000s
+2026-01-25 18:32:35,979 - PassiveExtractionWorkflow - INFO -  HASH INDEXES BUILT: Ready for O(1) lookups on 3 entries
+2026-01-25 18:32:35,979 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2026-01-25 18:32:35,979 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for efghousewares.co.uk
+2026-01-25 18:32:35,980 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 336 predefined category URLs from config\efghousewares_workflow_categories.json
+2026-01-25 18:32:35,980 - PassiveExtractionWorkflow - INFO -  INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=2000
+2026-01-25 18:32:35,981 - PassiveExtractionWorkflow - INFO -  Processing ALL 336 predefined categories (infinite mode)
+2026-01-25 18:32:35,981 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING MODE: Enabled (resume_context=True)
+2026-01-25 18:32:35,981 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING: Mode configuration loaded
+2026-01-25 18:32:35,981 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2026-01-25 18:32:35,981 - PassiveExtractionWorkflow - INFO -  HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2026-01-25 18:32:35,981 - PassiveExtractionWorkflow - INFO -  Processing chunk 1: categories 1-1
+2026-01-25 18:32:35,982 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,982 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2026-01-25 18:32:35,982 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-01-25 18:32:35,983 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-01-25 18:32:35,983 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-01-25 18:32:35,984 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,985 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 1 products available for progress tracking
+2026-01-25 18:32:35,985 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 5
+2026-01-25 18:32:35,985 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches
+2026-01-25 18:32:35,985 - PassiveExtractionWorkflow - INFO -  Processing chunk 2: categories 2-2
+2026-01-25 18:32:35,986 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,986 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2026-01-25 18:32:35,986 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-01-25 18:32:35,987 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-01-25 18:32:35,987 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-01-25 18:32:35,987 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,988 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 1 products available for progress tracking
+2026-01-25 18:32:35,988 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 5
+2026-01-25 18:32:35,988 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches
+2026-01-25 18:32:35,988 - PassiveExtractionWorkflow - INFO -  Processing chunk 3: categories 3-3
+2026-01-25 18:32:35,989 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,989 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2026-01-25 18:32:35,990 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-01-25 18:32:35,990 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-01-25 18:32:35,990 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-01-25 18:32:35,990 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,991 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 1 products available for progress tracking
+2026-01-25 18:32:35,991 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 5
+2026-01-25 18:32:35,991 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches
+2026-01-25 18:32:35,992 - PassiveExtractionWorkflow - INFO -  Processing chunk 4: categories 4-4
+2026-01-25 18:32:35,992 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,992 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2026-01-25 18:32:35,993 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-01-25 18:32:35,993 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-01-25 18:32:35,993 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-01-25 18:32:35,994 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,994 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 1 products available for progress tracking
+2026-01-25 18:32:35,994 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 5
+2026-01-25 18:32:35,994 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches
+2026-01-25 18:32:35,995 - PassiveExtractionWorkflow - INFO -  Processing chunk 5: categories 5-5
+2026-01-25 18:32:35,995 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,995 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2026-01-25 18:32:35,996 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-01-25 18:32:35,996 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-01-25 18:32:35,996 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-01-25 18:32:35,997 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:35,997 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 1 products available for progress tracking
+2026-01-25 18:32:35,997 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 1 categories starting from index 5
+2026-01-25 18:32:35,998 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2026-01-25 18:32:35,998 - PassiveExtractionWorkflow - INFO -  Processing category batch 1/1 (1 categories)
+2026-01-25 18:32:35,998 - PassiveExtractionWorkflow - INFO -  LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2026-01-25 18:32:35,998 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:32:35,998 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:32:35,999 - utils.browser_manager - INFO - ?? Navigating to https://www.efghousewares.co.uk
+2026-01-25 18:32:38,649 - utils.browser_manager - INFO - ? Page ready for https://www.efghousewares.co.uk
+2026-01-25 18:32:40,979 - tools.efghousewares.supplier_authentication_service - INFO - 🔎 Verifying price access via test product: https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50
+2026-01-25 18:32:47,143 - tools.efghousewares.supplier_authentication_service - INFO - ✅ Price access verified (p.price_text span.excUnitPrice -> '3.68')
+2026-01-25 18:32:47,143 - PassiveExtractionWorkflow - INFO -  LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2026-01-25 18:32:47,146 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.efghousewares.co.uk/shop-by-department/bathroom
+2026-01-25 18:32:47,147 - PassiveExtractionWorkflow - WARNING -  PCI/URL mismatch at entry: pci=5 expected=None actual=https://www.efghousewares.co.uk/shop-by-department/bathroom (aligning PCI to i=5)
+2026-01-25 18:32:47,147 - PassiveExtractionWorkflow - INFO -  CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)
+2026-01-25 18:32:47,148 - config.supplier_config_loader - INFO - Loaded supplier selector config for domain: efghousewares.co.uk
+2026-01-25 18:32:47,148 - configurable_supplier_scraper - INFO - 📁 Loaded selectors for domain efghousewares.co.uk from legacy config/supplier_configs/
+2026-01-25 18:32:47,148 - configurable_supplier_scraper - INFO - 🔘 Config specifies BUTTON pagination for www.efghousewares.co.uk
+2026-01-25 18:32:47,149 - configurable_supplier_scraper - INFO - 🔄 Using BUTTON pagination for: https://www.efghousewares.co.uk/shop-by-department/bathroom
+2026-01-25 18:32:47,149 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:32:47,149 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:32:51,417 - configurable_supplier_scraper - INFO - 🏁 No more pagination buttons found, collection complete
+2026-01-25 18:32:51,418 - configurable_supplier_scraper - INFO - ✅ Button pagination complete: 0 unique URLs collected
+2026-01-25 18:32:51,418 - PassiveExtractionWorkflow - WARNING - No product URLs found for https://www.efghousewares.co.uk/shop-by-department/bathroom
+2026-01-25 18:32:51,418 - PassiveExtractionWorkflow - INFO -  EMPTY CATEGORY HANDLING: Category 5 has no products, resetting index to 0
+2026-01-25 18:32:51,418 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for efghousewares.co.uk
+2026-01-25 18:32:51,419 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 336 predefined category URLs from config\efghousewares_workflow_categories.json
+2026-01-25 18:32:51,419 - utils.fixed_enhanced_state_manager - DEBUG - Category index unchanged: 5
+2026-01-25 18:32:51,420 - utils.fixed_enhanced_state_manager - INFO -  PHASE PRESERVED: 'supplier' (loaded from state)
+2026-01-25 18:32:51,420 - utils.fixed_enhanced_state_manager - INFO -  RESUMPTION: Preserving per-category counters (reason: active_category=True, frozen=False) for https://www.efghousewares.co.uk/shop-by-department/bathroom
+2026-01-25 18:32:51,420 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY INIT COMPLETE:
+  PCI (persistent_category_index): 5
+  Phase (current_phase): supplier
+  Category URL: https://www.efghousewares.co.uk/shop-by-department/bathroom
+2026-01-25 18:32:51,420 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:51,421 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:51,421 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:51,421 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:51,421 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:51,422 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:51,424 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:51,425 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:51,426 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:51,426 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:51,426 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-init)
+2026-01-25 18:32:51,426 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:51,427 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:51,427 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:51,427 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:51,427 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:51,428 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:51,431 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:51,432 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:51,432 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:51,433 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:51,433 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (freeze-category)
+2026-01-25 18:32:51,433 - utils.fixed_enhanced_state_manager - INFO -  FROZEN DENOMINATOR: Category https://www.efghousewares.co.uk/shop-by-department/bathroom  0 products (LOCKED)
+2026-01-25 18:32:51,434 - PassiveExtractionWorkflow - INFO -  FROZEN DENOMINATOR: Empty category 5  0 products
+2026-01-25 18:32:51,434 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:51,434 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:51,434 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:51,434 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:51,435 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:51,435 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:51,439 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:51,440 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:51,440 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:51,440 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2026-01-25 18:32:51,441 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 18:32:51,441 - PassiveExtractionWorkflow - INFO -  TOTALS COMMITTED: Resume pointers now enabled for empty category
+2026-01-25 18:32:51,441 - utils.fixed_enhanced_state_manager - ERROR -  MARK_CATEGORY_COMPLETED CALLED 
+2026-01-25 18:32:51,441 - utils.fixed_enhanced_state_manager - ERROR -  CATEGORY_COMPLETION_CALL: url=https://www.efghousewares.co.uk/shop-by-department... absolute_cat_index=5
+2026-01-25 18:32:51,442 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:32:51,442 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:32:51,442 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:32:51,443 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:32:51,443 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:32:51,443 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:32:51,446 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:32:51,447 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:32:51,448 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:32:51,448 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:32:51,448 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-complete)
+2026-01-25 18:32:51,448 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY_INDEX_TRACKER: Category completed https://www.efghousewares.co.uk/shop-by-department/bathroom  next pci=6
+2026-01-25 18:32:51,449 - PassiveExtractionWorkflow - INFO -  EMPTY CATEGORY COMPLETED: Category 5 marked as completed
+2026-01-25 18:32:51,449 - PassiveExtractionWorkflow - INFO -  Completed batch 1: 0 total products extracted so far
+2026-01-25 18:32:51,449 - PassiveExtractionWorkflow - INFO -  Processing chunk 6: categories 6-6
+2026-01-25 18:32:51,450 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:51,450 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2026-01-25 18:32:51,451 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-01-25 18:32:51,451 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-01-25 18:32:51,451 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-01-25 18:32:51,452 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:32:51,452 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 1 products available for progress tracking
+2026-01-25 18:32:51,452 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 1 categories starting from index 6
+2026-01-25 18:32:51,453 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2026-01-25 18:32:51,453 - PassiveExtractionWorkflow - INFO -  Processing category batch 1/1 (1 categories)
+2026-01-25 18:32:51,454 - PassiveExtractionWorkflow - INFO -  Skipping auth check (within cooldown window)
+2026-01-25 18:32:51,454 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats
+2026-01-25 18:32:51,455 - PassiveExtractionWorkflow - WARNING -  PCI/URL mismatch at entry: pci=6 expected=None actual=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats (aligning PCI to i=6)
+2026-01-25 18:32:51,455 - PassiveExtractionWorkflow - INFO -  CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)
+2026-01-25 18:32:51,455 - configurable_supplier_scraper - INFO - 🔘 Config specifies BUTTON pagination for www.efghousewares.co.uk
+2026-01-25 18:32:51,455 - configurable_supplier_scraper - INFO - 🔄 Using BUTTON pagination for: https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats
+2026-01-25 18:32:51,456 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:32:51,456 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:00,621 - configurable_supplier_scraper - INFO - 📦 Found 24 new product URLs (total: 24)
+2026-01-25 18:33:00,751 - configurable_supplier_scraper - INFO - ✅ Button clicked via JavaScript
+2026-01-25 18:33:04,023 - configurable_supplier_scraper - INFO - 📦 Found 19 new product URLs (total: 43)
+2026-01-25 18:33:04,035 - configurable_supplier_scraper - INFO - 🏁 No more pagination buttons found, collection complete
+2026-01-25 18:33:04,035 - configurable_supplier_scraper - INFO - ✅ Button pagination complete: 43 unique URLs collected
+2026-01-25 18:33:04,035 - PassiveExtractionWorkflow - INFO - Discovered 43 product URLs for category: https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats
+2026-01-25 18:33:04,038 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares.co.uk_shop-by-department_bathroom_bath-mats_manifest.json (5 entries) saved successfully
+2026-01-25 18:33:04,039 - PassiveExtractionWorkflow - INFO -  MANIFEST CREATED: Saved 43 URLs to efghousewares.co.uk_shop-by-department_bathroom_bath-mats_manifest.json
+2026-01-25 18:33:04,039 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:04,040 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:04,040 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:04,040 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:04,040 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:04,041 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:04,043 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:04,044 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:04,044 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:04,045 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-01-25 18:33:04,045 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (freeze-category)
+2026-01-25 18:33:04,045 - utils.fixed_enhanced_state_manager - INFO -  FROZEN DENOMINATOR: Category https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats  43 products (LOCKED)
+2026-01-25 18:33:04,045 - PassiveExtractionWorkflow - INFO -  FROZEN DENOMINATOR: Category 6  43 products (snapshot)
+2026-01-25 18:33:04,045 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:04,046 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:04,046 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:04,046 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:04,046 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:04,047 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:04,049 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:04,050 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:04,050 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:04,050 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=0/43
+2026-01-25 18:33:04,050 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-01-25 18:33:04,051 - PassiveExtractionWorkflow - INFO -  TOTALS COMMITTED: Resume pointers now enabled
+2026-01-25 18:33:04,051 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for efghousewares.co.uk
+2026-01-25 18:33:04,051 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 336 predefined category URLs from config\efghousewares_workflow_categories.json
+2026-01-25 18:33:04,051 - utils.fixed_enhanced_state_manager - DEBUG - Category index unchanged: 6
+2026-01-25 18:33:04,052 - utils.fixed_enhanced_state_manager - INFO -  PHASE PRESERVED: 'supplier' (loaded from state)
+2026-01-25 18:33:04,052 - utils.fixed_enhanced_state_manager - INFO -  RESUMPTION: Preserving per-category counters (reason: active_category=True, frozen=True) for https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats
+2026-01-25 18:33:04,052 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY INIT COMPLETE:
+  PCI (persistent_category_index): 6
+  Phase (current_phase): supplier
+  Category URL: https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats
+2026-01-25 18:33:04,052 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:04,052 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:04,053 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:04,053 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:04,053 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:04,053 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:04,056 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:04,057 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:04,057 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:04,057 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=0/43
+2026-01-25 18:33:04,057 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-init)
+2026-01-25 18:33:04,058 - PassiveExtractionWorkflow - INFO -  CATEGORY PROCESSING: abs_index=6, display_index=5, url=https://www.efghousewares.co.uk/shop-by-department...
+2026-01-25 18:33:04,058 - PassiveExtractionWorkflow - INFO -  EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 7/1)
+2026-01-25 18:33:04,058 - PassiveExtractionWorkflow - INFO - PAGINATION[C7 bath-mats]: pages=2 urls_page=43 total=43
+2026-01-25 18:33:04,059 - PassiveExtractionWorkflow - INFO -  DETAILED PRE-EXTRACTION FILTERING: Analyzing 43 collected URLs
+2026-01-25 18:33:04,059 - PassiveExtractionWorkflow - DEBUG -  UNIFIED FILTER: Loaded 2 EANs and 3 URLs from linking map
+2026-01-25 18:33:04,060 - PassiveExtractionWorkflow - INFO -  LINKING MAP FILTER RESULTS:
+  Total URLs: 43
+  Skipped (in linking map): 0
+  Remaining for processing: 43
+2026-01-25 18:33:04,060 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 1 products in efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:04,061 - PassiveExtractionWorkflow - DEBUG -  Loaded 1 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:04,061 - PassiveExtractionWorkflow - INFO -  Product cache indexes built: keys=1, url_idx=1, ean_idx=1
+2026-01-25 18:33:04,061 - PassiveExtractionWorkflow - INFO -  Product cache indexes built: keys=1, url_idx=1, ean_idx=1
+2026-01-25 18:33:04,062 - PassiveExtractionWorkflow - INFO -  STEP 1 - LINKING MAP CHECK: 0 complete (skipped)
+2026-01-25 18:33:04,062 - PassiveExtractionWorkflow - INFO -  STEP 2 - PRODUCT CACHE CHECK (stable_key): 0 cached; 43 need extraction
+2026-01-25 18:33:04,062 - PassiveExtractionWorkflow - INFO -  Filter Invariant: in=43 == skip=0 + cached=0 + full=43
+2026-01-25 18:33:04,062 - PassiveExtractionWorkflow - INFO -  FILTER INVARIANT VALIDATED:
+  in=43 == skip=0 + cached=0 + full=43
+2026-01-25 18:33:04,062 - PassiveExtractionWorkflow - INFO -  FROZEN DENOMINATOR: https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats = 43
+2026-01-25 18:33:04,063 - PassiveExtractionWorkflow - INFO -  RESUMING IN SUPPLIER PHASE:
+  Resume from product: 1
+  Skipping:
+    - 0 in linking map (already complete)
+    - 0 in cache (already extracted)
+  Products to process: 43
+2026-01-25 18:33:04,063 - PassiveExtractionWorkflow - INFO -  FILE-BASED RESUME CALCULATION:
+  Phase (AUTHORITY): supplier
+  Category: https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats
+  Resume from product: 1
+  Denominator: 43
+  Evidence:
+    - Total URLs extracted: 43
+    - Linking map (skip): 0
+    - Supplier cache: 0
+    - Need full extraction: 43
+  Filter invariant:  PASS
+  Worklist type: full_extraction
+  Worklist size: 43
+2026-01-25 18:33:04,063 - PassiveExtractionWorkflow - INFO -  RESUME STATE: phase=supplier cat=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats supplier=0/43 amazon=0/43
+2026-01-25 18:33:04,064 - PassiveExtractionWorkflow - INFO -  STEP-2 ALLOWED KEYS (category): 43 (amazon-only=0 + full=43)
+2026-01-25 18:33:04,064 - PassiveExtractionWorkflow - INFO -  WORK DEFINED (resume): denominators frozen  supplier=43, amazon=43
+2026-01-25 18:33:04,064 - PassiveExtractionWorkflow - INFO -  NEEDS_FULL_EXTRACTION (43): ['https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue', 'https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324', 'https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green', 'https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white', 'https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766']...
+2026-01-25 18:33:04,064 - PassiveExtractionWorkflow - INFO -  FILTERING EFFICIENCY: 0/43 = 0.0% already processed
+2026-01-25 18:33:04,065 - PassiveExtractionWorkflow - INFO -  CACHE UTILIZATION: 0/43 = 0.0% have supplier data
+2026-01-25 18:33:04,065 - PassiveExtractionWorkflow - INFO -  EXTRACTION NEEDED: 43/43 = 100.0% need fresh extraction
+2026-01-25 18:33:04,065 - PassiveExtractionWorkflow - INFO -  RESUME CATEGORY: category 6 at resume point, total products=43, resume index=0, remaining=43
+2026-01-25 18:33:04,065 - PassiveExtractionWorkflow - INFO -  PROCEEDING: category 6 at resume point with 43 products remaining.
+2026-01-25 18:33:04,066 - PassiveExtractionWorkflow - INFO -  PROCEEDING WITH EXTRACTION: category 6 has work to do.
+2026-01-25 18:33:04,066 - PassiveExtractionWorkflow - INFO -  FULL CATEGORY PROCESSING: Processing all 43 products
+2026-01-25 18:33:04,066 - PassiveExtractionWorkflow - INFO -  LINEAGE: manifest=4f0091e9705cacebce7aaaf5c6a13a9bdcc51ec5ae505d7560477186d8a3b9a2 cat_url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43
+2026-01-25 18:33:04,066 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:04,067 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:04,067 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:04,067 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:04,067 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:04,068 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:04,068 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:04,071 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:04,072 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:04,072 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:04,072 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=0/43
+2026-01-25 18:33:04,073 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:33:04,073 - utils.fixed_enhanced_state_manager - INFO -  FIRST AFTER-RESUME KEY: phase=supplier cat=6/336 prod=0/43 commit_type=supplier-commit
+2026-01-25 18:33:04,073 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=0/43 phase=supplier
+2026-01-25 18:33:04,074 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=0/43 commit_type=SUPPLIER
+2026-01-25 18:33:04,074 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (SUPPLIER): cat=6/336 prod=0/43 phase=supplier
+2026-01-25 18:33:04,074 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS COMMITTED: cat=6, prod_idx=0, total=43
+2026-01-25 18:33:04,074 - PassiveExtractionWorkflow - INFO -  PROCEEDING WITH EXTRACTION: 43 products need full extraction
+2026-01-25 18:33:04,074 - PassiveExtractionWorkflow - INFO -  EXTRACTION CONTRACT: Promising to extract exactly 43 products
+2026-01-25 18:33:04,075 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION: Processing 43 pre-approved URLs
+2026-01-25 18:33:04,075 - configurable_supplier_scraper - INFO - 🔍 Extracting product 1/43: https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue
+2026-01-25 18:33:04,075 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue (attempt 1/3)
+2026-01-25 18:33:04,075 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:04,075 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:04,076 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue
+2026-01-25 18:33:06,821 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue in 2.17s...
+2026-01-25 18:33:09,005 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue (attempt 2/3)
+2026-01-25 18:33:09,005 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:09,005 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:09,006 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue
+2026-01-25 18:33:11,919 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue
+2026-01-25 18:33:11,920 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue
+2026-01-25 18:33:11,993 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-blue (Size: 551289 bytes)
+2026-01-25 18:33:12,083 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:33:12,104 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5011264042038
+2026-01-25 18:33:12,111 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:12,111 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:12,111 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:12,111 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:12,112 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:12,112 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:12,112 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:12,114 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:12,115 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:12,115 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:12,115 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=0/43
+2026-01-25 18:33:12,115 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:33:12,115 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=0/43 commit_type=supplier-commit
+2026-01-25 18:33:12,116 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=0/43 phase=supplier
+2026-01-25 18:33:12,116 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:33:12,116 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 1/43
+2026-01-25 18:33:12,116 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 1 processed (total in cache: 1)
+2026-01-25 18:33:12,116 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 1/43 (remaining=42)
+2026-01-25 18:33:12,116 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:33:12,117 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 1
+2026-01-25 18:33:12,117 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 1, frequency=1, enabled=True
+2026-01-25 18:33:12,117 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=1, modulo=0
+2026-01-25 18:33:12,117 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:12,117 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:33:12,118 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:12,118 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:33:12,118 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 1 products to cache...
+2026-01-25 18:33:12,118 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:12,119 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 1 existing products for deduplication
+2026-01-25 18:33:12,119 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 1 existing + 1 new = 2 total
+2026-01-25 18:33:12,121 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (2 entries) saved successfully
+2026-01-25 18:33:12,122 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 2 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 990 bytes)
+2026-01-25 18:33:12,122 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (2 products)
+2026-01-25 18:33:12,122 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:12,122 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:12,122 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:12,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:12,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:12,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:12,125 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:12,126 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:12,126 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:12,126 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=0/43
+2026-01-25 18:33:12,126 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 2 products (1 new) to cache (every 1 products)
+2026-01-25 18:33:12,126 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:12,127 - configurable_supplier_scraper - INFO - ✅ Extracted: AQUALONA ROMAN RUBBER BATH MAT MEDIUM BLUE - £4.09
+2026-01-25 18:33:12,127 - configurable_supplier_scraper - INFO - 🔍 Extracting product 2/43: https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324
+2026-01-25 18:33:12,127 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324 (attempt 1/3)
+2026-01-25 18:33:12,127 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:12,127 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:12,127 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324
+2026-01-25 18:33:14,765 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324 in 1.68s...
+2026-01-25 18:33:16,462 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324 (attempt 2/3)
+2026-01-25 18:33:16,462 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:16,463 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:16,463 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324
+2026-01-25 18:33:19,129 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324
+2026-01-25 18:33:19,130 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324
+2026-01-25 18:33:19,198 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/blue-canyon-hex-pvc-promo-mat-106324 (Size: 552539 bytes)
+2026-01-25 18:33:19,293 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:33:19,315 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5060386421948
+2026-01-25 18:33:19,321 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:19,321 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:19,322 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:19,322 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:19,322 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:19,322 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:19,322 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:19,325 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:19,326 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:19,326 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:19,326 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=1/43
+2026-01-25 18:33:19,326 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:33:19,327 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=1/43 commit_type=supplier-commit
+2026-01-25 18:33:19,327 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=1/43 phase=supplier
+2026-01-25 18:33:19,327 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:33:19,327 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 2/43
+2026-01-25 18:33:19,328 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 2 processed (total in cache: 3)
+2026-01-25 18:33:19,328 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 2/43 (remaining=41)
+2026-01-25 18:33:19,328 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:33:19,328 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 2
+2026-01-25 18:33:19,328 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 2, frequency=1, enabled=True
+2026-01-25 18:33:19,329 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=3, modulo=0
+2026-01-25 18:33:19,329 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:19,329 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:33:19,330 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:19,330 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:33:19,330 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 3 products to cache...
+2026-01-25 18:33:19,330 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:19,331 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 2 existing products for deduplication
+2026-01-25 18:33:19,331 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:33:19,332 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 2 existing + 1 new = 3 total
+2026-01-25 18:33:19,334 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (3 entries) saved successfully
+2026-01-25 18:33:19,335 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 3 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 1487 bytes)
+2026-01-25 18:33:19,335 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (3 products)
+2026-01-25 18:33:19,335 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:19,335 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:19,335 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:19,335 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:19,336 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:19,336 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:19,338 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:19,339 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:19,339 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:19,339 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=1/43
+2026-01-25 18:33:19,340 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 3 products (1 new) to cache (every 1 products)
+2026-01-25 18:33:19,340 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:19,340 - configurable_supplier_scraper - INFO - ✅ Extracted: BLUE CANYON HEXAGONAL PVC BATH MAT 69CM X 38CM ASSORTED COLOURS - £1.78
+2026-01-25 18:33:19,340 - configurable_supplier_scraper - INFO - 🔍 Extracting product 3/43: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green
+2026-01-25 18:33:19,340 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green (attempt 1/3)
+2026-01-25 18:33:19,341 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:19,341 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:19,341 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green
+2026-01-25 18:33:22,354 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green in 2.31s...
+2026-01-25 18:33:24,674 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green (attempt 2/3)
+2026-01-25 18:33:24,674 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:24,674 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:24,674 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green
+2026-01-25 18:33:27,025 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green
+2026-01-25 18:33:27,025 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green
+2026-01-25 18:33:27,089 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-green (Size: 552174 bytes)
+2026-01-25 18:33:27,183 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:33:27,203 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5060187170045
+2026-01-25 18:33:27,210 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:27,210 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:27,210 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:27,211 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:27,211 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:27,211 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:27,212 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:27,215 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:27,216 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:27,216 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:27,216 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=2/43
+2026-01-25 18:33:27,217 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:33:27,217 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=2/43 commit_type=supplier-commit
+2026-01-25 18:33:27,217 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=2/43 phase=supplier
+2026-01-25 18:33:27,218 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:33:27,218 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 3/43
+2026-01-25 18:33:27,218 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 3 processed (total in cache: 4)
+2026-01-25 18:33:27,218 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 3/43 (remaining=40)
+2026-01-25 18:33:27,218 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:33:27,218 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 3
+2026-01-25 18:33:27,219 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 3, frequency=1, enabled=True
+2026-01-25 18:33:27,219 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=4, modulo=0
+2026-01-25 18:33:27,220 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:27,220 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:33:27,220 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:27,221 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:33:27,221 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 4 products to cache...
+2026-01-25 18:33:27,221 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:27,222 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 3 existing products for deduplication
+2026-01-25 18:33:27,222 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:33:27,223 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 3 existing + 1 new = 4 total
+2026-01-25 18:33:27,226 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (4 entries) saved successfully
+2026-01-25 18:33:27,227 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 4 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 1947 bytes)
+2026-01-25 18:33:27,228 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (4 products)
+2026-01-25 18:33:27,228 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:27,228 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:27,228 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:27,229 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:27,229 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:27,229 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:27,233 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:27,234 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:27,234 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:27,235 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=2/43
+2026-01-25 18:33:27,235 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 4 products (1 new) to cache (every 1 products)
+2026-01-25 18:33:27,236 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:27,236 - configurable_supplier_scraper - INFO - ✅ Extracted: BLUE CANYON RUBBER BATH MAT GREEN - £3.68
+2026-01-25 18:33:27,236 - configurable_supplier_scraper - INFO - 🔍 Extracting product 4/43: https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white
+2026-01-25 18:33:27,236 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white (attempt 1/3)
+2026-01-25 18:33:27,236 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:27,236 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:27,237 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white
+2026-01-25 18:33:29,984 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white in 2.28s...
+2026-01-25 18:33:32,269 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white (attempt 2/3)
+2026-01-25 18:33:32,269 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:32,269 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:32,270 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white
+2026-01-25 18:33:34,028 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white
+2026-01-25 18:33:34,028 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white
+2026-01-25 18:33:34,117 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/aqualona-roman-rubber-shower-mat-white (Size: 552222 bytes)
+2026-01-25 18:33:34,206 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:33:34,227 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5011264041369
+2026-01-25 18:33:34,233 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:34,234 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:34,234 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:34,234 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:34,234 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:34,234 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:34,235 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:34,238 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:34,239 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:34,239 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:34,239 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=3/43
+2026-01-25 18:33:34,239 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:33:34,240 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=3/43 commit_type=supplier-commit
+2026-01-25 18:33:34,240 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=3/43 phase=supplier
+2026-01-25 18:33:34,240 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:33:34,241 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 4/43
+2026-01-25 18:33:34,241 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 4 processed (total in cache: 5)
+2026-01-25 18:33:34,241 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 4/43 (remaining=39)
+2026-01-25 18:33:34,241 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:33:34,242 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 4
+2026-01-25 18:33:34,242 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 4, frequency=1, enabled=True
+2026-01-25 18:33:34,242 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=5, modulo=0
+2026-01-25 18:33:34,243 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:34,243 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:33:34,243 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:34,244 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:33:34,244 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 5 products to cache...
+2026-01-25 18:33:34,244 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:33:34,245 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 4 existing products for deduplication
+2026-01-25 18:33:34,245 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:33:34,245 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 4 existing + 1 new = 5 total
+2026-01-25 18:33:34,248 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (5 entries) saved successfully
+2026-01-25 18:33:34,249 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 5 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 2422 bytes)
+2026-01-25 18:33:34,249 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (5 products)
+2026-01-25 18:33:34,250 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:33:34,250 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:33:34,250 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:33:34,251 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:33:34,251 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:33:34,251 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:33:34,254 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:33:34,255 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:33:34,255 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:33:34,256 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=3/43
+2026-01-25 18:33:34,256 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 5 products (1 new) to cache (every 1 products)
+2026-01-25 18:33:34,256 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:33:34,256 - configurable_supplier_scraper - INFO - ✅ Extracted: AQUALONA ROMAN RUBBER SHOWER MAT WHITE - £5.21
+2026-01-25 18:33:34,257 - configurable_supplier_scraper - INFO - 🔍 Extracting product 5/43: https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:34,257 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 1/3)
+2026-01-25 18:33:34,257 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:34,258 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:34,258 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:36,804 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 in 1.65s...
+2026-01-25 18:33:38,468 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 2/3)
+2026-01-25 18:33:38,468 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:38,468 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:38,468 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:40,301 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:40,302 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:50,308 - configurable_supplier_scraper - ERROR - Navigation error for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 2): Timeout 10000ms exceeded.
+2026-01-25 18:33:50,309 - configurable_supplier_scraper - ERROR - Error fetching https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 2): Timeout 10000ms exceeded.
+2026-01-25 18:33:50,309 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 in 3.12s...
+2026-01-25 18:33:53,443 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 3/3)
+2026-01-25 18:33:53,443 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:33:53,443 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:33:53,443 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:54,998 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:33:54,998 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:34:05,006 - configurable_supplier_scraper - ERROR - Navigation error for https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 3): Timeout 10000ms exceeded.
+2026-01-25 18:34:05,006 - configurable_supplier_scraper - ERROR - Error fetching https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 (attempt 3): Timeout 10000ms exceeded.
+2026-01-25 18:34:05,006 - configurable_supplier_scraper - ERROR - Failed to fetch https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766 after 3 attempts.
+2026-01-25 18:34:05,007 - configurable_supplier_scraper - WARNING - ❌ Failed to fetch: https://www.efghousewares.co.uk/blue-canyon-comfort-bath-mat-blue-115766
+2026-01-25 18:34:05,007 - configurable_supplier_scraper - INFO - 🔍 Extracting product 6/43: https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream
+2026-01-25 18:34:05,007 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream (attempt 1/3)
+2026-01-25 18:34:05,007 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:05,008 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:05,008 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream
+2026-01-25 18:34:07,846 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream in 2.44s...
+2026-01-25 18:34:10,297 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream (attempt 2/3)
+2026-01-25 18:34:10,297 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:10,297 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:10,297 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream
+2026-01-25 18:34:13,015 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream
+2026-01-25 18:34:13,016 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream
+2026-01-25 18:34:13,106 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/aqualona-roman-rubber-bath-mat-medium-cream (Size: 551557 bytes)
+2026-01-25 18:34:13,195 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:34:13,215 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5011264047743
+2026-01-25 18:34:13,221 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:13,222 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:13,222 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:13,222 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:13,222 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:13,223 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:13,223 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:13,226 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:13,226 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:13,226 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:13,227 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=5/43
+2026-01-25 18:34:13,227 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:34:13,227 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=5/43 commit_type=supplier-commit
+2026-01-25 18:34:13,227 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=5/43 phase=supplier
+2026-01-25 18:34:13,227 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:34:13,227 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 6/43
+2026-01-25 18:34:13,228 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 6 processed (total in cache: 6)
+2026-01-25 18:34:13,228 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 6/43 (remaining=37)
+2026-01-25 18:34:13,228 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:34:13,228 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 6
+2026-01-25 18:34:13,229 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 6, frequency=1, enabled=True
+2026-01-25 18:34:13,229 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=6, modulo=0
+2026-01-25 18:34:13,229 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:13,229 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:34:13,230 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:13,230 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:34:13,230 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 6 products to cache...
+2026-01-25 18:34:13,231 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:13,231 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 5 existing products for deduplication
+2026-01-25 18:34:13,231 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:34:13,232 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 5 existing + 1 new = 6 total
+2026-01-25 18:34:13,235 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (6 entries) saved successfully
+2026-01-25 18:34:13,236 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 6 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 2913 bytes)
+2026-01-25 18:34:13,236 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (6 products)
+2026-01-25 18:34:13,237 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:13,237 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:13,237 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:13,238 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:13,238 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:13,238 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:13,241 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:13,242 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:13,242 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:13,242 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=5/43
+2026-01-25 18:34:13,242 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 6 products (1 new) to cache (every 1 products)
+2026-01-25 18:34:13,243 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:13,243 - configurable_supplier_scraper - INFO - ✅ Extracted: AQUALONA ROMAN RUBBER BATH MAT MEDIUM CREAM - £4.09
+2026-01-25 18:34:13,243 - configurable_supplier_scraper - INFO - 🔍 Extracting product 7/43: https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass
+2026-01-25 18:34:13,243 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass (attempt 1/3)
+2026-01-25 18:34:13,244 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:13,244 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:13,244 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass
+2026-01-25 18:34:16,034 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass in 2.39s...
+2026-01-25 18:34:18,431 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass (attempt 2/3)
+2026-01-25 18:34:18,431 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:18,432 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:18,432 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass
+2026-01-25 18:34:19,807 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass
+2026-01-25 18:34:19,807 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass
+2026-01-25 18:34:19,899 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/memory-foam-bath-mat-set-ass (Size: 551590 bytes)
+2026-01-25 18:34:20,067 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:34:20,097 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 6936318000555
+2026-01-25 18:34:20,105 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:20,106 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:20,106 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:20,106 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:20,106 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:20,106 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:20,107 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:20,111 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:20,111 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:20,112 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:20,112 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=6/43
+2026-01-25 18:34:20,112 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:34:20,112 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=6/43 commit_type=supplier-commit
+2026-01-25 18:34:20,112 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=6/43 phase=supplier
+2026-01-25 18:34:20,112 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:34:20,113 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 7/43
+2026-01-25 18:34:20,113 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 7 processed (total in cache: 7)
+2026-01-25 18:34:20,113 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 7/43 (remaining=36)
+2026-01-25 18:34:20,113 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:34:20,113 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 7
+2026-01-25 18:34:20,114 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 7, frequency=1, enabled=True
+2026-01-25 18:34:20,114 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=7, modulo=0
+2026-01-25 18:34:20,115 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:20,115 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:34:20,115 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:20,115 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:34:20,116 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 7 products to cache...
+2026-01-25 18:34:20,116 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:20,116 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 6 existing products for deduplication
+2026-01-25 18:34:20,116 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:34:20,116 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 6 existing + 1 new = 7 total
+2026-01-25 18:34:20,119 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (7 entries) saved successfully
+2026-01-25 18:34:20,120 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 7 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 3359 bytes)
+2026-01-25 18:34:20,120 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (7 products)
+2026-01-25 18:34:20,120 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:20,121 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:20,121 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:20,121 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:20,121 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:20,121 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:20,126 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:20,127 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:20,127 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:20,127 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=6/43
+2026-01-25 18:34:20,128 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 7 products (1 new) to cache (every 1 products)
+2026-01-25 18:34:20,128 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:20,128 - configurable_supplier_scraper - INFO - ✅ Extracted: MEMORY FOAM BATH MAT SET ASS - £3.82
+2026-01-25 18:34:20,128 - configurable_supplier_scraper - INFO - 🔍 Extracting product 8/43: https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245
+2026-01-25 18:34:20,128 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245 (attempt 1/3)
+2026-01-25 18:34:20,128 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:20,129 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:20,129 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245
+2026-01-25 18:34:22,757 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245 in 2.04s...
+2026-01-25 18:34:24,812 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245 (attempt 2/3)
+2026-01-25 18:34:24,812 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:24,812 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:24,813 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245
+2026-01-25 18:34:26,787 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245
+2026-01-25 18:34:26,787 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245
+2026-01-25 18:34:26,888 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/blue-canyon-cork-bath-mat-114245 (Size: 552277 bytes)
+2026-01-25 18:34:27,027 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:34:27,066 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5060187173701
+2026-01-25 18:34:27,074 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:27,075 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:27,075 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:27,075 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:27,075 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:27,076 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:27,076 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:27,083 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:27,085 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:27,085 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:27,085 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=7/43
+2026-01-25 18:34:27,086 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:34:27,086 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=7/43 commit_type=supplier-commit
+2026-01-25 18:34:27,086 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=7/43 phase=supplier
+2026-01-25 18:34:27,087 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:34:27,087 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 8/43
+2026-01-25 18:34:27,087 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 8 processed (total in cache: 8)
+2026-01-25 18:34:27,088 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 8/43 (remaining=35)
+2026-01-25 18:34:27,088 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:34:27,088 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 8
+2026-01-25 18:34:27,089 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 8, frequency=1, enabled=True
+2026-01-25 18:34:27,089 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=8, modulo=0
+2026-01-25 18:34:27,089 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:27,090 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:34:27,090 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:27,091 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:34:27,091 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 8 products to cache...
+2026-01-25 18:34:27,091 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:27,092 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 7 existing products for deduplication
+2026-01-25 18:34:27,093 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:34:27,093 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 7 existing + 1 new = 8 total
+2026-01-25 18:34:27,097 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (8 entries) saved successfully
+2026-01-25 18:34:27,099 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 8 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 3807 bytes)
+2026-01-25 18:34:27,099 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (8 products)
+2026-01-25 18:34:27,100 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:27,100 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:27,100 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:27,100 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:27,101 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:27,101 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:27,107 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:27,109 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:27,110 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:27,110 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=7/43
+2026-01-25 18:34:27,111 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 8 products (1 new) to cache (every 1 products)
+2026-01-25 18:34:27,111 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:27,112 - configurable_supplier_scraper - INFO - ✅ Extracted: BLUE CANYON CORK BATH MAT - £7.6
+2026-01-25 18:34:27,112 - configurable_supplier_scraper - INFO - 🔍 Extracting product 9/43: https://www.efghousewares.co.uk/sabichi-bath-mat-clear
+2026-01-25 18:34:27,112 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/sabichi-bath-mat-clear (attempt 1/3)
+2026-01-25 18:34:27,113 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:27,113 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:27,114 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/sabichi-bath-mat-clear
+2026-01-25 18:34:29,664 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/sabichi-bath-mat-clear in 1.99s...
+2026-01-25 18:34:31,661 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/sabichi-bath-mat-clear (attempt 2/3)
+2026-01-25 18:34:31,661 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:31,661 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:31,662 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/sabichi-bath-mat-clear
+2026-01-25 18:34:32,664 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/sabichi-bath-mat-clear
+2026-01-25 18:34:32,665 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/sabichi-bath-mat-clear
+2026-01-25 18:34:32,741 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/sabichi-bath-mat-clear (Size: 551688 bytes)
+2026-01-25 18:34:32,894 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-01-25 18:34:32,928 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5021961099488
+2026-01-25 18:34:32,939 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:32,939 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:32,939 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:32,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:32,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:32,940 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:32,941 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:32,944 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:32,944 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:32,945 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:32,945 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=8/43
+2026-01-25 18:34:32,945 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-01-25 18:34:32,945 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=6/336 prod=8/43 commit_type=supplier-commit
+2026-01-25 18:34:32,946 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=6/336 prod=8/43 phase=supplier
+2026-01-25 18:34:32,946 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats total=43 (LOCKED)
+2026-01-25 18:34:32,946 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 9/43
+2026-01-25 18:34:32,946 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 9 processed (total in cache: 9)
+2026-01-25 18:34:32,947 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [bath-mats]: 9/43 (remaining=34)
+2026-01-25 18:34:32,947 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [bath-mats]: 0/43 (global_done=0, remaining≈43)
+2026-01-25 18:34:32,947 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 9
+2026-01-25 18:34:32,947 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 9, frequency=1, enabled=True
+2026-01-25 18:34:32,947 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=9, modulo=0
+2026-01-25 18:34:32,948 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:32,948 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-01-25 18:34:32,948 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:32,949 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-01-25 18:34:32,949 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 9 products to cache...
+2026-01-25 18:34:32,949 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk_products_cache.json
+2026-01-25 18:34:32,949 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 8 existing products for deduplication
+2026-01-25 18:34:32,950 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-01-25 18:34:32,950 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 8 existing + 1 new = 9 total
+2026-01-25 18:34:32,953 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk_products_cache.json (9 entries) saved successfully
+2026-01-25 18:34:32,954 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 9 products (1 new) to cache: efghousewares-co-uk_products_cache.json (size: 4235 bytes)
+2026-01-25 18:34:32,954 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (9 products)
+2026-01-25 18:34:32,954 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-01-25 18:34:32,955 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-01-25 18:34:32,955 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-01-25 18:34:32,955 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-01-25 18:34:32,955 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-01-25 18:34:32,955 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-01-25 18:34:32,959 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk_processing_state.json (31 entries) saved successfully
+2026-01-25 18:34:32,961 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-01-25 18:34:32,961 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk_processing_state.json
+2026-01-25 18:34:32,961 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=6/336 url=https://www.efghousewares.co.uk/shop-by-department/bathroom/bath-mats prod_idx=8/43
+2026-01-25 18:34:32,962 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 9 products (1 new) to cache (every 1 products)
+2026-01-25 18:34:32,962 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-01-25 18:34:32,962 - configurable_supplier_scraper - INFO - ✅ Extracted: SABICHI BATH MAT CLEAR - £3.02
+2026-01-25 18:34:32,963 - configurable_supplier_scraper - INFO - 🔍 Extracting product 10/43: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:32,963 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey (attempt 1/3)
+2026-01-25 18:34:32,963 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:32,964 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:32,964 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:35,502 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey in 2.21s...
+2026-01-25 18:34:37,728 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey (attempt 2/3)
+2026-01-25 18:34:37,729 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:37,729 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:37,730 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:40,127 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:40,127 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:50,142 - configurable_supplier_scraper - ERROR - Navigation error for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey (attempt 2): Timeout 10000ms exceeded.
+2026-01-25 18:34:50,143 - configurable_supplier_scraper - ERROR - Error fetching https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey (attempt 2): Timeout 10000ms exceeded.
+2026-01-25 18:34:50,143 - configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey in 3.43s...
+2026-01-25 18:34:53,583 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey (attempt 3/3)
+2026-01-25 18:34:53,584 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-01-25 18:34:53,584 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-01-25 18:34:53,584 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:54,747 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:54,748 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/blue-canyon-rubber-bath-mat-grey
+2026-01-25 18:34:57,012 - __main__ - INFO - 🧠 Keeping browser persistent for next run - not calling cleanup()
+2026-01-25 18:34:57,031 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

@@ -77,16 +77,25 @@ This section aligns with `wiki-dec-3\1. Project Overview.md` and `3. Core Archit
 
 ### 2.1 Primary Entry Points
 
-- **PoundWholesale runner** – `run_custom_poundwholesale.py`  
-  - Initializes logging via `utils\logger.py`.  
-  - Loads configuration from `config\system_config.json` through `SystemConfigLoader`.  
-  - Connects to an existing Chrome instance via `utils\browser_manager.BrowserManager`.  
-  - Performs authentication using `tools\poundwholesale\supplier_authentication_service.py` and `tools\standalone_playwright_login.py`.  
-  - Invokes `tools\passive_extraction_workflow_latest.PassiveExtractionWorkflow.run()`.
+The system uses per-supplier runner scripts as the primary entry points. Each supplier has its own `run_custom_{supplier}.py` file:
 
-- **Clearance King runner** – `run_custom_clearance_king.py`  
-  - Same structure as PoundWholesale, but uses `clearance_king_workflow` and `tools\clearance_king\supplier_authentication_service.py`.  
-  - Performs browser cleanup via `BrowserManager.cleanup()` at the end of the run.
+| Runner Script | Supplier Domain | Auth Helper Location |
+|---------------|-----------------|---------------------|
+| `run_custom_poundwholesale.py` | poundwholesale.co.uk | `tools/poundwholesale/` |
+| `run_custom_clearance_king.py` | clearance-king.co.uk | `tools/clearance_king/` |
+| `run_custom_angelwholesale-co-uk.py` | angelwholesale.co.uk | `tools/angelwholesale-co-uk/` |
+| `run_custom_dkwholesale-com.py` | dkwholesale.com | `tools/dkwholesale-com/` |
+| `run_custom_efghousewares-co-uk.py` | efghousewares.co.uk | `tools/efghousewares-co-uk/` |
+| `run_custom_kdwholesale-co-uk.py` | kdwholesale.co.uk | `tools/kdwholesale-co-uk/` |
+| `run_custom_laceywholesale-co-uk.py` | laceywholesale.co.uk | `tools/laceywholesale-co-uk/` |
+| `run_custom_wholesaletradingsupplies-co-uk.py` | wholesaletradingsupplies.co.uk | `tools/wholesaletradingsupplies-co-uk/` |
+
+Each runner follows the same structure:
+- Initializes logging via `utils\logger.py`
+- Loads configuration from `config\system_config.json` through `SystemConfigLoader`
+- Connects to an existing Chrome instance via `utils\browser_manager.BrowserManager`
+- Performs authentication (if required) using the supplier-specific authentication service
+- Invokes `tools\passive_extraction_workflow_latest.PassiveExtractionWorkflow.run()`
 
 - **Legacy master runner** – `run_complete_fba_system.py`  
   - Older orchestration script that still sets a hard-coded OpenAI key and uses `tools\output_verification_node` and `tools\supplier_guard`.  
@@ -417,7 +426,53 @@ When investigating issues:
 
 ---
 
-## 11. References and Knowledge Base
+## 11. Supplier Onboarding
+
+For onboarding new wholesale suppliers, use the **supplier-onboarding** skill:
+
+- **Skill location**: `.claude/skills/supplier-onboarding/SKILL.md`
+- **Wizard utility**: `utils/supplier_onboarding_wizard.py`
+
+### 11.1 Automated 7-Step Workflow
+
+The skill provides a guided workflow:
+
+1. **Data Preprocessing** - LLM validates categories and selectors
+2. **Gather Information** - Collects domain, auth requirements, credentials
+3. **Prepare Configurations** - Creates JSON config files
+4. **Invoke Wizard** - Generates runner script and auth helper
+5. **Validate Files** - Verifies generated files are correct
+6. **Pre-Run Verification** - Checks system readiness
+7. **User Decision** - Test run, main run, or fix issues
+
+### 11.2 Naming Conventions
+
+The system uses three distinct naming forms:
+
+| Context | Form | Example |
+|---------|------|---------|
+| Config files | Dot-form | `supplier.com.json` |
+| System config | Dot-form | `"supplier_name": "supplier.com"` |
+| Runner scripts | Hyphen-form | `run_custom_supplier-com.py` |
+| Tool directories | Hyphen-form | `tools/supplier-com/` |
+| Workflow keys | Underscore-form | `supplier_workflow` |
+| State files | Underscore-form | `supplier_com_processing_state.json` |
+
+### 11.3 Quick Wizard Command
+
+```bash
+python utils/supplier_onboarding_wizard.py \
+  --domain "supplier.com" \
+  --categories-source "config/supplier_categories.json" \
+  --selectors-source "config/supplier_configs/supplier.com.json" \
+  --workflow-key "supplier_workflow" \
+  --mode generate \
+  --authentication-required false
+```
+
+---
+
+## 12. References and Knowledge Base
 
 - High-level guidance: `CLAUDE.md`, `CLAUDE_STANDARDS.md`  
 - Installation and setup: `wiki-dec-3\2. Installation And Setup.md`  

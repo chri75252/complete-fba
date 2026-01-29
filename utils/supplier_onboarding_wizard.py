@@ -49,14 +49,22 @@ except ImportError:
 # ============================================================================
 
 UK_TLDS = {
-    ".co.uk", ".org.uk", ".ac.uk", ".gov.uk", ".nhs.uk",
-    ".police.uk", ".ltd.uk", ".plc.uk", ".net.uk", ".me.uk"
+    ".co.uk",
+    ".org.uk",
+    ".ac.uk",
+    ".gov.uk",
+    ".nhs.uk",
+    ".police.uk",
+    ".ltd.uk",
+    ".plc.uk",
+    ".net.uk",
+    ".me.uk",
 }
 
 # Workflow to runner mapping
 WORKFLOW_TO_RUNNER = {
     "poundwholesale_workflow": "run_custom_poundwholesale.py",
-    "clearance_king_workflow": "run_custom_clearance_king.py"
+    "clearance_king_workflow": "run_custom_clearance_king.py",
 }
 
 # Default runner for unknown workflows
@@ -66,6 +74,7 @@ DEFAULT_RUNNER = "run_custom_poundwholesale.py"
 # ============================================================================
 # ATOMIC TEXT WRITE HELPER
 # ============================================================================
+
 
 def atomic_write_text(path: Path, content: str) -> None:
     """
@@ -88,17 +97,20 @@ def atomic_write_text(path: Path, content: str) -> None:
 # DATA STRUCTURES
 # ============================================================================
 
+
 @dataclass
 class SupplierForms:
     """Three forms of supplier identification."""
-    domain: str              # dot-form: poundwholesale.co.uk
-    supplier_id: str         # hyphen-form: poundwholesale-co-uk
+
+    domain: str  # dot-form: poundwholesale.co.uk
+    supplier_id: str  # hyphen-form: poundwholesale-co-uk
     supplier_name_underscore: str  # underscore-form: poundwholesale_co_uk
 
 
 # ============================================================================
 # DOMAIN NORMALIZATION
 # ============================================================================
+
 
 def normalize_domain(input_domain: str) -> str:
     """
@@ -111,27 +123,27 @@ def normalize_domain(input_domain: str) -> str:
     domain = input_domain.strip()
 
     # Handle full URL
-    if domain.startswith(('http://', 'https://')):
+    if domain.startswith(("http://", "https://")):
         parsed = urlparse(domain)
-        domain = parsed.netloc or parsed.path.split('/')[0]
+        domain = parsed.netloc or parsed.path.split("/")[0]
 
     # Remove www prefix
-    domain = re.sub(r'^www\.', '', domain)
+    domain = re.sub(r"^www\.", "", domain)
 
     # Check if already in dot-form with valid TLD (has at least one dot)
-    if '.' in domain:
+    if "." in domain:
         return domain.lower()
 
     # Convert hyphen-form to dot-form for multi-level TLDs (UK TLDs)
     for tld in UK_TLDS:
-        hyphen_tld = tld.replace('.', '-')
+        hyphen_tld = tld.replace(".", "-")
         if domain.endswith(hyphen_tld):
-            base = domain[:-len(hyphen_tld)]
+            base = domain[: -len(hyphen_tld)]
             return (base + tld).lower()
 
     # Handle hyphen-form with single-level TLD (e.g., example-com → example.com)
-    if domain.count('-') > 0:
-        parts = domain.rsplit('-', 1)
+    if domain.count("-") > 0:
+        parts = domain.rsplit("-", 1)
         return f"{parts[0]}.{parts[1]}".lower()
 
     return domain.lower()
@@ -145,21 +157,22 @@ def generate_supplier_forms(domain: str) -> SupplierForms:
     domain_dot = normalize_domain(domain)
 
     # Generate hyphen-form (supplier_id)
-    supplier_id = domain_dot.replace('.', '-')
+    supplier_id = domain_dot.replace(".", "-")
 
     # Generate underscore-form (supplier_name)
-    supplier_name_underscore = domain_dot.replace('.', '_').replace('-', '_')
+    supplier_name_underscore = domain_dot.replace(".", "_").replace("-", "_")
 
     return SupplierForms(
         domain=domain_dot,
         supplier_id=supplier_id,
-        supplier_name_underscore=supplier_name_underscore
+        supplier_name_underscore=supplier_name_underscore,
     )
 
 
 # ============================================================================
 # NAMING CONVENTIONS
 # ============================================================================
+
 
 class NamingConventions:
     """Centralized naming convention enforcement."""
@@ -177,7 +190,10 @@ class NamingConventions:
     @staticmethod
     def processing_state_file(supplier_name_underscore: str, repo_root: Path) -> Path:
         """OUTPUTS/CACHE/processing_states/{supplier_name_underscore}_processing_state.json"""
-        return repo_root / f"OUTPUTS/CACHE/processing_states/{supplier_name_underscore}_processing_state.json"
+        return (
+            repo_root
+            / f"OUTPUTS/CACHE/processing_states/{supplier_name_underscore}_processing_state.json"
+        )
 
     @staticmethod
     def categories_config_path(workflow_key: str, repo_root: Path) -> Path:
@@ -186,7 +202,7 @@ class NamingConventions:
         If missing, set to default config/{workflow_key}_categories.json and write back.
         """
         config_path = repo_root / "config/system_config.json"
-        config = json.loads(config_path.read_text(encoding='utf-8'))
+        config = json.loads(config_path.read_text(encoding="utf-8"))
 
         workflow = config.get("workflows", {}).get(workflow_key, {})
         categories_path = workflow.get("categories_config_path")
@@ -209,15 +225,21 @@ class NamingConventions:
         return repo_root / categories_path
 
     @staticmethod
-    def register_workflow(workflow_key: str, supplier_name: str, supplier_url: str,
-                         categories_path: str, test_product_url: Optional[str],
-                         auth_required: bool, repo_root: Path) -> None:
+    def register_workflow(
+        workflow_key: str,
+        supplier_name: str,
+        supplier_url: str,
+        categories_path: str,
+        test_product_url: Optional[str],
+        auth_required: bool,
+        repo_root: Path,
+    ) -> None:
         """
         Register complete workflow in system_config.json.
         Creates/updates workflows.{workflow_key} with all required fields.
         """
         config_path = repo_root / "config/system_config.json"
-        config = json.loads(config_path.read_text(encoding='utf-8'))
+        config = json.loads(config_path.read_text(encoding="utf-8"))
 
         if "workflows" not in config:
             config["workflows"] = {}
@@ -229,7 +251,7 @@ class NamingConventions:
             "categories_config_path": categories_path,
             "use_predefined_categories": True,
             "ai_client": None,
-            "authentication_required": auth_required
+            "authentication_required": auth_required,
         }
 
         # Add test_product_url if provided
@@ -241,8 +263,9 @@ class NamingConventions:
         guardian.save_json_atomic(config_path, config)
 
     @staticmethod
-    def register_credentials(supplier_name: str, username: Optional[str],
-                            password: Optional[str], repo_root: Path) -> None:
+    def register_credentials(
+        supplier_name: str, username: Optional[str], password: Optional[str], repo_root: Path
+    ) -> None:
         """
         Register credentials in system_config.json.
         Only registers if username and password are provided.
@@ -251,15 +274,12 @@ class NamingConventions:
             return  # Skip if credentials not provided
 
         config_path = repo_root / "config/system_config.json"
-        config = json.loads(config_path.read_text(encoding='utf-8'))
+        config = json.loads(config_path.read_text(encoding="utf-8"))
 
         if "credentials" not in config:
             config["credentials"] = {}
 
-        config["credentials"][supplier_name] = {
-            "username": username,
-            "password": password
-        }
+        config["credentials"][supplier_name] = {"username": username, "password": password}
 
         # Write back atomically
         guardian = WindowsSaveGuardian()
@@ -270,8 +290,10 @@ class NamingConventions:
 # RUNNER SELECTION
 # ============================================================================
 
-def determine_runner(workflow_key: str, supplier_id: str, supplier_domain: str,
-                     auth_required: bool, repo_root: Path) -> str:
+
+def determine_runner(
+    workflow_key: str, supplier_id: str, supplier_domain: str, auth_required: bool, repo_root: Path
+) -> str:
     """
     Select appropriate runner for the supplier.
     Priority:
@@ -291,13 +313,14 @@ def determine_runner(workflow_key: str, supplier_id: str, supplier_domain: str,
         workflow_key=workflow_key,
         supplier_domain=supplier_domain,
         auth_required=auth_required,
-        repo_root=repo_root
+        repo_root=repo_root,
     )
     return str(runner_path.absolute())
 
 
-def create_full_runner(supplier_id: str, workflow_key: str, supplier_domain: str,
-                       auth_required: bool, repo_root: Path) -> Path:
+def create_full_runner(
+    supplier_id: str, workflow_key: str, supplier_domain: str, auth_required: bool, repo_root: Path
+) -> Path:
     """
     Generate FULL runner implementation (117-143 lines) from template.
     HYBRID APPROACH: Template-based generation + LLM validation afterward.
@@ -305,14 +328,18 @@ def create_full_runner(supplier_id: str, workflow_key: str, supplier_domain: str
     Replaces create_runner_shim() which only generated 26-line forwarding scripts.
     """
     # Load template from skill directory (following Anthropic patterns)
-    template_path = repo_root / ".claude/skills/supplier-onboarding/templates/runner_template.py.txt"
+    template_path = (
+        repo_root / ".claude/skills/supplier-onboarding/templates/runner_template.py.txt"
+    )
     if not template_path.exists():
         raise FileNotFoundError(f"Runner template not found: {template_path}")
 
-    template = template_path.read_text(encoding='utf-8')
+    template = template_path.read_text(encoding="utf-8")
 
     # Determine supplier display name
-    supplier_display_name = supplier_domain.replace('.co.uk', '').replace('.com', '').replace('.', ' ').title()
+    supplier_display_name = (
+        supplier_domain.replace(".co.uk", "").replace(".com", "").replace(".", " ").title()
+    )
 
     # Authentication section
     if auth_required:
@@ -320,11 +347,19 @@ def create_full_runner(supplier_id: str, workflow_key: str, supplier_domain: str
         auth_helper_dir = repo_root / "tools" / supplier_id
         auth_helper_file = auth_helper_dir / "supplier_authentication_service.py"
 
-        supplier_class_name = supplier_domain.replace('.co.uk', '').replace('.com', '').replace('.', '').replace('-', '').title()
+        supplier_class_name = (
+            supplier_domain.replace(".co.uk", "")
+            .replace(".com", "")
+            .replace(".", "")
+            .replace("-", "")
+            .title()
+        )
 
-        if auth_helper_file.exists() or True:  # Always generate import assuming helper exists/will be created
+        if (
+            auth_helper_file.exists() or True
+        ):  # Always generate import assuming helper exists/will be created
             import_auth = f"from tools.{supplier_id}.supplier_authentication_service import {supplier_class_name}AuthenticationHelper"
-            auth_section = f'''        log.info(f"🔐 Initializing {supplier_display_name} authentication helper...")
+            auth_section = f"""        log.info(f"🔐 Initializing {supplier_display_name} authentication helper...")
         auth_helper = {supplier_class_name}AuthenticationHelper(page)
 
         if not credentials:
@@ -343,27 +378,39 @@ def create_full_runner(supplier_id: str, workflow_key: str, supplier_domain: str
                 return
         else:
             log.info("✅ Already authenticated!")
-'''
+"""
     else:
         import_auth = "# No authentication required"
-        auth_section = '''        log.info(f"ℹ️ No authentication required for {supplier_name}")
-'''
+        auth_section = """        log.info(f"ℹ️ No authentication required for {supplier_name}")
+"""
 
     # Replace template variables
-    runner_content = template.replace('{{SUPPLIER_NAME}}', supplier_id)
-    runner_content = runner_content.replace('{{SUPPLIER_DISPLAY_NAME}}', supplier_display_name)
-    runner_content = runner_content.replace('{{SUPPLIER_DOMAIN}}', supplier_domain)
-    runner_content = runner_content.replace('{{WORKFLOW_KEY}}', workflow_key)
-    runner_content = runner_content.replace('{{IMPORT_AUTH_HELPER}}', import_auth)
-    runner_content = runner_content.replace('{{AUTH_SECTION}}', auth_section)
+    runner_content = template.replace("{{SUPPLIER_NAME}}", supplier_id)
+    runner_content = runner_content.replace("{{SUPPLIER_DISPLAY_NAME}}", supplier_display_name)
+    runner_content = runner_content.replace("{{SUPPLIER_DOMAIN}}", supplier_domain)
+    runner_content = runner_content.replace("{{WORKFLOW_KEY}}", workflow_key)
+    runner_content = runner_content.replace("{{IMPORT_AUTH_HELPER}}", import_auth)
+    runner_content = runner_content.replace("{{AUTH_SECTION}}", auth_section)
 
     # Write runner file
     runner_path = repo_root / f"run_custom_{supplier_id}.py"
     atomic_write_text(runner_path, runner_content)
 
+    if "setup_logger()" in runner_content:
+        raise ValueError(
+            "Generated runner calls setup_logger() without supplier_name. "
+            "Update runner_template.py.txt to pass supplier_name."
+        )
+    if "setup_logger(supplier_name" not in runner_content:
+        raise ValueError(
+            "Generated runner missing setup_logger(supplier_name=...). "
+            "Log naming will be non-supplier-specific."
+        )
+
     # Make executable on Unix
     try:
         import stat
+
         runner_path.chmod(runner_path.stat().st_mode | stat.S_IEXEC)
     except:
         pass  # Windows doesn't support chmod
@@ -371,7 +418,9 @@ def create_full_runner(supplier_id: str, workflow_key: str, supplier_domain: str
     return runner_path
 
 
-def create_auth_helper(supplier_id: str, supplier_domain: str, supplier_url: str, repo_root: Path) -> Path:
+def create_auth_helper(
+    supplier_id: str, supplier_domain: str, supplier_url: str, repo_root: Path
+) -> Path:
     """
     Generate authentication helper for supplier from template.
     Creates tools/{supplier_id}/supplier_authentication_service.py
@@ -385,25 +434,35 @@ def create_auth_helper(supplier_id: str, supplier_domain: str, supplier_url: str
     # Create __init__.py
     init_file = tools_dir / "__init__.py"
     if not init_file.exists():
-        init_file.write_text("", encoding='utf-8')
+        init_file.write_text("", encoding="utf-8")
 
     # Load template from skill directory (following Anthropic patterns)
-    template_path = repo_root / ".claude/skills/supplier-onboarding/templates/auth_helper_template.py.txt"
+    template_path = (
+        repo_root / ".claude/skills/supplier-onboarding/templates/auth_helper_template.py.txt"
+    )
     if not template_path.exists():
         raise FileNotFoundError(f"Auth helper template not found: {template_path}")
 
-    template = template_path.read_text(encoding='utf-8')
+    template = template_path.read_text(encoding="utf-8")
 
     # Determine class name (remove special chars, title case)
-    supplier_class_name = supplier_domain.replace('.co.uk', '').replace('.com', '').replace('.', '').replace('-', '').title()
-    supplier_display_name = supplier_domain.replace('.co.uk', '').replace('.com', '').replace('.', ' ').title()
+    supplier_class_name = (
+        supplier_domain.replace(".co.uk", "")
+        .replace(".com", "")
+        .replace(".", "")
+        .replace("-", "")
+        .title()
+    )
+    supplier_display_name = (
+        supplier_domain.replace(".co.uk", "").replace(".com", "").replace(".", " ").title()
+    )
 
     # Replace template variables
-    content = template.replace('{{SUPPLIER_NAME}}', supplier_id)
-    content = content.replace('{{SUPPLIER_CLASS_NAME}}', supplier_class_name)
-    content = content.replace('{{SUPPLIER_DISPLAY_NAME}}', supplier_display_name)
-    content = content.replace('{{SUPPLIER_URL}}', supplier_url)
-    content = content.replace('{{SUPPLIER_ID}}', supplier_id)
+    content = template.replace("{{SUPPLIER_NAME}}", supplier_id)
+    content = content.replace("{{SUPPLIER_CLASS_NAME}}", supplier_class_name)
+    content = content.replace("{{SUPPLIER_DISPLAY_NAME}}", supplier_display_name)
+    content = content.replace("{{SUPPLIER_URL}}", supplier_url)
+    content = content.replace("{{SUPPLIER_ID}}", supplier_id)
 
     # Write file
     auth_file = tools_dir / "supplier_authentication_service.py"
@@ -466,11 +525,9 @@ if __name__ == "__main__":
 # FILE GENERATION
 # ============================================================================
 
+
 def generate_files(
-    session_input: Dict[str, Any],
-    forms: SupplierForms,
-    repo_root: Path,
-    staging_dir: Path
+    session_input: Dict[str, Any], forms: SupplierForms, repo_root: Path, staging_dir: Path
 ) -> List[str]:
     """
     Generate all configuration files to staging directory.
@@ -496,14 +553,20 @@ def generate_files(
             categories_content = {"category_urls": categories_raw}
         # If list of objects with name/url, extract URLs
         elif categories_raw and isinstance(categories_raw[0], dict):
-            urls = [item.get("url") or item.get("category_url") for item in categories_raw if item.get("url") or item.get("category_url")]
+            urls = [
+                item.get("url") or item.get("category_url")
+                for item in categories_raw
+                if item.get("url") or item.get("category_url")
+            ]
             categories_content = {"category_urls": urls}
         else:
             categories_content = {"category_urls": []}
     elif isinstance(categories_raw, dict) and "category_urls" in categories_raw:
         categories_content = categories_raw
     else:
-        raise ValueError(f"Categories must be list or dict with category_urls, got: {type(categories_raw)}")
+        raise ValueError(
+            f"Categories must be list or dict with category_urls, got: {type(categories_raw)}"
+        )
 
     guardian.save_json_atomic(categories_path, categories_content)
     generated.append(str(categories_path))
@@ -532,10 +595,10 @@ def load_or_parse_json(source: str, repo_root: Path) -> Dict[str, Any]:
     Load JSON from file path or parse inline JSON string.
     """
     # Try as file path first
-    if source.endswith('.json'):
+    if source.endswith(".json"):
         file_path = repo_root / source if not Path(source).is_absolute() else Path(source)
         if file_path.exists():
-            return json.loads(file_path.read_text(encoding='utf-8'))
+            return json.loads(file_path.read_text(encoding="utf-8"))
 
     # Try parsing as JSON string
     try:
@@ -544,7 +607,9 @@ def load_or_parse_json(source: str, repo_root: Path) -> Dict[str, Any]:
         raise ValueError(f"Cannot load JSON from source: {source}")
 
 
-def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForms, workflow_key: str):
+def atomic_move_to_final(
+    staging_dir: Path, repo_root: Path, forms: SupplierForms, workflow_key: str
+):
     """
     Atomically move files from staging to final locations.
     Re-reads JSON and uses save_json_atomic for all writes.
@@ -555,18 +620,18 @@ def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForm
     staged_selectors = staging_dir / "selectors.json"
     final_selectors = NamingConventions.selector_config_path(forms.domain, repo_root)
     final_selectors.parent.mkdir(parents=True, exist_ok=True)
-    selectors_data = json.loads(staged_selectors.read_text(encoding='utf-8'))
+    selectors_data = json.loads(staged_selectors.read_text(encoding="utf-8"))
     guardian.save_json_atomic(final_selectors, selectors_data)
 
     # 2. Categories - Create SINGLE correct filename for both system and state manager
     staged_categories = staging_dir / "categories.json"
 
     # Use state manager compatible naming (strips ALL TLDs: .com, .co.uk, .org, etc.)
-    supplier_name_clean = forms.domain.split('.')[0]
+    supplier_name_clean = forms.domain.split(".")[0]
     categories_filename = f"{supplier_name_clean}_categories.json"
     final_categories = repo_root / "config" / categories_filename
     final_categories.parent.mkdir(parents=True, exist_ok=True)
-    categories_data = json.loads(staged_categories.read_text(encoding='utf-8'))
+    categories_data = json.loads(staged_categories.read_text(encoding="utf-8"))
 
     # Save single categories file for both system_config.json and state manager
     guardian.save_json_atomic(final_categories, categories_data)
@@ -574,14 +639,16 @@ def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForm
 
     # Update system_config.json to use the correct path
     system_config_path = repo_root / "config" / "system_config.json"
-    system_config = json.loads(system_config_path.read_text(encoding='utf-8'))
+    system_config = json.loads(system_config_path.read_text(encoding="utf-8"))
 
     if "workflows" not in system_config:
         system_config["workflows"] = {}
     if workflow_key not in system_config["workflows"]:
         system_config["workflows"][workflow_key] = {}
 
-    system_config["workflows"][workflow_key]["categories_config_path"] = f"config/{categories_filename}"
+    system_config["workflows"][workflow_key]["categories_config_path"] = (
+        f"config/{categories_filename}"
+    )
     guardian.save_json_atomic(system_config_path, system_config)
     print(f"[OK] Updated system_config.json to use: config/{categories_filename}")
 
@@ -602,18 +669,19 @@ def atomic_move_to_final(staging_dir: Path, repo_root: Path, forms: SupplierForm
         final_pkg_dir.mkdir(parents=True, exist_ok=True)
 
         final_pkg_selectors = final_pkg_dir / "product_selectors.json"
-        pkg_selectors_data = json.loads(staged_pkg_selectors.read_text(encoding='utf-8'))
+        pkg_selectors_data = json.loads(staged_pkg_selectors.read_text(encoding="utf-8"))
         guardian.save_json_atomic(final_pkg_selectors, pkg_selectors_data)
 
         staged_ready = staging_dir / "supplier_ready.json"
         final_ready = repo_root / f"suppliers/{forms.supplier_id}/.supplier_ready"
-        ready_data = json.loads(staged_ready.read_text(encoding='utf-8'))
+        ready_data = json.loads(staged_ready.read_text(encoding="utf-8"))
         guardian.save_json_atomic(final_ready, ready_data)
 
 
 # ============================================================================
 # SANITY CHECK
 # ============================================================================
+
 
 def run_sanity_check(runner_path: str, repo_root: Path) -> subprocess.CompletedProcess:
     """
@@ -630,16 +698,14 @@ def run_sanity_check(runner_path: str, repo_root: Path) -> subprocess.CompletedP
         capture_output=True,
         text=True,
         timeout=600,  # 10 minute timeout
-        cwd=str(repo_root)
+        cwd=str(repo_root),
     )
 
     return result
 
 
 def verify_sanity_outputs(
-    forms: SupplierForms,
-    repo_root: Path,
-    run_start_time: float
+    forms: SupplierForms, repo_root: Path, run_start_time: float
 ) -> Tuple[bool, Dict[str, bool]]:
     """
     Verify 6 criteria with exact field names and time windows.
@@ -649,7 +715,7 @@ def verify_sanity_outputs(
     # 1. Scraping rate: supplier_products_completed >= 20 (nested then top-level fallback)
     state_file = NamingConventions.processing_state_file(forms.supplier_name_underscore, repo_root)
     if state_file.exists():
-        state = json.loads(state_file.read_text(encoding='utf-8'))
+        state = json.loads(state_file.read_text(encoding="utf-8"))
         # Try nested first, then top-level fallback
         completed = state.get("system_progression", {}).get("supplier_products_completed")
         if completed is None:
@@ -662,8 +728,7 @@ def verify_sanity_outputs(
     amazon_cache_dir = repo_root / "OUTPUTS/FBA_ANALYSIS/amazon_cache"
     if amazon_cache_dir.exists():
         recent_files = [
-            f for f in amazon_cache_dir.glob("amazon_*.json")
-            if f.stat().st_mtime >= run_start_time
+            f for f in amazon_cache_dir.glob("amazon_*.json") if f.stat().st_mtime >= run_start_time
         ]
         checks["amazon_cache"] = len(recent_files) > 0
     else:
@@ -675,7 +740,7 @@ def verify_sanity_outputs(
     if linking_map.exists():
         mtime = linking_map.stat().st_mtime
         size = linking_map.stat().st_size
-        checks["linking_map"] = (mtime >= run_start_time and size > 100)
+        checks["linking_map"] = mtime >= run_start_time and size > 100
     else:
         checks["linking_map"] = False
 
@@ -683,7 +748,8 @@ def verify_sanity_outputs(
     financial_dir = repo_root / "OUTPUTS/FBA_ANALYSIS/financial_reports"
     if financial_dir.exists():
         recent_csvs = [
-            f for f in financial_dir.glob("fba_financial_report_*.csv")
+            f
+            for f in financial_dir.glob("fba_financial_report_*.csv")
             if f.stat().st_mtime >= run_start_time and f.stat().st_size > 1024
         ]
         checks["financial_csv"] = len(recent_csvs) > 0
@@ -692,8 +758,7 @@ def verify_sanity_outputs(
 
     # 5. Processing state: updated recently (underscore-form filename)
     checks["processing_state"] = (
-        state_file.exists() and
-        state_file.stat().st_mtime >= run_start_time
+        state_file.exists() and state_file.stat().st_mtime >= run_start_time
     )
 
     # 6. No critical errors: scan logs/debug/* for ERROR/CRITICAL
@@ -716,20 +781,19 @@ def check_logs_for_errors(repo_root: Path, run_start_time: float) -> bool:
 
     # Find logs created during this run
     recent_logs = [
-        f for f in logs_dir.glob("run_custom_*.log")
-        if f.stat().st_mtime >= run_start_time
+        f for f in logs_dir.glob("run_custom_*.log") if f.stat().st_mtime >= run_start_time
     ]
 
     critical_patterns = [
-        r'ERROR:',
-        r'CRITICAL:',
-        r'Exception:',
-        r'Traceback \(most recent call last\):'
+        r"ERROR:",
+        r"CRITICAL:",
+        r"Exception:",
+        r"Traceback \(most recent call last\):",
     ]
 
     for log_file in recent_logs:
         try:
-            content = log_file.read_text(errors='ignore')
+            content = log_file.read_text(errors="ignore")
             for pattern in critical_patterns:
                 if re.search(pattern, content):
                     return False
@@ -743,7 +807,10 @@ def check_logs_for_errors(repo_root: Path, run_start_time: float) -> bool:
 # REMEDIATION
 # ============================================================================
 
-def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_root: Path) -> Dict[str, Any]:
+
+def generate_remediation(
+    checks: Dict[str, bool], forms: SupplierForms, repo_root: Path
+) -> Dict[str, Any]:
     """
     Generate remediation guidance for failed checks.
     """
@@ -756,8 +823,8 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
                 "Verify selectors are correct (product_item, title, price, ean, url, image)",
                 f"Check {NamingConventions.selector_config_path(forms.domain, repo_root)}",
                 "Use browser DevTools to verify CSS selectors match actual page structure",
-                "Ensure no login required or authentication is properly configured"
-            ]
+                "Ensure no login required or authentication is properly configured",
+            ],
         }
 
     if not checks.get("amazon_cache"):
@@ -767,8 +834,8 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
                 "Verify EAN extraction is working (check selectors)",
                 "Ensure Amazon API connectivity",
                 "Check test product URL has valid EAN",
-                f"Manually test: check OUTPUTS/FBA_ANALYSIS/amazon_cache/ exists"
-            ]
+                f"Manually test: check OUTPUTS/FBA_ANALYSIS/amazon_cache/ exists",
+            ],
         }
 
     if not checks.get("linking_map"):
@@ -777,8 +844,8 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
             "actions": [
                 f"Check hyphen-form directory: OUTPUTS/FBA_ANALYSIS/linking_maps/{forms.supplier_id}/",
                 "Verify workflow completed amazon_analysis phase",
-                "Ensure EAN matching succeeded for at least some products"
-            ]
+                "Ensure EAN matching succeeded for at least some products",
+            ],
         }
 
     if not checks.get("financial_csv"):
@@ -787,8 +854,8 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
             "actions": [
                 "Check financial_report_batch_size in system_config.json",
                 "Verify ROI calculations completed",
-                "Check OUTPUTS/FBA_ANALYSIS/financial_reports/ directory"
-            ]
+                "Check OUTPUTS/FBA_ANALYSIS/financial_reports/ directory",
+            ],
         }
 
     if not checks.get("processing_state"):
@@ -797,8 +864,8 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
             "actions": [
                 f"Check underscore-form file: OUTPUTS/CACHE/processing_states/{forms.supplier_name_underscore}_processing_state.json",
                 "Verify workflow completed without crashes",
-                "Check logs for interruptions"
-            ]
+                "Check logs for interruptions",
+            ],
         }
 
     if not checks.get("no_critical_errors"):
@@ -808,8 +875,8 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
                 "Review logs/debug/run_custom_*.log for ERROR/CRITICAL patterns",
                 "Address specific errors found",
                 "Check Chrome CDP connectivity if browser-related",
-                "Verify authentication if login-related"
-            ]
+                "Verify authentication if login-related",
+            ],
         }
 
     return remediation
@@ -818,6 +885,7 @@ def generate_remediation(checks: Dict[str, bool], forms: SupplierForms, repo_roo
 # ============================================================================
 # MAIN WIZARD LOGIC
 # ============================================================================
+
 
 class SupplierOnboardingWizard:
     """Main wizard orchestrator."""
@@ -834,7 +902,7 @@ class SupplierOnboardingWizard:
         """Main execution flow."""
         try:
             # 1. Load session input
-            self.session_input = json.loads(self.input_file.read_text(encoding='utf-8'))
+            self.session_input = json.loads(self.input_file.read_text(encoding="utf-8"))
             self.repo_root = Path(self.session_input["repo_root"])
 
             # 2. Generate supplier forms
@@ -847,7 +915,7 @@ class SupplierOnboardingWizard:
                 result = self.generate_mode()
 
             # 4. Write output
-            self.output_file.write_text(json.dumps(result, indent=2), encoding='utf-8')
+            self.output_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
 
         except Exception as e:
             # Error handling
@@ -855,22 +923,26 @@ class SupplierOnboardingWizard:
                 "success": False,
                 "errors": [str(e)],
                 "files_generated": [],
-                "sanity_results": {}
+                "sanity_results": {},
             }
-            self.output_file.write_text(json.dumps(error_result, indent=2), encoding='utf-8')
+            self.output_file.write_text(json.dumps(error_result, indent=2), encoding="utf-8")
 
     def reference_mode(self) -> Dict[str, Any]:
         """Validate existing files without writing."""
         checks = {
-            "selectors_exist": NamingConventions.selector_config_path(self.forms.domain, self.repo_root).exists(),
-            "categories_exist": NamingConventions.categories_config_path(self.session_input["workflow_key"], self.repo_root).exists()
+            "selectors_exist": NamingConventions.selector_config_path(
+                self.forms.domain, self.repo_root
+            ).exists(),
+            "categories_exist": NamingConventions.categories_config_path(
+                self.session_input["workflow_key"], self.repo_root
+            ).exists(),
         }
 
         return {
             "success": all(checks.values()),
             "files_generated": [],
             "validation_checks": checks,
-            "sanity_results": {}
+            "sanity_results": {},
         }
 
     def generate_mode(self) -> Dict[str, Any]:
@@ -882,13 +954,17 @@ class SupplierOnboardingWizard:
         self.staging_dir.mkdir(parents=True, exist_ok=True)
 
         # 2. Generate files to staging
-        staged_files = generate_files(self.session_input, self.forms, self.repo_root, self.staging_dir)
+        staged_files = generate_files(
+            self.session_input, self.forms, self.repo_root, self.staging_dir
+        )
 
         # 3. Validate staged files
         # (Add validation logic here if needed)
 
         # 4. Atomic move to final locations
-        atomic_move_to_final(self.staging_dir, self.repo_root, self.forms, self.session_input["workflow_key"])
+        atomic_move_to_final(
+            self.staging_dir, self.repo_root, self.forms, self.session_input["workflow_key"]
+        )
 
         # 4a. Register workflow in system_config.json
         categories_path = f"config/{self.session_input['workflow_key']}_categories.json"
@@ -906,7 +982,7 @@ class SupplierOnboardingWizard:
             categories_path=categories_path,
             test_product_url=test_product_url,
             auth_required=auth_required,
-            repo_root=self.repo_root
+            repo_root=self.repo_root,
         )
 
         # 4b. Register credentials (if provided)
@@ -916,7 +992,7 @@ class SupplierOnboardingWizard:
             supplier_name=self.forms.domain,
             username=username,
             password=password,
-            repo_root=self.repo_root
+            repo_root=self.repo_root,
         )
 
         # 4c. Generate authentication helper (if auth required)
@@ -925,7 +1001,7 @@ class SupplierOnboardingWizard:
                 supplier_id=self.forms.supplier_id,
                 supplier_domain=self.forms.domain,
                 supplier_url=supplier_url,
-                repo_root=self.repo_root
+                repo_root=self.repo_root,
             )
             print(f"[OK] Generated authentication helper: {auth_helper_path}")
             print(f"[WARN] Auth helper is a TEMPLATE - customize login selectors manually")
@@ -937,7 +1013,7 @@ class SupplierOnboardingWizard:
             supplier_id=self.forms.supplier_id,
             supplier_domain=self.forms.domain,
             auth_required=auth_required,
-            repo_root=self.repo_root
+            repo_root=self.repo_root,
         )
 
         # 6. Run sanity check (set run_start_time immediately before)
@@ -948,7 +1024,9 @@ class SupplierOnboardingWizard:
         all_passed, checks = verify_sanity_outputs(self.forms, self.repo_root, run_start_time)
 
         # 8. Generate remediation if needed
-        remediation = generate_remediation(checks, self.forms, self.repo_root) if not all_passed else None
+        remediation = (
+            generate_remediation(checks, self.forms, self.repo_root) if not all_passed else None
+        )
 
         # 9. If sanity passed, run full workflow and generate summary
         full_run_result = None
@@ -960,15 +1038,19 @@ class SupplierOnboardingWizard:
             "success": all_passed,
             "files_generated": [
                 str(NamingConventions.selector_config_path(self.forms.domain, self.repo_root)),
-                str(NamingConventions.categories_config_path(self.session_input["workflow_key"], self.repo_root)),
+                str(
+                    NamingConventions.categories_config_path(
+                        self.session_input["workflow_key"], self.repo_root
+                    )
+                ),
                 runner,  # ADD RUNNER SCRIPT TO TRACKED FILES
-                str(self.repo_root / "config" / "system_config.json")  # TRACK SYSTEM CONFIG UPDATE
+                str(self.repo_root / "config" / "system_config.json"),  # TRACK SYSTEM CONFIG UPDATE
             ],
             "sanity_results": checks,
             "remediation": remediation,
             "sanity_stdout": sanity_result.stdout[:1000],  # Truncate
             "sanity_stderr": sanity_result.stderr[:1000] if sanity_result.stderr else None,
-            "full_run_result": full_run_result
+            "full_run_result": full_run_result,
         }
 
     def run_full_workflow_and_summarize(self, runner: str) -> Dict[str, Any]:
@@ -982,26 +1064,20 @@ class SupplierOnboardingWizard:
                 capture_output=True,
                 text=True,
                 timeout=3600,  # 1 hour max
-                cwd=str(self.repo_root)
+                cwd=str(self.repo_root),
             )
 
             if result.returncode != 0:
                 return {
                     "status": "failed",
                     "error": f"Full run exited with code {result.returncode}",
-                    "stderr": result.stderr[:500]
+                    "stderr": result.stderr[:500],
                 }
 
         except subprocess.TimeoutExpired:
-            return {
-                "status": "timeout",
-                "error": "Full run exceeded 1 hour timeout"
-            }
+            return {"status": "timeout", "error": "Full run exceeded 1 hour timeout"}
         except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e)
-            }
+            return {"status": "error", "error": str(e)}
 
         # 2. Generate summary and curated CSV
         try:
@@ -1011,12 +1087,12 @@ class SupplierOnboardingWizard:
                 "summary_file": summary_result["summary_file"],
                 "curated_file": summary_result["curated_file"],
                 "total_products": summary_result["total_products"],
-                "curated_products": summary_result["curated_products"]
+                "curated_products": summary_result["curated_products"],
             }
         except Exception as e:
             return {
                 "status": "partial",
-                "error": f"Full run completed but summary generation failed: {e}"
+                "error": f"Full run completed but summary generation failed: {e}",
             }
 
     def _generate_summary_and_curated(self, runner: str) -> Dict[str, Any]:
@@ -1043,15 +1119,17 @@ class SupplierOnboardingWizard:
         curated_rows = []
         total_count = 0
 
-        with open(latest_csv, 'r', encoding='utf-8') as f:
+        with open(latest_csv, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 total_count += 1
                 try:
                     # Tolerant field name lookup: try repo names first, fallback to old names
-                    profit = float(row.get('net_profit_gbp') or row.get('profit_gbp') or 0)
-                    roi = float(row.get('roi_pct') or row.get('roi_percentage') or 0)
-                    margin = float(row.get('margin_pct') or row.get('profit_margin_percentage') or 0)
+                    profit = float(row.get("net_profit_gbp") or row.get("profit_gbp") or 0)
+                    roi = float(row.get("roi_pct") or row.get("roi_percentage") or 0)
+                    margin = float(
+                        row.get("margin_pct") or row.get("profit_margin_percentage") or 0
+                    )
 
                     if profit >= 2 and roi >= 30 and margin >= 25:
                         curated_rows.append(row)
@@ -1061,7 +1139,7 @@ class SupplierOnboardingWizard:
         # Write curated CSV
         curated_file = output_dir / f"curated_{timestamp}.csv"
         if curated_rows:
-            with open(curated_file, 'w', newline='', encoding='utf-8') as f:
+            with open(curated_file, "w", newline="", encoding="utf-8") as f:
                 writer = csv.DictWriter(f, fieldnames=curated_rows[0].keys())
                 writer.writeheader()
                 writer.writerows(curated_rows)
@@ -1103,19 +1181,20 @@ class SupplierOnboardingWizard:
 3. Run again with: `python {runner.replace(str(self.repo_root) + '/', '')}`
 """
 
-        summary_file.write_text(summary_content, encoding='utf-8')
+        summary_file.write_text(summary_content, encoding="utf-8")
 
         return {
             "summary_file": str(summary_file),
             "curated_file": str(curated_file),
             "total_products": total_count,
-            "curated_products": len(curated_rows)
+            "curated_products": len(curated_rows),
         }
 
 
 # ============================================================================
 # CLI ENTRY POINT
 # ============================================================================
+
 
 def main():
     parser = argparse.ArgumentParser(description="Supplier Onboarding Wizard")

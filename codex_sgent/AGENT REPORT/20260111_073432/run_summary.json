@@ -1,0 +1,125 @@
+{
+  "run_id": "20260111_073432",
+  "status": "OK",
+  "input_file": "RESERACH\\REPORT\\part 8 jan\\part 8 jan.xlsx",
+  "input_file_hash": "cc4da61bbb3215c7",
+  "supplier": "poundwholesale",
+  "skip_browser": true,
+  "preflight": {
+    "warnings": [],
+    "diagnostics": {
+      "mode": "openai_validated",
+      "model": "gpt-5-mini",
+      "base_url": "https://api.openai.com/v1"
+    }
+  },
+  "normalization_report": {
+    "original_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "NetProceeds",
+      "HMRC",
+      "NetProfit",
+      "ROI ( % ) ",
+      "Breakeven",
+      "ProfitMargin"
+    ],
+    "detected": {
+      "row_id": "RowID",
+      "supplier_title": "SupplierTitle",
+      "amazon_title": "AmazonTitle",
+      "supplier_ean": "EAN",
+      "amazon_ean": "EAN_OnPage",
+      "asin": "ASIN",
+      "supplier_price": "SupplierPrice_incVAT",
+      "selling_price": "SellingPrice_incVAT",
+      "net_profit": "NetProfit",
+      "roi": null,
+      "sales": "bought_in_past_month",
+      "supplier_url": "SupplierURL"
+    },
+    "stable_key_generated": true,
+    "stable_key_collision": false
+  },
+  "schema": {
+    "input_path": "RESERACH\\REPORT\\part 8 jan\\part 8 jan.xlsx",
+    "rows": 3063,
+    "detected_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "NetProceeds",
+      "HMRC",
+      "NetProfit",
+      "ROI ( % ) ",
+      "Breakeven",
+      "ProfitMargin"
+    ],
+    "warnings": []
+  },
+  "validation": {
+    "passed": true,
+    "errors": []
+  },
+  "bucket_counts": {
+    "FILTERED_OUT": 2727,
+    "HIGHLY_LIKELY": 191,
+    "NEEDS_VERIFICATION": 111,
+    "VERIFIED": 34
+  },
+  "global_traps_loaded": 0,
+  "ai_features": {
+    "enabled": true,
+    "provider": "openai",
+    "model": "gpt-5-mini"
+  },
+  "iterations": {
+    "max_iterations": 2,
+    "iterations_run": 1,
+    "mode": "iteration_loop"
+  },
+  "critique_summary": {
+    "recommended_action": "block",
+    "high_severity_issues": 2,
+    "proposed_changes": 13,
+    "overall_assessment": "This report contains at least one CRITICAL contradiction: exact EAN matches were placed in FILTERED_OUT (6 rows). Additionally, pack/bundle parsing is producing systemic anomalies (very large number of automatic bundle multipliers and high-RSU rows), causing many false negatives and suspect profit calculations. Given the contradiction and the scale of bundle/pack issues, the configuration and detection rules need to be tightened (dimension shields, pack keyword clarity, cap on automatic bundle multipliers, and higher verification confidence when EAN is absent). Do not finalize until contradictions are fixed and a re-run confirms behavior improvements."
+  },
+  "adjudication_count": 99,
+  "brand_detection": {
+    "enabled": true,
+    "known_brands": 1101
+  }
+}
