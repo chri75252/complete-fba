@@ -173,10 +173,25 @@ class ControlPlaneWorker:
 
             if job.get("job_type") == job_types.JOB_TYPE_RUN_WORKFLOW:
                 runner_script = str(job.get("runner_script") or "")
+
+                # SAFETY CHECK
+                if not runner_script or not (paths.repo_root / runner_script).exists():
+                    status["state"] = "failed"
+                    status["error"]["summary"] = f"Runner script missing: {runner_script}"
+                    write_json_atomic(status_path, status)
+                    _move_job(running_job_path, paths.jobs_failed)
+                    _release_lock(paths.active_lock_file)
+                    continue
+
                 sys_cfg_path = (job.get("override") or {}).get("system_config_path")
                 if sys_cfg_path:
                     env["FBA_SYSTEM_CONFIG_PATH"] = str(sys_cfg_path)
                 cmd = ["python", runner_script]
+            elif job.get("job_type") == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH:
+                refresh = job.get("refresh") or {}
+                env["CONTROL_PLANE_JOB_PATH"] = str(running_job_path)
+                cmd = ["python", "-m", "control_plane.run_product_list_refresh"]
+                timeout_seconds = int(refresh.get("timeout_seconds") or 7200)
             elif job.get("job_type") == job_types.JOB_TYPE_RUN_ONBOARDING_WIZARD:
                 wizard = job.get("wizard") or {}
                 cmd = [

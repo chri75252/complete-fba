@@ -1,0 +1,160 @@
+                    log.info(f"File-grounded calculation: Found {len(product_cache)} products in cache")
+                except Exception as e:
+                    log.warning(f"Failed to read product cache: {e}")
+            else:
+                log.warning(f"Product cache file not found: {cache_file_path}")
+            
+            # Read linking map to get processed count
+            if linking_map_path.exists():
+                file_grounded_data["linking_map_exists"] = True
+                try:
+                    with open(linking_map_path, 'r', encoding='utf-8') as f:
+                        linking_map = json.load(f)
+                    file_grounded_data["linking_map_count"] = len(linking_map)
+                    file_grounded_data["processed_products"] = len(linking_map)
+                    log.info(f"File-grounded calculation: Found {len(linking_map)} processed products in linking map")
+                except Exception as e:
+                    log.warning(f"Failed to read linking map: {e}")
+            else:
+                log.warning(f"Linking map file not found: {linking_map_path}")
+            
+            # Get category completion status using the category_completion_tracker
+            if get_completion_metrics:
+                try:
+                    completion_metrics = get_completion_metrics(str(current_dir))
+                    if completion_metrics and completion_metrics.get('category_completion_status'):
+                        # Convert the detailed completion status to the format expected by state
+                        for category_url, metrics in completion_metrics['category_completion_status'].items():
+                            file_grounded_data["category_completion_status"][category_url] = {
+                                "processed": metrics.get('processed_products', 0),
+                                "total": metrics.get('total_products', 0),
+                                "percent": metrics.get('completion_percentage', 0.0)
+                            }
+                        log.info(f"File-grounded calculation: Retrieved category completion for {len(file_grounded_data['category_completion_status'])} categories")
+                    else:
+                        log.warning("Category completion metrics returned empty or invalid data")
+                except Exception as e:
+                    log.warning(f"Failed to get category completion metrics: {e}")
+            else:
+                log.warning("Category completion tracker not available - using empty status")
+            
+            return file_grounded_data
+            
+        except Exception as e:
+            log.error(f"Failed to calculate file-grounded totals: {e}")
+            return {
+                "total_products": self.state_data.get("total_products", 0),
+                "processed_products": self.state_data.get("last_processed_index", 0),
+                "category_completion_status": {},
+                "linking_map_count": 0,
+                "cache_file_exists": False,
+                "linking_map_exists": False
+            }
+
+    def save_state(self, force: bool = False):
+        """
+        Save state to file with atomic write operation and file-grounded calculations
+        Args:
+            force: Force save even if no changes detected
+        """
+        try:
+            # STEP 1: Calculate file-grounded totals from actual files on disk
+            file_grounded_data = self._calculate_file_grounded_totals()
+            
+            # STEP 2: Update state with accurate file-based totals
+            self.state_data["total_products"] = file_grounded_data["total_products"]
+            
+            # Update processed index to match linking map count if linking map exists
+            if file_grounded_data["linking_map_exists"]:
+                self.state_data["last_processed_index"] = file_grounded_data["linking_map_count"]
+                self.state_data["successful_products"] = file_grounded_data["processed_products"]
+            
+            # STEP 3: Update category completion status in gap processing
+            if file_grounded_data["category_completion_status"]:
+                if "gap_processing" not in self.state_data:
+                    self.state_data["gap_processing"] = {}
+                self.state_data["gap_processing"]["category_completion_status"] = file_grounded_data["category_completion_status"]
+            
+            # STEP 4: Update metadata with file existence status
+            if "metadata" not in self.state_data:
+                self.state_data["metadata"] = {}
+            self.state_data["metadata"]["file_grounded_stats"] = {
+                "cache_file_exists": file_grounded_data["cache_file_exists"],
+                "linking_map_exists": file_grounded_data["linking_map_exists"],
+                "last_file_check": datetime.now(timezone.utc).isoformat()
+            }
+            
+            # STEP 5: Update timestamp
+            self.state_data["last_updated"] = datetime.now(timezone.utc).isoformat()
+            
+            # STEP 6: Log the file-grounded calculations for verification
+            log.info(f"File-grounded state update - Total: {file_grounded_data['total_products']}, "
+                    f"Processed: {file_grounded_data['processed_products']}, "
+                    f"Categories: {len(file_grounded_data['category_completion_status'])}")
+            
+            # STEP 7: Ensure directory exists
+            self.state_file_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # STEP 8: Atomic write using temporary file
+            temp_path = self.state_file_path.with_suffix('.tmp')
+            with open(temp_path, 'w', encoding='utf-8') as f:
+                json.dump(self.state_data, f, indent=2, ensure_ascii=False)
+            
+            # STEP 9: Atomic replace
+            os.replace(temp_path, self.state_file_path)
+            
+        except Exception as e:
+            log.error(f"Failed to save state: {e}")
+            # Cleanup temp file if it exists
+            if 'temp_path' in locals() and temp_path.exists():
+                temp_path.unlink()
+    
+    def update_processing_index(self, index: int, total_products: int = None):
+        """Update the current processing index"""
+        self.state_data["last_processed_index"] = index
+        if total_products is not None:
+            self.state_data["total_products"] = total_products
+        self.state_data["processing_status"] = "in_progress"
+        self.save_state()
+    
+    def add_category_performance(self, category_url: str, products_found: int, 
+                               profitable_products: int = 0, avg_roi: float = 0.0):
+        """Add or update category performance metrics"""
+        self.state_data["category_performance"][category_url] = {
+            "products_found": products_found,
+            "profitable_products": profitable_products,
+            "avg_roi_percent": avg_roi,
+            "last_processed": datetime.now(timezone.utc).isoformat()
+        }
+        self.save_state()
+    
+    def log_error(self, error_type: str, error_message: str, product_index: int = None, 
+                  context: Dict[str, Any] = None):
+        """Log an error with context"""
+        error_entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "error_type": error_type,
+            "error_message": error_message,
+            "product_index": product_index,
+            "context": context or {}
+        }
+        self.state_data["error_log"].append(error_entry)
+        
+        # Keep only last 100 errors to prevent file bloat
+        if len(self.state_data["error_log"]) > 100:
+            self.state_data["error_log"] = self.state_data["error_log"][-100:]
+        
+        self.save_state()
+    
+    def update_success_metrics(self, successful: bool, profitable: bool = False, 
+                             profit_amount: float = 0.0):
+        """Update success and profitability metrics"""
+        if successful:
+            self.state_data["successful_products"] += 1
+        if profitable:
+            self.state_data["profitable_products"] += 1
+            self.state_data["total_profit_found"] += profit_amount
+        self.save_state()
+    
+    def start_processing(self, config_hash: str = "", runtime_settings: Dict[str, Any] = None):
+        """Mark processing as started wi

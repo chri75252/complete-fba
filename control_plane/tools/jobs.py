@@ -67,6 +67,9 @@ def write_merged_system_config(
 def enqueue_run_job(
     run_id: str, request: RunRequest, merged_config_path: Path, categories_path: Path
 ) -> Path:
+    if not request.runner_script or not request.runner_script.strip():
+        raise ValueError("Cannot enqueue job: runner_script is empty")
+
     paths = get_paths()
     paths.jobs_pending.mkdir(parents=True, exist_ok=True)
 

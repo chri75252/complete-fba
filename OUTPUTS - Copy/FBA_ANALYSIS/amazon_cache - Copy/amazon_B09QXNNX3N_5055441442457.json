@@ -1,0 +1,127 @@
+
+                await asyncio.sleep(wait_time)
+        log.error(f"Failed to fetch {url} after {retry_count} attempts.")
+        return None
+
+    def _get_selectors_for_domain(self, url: str) -> Dict[str, Any]:
+        try:
+            domain = urlparse(url).netloc.lower().replace("www.", "")
+            for known_domain_key, config_value in self.selector_config.items():
+                if known_domain_key != "default" and (domain == known_domain_key or known_domain_key in domain):
+                    merged_config = self.selector_config["default"].copy()
+                    merged_config.update(config_value)
+                    return merged_config
+            return self.selector_config["default"]
+        except Exception as e:
+            log.error(f"Error determining selectors for domain from URL '{url}': {e}")
+            return self.selector_config["default"]
+
+    def extract_product_elements(self, html: str, url: str) -> List[BeautifulSoup]:
+        soup = BeautifulSoup(html, 'html.parser')
+        selectors_config = self._get_selectors_for_domain(url)
+        product_selectors = selectors_config.get("product", [])
+        if isinstance(product_selectors, str):
+            product_selectors = [product_selectors]
+        
+        for selector in product_selectors:
+            try:
+                # Ensure selector is not empty or just whitespace
+                if selector and selector.strip():
+                    elements = soup.select(selector)
+                    if elements:
+                        log.info(f"Found {len(elements)} product elements on {url} using selector: '{selector}'")
+                        return elements
+                else:
+                    log.warning(f"Skipping empty or invalid product selector for {url}")
+            except Exception as e:
+                log.error(f"Error with product selector '{selector}' on {url}: {e}")
+                continue
+        
+        log.warning(f"No product elements found with configured selectors on {url}. Trying generic approaches.")
+        potential_containers = soup.select("div.products, div.product-list, ul.products, div.collection, section.products")
+        for container in potential_containers:
+            child_items = container.find_all(["div", "li", "article"], recursive=False)
+            if len(child_items) > 3:
+                log.info(f"Found {len(child_items)} potential product elements using container approach.")
+                return child_items
+            deeper_items = container.find_all(["div", "li", "article"], recursive=True, limit=30)
+            if len(deeper_items) > 3:
+                log.info(f"Found {len(deeper_items)} potential product elements using deeper container scan.")
+                return deeper_items
+        
+        all_product_indicators = soup.find_all(lambda tag: tag.name in ["div", "li", "article"] and 
+                                                (tag.has_attr("class") and any(c in str(tag["class"]) for c in ["product", "item", "card"]) or
+                                                 tag.has_attr("id") and any(i in str(tag["id"]) for i in ["product", "item", "card"])),
+                                       limit=30)
+        if all_product_indicators:
+            log.info(f"Found {len(all_product_indicators)} product elements using indicator approach.")
+            return all_product_indicators
+            
+        log.warning(f"Could not extract any product elements from {url}.")
+        return []
+
+    def _extract_with_selector(self, element_soup: BeautifulSoup, selectors: List[str], attribute: Optional[str] = None, extract_text: bool = True) -> Optional[str]:
+        if not isinstance(selectors, list):
+            selectors = [str(selectors)] if selectors else []
+            
+        for selector in selectors:
+            try:
+                # Ensure selector is not empty or just whitespace before passing to select_one
+                if not selector or not selector.strip():
+                    log.debug(f"Skipping empty selector.")
+                    continue
+
+                target = element_soup.select_one(selector)
+                if target:
+                    if attribute:
+                        attr_value = target.get(attribute)
+                        if attr_value is not None:
+                            return str(attr_value).strip()
+                    elif extract_text:
+                        texts = [t.strip() for t in target.find_all(string=True, recursive=True) if t.strip()]
+                        text_content = " ".join(texts)
+                        if text_content: 
+                            return re.sub(r'\s+', ' ', text_content).strip()
+            except Exception as e: # Catch soupsieve errors here too
+                log.debug(f"Error with selector '{selector}': {e}")
+                continue
+        return None
+
+    async def _ai_extract_field_from_html_element(self, element_html: str, field_description: str, context_url: str) -> Optional[str]:
+        if not self.ai_client:
+            log.warning(f"AI client not available. Cannot extract '{field_description}' from HTML element on {context_url}.")
+            return None
+        try:
+            max_html_len = 8000
+            truncated_html = element_html[:max_html_len]
+            if len(element_html) > max_html_len:
+                truncated_html += "... [HTML truncated]"
+            prompt = (
+                f"You are an expert web data extractor. From the following HTML snippet of a product item on the webpage {context_url}, "
+                f"extract the '{field_description}'. Provide only the extracted value itself with no additional explanation, labels, or commentary. "
+                f"If the value is not found, respond with 'NOT_FOUND'.\n\n"
+                f"HTML Snippet:\n{truncated_html}"
+            )
+            response = await asyncio.to_thread(
+                 self.ai_client.chat.completions.create,
+                 model=self.openai_model,
+                 messages=[{"role": "user", "content": prompt}],
+                 temperature=0.0,
+                 max_tokens=150
+            )
+            extracted_value = response.choices[0].message.content.strip()
+            if extracted_value.upper() in ["NOT_FOUND", "NOT FOUND", "NONE", "N/A", "NO VALUE FOUND", "NO DATA FOUND", ""]:
+                log.info(f"AI indicated '{field_description}' was not found on {context_url}.")
+                return None
+            log.info(f"AI extracted '{field_description}' on {context_url}: '{extracted_value[:60]}...'")
+            return extracted_value
+        except Exception as e:
+            log.error(f"AI HTML element extraction for '{field_description}' on {context_url} failed: {e}")
+            return None
+
+    async def extract_title(self, element_soup: BeautifulSoup, element_html: str, context_url: str) -> Optional[str]:
+        selectors_config = self._get_selectors_for_domain(context_url)
+        title_selectors = selectors_config.get("title", [])
+        title = self._extract_with_selector(element_soup, title_selectors)
+        if not title:
+            for attr_name 

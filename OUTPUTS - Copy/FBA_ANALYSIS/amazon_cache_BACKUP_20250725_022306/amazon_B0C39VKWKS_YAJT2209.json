@@ -1,0 +1,166 @@
+oducts": 2,
+        "supplier_cache_control.cache_modes.conservative.force_validation": True,
+        "system.max_products": 10,
+        "system.max_products_per_category": 5
+    }
+    
+    applied_changes, verification = apply_toggle_configuration(config_changes)
+    
+    # Verify changes were applied
+    print("\n🔍 Configuration Verification:")
+    for key, verify_data in verification.items():
+        status = "✅" if verify_data['verified'] else "❌"
+        print(f"  {status} {key}: expected {verify_data['expected']}, got {verify_data['actual']}")
+    
+    # Run experiment
+    log_file, runtime = run_experiment_with_timeout(experiment_name, 120)
+    
+    # Analyze results
+    results = analyze_experiment_results(experiment_name, log_file, config_changes)
+    
+    return results
+
+def test_hybrid_processing():
+    """Test hybrid processing toggles with rigorous evidence"""
+    experiment_number = 3
+    experiment_name = "hybrid_processing"
+    
+    print(f"\n🧪 EXPERIMENT {experiment_number}: HYBRID PROCESSING")
+    print("=" * 60)
+    
+    # Create archives
+    archive_results = create_experiment_archive(experiment_number, experiment_name)
+    
+    # Clear state
+    cleared_files = clear_processing_state()
+    
+    # Apply configuration
+    config_changes = {
+        "hybrid_processing.enabled": True,
+        "hybrid_processing.switch_to_amazon_after_categories": 2,
+        "hybrid_processing.processing_modes.sequential.enabled": False,
+        "hybrid_processing.processing_modes.chunked.enabled": True,
+        "hybrid_processing.processing_modes.chunked.chunk_size_categories": 3,
+        "hybrid_processing.processing_modes.balanced.enabled": False,
+        "hybrid_processing.chunked.enabled": True,
+        "hybrid_processing.chunked.chunk_size_categories": 3,
+        "system.max_products": 15,
+        "system.max_products_per_category": 5
+    }
+    
+    applied_changes, verification = apply_toggle_configuration(config_changes)
+    
+    # Verify changes were applied
+    print("\n🔍 Configuration Verification:")
+    for key, verify_data in verification.items():
+        status = "✅" if verify_data['verified'] else "❌"
+        print(f"  {status} {key}: expected {verify_data['expected']}, got {verify_data['actual']}")
+    
+    # Run experiment
+    log_file, runtime = run_experiment_with_timeout(experiment_name, 120)
+    
+    # Analyze results
+    results = analyze_experiment_results(experiment_name, log_file, config_changes)
+    
+    return results
+
+def test_batch_synchronization():
+    """Test batch synchronization toggles with rigorous evidence"""
+    experiment_number = 4
+    experiment_name = "batch_synchronization"
+    
+    print(f"\n🧪 EXPERIMENT {experiment_number}: BATCH SYNCHRONIZATION")
+    print("=" * 60)
+    
+    # Create archives
+    archive_results = create_experiment_archive(experiment_number, experiment_name)
+    
+    # Clear state
+    cleared_files = clear_processing_state()
+    
+    # Apply configuration
+    config_changes = {
+        "batch_synchronization.enabled": True,
+        "batch_synchronization.synchronize_all_batch_sizes": True,
+        "batch_synchronization.target_batch_size": 4,
+        "system.supplier_extraction_batch_size": 4,
+        "system.linking_map_batch_size": 4,
+        "system.financial_report_batch_size": 4,
+        "system.max_products_per_cycle": 4,
+        "system.max_products": 16,
+        "system.max_products_per_category": 4
+    }
+    
+    applied_changes, verification = apply_toggle_configuration(config_changes)
+    
+    # Verify changes were applied
+    print("\n🔍 Configuration Verification:")
+    for key, verify_data in verification.items():
+        status = "✅" if verify_data['verified'] else "❌"
+        print(f"  {status} {key}: expected {verify_data['expected']}, got {verify_data['actual']}")
+    
+    # Run experiment
+    log_file, runtime = run_experiment_with_timeout(experiment_name, 120)
+    
+    # Analyze results
+    results = analyze_experiment_results(experiment_name, log_file, config_changes)
+    
+    return results
+
+def main():
+    """Run all rigorous toggle tests"""
+    print("🔬 RIGOROUS TOGGLE TESTING WITH EVIDENCE COLLECTION")
+    print("=" * 70)
+    
+    all_results = {}
+    
+    # Run each test
+    tests = [
+        test_supplier_extraction_progress,
+        test_supplier_cache_control,
+        test_hybrid_processing,
+        test_batch_synchronization
+    ]
+    
+    for test_func in tests:
+        try:
+            result = test_func()
+            all_results[result['experiment']] = result
+            
+            # Brief pause between tests
+            time.sleep(5)
+            
+        except Exception as e:
+            print(f"❌ Test failed: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    # Save comprehensive results
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    results_file = f"config/rigorous_toggle_test_results_{timestamp}.json"
+    
+    with open(results_file, 'w') as f:
+        json.dump(all_results, f, indent=2, default=str)
+    
+    print(f"\n📊 Results saved to: {results_file}")
+    
+    # Generate evidence summary
+    print("\n📋 EVIDENCE SUMMARY")
+    print("=" * 40)
+    
+    for experiment_name, result in all_results.items():
+        print(f"\n🧪 {experiment_name.upper()}:")
+        
+        # File evidence
+        for file_type, evidence in result.get('file_evidence', {}).items():
+            if evidence.get('exists'):
+                print(f"  📁 {file_type}: {evidence['size']} bytes, {evidence['modified']}")
+                if 'content_analysis' in evidence:
+                    for key, value in evidence['content_analysis'].items():
+                        print(f"    - {key}: {value}")
+            else:
+                print(f"  ❌ {file_type}: Not found")
+        
+        # Configuration verification
+        config_changes = result.get('config_changes', {})
+     

@@ -1,0 +1,132 @@
+"""
+Product Data Validator for Amazon FBA Agent System
+Validates extracted product data against expected formats and business rules.
+"""
+
+import re
+import logging
+from typing import Dict, Any, List, Optional, Tuple
+from datetime import datetime
+
+log = logging.getLogger(__name__)
+
+
+class ProductValidator:
+    """Validates product data for quality and completeness."""
+    
+    def __init__(self):
+        """Initialize validator with validation rules."""
+        self.required_fields = {
+            'supplier': ['title', 'price', 'url'],
+            'amazon': ['title', 'asin', 'current_price'],
+            'combined': ['supplier_product_info', 'amazon_product_info']
+        }
+        
+        self.price_limits = {
+            'min': 0.01,
+            'max': 100000.00
+        }
+        
+        self.weight_limits = {
+            'min_pounds': 0.01,
+            'max_pounds': 150.0  # FBA limit
+        }
+        
+        self.dimension_limits = {
+            'min_inches': 0.1,
+            'max_length_inches': 108.0,  # FBA oversize limit
+            'max_girth_inches': 165.0  # Length + 2*(Width + Height)
+        }
+        
+        # Restricted keywords for FBA
+        self.restricted_keywords = [
+            # Hazmat
+            'battery', 'batteries', 'lithium', 'flammable', 'explosive',
+            'chemical', 'hazardous', 'toxic', 'corrosive', 'radioactive',
+            
+            # Restricted categories
+            'weapon', 'knife', 'gun', 'ammunition', 'tobacco', 'vape',
+            'e-cigarette', 'alcohol', 'drug', 'pharmaceutical', 'prescription',
+            
+            # Adult content
+            'adult', 'sex', 'erotic', 'pornographic',
+            
+            # Counterfeit risks
+            'replica', 'fake', 'copy', 'knockoff', 'imitation'
+        ]
+
+    def validate_supplier_product(self, product_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Validate supplier product data.
+        
+        Args:
+            product_data: Supplier product data dict
+            
+        Returns:
+            Validation result with status and issues
+        """
+        validation_result = {
+            'valid': True,
+            'issues': [],
+            'warnings': [],
+            'data_quality_score': 100.0
+        }
+        
+        # Check required fields
+        for field in self.required_fields['supplier']:
+            if field not in product_data or not product_data[field]:
+                validation_result['valid'] = False
+                validation_result['issues'].append(f"Missing required field: {field}")
+                validation_result['data_quality_score'] -= 20
+        
+        # Validate title
+        title_validation = self._validate_text_field(product_data.get('title'), "Supplier Title", min_length=5, max_length=500, restricted_keywords_check=True)
+        if not title_validation['valid']:
+            validation_result['valid'] = False
+            validation_result['issues'].extend(title_validation['issues'])
+        validation_result['warnings'].extend(title_validation.get('warnings', []))
+        
+        # Validate price
+        if 'price' in product_data:
+            price_validation = self._validate_price(product_data['price'])
+            if not price_validation['valid']:
+                validation_result['valid'] = False
+                validation_result['issues'].extend(price_validation['issues'])
+            validation_result['warnings'].extend(price_validation.get('warnings', []))
+        
+        # Validate URL
+        if 'url' in product_data:
+            url_validation = self._validate_url(product_data['url'])
+            if not url_validation['valid']:
+                validation_result['valid'] = False
+                validation_result['issues'].extend(url_validation['issues'])
+        
+        # Validate identifiers if present
+        if product_data.get('ean'):
+            ean_validation = self._validate_ean(product_data['ean'])
+            if not ean_validation['valid']:
+                validation_result['warnings'].append(f"Invalid Supplier EAN: {ean_validation['issue']}")
+                validation_result['data_quality_score'] -= 5
+        
+        # Validate description
+        desc_validation = self._validate_text_field(product_data.get('description'), "Supplier Description", min_length=10, max_length=3000, allow_empty=True, restricted_keywords_check=True)
+        if not desc_validation['valid']: # Not a hard fail for description
+            validation_result['warnings'].extend(desc_validation['issues'])
+            validation_result['data_quality_score'] -= 5
+        validation_result['warnings'].extend(desc_validation.get('warnings', []))
+
+        # Validate images
+        img_validation = self._validate_image_urls(product_data.get('images'), "Supplier Images")
+        if not img_validation['valid']: # Not a hard fail for images
+            validation_result['warnings'].extend(img_validation['issues'])
+            validation_result['data_quality_score'] -= 5
+        validation_result['warnings'].extend(img_validation.get('warnings', []))
+        
+        # Validate brand
+        brand_validation = self._validate_text_field(product_data.get('brand'), "Supplier Brand", min_length=1, max_length=100, allow_empty=True)
+        if not brand_validation['valid']:
+             validation_result['warnings'].extend(brand_validation['issues']) # Not a hard fail
+        validation_result['warnings'].extend(brand_validation.get('warnings', []))
+
+        # Validate model number
+        model_validation = self._validate_text_fiel

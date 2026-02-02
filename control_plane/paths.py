@@ -72,6 +72,14 @@ class ControlPlanePaths:
     def system_index_path(self) -> Path:
         return self.index_dir / "system_index.json"
 
+    @property
+    def prompts_dir(self) -> Path:
+        return self.repo_root / "control_plane" / "prompts"
+
+    @property
+    def system_instructions_path(self) -> Path:
+        return self.prompts_dir / "SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md"
+
 
 def get_repo_root() -> Path:
     # control_plane/paths.py => repo root is parent

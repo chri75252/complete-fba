@@ -1,0 +1,200 @@
+"""
+FBA Financial Calculator
+========================
+Calculates ROI, net‑profit, breakeven price and profit margin by combining
+supplier data (from OUTPUTS/FBA_ANALYSIS/cache) with Amazon scrape data
+(from OUTPUTS/AMAZON_SCRAPE).
+
+* VAT rate hard‑coded to 20 % (UK seller).
+* Prep cost (ex‑VAT) default 0.50 £ / unit.
+* Shipping cost (ex‑VAT) default 0.00 £ / unit.
+* If FBA and Referral fees are missing in Keepa product details, you can supply fallback values.
+* Results are saved to the financial reports directory in OUTPUTS/FBA_ANALYSIS/financial_reports
+"""
+
+import os
+import json
+import pandas as pd
+from datetime import datetime
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
+
+# Paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SUPPLIER_CACHE = os.path.join(BASE_DIR, "OUTPUTS", "cached_products", "Clearance King UK_products_cache.json")
+AMAZON_SCRAPE_DIR = os.path.join(BASE_DIR, "OUTPUTS", "FBA_ANALYSIS", "amazon_cache")
+OUTPUT_DIR = os.path.join(BASE_DIR, "OUTPUTS", "FBA_ANALYSIS")
+FINANCIAL_REPORTS_DIR = os.path.join(OUTPUT_DIR, "financial_reports")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(FINANCIAL_REPORTS_DIR, exist_ok=True)
+
+# Load configuration from system_config.json
+def load_system_config():
+    """Load system configuration including VAT and fee settings."""
+    try:
+        config_path = os.path.join(BASE_DIR, "config", "system_config.json")
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        return config
+    except Exception as e:
+        log.warning(f"Failed to load system config: {e}, using defaults")
+        return {}
+
+# Load configuration
+_config = load_system_config()
+
+# Parameters from config with fallbacks
+VAT_RATE = _config.get("amazon", {}).get("vat_rate", 0.2)
+PREP_COST = _config.get("amazon", {}).get("fba_fees", {}).get("prep_house_fixed_fee", 0.55)  # Updated default to 0.55
+SHIP_COST = 0.0
+SUPPLIER_PRICES_INCLUDE_VAT = _config.get("supplier", {}).get("prices_include_vat", True)
+
+# Global variable to cache the linking map
+_linking_map = None
+
+# Define persistent linking map path with relative path
+LINKING_MAP_PATH = os.path.join(BASE_DIR, "OUTPUTS", "FBA_ANALYSIS", "Linking map", "linking_map.json")
+
+def load_linking_map():
+    """Load the persistent linking map file for enhanced product matching."""
+    global _linking_map
+    if _linking_map is not None:
+        return _linking_map
+    
+    # First try the persistent linking map
+    if os.path.exists(LINKING_MAP_PATH):
+        try:
+            with open(LINKING_MAP_PATH, 'r', encoding='utf-8') as f:
+                _linking_map = json.load(f)
+            print(f"Loaded persistent linking map with {len(_linking_map)} entries")
+            return _linking_map
+        except (json.JSONDecodeError, UnicodeDecodeError) as e:
+            print(f"Error reading persistent linking map: {e}")
+    
+    # Fallback: Look for linking map files in the output directory (legacy)
+    linking_files = []
+    
+    if os.path.exists(OUTPUT_DIR):
+        for fname in os.listdir(OUTPUT_DIR):
+            if fname.startswith("linking_map_") and fname.endswith(".json"):
+                linking_files.append(os.path.join(OUTPUT_DIR, fname))
+    
+    if not linking_files:
+        print("No linking map found - using fallback lookup methods")
+        _linking_map = []
+        return _linking_map
+    
+    # Use the most recent linking map
+    latest_map = max(linking_files, key=os.path.getmtime)
+    try:
+        with open(latest_map, 'r', encoding='utf-8') as f:
+            _linking_map = json.load(f)
+        print(f"Loaded legacy linking map: {latest_map} with {len(_linking_map)} entries")
+        return _linking_map
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        print(f"Error reading legacy linking map {latest_map}: {e}")
+        _linking_map = []
+        return _linking_map
+
+def find_amazon_json_by_linking_map(ean, title, url):
+    """Use linking map to find Amazon data for supplier product."""
+    linking_map = load_linking_map()
+    
+    # Create possible identifiers for this supplier product
+    possible_identifiers = []
+    if ean:
+        possible_identifiers.append(f"EAN_{ean}")
+    if url:
+        possible_identifiers.append(f"URL_{url}")
+    
+    # Search linking map for matching supplier product
+    for link_record in linking_map:
+        supplier_id = link_record.get("supplier_product_identifier", "")
+        
+        # Check if this record matches our supplier product
+        if any(identifier == supplier_id for identifier in possible_identifiers):
+            asin = link_record.get("chosen_amazon_asin")
+            if asin:
+                # Try to find the Amazon data file for this ASIN
+                amazon_data = find_amazon_json_by_asin(asin, link_record.get("amazon_ean_on_page"))
+                if amazon_data:
+                    print(f"Found Amazon data via linking map: {supplier_id} -> {asin}")
+                    return amazon_data
+    
+    return None
+
+def find_amazon_json_by_asin(asin, ean=None):
+    """Find Amazon JSON data by ASIN, with optional EAN for enhanced filename matching."""
+    if not asin:
+        return None
+    
+    # Try EAN-enhanced filename first if EAN is available
+    if ean:
+        ean_filename = f"amazon_{asin}_{ean}.json"
+        ean_path = os.path.join(AMAZON_SCRAPE_DIR, ean_filename)
+        if os.path.exists(ean_path):
+            try:
+                with open(ean_path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                print(f"Error reading {ean_filename}: {e}")
+    
+    # Fallback to standard ASIN filename
+    standard_filename = f"amazon_{asin}.json"
+    standard_path = os.path.join(AMAZON_SCRAPE_DIR, standard_filename)
+    if os.path.exists(standard_path):
+        try:
+            with open(standard_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, UnicodeDecodeError) as e:
+            print(f"Error reading {standard_filename}: {e}")
+    
+    # Final fallback: search for any file containing the ASIN
+    for fname in os.listdir(AMAZON_SCRAPE_DIR):
+        if asin in fname and fname.endswith('.json'):
+            try:
+                with open(os.path.join(AMAZON_SCRAPE_DIR, fname), 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                print(f"Error reading {fname}: {e}")
+                continue
+    
+    return None
+
+# Helper to find Amazon data file by ASIN, EAN, or fuzzy title
+
+def find_amazon_json(ean, asin, title, url=None):
+    """
+    Enhanced Amazon data lookup using linking map as primary method.
+    Falls back to legacy methods if linking map fails.
+    """
+    # Method 1: Use linking map (primary method for Fix 2.6)
+    amazon_data = find_amazon_json_by_linking_map(ean, title, url)
+    if amazon_data:
+        return amazon_data
+    
+    # Method 2: Direct ASIN lookup (if ASIN is provided)
+    if asin:
+        amazon_data = find_amazon_json_by_asin(asin, ean)
+        if amazon_data:
+            return amazon_data
+    
+    # Method 3: Legacy fallback methods for backwards compatibility
+    # First try exact match for amazon_{ASIN}.json format
+    if asin:
+        exact_match_filename = f"amazon_{asin}.json"
+        exact_match_path = os.path.join(AMAZON_SCRAPE_DIR, exact_match_filename)
+        if os.path.exists(exact_match_path):
+            try:
+                with open(exact_match_path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                print(f"Error reading {exact_match_filename}: {e}")
+    
+    # Fallback 1: Try any other filename containing EAN or ASIN
+    for fname in os.listdir(AMAZON_SCRAPE_DIR):
+        if (asin and asin in fname) or (ean and ean in fname):
+            try:
+          

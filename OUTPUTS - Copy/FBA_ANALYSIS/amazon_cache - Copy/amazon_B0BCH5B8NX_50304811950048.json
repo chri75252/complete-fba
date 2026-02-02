@@ -1,0 +1,97 @@
+return {
+            'original_value': parsed_value,
+            'original_unit': parsed_unit,
+            'pounds': round(pounds, 3),
+            'kilograms': round(pounds / self.weight_conversions.get('kg', 2.20462), 3), # Safe get
+            'ounces': round(pounds * 16, 2),
+            'grams': round(pounds * 453.59237, 1)
+        }
+
+    def normalize_dimensions(self, dim_input: Union[str, Dict[str, Any], List[float], Tuple[float, ...]]) -> Optional[Dict[str, Any]]:
+        """
+        Normalize dimensions to a standard dictionary format.
+        """
+        if dim_input is None:
+            return None
+
+        l_in: Optional[float] = None
+        w_in: Optional[float] = None
+        h_in: Optional[float] = None
+        original_l: Optional[float] = None
+        original_w: Optional[float] = None
+        original_h: Optional[float] = None
+        original_unit: Optional[str] = None
+
+        if isinstance(dim_input, dict):
+            inches_data = dim_input.get('inches')
+            if isinstance(inches_data, (tuple, list)) and len(inches_data) == 3 and all(isinstance(d, (int,float)) for d in inches_data):
+                l_in, w_in, h_in = map(float, inches_data)
+                original_l, original_w, original_h = dim_input.get('length'), dim_input.get('width'), dim_input.get('height')
+                original_unit = dim_input.get('unit')
+            elif all(k in dim_input for k in ['length', 'width', 'height']) and dim_input.get('unit'):
+                try:
+                    original_l, original_w, original_h = float(dim_input['length']), float(dim_input['width']), float(dim_input['height'])
+                    original_unit = str(dim_input['unit'])
+                    l_in = self.convert_dimension_to_inches(original_l, original_unit)
+                    w_in = self.convert_dimension_to_inches(original_w, original_unit)
+                    h_in = self.convert_dimension_to_inches(original_h, original_unit)
+                except ValueError:
+                    log.warning(f"Could not convert dimension values in dict: {dim_input}")
+                    return self._empty_dimensions()
+            else:
+                log.debug(f"Input dimension dict malformed: {dim_input}")
+                return self._empty_dimensions()
+        elif isinstance(dim_input, (list, tuple)) and len(dim_input) == 3 and all(isinstance(d, (int, float)) for d in dim_input):
+            l_in, w_in, h_in = map(float, dim_input)
+            original_l, original_w, original_h = l_in, w_in, h_in
+            original_unit = 'in' # Assume inches
+        elif isinstance(dim_input, str):
+            parsed_data = self.parse_dimension_string(dim_input)
+            if parsed_data and isinstance(parsed_data.get('inches'), (tuple, list)) and len(parsed_data['inches']) == 3:
+                l_in, w_in, h_in = map(float, parsed_data['inches'])
+                original_l, original_w, original_h = parsed_data.get('length'), parsed_data.get('width'), parsed_data.get('height')
+                original_unit = parsed_data.get('unit')
+            else:
+                log.debug(f"Could not parse dimension string: '{dim_input}'")
+                return self._empty_dimensions()
+        else:
+            log.warning(f"Unsupported dimension input type: {type(dim_input)}")
+            return self._empty_dimensions()
+
+        if not all(d is not None and d > 0 for d in [l_in, w_in, h_in]):
+            log.debug(f"Normalized dimensions resulted in non-positive values: L={l_in}, W={w_in}, H={h_in} from input {dim_input}")
+            return self._empty_dimensions()
+
+        cm_conversion_factor = self.dimension_conversions.get('cm', 0.393701) / self.dimension_conversions.get('in', 1.0)
+
+        return {
+            'original': {
+                'length': original_l, 'width': original_w, 'height': original_h, 'unit': original_unit
+            },
+            'inches': {
+                'length': round(l_in, 2), 'width': round(w_in, 2), 'height': round(h_in, 2)
+            },
+            'centimeters': {
+                'length': round(l_in * cm_conversion_factor, 1),
+                'width': round(w_in * cm_conversion_factor, 1),
+                'height': round(h_in * cm_conversion_factor, 1)
+            },
+            'volume_cubic_inches': round(l_in * w_in * h_in, 2),
+            'volume_cubic_feet': round((l_in * w_in * h_in) / 1728, 3) # 1728 cubic inches in a cubic foot
+        }
+
+    def normalize_boolean(self, value: Any) -> Optional[bool]:
+        """Converts various string/int inputs to boolean."""
+        if value is None:
+            return None # Or False, depending on desired strictness
+        if isinstance(value, bool):
+            return value
+        
+        val_str = str(value).lower().strip()
+        if val_str in ['true', 'yes', '1', 'on', 'enabled', 'active', 'in stock', 'available']:
+            return True
+        if val_str in ['false', 'no', '0', 'off', 'disabled', 'inactive', 'out of stock', 'unavailable']:
+            return False
+        
+        log.debug(f"Could not normalize boolean from value: '{value}'")
+        return None # Or raise error/return 

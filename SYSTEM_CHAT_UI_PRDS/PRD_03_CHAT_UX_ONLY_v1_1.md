@@ -103,6 +103,19 @@ Rules:
 
 ## 4. Local LLM (Qwen3‑8B / Ollama) Reliability Requirements
 
+### 4.0 Planner System Instructions
+
+The chat planner’s instructions are currently assembled inline in:
+- `control_plane/chat_orchestrator.py` (`build_prompt(...)`)
+
+If you want a dedicated, editable instruction file (recommended once behavior stabilizes), use:
+- `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
+
+The intention is:
+- keep the stable “policy” in a file
+- keep dynamic schemas and context (tools + system index + RAG context) assembled at runtime
+
+
 ### 4.1 Planner must be schema-constrained
 
 Tool selection must be returned as structured JSON that can be validated.
@@ -172,6 +185,30 @@ RAG can be used to improve tool selection for:
 RAG must never bypass confirmation gating or execute tools.
 
 ---
+
+## 7. Operator Cheat Sheet (avoid wrong tool routing)
+
+The planner is optimized for deterministic tool calls. Still, phrasing matters.
+
+**Use these phrases when you want a sandboxed workflow run (category analysis)**
+- "run sandboxed category analysis" + the category URL(s)
+- "enqueue sandbox run for category" + the category URL(s)
+- "analyze category URL(s) and generate sandbox linking map + financial report"
+- "run workflow for these categories" + URLs
+
+**Use these phrases when you want to *refresh Amazon for a product list***
+- "run sandboxed product list refresh" + product list file path
+- "refresh Amazon data for this product list" + file path
+- "enqueue product list refresh" + file path
+
+**Use these phrases when you want a read-only lookup (no run)**
+- "show existing linking map" + supplier domain
+- "find linking entries" + supplier domain + filters (ean/url/asin)
+- "show cached products" + supplier domain
+
+**Avoid ambiguous phrasing**
+- Avoid: "analyze this supplier" (could route to read tools)
+- Prefer: explicitly include "sandbox run" or "enqueue" when you want a job queued.
 
 ## 7. Test Plan
 

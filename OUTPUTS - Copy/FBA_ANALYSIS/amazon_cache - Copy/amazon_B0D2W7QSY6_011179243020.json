@@ -1,0 +1,234 @@
+# Troubleshooting Guide - Amazon FBA Agent System v3.7+
+
+**Last Updated:** August 6, 2025  
+**Version:** v3.7+  
+**Platform Support:** Windows 10/11, Linux, WSL2  
+
+---
+
+## 🎯 **OVERVIEW**
+
+This comprehensive troubleshooting guide covers common issues, solutions, and diagnostic procedures for the Amazon FBA Agent System v3.7+. The guide is organized by problem category with step-by-step resolution procedures.
+
+---
+
+## 🚨 **QUICK DIAGNOSTIC CHECKLIST**
+
+Before diving into specific issues, run this quick diagnostic:
+
+```bash
+# 1. Test system compatibility
+python test_windows_compatibility.py
+
+# 2. Check Chrome debug port
+curl http://localhost:9222/json/version
+
+# 3. Verify Python dependencies
+python -c "import playwright, aiohttp, beautifulsoup4, psutil; print('✅ Dependencies OK')"
+
+# 4. Check configuration
+python -c "import json; json.load(open('config/system_config.json')); print('✅ Config OK')"
+
+# 5. Test memory management
+python -c "from utils.windows_memory_manager import WindowsMemoryManager; print('✅ Memory Manager OK')"
+```
+
+**Expected Output:**
+```
+✅ Dependencies OK
+✅ Config OK
+✅ Memory Manager OK
+🎉 ALL TESTS PASSED - System is ready!
+```
+
+---
+
+## 🌐 **BROWSER & CHROME ISSUES**
+
+### **Issue: Chrome Debug Port Not Accessible**
+
+**Symptoms:**
+- Error: "Failed to connect to Chrome on port 9222"
+- Browser automation fails to start
+- Connection timeout errors
+
+**Diagnosis:**
+```bash
+# Check if Chrome is running with debug port
+curl http://localhost:9222/json/version
+
+# Check if port is in use
+netstat -an | grep 9222  # Linux
+netstat -an | findstr 9222  # Windows
+```
+
+**Solutions:**
+
+#### **Windows Solution:**
+```cmd
+# 1. Kill existing Chrome processes
+taskkill /F /IM chrome.exe
+
+# 2. Start Chrome with debug port
+chrome --remote-debugging-port=9222 --user-data-dir=C:\temp\chrome-debug
+
+# 3. Verify connection
+curl http://localhost:9222/json/version
+```
+
+#### **Linux/WSL Solution:**
+```bash
+# 1. Kill existing Chrome processes
+pkill chrome
+
+# 2. Start Chrome with debug port
+google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug --no-sandbox &
+
+# 3. Verify connection
+curl http://localhost:9222/json/version
+```
+
+### **Issue: Browser Memory Issues**
+
+**Symptoms:**
+- Chrome consuming excessive memory (>3GB)
+- System becomes unresponsive
+- Browser restart failures
+
+**Diagnosis:**
+```bash
+# Check Chrome memory usage
+# Windows:
+tasklist /FI "IMAGENAME eq chrome.exe" /FO TABLE
+
+# Linux:
+ps aux | grep chrome | awk '{sum+=$6} END {print "Chrome Memory: " sum/1024 " MB"}'
+```
+
+**Solutions:**
+
+1. **Automatic Memory Management (Built-in):**
+   - System automatically restarts Chrome at 3GB usage
+   - Monitor logs: `tail -f logs/health/memory_monitoring_*.log`
+
+2. **Manual Memory Cleanup:**
+   ```bash
+   # Force browser restart
+   python -c "
+   import asyncio
+   from utils.browser_manager import BrowserManager
+   async def restart():
+       bm = BrowserManager.get_instance()
+       await bm.restart_browser_gracefully()
+   asyncio.run(restart())
+   "
+   ```
+
+### **Issue: Browser Circuit Breaker Activation**
+
+**Symptoms:**
+- "Circuit breaker OPENED" messages in logs
+- Browser operations suspended
+- Automatic recovery attempts
+
+**Diagnosis:**
+```bash
+# Check circuit breaker status
+grep "Circuit Breaker" logs/health/browser_health_*.log | tail -10
+```
+
+**Solutions:**
+
+1. **Wait for Automatic Recovery:**
+   - Circuit breaker opens after 3 failures
+   - Automatically recovers after 5 minutes
+   - Monitor: `tail -f logs/health/circuit_breaker_*.log`
+
+2. **Manual Reset:**
+   ```python
+   # Reset circuit breaker
+   from utils.browser_circuit_breaker import BrowserCircuitBreaker
+   breaker = BrowserCircuitBreaker()
+   breaker.reset()
+   print("Circuit breaker reset")
+   ```
+
+---
+
+## 💾 **MEMORY MANAGEMENT ISSUES**
+
+### **Issue: High Memory Usage**
+
+**Symptoms:**
+- System memory >85%
+- Python process consuming >3GB
+- Smart memory clearing not working
+
+**Diagnosis:**
+```bash
+# Check system memory
+# Windows:
+wmic OS get TotalVisibleMemorySize,FreePhysicalMemory
+
+# Linux:
+free -h
+
+# Check Python memory
+python -c "
+import psutil
+proc = psutil.Process()
+print(f'Python Memory: {proc.memory_info().rss / 1024 / 1024:.1f} MB')
+"
+```
+
+**Solutions:**
+
+1. **Verify Smart Memory Management:**
+   ```bash
+   # Check if smart clearing is working
+   grep "SMART MEMORY CLEARED" logs/debug/*.log | tail -5
+   
+   # Expected: Clearing every ~500 products, keeping 100 recent
+   ```
+
+2. **Manual Memory Cleanup:**
+   ```python
+   # Force memory cleanup
+   from tools.passive_extraction_workflow_latest import PassiveExtractionWorkflow
+   workflow = PassiveExtractionWorkflow()
+   workflow.safe_memory_clear_with_file_fallback()
+   print("Memory cleared safely")
+   ```
+
+3. **Adjust Memory Thresholds:**
+   ```bash
+   # Edit .env file
+   echo "WINDOWS_MEMORY_WARNING_GB=3" >> .env
+   echo "WINDOWS_MEMORY_CRITICAL_GB=4" >> .env
+   echo "WINDOWS_MEMORY_EMERGENCY_GB=6" >> .env
+   ```
+
+### **Issue: WSL Memory Leak (Linux/WSL)**
+
+**Symptoms:**
+- VmmemWSL process consuming 13GB+
+- System becomes unresponsive
+- WSL memory not releasing
+
+**Diagnosis:**
+```bash
+# Check WSL memory usage
+wsl --list --verbose
+wsl --shutdown  # Test if this helps
+
+# Check VmmemWSL in Task Manager (Windows)
+```
+
+**Solutions:**
+
+1. **Automatic WSL Management (Built-in):**
+   - System monitors WSL memory automatically
+   - Triggers cleanup at 4GB/6GB/8GB thresholds
+   - Monitor: `tail -f logs/health/wsl_memory_*.log`
+
+2. **Manual WSL Mem

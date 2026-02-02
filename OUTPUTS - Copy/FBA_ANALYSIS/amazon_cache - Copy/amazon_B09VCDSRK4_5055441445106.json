@@ -1,0 +1,160 @@
+me__}")
+            return result
+
+        if not image_urls: 
+            result['warnings'].append(f"No {field_name} provided (optional field).")
+            return result
+
+        for i, url in enumerate(image_urls):
+            url_validation = self._validate_url(url)
+            if not url_validation['valid']:
+                result['valid'] = False 
+                result['issues'].append(f"Invalid URL for {field_name}[{i}]: {url_validation['issues'][0]}")
+            
+            if not re.search(r'\.(jpeg|jpg|gif|png|webp)(\?.*)?$', str(url), re.IGNORECASE): # Ensure url is str
+                result['warnings'].append(f"Image URL for {field_name}[{i}] ('{str(url)[:50]}...') does not have a common image extension.")
+        
+        return result
+
+    def _validate_extracted_weight(self, weight_data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Validate the structure and values of extracted weight data."""
+        result = {'valid': True, 'issues': [], 'warnings': []}
+        if weight_data is None:
+            result['warnings'].append("Weight data is missing (optional field)")
+            return result
+
+        if not isinstance(weight_data, dict):
+            result['valid'] = False
+            result['issues'].append(f"Weight data must be a dict, got {type(weight_data).__name__}")
+            return result
+
+        required_keys = ['value', 'unit', 'pounds']
+        missing_keys = [key for key in required_keys if key not in weight_data]
+        if missing_keys:
+            result['valid'] = False
+            result['issues'].append(f"Weight data missing key(s): {', '.join(missing_keys)}")
+        
+        if not result['valid']: return result
+
+        value = weight_data.get('value')
+        unit = weight_data.get('unit')
+        pounds = weight_data.get('pounds')
+
+        if not isinstance(value, (int, float)) or value <= 0:
+            result['valid'] = False
+            result['issues'].append(f"Weight value must be a positive number, got {value}")
+        if not isinstance(unit, str) or not unit.strip():
+            result['valid'] = False
+            result['issues'].append(f"Weight unit must be a non-empty string, got {unit}")
+        if not isinstance(pounds, (int, float)) or pounds <= 0:
+            result['valid'] = False
+            result['issues'].append(f"Weight in pounds must be a positive number, got {pounds}")
+        
+        if pounds < self.weight_limits['min_pounds']:
+            result['warnings'].append(f"Weight {pounds:.2f} lbs is below minimum {self.weight_limits['min_pounds']} lbs")
+        if pounds > self.weight_limits['max_pounds']:
+            result['valid'] = False 
+            result['issues'].append(f"Weight {pounds:.2f} lbs exceeds maximum {self.weight_limits['max_pounds']} lbs (FBA limit)")
+            
+        return result
+
+    def _validate_extracted_dimensions(self, dimension_data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Validate the structure and values of extracted dimension data."""
+        result = {'valid': True, 'issues': [], 'warnings': []}
+        if dimension_data is None:
+            result['warnings'].append("Dimension data is missing (optional field)")
+            return result
+
+        if not isinstance(dimension_data, dict):
+            result['valid'] = False
+            result['issues'].append(f"Dimension data must be a dict, got {type(dimension_data).__name__}")
+            return result
+
+        required_keys = ['length', 'width', 'height', 'unit', 'inches']
+        missing_keys = [key for key in required_keys if key not in dimension_data]
+        if missing_keys:
+            result['valid'] = False
+            result['issues'].append(f"Dimension data missing key(s): {', '.join(missing_keys)}")
+
+        if not result['valid']: return result
+
+        length = dimension_data.get('length')
+        width = dimension_data.get('width')
+        height = dimension_data.get('height')
+        unit = dimension_data.get('unit')
+        inches_tuple = dimension_data.get('inches')
+
+        dim_values = {'length': length, 'width': width, 'height': height}
+        for name, val in dim_values.items():
+            if not isinstance(val, (int, float)) or val <= 0:
+                result['valid'] = False
+                result['issues'].append(f"Dimension {name} must be a positive number, got {val}")
+        
+        if not isinstance(unit, str) or not unit.strip():
+            result['valid'] = False
+            result['issues'].append(f"Dimension unit must be a non-empty string, got {unit}")
+
+        if not isinstance(inches_tuple, tuple) or len(inches_tuple) != 3 or not all(isinstance(d, (int, float)) and d > 0 for d in inches_tuple):
+            result['valid'] = False
+            result['issues'].append(f"Dimensions in inches must be a tuple of 3 positive numbers, got {inches_tuple}")
+        else:
+            l_in, w_in, h_in = inches_tuple
+            dims_sorted = sorted([l_in, w_in, h_in])
+            longest_side = dims_sorted[2]
+            median_side = dims_sorted[1]
+            shortest_side = dims_sorted[0]
+
+            if longest_side > self.dimension_limits['max_length_inches']:
+                result['valid'] = False 
+                result['issues'].append(f"Longest dimension {longest_side:.2f} inches exceeds FBA max length {self.dimension_limits['max_length_inches']} inches")
+            
+            girth = longest_side + 2 * (median_side + shortest_side)
+            if girth > self.dimension_limits['max_girth_inches']:
+                result['valid'] = False 
+                result['issues'].append(f"Girth {girth:.2f} inches (L + 2*(W+H)) exceeds FBA max girth {self.dimension_limits['max_girth_inches']} inches")
+
+            for d_val, d_name_suffix in zip(inches_tuple, ["length", "width", "height"]):
+                 dim_name = f"{d_name_suffix}_inches"
+                 if d_val < self.dimension_limits['min_inches']:
+                     result['warnings'].append(f"Dimension {dim_name} {d_val:.2f} inches is below minimum {self.dimension_limits['min_inches']} inches")
+        return result
+
+    def generate_validation_report(self, validation_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Generate a summary report from multiple validation results.
+        
+        Args:
+            validation_results: List of validation results
+            
+        Returns:
+            Summary report
+        """
+        total = len(validation_results)
+        valid_count = sum(1 for r in validation_results if r.get('valid', False)) # Use .get for safety
+        
+        all_issues: List[str] = []
+        all_warnings: List[str] = []
+        quality_scores: List[float] = []
+        
+        for res in validation_results:
+            all_issues.extend(res.get('issues', []))
+            all_warnings.extend(res.get('warnings', []))
+            quality_scores.append(res.get('data_quality_score', 0.0)) # Default to 0.0
+        
+        issue_counts: Dict[str, int] = {}
+        for issue in all_issues:
+            issue_counts[issue] = issue_counts.get(issue, 0) + 1
+        
+        warning_counts: Dict[str, int] = {}
+        for warning in all_warnings:
+            warning_counts[warning] = warning_counts.get(warning, 0) + 1
+        
+        report = {
+            'timestamp': datetime.now().isoformat(),
+            'total_products_validated': total,
+            'valid_products_count': valid_count,
+            'invalid_products_count': total - valid_count,
+            'overall_validation_rate_percent': (valid_count / total * 100) if total > 0 else 0,
+            'average_data_quality_score': sum(quality_scores) / len(quality_scores) if quality_scores else 0,
+            'common_issues_top_10': sorted(issue_counts.items(), key=lambda x: x[1], reverse=True)[:10],
+            'common_warnings_top_10': sorted(warning_counts

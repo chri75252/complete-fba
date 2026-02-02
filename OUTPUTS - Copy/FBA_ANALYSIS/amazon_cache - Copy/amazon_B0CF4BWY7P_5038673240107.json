@@ -1,0 +1,328 @@
+able selectors that work consistently across product pages.",
+    "extraction_targets": {
+      "product_data": [
+        "price",
+        "title",
+        "ean",
+        "barcode",
+        "image",
+        "description",
+        "out_of_stock"
+      ],
+      "navigation": [
+        "next_page",
+        "category_links",
+        "breadcrumbs"
+      ],
+      "pagination": [
+        "next_page",
+        "previous_page",
+        "page_numbers"
+      ],
+      "filtering": [
+        "price_filter",
+        "category_filter",
+        "search_box",
+        "products_per_page",
+        "product limiter"
+      ],
+      "interaction": [
+        "add_to_cart",
+        "buy_now",
+        "product_link"
+      ]
+    },
+    "ai_model": "gpt-4.1-mini-2025-04-14",
+    "max_tokens": 2000,
+    "temperature": 0.1,
+    "fallback_selectors": {
+      "enabled": false,
+      "use_heuristic_backup": false
+    }
+  },
+  "discovery_assistance": {
+    "enabled": false,
+    "prompt_injection": {
+      "login_discovery_hints": "",
+      "product_navigation_discovery_hints": "OUT OF STOCK products show a red/orange badge or overlay with text like 'Out of Stock', 'Sold Out', or 'Unavailable'"
+    },
+    "_comment": "Two API calls are made: 1) login_discovery_hints for login elements, 2) product_navigation_discovery_hints for product/navigation selectors. You can paste full console elements, XPath, or any hints here."
+  },
+  "suppliers": {
+    "example-supplier": {
+      "name": "",
+      "base_url": "",
+      "api_config": {
+        "enabled": false,
+        "base_url": "",
+        "auth_type": "bearer",
+        "rate_limit": {
+          "requests_per_minute": 60,
+          "requests_per_hour": 1000
+        }
+      },
+      "scraping_config": {
+        "enabled": true,
+        "rate_limit": {
+          "requests_per_minute": 30,
+          "delay_between_requests": 2.0
+        }
+      },
+      "category_urls": {
+        "main_categories": [],
+        "pagination_pattern": "?p={page_num}",
+        "max_pages_per_category": 0
+      }
+    },
+    "wholesale-supplier": {
+      "name": "Example Wholesale Supplier",
+      "base_url": "",
+      "api_config": {
+        "enabled": true,
+        "base_url": "",
+        "auth_type": "api_key",
+        "rate_limit": {
+          "requests_per_minute": 100,
+          "requests_per_hour": 2000
+        }
+      },
+      "scraping_config": {
+        "enabled": false
+      }
+    }
+  },
+  "analysis": {
+    "min_roi_percent": 30.0,
+    "min_profit_per_unit": 0.75,
+    "min_rating": 3.8,
+    "min_reviews": 20,
+    "max_sales_rank": 150000,
+    "min_monthly_sales": 10,
+    "max_competition_level": 12,
+    "excluded_categories": [
+      "Adult Products",
+      "Dangerous Goods",
+      "Restricted Items"
+    ],
+    "target_categories": [
+      "Home & Kitchen",
+      "Pet Supplies",
+      "Toys",
+      "Health & Personal Care",
+      "Office Products",
+      "Sports & Outdoors",
+      "Baby Products"
+    ]
+  },
+  "amazon": {
+    "marketplace": "amazon.co.uk",
+    "currency": "GBP",
+    "vat_rate": 0.2,
+    "fba_fees": {
+      "referral_fee_rate": 0.15,
+      "fulfillment_fee_minimum": 2.41,
+      "storage_fee_per_cubic_foot": 0.75,
+      "prep_house_fixed_fee": 0.55
+    }
+  },
+  "supplier": {
+    "prices_include_vat": true
+  },
+  "output": {
+    "base_dir": "OUTPUTS/FBA_ANALYSIS",
+    "report_format": "json",
+    "save_intermediate_results": true,
+    "file_naming": {
+      "pattern": "{supplier}_{timestamp}",
+      "timestamp_format": "%Y%m%d_%H%M%S"
+    },
+    "retention": {
+      "keep_days": 180,
+      "archive_after_days": 180
+    }
+  },
+  "monitoring": {
+    "enabled": false,
+    "metrics_interval": 60,
+    "health_check_interval": 300,
+    "log_level": "INFO",
+    "alert_thresholds": {
+      "cpu_percent": 80,
+      "memory_percent": 85,
+      "error_rate_per_hour": 10
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_hours": 10000,
+    "max_size_mb": 500,
+    "selective_clear_config": {
+      "preserve_analyzed_products": true,
+      "preserve_ai_categories": true,
+      "preserve_linking_map": true,
+      "clear_unanalyzed_only": false,
+      "clear_failed_extractions": false
+    }
+  },
+  "integrations": {
+    "keepa": {
+      "enabled": true,
+      "api_key": "",
+      "rate_limit": {
+        "requests_per_minute": 100
+      }
+    },
+    "selleramp": {
+      "enabled": false,
+      "login_required": false,
+      "rate_limit": {
+        "requests_per_minute": 30
+      }
+    },
+    "openai": {
+      "enabled": false,
+      "api_key": "",
+      "model": "gpt-4.1-mini-2024-07-18",
+      "max_tokens": 1200,
+      "temperature": 0.1,
+      "web_search_enabled": false
+    }
+  },
+  "ai_features": {
+    "category_selection": {
+      "enabled": false,
+      "disable_ai_category_selection": false,
+      "mode": "v2",
+      "available_modes": {
+        "legacy": "Original 86-line prompt with detailed instructions",
+        "v2": "New 25-line clearance-first prompt optimized for arbitrage",
+        "minimal": "Super terse 12-line prompt for fallback"
+      },
+      "max_categories_per_request": 500,
+      "dynamic_reordering": {
+        "enabled": false,
+        "trigger_interval_categories": 5,
+        "trigger_interval_products": 100
+      },
+      "fallbacks": {
+        "max_retries": 2,
+        "clear_cache_between_retries": true,
+        "alternate_prompts": [
+          "v2",
+          "legacy",
+          "minimal"
+        ],
+        "temperature_escalation": [
+          0.1,
+          0.3,
+          0.5
+        ],
+        "model_escalation": [
+          "gpt-4.1-mini-2025-04-14"
+        ]
+      }
+    },
+    "product_matching": {
+      "quality_threshold": "medium",
+      "available_thresholds": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "skip_low_quality": true,
+      "ean_search_enabled": true,
+      "title_search_fallback": true
+    },
+    "security": {
+      "encryption_enabled": false,
+      "api_key_rotation_days": 90,
+      "session_timeout_minutes": 60,
+      "max_login_attempts": 3
+    }
+  },
+  "performance": {
+    "max_concurrent_requests": 10,
+    "request_timeout_seconds": 30,
+    "retry_attempts": 3,
+    "retry_delay_seconds": 2,
+    "batch_size": 50,
+    "rate_limiting": {
+      "rate_limit_delay": 3.0,
+      "batch_delay": 15.0,
+      "ai_batch_size": 5
+    },
+    "timeouts": {
+      "navigation_timeout_ms": 60000,
+      "search_input_timeout_ms": 5000,
+      "results_wait_timeout_ms": 15000,
+      "selector_wait_timeout_ms": 20000,
+      "page_load_timeout_ms": 10000,
+      "http_request_timeout_seconds": 15,
+      "sitemap_timeout_seconds": 10,
+      "keepa_primary_timeout_ms": 12000,
+      "keepa_fallback_timeout_ms": 5000,
+      "keepa_iframe_timeout_ms": 3000,
+      "keepa_grid_timeout_ms": 5000
+    },
+    "waits": {
+      "keepa_stabilization_ms": 1000,
+      "retry_delay_ms": 3000
+    },
+    "matching_thresholds": {
+      "title_similarity": 0.4,
+      "brand_similarity": 0.85,
+      "high_title_similarity": 0.85,
+      "medium_title_similarity": 0.5,
+      "confidence_high": 0.75,
+      "confidence_medium": 0.6,
+      "ai_boost_threshold": 0.8,
+      "ai_penalty_threshold": 0.2
+    }
+  },
+  "workflow_control": {
+    "ai_scraping_triggers": {
+      "enabled": true,
+      "bypass_conditions": {
+        "test_mode": false,
+        "bypass_ai_scraping": false,
+        "direct_amazon_extraction": true,
+        "use_predefined_categories": false
+      },
+      "fallback_behavior": {
+        "use_supplier_category_urls": false,
+        "skip_ai_category_selection": false,
+        "proceed_to_amazon_extraction": true
+      }
+    },
+    "extraction_modes": {
+      "full_ai_workflow": {
+        "enabled": true,
+        "description": "Complete AI-driven supplier scraping + Amazon matching",
+        "steps": [
+          "ai_category_selection",
+          "supplier_scraping",
+          "amazon_matching",
+          "profitability_analysis"
+        ]
+      },
+      "direct_amazon_mode": {
+        "enabled": false,
+        "description": "Skip supplier scraping, go directly to Amazon extraction with predefined ASINs",
+        "steps": [
+          "amazon_extraction",
+          "profitability_analysis"
+        ],
+        "trigger_conditions": {
+          "bypass_ai_scraping": true,
+          "direct_amazon_extraction": true
+        }
+      },
+      "hybrid_mode": {
+        "enabled": false,
+        "description": "Use predefined categories, skip AI selection",
+        "steps": [
+          "predefined_categories",
+          "supplier_scraping",
+          "amazon_matching",
+          "profitability_analysis"
+    

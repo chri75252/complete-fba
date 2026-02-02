@@ -15,9 +15,11 @@ from control_plane.rd2_policy import RagConfig, default_rag_config, should_use_r
 from control_plane.tools import (
     FinancialQuery,
     OnboardingWizardRequest,
+    ProductListRefreshRequest,
     RunRequest,
     ask_clarify,
     enqueue_onboarding_job,
+    enqueue_product_list_refresh,
     enqueue_run_job,
     find_cached_products,
     find_linking_entries,
@@ -53,6 +55,7 @@ READ_TOOLS = {
 WRITE_TOOLS = {
     "enqueue_run": "enqueue_run",
     "enqueue_onboarding": "enqueue_onboarding",
+    "enqueue_product_list_refresh": "enqueue_product_list_refresh",
 }
 
 
@@ -60,6 +63,7 @@ WRITE_TOOLS = {
 class ToolCall:
     name: str
     params: dict[str, Any]
+    explanation: str | None = None
 
 
 def _load_system_index(repo_root: Path) -> dict[str, Any] | None:
@@ -69,12 +73,115 @@ def _load_system_index(repo_root: Path) -> dict[str, Any] | None:
     return read_json(idx_path)
 
 
+def _load_system_instructions(repo_root: Path | None) -> str:
+    """Load system instructions from file if present, else return empty."""
+    if not repo_root:
+        return ""
+    instr_path = get_paths().system_instructions_path
+    if not instr_path.exists():
+        return ""
+    try:
+        return instr_path.read_text(encoding="utf-8")
+    except Exception:
+        return ""
+
+
+def _infer_supplier_domain_from_url(url: str) -> str:
+    """Extract supplier domain from a URL."""
+    import re
+
+    m = re.match(r"https?://([^/]+)/", url + "/")
+    return m.group(1).lower() if m else ""
+
+
+def _resolve_workflow_params(repo_root: Path, supplier_domain: str) -> tuple[str, str]:
+    """
+    Resolve workflow parameters for a supplier domain.
+
+    Maps supplier_domain -> workflow_key -> runner_script using three
+    matching strategies in order:
+    1. Hyphenated domain match (e.g., angelwholesale.co.uk -> angelwholesale-co-uk)
+    2. Workflow key base match (e.g., poundwholesale_workflow -> poundwholesale)
+    3. Domain base match (e.g., clearance-king.co.uk -> clearance_king)
+
+    Args:
+        repo_root: Repository root path
+        supplier_domain: Supplier domain (e.g., "angelwholesale.co.uk")
+
+    Returns:
+        Tuple of (workflow_key, runner_script)
+
+    Raises:
+        ValueError: If supplier not configured or no runner script found
+    """
+    # Load system config to find workflow key
+    sys_cfg = read_json(repo_root / "config" / "system_config.json")
+    workflows = sys_cfg.get("workflows", {})
+
+    # Step 1: Map domain -> workflow_key
+    workflow_key = next(
+        (k for k, v in workflows.items() if v.get("supplier_name") == supplier_domain),
+        None,
+    )
+    if not workflow_key:
+        raise ValueError(f"Supplier '{supplier_domain}' is not configured in system_config.json")
+
+    # Step 2: Map workflow_key -> runner_script
+    idx_path = repo_root / "OUTPUTS" / "CONTROL_PLANE" / "index" / "system_index.json"
+    if not idx_path.exists():
+        # Fallback: glob for runner scripts if index missing
+        runners = [p.name for p in repo_root.glob("run_custom_*.py")]
+    else:
+        runners = read_json(idx_path).get("inventory", {}).get("runners", [])
+
+    if not runners:
+        raise ValueError(f"No runner scripts found in repository")
+
+    # Matching heuristics (in order of preference)
+    # Strategy 1: Hyphenated domain (angelwholesale.co.uk -> angelwholesale-co-uk)
+    domain_hyphen = supplier_domain.replace(".", "-")
+    runner = next((r for r in runners if domain_hyphen in r), None)
+
+    # Strategy 2: Workflow key base (poundwholesale_workflow -> poundwholesale)
+    if not runner:
+        key_base = workflow_key.replace("_workflow", "")
+        runner = next((r for r in runners if key_base in r), None)
+
+    # Strategy 3: Domain base (clearance-king.co.uk -> clearance_king)
+    if not runner:
+        domain_base = supplier_domain.split(".")[0]
+        runner = next((r for r in runners if domain_base in r), None)
+
+    if not runner:
+        raise ValueError(
+            f"No runner script found matching '{supplier_domain}' or key '{workflow_key}'. "
+            f"Available runners: {', '.join(runners)}"
+        )
+
+    return workflow_key, runner
+
+
+def _extract_category_urls(user_text: str) -> list[str]:
+    """Extract category URLs from user text. Returns list of URLs containing '/Category/'."""
+    import re
+
+    # Match http/https URLs
+    url_pattern = r'https?://[^\s<>"\')\]]+[^\s<>"\')\].,;!?]'
+    urls = re.findall(url_pattern, user_text)
+    # Filter for category URLs
+    category_urls = [u for u in urls if "/Category/" in u]
+    return category_urls
+
+
 def build_prompt(
     user_text: str,
     system_index: dict[str, Any] | None,
     rag_context: str,
     rag_meta: dict[str, Any],
+    repo_root: Path | None = None,
 ) -> str:
+    system_instructions = _load_system_instructions(repo_root) if repo_root else ""
+
     tools_desc = {
         "ask_clarify": {
             "type": "read",
@@ -150,17 +257,27 @@ def build_prompt(
                 "timeout_seconds": 4200,
             },
         },
+        "enqueue_product_list_refresh": {
+            "type": "write",
+            "params": {
+                "supplier_domain": "<supplier-domain>",
+                "products_path": "C:/path/to/products_subset.json",
+                "run_id": "<run-id>",
+                "notes": "user request",
+                "dry_run": False,
+            },
+        },
     }
 
     return (
-        "You are a strict JSON generator. Return ONLY valid JSON (no markdown).\n"
-        "Choose ONE tool to call that best answers the user.\n"
-        "If the request is ambiguous or missing required info, choose tool `ask_clarify`.\n"
-        "IMPORTANT: Never choose `enqueue_run` unless `category_urls` is a non-empty list.\n"
-        "Allowed tools and schemas:\n"
-        + json.dumps(tools_desc, indent=2)
+        system_instructions
         + "\n\nReturn JSON format:\n"
-        + json.dumps({"tool": "<tool_name>", "params": {}}, indent=2)
+        + json.dumps(
+            {"tool": "<tool_name>", "params": {}, "explanation": "<short user-facing prose>"},
+            indent=2,
+        )
+        + "\n\nAllowed tools and schemas:\n"
+        + json.dumps(tools_desc, indent=2)
         + "\n\nSystem index (may be null):\n"
         + json.dumps(system_index or {}, indent=2)
         + "\n\nRAG metadata (may be null):\n"
@@ -173,6 +290,54 @@ def build_prompt(
 
 
 def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str, Any]]:
+    category_urls = _extract_category_urls(user_text)
+
+    if category_urls:
+        # Infer supplier domain from first category URL
+        supplier_domain = _infer_supplier_domain_from_url(category_urls[0])
+
+        try:
+            # Resolve workflow parameters (workflow_key and runner_script)
+            workflow_key, runner_script = _resolve_workflow_params(repo_root, supplier_domain)
+
+            # Success - return enqueue_run tool call with all required parameters
+            tool_call = ToolCall(
+                name="enqueue_run",
+                params={
+                    "supplier_domain": supplier_domain,
+                    "category_urls": category_urls,
+                    "workflow_key": workflow_key,
+                    "runner_script": runner_script,
+                    "max_products": 0,  # Use system default
+                    "max_products_per_category": 2000,  # Use system default
+                    "notes": "User requested category analysis via chat",
+                },
+                explanation=f"Starting analysis for {len(category_urls)} categories on {supplier_domain}. Using runner '{runner_script}' with workflow '{workflow_key}'.",
+            )
+            return tool_call, {
+                "meta": {},
+                "sources_used": [],
+                "scores": [],
+                "context_injected": False,
+            }
+
+        except ValueError as e:
+            # Resolution failed - return ask_clarify with error context
+            tool_call = ToolCall(
+                name="ask_clarify",
+                params={
+                    "user_text": user_text,
+                    "error_context": str(e),
+                },
+                explanation=f"I found {len(category_urls)} category URL(s), but I can't start the run: {str(e)}. Please verify the supplier is properly configured.",
+            )
+            return tool_call, {
+                "meta": {},
+                "sources_used": [],
+                "scores": [],
+                "context_injected": False,
+            }
+
     provider = get_provider()
     system_index = _load_system_index(repo_root)
 
@@ -204,19 +369,44 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
         rag_scores = [float(x) for x in (res.get("scores") or [])]
         rag_context = format_rag_context(chunks)
 
-    prompt = build_prompt(user_text, system_index, rag_context, rag_meta)
+    prompt = build_prompt(user_text, system_index, rag_context, rag_meta, repo_root)
 
-    data = provider.generate_json(prompt)
-    tool = str(data.get("tool") or "").strip()
-    params = data.get("params") or {}
-    if not isinstance(params, dict):
-        params = {}
+    explanation: str | None = None
 
-    if tool == "enqueue_run":
-        urls = params.get("category_urls")
-        if not isinstance(urls, list) or not [u for u in urls if isinstance(u, str) and u.strip()]:
+    for attempt in range(3):
+        data = provider.generate_json(prompt)
+        tool = str(data.get("tool") or "").strip()
+        params = data.get("params") or {}
+        if not isinstance(params, dict):
+            params = {}
+
+        explanation_raw = data.get("explanation")
+        if isinstance(explanation_raw, str) and explanation_raw.strip():
+            explanation = explanation_raw.strip()
+
+        allowed = set(READ_TOOLS) | set(WRITE_TOOLS)
+        if tool not in allowed:
+            if attempt < 2:
+                prompt = (
+                    prompt
+                    + "\n\nYour last response used an invalid tool name. Choose ONLY from the allowed tools."
+                )
+                continue
             tool = "ask_clarify"
             params = {"user_text": user_text}
+            explanation = explanation or "I need a bit more information to help with that."
+            break
+
+        if tool == "enqueue_run":
+            urls = params.get("category_urls")
+            if not isinstance(urls, list) or not [
+                u for u in urls if isinstance(u, str) and u.strip()
+            ]:
+                tool = "ask_clarify"
+                params = {"user_text": user_text}
+                explanation = explanation or "To proceed, I need one or more category URLs to run."
+
+        break
 
     rag_info = {
         "meta": rag_meta,
@@ -225,7 +415,7 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
         "context_injected": bool(rag_context),
     }
 
-    return ToolCall(name=tool, params=params), rag_info
+    return ToolCall(name=tool, params=params, explanation=explanation), rag_info
 
 
 def is_write_tool(tool: str) -> bool:
@@ -421,6 +611,17 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             timeout_seconds=int(p.get("timeout_seconds") or 4200),
         )
         return enqueue_onboarding_job(repo_root, run_id, req)
+
+    if name == "enqueue_product_list_refresh":
+        req = ProductListRefreshRequest(
+            supplier_domain=str(p.get("supplier_domain") or ""),
+            products=None,
+            products_path=str(p.get("products_path") or "") or None,
+            run_id=str(p.get("run_id") or "") or None,
+            notes=str(p.get("notes") or "") or None,
+            dry_run=bool(p.get("dry_run")),
+        )
+        return enqueue_product_list_refresh(repo_root, req)
 
     return {"ok": False, "error": f"Unknown tool: {name}"}
 

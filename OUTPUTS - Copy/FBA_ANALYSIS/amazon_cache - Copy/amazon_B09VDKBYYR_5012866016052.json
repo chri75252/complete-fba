@@ -1,0 +1,161 @@
+ 
+        if not ean.isdigit():
+            result['valid'] = False
+            result['issue'] = "EAN must contain only digits"
+            return result
+        
+        if len(ean) != 13:
+            result['valid'] = False
+            result['issue'] = f"EAN must be 13 digits, got {len(ean)}"
+            return result
+        
+        # Validate checksum
+        try:
+            total = sum(int(ean[i]) * (3 if i % 2 else 1) for i in range(12))
+            check_digit = (10 - (total % 10)) % 10
+            if check_digit != int(ean[12]):
+                result['valid'] = False
+                result['issue'] = "Invalid EAN checksum"
+        except:
+            result['valid'] = False
+            result['issue'] = "Error validating EAN checksum"
+        
+        return result
+
+    def _validate_asin(self, asin: str) -> Dict[str, Any]:
+        """Validate Amazon ASIN format."""
+        result = {'valid': True, 'issue': ''}
+        
+        if not asin or not isinstance(asin, str):
+            result['valid'] = False
+            result['issue'] = "ASIN must be a non-empty string"
+            return result
+        
+        if not re.match(r'^[A-Z0-9]{10}$', asin):
+            result['valid'] = False
+            result['issue'] = f"Invalid ASIN format: {asin}"
+        
+        return result
+
+    def _validate_sales_rank(self, rank: Any) -> Dict[str, Any]:
+        """Validate sales rank value."""
+        result = {'valid': True, 'issue': ''}
+        
+        if rank is None:
+            return result  # Sales rank is optional
+        
+        try:
+            rank_int = int(rank)
+            if rank_int < 0: # Rank 0 is possible for new/unranked items, but negative is invalid
+                result['valid'] = False
+                result['issue'] = "Sales rank cannot be negative"
+            elif rank_int > 20000000: # Arbitrary upper limit for sanity
+                result['warnings'].append(f"Sales rank seems unrealistically high: {rank_int}")
+        except (ValueError, TypeError):
+            result['valid'] = False
+            result['issue'] = f"Sales rank must be numeric, got: {type(rank).__name__}"
+        
+        return result
+
+    def _validate_rating(self, rating: Any) -> Dict[str, Any]:
+        """Validate product rating."""
+        result = {'valid': True, 'issue': ''}
+        
+        if rating is None:
+            return result  # Rating is optional
+        
+        try:
+            rating_float = float(rating)
+            if rating_float < 0 or rating_float > 5:
+                result['valid'] = False
+                result['issue'] = f"Rating must be between 0 and 5, got: {rating_float}"
+        except (ValueError, TypeError):
+            result['valid'] = False
+            result['issue'] = f"Rating must be numeric, got: {type(rating).__name__}"
+        
+        return result
+
+    def _is_text_restricted(self, text: str) -> bool:
+        """Helper to check if a combined text contains restricted keywords."""
+        if not text: return False
+        text_lower = text.lower()
+        for keyword in self.restricted_keywords:
+            if keyword in text_lower:
+                return True
+        return False
+
+    def _check_restricted_product(self, product_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Check if product contains restricted keywords in title or description."""
+        # This method is now largely covered by _is_text_restricted and individual field validations
+        # Kept for conceptual clarity if needed, but logic is integrated elsewhere.
+        result = {'restricted': False, 'reason': ''}
+        combined_text = str(product_data.get('title', '')) + " " + str(product_data.get('description', ''))
+        if self._is_text_restricted(combined_text):
+            result['restricted'] = True
+            # Find first keyword for reason
+            for keyword in self.restricted_keywords:
+                if keyword in combined_text.lower():
+                    result['reason'] = f"Product data contains restricted keyword: {keyword}"
+                    break
+        return result
+        
+    def _validate_financial_metrics(self, combined_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Validate financial calculations."""
+        result = {'valid': True, 'warnings': []} # valid is always true, only warnings
+        
+        roi = combined_data.get('roi_percent_calculated', 0)
+        profit = combined_data.get('estimated_profit_per_unit', 0)
+        supplier_price = combined_data.get('supplier_product_info', {}).get('price', 0)
+        amazon_price = combined_data.get('amazon_product_info', {}).get('current_price', 0)
+        
+        if not isinstance(supplier_price, (int, float)) or supplier_price <=0:
+             result['warnings'].append(f"Supplier price is invalid for financial validation: {supplier_price}")
+             return result # Cant do much more if supplier price is bad
+        if not isinstance(amazon_price, (int, float)) or amazon_price <=0:
+             result['warnings'].append(f"Amazon price is invalid for financial validation: {amazon_price}")
+             # Can still check some things
+
+        if roi > 1000 and profit > 0: # Only if profitable
+            result['warnings'].append(f"Unusually high ROI: {roi}%")
+        
+        if profit > amazon_price * 0.8 and amazon_price > 0: # Avoid division by zero
+            result['warnings'].append(f"Profit margin (£{profit:.2f}) seems very high compared to Amazon price (£{amazon_price:.2f})")
+        
+        if supplier_price > amazon_price and amazon_price > 0 : # Only if amazon price is valid
+            result['warnings'].append(f"Supplier price (£{supplier_price:.2f}) higher than Amazon price (£{amazon_price:.2f})")
+        
+        if profit < 0 and roi > 0:
+            result['warnings'].append(f"Contradictory financials: Negative profit (£{profit:.2f}) but positive ROI ({roi}%)")
+
+        return result
+
+    def _validate_text_field(self, text: Optional[str], field_name: str, min_length: int = 1, max_length: int = 5000, allow_empty: bool = False, restricted_keywords_check: bool = False) -> Dict[str, Any]:
+        """Generic validation for a text field."""
+        result = {'valid': True, 'issues': [], 'warnings': []}
+        
+        if text is None:
+            if not allow_empty:
+                result['valid'] = False
+                result['issues'].append(f"{field_name} cannot be None")
+            return result
+
+        if not isinstance(text, str):
+            result['valid'] = False
+            result['issues'].append(f"{field_name} must be a string, got {type(text).__name__}")
+            return result
+
+        if not allow_empty and not text.strip():
+            result['valid'] = False
+            result['issues'].append(f"{field_name} cannot be empty or just whitespace")
+            return result
+        
+        text_len = len(text)
+        if not allow_empty and text_len < min_length:
+            result['valid'] = False
+            result['issues'].append(f"{field_name} too short (minimum {min_length} characters), got {text_len}")
+        
+        if text_len > max_length:
+            result['warnings'].append(f"{field_name} very long (over {max_length} characters), got {text_len}")
+
+        if restricted_keywords_check:
+            if

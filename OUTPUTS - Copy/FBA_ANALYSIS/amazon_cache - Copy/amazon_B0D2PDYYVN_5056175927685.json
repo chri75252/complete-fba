@@ -1,0 +1,349 @@
+= BrowserManager.get_instance()
+       await bm.restart_browser_gracefully()
+   asyncio.run(restart())
+   "
+   ```
+
+### **Issue: Authentication Circuit Breaker**
+
+**Symptoms:**
+- "Authentication circuit breaker OPENED"
+- Authentication attempts suspended
+- Fallback to no-price processing
+
+**Solutions:**
+
+1. **Wait for Recovery:**
+   - Circuit breaker opens after 5 consecutive failures
+   - Automatically recovers after 2 minutes
+   - Monitor: `grep "auth.*circuit" logs/debug/*.log`
+
+2. **Manual Reset:**
+   ```python
+   # Reset authentication circuit breaker
+   from tools.supplier_authentication_service import SupplierAuthenticationService
+   auth_service = SupplierAuthenticationService(None)
+   auth_service.circuit_breaker.reset()
+   print("Authentication circuit breaker reset")
+   ```
+
+---
+
+## 📁 **FILE & DATA ISSUES**
+
+### **Issue: Missing Output Files**
+
+**Symptoms:**
+- Expected output files not created
+- Empty directories in OUTPUTS/
+- File permission errors
+
+**Diagnosis:**
+```bash
+# Check output directory structure
+ls -la OUTPUTS/
+ls -la OUTPUTS/cached_products/
+ls -la OUTPUTS/FBA_ANALYSIS/
+
+# Check file permissions
+ls -la config/system_config.json
+```
+
+**Solutions:**
+
+1. **Create Missing Directories:**
+   ```bash
+   # Create required directories
+   mkdir -p OUTPUTS/{cached_products,FBA_ANALYSIS/{amazon_cache,linking_maps,financial_reports},CACHE/processing_states,logs/{debug,health,application}}
+   ```
+
+2. **Fix File Permissions:**
+   ```bash
+   # Linux/WSL:
+   chmod -R 755 OUTPUTS/
+   chmod 644 config/system_config.json
+   
+   # Windows: Run as Administrator if needed
+   ```
+
+3. **Verify File Creation:**
+   ```python
+   # Test file creation
+   import os
+   import json
+   
+   test_file = "OUTPUTS/test_write.json"
+   try:
+       with open(test_file, 'w') as f:
+           json.dump({"test": "success"}, f)
+       os.remove(test_file)
+       print("✅ File write permissions OK")
+   except Exception as e:
+       print(f"❌ File write error: {e}")
+   ```
+
+### **Issue: Corrupted Configuration Files**
+
+**Symptoms:**
+- JSON decode errors
+- "Invalid configuration" messages
+- System fails to start
+
+**Diagnosis:**
+```bash
+# Validate JSON syntax
+python -m json.tool config/system_config.json
+
+# Check for common issues
+grep -n "," config/system_config.json | tail -5  # Trailing commas
+```
+
+**Solutions:**
+
+1. **Restore from Backup:**
+   ```bash
+   # Check for backup files
+   ls -la config/system_config.json.bak*
+   
+   # Restore from backup
+   cp config/system_config.json.bak1 config/system_config.json
+   ```
+
+2. **Reset to Default Configuration:**
+   ```bash
+   # Create minimal working configuration
+   cat > config/system_config.json << 'EOF'
+   {
+     "system": {
+       "max_products": 1000000,
+       "max_products_per_category": 1000,
+       "supplier_extraction_batch_size": 100
+     },
+     "processing_limits": {
+       "min_price_gbp": 0.01,
+       "max_price_gbp": 20.0
+     },
+     "chrome": {
+       "debug_port": 9222,
+       "headless": false
+     },
+     "authentication": {
+       "enabled": true
+     }
+   }
+   EOF
+   ```
+
+---
+
+## 🐍 **PYTHON & DEPENDENCY ISSUES**
+
+### **Issue: Import Errors**
+
+**Symptoms:**
+- "ModuleNotFoundError" messages
+- "No module named 'playwright'" errors
+- Import failures on startup
+
+**Diagnosis:**
+```bash
+# Check Python version
+python --version
+
+# Check installed packages
+pip list | grep -E "(playwright|aiohttp|beautifulsoup4|psutil)"
+
+# Test critical imports
+python -c "import playwright, aiohttp, beautifulsoup4, psutil, openai"
+```
+
+**Solutions:**
+
+1. **Reinstall Dependencies:**
+   ```bash
+   # Reinstall all dependencies
+   pip install -r requirements.txt --force-reinstall
+   
+   # Install Playwright browsers
+   playwright install chromium
+   playwright install-deps  # Linux only
+   ```
+
+2. **Virtual Environment Issues:**
+   ```bash
+   # Create new virtual environment
+   python -m venv venv_new
+   
+   # Windows:
+   venv_new\Scripts\activate
+   
+   # Linux:
+   source venv_new/bin/activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   ```
+
+3. **Path Issues:**
+   ```python
+   # Check Python path
+   import sys
+   print("Python path:")
+   for path in sys.path:
+       print(f"  {path}")
+   
+   # Add current directory to path
+   import os
+   sys.path.insert(0, os.getcwd())
+   ```
+
+### **Issue: Playwright Browser Issues**
+
+**Symptoms:**
+- "Browser not found" errors
+- Playwright installation failures
+- Browser launch failures
+
+**Solutions:**
+
+1. **Reinstall Playwright:**
+   ```bash
+   # Uninstall and reinstall
+   pip uninstall playwright
+   pip install playwright==1.40.0
+   playwright install chromium
+   ```
+
+2. **Manual Browser Installation:**
+   ```bash
+   # Linux: Install system dependencies
+   sudo apt update
+   sudo apt install -y libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libxss1 libasound2
+   
+   # Install browsers
+   playwright install chromium
+   playwright install-deps
+   ```
+
+---
+
+## ⚡ **PERFORMANCE ISSUES**
+
+### **Issue: Slow Processing Speed**
+
+**Symptoms:**
+- Processing <10 products/hour
+- Long delays between operations
+- Timeout errors
+
+**Diagnosis:**
+```bash
+# Check processing rate
+grep "products.*hour" logs/debug/*.log | tail -5
+
+# Check for bottlenecks
+grep -E "(timeout|slow|delay)" logs/debug/*.log | tail -10
+```
+
+**Solutions:**
+
+1. **Optimize Configuration:**
+   ```json
+   // Increase concurrency in config/system_config.json
+   {
+     "performance": {
+       "max_concurrent_requests": 12,
+       "request_timeout_seconds": 30,
+       "retry_attempts": 3,
+       "rate_limiting": {
+         "rate_limit_delay": 1.0,
+         "batch_delay": 5.0
+       }
+     }
+   }
+   ```
+
+2. **Check Network Issues:**
+   ```bash
+   # Test network connectivity
+   curl -w "@curl-format.txt" -o /dev/null -s "https://www.poundwholesale.co.uk"
+   
+   # Check DNS resolution
+   nslookup www.poundwholesale.co.uk
+   ```
+
+3. **System Resource Check:**
+   ```bash
+   # Check CPU usage
+   # Windows: Task Manager
+   # Linux: htop or top
+   
+   # Check disk I/O
+   # Windows: Resource Monitor
+   # Linux: iotop
+   ```
+
+### **Issue: Hash Optimization Not Working**
+
+**Symptoms:**
+- Processing already-cached products
+- No efficiency gains reported in logs
+- Missing "Cache hit" messages
+
+**Diagnosis:**
+```bash
+# Check hash optimization logs
+grep "HASH OPTIMIZATION\|Cache hit" logs/debug/*.log | tail -10
+
+# Check cache file and hash indexes
+ls -la OUTPUTS/cached_products/*.json
+python -c "
+from tools.passive_extraction_workflow_latest import PassiveExtractionWorkflow
+workflow = PassiveExtractionWorkflow('poundwholesale.co.uk')
+print('Hash optimizer available:', hasattr(workflow, 'hash_optimizer'))
+"
+```
+
+**Solutions:**
+
+1. **Verify Hash Optimization Status:**
+   ```python
+   # Check hash optimization functionality
+   import json
+   
+   # Check cache file
+   cache_file = "OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json"
+   try:
+       with open(cache_file, 'r') as f:
+           data = json.load(f)
+       print(f"✅ Cache file: {len(data)} products available for indexing")
+       
+       # Check for EAN and URL fields
+       sample = data[0] if data else {}
+       print(f"✅ Sample product has EAN: {'ean' in sample}")
+       print(f"✅ Sample product has URL: {'url' in sample}")
+   except Exception as e:
+       print(f"❌ Cache file error: {e}")
+   ```
+
+2. **Monitor Hash Performance:**
+   ```bash
+   # Watch for hash optimization messages during processing
+   tail -f logs/debug/*.log | grep -E "(ENHANCED FILTERING|Cache hit|efficiency gain)"
+   
+   # Expected output:
+   # 🔄 Cache hit (EAN): [Product Name] - skipping extraction
+   # 📈 Efficiency gain: X/Y = Z% reduction
+   # ⚡ Cache optimization saved ~X seconds
+   ```
+
+3. **Reset Hash Indexes:**
+   ```python
+   # Force hash index rebuild
+   from tools.passive_extraction_workflow_latest import PassiveExtractionWorkflow
+   workflow = PassiveExtractionWorkflow('poundwholesale.co.uk')
+   
+   # Clear existing indexes to force rebuild
+   if hasattr(workflow, 'product_cache_ean_index'):
+       delattr(workflow, 'product_cache_ean_index')
+   if hasattr(workflow, 

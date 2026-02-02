@@ -145,7 +145,10 @@ def render_chat_panel(base_dir: str) -> None:
                 audit_tool_call(user_text, tool_call, result, rag_info)
 
                 assistant_content = (
-                    str(result.get("message"))
+                    tool_call.explanation
+                    if isinstance(getattr(tool_call, "explanation", None), str)
+                    and tool_call.explanation
+                    else str(result.get("message"))
                     if isinstance(result.get("message"), str) and result.get("message")
                     else f"Executed tool: `{tool_call.name}`\n\nResult: `{result.get('ok')}`"
                 )
@@ -188,6 +191,11 @@ def render_chat_panel(base_dir: str) -> None:
 
     tool_call, rag_info = plan_tool_call(user_input, Path(base_dir))
 
+    if tool_call.explanation:
+        st.session_state["chat_messages"].append(
+            {"role": "assistant", "content": tool_call.explanation, "tool_result": None}
+        )
+
     if not tool_call.name:
         st.session_state["chat_messages"].append(
             {"role": "assistant", "content": "I couldn't select a tool for that request."}
@@ -204,7 +212,9 @@ def render_chat_panel(base_dir: str) -> None:
     audit_tool_call(user_input, tool_call, result, rag_info)
 
     assistant_content = (
-        str(result.get("message"))
+        tool_call.explanation
+        if isinstance(getattr(tool_call, "explanation", None), str) and tool_call.explanation
+        else str(result.get("message"))
         if isinstance(result.get("message"), str) and result.get("message")
         else f"Tool: `{tool_call.name}`\n\nResult: `{result.get('ok')}`"
     )

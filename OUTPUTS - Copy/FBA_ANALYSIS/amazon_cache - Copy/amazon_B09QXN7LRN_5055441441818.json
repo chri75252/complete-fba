@@ -1,0 +1,131 @@
+tml_element(element_html, "product title", context_url)
+
+    async def extract_price(self, element_soup: BeautifulSoup, element_html: str, context_url: str) -> Optional[float]:
+        selectors_config = self._get_selectors_for_domain(context_url)
+        price_selectors = selectors_config.get("price", [])
+        price_str = self._extract_with_selector(element_soup, price_selectors)
+        if not price_str:
+            price_meta = element_soup.select_one('[itemprop="price"], [data-price]')
+            if price_meta:
+                price_str = price_meta.get('content') or price_meta.get('data-price') or price_meta.get_text(strip=True)
+        if price_str:
+            parsed_price = self._parse_price(price_str)
+            if parsed_price is not None and parsed_price > 0:
+                return parsed_price
+        log.warning(f"Failed to extract/parse price with selectors/heuristics from element on {context_url}. Attempting AI fallback.")
+        ai_price_str = await self._ai_extract_field_from_html_element(element_html, "product price (numerical value only, e.g., 10.99)", context_url)
+        if ai_price_str:
+            return self._parse_price(ai_price_str)
+        return None
+
+    async def extract_url(self, element_soup: BeautifulSoup, element_html: str, context_url: str, base_url: str) -> Optional[str]:
+        selectors_config = self._get_selectors_for_domain(context_url)
+        url_selectors = selectors_config.get("url", [])
+        url_path = self._extract_with_selector(element_soup, url_selectors, attribute='href')
+        if not url_path:
+            anchor_tag = element_soup.find("a", href=True)
+            if anchor_tag:
+                url_path = anchor_tag.get('href')
+            elif element_soup.name == 'a' and element_soup.has_attr('href'):
+                url_path = element_soup.get('href')
+        if url_path:
+            return self._ensure_absolute_url(url_path, base_url)
+        log.warning(f"Failed to extract URL with selectors/heuristics from element on {context_url}. Attempting AI fallback.")
+        ai_url = await self._ai_extract_field_from_html_element(element_html, "product page URL (the 'href' attribute of the main link to the product)", context_url)
+        if ai_url:
+            return self._ensure_absolute_url(ai_url, base_url)
+        return None
+
+    def _ensure_absolute_url(self, url: str, base_url: str) -> str:
+        from urllib.parse import urljoin
+        url = url.strip()
+        if not base_url:
+            log.warning("Base URL is empty, cannot ensure absolute URL properly.")
+            return url
+        return urljoin(base_url, url)
+
+    async def extract_image(self, element_soup: BeautifulSoup, element_html: str, context_url: str, base_url: str) -> Optional[str]:
+        selectors_config = self._get_selectors_for_domain(context_url)
+        image_selectors = selectors_config.get("image", []) # This is a list of selectors
+        
+        img_src = None
+        preferred_attrs = ['data-src', 'src', 'data-lazy', 'data-original', 'data-srcset', 'srcset']
+
+        for selector_str in image_selectors:
+            # Ensure selector_str is a valid, non-empty string
+            if not selector_str or not selector_str.strip():
+                log.debug(f"Skipping empty or invalid image selector: '{selector_str}'")
+                continue
+            try:
+                target_tag = element_soup.select_one(selector_str)
+                if target_tag:
+                    # If the selector targets a <source> tag, prefer srcset
+                    if target_tag.name == 'source':
+                        src_candidate = target_tag.get('srcset') or target_tag.get('data-srcset')
+                        if src_candidate:
+                            # Take the first URL from srcset
+                            img_src = src_candidate.split(',')[0].strip().split(' ')[0]
+                            if img_src and not img_src.startswith('data:'): break 
+                    else: # For <img> tags or other elements
+                        for attr in preferred_attrs:
+                            if target_tag.has_attr(attr):
+                                src_candidate = target_tag[attr]
+                                if attr in ['data-srcset', 'srcset'] and src_candidate:
+                                    src_candidate = src_candidate.split(',')[0].strip().split(' ')[0]
+                                if src_candidate and not src_candidate.startswith('data:'):
+                                    img_src = src_candidate
+                                    break # Found a good src from this tag
+                        if img_src: break # Found a good src, no need to check other selectors
+            except Exception as e:
+                log.debug(f"Error applying image selector '{selector_str}': {e}")
+                continue
+        
+        # Fallback: if selectors didn't yield, find any img tag directly
+        if not img_src:
+            images = element_soup.find_all("img")
+            for img_tag_fallback in images:
+                for attr in preferred_attrs:
+                    if img_tag_fallback.has_attr(attr):
+                        src_candidate = img_tag_fallback[attr]
+                        if attr in ['data-srcset', 'srcset'] and src_candidate:
+                             src_candidate = src_candidate.split(',')[0].strip().split(' ')[0]
+                        if src_candidate and not src_candidate.startswith('data:'):
+                            img_src = src_candidate
+                            break
+                if img_src: break
+        
+        if img_src:
+            if img_src.startswith('data:'):
+                log.debug(f"Found data: image URL on {context_url}, skipping.")
+                return None
+            return self._ensure_absolute_url(img_src, base_url)
+
+        log.warning(f"Failed to extract image URL with selectors/heuristics from element on {context_url}. Attempting AI fallback.")
+        ai_img_src = await self._ai_extract_field_from_html_element(element_html, "product image source URL (src, data-src, or srcset attribute of the main product image tag or picture source tag)", context_url)
+        
+        if ai_img_src and not ai_img_src.startswith('data:'):
+            return self._ensure_absolute_url(ai_img_src, base_url)
+        return None
+
+    def _validate_ean(self, ean_text: Optional[str]) -> bool:
+        if not ean_text: return False
+        cleaned_ean = re.sub(r'[^\d]', '', str(ean_text).strip())
+        if len(cleaned_ean) in [8, 12, 13, 14]:
+            if len(set(cleaned_ean)) > 1 and not cleaned_ean.startswith("000000"): 
+                return True
+        return False
+
+    def _find_ean_in_text_content(self, soup: BeautifulSoup, product_url: str) -> Optional[str]:
+        log.debug(f"Attempting text-based EAN search for {product_url}")
+        ean_patterns = [
+            re.compile(r'(?:EAN|Barcode|GTIN|UPC)\s*[:\-]?\s*(\d{8,14})\b', re.IGNORECASE),
+            re.compile(r'\b(?:Barcode|EAN|GTIN|UPC)\s+(\d{8,14})\b', re.IGNORECASE),
+        ]
+        for prop in ['gtin13', 'gtin12', 'gtin8', 'sku', 'productID']:
+            elements = soup.select(f'[itemprop="{prop}"]')
+            for el in elements:
+                val = el.get('content') or el.get_text(strip=True)
+                if self._validate_ean(val):
+                    log.info(f"EAN found via itemprop='{prop}': {re.sub(r'[^\d]', '', val)} on {product_url}")
+                    return re.sub(r'[^\d]', '', val)
+        all_text_nodes_content = " ".join(t.strip()

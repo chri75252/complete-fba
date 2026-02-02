@@ -1,0 +1,74 @@
+2025-07-16 14:18:31,261 - utils.logger - INFO - 🔧 Logging initialised – log file: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/run_custom_poundwholesale_20250716_141831.log
+2025-07-16 14:18:31,262 - __main__ - INFO - 📋 Debug log file: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/logs/debug/run_custom_poundwholesale_20250716_141831.log
+2025-07-16 14:18:31,263 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2025-07-16 14:18:31,266 - utils.browser_manager - INFO - 🔧 BrowserManager singleton initialized
+2025-07-16 14:18:31,638 - utils.browser_manager - INFO - 🔌 Connecting to Chrome on debug port 9222
+2025-07-16 14:18:32,159 - utils.browser_manager - INFO - 📄 Using existing context with 2 pages
+2025-07-16 14:18:32,160 - utils.browser_manager - INFO - ✅ Connected to Chrome successfully
+2025-07-16 14:18:32,161 - utils.browser_manager - INFO - ♻️ Reusing existing page in context.
+2025-07-16 14:18:32,161 - __main__ - INFO - 🔐 Initializing authentication service for logout detection...
+2025-07-16 14:18:32,166 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk
+2025-07-16 14:18:32,166 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2025-07-16 14:18:32,446 - tools.supplier_authentication_service - WARNING - Could not verify authentication status: Page.goto: net::ERR_ABORTED at https://www.poundwholesale.co.uk/
+Call log:
+  - navigating to "https://www.poundwholesale.co.uk/", waiting until "load"
+
+2025-07-16 14:18:32,447 - tools.supplier_authentication_service - INFO - 🔐 Starting authentication for poundwholesale.co.uk
+2025-07-16 14:18:32,448 - tools.supplier_authentication_service - INFO - 🔧 Using standalone playwright authentication
+2025-07-16 14:18:32,448 - tools.standalone_playwright_login - INFO - 🔗 Connecting to shared Chrome instance...
+2025-07-16 14:18:34,258 - tools.standalone_playwright_login - INFO - ✅ Connected to shared Chrome instance at http://localhost:9222
+2025-07-16 14:18:34,259 - tools.standalone_playwright_login - DEBUG - Using existing browser context
+2025-07-16 14:18:34,262 - tools.standalone_playwright_login - DEBUG - Using existing page
+2025-07-16 14:18:34,353 - tools.standalone_playwright_login - INFO - 🔍 Checking if already logged in...
+2025-07-16 14:18:42,007 - tools.standalone_playwright_login - INFO - ✅ Found price element: £1.05 - already logged in
+2025-07-16 14:18:42,008 - tools.standalone_playwright_login - INFO - ✅ Already logged in!
+2025-07-16 14:18:42,008 - tools.standalone_playwright_login - INFO - 💰 Verifying price access...
+2025-07-16 14:18:51,170 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £0.71
+2025-07-16 14:18:51,197 - tools.standalone_playwright_login - DEBUG - Disconnected from shared Chrome browser
+2025-07-16 14:18:51,205 - tools.standalone_playwright_login - DEBUG - Playwright stopped
+2025-07-16 14:18:51,206 - tools.supplier_authentication_service - INFO - ✅ Standalone authentication successful: already_logged_in
+2025-07-16 14:18:51,213 - amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2025-07-16 14:18:51,216 - amazon_playwright_extractor - INFO - Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/CACHE/amazon_data
+2025-07-16 14:18:51,216 - amazon_playwright_extractor - WARNING - ⚠️ BrowserManager not available, using legacy browser connection
+2025-07-16 14:18:51,218 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/system_config.json
+2025-07-16 14:18:51,219 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2025-07-16 14:18:51,219 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2025-07-16 14:18:51,219 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2025-07-16 14:18:51,220 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2025-07-16 14:18:51,220 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2025-07-16 14:18:51,220 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2025-07-16 14:18:51,221 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2025-07-16 14:18:51,222 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map initialized as type: <class 'dict'>
+2025-07-16 14:18:51,222 - PassiveExtractionWorkflow - INFO - ✅ Output directory set to: /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS
+2025-07-16 14:18:51,223 - PassiveExtractionWorkflow - INFO - ✅ Initialization validation passed - all critical attributes verified
+2025-07-16 14:18:51,223 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk ---
+2025-07-16 14:18:51,224 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk_20250716_141851
+2025-07-16 14:18:51,224 - PassiveExtractionWorkflow - INFO - 📊 CONFIGURATION VALUES:
+2025-07-16 14:18:51,224 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 12
+2025-07-16 14:18:51,225 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 5
+2025-07-16 14:18:51,225 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 6
+2025-07-16 14:18:51,226 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2025-07-16 14:18:51,226 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 1
+2025-07-16 14:18:51,226 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 5
+2025-07-16 14:18:51,230 - utils.enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk - resuming from index 0
+2025-07-16 14:18:51,231 - PassiveExtractionWorkflow - INFO - 📋 Loaded existing processing state for poundwholesale.co.uk
+2025-07-16 14:18:51,231 - PassiveExtractionWorkflow - INFO - 🔄 Resuming from index 0
+2025-07-16 14:18:51,243 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (dict format) from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json with 17 entries
+2025-07-16 14:18:51,243 - PassiveExtractionWorkflow - DEBUG - 🔍 DEBUG: linking_map loaded as type: <class 'dict'>, length: 17
+2025-07-16 14:18:51,255 - PassiveExtractionWorkflow - INFO - ✅ Loaded linking map (dict format) from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json with 17 entries
+2025-07-16 14:18:51,256 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2025-07-16 14:18:51,256 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk
+2025-07-16 14:18:51,261 - tools.passive_extraction_workflow_latest - INFO - ✅ Successfully loaded 276 predefined category URLs from /mnt/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32/config/poundwholesale_categories.json
+2025-07-16 14:18:51,262 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING MODE: Enabled
+2025-07-16 14:18:51,262 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID PROCESSING: Mode configuration loaded
+2025-07-16 14:18:51,263 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2025-07-16 14:18:51,263 - PassiveExtractionWorkflow - INFO - 🔄 HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2025-07-16 14:18:51,263 - PassiveExtractionWorkflow - INFO - 🔄 Processing chunk 1: categories 1-1
+2025-07-16 14:18:51,266 - PassiveExtractionWorkflow - INFO - 🔄 NO PROCESSING PROGRESS: index=0, proceeding with scraping
+2025-07-16 14:18:51,266 - PassiveExtractionWorkflow - INFO - 🕷️ PERFORMING SUPPLIER SCRAPING from 1 categories
+2025-07-16 14:18:51,267 - PassiveExtractionWorkflow - INFO - 📦 Using supplier extraction batch size: 1
+2025-07-16 14:18:51,267 - PassiveExtractionWorkflow - INFO - 📊 PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2025-07-16 14:18:51,268 - PassiveExtractionWorkflow - INFO - 📦 Processing category batch 1/1 (1 categories)
+2025-07-16 14:18:51,279 - PassiveExtractionWorkflow - INFO - 🔄 EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 1/1)
+2025-07-16 14:18:51,279 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/wholesale-cleaning/cleaning-wipes-sprays/multi-purpose-cleaners
+2025-07-16 14:18:51,280 - configurable_supp

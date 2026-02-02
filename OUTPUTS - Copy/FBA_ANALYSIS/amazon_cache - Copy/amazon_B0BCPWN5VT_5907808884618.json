@@ -1,0 +1,175 @@
+"""
+Data Normalizer for Amazon FBA Agent System
+Normalizes and standardizes product data from various sources.
+"""
+
+import re
+import logging
+from typing import Dict, Any, Optional, List, Union, Tuple
+from datetime import datetime
+import unicodedata
+
+log = logging.getLogger(__name__)
+
+
+class DataNormalizer:
+    """Normalizes product data to consistent formats."""
+    
+    def __init__(self):
+        """Initialize normalizer with conversion rules."""
+        # Currency symbols and their codes
+        self.currency_symbols = {
+            '£': 'GBP',
+            '$': 'USD',
+            '€': 'EUR',
+            '¥': 'JPY',
+            '₹': 'INR',
+            'kr': 'SEK', # General 'kr', might need context for DKK, NOK
+            'zł': 'PLN' 
+        }
+        
+        # Weight unit conversions to pounds
+        self.weight_conversions = {
+            'kg': 2.20462,
+            'kilogram': 2.20462,
+            'kilo': 2.20462,
+            'g': 0.00220462,
+            'gram': 0.00220462,
+            'oz': 0.0625,
+            'ounce': 0.0625,
+            'lb': 1.0,
+            'lbs': 1.0,
+            'pound': 1.0,
+            'pounds': 1.0,
+            'mg': 0.00000220462,
+            'milligram': 0.00000220462,
+            'ton': 2000.0, # US ton
+            'tonne': 2204.62 # Metric tonne
+        }
+        
+        # Dimension unit conversions to inches
+        self.dimension_conversions = {
+            'mm': 0.0393701,
+            'millimeter': 0.0393701,
+            'cm': 0.393701,
+            'centimeter': 0.393701,
+            'dm': 3.93701,
+            'decimeter': 3.93701,
+            'm': 39.3701,
+            'meter': 39.3701,
+            'in': 1.0,
+            'inch': 1.0,
+            'inches': 1.0,
+            'ft': 12.0,
+            'foot': 12.0,
+            'feet': 12.0,
+            'yd': 36.0,
+            'yard': 36.0
+        }
+        
+        # Common brand name variations
+        self.brand_normalizations = {
+            'hp': 'HP',
+            'ibm': 'IBM',
+            'lg': 'LG',
+            '3m': '3M',
+            'p&g': 'Procter & Gamble',
+            'j&j': 'Johnson & Johnson',
+            'nestle': 'Nestlé',
+            'l\'oreal': 'L\'Oréal',
+            'coca cola': 'Coca-Cola',
+            'mercedes benz': 'Mercedes-Benz'
+            # Add more as needed
+        }
+
+    def normalize_product_data(self, product_data: Dict[str, Any], source: str = 'unknown') -> Dict[str, Any]:
+        """
+        Normalize all product data fields.
+        
+        Args:
+            product_data: Raw product data
+            source: Source of the data ('supplier' or 'amazon')
+            
+        Returns:
+            Normalized product data
+        """
+        normalized = product_data.copy() # Create a copy to avoid modifying original
+        
+        # Normalize text fields
+        if 'title' in normalized and normalized['title'] is not None:
+            normalized['title'] = self.normalize_title(normalized['title'])
+        
+        if 'description' in normalized and normalized['description'] is not None:
+            normalized['description'] = self.normalize_text(normalized['description'])
+        
+        if 'brand' in normalized and normalized['brand'] is not None:
+            normalized['brand'] = self.normalize_brand(normalized['brand'])
+        
+        # Normalize price fields
+        price_fields = ['price', 'current_price', 'sale_price', 'list_price', 'msrp']
+        for field in price_fields:
+            if field in normalized and normalized[field] is not None:
+                normalized[field] = self.normalize_price(normalized[field]) # Returns dict or None
+        
+        # Normalize identifiers
+        for id_field in ['ean', 'upc', 'isbn', 'asin', 'sku', 'mpn', 'model_number']:
+            if id_field in normalized and normalized[id_field] is not None:
+                normalized[id_field] = self.normalize_identifier(normalized[id_field], id_field)
+        
+        # Normalize weight
+        if 'weight' in normalized and normalized['weight'] is not None:
+            normalized['weight_normalized'] = self.normalize_weight(normalized['weight'])
+        elif 'weight_from_details' in normalized and normalized['weight_from_details'] is not None:
+            normalized['weight_normalized'] = self.normalize_weight(normalized['weight_from_details'])
+        
+        # Normalize dimensions
+        if 'dimensions' in normalized and normalized['dimensions'] is not None:
+            normalized['dimensions_normalized'] = self.normalize_dimensions(normalized['dimensions'])
+        elif 'dimensions_from_details' in normalized and normalized['dimensions_from_details'] is not None:
+            normalized['dimensions_normalized'] = self.normalize_dimensions(normalized['dimensions_from_details'])
+        
+        # Normalize boolean fields
+        boolean_fields = ['in_stock', 'is_prime', 'sold_by_amazon', 'is_available'] # Added is_available
+        for field in boolean_fields:
+            if field in normalized and normalized[field] is not None:
+                normalized[field] = self.normalize_boolean(normalized[field])
+
+        # Normalize URLs
+        if 'url' in normalized and normalized['url'] is not None:
+            normalized['url'] = self.normalize_url(normalized['url'])
+        
+        if 'image_url' in normalized and normalized['image_url'] is not None: # Single image_url
+            normalized['image_url'] = self.normalize_url(normalized['image_url'])
+        elif 'images' in normalized and isinstance(normalized['images'], list): # List of images
+            normalized['images'] = [self.normalize_url(url) for url in normalized['images'] if url] # Ensure url is not None
+
+        # Normalize categories
+        if 'category' in normalized and normalized['category'] is not None:
+            normalized['category'] = self.normalize_category(normalized['category'])
+        if 'categories' in normalized and isinstance(normalized['categories'], list): # List of categories
+             normalized['categories'] = [self.normalize_category(cat) for cat in normalized['categories'] if cat]
+
+
+        # Add metadata
+        normalized['_normalized_metadata'] = {
+            'normalized_at': datetime.now().isoformat(),
+            'original_source': source
+        }
+        
+        return normalized
+
+    def normalize_title(self, title: str) -> str:
+        """
+        Normalize product title.
+        """
+        if not title:
+            return ""
+        
+        title = str(title).strip()
+        title = unicodedata.normalize('NFKD', title)
+        title = re.sub(r'\s+', ' ', title)
+        title = re.sub(r'([!?.])\1+', r'\1', title)
+        title = re.sub(r'\s*-\s*-\s*', ' - ', title)
+        title = re.sub(r'\s*,\s*,\s*', ', ', title)
+        
+        # More advanced title casing might be need

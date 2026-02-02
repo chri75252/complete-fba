@@ -1,0 +1,128 @@
+
+        }
+        
+        if not text:
+            return identifiers
+            
+        text = str(text).strip()
+        
+        # Extract EAN
+        ean_match = re.search(r'(?:EAN|ean)[\s:-]*(\d{13})', text)
+        if ean_match and self._validate_ean(ean_match.group(1)):
+            identifiers['ean'] = ean_match.group(1)
+        
+        # Extract UPC
+        upc_match = re.search(r'(?:UPC|upc)[\s:-]*(\d{12})', text)
+        if upc_match and self._validate_upc(upc_match.group(1)):
+            identifiers['upc'] = upc_match.group(1)
+        
+        # Extract GTIN
+        gtin_match = re.search(r'(?:GTIN|gtin)[\s:-]*(\d{8,14})', text)
+        if gtin_match:
+            identifiers['gtin'] = gtin_match.group(1)
+        
+        # Extract ISBN
+        isbn_match = re.search(r'(?:ISBN|isbn)[\s:-]*(\d{10,13})', text)
+        if isbn_match:
+            identifiers['isbn'] = isbn_match.group(1)
+        
+        # Extract ASIN
+        asin_match = re.search(r'(?:ASIN|asin)[\s:-]*([A-Z0-9]{10})', text, re.IGNORECASE)
+        if asin_match:
+            identifiers['asin'] = asin_match.group(1).upper()
+        
+        # Generic barcode
+        if not any(identifiers.values()):
+            barcode_match = re.search(r'(?:Barcode|barcode)[\s:-]*(\d{8,14})', text)
+            if barcode_match:
+                identifiers['barcode'] = barcode_match.group(1)
+        
+        return identifiers
+
+    def extract_title(self, element: Any, fallback_text: str = "") -> str:
+        """
+        Extract and clean product title.
+        
+        Args:
+            element: BeautifulSoup element or string
+            fallback_text: Text to use if extraction fails
+            
+        Returns:
+            Cleaned title string
+        """
+        title = ""
+        
+        if isinstance(element, Tag):
+            # Try common title selectors, more specific first
+            title_selectors = [
+                'h1.product-title', 'h1[itemprop="name"]', 'h1.pdp-title', 'h1.product-name',
+                'h1', 
+                'h2.product-title', 'h2[itemprop="name"]',
+                'h2',
+                '.product-title', '.pdp-title', '.product-name', '.title', 
+                '[itemprop="name"]',
+                '[data-cy="product-title"]'
+            ]
+            for selector in title_selectors:
+                title_elem = element.select_one(selector)
+                if title_elem:
+                    title = title_elem.get_text(strip=True)
+                    if title: # Found a non-empty title
+                        break 
+            
+            if not title: # Fallback if no specific selector worked
+                # Try to get text from the most prominent heading if no title found yet
+                for heading_tag in ['h1', 'h2', 'h3']:
+                    heading_elem = element.find(heading_tag)
+                    if heading_elem:
+                        title = heading_elem.get_text(strip=True)
+                        if title:
+                            break
+                if not title:
+                    title = element.get_text(strip=True) # Last resort for the element itself
+        else:
+            title = str(element).strip()
+        
+        if not title and fallback_text:
+            title = fallback_text
+        
+        # Clean the title
+        title = re.sub(r'\s+', ' ', title).strip() # Normalize whitespace
+        
+        # Remove common noise patterns more intelligently
+        # Example: "Brand Name | Product Title Here" -> "Product Title Here"
+        # Example: "Product Title Here - Site Name" -> "Product Title Here"
+        # Example: "Product Title Here | Site Name" -> "Product Title Here"
+
+        # Split by common separators and take the most likely part
+        separators = ['|', ' - ', ' – ', ' :: ']
+        best_part = title
+        for sep in separators:
+            if sep in title:
+                parts = title.split(sep)
+                # Heuristic: often the longest part is the title, or the first/last part if it's not a brand/site name
+                # This can be made more sophisticated, e.g. by checking against known site names or brand lists
+                
+                # If "Brand | Title" or "Title | Brand/Site"
+                if len(parts) == 2:
+                    # Prefer part that doesn't look like a short brand/site name or a generic term
+                    # This is a simple heuristic, could be improved
+                    if len(parts[0]) > len(parts[1]) and len(parts[1]) < 15:
+                        best_part = parts[0].strip()
+                    elif len(parts[1]) > len(parts[0]) and len(parts[0]) < 15:
+                        best_part = parts[1].strip()
+                    else: # If lengths are similar or both parts are long, prefer the first
+                        best_part = parts[0].strip() 
+                    title = best_part # Update title with the best part found so far
+                    break # Processed one separator type
+
+        # Further noise removal
+        noise_patterns = [
+            r'(?i)^(buy|shop|purchase|get|new|genuine|official)\s+',  # Shopping prefixes
+            r'(?i)\s+(online|store|shop|official site|website)$', # Shopping suffixes
+            r'^\s*\d+\s*$',  # Just numbers
+            r'^(Product Detail|Details|Overview|Features|Specs|Specifications)$' # Generic section headers
+        ]
+        
+        for pattern in noise_patterns:
+            title = re.sub(pattern, '', title, flags=re.IGNORECASE).str

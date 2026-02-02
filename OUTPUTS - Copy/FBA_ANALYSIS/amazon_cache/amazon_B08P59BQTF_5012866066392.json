@@ -1,0 +1,34 @@
+{
+  "asin_from_details": "B08P59BQTF",
+  "title": "Magic Trick",
+  "main_image": "https://m.media-amazon.com/images/I/612NUJwLOHL._AC_SL1172_.jpg",
+  "thumbnails": [
+    "https://m.media-amazon.com/images/I/41yQHwzlz4L._SL1500_.jpg"
+  ],
+  "high_res_gallery": [],
+  "amazon_product_details_section": {
+    "Date First Available": "25 Sept. 2021"
+  },
+  "date_first_available_from_details": "25 Sept. 2021",
+  "prime_eligible": false,
+  "fulfilled_by_amazon": false,
+  "rating": 4.2,
+  "availability_text": "P.when(\"A\", \"load\").execute(\"aod-assets-loaded\", function(A){\n        function logAssetsNotLoaded() {\n            if (window.ueLogError) {\n                var customError = { message: 'Failed to load AOD assets for WDG: toy_display_on_website, Device: web' };\n                var additionalInfo = {\n                    logLevel : 'ERROR',\n                    attribution : 'aod_assets_not_loaded'\n                };\n                ueLogError (customError, additionalInfo);\n            }\n            if (window.ue && window.ue.count) {\n                window.ue.count(\"aod-assets-not-loaded\", 1);\n            }\n        }\n\n        function verifyAssetsLoaded() {\n            var assetsLoadedPageState = A.state('aod:assetsLoaded');\n            var logAssetsNotLoadedState = A.state('aod:logAssetsNotLoaded');\n\n            if((assetsLoadedPageState == null || !assetsLoadedPageState.isAodAssetsLoaded)\n                && (logAssetsNotLoadedState == null || !logAssetsNotLoadedState.isAodAssetsNotLoadedLogged)) {\n                A.state('aod:logAssetsNotLoaded', {isAodAssetsNotLoadedLogged: true});\n                logAssetsNotLoaded();\n            }\n        }\n\n        setTimeout(verifyAssetsLoaded, 50000)\n    });",
+  "in_stock": false,
+  "specifications_table": {
+    "Package Dimensions": "‎21.8 x 20.2 x 4.6 cm; 150 g",
+    "Educational Objective(s)": "‎Literacy & Spacial Awareness",
+    "ASIN": "‎B08P59BQTF"
+  },
+  "selleramp": {
+    "status": "SellerAmp extraction disabled"
+  },
+  "keepa": {
+    "status": "Product details tab timeout (extended)",
+    "ai_graph_analysis_status": "Keepa Graph AI Analysis disabled"
+  },
+  "asin_extracted_from_page": "B08P59BQTF",
+  "asin_queried": "B08P59BQTF",
+  "asin": "B08P59BQTF",
+  "_search_method_used": "EAN"
+}

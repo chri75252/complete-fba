@@ -1,0 +1,170 @@
+sting(self, path: Path, new_data: Any) -> Any:
+        """
+        Merge new data with existing data and deduplicate.
+        
+        Args:
+            path: Existing file path
+            new_data: New data to merge
+            
+        Returns:
+            Merged and deduplicated data
+        """
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                existing_data = json.load(f)
+            
+            # If both are lists, merge and deduplicate
+            if isinstance(existing_data, list) and isinstance(new_data, list):
+                # Create a combined list
+                combined = existing_data + new_data
+                
+                # Deduplicate based on a key (if available)
+                seen_keys = set()
+                deduplicated = []
+                
+                for item in combined:
+                    # Use EAN as deduplication key if available
+                    key = item.get('supplier_ean') or item.get('ean') or str(item)
+                    if key not in seen_keys:
+                        seen_keys.add(key)
+                        deduplicated.append(item)
+                
+                self.logger.info(
+                    f"Merged data: {len(existing_data)} existing + {len(new_data)} new "
+                    f"= {len(deduplicated)} deduplicated"
+                )
+                return deduplicated
+            else:
+                # For non-list data, prefer new data
+                self.logger.info("Non-list data - using new data")
+                return new_data
+                
+        except Exception as e:
+            self.logger.warning(f"Merge failed, using new data only: {e}")
+            return new_data
+    
+    def _strategy_temp_then_replace(self, path: Path, data: Any) -> bool:
+        """
+        Strategy 1: Temp file then atomic replace with retries and backoff.
+        
+        Args:
+            path: Target file path
+            data: Data to save
+            
+        Returns:
+            bool: True if successful
+        """
+        temp_path = path.with_suffix(path.suffix + '.tmp')
+        max_retries = 3
+        base_delay = 0.1
+        
+        for attempt in range(max_retries):
+            try:
+                # Clean up any existing temp file
+                if temp_path.exists():
+                    temp_path.unlink()
+                
+                # Write to temp file
+                with open(temp_path, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+                
+                # Set permissions
+                os.chmod(temp_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IWGRP)
+                
+                # Atomic replace (this is where WinError 5 typically occurs)
+                os.replace(temp_path, path)
+                
+                # Verify success
+                if path.exists() and path.stat().st_size > 0:
+                    return True
+                    
+            except (PermissionError, OSError) as e:
+                if attempt < max_retries - 1:
+                    delay = base_delay * (2 ** attempt)  # Exponential backoff
+                    self.logger.info(f"Retry {attempt + 1}/{max_retries} after {delay}s: {e}")
+                    time.sleep(delay)
+                    continue
+                else:
+                    raise e
+            finally:
+                # Clean up temp file
+                if temp_path.exists():
+                    try:
+                        temp_path.unlink()
+                    except:
+                        pass
+        
+        return False
+    
+    def _strategy_backup_then_replace(self, path: Path, data: Any) -> bool:
+        """
+        Strategy 2: Create timestamped backup, write temp, then replace.
+        
+        Args:
+            path: Target file path
+            data: Data to save
+            
+        Returns:
+            bool: True if successful
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_path = path.with_suffix(f".bak_{timestamp}")
+        temp_path = path.with_suffix(path.suffix + '.tmp2')
+        
+        try:
+            # Create backup of existing file
+            if path.exists():
+                shutil.copy2(path, backup_path)
+            
+            # Write to temp file
+            with open(temp_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            
+            # Atomic replace
+            os.replace(temp_path, path)
+            
+            # Verify and clean up backup if successful
+            if path.exists() and path.stat().st_size > 0:
+                # Remove backup after successful write
+                if backup_path.exists():
+                    backup_path.unlink()
+                return True
+                
+        except Exception as e:
+            # Restore from backup if available
+            if backup_path.exists() and not path.exists():
+                try:
+                    shutil.copy2(backup_path, path)
+                    self.logger.info("Restored from backup after failed write")
+                except:
+                    pass
+            raise e
+        finally:
+            # Clean up temp file
+            if temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except:
+                    pass
+        
+        return False    
+    def _strategy_alternative_temp_dir(self, path: Path, data: Any) -> bool:
+        """
+        Strategy 3: Use alternative temp directory when target is locked.
+        
+        Args:
+            path: Target file path
+            data: Data to save
+            
+        Returns:
+            bool: True if successful
+        """
+        # Create alternative temp directory
+        alt_temp_dir = Path(os.environ.get('TEMP', '/tmp')) / 'fba_tmp'
+        alt_temp_dir.mkdir(parents=True, exist_ok=True)
+        
+        temp_file_path = alt_temp_dir / f"temp_save_{int(time.time() * 1000)}.json"
+        
+        try:
+            # Write to alternative temp location
+            with open(te

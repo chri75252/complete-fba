@@ -1,0 +1,137 @@
+turn ""
+        
+        brand = str(brand).strip()
+        brand = re.sub(r'^(by|from|brand:)\s+', '', brand, flags=re.IGNORECASE)
+        brand = re.sub(r'\s+(brand|inc\.?|ltd\.?|co\.?|corp\.?|llc|gmbh)$', '', brand, flags=re.IGNORECASE)
+        
+        brand_lower = brand.lower()
+        if brand_lower in self.brand_normalizations:
+            return self.brand_normalizations[brand_lower]
+        
+        # If all caps or all lower (and not a known acronym like HP), title case it
+        if (brand.isupper() or brand.islower()) and brand_lower not in [k.lower() for k in self.brand_normalizations.values() if k.isupper()]:
+            brand = brand.title()
+        
+        return brand
+
+    def normalize_price(self, price_input: Union[str, float, int], target_currency: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        """
+        Normalize price to a dictionary with value and currency.
+        Handles various formats and extracts currency if possible.
+        """
+        if price_input is None:
+            return None
+        
+        if isinstance(price_input, (int, float)):
+            return {'value': round(float(price_input), 2), 'currency': target_currency or 'UNKNOWN'}
+        
+        price_str = str(price_input).strip()
+        if not price_str:
+            return None
+
+        extracted_currency = None
+        
+        # Attempt to identify currency symbol/code first
+        # Check for currency codes first (USD, GBP) as they are more explicit
+        for code_symbol, code_name in self.currency_symbols.items(): # Check symbols first
+            if code_symbol in price_str:
+                extracted_currency = code_name
+                price_str = price_str.replace(code_symbol, '') # Remove symbol for easier parsing
+                break 
+        
+        if not extracted_currency: # If no symbol, check for codes
+            for code in ['GBP', 'USD', 'EUR', 'CAD', 'AUD', 'JPY', 'INR', 'SEK', 'PLN']: 
+                # Regex to find code as a whole word, possibly at start/end or with space
+                match_code = re.search(rf'(?:^|\s)({code})(?:$|\s)', price_str, re.IGNORECASE)
+                if match_code:
+                    extracted_currency = match_code.group(1).upper()
+                    price_str = re.sub(rf'(?:^|\s)({code})(?:$|\s)', ' ', price_str, flags=re.IGNORECASE) # Remove code
+                    break
+        
+        price_str = price_str.strip()
+        
+        price_words_pattern = r'(?i)\b(price|cost|rrp|msrp|now|was|sale|save|off|only|approx\.?|around|from|total|subtotal|vat)\b[:\s]*'
+        price_str = re.sub(price_words_pattern, '', price_str).strip()
+
+        # Regex to find a number, possibly with thousands separators (., or space) and a decimal part
+        match = re.search(r'(\d{1,3}(?:([.,\s])\d{3})*(?:([.,])\d{1,2})?|\d+(?:([.,])\d{1,2})?)', price_str)
+        
+        numeric_part_str = None
+        if match:
+            numeric_part_str = match.group(0) 
+
+            # Standardize the numeric string
+            if ' ' in numeric_part_str: # Remove spaces if used as thousands separator
+                 numeric_part_str = numeric_part_str.replace(' ', '')
+
+            if ',' in numeric_part_str and '.' in numeric_part_str:
+                if numeric_part_str.rfind(',') > numeric_part_str.rfind('.'):
+                    numeric_part_str = numeric_part_str.replace('.', '').replace(',', '.')
+                else:
+                    numeric_part_str = numeric_part_str.replace(',', '')
+            elif ',' in numeric_part_str:
+                if re.match(r'^\d+,\d{1,2}$', numeric_part_str) and not re.match(r'^\d{1,3}(,\d{3})+(,\d{1,2})?$', numeric_part_str): # e.g. 12,34 not 1,234,56
+                    numeric_part_str = numeric_part_str.replace(',', '.')
+                else: # Assume thousand separator
+                    numeric_part_str = numeric_part_str.replace(',', '')
+        
+        if numeric_part_str:
+            try:
+                price_value = float(numeric_part_str)
+                if 0.001 < price_value < 10000000:
+                     return {'value': round(price_value, 2), 'currency': extracted_currency or target_currency or 'UNKNOWN'}
+            except ValueError:
+                log.debug(f"Could not convert '{numeric_part_str}' to float after parsing price string '{price_input}'")
+        
+        log.warning(f"Could not normalize price from input: '{price_input}'")
+        return None
+
+    def normalize_identifier(self, identifier: str, id_type: str) -> str:
+        """
+        Normalize product identifier.
+        """
+        if not identifier:
+            return ""
+        
+        identifier = str(identifier).strip()
+        identifier = re.sub(rf'^(?i){id_type}[\s:-]*', '', identifier) # Case insensitive prefix
+        
+        if id_type in ['ean', 'upc', 'isbn', 'gtin']: # GTIN also numeric
+            identifier = re.sub(r'[\s-]', '', identifier)
+        
+        if id_type == 'asin':
+            identifier = identifier.upper()
+        
+        expected_lengths = {
+            'ean': 13, 'upc': 12, 'isbn': [10, 13], 'asin': 10, 'gtin': [8,12,13,14]
+        }
+        
+        if id_type in expected_lengths:
+            expected = expected_lengths[id_type]
+            id_len = len(identifier)
+            if isinstance(expected, list):
+                if id_len not in expected:
+                    log.debug(f"Potential invalid {id_type} length: {id_len} for '{identifier}' (expected one of {expected})")
+            elif id_len != expected:
+                log.debug(f"Potential invalid {id_type} length: {id_len} for '{identifier}' (expected {expected})")
+        
+        return identifier
+
+    def normalize_weight(self, weight_input: Union[str, float, int, Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        """
+        Normalize weight to a standard dictionary format (value, unit, pounds).
+        """
+        if weight_input is None:
+            return None
+
+        parsed_value: Optional[float] = None
+        parsed_unit: Optional[str] = None
+        pounds: Optional[float] = None
+
+        if isinstance(weight_input, dict):
+            parsed_value = weight_input.get('value')
+            parsed_unit = weight_input.get('unit')
+            if 'pounds' in weight_input and isinstance(weight_input['pounds'], (int, float)):
+                 pounds = float(weight_input['pounds'])
+                 if parsed_value is None and parsed_unit is None and pounds is not None: # Reconstruct if only pounds given
+                

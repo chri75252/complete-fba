@@ -1,0 +1,40 @@
+2026-02-01 12:27:53,969 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: angelwholesale-co-uk__sandbox__run_ange_products_cache.json (6 entries) saved successfully
+2026-02-01 12:28:05,953 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0FV8KV3FS_5012866069058.json (11 entries) saved successfully
+2026-02-01 12:28:12,584 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0B4H4YPY7_5012866625032.json (11 entries) saved successfully
+2026-02-01 12:28:22,447 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B00DIB9O2I_5055499001200.json (11 entries) saved successfully
+2026-02-01 12:28:29,634 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0DMK2TN43_5015302105747.json (11 entries) saved successfully
+2026-02-01 12:28:37,075 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0FL879CHZ_5027148041455.json (11 entries) saved successfully
+2026-02-01 12:28:46,390 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B01MSZQ37V_5035320257174.json (11 entries) saved successfully
+2026-02-01 12:28:46,395 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (6 entries) saved successfully
+Traceback (most recent call last):
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\FBA_Financial_calculator.py", line 523, in run_calculations
+    with open(cache_path, "r", encoding="utf-8") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\cached_products\\angelwholesale-co-uk__sandbox__run_ange_products_cache.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\control_plane\run_product_list_refresh.py", line 319, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\control_plane\run_product_list_refresh.py", line 315, in main
+    run_calculations(sandbox_supplier)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\FBA_Financial_calculator.py", line 526, in run_calculations
+    raise Exception(f"Error reading supplier cache: {e}")
+Exception: Error reading supplier cache: [Errno 2] No such file or directory: 'C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\cached_products\\angelwholesale-co-uk__sandbox__run_ange_products_cache.json'
+Error during global cleanup: no running event loop
+Loading supplier products from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__sandbox__run_ange_products_cache.json
+Using Amazon data from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+Output will be saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\angelwholesale-co-uk__sandbox__run_ange
+Exception ignored in: <function BaseSubprocessTransport.__del__ at 0x0000024330754C20>
+Traceback (most recent call last):
+  File "C:\Python313\Lib\asyncio\base_subprocess.py", line 130, in __del__
+  File "C:\Python313\Lib\asyncio\base_subprocess.py", line 107, in close
+  File "C:\Python313\Lib\asyncio\proactor_events.py", line 109, in close
+  File "C:\Python313\Lib\asyncio\base_events.py", line 827, in call_soon
+  File "C:\Python313\Lib\asyncio\base_events.py", line 550, in _check_closed
+RuntimeError: Event loop is closed

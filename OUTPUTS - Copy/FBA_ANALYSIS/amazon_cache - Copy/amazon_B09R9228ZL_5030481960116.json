@@ -1,0 +1,135 @@
+
+"""
+WebScraper class for the passive extraction workflow.
+Provides methods for extracting data from supplier websites like clearance-king.co.uk.
+Integrates AI fallbacks for selector failures and features optimized HTML parsing.
+MODIFIED: Enhanced EAN extraction and added JSON output to test_scraper.
+FIXED: Malformed image selector.
+"""
+
+import os
+import logging
+import aiohttp
+import re
+import asyncio
+import time
+from datetime import datetime
+from typing import Dict, Any, List, Optional, Callable, Tuple
+from bs4 import BeautifulSoup, Tag
+
+# ADDED for test_scraper output
+import json
+from urllib.parse import urlparse # For deriving supplier name in test_scraper
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+log = logging.getLogger(__name__)
+
+# Constants
+OPENAI_MODEL_NAME_DEFAULT = "gpt-4.1-mini-2025-04-14"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
+REQUEST_TIMEOUT = 30  # seconds
+
+
+class WebScraper:
+    """
+    Web scraper for extracting data from supplier websites.
+    Prioritizes selector-based extraction, with AI-powered fallbacks.
+    Features include optimized parsing, robust error handling, and flexible selectors.
+    """
+    
+    def __init__(self, ai_client: Optional[Any] = None, openai_model_name: str = OPENAI_MODEL_NAME_DEFAULT):
+        """
+        Initialize the web scraper.
+        
+        Args:
+            ai_client: An initialized OpenAI client (or compatible)
+            openai_model_name: The model name to use for AI operations
+        """
+        self.session: Optional[aiohttp.ClientSession] = None
+        self.ai_client = ai_client
+        self.openai_model = openai_model_name
+        self.last_request_time = 0
+        self.rate_limit_delay = 1.0  # Default 1 second between requests
+
+        # Selectors dictionary with site-specific configurations
+        self.selector_config = {
+            # clearance-king.co.uk specific selectors
+            "clearance-king.co.uk": {
+                "product": "li.item.product.product-item",
+                "title": "a.product-item-link",
+                "price": "span.price",
+                "url": "a.product-item-link",
+                "image": "img.product-image-photo", # This is an <img> tag selector
+                "ean_detail_page": [
+                    "div.product-info-main div.value[itemprop='gtin13']", 
+                    "div.product-info-main div.product.attribute.sku div.value[itemprop='sku']", 
+                    "span.ck-b-code-value", 
+                    "table.additional-attributes-table td[data-th='EAN']",
+                    "table.additional-attributes-table td[data-th='Barcode']",
+                    ".product-info-main *:contains('EAN:') + *",
+                    ".product-info-main *:contains('Barcode:') + *",
+                    ".product-info-main *:contains('EAN:')", 
+                    ".product-info-main *:contains('Barcode:')",
+                ]
+            },
+            # Default selectors for any site
+            "default": {
+                "product": [
+                    ".products .product", ".product-grid .product", ".product-list .product-item",
+                    ".product-container", ".category-products .item", ".item-grid .item-box",
+                    ".product-layout", "article.product", "[data-test='product-grid'] > div",
+                    ".grid__item--collection-template", ".product-card", ".ProductItem"
+                ],
+                "title": [
+                    ".product-title", ".product-name", "h2", "h3", "h4", ".card-title", 
+                    "[class*='title']", "[class*='name']", "a[title]", ".product-info a"
+                ],
+                "price": [
+                    ".price", ".product-price", ".price-box", "[class*='price']", 
+                    ".card-text", ".amount", "[data-price]", "[itemprop='price']"
+                ],
+                "url": ["a[href]"],
+                # FIXED: Image selectors should target <img> tags or <source> tags within <picture>
+                "image": [
+                    "img",  # General img tag
+                    "img[data-src]", # Img tag with data-src
+                    "[class*='image'] img", # Img tag within an element with class containing 'image'
+                    "[class*='thumb'] img", # Img tag within an element with class containing 'thumb'
+                    "picture > source", # Source tag directly under a picture tag (will get srcset)
+                    "picture img" # Fallback img tag within a picture element
+                ],
+                "ean_detail_page": [ 
+                    "[itemprop='gtin13']", "[itemprop='gtin12']", "[itemprop='sku']",
+                    "*:contains('EAN:') + *", "*:contains('Barcode:') + *",
+                    "*:contains('GTIN:') + *", "*:contains('UPC:') + *",
+                    "*:contains('EAN:')", "*:contains('Barcode:')",
+                    "*:contains('GTIN:')", "*:contains('UPC:')",
+                    ".product-ean", ".product-barcode", ".product-gtin"
+                ]
+            }
+        }
+
+    async def _get_session(self) -> aiohttp.ClientSession:
+        if self.session is None or self.session.closed:
+            headers = {
+                "User-Agent": USER_AGENT,
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Cache-Control": "max-age=0",
+                "Connection": "keep-alive"
+            }
+            self.session = aiohttp.ClientSession(headers=headers)
+        return self.session
+
+    async def get_page_content(self, url: str, retry_count: int = 3) -> Optional[str]:
+        session = await self._get_session()
+        current_time = time.time()
+        time_since_last_request = current_time - self.last_request_time
+        if time_since_last_request < self.rate_limit_delay:
+            await asyncio.sleep(self.rate_limit_delay - time_since_last_request)
+        self.last_request_time = time.time()
+        
+        for attempt in range(retry_count):
+            try:
+                log.info(f"Fetching page content from: {url} (attemp

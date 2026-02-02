@@ -22,6 +22,7 @@ from .repo_files import (
     OnboardingWizardRequest,
 )
 from .clarify import ClarifyResponse, ask_clarify
+from .product_list_refresh import ProductListRefreshRequest, enqueue_product_list_refresh
 from control_plane.checklists import onboarding_sanity_check, run_readiness_check
 
 
@@ -50,6 +51,8 @@ def _touch_exports() -> None:
         OnboardingWizardRequest,
         ClarifyResponse,
         ask_clarify,
+        ProductListRefreshRequest,
+        enqueue_product_list_refresh,
         onboarding_sanity_check,
         run_readiness_check,
     )
