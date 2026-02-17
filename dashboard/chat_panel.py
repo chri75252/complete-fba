@@ -8,6 +8,7 @@ from control_plane.chat_orchestrator import (
     execute_tool_call,
     is_write_tool,
     plan_tool_call,
+    ToolCall,
 )
 from control_plane.env_config import ensure_llm_env
 from control_plane.llm.providers import get_provider
@@ -140,18 +141,54 @@ def render_chat_panel(base_dir: str) -> None:
             st.markdown("Proposed action requires confirmation:")
             st.json({"tool": tool_call.name, "params": tool_call.params})
 
+            if getattr(tool_call, "explanation", None):
+                st.info(tool_call.explanation)
+
+            if getattr(tool_call, "expected_outputs", None):
+                st.markdown("**Expected Output Files:**")
+                for path in tool_call.expected_outputs:
+                    st.code(path, language=None)
+
             if st.button("Confirm execute"):
                 result = execute_tool_call(tool_call, Path(base_dir))
                 audit_tool_call(user_text, tool_call, result, rag_info)
 
-                assistant_content = (
-                    tool_call.explanation
-                    if isinstance(getattr(tool_call, "explanation", None), str)
-                    and tool_call.explanation
-                    else str(result.get("message"))
-                    if isinstance(result.get("message"), str) and result.get("message")
-                    else f"Executed tool: `{tool_call.name}`\n\nResult: `{result.get('ok')}`"
-                )
+                # Enhanced messaging for product list refresh
+                if tool_call.name == "enqueue_product_list_refresh" and result.get("ok"):
+                    run_id = result.get("run_id", "unknown")
+                    sandbox_supplier = result.get("sandbox_supplier", "unknown")
+                    assistant_content = f"""✅ Job queued successfully!
+
+**Run ID:** `{run_id}`
+**Supplier:** `{sandbox_supplier}`
+
+⚠️ **ACTION REQUIRED:** Start the worker to execute:
+```
+python -m control_plane worker
+```
+
+**Monitor progress:**
+- Status: `OUTPUTS/CONTROL_PLANE/status/{run_id}.json`
+- Log: `OUTPUTS/CONTROL_PLANE/logs/{run_id}.log`
+- Pending jobs: Check `OUTPUTS/CONTROL_PLANE/jobs/pending/`
+
+The worker will pick up the job and move it to running, then done/failed."""
+                else:
+                    assistant_content = (
+                        tool_call.explanation
+                        if isinstance(getattr(tool_call, "explanation", None), str)
+                        and tool_call.explanation
+                        else str(result.get("message"))
+                        if isinstance(result.get("message"), str) and result.get("message")
+                        else f"Executed tool: `{tool_call.name}`\n\nResult: `{result.get('ok')}`"
+                    )
+
+                if (
+                    result.get("ok")
+                    and isinstance(result.get("run_id"), str)
+                    and result.get("run_id")
+                ):
+                    st.session_state["last_run_id"] = result["run_id"]
                 st.session_state["chat_messages"].append(
                     {
                         "role": "assistant",
@@ -173,6 +210,172 @@ def render_chat_panel(base_dir: str) -> None:
 
     user_input = st.chat_input("Ask about status, financials, traces, or request a run...")
     if not user_input:
+        return
+
+    if st.session_state["pending_tool_call"] is not None:
+        import re
+
+        updated_params = False
+        current_tool = st.session_state["pending_tool_call"]
+        new_params = current_tool.params.copy()
+        natural_match = None
+        analyze_match = None
+        unlimited_match = None
+
+        # Parse max_products_per_category (accepts: "to 10", "= 10", ": 10", or just "10")
+        mpc_match = re.search(
+            r"max[_ ]?products[_ ]?per[_ ]?category\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+            user_input,
+            re.IGNORECASE,
+        )
+        if mpc_match:
+            new_params["max_products_per_category"] = int(mpc_match.group(1))
+            updated_params = True
+
+        # Parse max_products (accepts: "to 10", "= 10", ": 10", or just "10")
+        mp_match = re.search(
+            r"max[_ ]?products(?![_ ]?per[_ ]?category)\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+            user_input,
+            re.IGNORECASE,
+        )
+        if mp_match:
+            new_params["max_products"] = int(mp_match.group(1))
+            updated_params = True
+
+        if not mp_match:
+            natural_match = re.search(
+                r"(?:first|only|just|limit(?:ed)?\s+to|top)\s+(\d+)\s+products?",
+                user_input,
+                re.IGNORECASE,
+            )
+            if natural_match:
+                new_params["max_products"] = int(natural_match.group(1))
+                updated_params = True
+
+        if not mp_match:
+            analyze_match = re.search(
+                r"analyze\s+(?:only\s+)?(?:the\s+)?(?:first\s+)?(\d+)\s+products?",
+                user_input,
+                re.IGNORECASE,
+            )
+            if analyze_match:
+                new_params["max_products"] = int(analyze_match.group(1))
+                updated_params = True
+
+        both_match = re.search(
+            r"\bboth\b(?:\s+(?:of\s+them|limits|values|settings))?\s+(?:should\s+be|=|to|:)\s*(\d+)\b",
+            user_input,
+            re.IGNORECASE,
+        )
+        if both_match and not (mpc_match or mp_match or natural_match or analyze_match):
+            val = int(both_match.group(1))
+            new_params["max_products"] = val
+            new_params["max_products_per_category"] = val
+            updated_params = True
+
+        if not mp_match:
+            unlimited_match = re.search(
+                r"\b(?:unlimited|no\s+limit|all\s+products)\b",
+                user_input,
+                re.IGNORECASE,
+            )
+            if unlimited_match:
+                new_params["max_products"] = 0
+                updated_params = True
+
+        if updated_params:
+            if (
+                (mp_match or natural_match or analyze_match)
+                and not mpc_match
+                and int(new_params.get("max_products") or 0) > 0
+            ):
+                new_params["max_products_per_category"] = int(new_params["max_products"])
+
+            st.session_state["pending_tool_call"] = ToolCall(
+                name=current_tool.name,
+                params=new_params,
+                explanation=current_tool.explanation,
+                expected_outputs=current_tool.expected_outputs,
+            )
+            changes = []
+            if "max_products_per_category" in new_params and (
+                mpc_match or (mp_match or natural_match or analyze_match)
+            ):
+                changes.append(
+                    f"max_products_per_category={new_params['max_products_per_category']}"
+                )
+            if mp_match or natural_match or analyze_match or unlimited_match:
+                changes.append(f"max_products={new_params['max_products']}")
+
+            st.session_state["chat_messages"].append({"role": "user", "content": user_input})
+            st.session_state["chat_messages"].append(
+                {
+                    "role": "assistant",
+                    "content": f"Updated pending run: {', '.join(changes)}",
+                }
+            )
+            st.rerun()
+            return
+
+        st.session_state["chat_messages"].append({"role": "user", "content": user_input})
+        st.session_state["chat_messages"].append(
+            {
+                "role": "assistant",
+                "content": "⚠️ A pending action is waiting for confirmation. Please **Confirm** or **Cancel** above, or type 'set max products to X' to edit parameters.",
+            }
+        )
+        st.rerun()
+        return
+
+    import re
+
+    explicit_run_id = re.search(
+        r"\b([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b",
+        user_input,
+        re.IGNORECASE,
+    )
+    cancel_pat = re.compile(
+        r"\b(?:cancel|stop|kill|abort|terminate)\b.*\b(?:run|job|process)\b",
+        re.IGNORECASE,
+    )
+    if cancel_pat.search(user_input):
+        st.session_state["chat_messages"].append({"role": "user", "content": user_input})
+        run_id = explicit_run_id.group(1) if explicit_run_id else ""
+        tool_call = ToolCall(
+            name="cancel_run",
+            params={"run_id": run_id},
+            explanation=None,
+            expected_outputs=[],
+        )
+        result = execute_tool_call(tool_call, Path(base_dir))
+        audit_tool_call(user_input, tool_call, result, {"meta": {}})
+        st.session_state["chat_messages"].append(
+            {
+                "role": "assistant",
+                "content": f"Cancel requested for run `{result.get('run_id') or run_id}`.",
+                "tool_result": result,
+            }
+        )
+        st.rerun()
+        return
+
+    stop_at_pat = re.search(
+        r"\b(?:stop|halt|end)\s+(?:at|after)\s+(\d+)\s+products?\b",
+        user_input,
+        re.IGNORECASE,
+    )
+    if stop_at_pat and st.session_state.get("last_run_id"):
+        st.session_state["chat_messages"].append({"role": "user", "content": user_input})
+        st.session_state["chat_messages"].append(
+            {
+                "role": "assistant",
+                "content": (
+                    "Cannot change limits on an already-running job. "
+                    "Type 'cancel the run' to stop it, then start a new run with the desired limits."
+                ),
+            }
+        )
+        st.rerun()
         return
 
     st.session_state["chat_messages"].append({"role": "user", "content": user_input})

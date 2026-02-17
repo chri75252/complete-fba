@@ -1,0 +1,119 @@
+{
+  "run_id": "20260202_174932",
+  "status": "OK",
+  "input_file": "RESERACH\\REPORT\\part 8 jan\\part 8 jan.xlsx",
+  "input_file_hash": "87239c94669268d5",
+  "supplier": "part_8_jan",
+  "skip_browser": true,
+  "preflight": {
+    "warnings": [],
+    "diagnostics": {
+      "mode": "openai_validated",
+      "model": "gpt-5-mini",
+      "base_url": "https://api.openai.com/v1"
+    }
+  },
+  "normalization_report": {
+    "original_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "HMRC",
+      "NetProfit",
+      "ROI ( % ) ",
+      "Breakeven",
+      "ProfitMargin",
+      "EAN_match"
+    ],
+    "detected": {
+      "row_id": "RowID",
+      "supplier_title": "SupplierTitle",
+      "amazon_title": "AmazonTitle",
+      "supplier_ean": "EAN",
+      "amazon_ean": "EAN_OnPage",
+      "asin": "ASIN",
+      "supplier_price": "SupplierPrice_incVAT",
+      "selling_price": "SellingPrice_incVAT",
+      "net_profit": "NetProfit",
+      "roi": null,
+      "sales": "bought_in_past_month",
+      "supplier_url": "SupplierURL"
+    },
+    "stable_key_generated": true,
+    "stable_key_collision": false
+  },
+  "schema": {
+    "input_path": "RESERACH\\REPORT\\part 8 jan\\part 8 jan.xlsx",
+    "rows": 3063,
+    "detected_columns": [
+      "EAN",
+      "EAN_OnPage",
+      "ASIN",
+      "SupplierTitle",
+      "AmazonTitle",
+      "SupplierURL",
+      "AmazonURL",
+      "bought_in_past_month",
+      "fba_seller_count",
+      "fbm_seller_count",
+      "total_offer_count",
+      "SupplierPrice_incVAT",
+      "SupplierPrice_exVAT",
+      "SellingPrice_incVAT",
+      "ReferralFee",
+      "FBAFee",
+      "PrepHouseFee",
+      "OutputVAT",
+      "InputVAT",
+      "HMRC",
+      "NetProfit",
+      "ROI ( % ) ",
+      "Breakeven",
+      "ProfitMargin",
+      "EAN_match"
+    ],
+    "warnings": []
+  },
+  "validation": {
+    "passed": true,
+    "errors": []
+  },
+  "bucket_counts": {
+    "FILTERED_OUT": 2755,
+    "HIGHLY_LIKELY": 188,
+    "NEEDS_VERIFICATION": 86,
+    "VERIFIED": 34
+  },
+  "global_traps_loaded": 0,
+  "ai_features": {
+    "enabled": false,
+    "provider": null,
+    "model": null
+  },
+  "iterations": {
+    "max_iterations": 1,
+    "iterations_run": 1,
+    "mode": "single_pass"
+  },
+  "brand_detection": {
+    "enabled": false,
+    "new_candidates": 0,
+    "known_brands": 0
+  }
+}

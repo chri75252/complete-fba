@@ -67,6 +67,50 @@ def enqueue_product_list_refresh(
     if not products_path:
         return {"ok": False, "error": "missing_products_or_products_path"}
 
+    candidate_path = Path(products_path)
+
+    repo_root_path = repo_root.resolve()
+    products_lists_root = (repo_root_path / "OUTPUTS" / "PRODUCTS_LISTS").resolve()
+    overrides_root = paths.overrides_dir.resolve()
+    inputs_root = (repo_root_path / "OUTPUTS" / "CONTROL_PLANE" / "inputs").resolve()
+    allowed_override = (overrides_root / run_id / "products_subset.json").resolve()
+
+    if not candidate_path.is_absolute():
+        norm = str(candidate_path).replace("\\", "/")
+        if candidate_path.parent == Path("."):
+            candidate_path = products_lists_root / candidate_path.name
+        elif norm.startswith("OUTPUTS/PRODUCTS_LISTS/"):
+            candidate_path = repo_root_path / candidate_path
+        else:
+            candidate_path = repo_root_path / candidate_path
+    candidate_path = candidate_path.resolve()
+
+    allowed = (
+        candidate_path == allowed_override
+        or candidate_path == products_lists_root
+        or products_lists_root in candidate_path.parents
+        or candidate_path == inputs_root
+        or inputs_root in candidate_path.parents
+    )
+    if not allowed:
+        return {
+            "ok": False,
+            "error": "products_path_not_allowed",
+            "products_path": str(candidate_path),
+            "message": "Products path must be under OUTPUTS/PRODUCTS_LISTS, OUTPUTS/CONTROL_PLANE/inputs, or the run override file.",
+        }
+
+    # Validate products_path exists before creating job
+    if not candidate_path.exists():
+        return {
+            "ok": False,
+            "error": "products_path_not_found",
+            "products_path": str(candidate_path),
+            "message": f"Products file not found: {candidate_path}",
+        }
+
+    products_path = str(candidate_path)
+
     job_path = paths.jobs_pending / f"job_{run_id}.json"
     payload = {
         "schema_version": "1.0",

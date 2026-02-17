@@ -509,6 +509,25 @@ ls -la OUTPUTS/FBA_ANALYSIS/linking_maps/
 - Dashboard reads directly from output files without database
 - Resume data reconstructed from linking_map.json on startup
 
+### **🚨 MAIN SCRIPT PROTECTION POLICY**
+
+- `tools/*` and `run_custom_*.py` are **read-only by default**. Do NOT edit without explicit user approval.
+- Protected files with SHA256 verification (use Python `hashlib`, NOT git):
+  - `tools/configurable_supplier_scraper.py` → `9249228a`
+  - `run_custom_poundwholesale.py` → `2fe136a4`
+  - `run_custom_clearance_king.py` → `514fbe7c`
+  - `run_custom_dkwholesale-com.py` → `e4cdd37a`
+  - `run_custom_efghousewares-co-uk.py` → `4f111523`
+- **No git operations** during automated execution (no pull/push/fetch/merge/rebase/reset/checkout/commit).
+- Prefer changes in `control_plane/*` and `dashboard/*`.
+- File-based communication pattern: Dashboard writes job JSONs → worker picks them up. No RPC.
+
+### **🔧 CONTROL PLANE DIAGNOSTICS**
+
+- Diagnostics probe: `python -m control_plane diagnostics-probe --url <url> --probe-id <id> [--html] [--screenshot]`
+- Output: `OUTPUTS/CONTROL_PLANE/diagnostics/<probe_id>/` (report.json, page.html, screenshot.png)
+- CLI subcommands: `worker`, `build-index`, `diagnostics-probe`
+
 ---
 
 ## Dashboard-Specific Instructions

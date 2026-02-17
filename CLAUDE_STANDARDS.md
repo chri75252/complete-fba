@@ -344,9 +344,20 @@ The system is production-ready with excellent architectural design, requiring on
 
 ---
 
-**Last Updated**: 2025-06-22  
-**Version**: 3.6  
-**Maintained By**: Amazon FBA Agent System Team  
+## Main Script Protection Policy
+
+- `tools/*` and `run_custom_*.py` are **read-only by default**. Do NOT edit without explicit user approval.
+- Verify protected file integrity using `hashlib.sha256` (NOT git commands).
+- **No git operations** during automated execution.
+- Prefer changes in `control_plane/*` and `dashboard/*`.
+- Control plane uses file-based communication (job JSONs) — no RPC.
+- Diagnostics probe available: `python -m control_plane diagnostics-probe --url <url> --probe-id <id> --html --screenshot`
+
+---
+
+**Last Updated**: 2026-02-10
+**Version**: 3.6
+**Maintained By**: Amazon FBA Agent System Team
 **Status**: ACTIVE STANDARD - All development must comply
 
 **File Generation Info**: This is the SOURCE OF TRUTH for all development standards. The file `claude.md` is auto-generated from this file for automation compatibility.

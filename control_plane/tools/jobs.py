@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from control_plane.json_io import write_json_atomic, read_json
+from control_plane.json_io import read_json, write_json_atomic
 from control_plane.paths import get_paths
 
 
@@ -65,7 +65,11 @@ def write_merged_system_config(
 
 
 def enqueue_run_job(
-    run_id: str, request: RunRequest, merged_config_path: Path, categories_path: Path
+    run_id: str,
+    request: RunRequest,
+    merged_config_path: Path,
+    categories_path: Path,
+    sandbox_supplier: str | None = None,
 ) -> Path:
     if not request.runner_script or not request.runner_script.strip():
         raise ValueError("Cannot enqueue job: runner_script is empty")
@@ -80,6 +84,7 @@ def enqueue_run_job(
         "created_at": utc_now_iso(),
         "job_type": "run_workflow",
         "supplier_domain": request.supplier_domain,
+        "sandbox_supplier": sandbox_supplier or request.supplier_domain,
         "workflow_key": request.workflow_key,
         "runner_script": request.runner_script,
         "override": {

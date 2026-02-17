@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -54,6 +55,7 @@ READ_TOOLS = {
 
 WRITE_TOOLS = {
     "enqueue_run": "enqueue_run",
+    "cancel_run": "cancel_run",
     "enqueue_onboarding": "enqueue_onboarding",
     "enqueue_product_list_refresh": "enqueue_product_list_refresh",
 }
@@ -64,6 +66,7 @@ class ToolCall:
     name: str
     params: dict[str, Any]
     explanation: str | None = None
+    expected_outputs: list[str] | None = None
 
 
 def _load_system_index(repo_root: Path) -> dict[str, Any] | None:
@@ -87,11 +90,15 @@ def _load_system_instructions(repo_root: Path | None) -> str:
 
 
 def _infer_supplier_domain_from_url(url: str) -> str:
-    """Extract supplier domain from a URL."""
+    """Extract supplier domain from a URL, stripping www. prefix."""
     import re
 
     m = re.match(r"https?://([^/]+)/", url + "/")
-    return m.group(1).lower() if m else ""
+    if not m:
+        return ""
+    domain = m.group(1).lower()
+    # Strip www. prefix for canonical domain matching
+    return domain.replace("www.", "")
 
 
 def _resolve_workflow_params(repo_root: Path, supplier_domain: str) -> tuple[str, str]:
@@ -161,15 +168,28 @@ def _resolve_workflow_params(repo_root: Path, supplier_domain: str) -> tuple[str
     return workflow_key, runner
 
 
-def _extract_category_urls(user_text: str) -> list[str]:
-    """Extract category URLs from user text. Returns list of URLs containing '/Category/'."""
+def _extract_category_urls(user_text: str, system_index: dict | None = None) -> list[str]:
+    """Extract category URLs from user text. Returns list of URLs belonging to known suppliers."""
     import re
+    from urllib.parse import urlparse
 
     # Match http/https URLs
     url_pattern = r'https?://[^\s<>"\')\]]+[^\s<>"\')\].,;!?]'
     urls = re.findall(url_pattern, user_text)
-    # Filter for category URLs
-    category_urls = [u for u in urls if "/Category/" in u]
+
+    if not system_index:
+        # Without index, return all URLs - caller should ensure index is loaded
+        return urls
+
+    known_domains = system_index.get("inventory", {}).get("suppliers", [])
+
+    category_urls = []
+    for u in urls:
+        parsed = urlparse(u)
+        domain = parsed.netloc.replace("www.", "").lower()
+        if any(d in domain for d in known_domains):
+            category_urls.append(u)
+
     return category_urls
 
 
@@ -190,7 +210,7 @@ def build_prompt(
         "query_financial": {
             "type": "read",
             "params": {
-                "supplier_domain": "<supplier-domain>",
+                "supplier_domain": "poundwholesale.co.uk",
                 "roi_min": 30,
                 "netprofit_min": 5,
                 "ean": None,
@@ -198,17 +218,17 @@ def build_prompt(
                 "limit": 50,
             },
         },
-        "show_status": {"type": "read", "params": {"run_id": "<run-id>"}},
-        "tail_logs": {"type": "read", "params": {"run_id": "<run-id>", "lines": 200}},
+        "show_status": {"type": "read", "params": {"run_id": ""}},
+        "tail_logs": {"type": "read", "params": {"run_id": "", "lines": 200}},
         "show_trace_summary": {"type": "read", "params": {"limit": 3}},
         "read_processing_state": {
             "type": "read",
-            "params": {"supplier_domain": "<supplier-domain>"},
+            "params": {"supplier_domain": "poundwholesale.co.uk"},
         },
         "find_cached_products": {
             "type": "read",
             "params": {
-                "supplier_domain": "<supplier-domain>",
+                "supplier_domain": "poundwholesale.co.uk",
                 "ean": None,
                 "url": None,
                 "title_contains": None,
@@ -218,24 +238,27 @@ def build_prompt(
         "find_linking_entries": {
             "type": "read",
             "params": {
-                "supplier_domain": "<supplier-domain>",
+                "supplier_domain": "poundwholesale.co.uk",
                 "supplier_ean": None,
                 "amazon_asin": None,
                 "supplier_url": None,
                 "limit": 50,
             },
         },
-        "read_amazon_cache_by_asin": {"type": "read", "params": {"asin": "<asin>"}},
-        "run_readiness_check": {"type": "read", "params": {"supplier_domain": "<supplier-domain>"}},
+        "read_amazon_cache_by_asin": {"type": "read", "params": {"asin": "ASIN"}},
+        "run_readiness_check": {
+            "type": "read",
+            "params": {"supplier_domain": "poundwholesale.co.uk"},
+        },
         "onboarding_sanity_check": {
             "type": "read",
-            "params": {"supplier_domain": "<supplier-domain>", "run_start_time": 0},
+            "params": {"supplier_domain": "poundwholesale.co.uk", "run_start_time": 0},
         },
         "enqueue_run": {
             "type": "write",
             "params": {
                 "workflow_key": "<workflow_key>",
-                "supplier_domain": "<supplier-domain>",
+                "supplier_domain": "poundwholesale.co.uk",
                 "runner_script": "<runner-script>",
                 "category_urls": ["<category-url>"],
                 "max_products": 50,
@@ -243,26 +266,32 @@ def build_prompt(
                 "notes": "user request",
             },
         },
+        "cancel_run": {
+            "type": "write",
+            "params": {
+                "run_id": "",
+            },
+        },
         "read_repo_file": {
             "type": "read",
-            "params": {"path": "<repo-relative-path>", "max_bytes": 200000},
+            "params": {"path": "RELATIVE_PATH_IN_REPO", "max_bytes": 200000},
         },
-        "list_repo_dir": {"type": "read", "params": {"path": "<repo-relative-dir>"}},
+        "list_repo_dir": {"type": "read", "params": {"path": "RELATIVE_DIR_IN_REPO"}},
         "enqueue_onboarding": {
             "type": "write",
             "params": {
-                "run_id": "<run-id>",
-                "input_path": "C:/path/to/onboarding_input.json",
-                "output_path": "C:/path/to/onboarding_output.json",
+                "run_id": "",
+                "input_path": "ABSOLUTE_PATH_TO_ONBOARDING_INPUT_JSON",
+                "output_path": "ABSOLUTE_PATH_TO_ONBOARDING_OUTPUT_JSON",
                 "timeout_seconds": 4200,
             },
         },
         "enqueue_product_list_refresh": {
             "type": "write",
             "params": {
-                "supplier_domain": "<supplier-domain>",
-                "products_path": "C:/path/to/products_subset.json",
-                "run_id": "<run-id>",
+                "supplier_domain": "poundwholesale.co.uk",
+                "products_path": "OUTPUTS/PRODUCTS_LISTS/products_subset.json",
+                "run_id": "",
                 "notes": "user request",
                 "dry_run": False,
             },
@@ -273,7 +302,7 @@ def build_prompt(
         system_instructions
         + "\n\nReturn JSON format:\n"
         + json.dumps(
-            {"tool": "<tool_name>", "params": {}, "explanation": "<short user-facing prose>"},
+            {"tool": "TOOL_NAME", "params": {}, "explanation": "short user-facing prose"},
             indent=2,
         )
         + "\n\nAllowed tools and schemas:\n"
@@ -289,18 +318,58 @@ def build_prompt(
     )
 
 
+def _parse_runtime_constraints(user_text: str) -> dict[str, int | None]:
+    """Extract max_products and max_products_per_category from user text."""
+    constraints: dict[str, int | None] = {"max_products": None, "max_products_per_category": None}
+
+    mpc_match = re.search(
+        r"max[_ ]?products[_ ]?per[_ ]?category\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+        user_text,
+        re.IGNORECASE,
+    )
+    if mpc_match:
+        constraints["max_products_per_category"] = int(mpc_match.group(1))
+
+    mp_match = re.search(
+        r"max[_ ]?products(?![_ ]?per[_ ]?category)\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+        user_text,
+        re.IGNORECASE,
+    )
+    if mp_match:
+        constraints["max_products"] = int(mp_match.group(1))
+
+    if constraints["max_products"] is None:
+        natural_match = re.search(
+            r"(?:first|only|just|limit(?:ed)?\s+to|top)\s+(\d+)\s+products?",
+            user_text,
+            re.IGNORECASE,
+        )
+        if natural_match:
+            constraints["max_products"] = int(natural_match.group(1))
+
+    if constraints["max_products"] is None:
+        analyze_match = re.search(
+            r"analyze\s+(?:only\s+)?(?:the\s+)?(?:first\s+)?(\d+)\s+products?",
+            user_text,
+            re.IGNORECASE,
+        )
+        if analyze_match:
+            constraints["max_products"] = int(analyze_match.group(1))
+
+    return constraints
+
+
 def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str, Any]]:
-    category_urls = _extract_category_urls(user_text)
+    system_index = _load_system_index(repo_root)
+    category_urls = _extract_category_urls(user_text, system_index)
 
     if category_urls:
-        # Infer supplier domain from first category URL
         supplier_domain = _infer_supplier_domain_from_url(category_urls[0])
+        constraints = _parse_runtime_constraints(user_text)
 
         try:
-            # Resolve workflow parameters (workflow_key and runner_script)
             workflow_key, runner_script = _resolve_workflow_params(repo_root, supplier_domain)
 
-            # Success - return enqueue_run tool call with all required parameters
             tool_call = ToolCall(
                 name="enqueue_run",
                 params={
@@ -308,11 +377,19 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
                     "category_urls": category_urls,
                     "workflow_key": workflow_key,
                     "runner_script": runner_script,
-                    "max_products": 0,  # Use system default
-                    "max_products_per_category": 2000,  # Use system default
+                    "max_products": constraints["max_products"],
+                    "max_products_per_category": constraints["max_products_per_category"],
                     "notes": "User requested category analysis via chat",
                 },
                 explanation=f"Starting analysis for {len(category_urls)} categories on {supplier_domain}. Using runner '{runner_script}' with workflow '{workflow_key}'.",
+                expected_outputs=[
+                    f"OUTPUTS/CONTROL_PLANE/jobs/pending/job_<run_id>.json",
+                    f"OUTPUTS/CONTROL_PLANE/status/<run_id>.json",
+                    f"OUTPUTS/CONTROL_PLANE/logs/<run_id>.log",
+                    f"OUTPUTS/CACHE/processing_states/{supplier_domain.replace('.', '_')}__sandbox_<id>_processing_state.json",
+                    f"OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier_domain}__sandbox_<id>/linking_map.json",
+                    f"OUTPUTS/FBA_ANALYSIS/financial_reports/{supplier_domain.replace('.', '-')}__sandbox_<id>/fba_financial_report_*.csv",
+                ],
             )
             return tool_call, {
                 "meta": {},
@@ -339,7 +416,6 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
             }
 
     provider = get_provider()
-    system_index = _load_system_index(repo_root)
 
     rag_cfg: RagConfig = default_rag_config()
     rag_enabled = bool(rag_cfg.enabled) and should_use_rag(user_text)
@@ -374,7 +450,21 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
     explanation: str | None = None
 
     for attempt in range(3):
-        data = provider.generate_json(prompt)
+        try:
+            data = provider.generate_json(prompt)
+        except Exception as e:
+            if attempt < 2:
+                prompt = (
+                    prompt
+                    + f"\n\nYour last response was invalid/unparseable JSON ({type(e).__name__}: {e}). "
+                    + "Return ONLY a single valid JSON object with keys: tool, params, explanation."
+                )
+                continue
+            data = {
+                "tool": "ask_clarify",
+                "params": {"user_text": user_text, "error_context": str(e)},
+            }
+
         tool = str(data.get("tool") or "").strip()
         params = data.get("params") or {}
         if not isinstance(params, dict):
@@ -383,6 +473,10 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
         explanation_raw = data.get("explanation")
         if isinstance(explanation_raw, str) and explanation_raw.strip():
             explanation = explanation_raw.strip()
+
+        expected_outputs = data.get("expected_outputs")
+        if not isinstance(expected_outputs, list):
+            expected_outputs = []
 
         allowed = set(READ_TOOLS) | set(WRITE_TOOLS)
         if tool not in allowed:
@@ -395,6 +489,7 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
             tool = "ask_clarify"
             params = {"user_text": user_text}
             explanation = explanation or "I need a bit more information to help with that."
+            expected_outputs = []
             break
 
         if tool == "enqueue_run":
@@ -403,8 +498,20 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
                 u for u in urls if isinstance(u, str) and u.strip()
             ]:
                 tool = "ask_clarify"
-                params = {"user_text": user_text}
+                params = {"user_text": user_text, "missing_params": ["category_urls"]}
                 explanation = explanation or "To proceed, I need one or more category URLs to run."
+                expected_outputs = []
+            else:
+                constraints = _parse_runtime_constraints(user_text)
+                if constraints.get("max_products") is not None:
+                    params["max_products"] = constraints["max_products"]
+                if constraints.get("max_products_per_category") is not None:
+                    params["max_products_per_category"] = constraints["max_products_per_category"]
+                if (
+                    constraints.get("max_products") is not None
+                    and constraints.get("max_products_per_category") is None
+                ):
+                    params["max_products_per_category"] = constraints["max_products"]
 
         break
 
@@ -415,7 +522,15 @@ def plan_tool_call(user_text: str, repo_root: Path) -> tuple[ToolCall, dict[str,
         "context_injected": bool(rag_context),
     }
 
-    return ToolCall(name=tool, params=params, explanation=explanation), rag_info
+    return (
+        ToolCall(
+            name=tool,
+            params=params,
+            explanation=explanation,
+            expected_outputs=expected_outputs,
+        ),
+        rag_info,
+    )
 
 
 def is_write_tool(tool: str) -> bool:
@@ -425,6 +540,60 @@ def is_write_tool(tool: str) -> bool:
 def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
     name = tool_call.name
     p = tool_call.params
+
+    def _normalize_run_id(raw: object) -> str:
+        run_id = str(raw or "").strip()
+        if run_id.lower() in {"<run-id>", "<run_id>", "run_id", "run-id"}:
+            return ""
+        if any(ch in run_id for ch in '<>:"/\\|?*'):
+            return ""
+        return run_id
+
+    def _resolve_contextual_run_id(repo_root: Path, raw: object) -> str:
+        normalized = _normalize_run_id(raw)
+        if normalized:
+            return normalized
+        paths = get_paths()
+        running_dir = paths.jobs_running
+        if running_dir.exists():
+            candidates = sorted(
+                [
+                    f
+                    for f in running_dir.iterdir()
+                    if f.name.startswith("job_") and f.suffix == ".json"
+                ],
+                key=lambda f: f.stat().st_mtime,
+                reverse=True,
+            )
+            if candidates:
+                return candidates[0].stem.replace("job_", "", 1)
+        pending_dir = paths.jobs_pending
+        if pending_dir.exists():
+            candidates = sorted(
+                [
+                    f
+                    for f in pending_dir.iterdir()
+                    if f.name.startswith("job_") and f.suffix == ".json"
+                ],
+                key=lambda f: f.stat().st_mtime,
+                reverse=True,
+            )
+            if candidates:
+                return candidates[0].stem.replace("job_", "", 1)
+        status_dir = paths.status_dir
+        if status_dir.exists():
+            candidates = sorted(
+                [
+                    f
+                    for f in status_dir.iterdir()
+                    if f.suffix == ".json" and not f.stem.endswith(".cancelled")
+                ],
+                key=lambda f: f.stat().st_mtime,
+                reverse=True,
+            )
+            if candidates:
+                return candidates[0].stem
+        return ""
 
     if isinstance(p, dict):
         inferred_supplier_domain = None
@@ -470,7 +639,11 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             p["url"] = items[0] if items else ""
 
     if name == "ask_clarify":
-        return ask_clarify(user_text=str(p.get("user_text") or "").strip() or None)
+        return ask_clarify(
+            user_text=str(p.get("user_text") or "").strip() or None,
+            missing_params=p.get("missing_params"),
+            error_context=str(p.get("error_context") or "").strip() or None,
+        )
 
     if name == "query_financial":
         q = FinancialQuery(
@@ -486,11 +659,21 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         return query_financial_rows(repo_root, q)
 
     if name == "show_status":
-        run_id = str(p.get("run_id") or "").strip()
+        run_id = _resolve_contextual_run_id(repo_root, p.get("run_id"))
+        if not run_id:
+            return {
+                "ok": False,
+                "error": "run_id could not be resolved. No active, pending, or recent job found.",
+            }
         return {"ok": True, "status": read_status(run_id)}
 
     if name == "tail_logs":
-        run_id = str(p.get("run_id") or "").strip()
+        run_id = _resolve_contextual_run_id(repo_root, p.get("run_id"))
+        if not run_id:
+            return {
+                "ok": False,
+                "error": "run_id could not be resolved. No active, pending, or recent job found.",
+            }
         lines = int(p.get("lines") or 200)
         paths = get_paths()
         log_path = paths.logs_dir / f"{run_id}.log"
@@ -502,6 +685,13 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
 
     if name == "read_processing_state":
         supplier_domain = str(p.get("supplier_domain") or "")
+        if not supplier_domain:
+            try:
+                import streamlit as st
+
+                supplier_domain = str(st.session_state.get("supplier") or "")
+            except Exception:
+                supplier_domain = ""
         return {"ok": True, "state": read_processing_state(repo_root, supplier_domain)}
 
     if name == "read_repo_file":
@@ -551,17 +741,74 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         return onboarding_sanity_check(repo_root, supplier_domain, run_start_time)
 
     if name == "enqueue_run":
+        workflow_key = str(p.get("workflow_key") or "")
+
+        from config.system_config_loader import SystemConfigLoader
+
+        config_loader = SystemConfigLoader()
+        full_config = config_loader.get_full_config()
+        valid_keys = list(full_config.get("workflows", {}).keys())
+
+        if workflow_key not in valid_keys:
+            supplier_domain = str(p.get("supplier_domain") or "")
+            for key in valid_keys:
+                domain_clean = supplier_domain.replace(".", "_").replace("-", "_")
+                if domain_clean in key.lower():
+                    p["workflow_key"] = key
+                    workflow_key = key
+                    break
+            else:
+                return {
+                    "ok": False,
+                    "error": f"Invalid workflow_key: {workflow_key}. Valid: {valid_keys}",
+                }
+
+        try:
+            base_cfg = read_json(repo_root / "config" / "system_config.json")
+        except Exception as e:
+            return {
+                "ok": False,
+                "error": f"Failed to parse config/system_config.json: {e}",
+            }
+
+        system_defaults = base_cfg.get("system") or {}
+
+        raw_max_products = p.get("max_products")
+        raw_max_products_per_category = p.get("max_products_per_category")
+
+        def _coerce_or_default(raw: object, default_val: int) -> int:
+            if raw is None:
+                return default_val
+            if isinstance(raw, str) and not raw.strip():
+                return default_val
+            return int(raw)
+
+        per_cat_default = int(system_defaults.get("max_products_per_category") or 0)
+        try:
+            if (
+                raw_max_products_per_category is None
+                and raw_max_products is not None
+                and int(raw_max_products) > 0
+            ):
+                per_cat_default = int(raw_max_products)
+        except Exception:
+            pass
+
         req = RunRequest(
             supplier_domain=str(p.get("supplier_domain") or ""),
-            workflow_key=str(p.get("workflow_key") or ""),
+            workflow_key=workflow_key,
             runner_script=str(p.get("runner_script") or ""),
             category_urls=list(p.get("category_urls") or []),
-            max_products=int(p.get("max_products") or 0),
-            max_products_per_category=int(p.get("max_products_per_category") or 0),
+            max_products=_coerce_or_default(
+                raw_max_products,
+                int(system_defaults.get("max_products") or 0),
+            ),
+            max_products_per_category=_coerce_or_default(
+                raw_max_products_per_category,
+                per_cat_default,
+            ),
             notes=p.get("notes"),
         )
-
-        base_cfg = read_json(repo_root / "config" / "system_config.json")
         run_id = str(p.get("run_id") or "").strip()
         if not run_id:
             import uuid
@@ -572,11 +819,12 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         if not sandbox_suffix:
             sandbox_suffix = f"sandbox__{run_id[:8]}"
 
+        # Build sandbox_supplier for output paths/polling, but keep supplier_name canonical for credential lookup
         sandbox_supplier = f"{req.supplier_domain}__{sandbox_suffix}"
 
         categories_path = write_categories_subset(run_id, sandbox_supplier, req.category_urls)
 
-        overrides = {
+        overrides: dict[str, Any] = {
             "system": {
                 "max_products": req.max_products,
                 "max_products_per_category": req.max_products_per_category,
@@ -589,8 +837,14 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             },
         }
 
+        base_creds = (base_cfg.get("credentials") or {}).get(req.supplier_domain)
+        if isinstance(base_creds, dict) and base_creds:
+            overrides["credentials"] = {sandbox_supplier: base_creds}
+
         merged_cfg_path = write_merged_system_config(run_id, base_cfg, overrides)
-        job_path = enqueue_run_job(run_id, req, merged_cfg_path, categories_path)
+        job_path = enqueue_run_job(
+            run_id, req, merged_cfg_path, categories_path, sandbox_supplier=sandbox_supplier
+        )
 
         return {
             "ok": True,
@@ -622,6 +876,31 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             dry_run=bool(p.get("dry_run")),
         )
         return enqueue_product_list_refresh(repo_root, req)
+
+    if name == "cancel_run":
+        run_id = _resolve_contextual_run_id(repo_root, p.get("run_id"))
+        if not run_id:
+            return {
+                "ok": False,
+                "error": "run_id could not be resolved. No active, pending, or recent job found.",
+            }
+
+        paths = get_paths()
+
+        cancel_path = paths.status_dir / f"{run_id}.cancelled"
+        cancel_path.parent.mkdir(parents=True, exist_ok=True)
+        cancel_path.write_text("cancelled", encoding="utf-8")
+
+        legacy_path = paths.lock_dir / f"cancel_{run_id}.flag"
+        legacy_path.parent.mkdir(parents=True, exist_ok=True)
+        legacy_path.write_text("cancelled", encoding="utf-8")
+
+        return {
+            "ok": True,
+            "run_id": run_id,
+            "cancel_marker": str(cancel_path),
+            "cancel_marker_legacy": str(legacy_path),
+        }
 
     return {"ok": False, "error": f"Unknown tool: {name}"}
 

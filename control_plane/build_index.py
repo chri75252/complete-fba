@@ -30,6 +30,22 @@ def build_system_index() -> dict:
         [str(p.relative_to(repo_root)) for p in (repo_root / "config").glob("*_categories.json")]
     )
 
+    from config.system_config_loader import SystemConfigLoader
+
+    config_loader = SystemConfigLoader()
+    full_config = config_loader.get_full_config()
+
+    workflows = full_config.get("workflows", {})
+    workflow_keys = sorted(list(workflows.keys()))
+
+    suppliers = []
+    for wf_config in workflows.values():
+        supplier_name = wf_config.get("supplier_name")
+        if supplier_name:
+            suppliers.append(supplier_name)
+
+    suppliers = sorted(list(set(suppliers)))
+
     now = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
     return {
@@ -45,6 +61,8 @@ def build_system_index() -> dict:
             "runners": runners,
             "supplier_configs": supplier_configs,
             "category_configs": category_configs,
+            "workflow_keys": workflow_keys,
+            "suppliers": suppliers,
         },
         "stats": {
             "system_config": stat(repo_root / "config" / "system_config.json"),

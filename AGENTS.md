@@ -486,3 +486,141 @@ python utils/supplier_onboarding_wizard.py \
 
 When in doubt, treat `wiki-dec-3` and this `AGENTS.md` as the primary documentation sources and reconcile any older documents (e.g. archived reports under `archive\` or older wiki folders) against the current code paths before relying on them.
 
+---
+
+## 13. Main Script Protection Policy
+
+### 13.1 Protected Files (Read-Only by Default)
+
+The following files are generated artifacts and MUST NOT be edited without explicit user approval:
+
+| File | SHA256 Prefix | Purpose |
+|------|---------------|---------|
+| `tools/configurable_supplier_scraper.py` | `9249228a` | Core supplier scraping engine |
+| `run_custom_poundwholesale.py` | `2fe136a4` | PoundWholesale launcher |
+| `run_custom_clearance_king.py` | `514fbe7c` | Clearance King launcher |
+| `run_custom_dkwholesale-com.py` | `e4cdd37a` | DK Wholesale launcher |
+| `run_custom_efghousewares-co-uk.py` | `4f111523` | EFG Housewares launcher |
+
+Additionally, all files under `tools/` and all `run_custom_*.py` files are protected.
+
+### 13.2 Verification Protocol
+
+Before and after any work session, verify protected file integrity using Python hashlib:
+
+```python
+import hashlib, pathlib
+h = hashlib.sha256(pathlib.Path(filepath).read_bytes()).hexdigest()[:8]
+```
+
+Do NOT use git commands for verification. No git operations of any kind during execution.
+
+### 13.3 Where to Make Changes
+
+Prefer changes in `control_plane/*` and `dashboard/*`. If behaviour needs adjusting in a runner or tool, prefer fixing the control plane layer or regenerating via the supplier-onboarding skill.
+
+### 13.4 No Git Operations During Execution
+
+Do not run any git commands (`pull`, `push`, `fetch`, `merge`, `rebase`, `reset`, `checkout`, `commit`, `stash`, etc.) during automated execution. If git becomes necessary, STOP and ask the user.
+
+### 13.5 Control Plane Diagnostics
+
+A diagnostics probe is available for investigating supplier pagination and page structure:
+
+```bash
+python -m control_plane diagnostics-probe --url <url> --probe-id <id> --html --screenshot
+```
+
+Output goes to `OUTPUTS/CONTROL_PLANE/diagnostics/<probe_id>/` including `report.json`, optional `page.html`, and `screenshot.png`.
+
+---
+
+## 14. Memory & Documentation Update Policy
+
+### 14.1 When to Update Memory and Documentation
+
+**Update ONLY after code changes are VERIFIED:**
+- Tests pass (pytest, lint, type-check)
+- Manual verification complete
+- Code is stable (not during active development that may revert)
+
+**Never update during:**
+- Active debugging sessions
+- Experimental feature development
+- Before changes are committed and tested
+
+### 14.2 Verification Gate
+
+Before updating memory or documentation:
+
+1. **Complete changes** → Code is written and tested
+2. **Run verification** → `pytest`, `ruff`, `black --check`, or manual test
+3. **Run Sentinel check** → `python utils/memory_sentinel.py --check`
+4. **Review drift report** → If drift detected, verify it's intentional
+5. **User confirmation** → Explicit "Update memory" approval
+6. **Update documentation** → Update relevant docs/*.md files
+7. **Update Supermemory** → Add new granular memories via supermemory(mode="add", ...)
+8. **Refresh baseline** → `python utils/memory_sentinel.py --update`
+
+### 14.3 Staging Area
+
+Draft memory updates in `docs/_MEMORY_STAGING.md` before promoting to:
+- Canonical documentation (docs/*.md)
+- Supermemory entries (permanent knowledge)
+
+### 14.4 Automation Hooks (Optional)
+
+For OpenCode with plugin support, sentinel.ts can auto-detect edits:
+- Events: `file.edited`, `file.watcher.updated`
+- Logic: Check if file matches critical patterns → Run sentinel.py → Prompt user if drift detected
+
+---
+
+## 15. Memory Retrieval Policy (Supermemory vs Serena MCP)
+
+### 15.1 When to Query Supermemory
+
+Query Supermemory **immediately after understanding the task**, before planning implementation:
+
+| Query Type | Example | Why |
+|------------|---------|-----|
+| Architecture | `fixed_enhanced_state_manager.py` | Get file structure and patterns |
+| Error patterns | `PCI hardening resume` | Find known fixes |
+| Configuration | `python version batch size` | Check project settings |
+| Policies | `main script protection` | Verify constraints |
+| Workflows | `RAG index control plane` | Understand flow |
+
+**Supermemory contains**: Architecture, error-solutions, configs, policies, patterns (100+ granular memories).
+
+### 15.2 When to Query Serena MCP
+
+Query Serena MCP **only when you need historical context**:
+
+| Query Type | Example | Why |
+|------------|---------|-----|
+| Root cause | `category_index_persistence` | Full analysis from past sessions |
+| Past implementations | `clearance_king_integration` | See how similar work was done |
+| Decision rationale | `surgical_fixes_approval` | Understand why choices were made |
+| Test results | `verification_complete_session` | Check prior outcomes |
+
+**Serena MCP contains**: Session transcripts, root-cause analyses, historical context (200+ memories).
+
+### 15.3 Execution Order
+
+```
+1. Parse user request
+2. Query Supermemory → Get architecture/patterns/policies
+3. [If needed] Query Serena MCP → Get historical context
+4. Plan and implement
+5. Verify
+6. Update Supermemory (only after verification + approval)
+```
+
+### 15.4 Golden Rule
+
+**"Use Supermemory for implementation. Use Serena MCP for context."**
+
+Supermemory gives you the "what" and "how". Serena gives you the "why".
+
+> **Note**: For detailed comparison and examples, see `docs/SERENA_VS_SUPERMEMORY_COMPARISON.md`.
+

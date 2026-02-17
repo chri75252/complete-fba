@@ -6,6 +6,8 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
+from control_plane.env_config import ensure_llm_env
+
 
 @dataclass(frozen=True)
 class LLMConfig:
@@ -16,6 +18,8 @@ class LLMConfig:
 
 
 def load_llm_config() -> LLMConfig:
+    ensure_llm_env()
+
     provider = os.environ.get("CONTROL_PLANE_LLM_PROVIDER", "none").strip().lower()
     model = os.environ.get("CONTROL_PLANE_LLM_MODEL")
 
@@ -40,15 +44,44 @@ def load_llm_config() -> LLMConfig:
             base_url=os.environ.get("CONTROL_PLANE_LLM_BASE_URL"),
         )
 
+    if provider == "opencode":
+        return LLMConfig(
+            provider=provider,
+            model=os.environ.get("OPENCODE_MODEL") or model or "minimax-m2.5-free",
+            api_key=os.environ.get("OPENCODE_API_KEY"),
+            base_url=os.environ.get("CONTROL_PLANE_LLM_BASE_URL", "https://opencode.ai/zen"),
+        )
+
     return LLMConfig(provider="none")
 
 
 def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str]) -> dict[str, Any]:
     data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+
+    request_headers = dict(headers)
+    if not any(k.lower() == "user-agent" for k in request_headers):
+        request_headers["User-Agent"] = "python-requests/2.32.3"
+
+    req = urllib.request.Request(url, data=data, headers=request_headers, method="POST")
     with urllib.request.urlopen(req, timeout=60) as resp:
         body = resp.read().decode("utf-8")
     return json.loads(body)
+
+
+def _safe_json_loads(text: str) -> dict[str, Any]:
+    raw = (text or "").strip()
+    raw = raw.removeprefix("```json").removeprefix("```").strip()
+    if raw.endswith("```"):
+        raw = raw[:-3].strip()
+
+    try:
+        return json.loads(raw)
+    except Exception:
+        start = raw.find("{")
+        end = raw.rfind("}")
+        if start >= 0 and end > start:
+            return json.loads(raw[start : end + 1])
+        raise
 
 
 def generate_json(prompt: str) -> dict[str, Any]:
@@ -68,7 +101,7 @@ def generate_json(prompt: str) -> dict[str, Any]:
         text = (out.get("message") or {}).get("content")
         if not isinstance(text, str):
             raise RuntimeError("ollama_response_missing_message_content")
-        return json.loads(text)
+        return _safe_json_loads(text)
 
     if cfg.provider == "lmstudio":
         base = (cfg.base_url or "http://localhost:1234").rstrip("/")
@@ -80,48 +113,19 @@ def generate_json(prompt: str) -> dict[str, Any]:
         }
         out = _post_json(url, payload, headers={"Content-Type": "application/json"})
         text = out["choices"][0]["message"]["content"]
-        return json.loads(text)
+        return _safe_json_loads(text)
 
-    if cfg.provider == "openai":
-        if not cfg.api_key:
-            raise RuntimeError("OPENAI_API_KEY not set")
-        base = (cfg.base_url or "https://api.openai.com").rstrip("/")
+    if cfg.provider == "opencode":
+        base = (cfg.base_url or "https://opencode.ai/zen").rstrip("/")
         url = f"{base}/v1/chat/completions"
         payload = {
             "model": cfg.model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0,
-            "response_format": {"type": "json_object"},
         }
-        out = _post_json(
-            url,
-            payload,
-            headers={"Content-Type": "application/json", "Authorization": f"Bearer {cfg.api_key}"},
-        )
+        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {cfg.api_key}"}
+        out = _post_json(url, payload, headers=headers)
         text = out["choices"][0]["message"]["content"]
-        return json.loads(text)
-
-    if cfg.provider == "anthropic":
-        if not cfg.api_key:
-            raise RuntimeError("ANTHROPIC_API_KEY not set")
-        base = (cfg.base_url or "https://api.anthropic.com").rstrip("/")
-        url = f"{base}/v1/messages"
-        payload = {
-            "model": cfg.model,
-            "max_tokens": 512,
-            "temperature": 0,
-            "messages": [{"role": "user", "content": prompt}],
-        }
-        out = _post_json(
-            url,
-            payload,
-            headers={
-                "Content-Type": "application/json",
-                "x-api-key": cfg.api_key,
-                "anthropic-version": "2023-06-01",
-            },
-        )
-        text = out["content"][0]["text"]
-        return json.loads(text)
+        return _safe_json_loads(text)
 
     raise RuntimeError(f"Unsupported provider: {cfg.provider}")

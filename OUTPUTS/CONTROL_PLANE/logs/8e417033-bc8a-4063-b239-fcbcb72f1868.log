@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\control_plane\run_product_list_refresh.py", line 300, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\control_plane\run_product_list_refresh.py", line 154, in main
+    sandbox_from_file, products = _load_products_from_subset(repo_root, products_path)
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\control_plane\run_product_list_refresh.py", line 130, in _load_products_from_subset
+    sandbox_supplier = str(data.get("sandbox_supplier") or "")
+                           ^^^^^^^^
+AttributeError: 'list' object has no attribute 'get'
+2026-02-12 07:02:37,918 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop

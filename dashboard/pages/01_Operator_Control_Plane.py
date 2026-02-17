@@ -90,8 +90,8 @@ def main() -> None:
         max_products = int(parsed.get("max_products") or 50)
         max_per_cat = int(parsed.get("max_products_per_category") or max_products)
 
-        max_products = st.number_input("Max products", min_value=1, value=max_products)
-        max_per_cat = st.number_input("Max products per category", min_value=1, value=max_per_cat)
+        max_products = st.number_input("Max products", min_value=0, value=max_products)
+        max_per_cat = st.number_input("Max products per category", min_value=0, value=max_per_cat)
 
         confirm = st.checkbox("I understand this will write override files and enqueue a run")
 
@@ -100,6 +100,8 @@ def main() -> None:
                 st.error("Confirmation required")
             else:
                 run_id = str(uuid.uuid4())
+                sandbox_suffix = f"sandbox__{run_id[:8]}"
+                sandbox_supplier = f"{supplier_domain}__{sandbox_suffix}"
 
                 # resolve category urls
                 category_urls = []
@@ -113,9 +115,8 @@ def main() -> None:
                 if not category_urls:
                     st.error("No categories provided")
                 else:
-                    subset_path = write_categories_subset(run_id, supplier_domain, category_urls)
+                    subset_path = write_categories_subset(run_id, sandbox_supplier, category_urls)
 
-                    # merged config overrides: set max products and override workflow categories path
                     overrides = {
                         "system": {
                             "max_products": int(max_products),
@@ -123,10 +124,16 @@ def main() -> None:
                         },
                         "workflows": {
                             workflow_key: {
+                                "supplier_name": sandbox_supplier,
                                 "categories_config_path": str(subset_path),
                             }
                         },
                     }
+
+                    base_creds = (system_config.get("credentials") or {}).get(supplier_domain)
+                    if isinstance(base_creds, dict) and base_creds:
+                        overrides["credentials"] = {sandbox_supplier: base_creds}
+
                     merged_path = write_merged_system_config(run_id, system_config, overrides)
 
                     request = RunRequest(
@@ -140,7 +147,13 @@ def main() -> None:
                         notes="created from Operator UI",
                     )
 
-                    job_path = enqueue_run_job(run_id, request, merged_path, subset_path)
+                    job_path = enqueue_run_job(
+                        run_id,
+                        request,
+                        merged_path,
+                        subset_path,
+                        sandbox_supplier=sandbox_supplier,
+                    )
                     st.success(f"Job enqueued: {job_path}")
                     st.session_state["last_run_id"] = run_id
 

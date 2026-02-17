@@ -131,10 +131,23 @@ def check_logs_for_errors(repo_root: Path, run_start_time: float) -> bool:
 
 def run_readiness_check(repo_root: Path, supplier_domain: str) -> dict[str, Any]:
     checks: dict[str, Any] = {}
+    missing_requirements: list[dict[str, str]] = []
+    expected_outputs: list[str] = []
 
     checks["cdp_running_9222"] = check_cdp_running(port=9222)
+    if not checks["cdp_running_9222"]:
+        missing_requirements.append(
+            {
+                "requirement": "Chrome CDP",
+                "reason": "Chrome DevTools Protocol not running on port 9222",
+                "fix": "chrome --remote-debugging-port=9222 --user-data-dir=C:\\temp\\chrome-debug",
+            }
+        )
 
     categories_file_ok = False
+    workflow_config = None
+    runner_script = None
+    requires_auth = False
     try:
         import json
 
@@ -143,14 +156,60 @@ def run_readiness_check(repo_root: Path, supplier_domain: str) -> dict[str, Any]
         for key, v in (cfg.get("workflows") or {}).items():
             if v.get("supplier_name") == supplier_domain:
                 wf = v
+                runner_script = v.get("runner_script")
                 break
         if wf and wf.get("categories_config_path"):
             p = repo_root / wf["categories_config_path"]
             categories_file_ok = p.exists() and p.stat().st_size > 0
+            workflow_config = wf
     except Exception:
         categories_file_ok = False
 
     checks["categories_file_present"] = categories_file_ok
+
+    if runner_script:
+        runner_path = repo_root / runner_script
+        checks["runner_exists"] = runner_path.exists()
+        if not checks["runner_exists"]:
+            missing_requirements.append(
+                {
+                    "requirement": "Runner script",
+                    "reason": f"Runner script not found: {runner_script}",
+                    "fix": f"Create {runner_script} or run supplier onboarding wizard",
+                }
+            )
+        requires_auth = "efg" in runner_script.lower() or "clearance" in runner_script.lower()
+    else:
+        checks["runner_exists"] = False
+        missing_requirements.append(
+            {
+                "requirement": "Workflow configuration",
+                "reason": f"No workflow found for supplier: {supplier_domain}",
+                "fix": "Add workflow to config/system_config.json or run onboarding",
+            }
+        )
+
+    if requires_auth:
+        creds_ok = False
+        try:
+            import json
+
+            cfg = json.load(
+                open(repo_root / "config" / "system_config.json", "r", encoding="utf-8")
+            )
+            creds = cfg.get("credentials", {}).get(supplier_domain)
+            creds_ok = bool(creds and creds.get("username") and creds.get("password"))
+        except Exception:
+            creds_ok = False
+        checks["credentials_configured"] = creds_ok
+        if not creds_ok:
+            missing_requirements.append(
+                {
+                    "requirement": "Credentials",
+                    "reason": f"Credentials missing for auth-required supplier: {supplier_domain}",
+                    "fix": f'Add to config/system_config.json: "credentials": {{"{supplier_domain}": {{"username": "...", "password": "..."}}}}',
+                }
+            )
 
     state_file = (
         repo_root
@@ -161,4 +220,24 @@ def run_readiness_check(repo_root: Path, supplier_domain: str) -> dict[str, Any]
     )
     checks["processing_state_exists"] = state_file.exists()
 
-    return {"ok": True, "checks": checks}
+    underscore_domain = supplier_domain_to_underscore(supplier_domain)
+    hyphen_domain = supplier_domain.replace(".", "-")
+    expected_outputs = [
+        f"OUTPUTS/CONTROL_PLANE/jobs/pending/job_<run_id>.json",
+        f"OUTPUTS/CONTROL_PLANE/status/<run_id>.json",
+        f"OUTPUTS/CONTROL_PLANE/logs/<run_id>.log",
+        f"OUTPUTS/CACHE/processing_states/{underscore_domain}__sandbox_<id>_processing_state.json",
+        f"OUTPUTS/FBA_ANALYSIS/linking_maps/{supplier_domain}__sandbox_<id>/linking_map.json",
+        f"OUTPUTS/cached_products/{hyphen_domain}__sandbox_<id>_products_cache.json",
+        f"OUTPUTS/FBA_ANALYSIS/financial_reports/{hyphen_domain}__sandbox_<id>/fba_financial_report_*.csv",
+    ]
+
+    all_ok = all(checks.values()) and len(missing_requirements) == 0
+
+    return {
+        "ok": all_ok,
+        "checks": checks,
+        "missing_requirements": missing_requirements,
+        "expected_outputs": expected_outputs,
+        "requires_auth": requires_auth,
+    }

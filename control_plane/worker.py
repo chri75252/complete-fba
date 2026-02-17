@@ -9,6 +9,7 @@ from typing import Any
 
 from control_plane import job_types
 from control_plane.internal.file_io import read_json, write_json_atomic, write_text_atomic
+from control_plane.paths import get_paths
 from control_plane.internal.path_resolver import ensure_control_plane_dirs, get_control_plane_paths
 from dashboard.metrics_core import MetricsLoader
 
@@ -32,6 +33,23 @@ def _status_template(run_id: str, supplier_domain: str) -> dict[str, Any]:
         "progress": {},
         "artifacts": {},
         "error": {"summary": "", "last_log_lines": []},
+        "refresh": {
+            "last_updated": None,
+            "paths": {
+                "products_path": None,
+                "overrides_run_dir": None,
+                "amazon_cache_dir": None,
+                "linking_map": None,
+                "processing_state": None,
+            },
+            "counts": {
+                "input_products": 0,
+                "linking_map_entries": 0,
+                "amazon_cache_files": 0,
+                "matched_asins": 0,
+            },
+            "source_supplier_domain": None,
+        },
     }
 
 
@@ -41,6 +59,18 @@ def _acquire_lock(lock_file: Path, run_id: str) -> bool:
         return False
     write_text_atomic(lock_file, run_id)
     return True
+
+
+def _is_cancelled(run_id: str) -> bool:
+    paths = get_paths()
+
+    if (paths.status_dir / f"{run_id}.cancelled").exists():
+        return True
+
+    if (paths.lock_dir / f"cancel_{run_id}.flag").exists():
+        return True
+
+    return False
 
 
 def _release_lock(lock_file: Path) -> None:
@@ -122,6 +152,38 @@ def _read_processing_progress(
     return resolved, {"progress": progress, "artifacts": artifacts}
 
 
+def _count_linking_map_entries(path):
+    if not path:
+        return 0
+    try:
+        data = read_json(Path(path))
+        if isinstance(data, list):
+            return len(data)
+        elif isinstance(data, dict):
+            return len(data)
+        return 0
+    except Exception:
+        return 0
+
+
+def _count_amazon_cache_files(cache_dir):
+    try:
+        return len(list(Path(cache_dir).glob("amazon_*.json")))
+    except Exception:
+        return 0
+
+
+def _count_matched_asins(path):
+    if not path:
+        return 0
+    try:
+        data = read_json(Path(path))
+        rows = data if isinstance(data, list) else list(data.values())
+        return sum(1 for r in rows if isinstance(r, dict) and r.get("amazon_asin"))
+    except Exception:
+        return 0
+
+
 class ControlPlaneWorker:
     def __init__(self, repo_root: Path | None = None, config: WorkerConfig | None = None):
         self.repo_root = repo_root
@@ -158,126 +220,199 @@ class ControlPlaneWorker:
                 time.sleep(self.config.poll_seconds)
                 continue
 
-            running_job_path = _move_job(job_path, paths.jobs_running)
-            status_path = paths.status_dir / f"{run_id}.json"
-            log_path = paths.logs_dir / f"{run_id}.log"
+            try:
+                running_job_path = _move_job(job_path, paths.jobs_running)
+                status_path = paths.status_dir / f"{run_id}.json"
+                log_path = paths.logs_dir / f"{run_id}.log"
 
-            status = _status_template(run_id, supplier_domain)
-            status["state"] = "running"
-            status["started_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                status = _status_template(run_id, supplier_domain)
+                status["state"] = "running"
+                status["started_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
-            cmd: list[str]
-            env = os.environ.copy()
+                cmd: list[str]
+                env = os.environ.copy()
 
-            timeout_seconds: int | None = None
+                timeout_seconds: int | None = None
 
-            if job.get("job_type") == job_types.JOB_TYPE_RUN_WORKFLOW:
-                runner_script = str(job.get("runner_script") or "")
+                if job.get("job_type") == job_types.JOB_TYPE_RUN_WORKFLOW:
+                    runner_script = str(job.get("runner_script") or "")
 
-                # SAFETY CHECK
-                if not runner_script or not (paths.repo_root / runner_script).exists():
+                    # SAFETY CHECK
+                    if not runner_script or not (paths.repo_root / runner_script).exists():
+                        status["state"] = "failed"
+                        status["error"]["summary"] = f"Runner script missing: {runner_script}"
+                        write_json_atomic(status_path, status)
+                        _move_job(running_job_path, paths.jobs_failed)
+                        continue
+
+                    sys_cfg_path = (job.get("override") or {}).get("system_config_path")
+                    if sys_cfg_path:
+                        env["FBA_SYSTEM_CONFIG_PATH"] = str(sys_cfg_path)
+                    cmd = ["python", runner_script]
+                elif job.get("job_type") == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH:
+                    refresh = job.get("refresh") or {}
+                    env["CONTROL_PLANE_JOB_PATH"] = str(running_job_path)
+                    cmd = ["python", "-m", "control_plane.run_product_list_refresh"]
+                    timeout_seconds = int(refresh.get("timeout_seconds") or 7200)
+                elif job.get("job_type") == job_types.JOB_TYPE_RUN_ONBOARDING_WIZARD:
+                    wizard = job.get("wizard") or {}
+                    cmd = [
+                        "python",
+                        "utils/supplier_onboarding_wizard.py",
+                        "--input",
+                        str(wizard.get("input")),
+                        "--output",
+                        str(wizard.get("output")),
+                    ]
+                    timeout_seconds = int(wizard.get("timeout_seconds") or 4200)
+                else:
                     status["state"] = "failed"
-                    status["error"]["summary"] = f"Runner script missing: {runner_script}"
+                    status["error"]["summary"] = "Unknown job_type"
                     write_json_atomic(status_path, status)
                     _move_job(running_job_path, paths.jobs_failed)
-                    _release_lock(paths.active_lock_file)
                     continue
 
-                sys_cfg_path = (job.get("override") or {}).get("system_config_path")
-                if sys_cfg_path:
-                    env["FBA_SYSTEM_CONFIG_PATH"] = str(sys_cfg_path)
-                cmd = ["python", runner_script]
-            elif job.get("job_type") == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH:
-                refresh = job.get("refresh") or {}
-                env["CONTROL_PLANE_JOB_PATH"] = str(running_job_path)
-                cmd = ["python", "-m", "control_plane.run_product_list_refresh"]
-                timeout_seconds = int(refresh.get("timeout_seconds") or 7200)
-            elif job.get("job_type") == job_types.JOB_TYPE_RUN_ONBOARDING_WIZARD:
-                wizard = job.get("wizard") or {}
-                cmd = [
-                    "python",
-                    "utils/supplier_onboarding_wizard.py",
-                    "--input",
-                    str(wizard.get("input")),
-                    "--output",
-                    str(wizard.get("output")),
-                ]
-                timeout_seconds = int(wizard.get("timeout_seconds") or 4200)
-            else:
-                status["state"] = "failed"
-                status["error"]["summary"] = "Unknown job_type"
                 write_json_atomic(status_path, status)
-                _move_job(running_job_path, paths.jobs_failed)
+
+                with open(log_path, "w", encoding="utf-8") as log_file:
+                    try:
+                        proc = subprocess.Popen(
+                            cmd,
+                            cwd=str(paths.repo_root),
+                            env=env,
+                            stdout=log_file,
+                            stderr=subprocess.STDOUT,
+                            text=True,
+                        )
+                    except Exception as e:
+                        status["state"] = "failed"
+                        status["error"]["summary"] = f"Failed to start process: {e}"
+                        write_json_atomic(status_path, status)
+                        _move_job(running_job_path, paths.jobs_failed)
+                        continue
+
+                    status["pid"] = proc.pid
+                    write_json_atomic(status_path, status)
+
+                    last_status_refresh = 0.0
+                    start_ts = time.time()
+                    try:
+                        while True:
+                            ret = proc.poll()
+                            now = time.time()
+
+                            if _is_cancelled(run_id):
+                                proc.terminate()
+                                status["state"] = "cancelled"
+                                status["ended_at"] = time.strftime(
+                                    "%Y-%m-%dT%H:%M:%SZ", time.gmtime()
+                                )
+                                status["error"]["summary"] = "Run cancelled"
+                                status["error"]["last_log_lines"] = _tail_file(log_path, 200)
+                                write_json_atomic(status_path, status)
+                                _move_job(running_job_path, paths.jobs_failed)
+                                break
+
+                            if now - last_status_refresh >= self.config.status_refresh_seconds:
+                                poll_supplier = job.get("sandbox_supplier", supplier_domain)
+                                resolved, snap = _read_processing_progress(loader, poll_supplier)
+                                status["resolved_paths"] = {
+                                    **resolved,
+                                    "runner_log": str(log_path),
+                                }
+                                status["progress"] = snap.get("progress", {})
+                                status["artifacts"] = snap.get("artifacts", {})
+                                status["error"]["last_log_lines"] = _tail_file(log_path, 50)
+                                write_json_atomic(status_path, status)
+
+                                # E9: Detect refresh jobs and populate status["refresh"]
+                                if (
+                                    job.get("job_type")
+                                    == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH
+                                ):
+                                    import time as time_module
+
+                                    refresh = job.get("refresh", {})
+                                    overrides_dir = (
+                                        paths.repo_root
+                                        / "OUTPUTS"
+                                        / "CONTROL_PLANE"
+                                        / "overrides"
+                                        / run_id
+                                    )
+                                    amazon_cache_dir = overrides_dir / "amazon_cache"
+                                    status["refresh"]["last_updated"] = time_module.strftime(
+                                        "%Y-%m-%dT%H:%M:%SZ", time_module.gmtime()
+                                    )
+                                    status["refresh"]["paths"] = {
+                                        "products_path": str(refresh.get("products_path", "")),
+                                        "overrides_run_dir": str(overrides_dir),
+                                        "amazon_cache_dir": str(amazon_cache_dir),
+                                        "linking_map": resolved.get("linking_map"),
+                                        "processing_state": resolved.get("processing_state"),
+                                    }
+                                    products_path = refresh.get("products_path")
+                                    input_products = 0
+                                    if products_path:
+                                        try:
+                                            input_products = len(read_json(Path(products_path)))
+                                        except Exception:
+                                            input_products = 0
+                                    status["refresh"]["counts"] = {
+                                        "input_products": input_products,
+                                        "linking_map_entries": _count_linking_map_entries(
+                                            resolved.get("linking_map")
+                                        ),
+                                        "amazon_cache_files": _count_amazon_cache_files(
+                                            amazon_cache_dir
+                                        ),
+                                        "matched_asins": _count_matched_asins(
+                                            resolved.get("linking_map")
+                                        ),
+                                    }
+                                    status["refresh"]["source_supplier_domain"] = job.get(
+                                        "source_supplier_domain"
+                                    )
+
+                                last_status_refresh = now
+
+                            if ret is not None:
+                                break
+
+                            if timeout_seconds is not None and now - start_ts > timeout_seconds:
+                                proc.terminate()
+                                break
+
+                            time.sleep(0.5)
+
+                    finally:
+                        try:
+                            proc.wait(timeout=30)
+                        except subprocess.TimeoutExpired:
+                            proc.kill()
+                            proc.wait(timeout=10)
+
+                if status.get("state") != "cancelled":
+                    status["ended_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                    status["error"]["last_log_lines"] = _tail_file(log_path, 200)
+
+                    if proc.returncode == 0:
+                        status["state"] = "done"
+                        write_json_atomic(status_path, status)
+                        _move_job(running_job_path, paths.jobs_done)
+                    else:
+                        status["state"] = "failed"
+                        status["error"]["summary"] = f"Process exited with code {proc.returncode}"
+                        write_json_atomic(status_path, status)
+                        _move_job(running_job_path, paths.jobs_failed)
+            finally:
                 _release_lock(paths.active_lock_file)
-                continue
 
-            write_json_atomic(status_path, status)
-
-            with open(log_path, "w", encoding="utf-8") as log_file:
-                try:
-                    proc = subprocess.Popen(
-                        cmd,
-                        cwd=str(paths.repo_root),
-                        env=env,
-                        stdout=log_file,
-                        stderr=subprocess.STDOUT,
-                        text=True,
-                    )
-                except Exception as e:
-                    status["state"] = "failed"
-                    status["error"]["summary"] = f"Failed to start process: {e}"
-                    write_json_atomic(status_path, status)
-                    _move_job(running_job_path, paths.jobs_failed)
-                    _release_lock(paths.active_lock_file)
-                    continue
-
-                status["pid"] = proc.pid
-                write_json_atomic(status_path, status)
-
-                last_status_refresh = 0.0
-                start_ts = time.time()
-                try:
-                    while True:
-                        ret = proc.poll()
-                        now = time.time()
-                        if now - last_status_refresh >= self.config.status_refresh_seconds:
-                            resolved, snap = _read_processing_progress(loader, supplier_domain)
-                            status["resolved_paths"] = {
-                                **resolved,
-                                "runner_log": str(log_path),
-                            }
-                            status["progress"] = snap.get("progress", {})
-                            status["artifacts"] = snap.get("artifacts", {})
-                            status["error"]["last_log_lines"] = _tail_file(log_path, 50)
-                            write_json_atomic(status_path, status)
-                            last_status_refresh = now
-
-                        if ret is not None:
-                            break
-
-                        if timeout_seconds is not None and now - start_ts > timeout_seconds:
-                            proc.terminate()
-                            break
-
-                        time.sleep(0.5)
-
-                finally:
-                    proc.wait(timeout=30)
-
-            status["ended_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-            status["error"]["last_log_lines"] = _tail_file(log_path, 200)
-
-            if proc.returncode == 0:
-                status["state"] = "done"
-                write_json_atomic(status_path, status)
-                _move_job(running_job_path, paths.jobs_done)
-            else:
-                status["state"] = "failed"
-                status["error"]["summary"] = f"Process exited with code {proc.returncode}"
-                write_json_atomic(status_path, status)
-                _move_job(running_job_path, paths.jobs_failed)
-
-            _release_lock(paths.active_lock_file)
+            try:
+                (get_paths().status_dir / f"{run_id}.cancelled").unlink(missing_ok=True)
+                (get_paths().lock_dir / f"cancel_{run_id}.flag").unlink(missing_ok=True)
+            except Exception:
+                pass
 
             time.sleep(self.config.poll_seconds)
 

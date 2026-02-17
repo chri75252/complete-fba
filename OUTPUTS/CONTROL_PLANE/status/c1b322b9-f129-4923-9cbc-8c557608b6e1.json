@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "c1b322b9-f129-4923-9cbc-8c557608b6e1",
+  "state": "failed",
+  "supplier_domain": "efghousewares.co.uk__sandbox__c1b322b9",
+  "started_at": "2026-02-16T21:13:32Z",
+  "ended_at": "2026-02-16T21:13:33Z",
+  "pid": 44688,
+  "resolved_paths": {
+    "processing_state": null,
+    "linking_map": null,
+    "financial_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\financial_reports",
+    "logs_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\logs\\debug",
+    "runner_log": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\logs\\c1b322b9-f129-4923-9cbc-8c557608b6e1.log"
+  },
+  "progress": {},
+  "artifacts": {
+    "cached_products_exists": false,
+    "linking_map_exists": false,
+    "financial_report_exists": true
+  },
+  "error": {
+    "summary": "Process exited with code 1",
+    "last_log_lines": [
+      "Traceback (most recent call last):",
+      "  File \"<frozen runpy>\", line 198, in _run_module_as_main",
+      "  File \"<frozen runpy>\", line 88, in _run_code",
+      "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\control_plane\\run_product_list_refresh.py\", line 371, in <module>",
+      "    main()",
+      "    ~~~~^^",
+      "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\control_plane\\run_product_list_refresh.py\", line 179, in main",
+      "    sandbox_from_file, products = _load_products_from_subset(repo_root, products_path)",
+      "                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\control_plane\\run_product_list_refresh.py\", line 145, in _load_products_from_subset",
+      "    data = read_json(subset)",
+      "  File \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\control_plane\\internal\\file_io.py\", line 39, in read_json",
+      "    return json.load(f)",
+      "           ~~~~~~~~~^^^",
+      "  File \"C:\\Python313\\Lib\\json\\__init__.py\", line 293, in load",
+      "    return loads(fp.read(),",
+      "        cls=cls, object_hook=object_hook,",
+      "        parse_float=parse_float, parse_int=parse_int,",
+      "        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)",
+      "  File \"C:\\Python313\\Lib\\json\\__init__.py\", line 346, in loads",
+      "    return _default_decoder.decode(s)",
+      "           ~~~~~~~~~~~~~~~~~~~~~~~^^^",
+      "  File \"C:\\Python313\\Lib\\json\\decoder.py\", line 345, in decode",
+      "    obj, end = self.raw_decode(s, idx=_w(s, 0).end())",
+      "               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^",
+      "  File \"C:\\Python313\\Lib\\json\\decoder.py\", line 363, in raw_decode",
+      "    raise JSONDecodeError(\"Expecting value\", s, err.value) from None",
+      "json.decoder.JSONDecodeError: Expecting value: line 16 column 3 (char 638)",
+      "2026-02-17 01:13:33,607 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop"
+    ]
+  },
+  "refresh": {
+    "last_updated": "2026-02-16T21:13:32Z",
+    "paths": {
+      "products_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\PRODUCTS_LISTS\\products_fullmix_efghouseware.json",
+      "overrides_run_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\c1b322b9-f129-4923-9cbc-8c557608b6e1",
+      "amazon_cache_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\c1b322b9-f129-4923-9cbc-8c557608b6e1\\amazon_cache",
+      "linking_map": null,
+      "processing_state": null
+    },
+    "counts": {
+      "input_products": 0,
+      "linking_map_entries": 0,
+      "amazon_cache_files": 0,
+      "matched_asins": 0
+    },
+    "source_supplier_domain": "efghousewares.co.uk"
+  }
+}

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -17,6 +18,21 @@ class LlmProvider(Protocol):
 class NoneProvider:
     def generate_json(self, prompt: str) -> dict[str, Any]:
         raise RuntimeError("LLM provider disabled")
+
+
+def _safe_json_loads(text: str) -> dict[str, Any]:
+    raw = (text or "").strip()
+    raw = re.sub(r"^```(?:json)?\s*", "", raw, flags=re.IGNORECASE)
+    raw = re.sub(r"\s*```$", "", raw)
+
+    try:
+        return json.loads(raw)
+    except Exception:
+        start = raw.find("{")
+        end = raw.rfind("}")
+        if start >= 0 and end > start:
+            return json.loads(raw[start : end + 1])
+        raise
 
 
 @dataclass(frozen=True)
@@ -41,9 +57,8 @@ class OllamaProvider:
         )
         resp.raise_for_status()
         data = resp.json()
-        # Ollama returns {response: "..."}
         text = data.get("response", "")
-        return json.loads(text)
+        return _safe_json_loads(text)
 
     def generate_with_tools(
         self,
@@ -152,6 +167,33 @@ class OpenAiProvider:
 
 
 @dataclass(frozen=True)
+class OpenAiCompatProvider:
+    base_url: str
+    model: str
+    api_key: str | None = None
+
+    def generate_json(self, prompt: str) -> dict[str, Any]:
+        import requests
+
+        url = self.base_url.rstrip("/") + "/v1/chat/completions"
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0,
+        }
+
+        headers = {"Content-Type": "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+
+        resp = requests.post(url, json=payload, headers=headers, timeout=60)
+        resp.raise_for_status()
+        data = resp.json()
+        text = data["choices"][0]["message"]["content"]
+        return _safe_json_loads(text)
+
+
+@dataclass(frozen=True)
 class AnthropicProvider:
     api_key: str
     model: str
@@ -182,6 +224,23 @@ def get_provider() -> LlmProvider:
         base_url = os.environ.get("CONTROL_PLANE_OLLAMA_BASE_URL", "http://localhost:11434")
         model = os.environ.get("CONTROL_PLANE_OLLAMA_MODEL", "llama3.1")
         return OllamaProvider(base_url=base_url, model=model)
+
+    if provider == "lmstudio":
+        base_url = os.environ.get("CONTROL_PLANE_LLM_BASE_URL", "http://localhost:1234")
+        model = os.environ.get("CONTROL_PLANE_LLM_MODEL") or os.environ.get(
+            "LOCAL_LLM_MODEL", "llama3"
+        )
+        return OpenAiCompatProvider(base_url=base_url, model=model)
+
+    if provider == "opencode":
+        base_url = os.environ.get("CONTROL_PLANE_LLM_BASE_URL", "https://opencode.ai/zen")
+        model = os.environ.get("OPENCODE_MODEL") or os.environ.get(
+            "CONTROL_PLANE_LLM_MODEL", "minimax-m2.5-free"
+        )
+        api_key = os.environ.get("OPENCODE_API_KEY", "")
+        if not api_key:
+            raise RuntimeError("OPENCODE_API_KEY not set")
+        return OpenAiCompatProvider(base_url=base_url, model=model, api_key=api_key)
 
     if provider == "openai":
         api_key = os.environ.get("OPENAI_API_KEY", "")
