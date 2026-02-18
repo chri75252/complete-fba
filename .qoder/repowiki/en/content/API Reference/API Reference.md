@@ -1,303 +1,431 @@
 # API Reference
 
 <cite>
-**Referenced Files in This Document**   
+**Referenced Files in This Document**
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md)
+- [10.2. Supplier Scraper Api.md](file://wiki-dec-3/10. Api Reference/10.2. Supplier Scraper Api.md)
+- [10.3. Financial Analysis Api.md](file://wiki-dec-3/10. Api Reference/10.3. Financial Analysis Api.md)
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md)
+- [system_config.json](file://config/system_config.json)
+- [system_config_loader.py](file://config/system_config_loader.py)
 - [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
 - [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py)
 - [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py)
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py)
+- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py)
+- [url_filter.py](file://utils/url_filter.py)
+- [browser_manager.py](file://utils/browser_manager.py)
+- [atomic_file_operations.py](file://utils/atomic_file_operations.py)
+- [processing_state.json](file://processing_states/poundwholesale_co_uk_processing_state.json)
+- [API_REFERENCE.md](file://docs/API_REFERENCE.md)
+- [system-config-toggle-v2.md](file://config/system-config-toggle-v2.md)
+- [browser_circuit_breaker.py](file://utils/browser_circuit_breaker.py)
+- [Security Challenges.md](file://wiki-dec-3/11. Troubleshooting Guide/11.5. Authentication Issues/11.5.3. Security Challenges.md)
 </cite>
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [passive_extraction_workflow_latest.py API](#passive_extraction_workflow_latestpy-api)
-3. [configurable_supplier_scraper.py API](#configurable_supplier_scraperpy-api)
-4. [FBA_Financial_calculator.py API](#fba_financial_calculatorpy-api)
-5. [fixed_enhanced_state_manager.py API](#fixed_enhanced_state_managerpy-api)
-6. [Client Implementation Guidelines](#client-implementation-guidelines)
-7. [Versioning and Backwards Compatibility](#versioning-and-backwards-compatibility)
-8. [Error Handling](#error-handling)
+2. [Project Structure](#project-structure)
+3. [Core Components](#core-components)
+4. [Architecture Overview](#architecture-overview)
+5. [Detailed Component Analysis](#detailed-component-analysis)
+6. [Dependency Analysis](#dependency-analysis)
+7. [Performance Considerations](#performance-considerations)
+8. [Troubleshooting Guide](#troubleshooting-guide)
+9. [Conclusion](#conclusion)
+10. [Appendices](#appendices)
 
 ## Introduction
-This document provides comprehensive API documentation for the public interfaces of the Amazon FBA Agent System. It details the core modules responsible for workflow execution, product extraction, financial calculation, and state management. Each section documents the public methods, parameters, return values, and usage patterns for the respective module. Code examples demonstrate typical usage scenarios, and error conditions are thoroughly documented. The system is designed for extensibility and integration, with guidelines provided for client implementation.
+This document provides comprehensive API documentation for the Amazon FBA Agent System, focusing on four primary domains:
+- Workflow Orchestration APIs: Orchestrate end-to-end product sourcing from supplier discovery to Amazon matching and financial analysis.
+- Supplier Scraper APIs: Extract product data from supplier websites with configurable selectors, authentication, and anti-detection strategies.
+- Financial Analysis APIs: Compute profitability metrics (ROI, net profit, breakeven) using supplier and Amazon data.
+- State Management APIs: Persist and recover processing state with atomic writes, thread safety, and resumption pointers.
 
-## passive_extraction_workflow_latest.py API
+The system emphasizes resilience, configurability, and performance through file-grounded state, hash-based deduplication, and structured workflows.
 
-The `PassiveExtractionWorkflow` class is the central orchestrator for the Amazon FBA product sourcing workflow. It manages the entire process from supplier product extraction to Amazon data retrieval, financial analysis, and stateful resumption.
+## Project Structure
+The system is organized into modular components:
+- Orchestrator: Workflow orchestration and phase management
+- Scraper: Supplier data extraction with Playwright and selector-based parsing
+- State Manager: Persistent, atomic state with resumption and validation
+- Financial Calculator: Profitability computations and report generation
+- Configuration: Centralized JSON configuration and loader utilities
+- Utilities: URL filtering, normalization, atomic file operations, and browser management
 
-### Class: PassiveExtractionWorkflow
+```mermaid
+graph TB
+subgraph "Configuration"
+CFG[system_config.json]
+Loader[SystemConfigLoader]
+end
+subgraph "Orchestration"
+WF[PassiveExtractionWorkflow]
+end
+subgraph "Scraping"
+Scraper[ConfigurableSupplierScraper]
+AuthSvc[supplier_authentication_service.py]
+URLF[url_filter.py]
+end
+subgraph "State"
+SM[FixedEnhancedStateManager]
+Atomic[atomic_file_operations.py]
+end
+subgraph "Finance"
+FC[FBA_Financial_calculator.py]
+end
+CFG --> Loader
+Loader --> WF
+WF --> Scraper
+Scraper --> AuthSvc
+Scraper --> URLF
+WF --> SM
+SM --> Atomic
+WF --> FC
+```
 
-**Section sources**
+**Diagram sources**
+- [system_config.json](file://config/system_config.json#L1-L200)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
 - [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
-
-#### Method: `__init__(self, config_loader, workflow_config, browser_manager=None, ai_client=None)`
-Initializes the workflow with configuration and service dependencies.
-
-**Parameters:**
-- `config_loader`: A configuration loader instance to retrieve system settings.
-- `workflow_config`: A dictionary containing workflow-specific configuration (e.g., supplier name).
-- `browser_manager`: An optional `BrowserManager` instance for shared browser control.
-- `ai_client`: An optional OpenAI client for AI-powered features (currently disabled).
+- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L3938)
+- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [url_filter.py](file://utils/url_filter.py#L1-L40)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1-L100)
+- [atomic_file_operations.py](file://utils/atomic_file_operations.py#L1-L100)
+- [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L1-L200)
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L860-L989)
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L17-L64)
+- [10.2. Supplier Scraper Api.md](file://wiki-dec-3/10. Api Reference/10.2. Supplier Scraper Api.md#L16-L53)
+- [10.3. Financial Analysis Api.md](file://wiki-dec-3/10. Api Reference/10.3. Financial Analysis Api.md#L15-L36)
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md#L17-L51)
 
-#### Method: `run(self)`
-Executes the main product sourcing workflow. This method orchestrates the entire process, including state loading, supplier scraping, Amazon data matching, financial calculation, and result reporting.
+## Core Components
+- PassiveExtractionWorkflow: Orchestrates supplier extraction, Amazon matching, gap processing, and financial analysis with phase-aware execution and resumption.
+- ConfigurableSupplierScraper: Extracts supplier product data using Playwright, configurable selectors, and authentication callbacks.
+- FixedEnhancedStateManager: Manages resilient, atomic state persistence with resumption pointers, progress tracking, and validation.
+- FBA_Financial_calculator: Computes profitability metrics using supplier and Amazon data, with VAT handling and linking-map-based matching.
+- SystemConfigLoader: Loads and exposes system configuration for workflows, limits, performance, and financial parameters.
 
-**Returns:**
-- `List[Dict[str, Any]]`: A list of profitable product results, or an empty list if no products were found or an error occurred.
+**Section sources**
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L20-L64)
+- [10.2. Supplier Scraper Api.md](file://wiki-dec-3/10. Api Reference/10.2. Supplier Scraper Api.md#L44-L50)
+- [10.3. Financial Analysis Api.md](file://wiki-dec-3/10. Api Reference/10.3. Financial Analysis Api.md#L15-L36)
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md#L17-L51)
 
-**Usage Example:**
-```python
-from config.system_config_loader import SystemConfigLoader
-from utils.browser_manager import BrowserManager
+## Architecture Overview
+The system follows a layered architecture:
+- Configuration layer: Centralized JSON configuration and loader
+- Orchestration layer: Workflow phases and resumption logic
+- Extraction layer: Supplier scraping with authentication and URL filtering
+- State layer: Atomic persistence and validation
+- Finance layer: Profitability computation and reporting
 
-config_loader = SystemConfigLoader()
-workflow_config = {"supplier_name": "poundwholesale.co.uk", "use_predefined_categories": True}
-browser_manager = BrowserManager.get_instance()
-
-workflow = PassiveExtractionWorkflow(config_loader, workflow_config, browser_manager)
-results = await workflow.run()
+```mermaid
+graph TB
+CFG[system_config.json] --> Loader
+Loader --> WF
+WF --> Scraper
+Scraper --> AuthSvc
+Scraper --> URLF
+WF --> SM
+SM --> Atomic
+WF --> FC
 ```
 
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1970-L2316)
+**Diagram sources**
+- [system_config.json](file://config/system_config.json#L1-L200)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
+- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L3938)
+- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [url_filter.py](file://utils/url_filter.py#L1-L40)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1-L100)
+- [atomic_file_operations.py](file://utils/atomic_file_operations.py#L1-L100)
+- [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L1-L200)
 
-#### Method: `_extract_supplier_products(self, supplier_url, supplier_name, category_urls_to_scrape, max_products_per_category, max_products_to_process, supplier_extraction_batch_size)`
-Extracts product data from a supplier's website by scraping the provided category URLs.
+## Detailed Component Analysis
 
-**Parameters:**
-- `supplier_url`: The base URL of the supplier website.
-- `supplier_name`: The name of the supplier.
-- `category_urls_to_scrape`: A list of category URLs to scrape.
-- `max_products_per_category`: Maximum number of products to extract per category.
-- `max_products_to_process`: Total maximum number of products to process.
-- `supplier_extraction_batch_size`: Number of categories to process in a batch.
+### Workflow Orchestration API
+- Purpose: End-to-end orchestration of supplier extraction, Amazon matching, gap processing, and financial analysis.
+- Key methods and responsibilities:
+  - run(): Executes the workflow with hash optimization and file-based progress tracking.
+  - _extract_supplier_products(): Scrapes supplier products in batches with rate limiting.
+  - _get_amazon_data(): Two-step matching using EAN then title similarity.
+  - _validate_product_match(): Confidence scoring for matched products.
+  - _run_hybrid_processing_mode(): Alternates supplier and Amazon phases.
+  - _process_gap_products(): Handles unmatched entries and resumption.
+  - _run_amazon_phase_from_resume(), _run_supplier_phase_from_resume(): Resume points by phase.
+- Configuration: Loaded via SystemConfigLoader with sections for system, processing_limits, performance, cache, monitoring, output, and analysis.
+- State management: Uses FixedEnhancedStateManager for atomic saves, resumption pointers, and validation.
 
-**Returns:**
-- `List[Dict[str, Any]]`: A list of dictionaries, each containing product data (title, price, URL, EAN, etc.).
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2318-L2435)
-
-#### Method: `_get_amazon_data(self, supplier_product)`
-Finds the corresponding product on Amazon for a given supplier product using a dual-pronged approach: EAN search first, followed by a title-based search if the EAN search fails.
-
-**Parameters:**
-- `supplier_product`: A dictionary containing the supplier product data.
-
-**Returns:**
-- `Dict[str, Any]`: A dictionary containing the matched Amazon product data, or an error dictionary if no match is found.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2437-L2525)
-
-## configurable_supplier_scraper.py API
-
-The `ConfigurableSupplierScraper` class is responsible for extracting product data from supplier websites. It uses Playwright for robust browser automation and supports configurable selectors for different suppliers.
-
-### Class: ConfigurableSupplierScraper
-
-**Section sources**
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L100-L1300)
-
-#### Method: `__init__(self, ai_client=None, openai_model_name=None, headless=False, use_shared_chrome=True, auth_callback=None, browser_manager=None, state_manager=None)`
-Initializes the scraper with optional AI and browser management capabilities.
-
-**Parameters:**
-- `ai_client`: An OpenAI client for AI-powered selector discovery (not currently used).
-- `openai_model_name`: The name of the OpenAI model to use (not currently used).
-- `headless`: Whether to run the browser in headless mode.
-- `use_shared_chrome`: Whether to connect to a shared Chrome instance via CDP.
-- `auth_callback`: An optional callback function to evaluate authentication status.
-- `browser_manager`: An optional `BrowserManager` instance for shared browser control.
-- `state_manager`: An optional `EnhancedStateManager` instance for progress tracking.
-
-**Section sources**
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L100-L200)
-
-#### Method: `scrape_products_from_url(self, url, max_products=50, product_accumulator=None)`
-Extracts product data from a single supplier category URL.
-
-**Parameters:**
-- `url`: The URL of the supplier category page.
-- `max_products`: The maximum number of products to extract from the page.
-- `product_accumulator`: An optional list to which products are appended in real-time for progress tracking.
-
-**Returns:**
-- `List[Dict[str, Any]]`: A list of dictionaries, each containing product data.
-
-**Section sources**
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L400-L800)
-
-#### Method: `extract_price(self, soup, product_html, product_url)`
-Extracts the product price from the HTML content using configurable selectors.
-
-**Parameters:**
-- `soup`: A BeautifulSoup object representing the product page's HTML.
-- `product_html`: The raw HTML string of the product page.
-- `product_url`: The URL of the product page.
-
-**Returns:**
-- `Optional[float]`: The extracted price as a float, or None if the price could not be found.
-
-**Section sources**
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1200-L1300)
-
-#### Method: `set_progress_callback(self, callback_func)`
-Sets a callback function to be called during the scraping process to report progress.
-
-**Parameters:**
-- `callback_func`: A function that accepts parameters for the current phase, processed count, total count, product URL, and product data.
-
-**Section sources**
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L380-L390)
-
-## FBA_Financial_calculator.py API
-
-The `FBA_Financial_calculator` module provides functions for calculating the profitability of products for Amazon FBA and generating financial reports.
-
-### Module: FBA_Financial_calculator
-
-**Section sources**
-- [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L0-L590)
-
-#### Function: `run_calculations(supplier_name, supplier_cache_path=None, output_dir=None, amazon_scrape_dir=None)`
-Performs financial calculations for all products from a given supplier.
-
-**Parameters:**
-- `supplier_name`: The name of the supplier (e.g., "poundwholesale.co.uk").
-- `supplier_cache_path`: Optional path to the supplier's product cache JSON file.
-- `output_dir`: Optional directory to save the financial report.
-- `amazon_scrape_dir`: Optional directory containing the Amazon product data.
-
-**Returns:**
-- `Dict[str, Any]`: A dictionary containing the results, including a pandas DataFrame, statistics, and the output file path.
-
-**Usage Example:**
-```python
-from FBA_Financial_calculator import run_calculations
-
-results = run_calculations("poundwholesale.co.uk")
-print(f"Generated {results['statistics']['generated_calculations']} financial calculations")
-print(f"Report saved to: {results['statistics']['output_file']}")
+```mermaid
+classDiagram
+class PassiveExtractionWorkflow {
++run()
++_extract_supplier_products(...)
++_get_amazon_data(...)
++_validate_product_match(...)
++_run_hybrid_processing_mode(...)
++_process_gap_products(...)
++_run_amazon_phase_from_resume(...)
++_run_supplier_phase_from_resume(...)
+}
+class SystemConfigLoader {
++get_system_config()
++get_full_config()
++get_workflow_config(key)
+}
+class FixedEnhancedStateManager {
++load_state()
++save_state_atomic(note)
++set_resumption_ptr(...)
++get_resumption_ptr()
++validate_and_repair_state()
+}
+PassiveExtractionWorkflow --> SystemConfigLoader : "loads config"
+PassiveExtractionWorkflow --> FixedEnhancedStateManager : "persists state"
 ```
 
-**Section sources**
-- [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L300-L500)
-
-#### Function: `financials(supplier, amazon, supplier_price_inc_vat)`
-Calculates the detailed financial metrics for a single product.
-
-**Parameters:**
-- `supplier`: A dictionary containing the supplier product data.
-- `amazon`: A dictionary containing the matched Amazon product data.
-- `supplier_price_inc_vat`: The supplier's price including VAT.
-
-**Returns:**
-- `Dict[str, Any]`: A dictionary containing financial metrics such as ROI, net profit, referral fee, FBA fee, and breakeven price.
+**Diagram sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1-L100)
 
 **Section sources**
-- [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L200-L300)
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L28-L64)
+- [API_REFERENCE.md](file://docs/API_REFERENCE.md#L15-L120)
 
-## fixed_enhanced_state_manager.py API
+### Supplier Scraper API
+- Purpose: Extract supplier product data with configurable selectors, authentication, and anti-detection.
+- Core components:
+  - ConfigurableSupplierScraper: Playwright-based scraper with AI fallbacks, rate limiting, and progress callbacks.
+  - SupplierConfigLoader: Loads domain-specific selector configurations from JSON.
+  - URLFilter: Filters URLs based on linking map and product cache presence.
+  - SupplierAuthenticationService: Maintains valid sessions and handles authentication fallbacks.
+  - BrowserManager: Centralized Chrome CDP management for shared browser instances.
+- Key capabilities:
+  - Configurable selector-based extraction with AI-powered fallbacks.
+  - Intelligent URL filtering to avoid redundant processing.
+  - Proactive authentication checks to prevent session expiration.
+  - Shared Chrome instance for efficient resource utilization.
 
-The `FixedEnhancedStateManager` class provides a robust system for managing the workflow's state, enabling it to resume from interruptions and track progress accurately.
+```mermaid
+classDiagram
+class ConfigurableSupplierScraper {
++scrape_products_from_url(url, max_products, accumulator)
++get_page_content(url, retry_count)
++set_progress_callback(callback)
+}
+class SupplierConfigLoader {
++load_supplier_selectors(domain)
++get_domain_from_url(url)
+}
+class URLFilter {
++filter_urls(urls, linking_map, cached_products)
+}
+class SupplierAuthenticationService {
++authenticate()
++check_session_validity()
+}
+class BrowserManager {
++get_browser()
++get_page_for_url(url)
+}
+ConfigurableSupplierScraper --> SupplierConfigLoader : "loads selectors"
+ConfigurableSupplierScraper --> SupplierAuthenticationService : "auth integration"
+ConfigurableSupplierScraper --> URLFilter : "filters URLs"
+ConfigurableSupplierScraper --> BrowserManager : "uses shared browser"
+```
 
-### Class: FixedEnhancedStateManager
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L100-L2000)
-
-#### Method: `__init__(self, supplier_name, base_path=None, lock_timeout=5.0)`
-Initializes the state manager for a specific supplier.
-
-**Parameters:**
-- `supplier_name`: The name of the supplier.
-- `base_path`: The base directory path for state files (optional).
-- `lock_timeout`: The timeout in seconds for acquiring the file lock.
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L100-L200)
-
-#### Method: `load_state(self) -> bool`
-Loads the existing state from the state file.
-
-**Returns:**
-- `bool`: True if a state file was found and loaded, False if starting fresh.
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L300-L400)
-
-#### Method: `save_state_atomic(self, note="")`
-Atomically saves the current state to disk using a temporary file and rename operation to ensure data integrity.
-
-**Parameters:**
-- `note`: An optional note to include in the save operation for logging.
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L800-L1000)
-
-#### Method: `get_resumption_ptr(self) -> ResumptionPtr`
-Retrieves the current resumption pointer, which indicates where the workflow should resume processing.
-
-**Returns:**
-- `ResumptionPtr`: A named tuple containing the current phase, category index, and product index.
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1200-L1300)
-
-#### Method: `set_resumption_ptr(self, phase, cat_idx, prod_idx_next)`
-Sets the resumption pointer to a specific location in the workflow.
-
-**Parameters:**
-- `phase`: The current phase ("supplier" or "amazon_analysis").
-- `cat_idx`: The index of the current category.
-- `prod_idx_next`: The index of the next product to process in the current category.
+**Diagram sources**
+- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L3938)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [url_filter.py](file://utils/url_filter.py#L1-L40)
+- [browser_manager.py](file://utils/browser_manager.py)
 
 **Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1100-L1200)
+- [10.2. Supplier Scraper Api.md](file://wiki-dec-3/10. Api Reference/10.2. Supplier Scraper Api.md#L44-L86)
 
-## Client Implementation Guidelines
+### Financial Analysis API
+- Purpose: Compute profitability metrics (ROI, net profit, breakeven) using supplier and Amazon data.
+- Core methods:
+  - financials(): Calculates metrics including supplier price (inc/ex VAT), selling price, referral fee, FBA fee, HMRC obligations, net profit, ROI, breakeven, and profit margin.
+  - run_calculations(): Executes the core workflow for a supplier, generating financial reports and statistics.
+  - find_amazon_json(): Hierarchical matching using linking map, ASIN, filename, and fuzzy title matching.
+- Inputs:
+  - purchase_price, shipping_costs, amazon_fees, selling_price, supplier_name, optional paths for supplier cache, output directory, and Amazon scrape data.
+- Outputs:
+  - Dictionary with financial metrics and statistics; CSV/JSON reports in supplier-specific directories.
 
-To extend or integrate with the Amazon FBA Agent System, clients should follow these guidelines:
+```mermaid
+flowchart TD
+A["Inputs: supplier data + Amazon data"] --> B["find_amazon_json()"]
+B --> C{"Match Found?"}
+C --> |Yes| D["financials()"]
+C --> |No| E["Skip/Log No Match"]
+D --> F["Run Statistics + Reports"]
+F --> G["Outputs: Metrics + Reports"]
+```
 
-1.  **Use the Public API:** Interact with the system through the documented public methods of the `PassiveExtractionWorkflow`, `ConfigurableSupplierScraper`, `FBA_Financial_calculator`, and `FixedEnhancedStateManager` classes. Avoid accessing internal attributes or methods that are not part of the public API.
-2.  **Handle Asynchronous Operations:** The core workflow and scraper methods are asynchronous (use `async/await`). Ensure your client code is also asynchronous or properly handles the returned coroutines.
-3.  **Respect Configuration:** The system is heavily driven by the `system_config.json` file. Clients should load and respect these configurations rather than hardcoding values.
-4.  **Implement Progress Callbacks:** For long-running operations, use the `set_progress_callback` method on the scraper to receive real-time updates on the scraping progress.
-5.  **Manage State Correctly:** Use the `FixedEnhancedStateManager` to load and save the workflow state. Always call `load_state()` at the beginning of a session and rely on `get_resumption_ptr()` to determine where to resume processing.
-6.  **Handle Errors Gracefully:** Implement robust error handling around calls to the API, as network requests and browser automation can fail. Refer to the [Error Handling](#error-handling) section for details.
+**Diagram sources**
+- [FBA_Financial_calculator.py](file://tools/FBA_Financial_calculator.py#L210-L555)
 
-## Versioning and Backwards Compatibility
+**Section sources**
+- [10.3. Financial Analysis Api.md](file://wiki-dec-3/10. Api Reference/10.3. Financial Analysis Api.md#L21-L103)
 
-The system uses a schema versioning system within the state file (`schema_version` field) to manage backwards compatibility.
+### State Management API
+- Purpose: Persist and recover processing state with atomic writes, thread safety, and resumption pointers.
+- Key methods:
+  - load_state(), save_state_atomic(), save_debounced(): Atomic persistence with file locking.
+  - set_resumption_ptr(), get_resumption_ptr(): Phase-aware resumption with monotonicity validation.
+  - update_processing_progress(), initialize_category_processing(), mark_category_completed(): Progress tracking.
+  - validate_and_repair_state(), force_cache_rebuild(): Error recovery and cache rebuild.
+- Data schema:
+  - Fields include schema_version, timestamps, supplier_name, resumption_index, progress_index, session_products_processed, total_products, processing_status, category_performance, error_log, and structured sections for system_progression, gap_processing, metadata, and user_display_metrics.
 
-*   **State File Schema:** The `FixedEnhancedStateManager` is designed to handle state files from older versions. The `load_state` method includes logic to migrate legacy state formats to the current enhanced format.
-*   **Public API Stability:** The public methods of the core classes are considered stable. Changes to these interfaces will be made cautiously and will be documented in a changelog.
-*   **Configuration Backwards Compatibility:** The `system_config.json` file is designed to be backwards compatible. New configuration options are added as optional fields, and the system provides sensible defaults for missing values.
-*   **Deprecation:** If a public method must be deprecated, it will be marked as such in the documentation and will remain functional for at least one major version before being removed.
+```mermaid
+erDiagram
+PROCESSING_STATE {
+string schema_version
+string created_at
+string last_updated
+string supplier_name
+int resumption_index
+int progress_index
+int session_products_processed
+int total_products
+string processing_status
+object category_performance
+array error_log
+int successful_products
+int profitable_products
+float total_profit_found
+object processing_statistics
+object metadata
+object gap_processing
+object system_progression
+object user_display_metrics
+}
+```
 
-## Error Handling
+**Diagram sources**
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L138-L200)
+- [processing_state.json](file://processing_states/poundwholesale_co_uk_processing_state.json#L1-L100)
 
-The system employs comprehensive error handling throughout its components.
+**Section sources**
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md#L134-L177)
 
-### Exception Handling in `PassiveExtractionWorkflow.run()`
-The `run()` method is designed to be resilient. It catches exceptions during the main processing loop and logs them, allowing the workflow to continue processing other products. Critical errors that prevent the entire workflow from continuing (e.g., failure to load configuration) will cause the method to return an empty list.
+## Dependency Analysis
+- Workflow Orchestration depends on:
+  - SystemConfigLoader for configuration
+  - FixedEnhancedStateManager for state persistence
+  - ConfigurableSupplierScraper for supplier data
+  - FBA_Financial_calculator for profitability analysis
+- Supplier Scraper depends on:
+  - SupplierConfigLoader for selectors
+  - SupplierAuthenticationService for sessions
+  - URLFilter for deduplication
+  - BrowserManager for shared Chrome
+- State Manager depends on:
+  - AtomicFileOperations for atomic writes
+  - Normalization utilities for URL handling
 
-### Error Conditions in `configurable_supplier_scraper.py`
-*   **Network Errors:** The `get_page_content` method implements retries with exponential backoff for network timeouts and rate limiting (HTTP 429).
-*   **Authentication Failures:** The scraper can detect when a login is required (e.g., by checking for "Log in to view prices" text) and can trigger an authentication callback.
-*   **Selector Failures:** If configured selectors fail to extract data, the scraper will log a warning and attempt to use fallback selectors or AI-powered extraction (if enabled).
-*   **Memory Management:** The scraper includes proactive memory cleanup to prevent crashes during long scraping sessions.
+```mermaid
+graph TB
+WF[PassiveExtractionWorkflow] --> CFG[system_config.json]
+WF --> SM[FixedEnhancedStateManager]
+WF --> SCR[ConfigurableSupplierScraper]
+WF --> FC[FBA_Financial_calculator]
+SCR --> SCL[supplier_config_loader.py]
+SCR --> SAS[supplier_authentication_service.py]
+SCR --> UF[url_filter.py]
+SCR --> BM[browser_manager.py]
+SM --> AFO[atomic_file_operations.py]
+```
 
-### Error Conditions in `FBA_Financial_calculator.py`
-*   **Missing Files:** The `run_calculations` function will raise an exception if the supplier cache file or Amazon data directory cannot be found.
-*   **Missing Data:** If a product is missing critical data (EAN, ASIN, title), it will be skipped with a warning logged.
-*   **Price Extraction:** If no price can be found in the Amazon data, the product is skipped, and a detailed warning is logged listing all the price fields that were checked.
+**Diagram sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
+- [system_config.json](file://config/system_config.json#L1-L200)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1-L100)
+- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L3938)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [url_filter.py](file://utils/url_filter.py#L1-L40)
+- [browser_manager.py](file://utils/browser_manager.py)
+- [atomic_file_operations.py](file://utils/atomic_file_operations.py#L1-L100)
 
-### Error Conditions in `fixed_enhanced_state_manager.py`
-*   **File I/O Errors:** The `save_state_atomic` method uses multiple fallback strategies (thread-safe writer, legacy atomic save, basic temp file) to ensure the state is saved even if one method fails.
-*   **State Corruption:** The `validate_and_repair_state` method can detect and repair common state corruption patterns, such as impossible index states or phase contamination.
-*   **Concurrency:** The state manager uses file locking to prevent data corruption when multiple processes attempt to write to the state file simultaneously.
+**Section sources**
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L178-L203)
+- [10.2. Supplier Scraper Api.md](file://wiki-dec-3/10. Api Reference/10.2. Supplier Scraper Api.md#L176-L203)
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md#L178-L207)
+
+## Performance Considerations
+- Hash-based deduplication: Reduces processing time by filtering duplicates across categories using O(1) lookups.
+- File-grounded progress tracking: Ensures accuracy and avoids memory pressure.
+- Sliding window memory management: Keeps recent items in memory while persisting progress to files.
+- Rate limiting and backoff: Controlled delays between requests to avoid supplier throttling.
+- Shared Chrome via CDP: Minimizes browser startup overhead and improves throughput.
+- Atomic state persistence: Prevents corruption and supports crash recovery without manual intervention.
+
+**Section sources**
+- [API_REFERENCE.md](file://docs/API_REFERENCE.md#L64-L120)
+- [10.2. Supplier Scraper Api.md](file://wiki-dec-3/10. Api Reference/10.2. Supplier Scraper Api.md#L204-L206)
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md#L178-L207)
+
+## Troubleshooting Guide
+- Authentication failures: Trigger re-login attempts and session validation; proactive checks every N products.
+- No-match handling: Creates no-match entries to prevent infinite reprocessing loops.
+- State corruption: Automatic validation and repair; can force cache rebuild when needed.
+- IP blocking and rate limiting: Implement exponential backoff, random delays, proxy rotation, and circuit breakers.
+- Security challenges: Monitor for suspicious patterns; apply preventive security checks and configuration validation.
+
+```mermaid
+flowchart TD
+A["Detect Issue"] --> B{"Type?"}
+B --> |Auth| C["Re-authenticate + Retry"]
+B --> |No-Match| D["Mark No-Match + Skip"]
+B --> |State Corruption| E["Validate + Repair State"]
+B --> |Rate Limit| F["Backoff + Circuit Breaker"]
+C --> G["Resume Workflow"]
+D --> G
+E --> G
+F --> G
+```
+
+**Diagram sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2700-L2800)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L2000-L2200)
+- [browser_circuit_breaker.py](file://utils/browser_circuit_breaker.py#L0-L213)
+
+**Section sources**
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L352-L395)
+- [10.4. State Management Api.md](file://wiki-dec-3/10. Api Reference/10.4. State Management Api.md#L208-L232)
+- [Security Challenges.md](file://wiki-dec-3/11. Troubleshooting Guide/11.5. Authentication Issues/11.5.3. Security Challenges.md#L94-L116)
+
+## Conclusion
+The Amazon FBA Agent System provides robust, configurable APIs for workflow orchestration, supplier scraping, financial analysis, and state management. Its emphasis on atomic state persistence, hash-based deduplication, and resilient error handling enables reliable, high-performance operations across long-running product sourcing workflows.
+
+## Appendices
+
+### Configuration and Versioning
+- Configuration structure: system, processing_limits, supplier_extraction_progress, hybrid_processing, batch_synchronization, performance, cache, monitoring, output, chrome, analysis, amazon, supplier, credentials, workflows, ai_features, integrations, authentication, surgical_fixes.
+- Versioning: Schema versioning and migration logic in state management; configuration loader provides fallbacks for missing parameters.
+
+**Section sources**
+- [system_config.json](file://config/system_config.json#L1-L200)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L396-L420)
+
+### Authentication and Security
+- Authentication fallbacks during scraping and session validation.
+- Rate limiting strategies and circuit breaker patterns to mitigate IP blocking.
+- Security checks for sensitive data exposure and configuration validation.
+
+**Section sources**
+- [10.1. Workflow Orchestration Api.md](file://wiki-dec-3/10. Api Reference/10.1. Workflow Orchestration Api.md#L352-L381)
+- [Security Challenges.md](file://wiki-dec-3/11. Troubleshooting Guide/11.5. Authentication Issues/11.5.3. Security Challenges.md#L94-L116)
+- [system-config-toggle-v2.md](file://config/system-config-toggle-v2.md#L136-L182)

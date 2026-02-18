@@ -224,7 +224,7 @@ The worker will pick up the job and move it to running, then done/failed."""
 
         # Parse max_products_per_category (accepts: "to 10", "= 10", ": 10", or just "10")
         mpc_match = re.search(
-            r"max[_ ]?products[_ ]?per[_ ]?category\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+            r"(?:max[_ ]?products[_ ]?per[_ ]?category|products?\s+per\s+category)\s*(?:from\s+\d+\s+)?(?:should\s+be|set\s+to|to|=|:)?\s*(\d+)",
             user_input,
             re.IGNORECASE,
         )
@@ -234,7 +234,7 @@ The worker will pick up the job and move it to running, then done/failed."""
 
         # Parse max_products (accepts: "to 10", "= 10", ": 10", or just "10")
         mp_match = re.search(
-            r"max[_ ]?products(?![_ ]?per[_ ]?category)\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+            r"max[_ ]?products(?![_ ]?per[_ ]?category)\s*(?:from\s+\d+\s+)?(?:should\s+be|set\s+to|to|=|:)?\s*(\d+)",
             user_input,
             re.IGNORECASE,
         )
@@ -244,7 +244,7 @@ The worker will pick up the job and move it to running, then done/failed."""
 
         if not mp_match:
             natural_match = re.search(
-                r"(?:first|only|just|limit(?:ed)?\s+to|top)\s+(\d+)\s+products?",
+                r"(?:first|only|just|limit(?:ed)?\s+to|top|up\s*to|at\s*most|no\s+more\s+than)\s+(\d+)\s+products?",
                 user_input,
                 re.IGNORECASE,
             )
@@ -254,12 +254,23 @@ The worker will pick up the job and move it to running, then done/failed."""
 
         if not mp_match:
             analyze_match = re.search(
-                r"analyze\s+(?:only\s+)?(?:the\s+)?(?:first\s+)?(\d+)\s+products?",
+                r"(?:analy[sz]e|process|run|check)\s+(?:only\s+)?(?:the\s+)?(?:first\s+)?(\d+)\s+products?",
                 user_input,
                 re.IGNORECASE,
             )
             if analyze_match:
                 new_params["max_products"] = int(analyze_match.group(1))
+                updated_params = True
+
+        reversed_match = None
+        if not mp_match and not natural_match and not analyze_match:
+            reversed_match = re.search(
+                r"\b(\d+)\s+products?\s+(?:max(?:imum)?|limit(?:ed)?)\b",
+                user_input,
+                re.IGNORECASE,
+            )
+            if reversed_match:
+                new_params["max_products"] = int(reversed_match.group(1))
                 updated_params = True
 
         both_match = re.search(
@@ -304,7 +315,7 @@ The worker will pick up the job and move it to running, then done/failed."""
                 changes.append(
                     f"max_products_per_category={new_params['max_products_per_category']}"
                 )
-            if mp_match or natural_match or analyze_match or unlimited_match:
+            if mp_match or natural_match or analyze_match or reversed_match or unlimited_match:
                 changes.append(f"max_products={new_params['max_products']}")
 
             st.session_state["chat_messages"].append({"role": "user", "content": user_input})

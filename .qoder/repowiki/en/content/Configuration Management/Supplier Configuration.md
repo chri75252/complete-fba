@@ -1,223 +1,311 @@
 # Supplier Configuration
 
 <cite>
-**Referenced Files in This Document**  
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
+**Referenced Files in This Document**
 - [supplier_config_loader.py](file://config/supplier_config_loader.py)
+- [system_config_loader.py](file://config/system_config_loader.py)
+- [system_config.json](file://config/system_config.json)
+- [clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json)
+- [efghousewares.co.uk.json](file://config/supplier_configs/efghousewares.co.uk.json)
+- [poundwholesale.co.uk.json](file://config/supplier_configs/poundwholesale.co.uk.json)
+- [README.md](file://config/supplier_configs/README.md)
+- [efghousewares_categories.json](file://config/efghousewares_categories.json)
+- [poundwholesale_categories.json](file://config/poundwholesale_categories.json)
+- [11.5.1. Credential Validation.md](file://WIKI REPO SEPT17/11. Troubleshooting Guide/11.5. Authentication Issues/11.5.1. Credential Validation.md)
 </cite>
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Supplier Configuration Structure](#supplier-configuration-structure)
-3. [Field Mappings Configuration](#field-mappings-configuration)
-4. [Navigation Configuration](#navigation-configuration)
-5. [Pagination and Page Limiting](#pagination-and-page-limiting)
-6. [SupplierConfigLoader Module](#supplierconfigloader-module)
-7. [Selector Strategy Examples](#selector-strategy-examples)
-8. [Common Configuration Issues](#common-configuration-issues)
-9. [Creating New Supplier Configurations](#creating-new-supplier-configurations)
+2. [Project Structure](#project-structure)
+3. [Core Components](#core-components)
+4. [Architecture Overview](#architecture-overview)
+5. [Detailed Component Analysis](#detailed-component-analysis)
+6. [Dependency Analysis](#dependency-analysis)
+7. [Performance Considerations](#performance-considerations)
+8. [Troubleshooting Guide](#troubleshooting-guide)
+9. [Conclusion](#conclusion)
+10. [Appendices](#appendices)
 
 ## Introduction
+This document explains supplier-specific configuration management for the Amazon FBA Agent System. It covers the configuration structure for authentication credentials, category mappings, workflow settings, and extraction parameters. It also describes how to create and modify supplier configurations for new integrations, provides template examples for authenticated and non-authenticated suppliers, and explains the configuration loading mechanism, validation processes, and error handling. Practical onboarding steps and common configuration issues are included to help operators integrate new suppliers efficiently.
 
-The supplier configuration system enables product extraction from individual supplier websites by defining domain-specific settings in JSON configuration files. These configurations contain CSS selectors, navigation strategies, and extraction rules that allow the system to adapt to different website structures and data presentation patterns. The system uses a modular approach where each supplier has its own configuration file, enabling targeted customization while maintaining a consistent interface for data extraction processes.
-
-**Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
-- [supplier_config_loader.py](file://config/supplier_config_loader.py)
-
-## Supplier Configuration Structure
-
-Supplier configurations are stored as JSON files in the `config/supplier_configs/` directory, with filenames following the pattern `{domain}.json`. Each configuration file contains several key sections that define how the system should interact with and extract data from the supplier's website. The structure includes metadata about the supplier, field mappings for product data extraction, navigation configuration for category traversal, and pagination settings for handling multi-page results.
+## Project Structure
+Supplier configuration is split into two layers:
+- System-wide configuration: central settings, credentials, and workflow definitions
+- Supplier-specific configuration: selectors, extraction parameters, and navigation settings
 
 ```mermaid
-flowchart TD
-ConfigFile["Supplier Config File\n(domain.json)"] --> Metadata["Metadata\n(supplier_id, name, base_url)"]
-ConfigFile --> FieldMappings["Field Mappings\n(product_item, title, price, etc.)"]
-ConfigFile --> Navigation["Navigation Configuration\n(strategy, categories)"]
-ConfigFile --> Pagination["Pagination Settings\n(pattern, selectors)"]
-ConfigFile --> PageLimiter["Page Limiter\n(products per page)"]
-style ConfigFile fill:#f9f,stroke:#333
-style Metadata fill:#bbf,stroke:#333
-style FieldMappings fill:#bbf,stroke:#333
-style Navigation fill:#bbf,stroke:#333
-style Pagination fill:#bbf,stroke:#333
-style PageLimiter fill:#bbf,stroke:#333
+graph TB
+subgraph "System Configuration"
+SYS_CFG["system_config.json"]
+SYS_LOADER["SystemConfigLoader"]
+end
+subgraph "Supplier Configuration"
+SEL_LOADER["supplier_config_loader.py"]
+SEL_CFG["supplier_configs/*.json"]
+end
+subgraph "Category Mappings"
+CAT_JSON1["efghousewares_categories.json"]
+CAT_JSON2["poundwholesale_categories.json"]
+end
+SYS_CFG --> SYS_LOADER
+SEL_LOADER --> SEL_CFG
+SYS_LOADER --> CAT_JSON1
+SYS_LOADER --> CAT_JSON2
 ```
 
 **Diagram sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
+- [system_config.json](file://config/system_config.json#L1-L384)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [efghousewares_categories.json](file://config/efghousewares_categories.json#L1-L346)
+- [poundwholesale_categories.json](file://config/poundwholesale_categories.json#L1-L234)
 
 **Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
+- [system_config.json](file://config/system_config.json#L1-L384)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
 
-## Field Mappings Configuration
+## Core Components
+- Supplier selector loader: loads domain-specific or default selector configurations from JSON files
+- System configuration loader: loads system_config.json and exposes getters for suppliers, credentials, and workflows
+- Supplier configuration files: per-domain JSON files containing selectors, authentication, pagination, and extraction parameters
+- Category mapping files: lists of category URLs for predefined category extraction workflows
 
-The `field_mappings` section defines CSS selectors for extracting product information from supplier web pages. Each field mapping contains an array of selectors organized in priority order, allowing the system to attempt extraction with multiple selectors until one successfully returns content. This priority array approach provides robustness against website layout changes and variations across different product pages.
+Key responsibilities:
+- Load and validate supplier configuration
+- Provide selectors and parameters to extraction workflows
+- Manage authentication credentials and workflow settings
+- Support both authenticated and non-authenticated suppliers
 
-The configuration supports extraction of various product attributes including title, price, URL, image, EAN, barcode, SKU, and stock status. For fields where login is required to view pricing information, a separate `price_login_required` selector is provided to detect when authentication is needed.
+**Section sources**
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
+- [system_config_loader.py](file://config/system_config_loader.py#L42-L50)
+- [system_config.json](file://config/system_config.json#L247-L264)
+
+## Architecture Overview
+The configuration architecture separates concerns between system-level settings and supplier-level specifics. SystemConfigLoader centralizes access to credentials and workflow definitions, while supplier_config_loader.py manages domain-specific selectors and supports fallback to default configurations.
 
 ```mermaid
-flowchart TD
-FieldMappings["field_mappings"] --> ProductItem["product_item\nContainer element"]
-FieldMappings --> Title["title\nProduct name"]
-FieldMappings --> Price["price\nProduct price"]
-FieldMappings --> PriceLogin["price_login_required\nLogin detection"]
-FieldMappings --> URL["url\nProduct page link"]
-FieldMappings --> Image["image\nProduct image"]
-FieldMappings --> EAN["ean\nProduct barcode/EAN"]
-FieldMappings --> Barcode["barcode\nAlternative barcode"]
-FieldMappings --> SKU["sku\nProduct SKU"]
-FieldMappings --> OutOfStock["out_of_stock\nStock availability"]
-FieldMappings --> StockStatus["stock_status\nGeneral stock indicator"]
-style FieldMappings fill:#f96,stroke:#333
-style ProductItem fill:#bbf,stroke:#333
-style Title fill:#bbf,stroke:#333
-style Price fill:#bbf,stroke:#333
-style PriceLogin fill:#bbf,stroke:#333
-style URL fill:#bbf,stroke:#333
-style Image fill:#bbf,stroke:#333
-style EAN fill:#bbf,stroke:#333
-style Barcode fill:#bbf,stroke:#333
-style SKU fill:#bbf,stroke:#333
-style OutOfStock fill:#bbf,stroke:#333
-style StockStatus fill:#bbf,stroke:#333
+sequenceDiagram
+participant Caller as "Caller"
+participant SysCfg as "SystemConfigLoader"
+participant SelCfg as "supplier_config_loader.py"
+Caller->>SysCfg : get_credentials(supplier_name)
+SysCfg-->>Caller : {username, password}
+Caller->>SysCfg : get_supplier_config(supplier_name)
+SysCfg-->>Caller : {supplier_id, base_url, ...}
+Caller->>SelCfg : load_supplier_selectors(domain)
+SelCfg-->>Caller : {field_mappings, pagination, ...}
 ```
 
 **Diagram sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L10-L85)
+- [system_config_loader.py](file://config/system_config_loader.py#L46-L47)
+- [system_config_loader.py](file://config/system_config_loader.py#L42-L44)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
 
-**Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L10-L85)
+## Detailed Component Analysis
 
-## Navigation Configuration
-
-The `navigation_configuration` section controls how the system traverses product categories on the supplier website. It supports two primary navigation strategies: predefined categories and AI-driven category progression. The configuration specifies whether to use predefined category URLs or allow the system to discover categories dynamically.
-
-For suppliers with complex category structures, the system can be configured to use a list of predefined category URLs, ensuring comprehensive coverage of all product sections. This approach is particularly useful when the supplier's website has inconsistent navigation patterns or when specific category pages need to be prioritized.
-
-```mermaid
-flowchart TD
-NavigationConfig["navigation_configuration"] --> Strategy["navigation_strategy\n(predefined_categories)"]
-NavigationConfig --> UsePredefined["use_predefined_categories\n(Enable/disable)"]
-NavigationConfig --> Predefined["predefined_categories\n(List of category URLs)"]
-NavigationConfig --> HomepageReliability["homepage_products_unreliable\n(Flag for homepage scraping)"]
-NavigationConfig --> AIProgression["use_ai_category_progression\n(AI-driven navigation)"]
-Strategy --> |Value| PredefinedCategories["predefined_categories"]
-Strategy --> |Value| AIDiscovery["ai_discovery"]
-style NavigationConfig fill:#f96,stroke:#333
-style Strategy fill:#bbf,stroke:#333
-style UsePredefined fill:#bbf,stroke:#333
-style Predefined fill:#bbf,stroke:#333
-style HomepageReliability fill:#bbf,stroke:#333
-style AIProgression fill:#bbf,stroke:#333
-style PredefinedCategories fill:#9f9,stroke:#333
-style AIDiscovery fill:#9f9,stroke:#333
-```
-
-**Diagram sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L86-L105)
-
-**Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L86-L105)
-
-## Pagination and Page Limiting
-
-The pagination configuration enables the system to navigate through multiple pages of product listings. It includes a URL pattern template that defines how page numbers are incorporated into category URLs, as well as selectors for identifying "next page" navigation buttons. The system supports both URL-based pagination (using query parameters) and button-based navigation.
-
-The `page_limiter` section allows optimization of data extraction by setting the number of products displayed per page. This reduces the number of page requests needed to extract all products from a category, improving efficiency and reducing server load on both the scraper and the target website.
+### Supplier Selector Loader
+The selector loader provides:
+- Domain-specific configuration loading with fallback to default
+- URL parsing and domain normalization
+- Save operation for generating new supplier configs
 
 ```mermaid
 flowchart TD
-PaginationSection["pagination"] --> Pattern["pattern\n(?p={page_num})"]
-PaginationSection --> UseURL["use_url_navigation\n(Enable URL pattern)"]
-PaginationSection --> NextButton["next_button_selector\n(Array of selectors)"]
-PageLimiterSection["page_limiter"] --> Selector["selector\n(CSS selector for limiter)"]
-PageLimiterSection --> Value["value\n(Number of products per page)"]
-PageLimiterSection --> Note["note\n(Configuration purpose)"]
-style PaginationSection fill:#f96,stroke:#333
-style Pattern fill:#bbf,stroke:#333
-style UseURL fill:#bbf,stroke:#333
-style NextButton fill:#bbf,stroke:#333
-style PageLimiterSection fill:#f96,stroke:#333
-style Selector fill:#bbf,stroke:#333
-style Value fill:#bbf,stroke:#333
-style Note fill:#bbf,stroke:#333
+Start(["Entry"]) --> Parse["Normalize domain<br/>Remove 'www.'"]
+Parse --> Paths["Build paths:<br/>domain.json<br/>default.json"]
+Paths --> TryDomain{"domain.json exists?"}
+TryDomain --> |Yes| LoadDomain["Load domain.json"]
+TryDomain --> |No| TryDefault{"default.json exists?"}
+TryDefault --> |Yes| LoadDefault["Load default.json"]
+TryDefault --> |No| Warn["Log warning"]
+LoadDomain --> Return["Return config"]
+LoadDefault --> Return
+Warn --> Return
 ```
 
 **Diagram sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L106-L121)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
 
 **Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L106-L121)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
 
-## SupplierConfigLoader Module
-
-The `SupplierConfigLoader` module provides the core functionality for loading and managing supplier configurations. It includes functions for loading selectors based on domain names, extracting domains from URLs, and saving configuration changes. The module serves as the central interface between the scraping system and the supplier-specific configuration files.
-
-The `load_supplier_selectors()` function takes a domain name as input and returns the corresponding configuration, with fallback to a default configuration if a domain-specific file is not found. The `get_domain_from_url()` function extracts the domain from a full URL, normalizing it by removing the "www." prefix and converting to lowercase for consistent file matching.
+### System Configuration Loader
+The system loader:
+- Reads system_config.json from environment or default location
+- Exposes getters for system, amazon, suppliers, credentials, and workflows
+- Provides backward-compatible load_config()
 
 ```mermaid
 classDiagram
-class SupplierConfigLoader {
-+CONFIG_DIR : Path
-+load_supplier_selectors(domain : str) : Dict[str, Any]
-+get_domain_from_url(url : str) : str
-+save_supplier_selectors(domain : str, config : Dict[str, Any]) : bool
-}
-SupplierConfigLoader --> "1" "0..1" ConfigFile : loads from
-ConfigFile --> ".json" FileFormat : stored as
-class ConfigFile {
-+supplier_id : str
-+supplier_name : str
-+base_url : str
-+field_mappings : Dict[str, List[str]]
-+navigation_configuration : Dict[str, Any]
-+pagination : Dict[str, Any]
-+page_limiter : Dict[str, Any]
-}
-class FileFormat {
-+extension : ".json"
-+format : "JSON"
+class SystemConfigLoader {
++str config_path
++Dict _config
++__init__(config_path)
++get_system_config() Dict
++get_full_config() Dict
++get_amazon_config() Dict
++get_supplier_config(supplier_name) Dict
++get_credentials(supplier_name) Dict
++get_workflow_config(workflow_key) Dict
++get_financial_batch_size() int
++load_config() Dict
+-_load() void
 }
 ```
 
 **Diagram sources**
-- [supplier_config_loader.py](file://config/supplier_config_loader.py#L22-L105)
+- [system_config_loader.py](file://config/system_config_loader.py#L9-L87)
 
 **Section sources**
-- [supplier_config_loader.py](file://config/supplier_config_loader.py#L22-L105)
+- [system_config_loader.py](file://config/system_config_loader.py#L9-L87)
 
-## Selector Strategy Examples
+### Supplier Configuration Structure
+Supplier configuration files define:
+- Identity: supplier_id, supplier_name, base_url
+- Authentication: login_url, login_selectors, authentication_check_selectors
+- Field mappings: selectors for product_item, title, price, url, image, ean, barcode, sku, stock, availability
+- Navigation: navigation_strategy, predefined_categories, homepage reliability flag
+- Pagination: pattern, next_button_selector, next_button_javascript
+- Additional: rate limiting, page limiter, discovery metadata
 
-The poundwholesale-co-uk.json configuration demonstrates several effective selector strategies for robust data extraction. For product titles, multiple selectors are provided in priority order, starting with the most specific selector and falling back to more general ones. This approach ensures extraction continues to work even if the website structure changes slightly.
-
-Price extraction includes selectors for both visible pricing and login-required indicators, allowing the system to detect when authentication is needed to view prices. The EAN/barcode extraction uses a combination of direct DOM element selectors, structured data (JSON-LD), and meta tags, maximizing the chances of successfully extracting this critical product identifier.
-
-Stock status detection employs multiple selectors to identify both available and unavailable products, with specific text matching for phrases like "Out of stock" and "DISCONTINUED". This comprehensive approach ensures accurate inventory status reporting even when the website uses different terminology across product categories.
-
-**Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
-
-## Common Configuration Issues
-
-Several common issues can arise when configuring supplier extraction settings. Selector fragility occurs when CSS selectors are too specific and break with minor website updates. To mitigate this, configurations should use multiple selectors in priority arrays and favor class-based selectors over structural ones.
-
-Login requirement detection is critical for suppliers that hide pricing behind authentication. The configuration must include specific selectors to identify login prompts, allowing the system to handle authentication appropriately. Pagination pattern mismatches can occur when the URL pattern doesn't match the actual website structure, requiring careful analysis of the supplier's pagination implementation.
-
-Other issues include incomplete category coverage when predefined categories are missing, incorrect field mapping priorities that extract wrong data, and page limiter conflicts when the selected number of products per page doesn't match available options on the website.
+Examples:
+- Authenticated supplier with login_config and authentication fields
+- Non-authenticated supplier with authentication_required flag
+- Supplier with explicit predefined categories and pagination settings
 
 **Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
-- [supplier_config_loader.py](file://config/supplier_config_loader.py)
+- [clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json#L1-L159)
+- [efghousewares.co.uk.json](file://config/supplier_configs/efghousewares.co.uk.json#L1-L85)
+- [poundwholesale.co.uk.json](file://config/supplier_configs/poundwholesale.co.uk.json#L1-L137)
 
-## Creating New Supplier Configurations
+### Category Mapping Files
+Predefined category mappings enable targeted extraction workflows:
+- efghousewares_categories.json: comprehensive category URL list
+- poundwholesale_categories.json: curated subset of categories
 
-To create a new supplier configuration, start by identifying the supplier's domain and creating a JSON file named after the domain in the `config/supplier_configs/` directory. The configuration should include basic metadata (supplier_id, supplier_name, base_url) and begin with essential field mappings for product items, titles, prices, and URLs.
-
-Begin with a minimal configuration and test extraction on a single product category. Gradually add selectors for additional fields like EAN, barcode, and stock status, verifying each addition with test data. Implement navigation configuration based on whether the supplier benefits from predefined categories or AI-driven discovery.
-
-Test pagination thoroughly by verifying that the system can navigate through multiple pages of results. Finally, optimize performance by configuring the page limiter to maximize products per page. Validate the complete configuration by running a full extraction cycle and verifying data quality in the output.
+These files are referenced by workflow definitions in system_config.json.
 
 **Section sources**
-- [poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
-- [supplier_config_loader.py](file://config/supplier_config_loader.py)
+- [efghousewares_categories.json](file://config/efghousewares_categories.json#L1-L346)
+- [poundwholesale_categories.json](file://config/poundwholesale_categories.json#L1-L234)
+
+### Configuration Loading and Validation
+The system loads configurations in this order:
+- System configuration via SystemConfigLoader
+- Supplier-specific selectors via supplier_config_loader
+- Category mappings via workflow definitions
+
+Validation highlights:
+- Selector priority reversed for EAN extraction (CSS selectors first, then pattern matching)
+- Button-based pagination honors config and falls back to URL pagination if needed
+- Graceful fallback to default configuration when domain-specific file is missing
+
+**Section sources**
+- [README.md](file://config/supplier_configs/README.md#L131-L183)
+- [README.md](file://config/supplier_configs/README.md#L454-L456)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
+
+## Dependency Analysis
+Supplier configuration depends on:
+- System configuration for credentials and workflow definitions
+- Supplier selector files for extraction parameters
+- Category mapping files for navigation strategies
+
+```mermaid
+graph LR
+SYS["system_config.json"] --> LOADER["SystemConfigLoader"]
+LOADER --> CRED["Credentials"]
+LOADER --> WF["Workflows"]
+SEL["supplier_configs/*.json"] --> LOADER2["supplier_config_loader.py"]
+CAT1["efghousewares_categories.json"] --> LOADER
+CAT2["poundwholesale_categories.json"] --> LOADER
+```
+
+**Diagram sources**
+- [system_config.json](file://config/system_config.json#L247-L338)
+- [system_config_loader.py](file://config/system_config_loader.py#L42-L50)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
+
+**Section sources**
+- [system_config.json](file://config/system_config.json#L247-L338)
+- [system_config_loader.py](file://config/system_config_loader.py#L42-L50)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
+
+## Performance Considerations
+- Prefer CSS selectors over pattern matching for EAN extraction to avoid false positives and reduce fallback overhead
+- Use button-based pagination when supported by the supplier to capture all products without URL limitations
+- Limit per-page product counts using page_limiter to balance throughput and accuracy
+- Enable caching and selective clearing to minimize repeated extractions
+
+[No sources needed since this section provides general guidance]
+
+## Troubleshooting Guide
+Common configuration issues and resolutions:
+- Missing credentials: verify domain key matches base_url and ensure proper structure
+- Incorrect supplier IDs: ensure file names use hyphens and match supplier_id
+- Malformed JSON: check for trailing commas, missing brackets, unescaped quotes, and comments
+- Authentication failures: handle special characters in passwords and avoid account lockout
+
+The system logs detailed errors during configuration loading and authentication attempts to aid diagnosis.
+
+**Section sources**
+- [11.5.1. Credential Validation.md](file://WIKI REPO SEPT17/11. Troubleshooting Guide/11.5. Authentication Issues/11.5.1. Credential Validation.md#L241-L274)
+- [system_config_loader.py](file://config/system_config_loader.py#L75-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L58-L69)
+
+## Conclusion
+Supplier configuration management centers on a clear separation between system-wide settings and supplier-specific selectors. By following the documented structure and validation practices, operators can onboard new suppliers efficiently, support both authenticated and non-authenticated scenarios, and maintain robust extraction workflows with reliable pagination and field mapping.
+
+[No sources needed since this section summarizes without analyzing specific files]
+
+## Appendices
+
+### Step-by-Step Onboarding Guide
+1. Prepare supplier configuration
+   - Create domain-specific JSON file in config/supplier_configs/
+   - Define identity, base_url, and field_mappings
+   - Add authentication fields if required
+   - Configure pagination and navigation settings
+
+2. Integrate with system configuration
+   - Add supplier credentials under config/system_config.json
+   - Define workflow entry under workflows with categories_config_path
+   - Set authentication_required and session persistence flags as needed
+
+3. Validate configuration
+   - Run selector loader to confirm domain-specific config loads
+   - Verify credentials retrieval via SystemConfigLoader
+   - Test pagination method selection and fallback behavior
+
+4. Execute extraction
+   - Use workflow definitions to trigger category extraction
+   - Monitor logs for authentication and extraction success
+
+**Section sources**
+- [system_config.json](file://config/system_config.json#L247-L338)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L69)
+
+### Template Examples
+- Authenticated supplier template
+  - Includes authentication fields, login_config, and test_product_url
+  - Suitable for suppliers requiring login before scraping
+
+- Non-authenticated supplier template
+  - Sets authentication_required to false
+  - Focuses on public page selectors and pagination
+
+- EAN-based extraction template
+  - Emphasizes field_mappings.ean with CSS selectors
+  - Validates numeric codes and leverages structured HTML
+
+- Title-based extraction template
+  - Relies on title and url selectors
+  - Useful when EAN/Barcode data is unavailable
+
+**Section sources**
+- [clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json#L1-L159)
+- [efghousewares.co.uk.json](file://config/supplier_configs/efghousewares.co.uk.json#L1-L85)
+- [poundwholesale.co.uk.json](file://config/supplier_configs/poundwholesale.co.uk.json#L1-L137)

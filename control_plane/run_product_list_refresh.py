@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import re
 import time
-import uuid
 from pathlib import Path
 from typing import Any
 
@@ -142,21 +142,78 @@ def _load_products_from_subset(
     if not subset.is_absolute():
         subset = repo_root / subset
 
-    data = read_json(subset)
+    if not subset.exists():
+        raise RuntimeError(f"Products subset file not found: {subset}")
+
+    try:
+        data = read_json(subset)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(
+            f"Invalid JSON in products subset: {subset} (line {e.lineno}, column {e.colno})"
+        ) from e
+    except Exception as e:
+        raise RuntimeError(f"Failed to read products subset: {subset} ({e})") from e
 
     if isinstance(data, list):
         products = [p for p in data if isinstance(p, dict)]
         return "", products
 
     if not isinstance(data, dict):
-        return "", []
+        raise RuntimeError(
+            f"Products subset must be a JSON object or array, got: {type(data).__name__}"
+        )
 
     sandbox_supplier = str(data.get("sandbox_supplier") or data.get("supplier_domain") or "")
     products_raw = data.get("products")
     products: list[dict[str, Any]] = []
-    if isinstance(products_raw, list):
-        products = [p for p in products_raw if isinstance(p, dict)]
+    if products_raw is None:
+        return sandbox_supplier, products
+    if not isinstance(products_raw, list):
+        raise RuntimeError(
+            f"Invalid products payload in subset file: 'products' must be a list, got {type(products_raw).__name__}"
+        )
+    products = [p for p in products_raw if isinstance(p, dict)]
     return sandbox_supplier, products
+
+
+def _product_identity(product: dict[str, Any]) -> str:
+    ean = _sanitize_ean(str(product.get("supplier_ean") or product.get("ean") or ""))
+    supplier_url = str(product.get("supplier_url") or product.get("url") or "").strip().lower()
+    supplier_title = (
+        str(product.get("supplier_title") or product.get("title") or "").strip().lower()
+    )
+    if ean:
+        return f"ean:{ean}"
+    if supplier_url:
+        return f"url:{supplier_url}"
+    if supplier_title:
+        return f"title:{supplier_title}"
+    return ""
+
+
+def _load_existing_linking_results(repo_root: Path, sandbox_supplier: str) -> list[dict[str, Any]]:
+    path = _linking_map_path(repo_root, sandbox_supplier)
+    if not path.exists():
+        return []
+    try:
+        data = read_json(path)
+    except Exception:
+        return []
+    if not isinstance(data, list):
+        return []
+
+    out: list[dict[str, Any]] = []
+    seen_keys: set[str] = set()
+    for row in data:
+        if not isinstance(row, dict):
+            continue
+        key = _product_identity(row)
+        if key:
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+        out.append(row)
+    return out
 
 
 def main() -> None:
@@ -184,7 +241,12 @@ def main() -> None:
             sandbox_from_file,
         )
 
-    results: list[dict[str, Any]] = []
+    results: list[dict[str, Any]] = _load_existing_linking_results(repo_root, sandbox_supplier)
+    processed_keys: set[str] = set()
+    for row in results:
+        key = _product_identity(row)
+        if key:
+            processed_keys.add(key)
 
     # Initialize Amazon extractor for full Keepa data extraction
     extractor = FixedAmazonExtractor(chrome_debug_port=9222)
@@ -216,7 +278,7 @@ def main() -> None:
                 log.info("Linking map periodic flush: %d entries", len(results))
                 results_since_flush = 0
                 sp["amazon_products_completed"] = len(results)
-                sp["amazon_products_needing_analysis"] = len(products) - len(results)
+                sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
                 state_manager.save_state_atomic()
 
         products_by_source = _group_products_by_source(products)
@@ -228,8 +290,8 @@ def main() -> None:
         sp["current_category_url"] = ""
         sp["supplier_products_completed"] = 0
         sp["supplier_products_needing_extraction"] = len(products)
-        sp["amazon_products_completed"] = 0
-        sp["amazon_products_needing_analysis"] = len(products)
+        sp["amazon_products_completed"] = len(results)
+        sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
 
         state_manager.enter_runtime_phase()
         state_manager.save_state_atomic()
@@ -242,15 +304,20 @@ def main() -> None:
             sp["supplier_products_completed"] = 0
             state_manager.save_state_atomic()
 
-            for idx, product in enumerate(source_products, start=1):
+            for _idx, product in enumerate(source_products, start=1):
                 # Initialize variables before try block to prevent NameError in except
                 title = ""
                 supplier_url = ""
                 ean = ""
+                product_key = ""
                 try:
                     title = str(product.get("title") or "")
                     supplier_url = str(product.get("url") or "")
                     ean = _sanitize_ean(str(product.get("ean") or ""))
+                    product_key = _product_identity(product)
+
+                    if product_key and product_key in processed_keys:
+                        continue
 
                     match_method = "title"
                     asin: str | None = None
@@ -272,6 +339,8 @@ def main() -> None:
                                 "created_at": _utc_now_iso(),
                             }
                         )
+                        if product_key:
+                            processed_keys.add(product_key)
                         _flush_if_needed()
                         continue
 
@@ -295,6 +364,8 @@ def main() -> None:
                                 "created_at": _utc_now_iso(),
                             }
                         )
+                        if product_key:
+                            processed_keys.add(product_key)
                         _flush_if_needed()
                         continue
 
@@ -310,6 +381,8 @@ def main() -> None:
                                 "created_at": _utc_now_iso(),
                             }
                         )
+                        if product_key:
+                            processed_keys.add(product_key)
                         _flush_if_needed()
                         continue
 
@@ -332,6 +405,8 @@ def main() -> None:
                             "created_at": _utc_now_iso(),
                         }
                     )
+                    if product_key:
+                        processed_keys.add(product_key)
                     _flush_if_needed()
                 except Exception as e:
                     log.error(
@@ -349,6 +424,8 @@ def main() -> None:
                             "created_at": _utc_now_iso(),
                         }
                     )
+                    if product_key:
+                        processed_keys.add(product_key)
                     _flush_if_needed()
                     continue
 
@@ -356,6 +433,16 @@ def main() -> None:
         sp["amazon_products_completed"] = len(results)
         sp["amazon_products_needing_analysis"] = 0
         sp["current_phase"] = "complete"
+        state_manager.save_state_atomic()
+
+        # Sync top-level counters from system_progression (Issue #6 fix)
+        sd = state_manager.state_data
+        sd["total_products"] = sp.get("supplier_products_completed", 0)
+        sd["session_products_processed"] = sp.get("amazon_products_completed", 0)
+        sd["successful_products"] = sum(1 for r in results if r.get("amazon_asin"))
+        sd["processing_status"] = "complete"
+        sd["is_fresh_start"] = False
+        sd["last_updated"] = _utc_now_iso()
         state_manager.save_state_atomic()
 
     try:

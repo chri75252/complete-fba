@@ -83,6 +83,9 @@ def _release_lock(lock_file: Path) -> None:
 def _move_job(src: Path, dst_dir: Path) -> Path:
     dst_dir.mkdir(parents=True, exist_ok=True)
     dst = dst_dir / src.name
+    if dst.exists():
+        suffix = int(time.time() * 1000)
+        dst = dst_dir / f"{src.stem}__dup_{suffix}{src.suffix}"
     os.replace(src, dst)
     return dst
 
@@ -95,8 +98,31 @@ def _tail_file(path: Path, lines: int) -> list[str]:
     return [ln.rstrip("\n\r") for ln in all_lines[-lines:]]
 
 
+def _has_run_scoped_financial_report(
+    financial_dir: str | None, run_started_at: float | None
+) -> bool:
+    if not financial_dir:
+        return False
+
+    base = Path(financial_dir)
+    if not base.exists():
+        return False
+
+    if run_started_at is None:
+        return any(base.rglob("*.csv"))
+
+    try:
+        for csv_path in base.rglob("*.csv"):
+            if csv_path.stat().st_mtime >= run_started_at:
+                return True
+    except Exception:
+        return False
+
+    return False
+
+
 def _read_processing_progress(
-    loader: MetricsLoader, supplier_domain: str
+    loader: MetricsLoader, supplier_domain: str, run_started_at: float | None = None
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     paths = loader.resolve_paths(supplier_domain)
 
@@ -145,7 +171,7 @@ def _read_processing_progress(
             paths.get("linking_file") and os.path.exists(paths["linking_file"])
         ),
         "financial_report_exists": bool(
-            paths.get("financial_dir") and os.path.exists(paths["financial_dir"])
+            _has_run_scoped_financial_report(paths.get("financial_dir"), run_started_at)
         ),
     }
 
@@ -182,6 +208,47 @@ def _count_matched_asins(path):
         return sum(1 for r in rows if isinstance(r, dict) and r.get("amazon_asin"))
     except Exception:
         return 0
+
+
+def _recompute_refresh_counts(status, job, paths, resolved, loader):
+    """Recompute refresh.counts from authoritative sources at terminal status."""
+    import time as time_module
+
+    refresh = job.get("refresh", {})
+    run_id = str(job.get("run_id", ""))
+    overrides_dir = paths.repo_root / "OUTPUTS" / "CONTROL_PLANE" / "overrides" / run_id
+    amazon_cache_dir = overrides_dir / "amazon_cache"
+
+    status["refresh"]["last_updated"] = time_module.strftime(
+        "%Y-%m-%dT%H:%M:%SZ", time_module.gmtime()
+    )
+    status["refresh"]["paths"] = {
+        "products_path": str(refresh.get("products_path", "")),
+        "overrides_run_dir": str(overrides_dir),
+        "amazon_cache_dir": str(amazon_cache_dir),
+        "linking_map": resolved.get("linking_map"),
+        "processing_state": resolved.get("processing_state"),
+    }
+
+    # Recompute input_products correctly (handle object-shaped JSON)
+    products_path = refresh.get("products_path")
+    input_products = 0
+    if products_path:
+        try:
+            data = read_json(Path(products_path))
+            if isinstance(data, dict) and "products" in data:
+                input_products = len(data["products"])
+            elif isinstance(data, list):
+                input_products = len(data)
+        except Exception:
+            input_products = 0
+
+    status["refresh"]["counts"] = {
+        "input_products": input_products,
+        "linking_map_entries": _count_linking_map_entries(resolved.get("linking_map")),
+        "amazon_cache_files": _count_amazon_cache_files(amazon_cache_dir),
+        "matched_asins": _count_matched_asins(resolved.get("linking_map")),
+    }
 
 
 class ControlPlaneWorker:
@@ -315,7 +382,11 @@ class ControlPlaneWorker:
 
                             if now - last_status_refresh >= self.config.status_refresh_seconds:
                                 poll_supplier = job.get("sandbox_supplier", supplier_domain)
-                                resolved, snap = _read_processing_progress(loader, poll_supplier)
+                                resolved, snap = _read_processing_progress(
+                                    loader,
+                                    poll_supplier,
+                                    run_started_at=start_ts,
+                                )
                                 status["resolved_paths"] = {
                                     **resolved,
                                     "runner_log": str(log_path),
@@ -355,7 +426,11 @@ class ControlPlaneWorker:
                                     input_products = 0
                                     if products_path:
                                         try:
-                                            input_products = len(read_json(Path(products_path)))
+                                            data = read_json(Path(products_path))
+                                            if isinstance(data, dict) and "products" in data:
+                                                input_products = len(data["products"])
+                                            elif isinstance(data, list):
+                                                input_products = len(data)
                                         except Exception:
                                             input_products = 0
                                     status["refresh"]["counts"] = {
@@ -395,6 +470,16 @@ class ControlPlaneWorker:
                 if status.get("state") != "cancelled":
                     status["ended_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
                     status["error"]["last_log_lines"] = _tail_file(log_path, 200)
+
+                    # Recompute refresh counts from disk before final status write (Issue #7 fix)
+                    if job.get("job_type") == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH:
+                        poll_supplier = job.get("sandbox_supplier", supplier_domain)
+                        resolved, _ = _read_processing_progress(
+                            loader,
+                            poll_supplier,
+                            run_started_at=start_ts,
+                        )
+                        _recompute_refresh_counts(status, job, paths, resolved, loader)
 
                     if proc.returncode == 0:
                         status["state"] = "done"

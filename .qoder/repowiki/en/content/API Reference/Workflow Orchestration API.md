@@ -1,396 +1,306 @@
 # Workflow Orchestration API
 
 <cite>
-**Referenced Files in This Document**   
+**Referenced Files in This Document**
 - [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py)
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py)
 - [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
-- [system_config_loader.py](file://config/system_config_loader.py)
-- [system_config.json](file://config/system_config.json)
-- [run_custom_poundwholesale.py](file://run_custom_poundwholesale.py)
+- [10.1. Workflow Orchestration Api.md](file://WIKI REPO SEPT17/10. Api Reference/10.1. Workflow Orchestration Api.md)
+- [3. Core Architecture\3.1. Workflow Engine.md](file://WIKI REPO SEPT17/3. Core Architecture/3.1. Workflow Engine.md)
 </cite>
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Core Components](#core-components)
-3. [Workflow Initialization](#workflow-initialization)
-4. [Configuration Management](#configuration-management)
-5. [Execution Phases](#execution-phases)
-6. [State Management](#state-management)
-7. [Event Lifecycle Management](#event-lifecycle-management)
-8. [Usage Examples](#usage-examples)
-9. [Error Handling](#error-handling)
-10. [Versioning and Compatibility](#versioning-and-compatibility)
+2. [Project Structure](#project-structure)
+3. [Core Components](#core-components)
+4. [Architecture Overview](#architecture-overview)
+5. [Detailed Component Analysis](#detailed-component-analysis)
+6. [Dependency Analysis](#dependency-analysis)
+7. [Performance Considerations](#performance-considerations)
+8. [Troubleshooting Guide](#troubleshooting-guide)
+9. [Conclusion](#conclusion)
 
 ## Introduction
-The `passive_extraction_workflow_latest.py` module serves as the central orchestrator for the Amazon FBA Agent System, managing the complete workflow for identifying profitable products. This API documentation details the public classes and methods that control workflow initialization, configuration loading, execution phases (scraping, matching, analysis), and event lifecycle management. The system is designed for resilience and statefulness, allowing interruption and resumption of long-running processes. It integrates with state management and browser automation components to provide a robust product sourcing solution.
+This document provides comprehensive API documentation for the Workflow Orchestration API, focusing on the PassiveExtractionWorkflow class and its associated hash optimization features. It explains the constructor parameters, the asynchronous run() method, and the hash optimization functions that dramatically improve performance by replacing O(n) linear searches with O(1) hash lookups. The document also covers error handling strategies, memory management features, integration patterns with other system components, and practical examples for initialization, execution, and progress monitoring.
+
+## Project Structure
+The Workflow Orchestration API centers around the PassiveExtractionWorkflow class located in the tools directory, with supporting utilities in the utils directory. The workflow integrates with:
+- EnhancedStateManager for stateful, resumable execution
+- HashLookupOptimizer for O(1) deduplication and progress tracking
+- Supplier and Amazon extractors for data retrieval
+- Atomic file operations for safe persistence
+
+```mermaid
+graph TB
+subgraph "Tools"
+PEW["PassiveExtractionWorkflow<br/>tools/passive_extraction_workflow_latest.py"]
+CFG["System Configuration Loader<br/>config/system_config_loader.py"]
+end
+subgraph "Utils"
+SEM["EnhancedStateManager<br/>utils/fixed_enhanced_state_manager.py"]
+HLO["HashLookupOptimizer<br/>utils/hash_lookup_optimizer.py"]
+BMS["BrowserManager<br/>utils/browser_manager.py"]
+PATH["Path Manager<br/>utils/path_manager.py"]
+end
+subgraph "External Integrations"
+CSS["ConfigurableSupplierScraper<br/>tools/configurable_supplier_scraper.py"]
+FA["FBA Financial Calculator<br/>FBA_Financial_calculator.py"]
+WSG["WindowsSaveGuardian<br/>utils/windows_save_guardian.py"]
+end
+PEW --> CFG
+PEW --> SEM
+PEW --> HLO
+PEW --> CSS
+PEW --> FA
+PEW --> PATH
+PEW --> BMS
+PEW --> WSG
+```
+
+**Diagram sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L86-L200)
+
+**Section sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1-L120)
+- [3. Core Architecture\3.1. Workflow Engine.md](file://WIKI REPO SEPT17/3. Core Architecture/3.1. Workflow Engine.md#L189-L192)
 
 ## Core Components
-
-The Amazon FBA Agent System is built around several core components that work together to extract, analyze, and validate profitable products from supplier websites and Amazon. The main orchestrator is the `PassiveExtractionWorkflow` class, which coordinates the entire process from configuration loading to final report generation.
+- PassiveExtractionWorkflow: Orchestrates supplier scraping, Amazon matching, financial analysis, and stateful persistence.
+- EnhancedStateManager: Manages resumption, progress tracking, and atomic state writes.
+- HashLookupOptimizer: Provides O(1) hash-based lookups for linking map entries using EAN, URL, and ASIN indexes.
+- ConfigurableSupplierScraper: Extracts supplier product data from category URLs.
+- FixedAmazonExtractor: Searches Amazon for products and extracts data.
+- FBA Financial calculator: Computes profitability metrics.
 
 **Section sources**
 - [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L150-L2412)
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L86-L200)
 
-## Workflow Initialization
+## Architecture Overview
+The workflow follows a deterministic, stateful execution model:
+- Initialization loads configuration and sets up paths, scrapers, extractors, and optimizers.
+- Supplier phase: Extracts products from predefined category URLs in batches.
+- Amazon phase: Matches supplier products to Amazon listings using EAN-first and title-based fallback strategies.
+- Financial analysis: Calculates ROI and profitability using the FBA calculator.
+- State management: Uses EnhancedStateManager to persist progress and enable safe resumption.
+- Hash optimization: Uses HashLookupOptimizer to skip reprocessing and accelerate deduplication.
+
+```mermaid
+sequenceDiagram
+participant Client as "Caller"
+participant WF as "PassiveExtractionWorkflow"
+participant SM as "EnhancedStateManager"
+participant CSS as "ConfigurableSupplierScraper"
+participant AMZ as "FixedAmazonExtractor"
+participant HLO as "HashLookupOptimizer"
+participant FC as "FBA Financial Calculator"
+Client->>WF : Initialize with config_loader, workflow_config
+WF->>SM : initialize_workflow_session()
+WF->>CSS : _extract_supplier_products(categories, batch_size)
+CSS-->>WF : supplier_products[]
+WF->>WF : filter by price range and resume index
+loop For each product
+WF->>HLO : check_product_in_linking_map(EAN, URL)
+alt Already processed
+WF->>SM : mark_product_processed(URL)
+else New product
+WF->>AMZ : _get_amazon_data(product)
+AMZ-->>WF : amazon_data
+WF->>FC : run_calculations(supplier + amazon)
+FC-->>WF : financial_metrics
+WF->>SM : update progress and state
+end
+end
+WF-->>Client : results_summary
+```
+
+**Diagram sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2125-L2650)
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L86-L200)
+
+## Detailed Component Analysis
 
 ### PassiveExtractionWorkflow Class
-The `PassiveExtractionWorkflow` class is the primary orchestrator of the Amazon FBA agent system. It manages the complete workflow from initialization to final report generation.
+The PassiveExtractionWorkflow class is the primary orchestrator. It encapsulates:
+- Constructor parameters: config_loader, workflow_config, optional browser_manager, optional ai_client.
+- run(): Asynchronous main execution entry point that orchestrates supplier and Amazon phases, applies filters, and persists state.
+- Hash optimization integration: Uses HashLookupOptimizer for O(1) deduplication checks.
+- Memory management: Processes categories in batches and uses atomic writes to reduce memory pressure and ensure crash safety.
+
+Key methods and responsibilities:
+- run(): Loads configuration, initializes session, determines resume phase and index, executes supplier and Amazon phases, and returns results_summary.
+- _extract_supplier_products(): Scrapes supplier products from category URLs in batches.
+- _get_amazon_data(): Performs EAN-first search with title-based fallback and similarity validation.
+- Internal hash optimization integration: check_product_in_linking_map() for O(1) deduplication.
+
+Asynchronous execution pattern:
+- run() is declared async and awaits coroutines for supplier scraping, Amazon data retrieval, and financial calculations.
+- Batch processing loops await each product’s processing, enabling cooperative multitasking and predictable throughput.
+
+Return value structure:
+- The method returns results_summary, which includes counts and lists of processed products and profitability metrics.
+
+Performance metrics:
+- The workflow logs category progress, supplier and Amazon progress ratios, and timing information for each batch and product.
+- EnhancedStateManager tracks processing statistics and runtime metrics for observability.
+
+**Section sources**
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
+- [10.1. Workflow Orchestration Api.md](file://WIKI REPO SEPT17/10. Api Reference/10.1. Workflow Orchestration Api.md#L296-L327)
+
+### Hash Optimization Functions
+
+#### HashLookupOptimizer
+The HashLookupOptimizer provides O(1) hash-based lookups to replace O(n) linear searches:
+- Indexes: Maintains three hash indexes—EAN, URL, and ASIN—enabling instant lookups.
+- Thread safety: Uses threading.Lock for concurrent access.
+- Performance metrics: Tracks hash lookups, linear lookups, cache hit rate, and average lookup times.
+- Auto-maintenance: Automatically updates indexes when linking map entries change.
+
+Key methods:
+- build_indexes(linking_map): Builds indexes from the current linking map.
+- check_product_in_linking_map(supplier_ean, supplier_url): Returns (found, entry) using normalized EAN or URL.
+- get_entry_by_ean/get_entry_by_url/get_entry_by_asin(): Individual O(1) getters.
+- add_entry/remove_entry(): Manage index updates.
+- get_processed_urls_set/get_processed_eans_set(): Fast set-based filtering for progress tracking.
+- get_index_stats/log_performance_summary(): Reports performance summary.
+
+Performance characteristics:
+- Replaces O(n) lookups with O(1) operations, achieving approximately 3,650x performance improvement.
+- Minimal memory overhead with automatic synchronization.
+
+Integration with PassiveExtractionWorkflow:
+- During Amazon analysis, the workflow calls check_product_in_linking_map() to skip reprocessing already matched products, dramatically reducing redundant work.
+
+**Section sources**
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2686-L2720)
+
+#### get_current_progress_from_files()
+This method (implemented in the system) provides file-based progress tracking:
+- Purpose: Reads actual files on disk to compute accurate progress counts for categories and products.
+- Parameters: None (uses internal state and file system).
+- Return value: Dictionary with counts such as discovered, completed, and remaining products per category.
+- Performance characteristics: File-grounded calculations ensure accuracy without relying on in-memory variables.
+
+Integration patterns:
+- Used alongside EnhancedStateManager to validate resume positions and detect gaps.
+- Supports dashboards and monitoring systems that require real-time, file-backed metrics.
+
+**Section sources**
+- [10.1. Workflow Orchestration Api.md](file://WIKI REPO SEPT17/10. Api Reference/10.1. Workflow Orchestration Api.md#L296-L327)
+
+### Usage Examples
+
+#### Programmatic Workflow Control
+- Starting a workflow:
+  - Load configuration using SystemConfigLoader.
+  - Instantiate PassiveExtractionWorkflow with config_loader and workflow_config.
+  - Call run() asynchronously to execute the workflow.
+
+- Pausing and resuming:
+  - The workflow automatically detects the previous state and resumes from the correct index.
+  - Interrupt the process and rerun the same code to resume seamlessly.
+
+- Custom configuration injection:
+  - Modify system configuration values (e.g., max_products, max_products_per_category) before initializing the workflow.
+
+Example references:
+- See usage examples in the API reference documentation.
+
+**Section sources**
+- [10.1. Workflow Orchestration Api.md](file://WIKI REPO SEPT17/10. Api Reference/10.1. Workflow Orchestration Api.md#L296-L334)
+
+## Dependency Analysis
+The PassiveExtractionWorkflow depends on several key modules:
+- EnhancedStateManager: Provides atomic state persistence, resumption, and progress tracking.
+- HashLookupOptimizer: Enables O(1) deduplication and progress filtering.
+- ConfigurableSupplierScraper: Supplies supplier product data.
+- FixedAmazonExtractor: Retrieves Amazon product data.
+- FBA Financial calculator: Computes profitability metrics.
+- Path and Browser managers: Centralize path resolution and browser lifecycle.
 
 ```mermaid
 classDiagram
 class PassiveExtractionWorkflow {
-+__init__(config_loader, workflow_config, browser_manager, ai_client)
-+run()
-+_extract_supplier_products(supplier_url, supplier_name, category_urls_to_scrape, max_products_per_category, max_products_to_process, supplier_extraction_batch_size)
-+_get_amazon_data(product_data)
-+_validate_product_match(supplier_title, amazon_title)
-+_run_hybrid_processing_mode(supplier_url, supplier_name, category_urls_to_scrape, max_products_per_category, max_products_to_process, max_analyzed_products, max_products_per_cycle, supplier_extraction_batch_size)
-+_process_gap_products(gap_size, supplier_cache_count, linking_map_count)
-+_run_amazon_phase_from_resume(resumption_ptr)
-+_run_supplier_phase_from_resume(resumption_ptr)
++run() Coroutine
++_extract_supplier_products()
++_get_amazon_data()
++hash_optimizer : HashLookupOptimizer
++state_manager : EnhancedStateManager
 }
+class HashLookupOptimizer {
++build_indexes()
++check_product_in_linking_map()
++get_entry_by_ean()
++get_entry_by_url()
++get_entry_by_asin()
++get_index_stats()
+}
+class EnhancedStateManager {
++initialize_workflow_session()
++commit_amazon_progress()
++mark_product_processed()
++save_state_atomic()
+}
+class ConfigurableSupplierScraper {
++scrape_products_from_url()
+}
+class FixedAmazonExtractor {
++search_by_ean_and_extract_data()
++search_by_title_using_search_bar()
++extract_data()
+}
+class FBA_Financial_calculator {
++run_calculations()
++financials()
+}
+PassiveExtractionWorkflow --> HashLookupOptimizer : "uses"
+PassiveExtractionWorkflow --> EnhancedStateManager : "uses"
+PassiveExtractionWorkflow --> ConfigurableSupplierScraper : "uses"
+PassiveExtractionWorkflow --> FixedAmazonExtractor : "uses"
+PassiveExtractionWorkflow --> FBA_Financial_calculator : "uses"
 ```
 
 **Diagram sources**
 - [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
-
-### Initialization Parameters
-The workflow initialization accepts the following parameters:
-
-- `config_loader`: Configuration loader instance for loading system settings
-- `workflow_config`: Workflow-specific configuration dictionary
-- `browser_manager`: Optional browser manager for shared browser instance
-- `ai_client`: Optional AI client for enhanced product matching
-
-The constructor initializes all core components including the state manager, Amazon extractor, supplier scraper, and various optimization systems.
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L86-L200)
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L860-L989)
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L851-L2650)
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L86-L200)
 
-## Configuration Management
+## Performance Considerations
+- Hash optimization: The HashLookupOptimizer delivers approximately 3,650x performance improvement by replacing O(n) linear searches with O(1) hash lookups. This is critical for large linking maps and frequent deduplication checks.
+- Batch processing: Categories and products are processed in configurable batches to manage memory usage and system stability.
+- Atomic persistence: Atomic file operations ensure data integrity and reduce crash risks during state updates.
+- Thread safety: Hash indexes use locks to support concurrent access safely.
+- Observability: Logging and metrics provide insights into performance bottlenecks and throughput.
 
-### Configuration Loading
-The workflow loads configuration from multiple sources, with `system_config.json` serving as the single source of truth. The configuration is loaded through the `SystemConfigLoader` class, which provides access to various configuration sections.
+[No sources needed since this section provides general guidance]
 
-```mermaid
-classDiagram
-class SystemConfigLoader {
-+__init__(config_path)
-+get_system_config()
-+get_full_config()
-+get_amazon_config()
-+get_supplier_config(supplier_name)
-+get_credentials(supplier_name)
-+get_workflow_config(workflow_key)
-+get_financial_batch_size()
-+load_config()
-}
-```
+## Troubleshooting Guide
+Common issues and resolutions:
+- Authentication failures: The workflow triggers authentication fallback checks and retries to maintain session stability.
+- State corruption or inconsistent progress: EnhancedStateManager validates and repairs state, clamps counters, and mirrors human-readable progress fields for transparency.
+- Performance regressions: Use HashLookupOptimizer.get_index_stats() and log_performance_summary() to monitor cache hit rates and lookup times.
+- Resumption anomalies: The workflow re-evaluates resume phases based on file-grounded supplier backlog to prevent premature routing to Amazon.
 
-**Diagram sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
-
-### Configuration Structure
-The system configuration is structured as a hierarchical JSON object with the following key sections:
-
-- `system`: Core system parameters and operational toggles
-- `processing_limits`: Price and quantity limits for product filtering
-- `supplier_extraction_progress`: Progress tracking and persistence settings
-- `hybrid_processing`: Configuration for hybrid processing modes
-- `batch_synchronization`: Settings for synchronizing batch sizes
-- `performance`: Performance and timeout settings
-- `cache`: Cache management configuration
-- `monitoring`: System monitoring and alerting settings
-- `output`: Output directory and file naming configuration
-- `chrome`: Chrome browser configuration
-- `analysis`: Product analysis criteria (ROI, profit, ratings)
-- `amazon`: Amazon marketplace settings
-- `supplier`: Supplier-specific settings
-- `credentials`: Supplier login credentials
-- `workflows`: Predefined workflow configurations
-- `ai_features`: AI feature toggles
-- `integrations`: Third-party service integrations
-- `authentication`: Authentication and session management
-- `surgical_fixes`: System fix and enhancement toggles
+Integration tips:
+- Ensure system_config.json is correctly configured for batch sizes, limits, and toggles.
+- Verify that EnhancedStateManager is initialized before any saves to avoid corrupted state files.
+- Confirm that HashLookupOptimizer.build_indexes() is called after loading the linking map to enable O(1) lookups.
 
 **Section sources**
-- [system_config.json](file://config/system_config.json#L1-L300)
+- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2668-L2678)
+- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L86-L200)
+- [hash_lookup_optimizer.py](file://utils/hash_lookup_optimizer.py#L1-L1)
 
-## Execution Phases
-
-### Main Execution Flow
-The workflow execution follows a structured sequence of phases, each handling a specific aspect of the product sourcing process.
-
-```mermaid
-flowchart TD
-A[Start] --> B[Initialize Configuration]
-B --> C[Load State and Linking Map]
-C --> D[Phase Detection]
-D --> E{Current Phase?}
-E --> |SUPPLIER_EXTRACTION| F[Extract Supplier Products]
-E --> |AMAZON_ANALYSIS| G[Analyze Amazon Data]
-E --> |GAP_PROCESSING| H[Process Gap Products]
-E --> |FRESH_CATEGORIES| I[Process Fresh Categories]
-F --> J[Filter Products by Price]
-J --> K[Process Products in Batches]
-K --> L[Get Amazon Data]
-L --> M[Create Linking Map Entry]
-M --> N[Perform Financial Analysis]
-N --> O[Check Profitability]
-O --> P[Update State Manager]
-P --> Q{Batch Complete?}
-Q --> |No| K
-Q --> |Yes| R[Periodic Save]
-R --> S{All Products Processed?}
-S --> |No| K
-S --> |Yes| T[Final Save and Report Generation]
-T --> U[End]
-```
-
-**Diagram sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1970-L2316)
-
-### Supplier Product Extraction
-The supplier product extraction phase retrieves product data from supplier websites using configurable batch sizes.
-
-```python
-[passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2318-L2435)
-```
-
-This method processes category URLs in batches controlled by the `supplier_extraction_batch_size` configuration parameter, providing memory management and stability for suppliers with many categories.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2318-L2435)
-
-### Amazon Data Retrieval
-The Amazon data retrieval phase implements a two-step matching strategy to find supplier products on Amazon.
-
-```python
-[passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2437-L2525)
-```
-
-The process first attempts to match by EAN for high-confidence results, then falls back to title-based search with similarity scoring when EAN matching fails.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2437-L2525)
-
-### Product Matching Validation
-The product matching validation ensures that matched products are genuinely similar by calculating a confidence score based on title similarity.
-
-```python
-[passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2548-L2563)
-```
-
-This method uses word overlap scoring to validate that the matched Amazon product is a rational match for the supplier product.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2548-L2563)
-
-## State Management
-
-### Enhanced State Manager
-The `FixedEnhancedStateManager` class provides robust state management with thread safety and atomic operations.
-
-```mermaid
-classDiagram
-class FixedEnhancedStateManager {
-+__init__(supplier_name, base_path, lock_timeout)
-+load_state()
-+save_state(preserve_interruption_state)
-+save_state_atomic(note)
-+perform_startup_analysis()
-+force_cache_rebuild(reason)
-+validate_and_repair_state()
-+update_discovered_products_in_category(category_url, discovered_count)
-+set_frozen_denominator(category_url, discovered_count, manifest_urls)
-+get_frozen_denominator(category_url)
-+set_resumption_ptr(phase, cat_idx, prod_idx_next)
-+get_resumption_ptr()
-+get_current_category_info()
-+correct_category_totals_realtime(category_url, actual_discovered)
-+update_processing_progress(increment, product_url)
-+initialize_category_processing(category_index, category_url, total_categories)
-+commit_supplier_progress(cat_idx, prod_idx, total_cats, cat_url, total_prod_in_cat)
-+commit_amazon_progress(cat_idx, queue_idx, total_cats, cat_url, queue_len)
-+commit_phase_switch(new_phase, reset_index)
-+validate_state_integrity()
-+repair_state_corruption(validation_report)
-}
-```
-
-**Diagram sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L150-L2412)
-
-### State Data Structure
-The state manager maintains a comprehensive state structure with the following key fields:
-
-- `schema_version`: Version of the state schema
-- `created_at`: Timestamp when state was created
-- `last_updated`: Timestamp of last state update
-- `supplier_name`: Name of the supplier being processed
-- `resumption_index`: Index where processing should resume after interruption
-- `progress_index`: Current progress in active session
-- `session_products_processed`: Number of products processed in current session
-- `total_products`: Total number of products to process
-- `processing_status`: Current processing status
-- `is_fresh_start`: Flag indicating if this is a fresh start
-- `category_performance`: Performance metrics for categories
-- `error_log`: Log of processing errors
-- `successful_products`: Count of successful products
-- `profitable_products`: Count of profitable products
-- `total_profit_found`: Total profit found
-- `processing_statistics`: Various processing statistics
-- `metadata`: Additional metadata
-- `gap_processing`: Gap processing state and metrics
-- `system_progression`: System progression tracking
-- `user_display_metrics`: User-facing metrics
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L200-L500)
-
-## Event Lifecycle Management
-
-### Phase-Aware Processing
-The workflow implements phase-aware processing with automatic detection of the current phase based on file-grounded totals.
-
-```mermaid
-stateDiagram-v2
-[*] --> SUPPLIER_EXTRACTION
-SUPPLIER_EXTRACTION --> AMAZON_ANALYSIS : supplier cache created
-AMAZON_ANALYSIS --> GAP_PROCESSING : linking map < cache
-AMAZON_ANALYSIS --> COMPLETED : linking map = cache
-GAP_PROCESSING --> AMAZON_ANALYSIS : gap processing complete
-GAP_PROCESSING --> COMPLETED : gap processing complete
-COMPLETED --> [*]
-state FRESH_CATEGORIES <<choice>>
-FRESH_CATEGORIES --> SUPPLIER_EXTRACTION : reverse gap detected
-```
-
-**Diagram sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2100-L2150)
-
-### Atomic State Persistence
-The system uses atomic state persistence to ensure data integrity during crashes or interruptions.
-
-```python
-[fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1000-L1200)
-```
-
-The state is saved using a temp-then-replace pattern, ensuring that the state file is never in a corrupted state.
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L1000-L1200)
-
-## Usage Examples
-
-### Programmatic Workflow Control
-The workflow can be programmatically started, paused, and resumed using the `PassiveExtractionWorkflow` class.
-
-#### Starting a Workflow
-```python
-from config.system_config_loader import SystemConfigLoader
-from passive_extraction_workflow_latest import PassiveExtractionWorkflow
-
-# Load configuration
-config_loader = SystemConfigLoader()
-workflow_config = config_loader.get_workflow_config("poundwholesale_workflow")
-
-# Initialize and run workflow
-workflow = PassiveExtractionWorkflow(config_loader, workflow_config)
-results = await workflow.run()
-```
-
-#### Pausing and Resuming
-The workflow automatically handles pausing and resuming through its state management system. To pause, simply interrupt the process (Ctrl+C). To resume, run the same code again:
-
-```python
-# The workflow will automatically detect the previous state and resume
-workflow = PassiveExtractionWorkflow(config_loader, workflow_config)
-results = await workflow.run()  # Will resume from last processed product
-```
-
-#### Custom Configuration Injection
-Custom configurations can be injected by modifying the system configuration:
-
-```python
-# Load and modify configuration
-config_loader = SystemConfigLoader()
-full_config = config_loader.get_full_config()
-
-# Modify specific settings
-full_config["system"]["max_products"] = 100
-full_config["system"]["max_products_per_category"] = 10
-full_config["analysis"]["min_roi_percent"] = 25.0
-
-# Initialize workflow with modified configuration
-workflow = PassiveExtractionWorkflow(config_loader, workflow_config)
-results = await workflow.run()
-```
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1970-L2316)
-- [run_custom_poundwholesale.py](file://run_custom_poundwholesale.py)
-
-## Error Handling
-
-### Authentication Fallback
-The system implements an authentication fallback mechanism to handle session timeouts.
-
-```python
-[passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2700-L2750)
-```
-
-When authentication is needed, the system triggers a re-login attempt and continues processing.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2700-L2750)
-
-### No-Match Handling
-When a product cannot be matched on Amazon, the system creates a no-match entry to prevent infinite reprocessing loops.
-
-```python
-[passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2750-L2800)
-```
-
-This ensures that products that cannot be found on Amazon are marked as processed and not re-analyzed in subsequent runs.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L2750-L2800)
-
-### State Validation and Repair
-The state manager includes comprehensive validation and repair capabilities to handle corrupted state files.
-
-```python
-[fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L2000-L2200)
-```
-
-The system can detect and repair various corruption patterns, including impossible index states and phase semantic mixing.
-
-**Section sources**
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py#L2000-L2200)
-
-## Versioning and Compatibility
-
-### Backward Compatibility
-The system maintains backward compatibility through several mechanisms:
-
-1. **Schema Versioning**: The state manager uses schema versioning to handle changes in the state structure.
-2. **Migration Logic**: Legacy state formats are automatically migrated to the current format.
-3. **Fallback Configurations**: Default values are provided for missing configuration parameters.
-
-### Versioning Considerations
-When integrating with external systems, consider the following versioning aspects:
-
-- **State File Format**: The state file format may change between versions, but migration logic is provided.
-- **Configuration Structure**: The configuration structure is stable, but new optional fields may be added.
-- **API Stability**: The public methods of the `PassiveExtractionWorkflow` class are considered stable and backward compatible.
-- **Event Signatures**: Event signatures (log messages, state updates) may change, so external integrations should use structured data rather than parsing log output.
-
-External integrations should use the configuration loader and state manager APIs rather than directly reading configuration or state files to ensure compatibility across versions.
-
-**Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py)
-- [fixed_enhanced_state_manager.py](file://utils/fixed_enhanced_state_manager.py)
-- [system_config_loader.py](file://config/system_config_loader.py)
-- [system_config.json](file://config/system_config.json)
+## Conclusion
+The Workflow Orchestration API, centered on the PassiveExtractionWorkflow class, provides a robust, stateful, and highly optimized pipeline for extracting supplier products, matching them to Amazon listings, and computing profitability. Through hash-based deduplication, batch processing, and atomic state management, it achieves significant performance gains and reliability. The documented APIs and integration patterns enable seamless programmatic control, monitoring, and maintenance of long-running extraction tasks.

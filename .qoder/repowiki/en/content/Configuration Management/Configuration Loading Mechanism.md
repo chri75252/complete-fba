@@ -1,256 +1,273 @@
 # Configuration Loading Mechanism
 
 <cite>
-**Referenced Files in This Document**   
+**Referenced Files in This Document**
+- [system_config.json](file://config/system_config.json)
 - [system_config_loader.py](file://config/system_config_loader.py)
 - [supplier_config_loader.py](file://config/supplier_config_loader.py)
-- [system_config.json](file://config/system_config.json)
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py)
+- [config_merger.py](file://control_plane/config_merger.py)
+- [env_config.py](file://control_plane/env_config.py)
+- [clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json)
+- [poundwholesale.co.uk.json](file://config/supplier_configs/poundwholesale.co.uk.json)
 </cite>
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [System Configuration Loader](#system-configuration-loader)
-3. [Supplier Configuration Loader](#supplier-configuration-loader)
-4. [Configuration Integration and Usage](#configuration-integration-and-usage)
-5. [Error Handling and Path Resolution](#error-handling-and-path-resolution)
-6. [Best Practices for Configuration Management](#best-practices-for-configuration-management)
+2. [Project Structure](#project-structure)
+3. [Core Components](#core-components)
+4. [Architecture Overview](#architecture-overview)
+5. [Detailed Component Analysis](#detailed-component-analysis)
+6. [Dependency Analysis](#dependency-analysis)
+7. [Performance Considerations](#performance-considerations)
+8. [Troubleshooting Guide](#troubleshooting-guide)
+9. [Conclusion](#conclusion)
 
 ## Introduction
-The configuration loading mechanism in the Amazon FBA Agent System is designed to provide a robust, flexible, and backward-compatible way to manage system and supplier-specific settings. The system uses two primary loaders: `SystemConfigLoader` for global system configuration and `SupplierConfigLoader` for supplier-specific scraping configurations. These loaders ensure that configuration data is consistently loaded, accessed, and integrated into various components of the system, enabling dynamic behavior based on configuration toggles and parameters.
+This document explains the configuration loading and management system used by the Amazon FBA Agent System. It covers how the main system configuration is loaded, how supplier-specific configurations are resolved, and how configuration merging and environment-based overrides work. It also documents the current limitations around hot-reloading and runtime updates, and provides guidance on extending the system safely.
 
-**Section sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L1-L83)
-- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L186)
-
-## System Configuration Loader
-
-The `SystemConfigLoader` class is responsible for loading and providing access to the main system configuration file, `system_config.json`. It implements a simple yet effective pattern for configuration management with built-in backward compatibility.
-
-### Initialization and Path Resolution
-The loader resolves the configuration path through a hierarchical approach:
-1. If a `config_path` is provided during initialization, it uses that path
-2. Otherwise, it constructs the default path by navigating from the current file's directory to the project root and appending `config/system_config.json`
-
-This resolution mechanism ensures the configuration can be loaded regardless of the execution context while maintaining a predictable default location.
-
-### Configuration Loading Process
-The `_load()` method implements the core loading logic with proper error handling:
-- It first checks if the configuration file exists at the resolved path
-- If the file is missing, it logs an error and initializes an empty configuration
-- If the file exists, it attempts to parse the JSON content with UTF-8 encoding
-- In case of parsing errors, it logs the exception and initializes an empty configuration
-
-This fail-safe approach ensures the system can continue operating even when configuration is unavailable, albeit with default behavior.
-
-### Accessor Methods
-The loader provides granular getter methods for different configuration sections:
-- `get_system_config()`: Returns the system-specific configuration with fallback to the root
-- `get_amazon_config()`: Returns Amazon marketplace settings
-- `get_supplier_config(supplier_name)`: Returns supplier-specific settings
-- `get_credentials(supplier_name)`: Returns authentication credentials for a supplier
-- `get_workflow_config(workflow_key)`: Returns workflow-specific parameters
-- `get_financial_batch_size()`: Returns batch size for financial reporting with a consistent default
-
-These methods abstract the underlying JSON structure, providing a clean interface for configuration access.
-
-### Backward Compatibility
-The `load_config()` method maintains backward compatibility with older code that expects direct access to the full configuration dictionary. This allows gradual refactoring of the codebase without breaking existing functionality.
+## Project Structure
+The configuration system is organized into three primary areas:
+- System configuration: centralized JSON configuration with environment-aware loading
+- Supplier configuration: domain-specific scraping selectors and navigation settings
+- Control plane utilities: configuration merging and environment normalization
 
 ```mermaid
-classDiagram
-class SystemConfigLoader {
-+str config_path
--Dict[str, Any] _config
-+__init__(config_path : str | None)
-+get_system_config() Dict[str, Any]
-+get_full_config() Dict[str, Any]
-+get_amazon_config() Dict[str, Any]
-+get_supplier_config(supplier_name : str) Dict[str, Any]
-+get_credentials(supplier_name : str) Dict[str, str]
-+get_workflow_config(workflow_key : str) Dict[str, Any]
-+get_financial_batch_size() int
-+load_config() Dict[str, Any]
--_load() None
-}
+graph TB
+subgraph "Configuration Package"
+SYS_CFG["config/system_config.json"]
+SYS_LOADER["config/system_config_loader.py"]
+SUP_CFG_DIR["config/supplier_configs/"]
+SUP_LOADER["config/supplier_config_loader.py"]
+end
+subgraph "Control Plane"
+MERGER["control_plane/config_merger.py"]
+ENVCFG["control_plane/env_config.py"]
+end
+SYS_LOADER --> SYS_CFG
+SUP_LOADER --> SUP_CFG_DIR
+MERGER --> SYS_CFG
+ENVCFG --> SYS_CFG
 ```
 
 **Diagram sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L8-L81)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [config_merger.py](file://control_plane/config_merger.py#L1-L24)
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
 
 **Section sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L8-L81)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [config_merger.py](file://control_plane/config_merger.py#L1-L24)
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
 
-## Supplier Configuration Loader
+## Core Components
+- SystemConfigLoader: loads and exposes the main system configuration with safe defaults and backward compatibility
+- SupplierConfigLoader: loads domain-specific scraping selectors with fallback to a default configuration
+- ConfigMerger: merges dictionaries deeply to apply overrides
+- EnvConfig: normalizes and aligns environment variables for LLM providers
 
-The `SupplierConfigLoader` module handles supplier-specific configurations, particularly CSS selectors for web scraping. It provides a flexible system for managing domain-specific scraping rules with fallback mechanisms.
+**Section sources**
+- [system_config_loader.py](file://config/system_config_loader.py#L9-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L135)
+- [config_merger.py](file://control_plane/config_merger.py#L7-L23)
+- [env_config.py](file://control_plane/env_config.py#L26-L45)
 
-### Domain Normalization
-The loader normalizes domain names by:
-- Converting to lowercase
-- Removing the "www." prefix
-- Extracting the domain from URLs using `urlparse`
-
-This normalization ensures consistent handling of domains regardless of their presentation in URLs.
-
-### Configuration Loading Strategy
-The loader implements a two-tiered approach:
-1. First, it attempts to load a domain-specific configuration file (e.g., `poundwholesale-co-uk.json`)
-2. If the domain-specific file is not found, it falls back to a default configuration (`default.json`)
-
-This strategy allows for specialized configurations for known suppliers while providing a baseline configuration for new or unknown suppliers.
-
-### Runtime Configuration Saving
-The `save_supplier_selectors()` function enables dynamic creation and updating of supplier configurations:
-- It normalizes the domain name before saving
-- Ensures the configuration directory exists before writing
-- Uses UTF-8 encoding with proper JSON formatting
-- Returns a boolean success indicator for error handling
-
-This capability supports the system's adaptability to new suppliers without requiring manual file creation.
+## Architecture Overview
+The configuration architecture follows a layered approach:
+- System configuration is loaded once at startup with environment-aware path resolution
+- Supplier configuration is resolved per-domain with a fallback strategy
+- Overrides and environment variables can adjust behavior without changing files
+- Deep merging enables incremental configuration changes
 
 ```mermaid
 sequenceDiagram
-participant Client as "Client Code"
-participant Loader as "SupplierConfigLoader"
+participant App as "Application"
+participant SysLoader as "SystemConfigLoader"
 participant FS as "File System"
-Client->>Loader : load_supplier_selectors("www.poundwholesale.co.uk")
-Loader->>Loader : normalize_domain("www.poundwholesale.co.uk")
-Loader->>Loader : clean_domain = "poundwholesale.co.uk"
-Loader->>FS : check_exists("config/supplier_configs/poundwholesale.co.uk.json")
+participant SupLoader as "SupplierConfigLoader"
+App->>SysLoader : Initialize with optional config_path
+SysLoader->>SysLoader : Resolve path (env or default)
+SysLoader->>FS : Check file existence
 alt File exists
-FS-->>Loader : File found
-Loader->>FS : read_json("config/supplier_configs/poundwholesale.co.uk.json")
-FS-->>Loader : Configuration data
-Loader-->>Client : Return domain-specific config
-else File not found
-FS-->>Loader : File not found
-Loader->>FS : check_exists("config/supplier_configs/default.json")
-alt Default exists
-FS-->>Loader : File found
-Loader->>FS : read_json("config/supplier_configs/default.json")
-FS-->>Loader : Default configuration
-Loader-->>Client : Return default config
-else Default not found
-FS-->>Loader : File not found
-Loader-->>Client : Return empty config
+SysLoader->>FS : Open and parse JSON (UTF-8)
+FS-->>SysLoader : Parsed config
+else File missing or parse error
+SysLoader->>SysLoader : Log error and initialize empty config
+end
+App->>SupLoader : Load selectors for domain
+SupLoader->>FS : Check domain-specific config
+alt Found
+SupLoader->>FS : Load domain config
+FS-->>SupLoader : Domain config
+else Not found
+SupLoader->>FS : Check default config
+alt Found
+SupLoader->>FS : Load default config
+FS-->>SupLoader : Default config
+else Not found
+SupLoader->>SupLoader : Log warning and return empty
 end
 end
 ```
 
 **Diagram sources**
-- [supplier_config_loader.py](file://config/supplier_config_loader.py#L10-L133)
+- [system_config_loader.py](file://config/system_config_loader.py#L16-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L70)
+
+## Detailed Component Analysis
+
+### System Configuration Loader
+The SystemConfigLoader encapsulates loading and access to the main system configuration. It supports:
+- Environment-aware path resolution via an environment variable
+- Safe loading with graceful fallback to empty configuration on failure
+- Granular getters for subsystems (system, amazon, workflows, credentials)
+- Backward-compatible method to return the full configuration tree
+
+Key behaviors:
+- Path resolution hierarchy: explicit path → environment variable → default path
+- Error handling: logs failures and initializes empty configuration
+- Accessor methods provide sensible defaults for missing keys
+
+Programmatic access examples:
+- Retrieve the entire system subtree: [get_system_config](file://config/system_config_loader.py#L32-L37)
+- Retrieve full configuration: [get_full_config](file://config/system_config_loader.py#L35-L37)
+- Retrieve Amazon-specific settings: [get_amazon_config](file://config/system_config_loader.py#L39-L40)
+- Retrieve workflow configuration by key: [get_workflow_config](file://config/system_config_loader.py#L49-L50)
+- Retrieve supplier credentials: [get_credentials](file://config/system_config_loader.py#L46-L47)
+
+Fallback and precedence:
+- The loader does not merge with defaults; it returns empty dicts for missing keys
+- For robustness, callers should provide their own defaults when invoking getters
+
+Hot-reloading and runtime updates:
+- The current implementation loads configuration once during initialization
+- No built-in reload mechanism exists; dynamic updates require manual reload and component notification
+
+Validation and error handling:
+- Existence checks before reading
+- Try-catch around JSON parsing with detailed logging
+- Graceful degradation to empty configuration on failure
 
 **Section sources**
-- [supplier_config_loader.py](file://config/supplier_config_loader.py#L10-L133)
+- [system_config_loader.py](file://config/system_config_loader.py#L9-L87)
+- [system_config.json](file://config/system_config.json#L1-L384)
 
-## Configuration Integration and Usage
+### Supplier Configuration Loader
+The SupplierConfigLoader manages domain-specific scraping configurations:
+- Domain resolution: cleans domain names and removes prefixes
+- File resolution: tries domain-specific JSON, falls back to default JSON
+- Error handling: logs failures and optionally falls back to default
+- URL parsing: extracts domains from URLs with flexible input formats
+- Persistence: writes domain-specific configuration files
 
-### Workflow Initialization
-The `passive_extraction_workflow_latest.py` tool demonstrates the integration of configuration loaders into the system's core workflows. During initialization, it:
-- Creates a `SystemConfigLoader` instance to load system-wide settings
-- Accesses configuration values directly from `self.system_config` without hardcoded fallbacks
-- Uses configuration to set operational parameters like batch sizes and processing limits
+Configuration resolution order:
+1. Look for domain-specific file: `config/supplier_configs/{cleaned_domain}.json`
+2. If not found, fall back to default file: `config/supplier_configs/default.json`
+3. If neither exists, return empty configuration with warning
 
-This approach ensures all toggle experiments and configuration changes are respected at runtime.
+Examples:
+- Load selectors for a domain: [load_supplier_selectors](file://config/supplier_config_loader.py#L23-L70)
+- Extract domain from URL: [get_domain_from_url](file://config/supplier_config_loader.py#L72-L107)
+- Save selectors to disk: [save_supplier_selectors](file://config/supplier_config_loader.py#L109-L135)
 
-### Dependency Injection
-Configuration is injected into components through dependency injection:
-- The workflow class receives the configuration loader during initialization
-- Components like the supplier scraper and authentication service access configuration through the workflow
-- This pattern promotes loose coupling and testability
+Supplier configuration examples:
+- Clearance King UK configuration demonstrates pricing selectors, authentication, field mappings, pagination, and navigation: [clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json#L1-L159)
+- Poundwholesale UK configuration shows predefined categories and pagination settings: [poundwholesale.co.uk.json](file://config/supplier_configs/poundwholesale.co.uk.json#L1-L137)
 
-### Configuration-Driven Behavior
-The system uses configuration to control critical behaviors:
-- Processing limits (maximum products, categories, batch sizes)
-- Feature toggles (hybrid processing, AI features, authentication)
-- Performance settings (timeouts, retry attempts, rate limiting)
-- Output and caching strategies
+Template and inheritance patterns:
+- Domain-specific files inherit from a default template when present
+- No nested inheritance across multiple levels is implemented; fallback is single-level
+
+**Section sources**
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L135)
+- [clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json#L1-L159)
+- [poundwholesale.co.uk.json](file://config/supplier_configs/poundwholesale.co.uk.json#L1-L137)
+
+### Configuration Merging Utility
+The control plane provides a deep merge utility for applying incremental configuration overrides:
+- Recursively merges dictionaries, overriding leaf values from the overrides set
+- Uses deep copies to avoid mutating original structures
+- Suitable for combining base configuration with environment-specific overrides
+
+Usage pattern:
+- Merge base configuration with overrides to produce a final configuration object
+
+**Section sources**
+- [config_merger.py](file://control_plane/config_merger.py#L7-L23)
+
+### Environment Configuration Normalization
+Environment variables are normalized and aligned for LLM provider configuration:
+- Cleans whitespace and removes entries that become empty after cleaning
+- Ensures consistent provider selection and base URL/model pairing across providers
+
+**Section sources**
+- [env_config.py](file://control_plane/env_config.py#L14-L45)
+
+## Dependency Analysis
+The configuration system exhibits clear separation of concerns:
+- SystemConfigLoader depends on the file system and logging
+- SupplierConfigLoader depends on JSON parsing, file system, and URL parsing
+- ConfigMerger is a pure utility for dictionary manipulation
+- EnvConfig operates purely on environment variables
 
 ```mermaid
-flowchart TD
-A[System Startup] --> B[Initialize SystemConfigLoader]
-B --> C[Load system_config.json]
-C --> D[Create PassiveExtractionWorkflow]
-D --> E[Inject Configuration]
-E --> F[Initialize Components]
-F --> G[Supplier Scraper]
-F --> H[Amazon Extractor]
-F --> I[Authentication Service]
-G --> J[Use get_supplier_config()]
-H --> K[Use get_amazon_config()]
-I --> L[Use get_credentials()]
-J --> M[Scrape Supplier Data]
-K --> N[Extract Amazon Data]
-L --> O[Authenticate Supplier]
+graph TB
+SYS_LOADER["SystemConfigLoader<br/>config/system_config_loader.py"]
+SUP_LOADER["SupplierConfigLoader<br/>config/supplier_config_loader.py"]
+MERGER["Deep Merge<br/>control_plane/config_merger.py"]
+ENVCFG["Env Normalization<br/>control_plane/env_config.py"]
+SYS_JSON["System Config JSON<br/>config/system_config.json"]
+SUP_JSON["Supplier Config JSON<br/>config/supplier_configs/*.json"]
+SYS_LOADER --> SYS_JSON
+SUP_LOADER --> SUP_JSON
+MERGER --> SYS_LOADER
+ENVCFG --> SYS_LOADER
 ```
 
 **Diagram sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1902-L1927)
-- [system_config_loader.py](file://config/system_config_loader.py#L8-L81)
+- [system_config_loader.py](file://config/system_config_loader.py#L16-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L135)
+- [config_merger.py](file://control_plane/config_merger.py#L7-L23)
+- [env_config.py](file://control_plane/env_config.py#L26-L45)
 
 **Section sources**
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1902-L1927)
+- [system_config_loader.py](file://config/system_config_loader.py#L16-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L23-L135)
+- [config_merger.py](file://control_plane/config_merger.py#L7-L23)
+- [env_config.py](file://control_plane/env_config.py#L26-L45)
 
-## Error Handling and Path Resolution
+## Performance Considerations
+- Single-shot loading: Both system and supplier configurations are loaded once and cached in memory
+- Minimal I/O overhead: Supplier loader performs file existence checks and JSON reads only when needed
+- Deep merge cost: Linear in the size of the merged structures; use judiciously for large configurations
+- Environment normalization: Constant-time operations on environment variables
 
-### Common Issues
-The configuration system addresses several common issues:
+## Troubleshooting Guide
+Common issues and resolutions:
+- System configuration not found
+  - Verify the resolved path matches expectations; check environment variable and default path resolution
+  - Confirm file permissions and encoding (UTF-8)
+  - Review logs for parsing exceptions
 
-#### Path Resolution Errors
-- The system uses relative path resolution from the module's location
-- It constructs paths using `os.path.join()` for cross-platform compatibility
-- Missing configuration files are handled gracefully with empty defaults
+- Supplier configuration missing
+  - Ensure domain-specific JSON exists or default JSON is present
+  - Confirm domain cleaning logic (prefix removal) matches the intended domain
+  - Check URL parsing edge cases for protocol-less inputs
 
-#### Encoding Problems
-- All configuration files are read with explicit UTF-8 encoding
-- This prevents issues with special characters in configuration values
-- The encoding is specified in both read and write operations
+- Configuration not updating at runtime
+  - The loaders do not implement hot-reloading; restart the process or implement a reload mechanism
+  - Apply overrides using the deep merge utility and reinitialize affected components
 
-#### Configuration Reload Requirements
-- The current implementation loads configuration once during initialization
-- For dynamic updates, the system would need a reload mechanism
-- Components would need to handle configuration changes at runtime
-
-### Error Handling Strategies
-The loaders implement comprehensive error handling:
-- File existence checks before reading
-- Try-catch blocks around JSON parsing
-- Detailed logging of errors and warnings
-- Graceful degradation when configuration is unavailable
-
-## Best Practices for Configuration Management
-
-### Extending the Loader
-To extend the loader with new accessor methods:
-1. Add the method to the `SystemConfigLoader` class
-2. Implement appropriate default values
-3. Document the method's purpose and return type
-4. Ensure backward compatibility with existing code
-
-Example pattern:
-```python
-def get_new_feature_config(self) -> Dict[str, Any]:
-    return self._config.get("new_feature", {})
-```
-
-### Handling Dynamic Configuration Updates
-For systems requiring runtime configuration updates:
-1. Implement a reload method that calls `_load()` again
-2. Notify dependent components of configuration changes
-3. Handle potential state inconsistencies
-4. Consider using a configuration change event system
-
-### Configuration Validation
-Additional validation could be implemented:
-- Schema validation using JSON Schema
-- Type checking for configuration values
-- Range validation for numeric parameters
-- Required field checks
-
-These practices would enhance configuration reliability and prevent runtime errors due to invalid settings.
+- Environment variable misconfiguration
+  - Use the environment normalization utility to clean and align provider settings
+  - Verify that provider-specific variables are consistently set
 
 **Section sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L8-L81)
-- [supplier_config_loader.py](file://config/supplier_config_loader.py#L10-L133)
-- [passive_extraction_workflow_latest.py](file://tools/passive_extraction_workflow_latest.py#L1902-L1927)
+- [system_config_loader.py](file://config/system_config_loader.py#L75-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L42-L70)
+- [config_merger.py](file://control_plane/config_merger.py#L7-L23)
+- [env_config.py](file://control_plane/env_config.py#L26-L45)
+
+## Conclusion
+The configuration system provides a robust foundation for managing system-wide and supplier-specific settings. It emphasizes safety through fail-fast loading, clear separation of concerns, and environment-aware configuration. While it currently lacks built-in hot-reloading, the modular design allows for straightforward extension with a reload mechanism and validation utilities. The deep merge and environment normalization utilities enable flexible overrides and consistent behavior across environments.

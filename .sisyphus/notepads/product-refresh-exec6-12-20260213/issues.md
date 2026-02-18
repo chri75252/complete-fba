@@ -13,3 +13,7 @@
 - Root cause: `FixedEnhancedStateManager.save_state_atomic()` calls `save()` which blocks until `_startup_completed` is True.
 - Symptom: processing state file never written, so worker `resolved_paths.processing_state` stayed null.
 - Fix: call `state_manager.enter_runtime_phase()` before first `save_state_atomic()` in `control_plane/run_product_list_refresh.py`.
+
+## validation limitations noted (2026-02-17)
+- The Issue #6 flow was validated with a deterministic runtime monkeypatch stub (no live Chrome/CDP/Amazon).
+- This confirms completion-state synchronization logic and artifact writes, but does not validate real network/browser extraction behavior.

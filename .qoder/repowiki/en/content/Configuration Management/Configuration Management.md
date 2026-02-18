@@ -1,301 +1,326 @@
 # Configuration Management
 
 <cite>
-**Referenced Files in This Document**   
+**Referenced Files in This Document**
 - [system_config.json](file://config/system_config.json)
 - [system_config_loader.py](file://config/system_config_loader.py)
 - [supplier_config_loader.py](file://config/supplier_config_loader.py)
-- [supplier_configs/poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json)
-- [supplier_configs/clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json)
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py)
+- [poundwholesale_categories.json](file://config/poundwholesale_categories.json)
+- [clearance-king_categories.json](file://config/clearance-king_categories.json)
+- [efghousewares_categories.json](file://config/efghousewares_categories.json)
+- [kdwholesale_categories.json](file://config/kdwholesale_categories.json)
+- [laceywholesale_categories.json](file://config/laceywholesale_categories.json)
+- [clearance_king_system_config_additions.json](file://config/clearance_king_system_config_additions.json)
+- [full-first.json](file://config/full-first.json)
+- [env_config.py](file://control_plane/env_config.py)
+- [README.md](file://config/supplier_configs/README.md)
 </cite>
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [System Configuration Framework](#system-configuration-framework)
-3. [Supplier-Specific Configuration](#supplier-specific-configuration)
-4. [Configuration Loading Mechanism](#configuration-loading-mechanism)
-5. [Key Configuration Options](#key-configuration-options)
-6. [Configuration and Component Integration](#configuration-and-component-integration)
-7. [Common Configuration Issues and Solutions](#common-configuration-issues-and-solutions)
-8. [Best Practices for Configuration Management](#best-practices-for-configuration-management)
+2. [Project Structure](#project-structure)
+3. [Core Components](#core-components)
+4. [Architecture Overview](#architecture-overview)
+5. [Detailed Component Analysis](#detailed-component-analysis)
+6. [Dependency Analysis](#dependency-analysis)
+7. [Performance Considerations](#performance-considerations)
+8. [Troubleshooting Guide](#troubleshooting-guide)
 9. [Conclusion](#conclusion)
+10. [Appendices](#appendices)
 
 ## Introduction
-The Amazon FBA Agent System employs a comprehensive configuration management framework that governs system-wide settings, supplier-specific behaviors, performance parameters, and authentication protocols. This document provides a detailed analysis of the configuration architecture, focusing on the implementation of system-wide settings in system_config.json, supplier-specific configurations in the supplier_configs directory, and the mechanisms for loading and applying these configurations throughout the system. The configuration framework enables flexible, maintainable, and scalable operation of the agent system across multiple supplier websites and operational environments.
+This document explains the configuration management of the Amazon FBA Agent System. It covers the system configuration structure, processing limits, performance parameters, Chrome automation settings, supplier-specific configurations, and the configuration loading mechanisms. It also provides examples of configuration options, their behavioral effects, environment variable usage, validation strategies, troubleshooting steps, and templates for integrating new suppliers.
 
-## System Configuration Framework
-
-The system configuration framework is centered around the system_config.json file, which contains comprehensive settings that control the behavior of the Amazon FBA Agent System. The configuration is organized into logical sections that address different aspects of system operation, including processing limits, performance parameters, Chrome settings, and authentication configuration.
+## Project Structure
+Configuration is organized around:
+- Central system configuration: a single JSON file that defines system-wide behavior, processing limits, performance tuning, output settings, and supplier workflows.
+- Supplier-specific selectors: per-domain JSON files that define CSS selectors and pagination patterns for scraping.
+- Supplier category lists: per-supplier JSON files enumerating category URLs to crawl.
+- Environment configuration helpers: utilities to normalize and align environment variables for LLM providers.
 
 ```mermaid
-graph TD
-SystemConfig[system_config.json] --> ProcessingLimits[processing_limits]
-SystemConfig --> Performance[performance]
-SystemConfig --> Chrome[chrome]
-SystemConfig --> Authentication[authentication]
-SystemConfig --> Cache[cache]
-SystemConfig --> Output[output]
-SystemConfig --> Monitoring[monitoring]
-SystemConfig --> Analysis[analysis]
-SystemConfig --> Amazon[amazon]
-SystemConfig --> Supplier[supplier]
-SystemConfig --> Credentials[credentials]
-SystemConfig --> Workflows[workflows]
-SystemConfig --> AiFeatures[ai_features]
-SystemConfig --> Integrations[integrations]
-SystemConfig --> SurgicalFixes[surgical_fixes]
-ProcessingLimits --> MaxProducts[max_products]
-ProcessingLimits --> MaxAnalyzedProducts[max_analyzed_products]
-ProcessingLimits --> MaxProductsPerCategory[max_products_per_category]
-ProcessingLimits --> MinPrice[min_price_gbp]
-ProcessingLimits --> MaxPrice[max_price_gbp]
-Performance --> MaxConcurrentRequests[max_concurrent_requests]
-Performance --> RequestTimeout[request_timeout_seconds]
-Performance --> RetryAttempts[retry_attempts]
-Performance --> RetryDelay[retry_delay_seconds]
-Performance --> Timeouts[timeouts]
-Chrome --> DebugPort[debug_port]
-Chrome --> Headless[headless]
-Chrome --> Extensions[extensions]
-Authentication --> Enabled[enabled]
-Authentication --> ConsecutiveFailureThreshold[consecutive_failure_threshold]
-Authentication --> MaxConsecutiveAuthFailures[max_consecutive_auth_failures]
-Authentication --> AuthFailureDelay[auth_failure_delay_seconds]
-Authentication --> CircuitBreaker[circuit_breaker]
-Cache --> Enabled[enabled]
-Cache --> TtlHours[ttl_hours]
-Cache --> MaxSize[max_size_mb]
+graph TB
+A["config/system_config.json"] --> B["SystemConfigLoader<br/>loads and exposes config"]
+A --> C["Workflows<br/>per supplier"]
+A --> D["Processing Limits<br/>price, counts, timeouts"]
+A --> E["Performance<br/>batch sizes, retries, timeouts"]
+A --> F["Output<br/>paths, retention, naming"]
+A --> G["Chrome<br/>automation settings"]
+A --> H["Analysis<br/>filters and targets"]
+A --> I["Integrations<br/>Keepa, OpenAI"]
+A --> J["Authentication<br/>circuit breaker, thresholds"]
+K["config/supplier_configs/*.json"] --> L["SupplierConfigLoader<br/>domain selectors"]
+M["config/*_categories.json"] --> C
+N["control_plane/env_config.py"] --> O["LLM env normalization"]
 ```
 
 **Diagram sources**
-- [system_config.json](file://config/system_config.json#L1-L300)
-
-**Section sources**
-- [system_config.json](file://config/system_config.json#L1-L300)
-
-## Supplier-Specific Configuration
-
-Supplier-specific configurations are managed through JSON files in the supplier_configs directory, with each file corresponding to a specific supplier domain. This approach enables tailored scraping strategies, selector configurations, and operational parameters for each supplier website, accommodating the unique structure and requirements of different e-commerce platforms.
-
-The supplier configuration files contain detailed information about CSS selectors for product data extraction, navigation strategies, pagination patterns, and other supplier-specific settings. This modular approach allows for easy addition or modification of supplier configurations without requiring changes to the core scraping logic.
-
-```mermaid
-graph TD
-SupplierConfigs[supplier_configs/] --> PoundWholesale[poundwholesale-co-uk.json]
-SupplierConfigs --> ClearanceKing[clearance-king.co.uk.json]
-SupplierConfigs --> CutPriceWholesaler[cutpricewholesaler.com.json]
-SupplierConfigs --> WholesaleCosmetics[wholesale-cosmetics.co.uk.json]
-SupplierConfigs --> HarrisonsDirect[www.harrisonsdirect.co.uk.json]
-SupplierConfigs --> Default[default.json]
-PoundWholesale --> FieldMappings[field_mappings]
-PoundWholesale --> Navigation[navigation_configuration]
-PoundWholesale --> Pagination[pagination]
-PoundWholesale --> PageLimiter[page_limiter]
-FieldMappings --> ProductItem[product_item]
-FieldMappings --> Title[title]
-FieldMappings --> Price[price]
-FieldMappings --> Url[url]
-FieldMappings --> Image[image]
-FieldMappings --> Ean[ean]
-FieldMappings --> Barcode[barcode]
-FieldMappings --> ProductCode[product_code]
-FieldMappings --> Sku[sku]
-FieldMappings --> OutOfStock[out_of_stock]
-FieldMappings --> StockStatus[stock_status]
-Navigation --> Strategy[navigation_strategy]
-Navigation --> UsePredefinedCategories[use_predefined_categories]
-Navigation --> PredefinedCategories[predefined_categories]
-Pagination --> Pattern[pagination_pattern]
-Pagination --> UseUrlNavigation[use_url_navigation]
-Pagination --> NextButtonSelector[next_button_selector]
-```
-
-**Diagram sources**
-- [supplier_configs/poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L1-L122)
-- [supplier_configs/clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json#L1-L33)
-
-**Section sources**
-- [supplier_configs/poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L1-L122)
-- [supplier_configs/clearance-king.co.uk.json](file://config/supplier_configs/clearance-king.co.uk.json#L1-L33)
-
-## Configuration Loading Mechanism
-
-The configuration loading mechanism is implemented through dedicated loader classes that handle the retrieval and parsing of configuration data. The system employs a two-tiered approach with separate loaders for system-wide configuration and supplier-specific configurations, ensuring efficient and reliable access to configuration data throughout the application.
-
-The SystemConfigLoader class manages the loading of system-wide configuration from system_config.json, providing accessor methods for different configuration sections. The SupplierConfigLoader class handles the loading of supplier-specific configurations from JSON files in the supplier_configs directory, with fallback to a default configuration when supplier-specific files are not available.
-
-```mermaid
-classDiagram
-class SystemConfigLoader {
-+config_path : str
--_config : Dict[str, Any]
-+__init__(config_path : str | None)
-+get_system_config() Dict[str, Any]
-+get_full_config() Dict[str, Any]
-+get_amazon_config() Dict[str, Any]
-+get_supplier_config(supplier_name : str) Dict[str, Any]
-+get_credentials(supplier_name : str) Dict[str, str]
-+get_workflow_config(workflow_key : str) Dict[str, Any]
-+get_financial_batch_size() int
-+load_config() Dict[str, Any]
--_load() None
-}
-class SupplierConfigLoader {
-+CONFIG_DIR : Path
-+load_supplier_selectors(domain : str) Dict[str, Any]
-+get_domain_from_url(url : str) str
-+save_supplier_selectors(domain : str, config : Dict[str, Any]) bool
-}
-SystemConfigLoader --> "loads" system_config.json
-SupplierConfigLoader --> "loads" supplier_configs/
-configurable_supplier_scraper --> SystemConfigLoader
-configurable_supplier_scraper --> SupplierConfigLoader
-supplier_authentication_service --> SystemConfigLoader
-```
-
-**Diagram sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
+- [system_config.json](file://config/system_config.json#L1-L384)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
 - [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
 
 **Section sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
+- [system_config.json](file://config/system_config.json#L1-L384)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
 - [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [README.md](file://config/supplier_configs/README.md)
 
-## Key Configuration Options
+## Core Components
+- System configuration loader: reads the central configuration file and exposes getters for system, Amazon, workflows, credentials, and batch sizes.
+- Supplier configuration loader: loads domain-specific CSS selectors and pagination patterns, with fallback to a default configuration.
+- Supplier category lists: JSON arrays of category URLs per supplier, enabling targeted crawling.
+- Environment configuration: normalizes LLM provider environment variables for consistent operation.
 
-The system configuration includes several key options that significantly impact system behavior and performance. These options are carefully designed to balance efficiency, reliability, and resource utilization across different operational scenarios.
-
-### Processing Limits
-The processing limits section defines constraints on the number of products processed during extraction and analysis. Key parameters include:
-- **max_products**: Maximum total products to process (1,000,000)
-- **max_analyzed_products**: Maximum products to analyze (1,000,000)
-- **max_products_per_category**: Maximum products per category (1,000)
-- **max_products_per_cycle**: Maximum products per processing cycle (100)
-
-These limits prevent resource exhaustion during large-scale operations while allowing comprehensive processing of supplier catalogs.
-
-### Performance Parameters
-Performance parameters control the behavior of HTTP requests and concurrent operations:
-- **max_concurrent_requests**: Maximum concurrent requests (8)
-- **request_timeout_seconds**: Request timeout in seconds (45)
-- **retry_attempts**: Number of retry attempts (5)
-- **retry_delay_seconds**: Delay between retries (3 seconds)
-
-These settings optimize network efficiency while maintaining reliability in the face of transient failures.
-
-### Chrome Settings
-Chrome settings configure the browser automation environment:
-- **debug_port**: Chrome debugging port (9222)
-- **headless**: Headless mode (false)
-- **extensions**: Enabled browser extensions (Keepa, SellerAmp)
-
-These settings enable debugging and integration with essential browser tools for Amazon FBA analysis.
-
-### Authentication Configuration
-Authentication settings manage supplier login and session maintenance:
-- **consecutive_failure_threshold**: Threshold for consecutive authentication failures (5)
-- **max_consecutive_auth_failures**: Maximum consecutive authentication failures (10)
-- **auth_failure_delay_seconds**: Delay after authentication failure (60 seconds)
-- **circuit_breaker**: Circuit breaker configuration for authentication failures
-
-These settings prevent account lockouts and implement resilience against authentication issues.
+Key responsibilities:
+- Centralized configuration access for the pipeline.
+- Supplier-specific scraping customization.
+- Supplier category enumeration and pagination patterns.
+- Environment variable alignment for LLM providers.
 
 **Section sources**
-- [system_config.json](file://config/system_config.json#L1-L300)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [system_config.json](file://config/system_config.json#L1-L384)
 
-## Configuration and Component Integration
-
-Configuration settings are integrated throughout the system components, driving behavior and enabling adaptability to different operational requirements. The configuration framework enables dependency injection into various components, allowing them to operate according to the specified parameters.
-
-The configurable_supplier_scraper component uses configuration data to determine scraping behavior, including selector configurations, rate limiting, and AI model selection. The supplier_authentication_service component relies on authentication configuration to manage login attempts and session validation. The browser management system uses Chrome settings to configure the automation environment.
+## Architecture Overview
+The configuration architecture separates concerns:
+- System-level controls (limits, performance, output, Chrome) are defined centrally.
+- Supplier-level controls (URLs, selectors, pagination) are modular and domain-specific.
+- Workflows tie suppliers to their category lists and operational flags.
+- Environment helpers ensure consistent LLM configuration across deployments.
 
 ```mermaid
 sequenceDiagram
-participant Config as Configuration
-participant Loader as SystemConfigLoader
-participant Scraper as ConfigurableSupplierScraper
-participant Auth as SupplierAuthenticationService
-participant Browser as BrowserManager
-Config->>Loader : system_config.json
-Loader->>Loader : Parse configuration
-Loader->>Scraper : Provide system configuration
-Loader->>Auth : Provide authentication configuration
-Loader->>Browser : Provide Chrome settings
-Scraper->>Scraper : Apply processing limits
-Scraper->>Scraper : Apply performance parameters
-Scraper->>Scraper : Load supplier selectors
-Auth->>Auth : Apply authentication thresholds
-Auth->>Auth : Configure circuit breaker
-Browser->>Browser : Apply Chrome settings
-Browser->>Browser : Launch browser with extensions
-Scraper->>Auth : Request authentication check
-Auth->>Auth : Validate authentication status
-Auth-->>Scraper : Authentication status
-Scraper->>Browser : Request browser context
-Browser-->>Scraper : Browser context
+participant Caller as "Pipeline Component"
+participant Loader as "SystemConfigLoader"
+participant Env as "env_config.py"
+participant SupSel as "SupplierConfigLoader"
+Caller->>Loader : get_workflow_config("supplier_workflow")
+Loader-->>Caller : workflow definition
+Caller->>SupSel : load_supplier_selectors(domain)
+SupSel-->>Caller : selectors + pagination
+Caller->>Env : ensure_llm_env()
+Env-->>Caller : normalized LLM env vars
 ```
 
 **Diagram sources**
-- [system_config_loader.py](file://config/system_config_loader.py#L1-L84)
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L799)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
+
+## Detailed Component Analysis
+
+### System Configuration Structure
+The central configuration file defines:
+- Pipeline toggles: enable/disable hybrid processing modes and resume logic.
+- System: name, version, environment, test mode, cache clearing, output roots, batch sizes, and browser reuse.
+- Dynamic reordering: optional adaptive ordering of categories/products.
+- Processing limits: price bounds, product caps, pagination safety, and category validation.
+- Supplier cache control: update frequency, validation, and modes (e.g., exhaustive).
+- Supplier extraction progress: tracking, recovery modes, and persistence.
+- Hybrid processing: sequential/chunked/balanced modes, memory management, sliding windows.
+- Batch synchronization: synchronize batch sizes across subsystems.
+- Performance: concurrency, timeouts, retry behavior, rate limiting, and matching thresholds.
+- Cache: TTL, size limits, and selective clearing policies.
+- Monitoring: intervals, health checks, log level, and alert thresholds.
+- Output: base directory, report format, intermediate results, naming pattern, retention.
+- Chrome: debug port, headless mode, extensions.
+- Analysis: ROI, profit, rating, reviews, sales rank, monthly sales, competition, excluded/target categories.
+- Amazon marketplace: marketplace, currency, VAT, and FBA fee structure.
+- Supplier pricing: whether prices include VAT.
+- Credentials: per-supplier username/password.
+- Workflows: per-supplier definitions including URLs, category configs, authentication flags, and test product URLs.
+- AI features: category selection and product matching options.
+- Integrations: Keepa and OpenAI toggles and limits.
+- Authentication: startup verification, thresholds, periodic intervals, circuit breaker.
+- Surgical fixes: enhanced detection and state validation toggles.
+
+Effects on system behavior:
+- Processing limits constrain price ranges and volumes to reduce risk and cost.
+- Performance parameters tune throughput and resilience against upstream throttling.
+- Chrome settings control automation headless behavior and extension availability.
+- Workflows connect suppliers to category lists and operational modes.
+- Cache and monitoring tune reliability and observability.
 
 **Section sources**
-- [configurable_supplier_scraper.py](file://tools/configurable_supplier_scraper.py#L1-L799)
-- [supplier_authentication_service.py](file://tools/supplier_authentication_service.py#L1-L114)
+- [system_config.json](file://config/system_config.json#L1-L384)
 
-## Common Configuration Issues and Solutions
+### Supplier-Specific Configuration Loading
+The supplier configuration loader:
+- Accepts a domain and loads domain-specific selectors from supplier_configs/<domain>.json.
+- Falls back to a default.json if domain-specific file is missing.
+- Provides utilities to extract domains from URLs and to save updated configurations.
+- Supports command-line generation of sample configurations.
 
-Several common configuration issues may arise during system operation, particularly related to supplier-specific settings and performance tuning. Understanding these issues and their solutions is essential for maintaining reliable system operation.
-
-### Supplier-Specific Configuration Issues
-1. **Selector Mismatch**: When supplier website structure changes, CSS selectors may no longer match the expected elements.
-   - **Solution**: Update the supplier configuration file with new selectors, using browser developer tools to identify current element patterns.
-
-2. **Pagination Failure**: Changes in pagination implementation can prevent complete category scraping.
-   - **Solution**: Verify and update the pagination configuration, including pattern and next button selectors.
-
-3. **Authentication Problems**: Login requirements or CAPTCHA challenges may disrupt scraping.
-   - **Solution**: Adjust authentication configuration, including increasing retry attempts or implementing additional authentication steps.
-
-### Performance Tuning Issues
-1. **Rate Limiting**: Excessive request frequency may trigger supplier rate limiting.
-   - **Solution**: Adjust performance parameters, particularly request_timeout_seconds and retry_delay_seconds, to reduce request frequency.
-
-2. **Memory Exhaustion**: Large-scale operations may consume excessive memory.
-   - **Solution**: Optimize processing_limits, particularly max_products_per_category, and ensure cache settings are appropriate for available resources.
-
-3. **Browser Stability**: Extended browser sessions may become unstable.
-   - **Solution**: Adjust Chrome settings, particularly headless mode, and implement browser restarts at appropriate intervals.
+Operational impact:
+- Enables per-supplier scraping customization without modifying core code.
+- Reduces maintenance overhead by centralizing selector definitions.
+- Provides a fallback mechanism to keep pipelines running during partial supplier updates.
 
 **Section sources**
-- [system_config.json](file://config/system_config.json#L1-L300)
-- [supplier_configs/poundwholesale-co-uk.json](file://config/supplier_configs/poundwholesale-co-uk.json#L1-L122)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [README.md](file://config/supplier_configs/README.md)
 
-## Best Practices for Configuration Management
+### Supplier Category Lists
+Each supplier has a dedicated category list JSON:
+- Defines category URLs to crawl.
+- Includes metadata such as total categories, source, and validation timestamps.
+- Some lists include pagination patterns and test product URLs.
 
-Effective configuration management is critical for maintaining a reliable and adaptable system. The following best practices are recommended for managing configuration in the Amazon FBA Agent System.
+Examples:
+- poundwholesale: extensive subcategories across homeware, toys, stationery, DIY, and more.
+- clearance-king: categorized sections for baby/kids, books, clothing/fashion, electrical, garden/outdoor, gifts/toys, health/beauty, household, mailing supplies, media, party celebrations, pets, smoking products, sports/leisure, stationery/crafts, and more.
+- efghousewares: large catalog spanning Christmas, bathroom, china, cleaning materials, DIY brands, electrical, food & drink, gardening, glassware, hardware, home decor, household cleaners, kids products, kitchenware, laundry storage, partyware, pest control, pet products, plastic housewares, pound-lines, seasonal sports homewares, smoking products, stationery, textiles & accessories, toiletries, toys.
+- kdwholesale: categorized sections for bathroom essentials, cleaning and laundry products, gifts/party, hardware, health/beauty care products, home essential products, kitchen essentials, seasonal, smoking acc and batteries, special offer, sports and toys, stationery/art and craft, and toys.
+- laceywholesale: focused categories including air fresheners, baby products, bath care, batteries, catering cloths, dental, deodorants, feminine care, hair care, house-hold and cleaning, lighting, male care, medical, others, paper products, pet care, refuse and plastic bags, smoking requisites, and vapes.
 
-### Environment-Specific Settings
-Maintain separate configuration files or configuration sections for different environments (development, testing, production). This allows for appropriate parameter tuning in each environment while maintaining consistency in configuration structure.
-
-### Version Control
-Store configuration files in version control to track changes and enable rollback to previous configurations when needed. This is particularly important for supplier-specific configurations that may require frequent updates.
-
-### Documentation
-Maintain comprehensive documentation of configuration options, including their purpose, valid values, and impact on system behavior. This facilitates onboarding of new team members and ensures consistent understanding of configuration parameters.
-
-### Testing
-Implement thorough testing of configuration changes before deploying to production. This includes testing both the syntax of configuration files and the operational impact of configuration changes.
-
-### Monitoring
-Monitor system behavior in relation to configuration settings, particularly performance parameters and processing limits. Use monitoring data to inform configuration optimization and capacity planning.
+Best practices:
+- Keep category lists curated and validated to minimize wasted cycles.
+- Add pagination patterns when suppliers use numbered pages.
+- Include test product URLs for quick validation.
 
 **Section sources**
-- [system_config.json](file://config/system_config.json#L1-L300)
-- [supplier_config.md](file://config/supplier_config.md#L1-L50)
+- [poundwholesale_categories.json](file://config/poundwholesale_categories.json#L1-L234)
+- [clearance-king_categories.json](file://config/clearance-king_categories.json#L1-L159)
+- [efghousewares_categories.json](file://config/efghousewares_categories.json#L1-L346)
+- [kdwholesale_categories.json](file://config/kdwholesale_categories.json#L1-L101)
+- [laceywholesale_categories.json](file://config/laceywholesale_categories.json#L1-L29)
+
+### Configuration Loading Mechanism
+The system loader:
+- Reads the central configuration file from a path resolved via environment variable or default location.
+- Parses JSON and exposes getters for system, Amazon, suppliers, credentials, workflows, and batch sizes.
+- Logs errors if the file is missing or malformed.
+
+Environment variable usage:
+- FBA_SYSTEM_CONFIG_PATH: overrides the default configuration file path.
+
+Behavioral effects:
+- Ensures consistent configuration access across modules.
+- Provides backward-compatible accessors for older parts of the codebase.
+
+**Section sources**
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+
+### Environment Variable Usage
+The environment configuration helper:
+- Normalizes LLM provider settings by aligning CONTROL_PLANE_LLM_* and CONTROL_PLANE_OLLAMA_* variables.
+- Ensures consistent base URLs and model names regardless of which environment variables are set.
+
+Effects:
+- Simplifies deployment configuration for local vs remote LLM providers.
+- Prevents misconfiguration by auto-aligning related variables.
+
+**Section sources**
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
+
+### Configuration Validation and Examples
+Validation patterns:
+- Central configuration loader validates file existence and parses JSON safely, logging errors and returning empty structures on failure.
+- Supplier configuration loader validates presence of domain-specific or default files, with fallback logging.
+
+Examples of configuration effects:
+- Processing limits: min/max price and product caps reduce scope and cost.
+- Performance: retry attempts and delays improve resilience to transient failures.
+- Chrome: headless mode and extensions influence automation stability and debugging.
+- Workflows: authentication_required and session_persistence control supplier login behavior.
+- Cache control: validation and backup toggles protect against corrupted caches.
+
+**Section sources**
+- [system_config_loader.py](file://config/system_config_loader.py#L75-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L42-L69)
+
+### Templates and Examples for New Suppliers
+Templates and guidance:
+- Use the sample supplier configuration generator to scaffold domain-specific selector files.
+- Populate supplier category lists with validated URLs and pagination patterns.
+- Extend workflows with supplier-specific settings and authentication flags.
+- Add credentials for suppliers requiring login.
+
+Reference templates:
+- Sample supplier configuration template and generator usage are embedded in the supplier configuration loader.
+- Example additions for a new supplier’s credentials and workflow are provided in the additions file.
+- Full configuration examples demonstrate advanced settings for analysis, cache, monitoring, integrations, and authentication.
+
+**Section sources**
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L137-L187)
+- [clearance_king_system_config_additions.json](file://config/clearance_king_system_config_additions.json#L1-L20)
+- [full-first.json](file://config/full-first.json#L105-L489)
+
+## Dependency Analysis
+Configuration dependencies:
+- SystemConfigLoader depends on the central configuration file and environment variables.
+- SupplierConfigLoader depends on supplier_configs directory and default fallback.
+- Workflows depend on category lists and supplier credentials.
+- Environment helpers depend on standard environment variables.
+
+```mermaid
+graph TB
+SysCfg["system_config.json"] --> Loader["SystemConfigLoader"]
+EnvVars["Environment Variables"] --> Loader
+EnvVars --> EnvHelper["env_config.py"]
+DomSel["supplier_configs/*.json"] --> SupLoader["SupplierConfigLoader"]
+CatLists["*_categories.json"] --> Workflows["Workflows"]
+Creds["Credentials"] --> Workflows
+```
+
+**Diagram sources**
+- [system_config.json](file://config/system_config.json#L1-L384)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
+
+**Section sources**
+- [system_config.json](file://config/system_config.json#L1-L384)
+- [system_config_loader.py](file://config/system_config_loader.py#L1-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L1-L187)
+- [env_config.py](file://control_plane/env_config.py#L1-L45)
+
+## Performance Considerations
+- Concurrency and batching: tune max_concurrent_requests, batch_size, and retry_attempts to balance speed and upstream compliance.
+- Timeouts: adjust navigation and selector wait timeouts to accommodate supplier page complexity.
+- Rate limiting: configure rate_limit_delay and batch_delay to avoid throttling.
+- Memory management: use hybrid processing modes and sliding window cache clearing to manage memory pressure.
+- Cache TTL and size: set appropriate TTL and max_size_mb to optimize hit rates while controlling disk usage.
+
+[No sources needed since this section provides general guidance]
+
+## Troubleshooting Guide
+Common issues and resolutions:
+- Configuration file not found: verify FBA_SYSTEM_CONFIG_PATH or ensure the default path exists.
+- Malformed JSON: check for syntax errors and ensure UTF-8 encoding.
+- Missing supplier selectors: confirm domain-specific JSON exists or rely on default fallback; regenerate with the built-in generator.
+- Authentication failures: review authentication thresholds and circuit breaker settings; ensure credentials are present in the configuration.
+- Chrome automation problems: adjust headless mode, debug port, and extension list; verify browser compatibility.
+- Excessive memory usage: enable memory management toggles and sliding window clearing; reduce batch sizes.
+
+**Section sources**
+- [system_config_loader.py](file://config/system_config_loader.py#L75-L87)
+- [supplier_config_loader.py](file://config/supplier_config_loader.py#L42-L69)
+- [system_config.json](file://config/system_config.json#L139-L186)
 
 ## Conclusion
-The configuration management framework in the Amazon FBA Agent System provides a robust and flexible foundation for controlling system behavior across diverse operational scenarios. By separating system-wide settings from supplier-specific configurations and implementing a reliable loading mechanism, the system achieves a balance between consistency and adaptability. The comprehensive configuration options enable fine-tuning of performance, reliability, and resource utilization, while the integration with system components ensures consistent application of configuration parameters throughout the application. Following best practices for configuration management will ensure the continued reliability and effectiveness of the system as it evolves to meet changing requirements.
+The Amazon FBA Agent System’s configuration management combines a centralized configuration file with modular supplier-specific settings. This design enables precise control over processing limits, performance tuning, Chrome automation, and supplier workflows while supporting extensibility and resilience. By leveraging environment variables, validation, and templates, teams can reliably operate at scale and adapt quickly to new suppliers and changing requirements.
+
+[No sources needed since this section summarizes without analyzing specific files]
+
+## Appendices
+
+### Configuration Options Quick Reference
+- System: name, version, environment, test_mode, clear_cache, selective_cache_clear, output_root, reuse_browser, max_tabs, supplier_login_max_retries, supplier_login_backoff_sec, enable_supplier_parser, force_ai_category_suggestion, supplier_extraction_batch_size, max_categories_to_process.
+- Processing limits: max_products_per_category, max_products_per_run, pagination_safety_limit, min_price_gbp, max_price_gbp, price_midpoint_gbp, min_products_per_category, category_validation.enabled/min_products_per_category/timeout_seconds.
+- Performance: max_concurrent_requests, request_timeout_seconds, retry_attempts, retry_delay_seconds, batch_size, matching_thresholds.title_similarity/medium_title_similarity/high_title_similarity, rate_limiting.rate_limit_delay, batch_delay, ai_batch_size, timeouts.navigation_timeout_ms/search_input_timeout_ms/results_wait_timeout_ms/selector_wait_timeout_ms/page_load_timeout_ms/http_request_timeout_seconds.
+- Cache: enabled, ttl_hours, max_size_mb, selective_clear_config.preserve_analyzed_products/preserve_ai_categories/preserve_linking_map/clear_unanalyzed_only/clear_failed_extractions.
+- Monitoring: enabled, metrics_interval, health_check_interval, log_level, alert_thresholds.cpu_percent/memory_percent/error_rate_per_hour.
+- Output: base_dir, report_format, save_intermediate_results, file_naming.pattern/timestamp_format, retention.keep_days/archive_after_days.
+- Chrome: debug_port, headless, extensions.
+- Analysis: min_roi_percent, min_profit_per_unit, min_rating, min_reviews, max_sales_rank, min_monthly_sales, max_competition_level, excluded_categories, target_categories.
+- Amazon: marketplace, currency, vat_rate, fba_fees.referral_fee_rate/fulfillment_fee_minimum/storage_fee_per_cubic_foot/prep_house_fixed_fee.
+- Supplier: prices_include_vat.
+- Integrations: keepa.enabled/api_key/rate_limit.requests_per_minute, openai.enabled.
+- Authentication: enabled/startup_verification/consecutive_failure_threshold/primary_periodic_interval/secondary_periodic_interval/max_consecutive_auth_failures/auth_failure_delay_seconds/min_products_between_logins/adaptive_threshold_enabled/circuit_breaker.enabled/failure_threshold/recovery_timeout_seconds.
+- Surgical fixes: enable_enhanced_fresh_start_detection, enable_state_synchronization_validation, enable_dual_index_system, enable_url_normalization.
+
+**Section sources**
+- [system_config.json](file://config/system_config.json#L11-L384)

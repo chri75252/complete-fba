@@ -79,3 +79,10 @@
 ## Next Steps
 
 Plan is complete and ready for production use. All critical path items implemented and verified.
+
+## 2026-02-17 Validation Addendum (Issues #6 and #7)
+
+- Practical validation for Issue #6 is reproducible without live browser by monkeypatching `control_plane.run_product_list_refresh` at runtime only (no source edits): stub `FixedAmazonExtractor` + `_ensure_playwright_page`, then execute `main()` with `CONTROL_PLANE_JOB_PATH`.
+- Evidence confirms top-level processing-state sync at completion: `total_products=3`, `session_products_processed=3`, `successful_products=2`, `processing_status=complete`, `is_fresh_start=false` in `OUTPUTS/CACHE/processing_states/issue6_test_processing_state.json`.
+- Practical validation for Issue #7 confirms `refresh.counts.input_products` handles both JSON shapes correctly: object payload (`products` key) counted as 3 and list payload counted as 2.
+- Terminal recomputation behavior is validated from disk-backed artifacts: `linking_map_entries=3`, `amazon_cache_files=2`, `matched_asins=2` in generated status JSONs.

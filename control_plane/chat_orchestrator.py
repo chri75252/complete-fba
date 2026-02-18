@@ -323,7 +323,7 @@ def _parse_runtime_constraints(user_text: str) -> dict[str, int | None]:
     constraints: dict[str, int | None] = {"max_products": None, "max_products_per_category": None}
 
     mpc_match = re.search(
-        r"max[_ ]?products[_ ]?per[_ ]?category\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+        r"(?:max[_ ]?products[_ ]?per[_ ]?category|products?\s+per\s+category)\s*(?:from\s+\d+\s+)?(?:should\s+be|set\s+to|to|=|:)?\s*(\d+)",
         user_text,
         re.IGNORECASE,
     )
@@ -331,7 +331,7 @@ def _parse_runtime_constraints(user_text: str) -> dict[str, int | None]:
         constraints["max_products_per_category"] = int(mpc_match.group(1))
 
     mp_match = re.search(
-        r"max[_ ]?products(?![_ ]?per[_ ]?category)\s*(?:from\s+\d+\s+)?(?:to|=|:)?\s*(\d+)",
+        r"max[_ ]?products(?![_ ]?per[_ ]?category)\s*(?:from\s+\d+\s+)?(?:should\s+be|set\s+to|to|=|:)?\s*(\d+)",
         user_text,
         re.IGNORECASE,
     )
@@ -340,7 +340,7 @@ def _parse_runtime_constraints(user_text: str) -> dict[str, int | None]:
 
     if constraints["max_products"] is None:
         natural_match = re.search(
-            r"(?:first|only|just|limit(?:ed)?\s+to|top)\s+(\d+)\s+products?",
+            r"(?:first|only|just|limit(?:ed)?\s+to|top|up\s*to|at\s*most|no\s+more\s+than)\s+(\d+)\s+products?",
             user_text,
             re.IGNORECASE,
         )
@@ -349,12 +349,30 @@ def _parse_runtime_constraints(user_text: str) -> dict[str, int | None]:
 
     if constraints["max_products"] is None:
         analyze_match = re.search(
-            r"analyze\s+(?:only\s+)?(?:the\s+)?(?:first\s+)?(\d+)\s+products?",
+            r"(?:analy[sz]e|process|run|check)\s+(?:only\s+)?(?:the\s+)?(?:first\s+)?(\d+)\s+products?",
             user_text,
             re.IGNORECASE,
         )
         if analyze_match:
             constraints["max_products"] = int(analyze_match.group(1))
+
+    if constraints["max_products"] is None:
+        reversed_match = re.search(
+            r"\b(\d+)\s+products?\s+(?:max(?:imum)?|limit(?:ed)?)\b",
+            user_text,
+            re.IGNORECASE,
+        )
+        if reversed_match:
+            constraints["max_products"] = int(reversed_match.group(1))
+
+    if constraints["max_products"] is None:
+        unlimited_match = re.search(
+            r"\b(?:unlimited|no\s+limit|all\s+products?)\b",
+            user_text,
+            re.IGNORECASE,
+        )
+        if unlimited_match:
+            constraints["max_products"] = 0
 
     return constraints
 
