@@ -1,0 +1,462 @@
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e7]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "app fixed" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8501/
+            - generic [ref=e14]: app fixed
+        - listitem [ref=e15]:
+          - link "Operator Control Plane" [ref=e17] [cursor=pointer]:
+            - /url: http://localhost:8501/Operator_Control_Plane
+            - generic [ref=e18]: Operator Control Plane
+      - generic [ref=e22]:
+        - heading "⚙️ Configuration" [level=2] [ref=e26]
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - paragraph [ref=e31]: Base Directory
+            - img [ref=e35]
+          - textbox "Base Directory" [ref=e40]:
+            - /placeholder: ""
+            - text: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - paragraph [ref=e45]: Supplier
+            - img [ref=e49]
+          - generic [ref=e53]:
+            - generic [ref=e54]:
+              - generic [ref=e55]: poundwholesale.co.uk
+              - combobox "Selected poundwholesale.co.uk. Supplier" [ref=e57]
+            - img "open" [ref=e59] [cursor=pointer]
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - paragraph [ref=e66]: Auto Refresh (seconds)
+            - img [ref=e70]
+          - generic [ref=e73]:
+            - slider "Auto Refresh (seconds)" [ref=e76]:
+              - generic: "60"
+            - generic:
+              - generic: "0"
+              - generic: "300"
+        - alert [ref=e79]:
+          - paragraph [ref=e84]: ✅ All data files found
+        - separator [ref=e88]
+        - paragraph [ref=e92]:
+          - strong [ref=e93]: "System Information:"
+        - paragraph [ref=e97]:
+          - text: "Base Dir:"
+          - code [ref=e98]: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-
+        - paragraph [ref=e102]:
+          - text: "Supplier:"
+          - code [ref=e103]: poundwholesale.co.uk
+        - paragraph [ref=e107]:
+          - text: "Auto Refresh:"
+          - code [ref=e108]: 60s
+    - generic [ref=e3]:
+      - banner [ref=e111]:
+        - generic [ref=e114]:
+          - generic [ref=e814]:
+            - img "Running..." [ref=e815]:
+              - img [ref=e816]
+            - button "Stop" [ref=e821] [cursor=pointer]
+          - button "Deploy" [ref=e124] [cursor=pointer]:
+            - generic [ref=e126]: Deploy
+          - button [ref=e128] [cursor=pointer]:
+            - img [ref=e129]
+      - generic [ref=e132]:
+        - generic [ref=e134]:
+          - tablist [ref=e136]:
+            - tab "Dashboard" [ref=e137] [cursor=pointer]:
+              - paragraph [ref=e139]: Dashboard
+            - tab "Operator" [ref=e140] [cursor=pointer]:
+              - paragraph [ref=e142]: Operator
+            - tab "Chat" [selected] [ref=e143] [cursor=pointer]:
+              - paragraph [ref=e145]: Chat
+          - tabpanel "Chat" [ref=e573]:
+            - generic [ref=e574]:
+              - heading "Chat" [level=3] [ref=e579]: Chat
+              - generic [ref=e582]:
+                - paragraph [ref=e588]: Use natural language. Write/exec actions require confirmation.
+                - generic [ref=e590]:
+                  - paragraph [ref=e594]: "LLM provider:"
+                  - generic [ref=e596]:
+                    - code [ref=e599]: "'opencode'"
+                    - generic:
+                      - button "Copy to clipboard":
+                        - img
+                  - paragraph [ref=e603]: "RAG index:"
+                  - generic [ref=e609]:
+                    - generic [ref=e611] [cursor=pointer]:
+                      - img [ref=e614]
+                      - generic [ref=e616]: "{"
+                    - generic [ref=e618]:
+                      - generic [ref=e619]:
+                        - generic [ref=e620]:
+                          - generic [ref=e621]:
+                            - text: "\""
+                            - generic [ref=e622]: ok
+                            - text: "\""
+                          - generic [ref=e623]: ":"
+                        - generic [ref=e625]: "true"
+                      - generic [ref=e626]:
+                        - generic [ref=e627]:
+                          - generic [ref=e628]:
+                            - text: "\""
+                            - generic [ref=e629]: doc_count
+                            - text: "\""
+                          - generic [ref=e630]: ":"
+                        - generic [ref=e632]: "890"
+                      - generic [ref=e633]:
+                        - generic [ref=e634]:
+                          - generic [ref=e635]:
+                            - text: "\""
+                            - generic [ref=e636]: generated_at
+                            - text: "\""
+                          - generic [ref=e637]: ":"
+                        - generic [ref=e640]: "\"2026-02-09T05:06:08Z\""
+                    - generic [ref=e642] [cursor=pointer]: "}"
+                  - button "Refresh system index" [ref=e645] [cursor=pointer]:
+                    - paragraph [ref=e647]: Refresh system index
+                  - button "Build RAG index" [ref=e650] [cursor=pointer]:
+                    - paragraph [ref=e652]: Build RAG index
+              - generic [ref=e685]:
+                - img [ref=e687]
+                - generic "Chat message from user" [ref=e690]:
+                  - paragraph [ref=e695]: I want to onboard a new supplier using the onboarding skill. The domain is stationerywholesale.co.uk. The raw categories are saved in setup/stationerywholesale/stationerywholesale_categories.txt. The selectors are saved in config/supplier_configs/stationerywholesale.co.uk.json. No login required.
+              - generic [ref=e697]:
+                - img [ref=e699]
+                - generic "Chat message from assistant" [ref=e702]:
+                  - paragraph [ref=e707]: Reading the supplier onboarding skill documentation to understand the 7-step workflow and requirements for onboarding stationerywholesale.co.uk
+              - generic [ref=e709]:
+                - img [ref=e711]
+                - generic "Chat message from assistant" [ref=e714]:
+                  - generic [ref=e715]:
+                    - generic [ref=e718]:
+                      - paragraph [ref=e719]:
+                        - text: "File read completed. Path:"
+                        - code [ref=e720]: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\.claude\skills\supplier-onboarding\SKILL.md
+                        - text: "Chars returned:"
+                        - code [ref=e721]: "35568"
+                      - paragraph [ref=e722]: See the Tool output expander for the file contents.
+                    - group [ref=e725]:
+                      - generic "keyboard_arrow_down Tool output" [ref=e743] [cursor=pointer]:
+                        - generic [ref=e727]:
+                          - generic [ref=e745]: keyboard_arrow_down
+                          - paragraph [ref=e732]: Tool output
+                      - generic [ref=e753]:
+                        - generic [ref=e755] [cursor=pointer]:
+                          - img [ref=e758]
+                          - generic [ref=e760]: "{"
+                        - generic [ref=e762]:
+                          - generic [ref=e763]:
+                            - generic [ref=e764]:
+                              - generic [ref=e765]:
+                                - text: "\""
+                                - generic [ref=e766]: ok
+                                - text: "\""
+                              - generic [ref=e767]: ":"
+                            - generic [ref=e769]: "true"
+                          - generic [ref=e770]:
+                            - generic [ref=e771]:
+                              - generic [ref=e772]:
+                                - text: "\""
+                                - generic [ref=e773]: path
+                                - text: "\""
+                              - generic [ref=e774]: ":"
+                            - generic [ref=e777]: "\"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\.claude\\skills\\supplier-onboarding\\SKILL.md\""
+                          - generic [ref=e778]:
+                            - generic [ref=e779]:
+                              - generic [ref=e780]:
+                                - text: "\""
+                                - generic [ref=e781]: content
+                                - text: "\""
+                              - generic [ref=e782]: ":"
+                            - generic [ref=e785]: "\"--- name: supplier-onboarding description: Guided supplier onboarding for Amazon FBA Agent System with deterministic file generation, atomic operations, and comprehensive validation. Use when onboarding new wholesale suppliers to the FBA analysis system. --- # Supplier Onboarding Onboard wholesale suppliers to the Amazon FBA Agent System through automated configuration generation, runner script creation, and comprehensive validation. ## Prerequisites Before starting, ensure: - [ ] Chrome running with debug port: `chrome --remote-debugging-port=9222 --user-data-dir=C:\\temp\\chrome-debug` - [ ] Repository location known - [ ] Python dependencies installed: `pip install -r requirements.txt` - [ ] User has supplier domain/URL ready ## Workflow Overview This skill follows a **7-step workflow**: 0. **Data Preprocessing** (LLM manual validation - Read/Write tools only) 1. **Gather Information** (Progressive discovery) 2. **Prepare Configurations** (Create JSON files) 3. **Invoke Wizard** (Generate runner + auth helper) 4. **Validate Files** (⚠️ CRITICAL: Read and analyze, not just check existence) 5. **Report Results** (Comprehensive summary) 6. **Pre-Run Verification** (LLM manual checks before execution) 7. **User Decision** (Test Run / Main Run / Fix Issues) --- ## Step 0: Data Preprocessing and Validation (LLM MANUAL WORK) **🚨 CRITICAL**: This entire step is performed MANUALLY by Claude using Read/Write tools. NO Python scripts are executed during this phase. **Purpose**: Prepare and validate all input files BEFORE invoking the wizard script. **When**: ALWAYS execute this step first when user provides raw data files (.txt, .md) or inline data. --- ### 0.1. Discover What User Provided **Check user's message for**: - File paths: `\"categories in setup/categories_{supplier}.txt\"` - Inline data: URLs or JSON pasted in chat - Domain: e.g., `\"supplier.co.uk\"`, `\"supplier.com\"` - Authentication: `\"no login required\"` or `\"requires username/[REDACTED]\"` **Action**: Use Read tool to examine any referenced files: ```bash # User mentioned: \"categories in setup/categories_supplier.txt\" Read: setup/categories_supplier.txt # User mentioned: \"selectors in setup/selectors_supplier.txt\" Read: setup/selectors_supplier.txt ``` **Checklist**: - [ ] Found categories source (file or inline data) - [ ] Found selectors source (file or inline data) - [ ] Identified data format (plain text, markdown, JSON) - [ ] Confirmed supplier domain --- ### 0.2. Validate Categories Content (LLM Manual Inspection) **Read the categories file line by line and check**: 1. **URL Format**: Each line must start with `http://` or `https://` 2. **Domain Match**: Each URL must contain the correct supplier domain 3. **No Wrong URLs**: Check for other suppliers' URLs 4. **Valid Syntax**: Proper URL structure 5. **Sufficient Quantity**: At least 1 URL (ideally 10+ for production) **Example Manual Validation**: ``` Line 1: https://supplier.com/category/toys ✅ Valid Line 2: https://supplier.com/category/gifts ✅ Valid Line 5: https://other-supplier.com/category ❌ WRONG DOMAIN - Remove Line 8: supplier.com/category/home ❌ Missing protocol - Add https:// Line 10: # This is a comment ✅ Skip (comment line) ``` **What to do if issues found**: - Remove lines with wrong domains - Add `https://` to URLs missing protocol - Skip comment lines (starting with # or //) - Count total valid URLs after cleanup **Checklist**: - [ ] Examined every URL manually - [ ] Verified correct supplier domain on each URL - [ ] Removed or fixed any invalid URLs - [ ] Counted total valid URLs --- ### 0.3. Validate Selectors Content (LLM Manual Inspection) **Read the selectors file and extract CSS selectors**: **If markdown format**: ```markdown ### Product Item Container ```css .product-card ``` ### Title ```css .product-card h3 a ``` ``` **LLM extracts from code blocks**: - Find all `### Header` lines - Extract CSS from following ` ```css ... ``` ` blocks - Map headers to selector keys (e.g., \"Product Item\" → `product_item`) **Required Selectors** (must be present): - `product_item` - Container for each product card - `title` - Product title selector - `price` - Price selector - `url` - Product URL selector **CSS Syntax Validation** (check manually): ```css ✅ Valid: .product-card h3 a ✅ Valid: span.price ✅ Valid: button:contains('Next Page') ✅ Valid: [data-product-id] ❌ Invalid: .product[data-id (missing closing bracket) ❌ Invalid: span(price (unbalanced parentheses) ❌ Invalid: :contains('Next' (missing closing parentheses) ``` **Checklist**: - [ ] Extracted all selectors from source file - [ ] Verified required keys present - [ ] Checked CSS syntax (balanced brackets/parentheses) - [ ] No empty values --- ### 0.4. Create JSON Files (LLM Manual Work) **Use Write tool to create TWO JSON files in setup/ folder**: #### **File 1**: `setup/{supplier_name}_categories.json` ```json { \"category_urls\": [ \"https://supplier.com/category/toys\", \"https:// …<truncated>\""
+                        - generic [ref=e787] [cursor=pointer]: "}"
+              - generic [ref=e655]:
+                - textbox "Ask about status, financials, traces, or request a run..." [ref=e658]
+                - button [disabled] [ref=e659]:
+                  - img [ref=e660]
+        - paragraph [ref=e152]:
+          - strong [ref=e153]: Live Progress
+          - text: "— Matches: 10809 (+0)"
+        - generic [ref=e155]:
+          - generic [ref=e157]:
+            - heading "🏥 System Health" [level=3] [ref=e162]: 🏥 System Health
+            - generic [ref=e165]:
+              - generic [ref=e171]:
+                - heading "System Progression" [level=4] [ref=e173]: System Progression
+                - paragraph [ref=e175]:
+                  - text: "Phase:"
+                  - strong [ref=e176]: initialized
+                - paragraph [ref=e177]:
+                  - text: "Category:"
+                  - strong [ref=e178]: "23"
+                  - text: /
+                  - strong [ref=e179]: "230"
+                - paragraph [ref=e180]: "Current: toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military"
+              - generic [ref=e186]:
+                - heading "Category Progress" [level=4] [ref=e188]: Category Progress
+                - paragraph [ref=e190]:
+                  - text: "Supplier Extracted:"
+                  - strong [ref=e191]: "1"
+                  - text: /
+                  - strong [ref=e192]: "2"
+                - paragraph [ref=e193]:
+                  - text: "Amazon Analyzed:"
+                  - strong [ref=e194]: "132"
+                  - text: /
+                  - strong [ref=e195]: "134"
+              - generic [ref=e201]:
+                - heading "Total Stats" [level=4] [ref=e203]: Total Stats
+                - paragraph [ref=e205]:
+                  - text: "Total Extracted:"
+                  - strong [ref=e206]: 10,267
+                - paragraph [ref=e207]:
+                  - text: "Total Processed:"
+                  - strong [ref=e208]: 10,809
+                - paragraph [ref=e209]:
+                  - text: "Fresh Starts:"
+                  - strong [ref=e210]: "0"
+          - generic [ref=e212]:
+            - heading "🔗 Amazon Matching Performance" [level=3] [ref=e217]: 🔗 Amazon Matching Performance
+            - generic [ref=e220]:
+              - generic [ref=e225]:
+                - paragraph [ref=e229]: Total Matches
+                - generic [ref=e231]: 10,809
+              - generic [ref=e236]:
+                - paragraph [ref=e240]: High Confidence Rate
+                - generic [ref=e242]: 36.1%
+              - generic [ref=e247]:
+                - paragraph [ref=e251]: No EAN Count
+                - generic [ref=e253]: "382"
+              - generic [ref=e258]:
+                - paragraph [ref=e262]: Primary Method
+                - generic [ref=e264]: Ean
+            - paragraph [ref=e268]:
+              - strong [ref=e269]: Confidence Distribution
+            - generic [ref=e271]:
+              - paragraph [ref=e277]:
+                - strong [ref=e278]: High
+                - text: ": 3,904"
+              - paragraph [ref=e284]:
+                - strong [ref=e285]: Medium
+                - text: ": 2,995"
+              - paragraph [ref=e291]:
+                - strong [ref=e292]: Low
+                - text: ": 3,680"
+              - paragraph [ref=e298]:
+                - strong [ref=e299]: "0"
+                - text: ": 228"
+              - paragraph [ref=e305]:
+                - strong [ref=e306]: None
+                - text: ": 2"
+        - heading "💰 Financial Performance" [level=3] [ref=e311]: 💰 Financial Performance
+        - generic [ref=e314]:
+          - generic [ref=e319]:
+            - paragraph [ref=e323]: Files Scanned
+            - generic [ref=e325]: "1"
+          - generic [ref=e330]:
+            - paragraph [ref=e334]: Total Rows
+            - generic [ref=e336]: 17,290
+          - generic [ref=e341]:
+            - paragraph [ref=e345]: Profitable Products
+            - generic [ref=e347]: 10,480
+          - generic [ref=e352]:
+            - paragraph [ref=e356]: Average ROI
+            - generic [ref=e358]: 195.7%
+        - generic [ref=e362]:
+          - heading "Total Profit Potential" [level=3] [ref=e364]: Total Profit Potential
+          - heading "£42,153.16" [level=1] [ref=e370]: £42,153.16
+        - separator [ref=e375]
+        - heading "📊 Analytics Charts" [level=2] [ref=e380]: 📊 Analytics Charts
+        - generic [ref=e383]:
+          - generic [ref=e391]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic: −20k
+                    - generic:
+                      - generic: −10k
+                    - generic:
+                      - generic: "0"
+                    - generic:
+                      - generic: 10k
+                    - generic:
+                      - generic: 20k
+                    - generic:
+                      - generic: 30k
+                  - generic:
+                    - generic:
+                      - generic: "0"
+                    - generic:
+                      - generic: 2k
+                    - generic:
+                      - generic: 4k
+                    - generic:
+                      - generic: 6k
+                    - generic:
+                      - generic: 8k
+                    - generic:
+                      - generic: 10k
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: ROI Histogram (All Products)
+                - generic:
+                  - generic: ROI (%)
+                - generic:
+                  - generic: Count
+            - toolbar [ref=e405]:
+              - button "Download plot as a PNG" [ref=e407] [cursor=pointer]:
+                - img [ref=e408]
+              - generic [ref=e410]:
+                - button "Zoom" [ref=e411] [cursor=pointer]:
+                  - img [ref=e412]
+                - button "Pan" [ref=e414] [cursor=pointer]:
+                  - img [ref=e415]
+              - generic [ref=e417]:
+                - button "Zoom in" [ref=e418] [cursor=pointer]:
+                  - img [ref=e419]
+                - button "Zoom out" [ref=e421] [cursor=pointer]:
+                  - img [ref=e422]
+                - button "Autoscale" [ref=e424] [cursor=pointer]:
+                  - img [ref=e425]
+                - button "Reset axes" [ref=e427] [cursor=pointer]:
+                  - img [ref=e428]
+              - button "Fullscreen" [ref=e431] [cursor=pointer]:
+                - img [ref=e432]
+            - img
+          - generic [ref=e441]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic: "0"
+                    - generic:
+                      - generic: "200"
+                    - generic:
+                      - generic: "400"
+                    - generic:
+                      - generic: "600"
+                    - generic:
+                      - generic: "800"
+                    - generic:
+                      - generic: "1000"
+                  - generic:
+                    - generic:
+                      - generic: "0"
+                    - generic:
+                      - generic: 2k
+                    - generic:
+                      - generic: 4k
+                    - generic:
+                      - generic: 6k
+                    - generic:
+                      - generic: 8k
+                    - generic:
+                      - generic: 10k
+                    - generic:
+                      - generic: 12k
+                    - generic:
+                      - generic: 14k
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Price Ratio (Amazon/Supplier)
+                - generic:
+                  - generic: Price Ratio (x)
+                - generic:
+                  - generic: Count
+            - toolbar [ref=e455]:
+              - button "Download plot as a PNG" [ref=e457] [cursor=pointer]:
+                - img [ref=e458]
+              - generic [ref=e460]:
+                - button "Zoom" [ref=e461] [cursor=pointer]:
+                  - img [ref=e462]
+                - button "Pan" [ref=e464] [cursor=pointer]:
+                  - img [ref=e465]
+              - generic [ref=e467]:
+                - button "Zoom in" [ref=e468] [cursor=pointer]:
+                  - img [ref=e469]
+                - button "Zoom out" [ref=e471] [cursor=pointer]:
+                  - img [ref=e472]
+                - button "Autoscale" [ref=e474] [cursor=pointer]:
+                  - img [ref=e475]
+                - button "Reset axes" [ref=e477] [cursor=pointer]:
+                  - img [ref=e478]
+              - button "Fullscreen" [ref=e481] [cursor=pointer]:
+                - img [ref=e482]
+            - img
+        - alert [ref=e490]:
+          - generic [ref=e494]:
+            - paragraph [ref=e495]: "Error creating Profit vs Price chart: Invalid element(s) received for the 'size' property of scattergl.marker Invalid elements include: [nan, nan, nan, nan, nan, nan, nan, nan, nan, nan]"
+            - generic [ref=e497]:
+              - code [ref=e500]: "The 'size' property is a number and may be specified as: - An int or float in the interval [0, inf] - A tuple, list, or one-dimensional numpy array of the above"
+              - generic:
+                - button "Copy to clipboard":
+                  - img
+        - generic [ref=e508]:
+          - img:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: fba_seller_count
+                  - generic:
+                    - generic: fbm_seller_count
+                - generic:
+                  - generic:
+                    - generic: −1
+                  - generic:
+                    - generic: −0.5
+                  - generic:
+                    - generic: "0"
+                  - generic:
+                    - generic: "0.5"
+                  - generic:
+                    - generic: "1"
+          - img:
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Seller Mix (Aggregated)
+              - generic:
+                - generic: Type
+              - generic:
+                - generic: Count
+          - toolbar [ref=e522]:
+            - button "Download plot as a PNG" [ref=e524] [cursor=pointer]:
+              - img [ref=e525]
+            - generic [ref=e527]:
+              - button "Zoom" [ref=e528] [cursor=pointer]:
+                - img [ref=e529]
+              - button "Pan" [ref=e531] [cursor=pointer]:
+                - img [ref=e532]
+            - generic [ref=e534]:
+              - button "Zoom in" [ref=e535] [cursor=pointer]:
+                - img [ref=e536]
+              - button "Zoom out" [ref=e538] [cursor=pointer]:
+                - img [ref=e539]
+              - button "Autoscale" [ref=e541] [cursor=pointer]:
+                - img [ref=e542]
+              - button "Reset axes" [ref=e544] [cursor=pointer]:
+                - img [ref=e545]
+            - button "Fullscreen" [ref=e548] [cursor=pointer]:
+              - img [ref=e549]
+          - img
+        - heading "📋 Latest Logs" [level=3] [ref=e555]: 📋 Latest Logs
+        - paragraph [ref=e560]:
+          - strong [ref=e561]: "Showing last 200 lines from:"
+          - code [ref=e562]: run_custom_efghousewares-co-uk_20260225_110403.log
+        - generic [ref=e564]:
+          - code [ref=e567]: "2026-02-25 11:04:32,345 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic 2026-02-25 11:04:32,349 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__d892bcd1_processing_state.json (30 entries) saved successfully 2026-02-25 11:04:32,350 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True 2026-02-25 11:04:32,350 - utils.fixed_enhanced_state_manager - DEBUG - Guardian fallback save completed: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\efghousewares_co_uk__sandbox__d892bcd1_processing_state.json 2026-02-25 11:04:32,350 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier) 2026-02-25 11:04:32,350 - utils.fixed_enhanced_state_manager - INFO - ATOMIC SAVE (category-init) 2026-02-25 11:04:32,350 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: State hardening completed (critical keys guaranteed) 2026-02-25 11:04:32,350 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: runtime mode; skipping file-grounded recompute 2026-02-25 11:04:32,351 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Checking atomic writer availability 2026-02-25 11:04:32,351 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Checking legacy atomic operations 2026-02-25 11:04:32,351 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Using WindowsSaveGuardian as final fallback 2026-02-25 11:04:32,351 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic 2026-02-25 11:04:32,385 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__d892bcd1_processing_state.json (30 entries) saved successfully 2026-02-25 11:04:32,386 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True 2026-02-25 11:04:32,386 - utils.fixed_enhanced_state_manager - DEBUG - Guardian fallback save completed: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\efghousewares_co_uk__sandbox__d892bcd1_processing_state.json 2026-02-25 11:04:32,386 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier) 2026-02-25 11:04:32,386 - utils.fixed_enhanced_state_manager - INFO - ATOMIC SAVE (freeze-category) 2026-02-25 11:04:32,386 - utils.fixed_enhanced_state_manager - INFO - FROZEN DENOMINATOR: Category https://www.efghousewares.co.uk/category/stationery 0 products (LOCKED) 2026-02-25 11:04:32,387 - PassiveExtractionWorkflow - INFO - FROZEN DENOMINATOR: Empty category 1 0 products 2026-02-25 11:04:32,387 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: State hardening completed (critical keys guaranteed) 2026-02-25 11:04:32,387 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: runtime mode; skipping file-grounded recompute 2026-02-25 11:04:32,387 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Checking atomic writer availability 2026-02-25 11:04:32,387 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Checking legacy atomic operations 2026-02-25 11:04:32,387 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Using WindowsSaveGuardian as final fallback 2026-02-25 11:04:32,388 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic 2026-02-25 11:04:32,410 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__d892bcd1_processing_state.json (30 entries) saved successfully 2026-02-25 11:04:32,410 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True 2026-02-25 11:04:32,410 - utils.fixed_enhanced_state_manager - DEBUG - Guardian fallback save completed: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\efghousewares_co_uk__sandbox__d892bcd1_processing_state.json 2026-02-25 11:04:32,410 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier) 2026-02-25 11:04:32,410 - utils.fixed_enhanced_state_manager - INFO - ATOMIC SAVE 2026-02-25 11:04:32,410 - PassiveExtractionWorkflow - INFO - TOTALS COMMITTED: Resume pointers now enabled for empty category 2026-02-25 11:04:32,410 - utils.fixed_enhanced_state_manager - ERROR - MARK_CATEGORY_COMPLETED CALLED 2026-02-25 11:04:32,410 - utils.fixed_enhanced_state_manager - ERROR - CATEGORY_COMPLETION_CALL: url=https://www.efghousewares.co.uk/category/stationer... absolute_cat_index=1 2026-02-25 11:04:32,411 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: State hardening completed (critical keys guaranteed) 2026-02-25 11:04:32,411 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: runtime mode; skipping file-grounded recompute 2026-02-25 11:04:32,411 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Checking atomic writer availability 2026-02-25 11:04:32,411 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Checking legacy atomic operations 2026-02-25 11:04:32,411 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: Using WindowsSaveGuardian as final fallback 2026-02-25 11:04:32,411 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic 2026-02-25 11:04:32,430 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__d892bcd1_processing_state.json (30 entries) saved successfully 2026-02-25 11:04:32,431 - utils.fixed_enhanced_state_manager - DEBUG - ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True 2026-02-25 11:04:32,431 - utils.fixed_enhanced_state_manager - DEBUG - Guardian fallback save completed: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\efghousewares_co_uk__sandbox__d892bcd1_processing_state.json 2026-02-25 11:04:32,431 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False 2026-02-25 11:04:32,431 - utils.fixed_enhanced_state_manager - INFO - ATOMIC SAVE (category-complete) 2026-02-25 11:04:32,431 - utils.fixed_enhanced_state_manager - INFO - CATEGORY_INDEX_TRACKER: Category completed https://www.efghousewares.co.uk/category/stationery next pci=2 2026-02-25 11:04:32,432 - PassiveExtractionWorkflow - INFO - EMPTY CATEGORY COMPLETED: Category 1 marked as completed 2026-02-25 11:04:32,432 - PassiveExtractionWorkflow - INFO - Completed batch 1: 0 total products extracted so far 2026-02-25 11:04:32,432 - __main__ - INFO - ✅ Workflow completed successfully 2026-02-25 11:04:32,432 - __main__ - INFO - 🧠 Keeping browser persistent for next run - not calling cleanup() 2026-02-25 11:04:32,434 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop"
+          - generic:
+            - button "Copy to clipboard":
+              - img
+  - img [ref=e568]

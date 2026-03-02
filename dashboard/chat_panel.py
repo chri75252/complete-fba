@@ -4,11 +4,14 @@ from pathlib import Path
 import streamlit as st
 
 from control_plane.chat_orchestrator import (
+    ToolCall,
+    AgentStep,
+    agent_plan_step,
     audit_tool_call,
     execute_tool_call,
-    is_write_tool,
     plan_tool_call,
-    ToolCall,
+    respond_to_tool_result,
+    _compute_rag_info,
 )
 from control_plane.env_config import ensure_llm_env
 from control_plane.llm.providers import get_provider
@@ -80,10 +83,96 @@ def _truncate_value(
 def _ensure_state() -> None:
     if "chat_messages" not in st.session_state:
         st.session_state["chat_messages"] = []
+    if "agent_trace" not in st.session_state:
+        st.session_state["agent_trace"] = []
     if "pending_tool_call" not in st.session_state:
         st.session_state["pending_tool_call"] = None
         st.session_state["pending_user_text"] = None
         st.session_state["pending_rag_info"] = None
+
+
+MAX_AGENT_STEPS = 10
+
+
+def _run_agent_loop(user_text: str, base_dir: str) -> None:
+    """Drive the autonomous agent loop within one Streamlit execution."""
+    import streamlit as st
+
+    repo_root = Path(base_dir)
+    scratchpad: list[dict] = st.session_state.get("agent_scratchpad", [])
+    trace: list[dict] = st.session_state.get("agent_trace", [])
+    chat_history = st.session_state.get("chat_messages", [])
+
+    rag_info, _ = _compute_rag_info(user_text)
+
+    with st.status("Agent is working...", expanded=True) as status:
+        for step_num in range(MAX_AGENT_STEPS):
+            step = agent_plan_step(user_text, repo_root, scratchpad, chat_history, (rag_info, ""))
+
+            if step.kind == "final_answer":
+                status.update(label="Done", state="complete")
+                st.session_state["chat_messages"].append(
+                    {
+                        "role": "assistant",
+                        "content": step.text,
+                        "thought_trace": trace,
+                    }
+                )
+                st.session_state["agent_scratchpad"] = []
+                st.session_state["agent_trace"] = []
+                st.rerun()
+                return
+
+            if step.kind == "approval_needed":
+                status.update(label="Waiting for approval...", state="running")
+                st.session_state["pending_tool_call"] = step.tool_call
+                st.session_state["pending_user_text"] = user_text
+                st.session_state["pending_rag_info"] = rag_info
+                st.session_state["agent_scratchpad"] = scratchpad
+                st.session_state["agent_trace"] = trace
+                st.rerun()
+                return
+
+            # Read tool executed
+            st.write(f"Step {step_num + 1}: `{step.tool_call.name}` ✓")
+            if step.tool_call.explanation:
+                with st.expander(f"Thought {step_num + 1}", expanded=True):
+                    st.markdown(step.tool_call.explanation)
+
+            trace.append(
+                {
+                    "step": step_num + 1,
+                    "tool": step.tool_call.name,
+                    "explanation": step.tool_call.explanation,
+                }
+            )
+            st.session_state["agent_trace"] = trace
+
+            scratchpad.append(
+                {
+                    "role": "action",
+                    "tool": step.tool_call.name,
+                    "params": step.tool_call.params,
+                }
+            )
+            scratchpad.append(
+                {
+                    "role": "observation",
+                    "result": step.result,
+                }
+            )
+
+        status.update(label="Step limit reached", state="error")
+        st.session_state["chat_messages"].append(
+            {
+                "role": "assistant",
+                "content": "I reached the maximum number of steps. See my earlier tool outputs for what I found.",
+                "thought_trace": trace,
+            }
+        )
+        st.session_state["agent_scratchpad"] = []
+        st.session_state["agent_trace"] = []
+        st.rerun()
 
 
 def render_chat_panel(base_dir: str) -> None:
@@ -128,6 +217,15 @@ def render_chat_panel(base_dir: str) -> None:
     for msg in st.session_state["chat_messages"]:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
+            thought_trace = msg.get("thought_trace")
+            if thought_trace:
+                with st.expander("Thought trace", expanded=False):
+                    for item in thought_trace:
+                        step = item.get("step")
+                        tool = item.get("tool")
+                        explanation = item.get("explanation") or "(no explanation provided)"
+                        st.markdown(f"**Step {step}** - `{tool}`")
+                        st.markdown(explanation)
             tool_result = msg.get("tool_result")
             if tool_result is not None:
                 with st.expander("Tool output", expanded=False):
@@ -153,59 +251,61 @@ def render_chat_panel(base_dir: str) -> None:
                 result = execute_tool_call(tool_call, Path(base_dir))
                 audit_tool_call(user_text, tool_call, result, rag_info)
 
-                # Enhanced messaging for product list refresh
-                if tool_call.name == "enqueue_product_list_refresh" and result.get("ok"):
-                    run_id = result.get("run_id", "unknown")
-                    sandbox_supplier = result.get("sandbox_supplier", "unknown")
-                    assistant_content = f"""✅ Job queued successfully!
-
-**Run ID:** `{run_id}`
-**Supplier:** `{sandbox_supplier}`
-
-⚠️ **ACTION REQUIRED:** Start the worker to execute:
-```
-python -m control_plane worker
-```
-
-**Monitor progress:**
-- Status: `OUTPUTS/CONTROL_PLANE/status/{run_id}.json`
-- Log: `OUTPUTS/CONTROL_PLANE/logs/{run_id}.log`
-- Pending jobs: Check `OUTPUTS/CONTROL_PLANE/jobs/pending/`
-
-The worker will pick up the job and move it to running, then done/failed."""
-                else:
-                    assistant_content = (
-                        tool_call.explanation
-                        if isinstance(getattr(tool_call, "explanation", None), str)
-                        and tool_call.explanation
-                        else str(result.get("message"))
-                        if isinstance(result.get("message"), str) and result.get("message")
-                        else f"Executed tool: `{tool_call.name}`\n\nResult: `{result.get('ok')}`"
-                    )
-
                 if (
                     result.get("ok")
                     and isinstance(result.get("run_id"), str)
                     and result.get("run_id")
                 ):
                     st.session_state["last_run_id"] = result["run_id"]
-                st.session_state["chat_messages"].append(
-                    {
-                        "role": "assistant",
-                        "content": assistant_content,
-                        "tool_result": result,
-                    }
+                    if isinstance(result.get("sandbox_supplier"), str):
+                        st.session_state["last_sandbox_supplier"] = result["sandbox_supplier"]
+
+                # Append write result to scratchpad and clear pending state
+                scratchpad = st.session_state.get("agent_scratchpad", [])
+                scratchpad.append(
+                    {"role": "action", "tool": tool_call.name, "params": tool_call.params}
                 )
+                scratchpad.append({"role": "observation", "result": result})
+                st.session_state["agent_scratchpad"] = scratchpad
+
+                # Preserve the user text so the loop can resume
+                if user_text:
+                    st.session_state["agent_user_text"] = user_text
 
                 st.session_state["pending_tool_call"] = None
                 st.session_state["pending_user_text"] = None
                 st.session_state["pending_rag_info"] = None
+
                 st.rerun()
 
             if st.button("Cancel"):
                 st.session_state["pending_tool_call"] = None
                 st.session_state["pending_user_text"] = None
                 st.session_state["pending_rag_info"] = None
+                st.session_state["agent_scratchpad"] = []
+                st.session_state["agent_trace"] = []
+                st.session_state["agent_user_text"] = None
+                st.session_state["chat_messages"].append(
+                    {"role": "assistant", "content": "Action cancelled by user."}
+                )
+                st.rerun()
+
+    # Resume agent loop if there's an active scratchpad and no pending UI blocker
+    if st.session_state.get("agent_scratchpad") and not st.session_state.get("pending_tool_call"):
+        resume_text = st.session_state.get("agent_user_text", "")
+        if resume_text:
+            _run_agent_loop(resume_text, base_dir)
+            return
+
+    if st.session_state.get("last_run_id"):
+        cols = st.columns([1, 4])
+        with cols[0]:
+            if st.button("🔍 Validate Last Run", type="primary", use_container_width=True):
+                run_id = st.session_state.get("last_run_id")
+                audit_prompt = f"The workflow for run {run_id} has completed. Please perform a rigorous post-run audit using validate_run_integrity. Summarize your findings."
+
+                st.session_state["chat_messages"].append({"role": "user", "content": audit_prompt})
+                _run_agent_loop(audit_prompt, base_dir)
                 st.rerun()
 
     user_input = st.chat_input("Ask about status, financials, traces, or request a run...")
@@ -340,36 +440,6 @@ The worker will pick up the job and move it to running, then done/failed."""
 
     import re
 
-    explicit_run_id = re.search(
-        r"\b([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b",
-        user_input,
-        re.IGNORECASE,
-    )
-    cancel_pat = re.compile(
-        r"\b(?:cancel|stop|kill|abort|terminate)\b.*\b(?:run|job|process)\b",
-        re.IGNORECASE,
-    )
-    if cancel_pat.search(user_input):
-        st.session_state["chat_messages"].append({"role": "user", "content": user_input})
-        run_id = explicit_run_id.group(1) if explicit_run_id else ""
-        tool_call = ToolCall(
-            name="cancel_run",
-            params={"run_id": run_id},
-            explanation=None,
-            expected_outputs=[],
-        )
-        result = execute_tool_call(tool_call, Path(base_dir))
-        audit_tool_call(user_input, tool_call, result, {"meta": {}})
-        st.session_state["chat_messages"].append(
-            {
-                "role": "assistant",
-                "content": f"Cancel requested for run `{result.get('run_id') or run_id}`.",
-                "tool_result": result,
-            }
-        )
-        st.rerun()
-        return
-
     stop_at_pat = re.search(
         r"\b(?:stop|halt|end)\s+(?:at|after)\s+(\d+)\s+products?\b",
         user_input,
@@ -393,6 +463,8 @@ The worker will pick up the job and move it to running, then done/failed."""
 
     provider_ok = True
     try:
+        from control_plane.llm.providers import get_provider
+
         _ = get_provider()
     except Exception as e:
         provider_ok = False
@@ -401,39 +473,6 @@ The worker will pick up the job and move it to running, then done/failed."""
         )
 
     if not provider_ok:
-        return
-
-    tool_call, rag_info = plan_tool_call(user_input, Path(base_dir))
-
-    if tool_call.explanation:
-        st.session_state["chat_messages"].append(
-            {"role": "assistant", "content": tool_call.explanation, "tool_result": None}
-        )
-
-    if not tool_call.name:
-        st.session_state["chat_messages"].append(
-            {"role": "assistant", "content": "I couldn't select a tool for that request."}
-        )
-        return
-
-    if is_write_tool(tool_call.name):
-        st.session_state["pending_tool_call"] = tool_call
-        st.session_state["pending_user_text"] = user_input
-        st.session_state["pending_rag_info"] = rag_info
         st.rerun()
 
-    result = execute_tool_call(tool_call, Path(base_dir))
-    audit_tool_call(user_input, tool_call, result, rag_info)
-
-    assistant_content = (
-        tool_call.explanation
-        if isinstance(getattr(tool_call, "explanation", None), str) and tool_call.explanation
-        else str(result.get("message"))
-        if isinstance(result.get("message"), str) and result.get("message")
-        else f"Tool: `{tool_call.name}`\n\nResult: `{result.get('ok')}`"
-    )
-    st.session_state["chat_messages"].append(
-        {"role": "assistant", "content": assistant_content, "tool_result": result}
-    )
-
-    st.rerun()
+    _run_agent_loop(user_input, base_dir)

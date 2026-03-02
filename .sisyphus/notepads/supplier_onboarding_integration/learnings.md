@@ -1,0 +1,4 @@
+- Task 3: Updated `control_plane/tools/output_writer.py` to add `"OUTPUTS/CONTROL_PLANE/jobs/onboarding_staging"` to `_ALLOWED_WRITE_DIRS` tuple. Verified import passes without error.
+- Task 1: Updated `enqueue_onboarding_job` in `control_plane/tools/repo_files.py` to accept `supplier_domain: str = "unknown"` parameter and pass it to the job payload. Also updated `chat_orchestrator.py` to: (1) add `"supplier_domain": "poundwholesale.co.uk"` to the `enqueue_onboarding` tool schema in `tools_desc`, and (2) extract and pass `supplier_domain` in `execute_tool_call`.
+- Task 2: Expanded `_ALLOWED_READ_DIR_PREFIXES` and `_ALLOWED_LIST_DIRS` in `control_plane/tools/repo_files.py` to include `.claude/skills/` and `setup/` directories. This enables the LLM to read the supplier onboarding skill and test data files.
+- Verification: All changes pass Python import check (`python -c "import control_plane.chat_orchestrator; import control_plane.tools.repo_files"`) without error.

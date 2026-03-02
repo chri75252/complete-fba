@@ -1,0 +1,60 @@
+{
+  "supplier_id": "stationerywholesale-co-uk",
+  "supplier_name": "Stationerywholesale.Co.Uk",
+  "base_url": "https://stationerywholesale.co.uk/",
+  "field_mappings": {
+    "product_item": [
+      "article.card"
+    ],
+    "title": [
+      ".card-title a",
+      ".card-title"
+    ],
+    "price": [
+      "[data-product-price-without-tax]"
+    ],
+    "url": [
+      ".card-title a"
+    ],
+    "image": [
+      "article.card img.card-image"
+    ],
+    "ean": [
+      "dt.upc-label + dd.productView-info-value",
+      "dt.upc-label + dd"
+    ],
+    "sku": [
+      "dt.productView-info-name--sku + dd.productView-info-value"
+    ],
+    "out_of_stock": [
+      "input#form-action-addToCart[disabled]"
+    ],
+    "product_detail_title": [
+      "h1.productView-title"
+    ],
+    "product_detail_price": [
+      "[data-product-price-without-tax]"
+    ],
+    "product_detail_image": [
+      ".productView-imageCarousel-main img"
+    ]
+  },
+  "navigation_configuration": {
+    "navigation_strategy": "predefined_categories",
+    "homepage_products_unreliable": true,
+    "use_predefined_categories": true,
+    "predefined_categories": []
+  },
+  "pagination": {
+    "use_url_navigation": true,
+    "url_param": "?limit=100&page={page_num}",
+    "next_button_selector": [
+      "li.pagination-item--next a"
+    ]
+  },
+  "auto_discovered": false,
+  "discovery_timestamp": "2026-03-01T10:00:00.000000",
+  "success": true,
+  "use_ai_category_progression": false,
+  "authentication_required": false
+}

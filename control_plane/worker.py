@@ -342,6 +342,7 @@ class ControlPlaneWorker:
                 write_json_atomic(status_path, status)
 
                 with open(log_path, "w", encoding="utf-8") as log_file:
+                    env["CONTROL_PLANE_LOG_PATH"] = str(log_path)
                     try:
                         proc = subprocess.Popen(
                             cmd,
