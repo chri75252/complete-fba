@@ -50,3 +50,13 @@
 ## 2026-03-02 expected output verification design
 - Kept deep schema validation focused on linking_map rows only; removed cached_products deep schema sampling from standard workflow validation.
 - Preserved triangulation fallback path and broadened trigger to run when any validation errors exist, including missing expected outputs.
+
+## 2026-03-05 - Regression root-cause decisions
+
+- Classified the `cancel_run` problem as a control-flow/prompt interaction bug, not a missing `st.rerun()` or uncleared `pending_tool_call` bug.
+- Classified `ask_clarify` behavior as prompt-policy overconstraint (`never guess paths` + `missing => ask_clarify`) rather than tool execution failure.
+- Treated prompt claim "backend resolves empty cancel run_id from last_run_id" as inconsistent with current executor implementation, which resolves from job/status files.
+
+## 2026-03-05 - Follow-up decision from external plan review
+
+- Treat external findings as partially stale: keep accepted fixes marked as complete (`ask_clarify` terminal persistence, category-cap translation, deterministic expected-output merge, worker `.env` inheritance), and keep only the cancel-loop post-approval control-flow behavior as actionable.

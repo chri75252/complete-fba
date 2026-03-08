@@ -1,20 +1,18 @@
 import os
+import sys
+import time
 from pathlib import Path
 
 import streamlit as st
 
 from control_plane.chat_orchestrator import (
     ToolCall,
-    AgentStep,
+    _compute_rag_info,
     agent_plan_step,
     audit_tool_call,
     execute_tool_call,
-    plan_tool_call,
-    respond_to_tool_result,
-    _compute_rag_info,
 )
 from control_plane.env_config import ensure_llm_env
-from control_plane.llm.providers import get_provider
 from control_plane.paths import get_paths
 from control_plane.rag_index import write_rag_index
 from control_plane.rag_retriever import load_rag_index
@@ -34,7 +32,7 @@ def _truncate_value(
     if value is None:
         return None
 
-    if isinstance(value, (bool, int, float)):
+    if isinstance(value, bool | int | float):
         return value
 
     if isinstance(value, str):
@@ -59,8 +57,7 @@ def _truncate_value(
 
     if isinstance(value, dict):
         out: dict[str, object] = {}
-        count = 0
-        for k, v in value.items():
+        for count, (k, v) in enumerate(value.items()):
             if count >= max_dict_items:
                 out["…"] = f"({len(value) - max_dict_items} more keys)"
                 break
@@ -71,7 +68,6 @@ def _truncate_value(
                 max_dict_items=max_dict_items,
                 depth=depth - 1,
             )
-            count += 1
         return out
 
     text = repr(value)
@@ -116,10 +112,12 @@ def _run_agent_loop(user_text: str, base_dir: str) -> None:
                         "role": "assistant",
                         "content": step.text,
                         "thought_trace": trace,
+                        "tool_result": step.result,
                     }
                 )
                 st.session_state["agent_scratchpad"] = []
                 st.session_state["agent_trace"] = []
+                st.session_state["agent_user_text"] = None
                 st.rerun()
                 return
 
@@ -162,6 +160,15 @@ def _run_agent_loop(user_text: str, base_dir: str) -> None:
                 }
             )
 
+            if step.tool_call is not None and step.result is not None:
+                st.session_state["chat_messages"].append(
+                    {
+                        "role": "assistant",
+                        "content": f"Tool output from `{step.tool_call.name}`.",
+                        "tool_result": step.result,
+                    }
+                )
+
         status.update(label="Step limit reached", state="error")
         st.session_state["chat_messages"].append(
             {
@@ -185,6 +192,38 @@ def render_chat_panel(base_dir: str) -> None:
     with col_b:
         st.write("LLM provider:")
         st.code(repr(os.environ.get("CONTROL_PLANE_LLM_PROVIDER", "none")), language="text")
+
+        with st.expander("Provenance", expanded=False):
+
+            def _mtime(p: str | None) -> str | None:
+                if not p:
+                    return None
+                try:
+                    ts = Path(p).stat().st_mtime
+                    return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts))
+                except Exception:
+                    return None
+
+            st.json(
+                {
+                    "python": sys.version.split()[0],
+                    "cwd": os.getcwd(),
+                    "dashboard.chat_panel": {
+                        "file": __file__,
+                        "mtime": _mtime(__file__),
+                    },
+                    "control_plane.chat_orchestrator": {
+                        "file": getattr(
+                            sys.modules.get("control_plane.chat_orchestrator"), "__file__", None
+                        ),
+                        "mtime": _mtime(
+                            getattr(
+                                sys.modules.get("control_plane.chat_orchestrator"), "__file__", None
+                            )
+                        ),
+                    },
+                }
+            )
 
         rag_index = load_rag_index(get_paths().rag_index_path)
         rag_summary = {
@@ -250,6 +289,14 @@ def render_chat_panel(base_dir: str) -> None:
             if st.button("Confirm execute"):
                 result = execute_tool_call(tool_call, Path(base_dir))
                 audit_tool_call(user_text, tool_call, result, rag_info)
+
+                st.session_state["chat_messages"].append(
+                    {
+                        "role": "assistant",
+                        "content": f"Executed `{tool_call.name}`.",
+                        "tool_result": result,
+                    }
+                )
 
                 if (
                     result.get("ok")
@@ -380,8 +427,22 @@ def render_chat_panel(base_dir: str) -> None:
         )
         if both_match and not (mpc_match or mp_match or natural_match or analyze_match):
             val = int(both_match.group(1))
-            new_params["max_products"] = val
             new_params["max_products_per_category"] = val
+            per_category_intent = bool(
+                re.search(r"\b(per\s+category|each\s+category)\b", user_input, re.IGNORECASE)
+            )
+            url_count = 0
+            if isinstance(current_tool.params.get("category_urls"), list):
+                url_count = len(
+                    [
+                        u
+                        for u in current_tool.params.get("category_urls")
+                        if isinstance(u, str) and u.strip()
+                    ]
+                )
+            new_params["max_products"] = (
+                val * url_count if per_category_intent and url_count > 1 else val
+            )
             updated_params = True
 
         if not mp_match:
@@ -401,6 +462,27 @@ def render_chat_panel(base_dir: str) -> None:
                 and int(new_params.get("max_products") or 0) > 0
             ):
                 new_params["max_products_per_category"] = int(new_params["max_products"])
+
+            per_category_intent = bool(
+                re.search(r"\b(per\s+category|each\s+category)\b", user_input, re.IGNORECASE)
+            )
+            url_count = 0
+            if isinstance(current_tool.params.get("category_urls"), list):
+                url_count = len(
+                    [
+                        u
+                        for u in current_tool.params.get("category_urls")
+                        if isinstance(u, str) and u.strip()
+                    ]
+                )
+            if per_category_intent and url_count > 1:
+                try:
+                    mpc = int(new_params.get("max_products_per_category") or 0)
+                    mp = new_params.get("max_products")
+                    if mpc > 0 and (mp is None or int(mp) == mpc):
+                        new_params["max_products"] = mpc * url_count
+                except Exception:
+                    pass
 
             st.session_state["pending_tool_call"] = ToolCall(
                 name=current_tool.name,

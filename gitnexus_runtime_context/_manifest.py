@@ -1,0 +1,1028 @@
+"""Generated selection manifest for GitNexus runtime context."""
+
+SELECTION_SUMMARY = {
+  "generated_at_utc": "2026-03-07T21:35:40.434131+00:00",
+  "rules_file": "C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/config/gitnexus_scope_rules.json",
+  "sandbox_min_unique_suppliers": 0,
+  "total_selected_items": 125,
+  "categories": {
+    "amazon_cache:latest": 20,
+    "cached_products:main": 11,
+    "cached_products:sandbox_latest": 10,
+    "financial_reports:main_largest_per_supplier": 6,
+    "financial_reports:sandbox_latest": 5,
+    "linking_maps:main": 9,
+    "linking_maps:sandbox_latest": 10,
+    "logs_debug:main_latest": 5,
+    "logs_debug:sandbox_latest": 5,
+    "manifests:main": 11,
+    "manifests:sandbox": 5,
+    "processing_states:main": 13,
+    "processing_states:sandbox_latest": 10,
+    "products_lists:latest": 5
+  },
+  "selected": [
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B013UWIZL0_028503053712.json",
+      "size_bytes": 3116,
+      "mtime_iso": "2026-03-06T16:42:45.097630+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B01N6Y5KHS_3574661237008.json",
+      "size_bytes": 14702,
+      "mtime_iso": "2026-03-05T04:09:58.399007+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B075MLB5DB_5012866330875.json",
+      "size_bytes": 5924,
+      "mtime_iso": "2026-03-06T16:43:27.717687+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B07FD7QRPG_5012866020288.json",
+      "size_bytes": 6329,
+      "mtime_iso": "2026-03-06T16:44:11.446546+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09PNDS14V_5023797203589.json",
+      "size_bytes": 7685,
+      "mtime_iso": "2026-03-06T16:41:02.872447+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09PNDS14V_5023797209406.json",
+      "size_bytes": 7685,
+      "mtime_iso": "2026-03-06T16:39:48.424166+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09PNDS14V_5055323141379.json",
+      "size_bytes": 7685,
+      "mtime_iso": "2026-03-06T16:38:33.350327+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09WLLR3CR_5023797401381.json",
+      "size_bytes": 3661,
+      "mtime_iso": "2026-03-06T16:40:27.023940+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09WLLR3CR_Soft_Acrylic_Cable_Knitted_Bootees__by_Soft_Touch_.json",
+      "size_bytes": 3690,
+      "mtime_iso": "2026-03-06T16:37:16.602056+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0BFV6D5FB_28503053637.json",
+      "size_bytes": 5159,
+      "mtime_iso": "2026-03-06T16:44:45.393883+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0BKPMWSF1_5023797310829.json",
+      "size_bytes": 4670,
+      "mtime_iso": "2026-03-06T16:39:13.329608+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0BV5BFKLX_5023797208607.json",
+      "size_bytes": 3626,
+      "mtime_iso": "2026-03-06T16:37:56.426370+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0CW3K59XJ_5055499002382.json",
+      "size_bytes": 6215,
+      "mtime_iso": "2026-03-05T03:50:27.474960+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0F3CHCGV2_5012866625223.json",
+      "size_bytes": 5032,
+      "mtime_iso": "2026-03-06T16:46:04.243211+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0F43KZDGT_5060347220245.json",
+      "size_bytes": 3957,
+      "mtime_iso": "2026-03-05T03:50:27.505256+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FC2NS4RX_Cotton_Baby_Bootees_with_Bow_(White_&_Grey)_(Assor.json",
+      "size_bytes": 4654,
+      "mtime_iso": "2026-03-06T16:36:43.401010+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FHQPLNSW_3_Pack_Blue_Deluxe_Super_Soft_Muslin_Squares__(Ass.json",
+      "size_bytes": 4646,
+      "mtime_iso": "2026-03-05T03:50:27.530358+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FK9JRLVV_028503050544.json",
+      "size_bytes": 6254,
+      "mtime_iso": "2026-03-06T16:45:21.531992+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FK9JRLVV_028503050674.json",
+      "size_bytes": 6254,
+      "mtime_iso": "2026-03-06T16:47:20.313219+00:00"
+    },
+    {
+      "category": "amazon_cache",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FR95WLQD_028503059202.json",
+      "size_bytes": 3570,
+      "mtime_iso": "2026-03-06T16:46:46.087721+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__4bcdae0c_products_cache.json",
+      "size_bytes": 5237,
+      "mtime_iso": "2026-03-05T00:22:25.667852+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__4e866202_products_cache.json",
+      "size_bytes": 8321,
+      "mtime_iso": "2026-03-06T16:42:09.307993+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk_products_cache.json",
+      "size_bytes": 562,
+      "mtime_iso": "2026-02-13T05:39:38.656179+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/BEFORE RNUpoundwholesale-co-uk_products_cache.json",
+      "size_bytes": 6229570,
+      "mtime_iso": "2025-11-08T02:22:54.604775+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/clearance-king-co-uk_products_cache.json",
+      "size_bytes": 77497,
+      "mtime_iso": "2026-01-17T19:31:03.823316+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/dkwholesale-com_products_cache.json",
+      "size_bytes": 3183,
+      "mtime_iso": "2025-12-04T05:05:41.648037+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json",
+      "size_bytes": 4235,
+      "mtime_iso": "2026-03-05T03:50:27.564209+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/kdwholesale-co-uk_products_cache.json",
+      "size_bytes": 12422,
+      "mtime_iso": "2025-11-21T02:54:36.827992+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/laceywholesale-co-uk_products_cache.json",
+      "size_bytes": 10268,
+      "mtime_iso": "2025-11-21T08:24:14.440324+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json",
+      "size_bytes": 6115274,
+      "mtime_iso": "2026-01-26T19:01:04.237651+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/cached_products/wholesaletradingsupplies-co-uk_products_cache.json",
+      "size_bytes": 1993,
+      "mtime_iso": "2025-12-03T05:22:08.581896+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json",
+      "size_bytes": 4212,
+      "mtime_iso": "2026-03-02T09:47:45.483915+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox_20260210_143022_products_cache.json",
+      "size_bytes": 5429,
+      "mtime_iso": "2026-03-04T22:27:01.368039+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__06956903_products_cache.json",
+      "size_bytes": 7711,
+      "mtime_iso": "2026-03-02T12:07:05.298337+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__17fd6e1d_products_cache.json",
+      "size_bytes": 5228,
+      "mtime_iso": "2026-03-05T00:48:37.019911+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__4bcdae0c_products_cache.json",
+      "size_bytes": 5265,
+      "mtime_iso": "2026-03-05T00:13:15.194043+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__4e866202_products_cache.json",
+      "size_bytes": 4700,
+      "mtime_iso": "2026-03-06T16:30:01.069421+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox_products_cache.json",
+      "size_bytes": 7401,
+      "mtime_iso": "2026-03-05T22:28:35.740041+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/efghousewares-co-uk__sandbox__632ccba4_products_cache.json",
+      "size_bytes": 482,
+      "mtime_iso": "2026-02-17T22:00:56.990768+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/efghousewares-co-uk__sandbox__b99c5be5_products_cache.json",
+      "size_bytes": 4483,
+      "mtime_iso": "2026-03-05T15:45:15.567446+00:00"
+    },
+    {
+      "category": "cached_products",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/cached_products/efghousewares-co-uk__sandbox__d0033d9f_products_cache.json",
+      "size_bytes": 4974,
+      "mtime_iso": "2026-02-17T22:18:55.862362+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "main_largest_per_supplier",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk/fba_financial_report_angelwholesale-co-uk_20260125_190822.csv",
+      "size_bytes": 5149919,
+      "mtime_iso": "2026-01-25T15:08:23.132196+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "main_largest_per_supplier",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__4bcdae0c/fba_financial_report_angelwholesale-co-uk__4bcdae0c_20260305_042502.csv",
+      "size_bytes": 3828,
+      "mtime_iso": "2026-03-05T00:25:02.969099+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "main_largest_per_supplier",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__4e866202/fba_financial_report_angelwholesale-co-uk__4e866202_20260306_204246.csv",
+      "size_bytes": 7771,
+      "mtime_iso": "2026-03-06T16:42:46.080397+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "main_largest_per_supplier",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/clearance-king-co-uk/fba_financial_report_clearance-king-co-uk_20260125_192326.csv",
+      "size_bytes": 55882,
+      "mtime_iso": "2026-01-25T15:23:26.414986+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "main_largest_per_supplier",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/efghousewares-co-uk/fba_financial_report_20260122_093337.csv",
+      "size_bytes": 10337088,
+      "mtime_iso": "2026-01-22T05:33:37.601753+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "main_largest_per_supplier",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_COMPLETE_20250824_224923.csv",
+      "size_bytes": 4236438,
+      "mtime_iso": "2025-11-08T02:22:53.888221+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox_20260210_143022/fba_financial_report_angelwholesale-co-uk__sandbox_20260210_143022_20260305_023516.csv",
+      "size_bytes": 4882,
+      "mtime_iso": "2026-03-04T22:35:16.552426+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox_20260210_143022/fba_financial_report_angelwholesale-co-uk__sandbox_20260210_143022_20260305_023801.csv",
+      "size_bytes": 4802,
+      "mtime_iso": "2026-03-04T22:38:01.811168+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__4bcdae0c/fba_financial_report_angelwholesale-co-uk__sandbox__4bcdae0c_20260305_041531.csv",
+      "size_bytes": 4896,
+      "mtime_iso": "2026-03-05T00:15:31.994022+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__4bcdae0c/fba_financial_report_angelwholesale-co-uk__sandbox__4bcdae0c_20260305_041739.csv",
+      "size_bytes": 4915,
+      "mtime_iso": "2026-03-05T00:17:39.026466+00:00"
+    },
+    {
+      "category": "financial_reports",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__4bcdae0c/fba_financial_report_angelwholesale-co-uk__sandbox__4bcdae0c_20260305_041955.csv",
+      "size_bytes": 4922,
+      "mtime_iso": "2026-03-05T00:19:55.029875+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk/linking_map.json",
+      "size_bytes": 1114,
+      "mtime_iso": "2026-02-13T05:41:24.268734+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__4bcdae0c/linking_map.json",
+      "size_bytes": 5489,
+      "mtime_iso": "2026-03-05T00:30:35.073806+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__4e866202/linking_map.json",
+      "size_bytes": 9558,
+      "mtime_iso": "2026-03-06T16:47:20.329161+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king-co-uk/linking_map.json",
+      "size_bytes": 10130,
+      "mtime_iso": "2025-11-08T07:53:25.540589+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk/linking_map.json",
+      "size_bytes": 72537,
+      "mtime_iso": "2026-01-25T15:23:26.427871+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/efghousewares.co.uk/linking_map.json",
+      "size_bytes": 1821,
+      "mtime_iso": "2026-01-25T13:29:36.543041+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/issue6.test/linking_map.json",
+      "size_bytes": 968,
+      "mtime_iso": "2026-02-17T14:41:22.160607+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/issue7.test/linking_map.json",
+      "size_bytes": 195,
+      "mtime_iso": "2026-02-17T14:39:53.237281+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json",
+      "size_bytes": 5928908,
+      "mtime_iso": "2026-01-25T08:20:58.524514+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox/linking_map.json",
+      "size_bytes": 5669,
+      "mtime_iso": "2026-03-04T14:32:04.265424+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox_20260210_143022/linking_map.json",
+      "size_bytes": 5565,
+      "mtime_iso": "2026-03-04T22:38:46.574017+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__17fd6e1d/linking_map.json",
+      "size_bytes": 598,
+      "mtime_iso": "2026-03-05T00:49:26.679647+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__4bcdae0c/linking_map.json",
+      "size_bytes": 5601,
+      "mtime_iso": "2026-03-05T00:20:48.277537+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__aebdad60/linking_map.json",
+      "size_bytes": 2309,
+      "mtime_iso": "2026-03-02T09:42:14.062535+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__af03729b/linking_map.json",
+      "size_bytes": 585,
+      "mtime_iso": "2026-03-02T09:31:00.554185+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__c1be8169/linking_map.json",
+      "size_bytes": 3435,
+      "mtime_iso": "2026-03-06T23:56:10.025817+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk__sandbox__5732e2c2/linking_map.json",
+      "size_bytes": 2,
+      "mtime_iso": "2026-03-04T14:50:15.942539+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk__sandbox__ea2741e8/linking_map.json",
+      "size_bytes": 2,
+      "mtime_iso": "2026-03-04T14:58:01.827265+00:00"
+    },
+    {
+      "category": "linking_maps",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/FBA_ANALYSIS/linking_maps/efghousewares.co.uk__sandbox__d8f5d679/linking_map.json",
+      "size_bytes": 3385,
+      "mtime_iso": "2026-03-02T11:54:33.266545+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "main_latest",
+      "source_relative_path": "logs/debug/run_custom_angelwholesale-co-uk__4e866202_20260306_203506.log",
+      "size_bytes": 543277,
+      "mtime_iso": "2026-03-06T16:47:20.344737+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "main_latest",
+      "source_relative_path": "logs/debug/run_custom_clearance-king-co-uk_20260306_074334.log",
+      "size_bytes": 68676,
+      "mtime_iso": "2026-03-06T03:45:06.201608+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "main_latest",
+      "source_relative_path": "logs/debug/run_custom_efghousewares-co-uk_20260305_194314.log",
+      "size_bytes": 128118,
+      "mtime_iso": "2026-03-05T15:45:17.094146+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "main_latest",
+      "source_relative_path": "logs/debug/run_custom_efghousewares-co-uk_20260306_000355.log",
+      "size_bytes": 25418,
+      "mtime_iso": "2026-03-05T20:05:34.690904+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "main_latest",
+      "source_relative_path": "logs/debug/run_custom_efghousewares-co-uk_20260306_021257.log",
+      "size_bytes": 3478,
+      "mtime_iso": "2026-03-05T22:13:44.345510+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "sandbox_latest",
+      "source_relative_path": "logs/debug/run_custom_angelwholesale-co-uk__sandbox_20260306_022610.log",
+      "size_bytes": 89005,
+      "mtime_iso": "2026-03-05T22:28:56.774921+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "sandbox_latest",
+      "source_relative_path": "logs/debug/run_custom_angelwholesale-co-uk__sandbox__17fd6e1d_20260305_044719.log",
+      "size_bytes": 176217,
+      "mtime_iso": "2026-03-05T00:50:01.410737+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "sandbox_latest",
+      "source_relative_path": "logs/debug/run_custom_angelwholesale-co-uk__sandbox__4e866202_20260306_202849.log",
+      "size_bytes": 126346,
+      "mtime_iso": "2026-03-06T16:30:02.972736+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "sandbox_latest",
+      "source_relative_path": "logs/debug/run_custom_clearance-king-co-uk__sandbox_20260306_020431.log",
+      "size_bytes": 22480,
+      "mtime_iso": "2026-03-05T22:04:45.640284+00:00"
+    },
+    {
+      "category": "logs_debug",
+      "kind": "sandbox_latest",
+      "source_relative_path": "logs/debug/run_custom_clearance-king-co-uk__sandbox_20260306_021726.log",
+      "size_bytes": 24632,
+      "mtime_iso": "2026-03-05T22:18:22.228604+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2026-01-25T15:05:38.739734+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk__4bcdae0c",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-05T00:22:25.806950+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk__4e866202",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-06T16:42:09.336800+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/clearance-king.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-06T03:44:43.022596+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/dkwholesale.com",
+      "size_bytes": 0,
+      "mtime_iso": "2025-12-04T05:05:11.972690+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/efghousewares.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-05T04:09:58.480251+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/kdwholesale.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2025-11-21T02:54:10.490418+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/laceywholesale.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2025-11-21T08:23:36.101418+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/poundwholesale.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2026-01-26T19:01:04.846607+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/poundwholesale_co_uk",
+      "size_bytes": 0,
+      "mtime_iso": "2025-11-08T02:22:54.850993+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/manifests/wholesaletradingsupplies.co.uk",
+      "size_bytes": 0,
+      "mtime_iso": "2025-12-03T05:21:48.867919+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "sandbox",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk__sandbox",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-05T22:26:39.110050+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "sandbox",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk__sandbox__17fd6e1d",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-05T00:48:37.151121+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "sandbox",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk__sandbox__4bcdae0c",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-05T00:13:15.318247+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "sandbox",
+      "source_relative_path": "OUTPUTS/manifests/angelwholesale.co.uk__sandbox__4e866202",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-06T16:30:01.107484+00:00"
+    },
+    {
+      "category": "manifests",
+      "kind": "sandbox",
+      "source_relative_path": "OUTPUTS/manifests/efghousewares.co.uk__sandbox__b99c5be5",
+      "size_bytes": 0,
+      "mtime_iso": "2026-03-05T15:44:14.853879+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__4bcdae0c_processing_state.json",
+      "size_bytes": 4748,
+      "mtime_iso": "2026-03-05T00:31:58.380466+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__4e866202_processing_state.json",
+      "size_bytes": 5270,
+      "mtime_iso": "2026-03-06T16:47:20.337611+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk_processing_state.json",
+      "size_bytes": 48837,
+      "mtime_iso": "2026-02-12T02:25:41.104037+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/clearance-king-co-uk_processing_state.json",
+      "size_bytes": 5970,
+      "mtime_iso": "2025-11-08T07:54:37.593413+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/clearance-king_co_uk_processing_state.json",
+      "size_bytes": 11585,
+      "mtime_iso": "2026-03-06T03:44:43.073330+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/dkwholesale_com_processing_state.json",
+      "size_bytes": 5534,
+      "mtime_iso": "2025-12-04T05:05:41.636455+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/efghousewares_co_uk_processing_state.json",
+      "size_bytes": 7058,
+      "mtime_iso": "2026-03-05T04:09:58.199941+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/issue6_test_processing_state.json",
+      "size_bytes": 2349,
+      "mtime_iso": "2026-02-17T14:41:22.158603+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/kdwholesale_co_uk_processing_state.json",
+      "size_bytes": 5167,
+      "mtime_iso": "2025-12-03T08:44:45.106297+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/laceywholesale_co_uk_processing_state.json",
+      "size_bytes": 3110,
+      "mtime_iso": "2025-11-21T08:24:14.434163+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json",
+      "size_bytes": 47312,
+      "mtime_iso": "2026-01-26T19:01:05.274053+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/test_supplier_processing_state.json",
+      "size_bytes": 2236,
+      "mtime_iso": "2025-10-05T06:21:10.653968+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "main",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/wholesaletradingsupplies_co_uk_processing_state.json",
+      "size_bytes": 4232,
+      "mtime_iso": "2025-12-03T05:22:08.572411+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox_20260210_143022_processing_state.json",
+      "size_bytes": 4803,
+      "mtime_iso": "2026-03-04T23:44:01.703907+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__17fd6e1d_processing_state.json",
+      "size_bytes": 4553,
+      "mtime_iso": "2026-03-05T00:49:26.723813+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__4a986230_processing_state.json",
+      "size_bytes": 2822,
+      "mtime_iso": "2026-03-05T00:11:09.173521+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__4bcdae0c_processing_state.json",
+      "size_bytes": 4546,
+      "mtime_iso": "2026-03-05T00:20:48.362828+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__4e866202_processing_state.json",
+      "size_bytes": 4495,
+      "mtime_iso": "2026-03-06T16:30:01.117458+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__c1be8169_processing_state.json",
+      "size_bytes": 2436,
+      "mtime_iso": "2026-03-06T23:56:10.039399+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox_processing_state.json",
+      "size_bytes": 3583,
+      "mtime_iso": "2026-03-05T22:28:35.777554+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/clearance-king_co_uk__sandbox_processing_state.json",
+      "size_bytes": 3029,
+      "mtime_iso": "2026-03-05T22:18:22.190270+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/efghousewares_co_uk__sandbox__3fbadb6f_processing_state.json",
+      "size_bytes": 2780,
+      "mtime_iso": "2026-03-05T20:05:16.279170+00:00"
+    },
+    {
+      "category": "processing_states",
+      "kind": "sandbox_latest",
+      "source_relative_path": "OUTPUTS/CACHE/processing_states/efghousewares_co_uk__sandbox__b99c5be5_processing_state.json",
+      "size_bytes": 4306,
+      "mtime_iso": "2026-03-05T15:45:15.607417+00:00"
+    },
+    {
+      "category": "products_lists",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/PRODUCTS_LISTS/clearanceking_mix_lis9t.json",
+      "size_bytes": 2691,
+      "mtime_iso": "2026-02-16T20:51:33.205669+00:00"
+    },
+    {
+      "category": "products_lists",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/PRODUCTS_LISTS/efghousewares_product_list2.json",
+      "size_bytes": 2238,
+      "mtime_iso": "2026-03-02T03:13:03.550151+00:00"
+    },
+    {
+      "category": "products_lists",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/PRODUCTS_LISTS/products_fullmix2_angelwholesale.json",
+      "size_bytes": 2476,
+      "mtime_iso": "2026-02-16T18:08:15.522775+00:00"
+    },
+    {
+      "category": "products_lists",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/PRODUCTS_LISTS/products_fullmix3_angelwholesale.json",
+      "size_bytes": 3508,
+      "mtime_iso": "2026-02-17T21:09:32.541127+00:00"
+    },
+    {
+      "category": "products_lists",
+      "kind": "latest",
+      "source_relative_path": "OUTPUTS/PRODUCTS_LISTS/products_fullmix_efghouseware.json",
+      "size_bytes": 2498,
+      "mtime_iso": "2026-03-05T04:09:58.463738+00:00"
+    }
+  ]
+}
+GENERATED_FILES = [
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B013UWIZL0_028503053712.json__211d47ab30.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B01N6Y5KHS_3574661237008.json__a371dd1429.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B075MLB5DB_5012866330875.json__7b23725d7f.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B07FD7QRPG_5012866020288.json__31f9d69600.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09PNDS14V_5023797203589.json__f3b058a0fb.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09PNDS14V_5023797209406.json__eeb73ebea7.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09PNDS14V_5055323141379.json__b316f8afcc.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09WLLR3CR_5023797401381.json__6a5f806407.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B09WLLR3CR_Soft_Acrylic_Cable_Knitted_Bootees__by_Soft_Touch_.json__3889ec5765.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0BFV6D5FB_28503053637.json__dcf215c84b.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0BKPMWSF1_5023797310829.json__c6567cfc4c.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0BV5BFKLX_5023797208607.json__4ed8229958.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0CW3K59XJ_5055499002382.json__c27b117495.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0F3CHCGV2_5012866625223.json__a92b4b37b7.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0F43KZDGT_5060347220245.json__5052dc2622.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FC2NS4RX_Cotton_Baby_Bootees_with_Bow_(White_&_Grey)_(Assor.json__3042245a79.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FHQPLNSW_3_Pack_Blue_Deluxe_Super_Soft_Muslin_Squares__(Ass.json__fe7e35d173.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FK9JRLVV_028503050544.json__cd7f5c998e.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FK9JRLVV_028503050674.json__2d264d9047.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/amazon_cache/amazon_B0FR95WLQD_028503059202.json__457c9bb522.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__4bcdae0c_products_cache.json__3133802f9c.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__4e866202_products_cache.json__946d7f3c2b.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk_products_cache.json__bc179f52e3.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/BEFORE RNUpoundwholesale-co-uk_products_cache.json__0193bdf14b.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/clearance-king-co-uk_products_cache.json__6f2374446a.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/dkwholesale-com_products_cache.json__3858b80bce.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json__08fa19e0ee.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/kdwholesale-co-uk_products_cache.json__46560e20f7.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/laceywholesale-co-uk_products_cache.json__254c8e787f.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json__5ae5d65897.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/wholesaletradingsupplies-co-uk_products_cache.json__a34b883ee8.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json__6a1dce7be7.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox_20260210_143022_products_cache.json__14759db486.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__06956903_products_cache.json__276dc52413.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__17fd6e1d_products_cache.json__3846c89f98.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__4bcdae0c_products_cache.json__392b7c46dc.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__4e866202_products_cache.json__1931a2bcc3.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox_products_cache.json__e9afd17182.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/efghousewares-co-uk__sandbox__632ccba4_products_cache.json__249670e481.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/efghousewares-co-uk__sandbox__b99c5be5_products_cache.json__e98fec2d47.py",
+  "gitnexus_runtime_context/OUTPUTS/cached_products/efghousewares-co-uk__sandbox__d0033d9f_products_cache.json__b3946039a7.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk/fba_financial_report_angelwholesale-co-uk_20260125_190822.csv__b6a6c622b4.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__4bcdae0c/fba_financial_report_angelwholesale-co-uk__4bcdae0c_20260305_042502.csv__fa7c31c4f0.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__4e866202/fba_financial_report_angelwholesale-co-uk__4e866202_20260306_204246.csv__7fc883a42d.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/clearance-king-co-uk/fba_financial_report_clearance-king-co-uk_20260125_192326.csv__7943d982c4.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/efghousewares-co-uk/fba_financial_report_20260122_093337.csv__80c7295abd.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_COMPLETE_20250824_224923.csv__f7aeddefff.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox_20260210_143022/fba_financial_report_angelwholesale-co-uk__sandbox_20260210_143022_20260305_023516.csv__97efc197fd.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox_20260210_143022/fba_financial_report_angelwholesale-co-uk__sandbox_20260210_143022_20260305_023801.csv__8cd3a2311b.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__4bcdae0c/fba_financial_report_angelwholesale-co-uk__sandbox__4bcdae0c_20260305_041531.csv__09c013174d.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__4bcdae0c/fba_financial_report_angelwholesale-co-uk__sandbox__4bcdae0c_20260305_041739.csv__862b021830.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__4bcdae0c/fba_financial_report_angelwholesale-co-uk__sandbox__4bcdae0c_20260305_041955.csv__e0a79d804a.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk/linking_map.json__4ae4d65a8b.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__4bcdae0c/linking_map.json__b4d6cfd018.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__4e866202/linking_map.json__ee9f8755ab.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king-co-uk/linking_map.json__77e029a002.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk/linking_map.json__72d2fc33d7.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/efghousewares.co.uk/linking_map.json__9c8faa16fd.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/issue6.test/linking_map.json__e57d8787ec.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/issue7.test/linking_map.json__d6604e26c4.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json__ff146ba561.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox/linking_map.json__8289d7f613.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox_20260210_143022/linking_map.json__5e1968814d.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__17fd6e1d/linking_map.json__a1e4671a2f.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__4bcdae0c/linking_map.json__4a31d9dfd3.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__aebdad60/linking_map.json__1e26d9fdd5.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__af03729b/linking_map.json__34cc5fb557.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__c1be8169/linking_map.json__75f0abd1cf.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk__sandbox__5732e2c2/linking_map.json__879cff470e.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk__sandbox__ea2741e8/linking_map.json__ad7333dd22.py",
+  "gitnexus_runtime_context/OUTPUTS/FBA_ANALYSIS/linking_maps/efghousewares.co.uk__sandbox__d8f5d679/linking_map.json__1202e5a3bc.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_angelwholesale-co-uk__4e866202_20260306_203506.log__d900ecd8f1.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_clearance-king-co-uk_20260306_074334.log__fefb855aae.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_efghousewares-co-uk_20260305_194314.log__f54974fd3e.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_efghousewares-co-uk_20260306_000355.log__f0235df9a8.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_efghousewares-co-uk_20260306_021257.log__e57be85305.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_angelwholesale-co-uk__sandbox_20260306_022610.log__a7537b0211.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_angelwholesale-co-uk__sandbox__17fd6e1d_20260305_044719.log__ca53593cd2.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_angelwholesale-co-uk__sandbox__4e866202_20260306_202849.log__e17ea264da.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_clearance-king-co-uk__sandbox_20260306_020431.log__6d4bfe1729.py",
+  "gitnexus_runtime_context/logs/debug/run_custom_clearance-king-co-uk__sandbox_20260306_021726.log__99e54b9c7f.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk/__folder_summary__041b5bb5cb.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk__4bcdae0c/__folder_summary__3b10e3b385.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk__4e866202/__folder_summary__d524be9583.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/clearance-king.co.uk/__folder_summary__207dbc94d9.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/dkwholesale.com/__folder_summary__72b16ffcc5.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/efghousewares.co.uk/__folder_summary__b7ad538c4f.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/kdwholesale.co.uk/__folder_summary__9641be472a.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/laceywholesale.co.uk/__folder_summary__e55d88f5cb.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/poundwholesale.co.uk/__folder_summary__a9b2eac113.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/poundwholesale_co_uk/__folder_summary__20c9c9ce3f.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/wholesaletradingsupplies.co.uk/__folder_summary__75a9eb9071.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk__sandbox/__folder_summary__ac9594b52e.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk__sandbox__17fd6e1d/__folder_summary__4c3d8a329c.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk__sandbox__4bcdae0c/__folder_summary__e5a3be3d38.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/angelwholesale.co.uk__sandbox__4e866202/__folder_summary__98c4ed33c4.py",
+  "gitnexus_runtime_context/OUTPUTS/manifests/efghousewares.co.uk__sandbox__b99c5be5/__folder_summary__935a207e22.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__4bcdae0c_processing_state.json__8f141c9d85.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__4e866202_processing_state.json__903efc5935.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk_processing_state.json__c2a9001ee4.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/clearance-king-co-uk_processing_state.json__07d5012c70.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/clearance-king_co_uk_processing_state.json__09aa68e1fd.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/dkwholesale_com_processing_state.json__f2a584135d.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/efghousewares_co_uk_processing_state.json__e43dd0b373.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/issue6_test_processing_state.json__0f36c648fe.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/kdwholesale_co_uk_processing_state.json__6ffbe098c3.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/laceywholesale_co_uk_processing_state.json__cda5ecde7c.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json__a8e8071d21.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/test_supplier_processing_state.json__b4fa2f357b.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/wholesaletradingsupplies_co_uk_processing_state.json__a47e09334c.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox_20260210_143022_processing_state.json__5ef1d48152.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__17fd6e1d_processing_state.json__61d34fabb2.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__4a986230_processing_state.json__6e9f261b65.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__4bcdae0c_processing_state.json__9b7c742a81.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__4e866202_processing_state.json__a04e7d0fb1.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__c1be8169_processing_state.json__25394d0723.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox_processing_state.json__d6fa9884a3.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/clearance-king_co_uk__sandbox_processing_state.json__06a2329dff.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/efghousewares_co_uk__sandbox__3fbadb6f_processing_state.json__1d313967ef.py",
+  "gitnexus_runtime_context/OUTPUTS/CACHE/processing_states/efghousewares_co_uk__sandbox__b99c5be5_processing_state.json__11bae26c79.py",
+  "gitnexus_runtime_context/OUTPUTS/PRODUCTS_LISTS/clearanceking_mix_lis9t.json__6b4eb7e2fc.py",
+  "gitnexus_runtime_context/OUTPUTS/PRODUCTS_LISTS/efghousewares_product_list2.json__d1b201fa46.py",
+  "gitnexus_runtime_context/OUTPUTS/PRODUCTS_LISTS/products_fullmix2_angelwholesale.json__32ae84a3c0.py",
+  "gitnexus_runtime_context/OUTPUTS/PRODUCTS_LISTS/products_fullmix3_angelwholesale.json__8caa86bc31.py",
+  "gitnexus_runtime_context/OUTPUTS/PRODUCTS_LISTS/products_fullmix_efghouseware.json__8b64288792.py"
+]

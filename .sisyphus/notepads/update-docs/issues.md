@@ -1,0 +1,1 @@
+- 2026-03-02: `update-docs` notepad directory was missing; created `.sisyphus/notepads/update-docs/` before appending notes.

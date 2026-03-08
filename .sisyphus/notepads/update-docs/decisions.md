@@ -1,0 +1,1 @@
+- 2026-03-02: Preserved exact user-provided wording and appended as a new section (`## 5. File Access Scope`) without modifying earlier sections.

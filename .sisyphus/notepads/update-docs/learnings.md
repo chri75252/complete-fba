@@ -1,0 +1,2 @@
+- 2026-03-02: For doc-only guardrail updates, use append-only `cat >>` and verify with line-numbered read at end-of-file.
+- 2026-03-02: For doc-only guardrail updates, use append-only `cat >>` and verify with line-numbered read at end-of-file.

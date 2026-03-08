@@ -1,0 +1,839 @@
+2026-03-02 13:46:18,659 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_20260302_134618.log
+2026-03-02 13:46:18,659 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_20260302_134618.log
+2026-03-02 13:46:18,660 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2026-03-02 13:46:18,660 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-03-02 13:46:18,661 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2026-03-02 13:46:19,175 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2026-03-02 13:46:19,176 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-03-02 13:46:21,215 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]
+2026-03-02 13:46:21,224 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/145.0.7632.117
+2026-03-02 13:46:21,224 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2026-03-02 13:46:23,277 - utils.browser_manager - DEBUG - ?? Using IPv4 endpoint for CDP connection
+2026-03-02 13:46:23,278 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+2026-03-02 13:46:23,492 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2026-03-02 13:46:23,493 - utils.browser_manager - INFO - ?? Using existing context with 2 pages
+2026-03-02 13:46:23,493 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 145.0.7632.117
+2026-03-02 13:46:23,493 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:23,493 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:23,494 - __main__ - INFO - ℹ️ No authentication required for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,495 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2026-03-02 13:46:23,497 - PassiveExtractionWorkflow - INFO -  DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2026-03-02 13:46:23,497 - PassiveExtractionWorkflow - INFO -  DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2026-03-02 13:46:23,497 - PassiveExtractionWorkflow - INFO -  Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:46:23,498 - PassiveExtractionWorkflow - INFO -  Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-02 13:46:23,499 - PassiveExtractionWorkflow - INFO -  Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,500 - PassiveExtractionWorkflow - INFO -  NO CACHE FOUND: No supplier cache file found for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,501 - PassiveExtractionWorkflow - INFO -  State manager initialized with accurate totals: 0 products, 0 categories
+2026-03-02 13:46:23,501 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2026-03-02 13:46:23,501 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-03-02 13:46:23,502 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-03-02 13:46:23,502 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2026-03-02 13:46:23,503 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-03-02 13:46:23,503 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-03-02 13:46:23,503 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2026-03-02 13:46:23,503 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2026-03-02 13:46:23,503 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2026-03-02 13:46:23,504 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-03-02 13:46:23,504 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2026-03-02 13:46:23,504 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2026-03-02 13:46:23,504 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map initialized as type: <class 'list'>
+2026-03-02 13:46:23,504 - PassiveExtractionWorkflow - INFO - ?? HashLookupOptimizer initialized - ready for O(1) lookups
+2026-03-02 13:46:23,504 - PassiveExtractionWorkflow - INFO -  Hash-based lookup optimization system initialized
+2026-03-02 13:46:23,504 - PassiveExtractionWorkflow - INFO -  SENTINEL MONITORING: Proactive monitoring system initialized
+2026-03-02 13:46:23,505 - PassiveExtractionWorkflow - INFO -  WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2026-03-02 13:46:23,505 - PassiveExtractionWorkflow - INFO -  Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2026-03-02 13:46:23,505 - PassiveExtractionWorkflow - INFO -  Initialization validation passed - all critical attributes verified
+2026-03-02 13:46:23,505 - __main__ - INFO - 🚀 Starting workflow for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60...
+2026-03-02 13:46:23,506 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60 ---
+2026-03-02 13:46:23,506 - PassiveExtractionWorkflow - INFO - Session ID: angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60_20260302_134623
+2026-03-02 13:46:23,506 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,521 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 1 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\aebdad60-6e2c-4777-968c-59a4ef4fbfa1\categories_subset.json
+2026-03-02 13:46:23,521 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-03-02 13:46:23,522 - utils.fixed_enhanced_state_manager - INFO - No existing state file found for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60, starting fresh
+2026-03-02 13:46:23,522 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-03-02 13:46:23,522 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2026-03-02 13:46:23,522 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 0 categories
+2026-03-02 13:46:23,523 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2026-03-02 13:46:23,523 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2026-03-02 13:46:23,523 - utils.fixed_enhanced_state_manager - INFO -  STARTUP CHECK: is_fresh_start flag is 'True'
+2026-03-02 13:46:23,524 - utils.fixed_enhanced_state_manager - WARNING -  Category config file not found: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\angelwholesale__angelwholesale_co_uk__sandbox__aebdad60_categories.json
+2026-03-02 13:46:23,524 - utils.fixed_enhanced_state_manager - INFO -  START MODE: is_fresh_start=True, pci=1, session_cursor=1, url=N/A...
+2026-03-02 13:46:23,524 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2026-03-02 13:46:23,524 - utils.fixed_enhanced_state_manager - WARNING -  Category config file not found: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\angelwholesale__angelwholesale_co_uk__sandbox__aebdad60_categories.json
+2026-03-02 13:46:23,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:23,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:23,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:23,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:23,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:23,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:23,532 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:23,533 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:23,533 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:23,533 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-03-02 13:46:23,533 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+2026-03-02 13:46:23,533 - utils.fixed_enhanced_state_manager - INFO -  STARTUP GATING COMPLETE: session_cursor=1, startup_completed=True
+2026-03-02 13:46:23,534 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Completed comprehensive state analysis
+2026-03-02 13:46:23,534 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-03-02 13:46:23,534 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+2026-03-02 13:46:23,534 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:23,534 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:23,534 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:23,535 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:23,535 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:23,535 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:23,535 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:23,554 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:23,555 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:23,555 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (manifest)
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:23,556 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:23,557 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:23,580 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:23,581 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:23,581 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:23,582 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-03-02 13:46:23,582 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-02 13:46:23,582 - PassiveExtractionWorkflow - INFO -  FROZEN TOTAL CATEGORIES set to 1 (hash=f72aaeb8)
+2026-03-02 13:46:23,582 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:23,582 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:23,582 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:23,582 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:23,583 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:23,583 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:23,602 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:23,603 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:23,603 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:23,604 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: category_denominator_unfrozen (supplier)
+2026-03-02 13:46:23,604 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-02 13:46:23,604 - PassiveExtractionWorkflow - WARNING -  RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2026-03-02 13:46:23,604 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2026-03-02 13:46:23,604 - PassiveExtractionWorkflow - INFO -  RESUMPTION POINT CONFIRMED: Starting from category index 1 at product 0 in phase 'supplier'.
+2026-03-02 13:46:23,604 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to supplier extraction phase
+2026-03-02 13:46:23,604 - PassiveExtractionWorkflow - DEBUG - PTR print suppressed at workflow; state manager will emit gated proofs
+2026-03-02 13:46:23,604 - PassiveExtractionWorkflow - INFO -  CONFIGURATION VALUES:
+2026-03-02 13:46:23,605 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2026-03-02 13:46:23,605 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 2000
+2026-03-02 13:46:23,605 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2026-03-02 13:46:23,605 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2026-03-02 13:46:23,605 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2026-03-02 13:46:23,605 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2026-03-02 13:46:23,605 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-03-02 13:46:23,621 - utils.fixed_enhanced_state_manager - INFO - Loaded state for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60 - resumption from index 0
+2026-03-02 13:46:23,622 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-03-02 13:46:23,622 - utils.fixed_enhanced_state_manager - INFO - Startup analysis already completed for this session
+2026-03-02 13:46:23,622 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-03-02 13:46:23,622 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+2026-03-02 13:46:23,622 - PassiveExtractionWorkflow - INFO -  WORKFLOW START CURSOR: category_index=1 (pci=1, cursor=1, max=1)
+2026-03-02 13:46:23,622 - PassiveExtractionWorkflow - INFO -  WORKFLOW INITIALIZED: Starting from category 1 in phase 'supplier'
+2026-03-02 13:46:23,623 - PassiveExtractionWorkflow - INFO -  No existing linking map found at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60\linking_map.json - Creating new map
+2026-03-02 13:46:23,623 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 0 EANs, 0 URLs, 0 ASINs in 0.000s
+2026-03-02 13:46:23,623 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2026-03-02 13:46:23,623 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,624 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 1 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\aebdad60-6e2c-4777-968c-59a4ef4fbfa1\categories_subset.json
+2026-03-02 13:46:23,624 - PassiveExtractionWorkflow - INFO -  INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=2000
+2026-03-02 13:46:23,625 - PassiveExtractionWorkflow - INFO -  Processing ALL 1 predefined categories (infinite mode)
+2026-03-02 13:46:23,625 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING MODE: Enabled (resume_context=False)
+2026-03-02 13:46:23,625 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING: Mode configuration loaded
+2026-03-02 13:46:23,625 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2026-03-02 13:46:23,625 - PassiveExtractionWorkflow - INFO -  HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2026-03-02 13:46:23,625 - PassiveExtractionWorkflow - INFO -  Processing chunk 1: categories 1-1
+2026-03-02 13:46:23,626 - PassiveExtractionWorkflow - INFO -  NO CACHE FOUND: No supplier cache file found for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,626 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-03-02 13:46:23,627 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-03-02 13:46:23,627 - PassiveExtractionWorkflow - INFO -  NO CACHE FOUND: No supplier cache file found for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:23,627 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 1 categories starting from index 1
+2026-03-02 13:46:23,627 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2026-03-02 13:46:23,628 - PassiveExtractionWorkflow - INFO -  Processing category batch 1/1 (1 categories)
+2026-03-02 13:46:23,628 - PassiveExtractionWorkflow - INFO -  LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2026-03-02 13:46:23,628 - PassiveExtractionWorkflow - WARNING -  LOGIN SCRIPT TRIGGER ERROR: No module named 'tools.angelwholesale' in category_batch_1, continuing processing
+2026-03-02 13:46:23,632 - PassiveExtractionWorkflow - INFO - Scraping category: https://angelwholesale.co.uk/Category/A-To-Z-wholesale
+2026-03-02 13:46:23,633 - config.supplier_config_loader - INFO - Loaded supplier selector config for domain: angelwholesale.co.uk
+2026-03-02 13:46:23,634 - configurable_supplier_scraper - INFO - 📁 Loaded selectors for domain angelwholesale.co.uk from legacy config/supplier_configs/
+2026-03-02 13:46:23,634 - configurable_supplier_scraper - INFO - 🔘 Config specifies BUTTON pagination for angelwholesale.co.uk
+2026-03-02 13:46:23,634 - configurable_supplier_scraper - INFO - 🔄 Using BUTTON pagination for: https://angelwholesale.co.uk/Category/A-To-Z-wholesale
+2026-03-02 13:46:23,634 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:23,634 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:31,985 - configurable_supplier_scraper - INFO - 📦 Found 41 new product URLs (total: 41)
+2026-03-02 13:46:32,000 - configurable_supplier_scraper - INFO - ✅ Button clicked via JavaScript
+2026-03-02 13:46:36,393 - configurable_supplier_scraper - INFO - 📦 Found 18 new product URLs (total: 59)
+2026-03-02 13:46:36,441 - configurable_supplier_scraper - INFO - 🏁 No more pagination buttons found, collection complete
+2026-03-02 13:46:36,441 - configurable_supplier_scraper - INFO - ✅ Button pagination complete: 59 unique URLs collected
+2026-03-02 13:46:36,441 - PassiveExtractionWorkflow - INFO - Discovered 59 product URLs for category: https://angelwholesale.co.uk/Category/A-To-Z-wholesale
+2026-03-02 13:46:36,447 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60_Category_A-To-Z-wholesale_manifest.json (5 entries) saved successfully
+2026-03-02 13:46:36,448 - PassiveExtractionWorkflow - INFO -  MANIFEST CREATED: Saved 59 URLs to angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60_Category_A-To-Z-wholesale_manifest.json
+2026-03-02 13:46:36,449 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:36,449 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:36,449 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:36,449 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:36,450 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:36,450 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:36,455 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:36,456 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:36,457 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:36,457 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=0/59
+2026-03-02 13:46:36,457 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (freeze-category)
+2026-03-02 13:46:36,457 - utils.fixed_enhanced_state_manager - INFO -  FROZEN DENOMINATOR: Category https://angelwholesale.co.uk/Category/A-To-Z-wholesale  59 products (LOCKED)
+2026-03-02 13:46:36,457 - PassiveExtractionWorkflow - INFO -  FROZEN DENOMINATOR: Category 1  59 products (snapshot)
+2026-03-02 13:46:36,458 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:36,458 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:36,458 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:36,459 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:36,459 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:36,459 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:36,490 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:36,492 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:36,492 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:36,492 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=0/59
+2026-03-02 13:46:36,492 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-02 13:46:36,493 - PassiveExtractionWorkflow - INFO -  TOTALS COMMITTED: Resume pointers now enabled
+2026-03-02 13:46:36,493 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:36,493 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 1 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\aebdad60-6e2c-4777-968c-59a4ef4fbfa1\categories_subset.json
+2026-03-02 13:46:36,494 - utils.fixed_enhanced_state_manager - DEBUG - Category index unchanged: 1
+2026-03-02 13:46:36,494 - utils.fixed_enhanced_state_manager - INFO -  PHASE PRESERVED: 'supplier' (loaded from state)
+2026-03-02 13:46:36,494 - utils.fixed_enhanced_state_manager - INFO -  RESUMPTION: Preserving per-category counters (reason: active_category=True, frozen=True) for https://angelwholesale.co.uk/Category/A-To-Z-wholesale
+2026-03-02 13:46:36,494 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY INIT COMPLETE:
+  PCI (persistent_category_index): 1
+  Phase (current_phase): supplier
+  Category URL: https://angelwholesale.co.uk/Category/A-To-Z-wholesale
+2026-03-02 13:46:36,494 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:36,494 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:36,495 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:36,495 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:36,495 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:36,495 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:36,524 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:36,526 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:36,526 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:36,526 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=0/59
+2026-03-02 13:46:36,526 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-init)
+2026-03-02 13:46:36,527 - PassiveExtractionWorkflow - INFO -  CATEGORY PROCESSING: abs_index=1, display_index=1, url=https://angelwholesale.co.uk/Category/A-To-Z-whole...
+2026-03-02 13:46:36,527 - PassiveExtractionWorkflow - INFO -  EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 2/1)
+2026-03-02 13:46:36,528 - PassiveExtractionWorkflow - INFO - PAGINATION[C2 a-to-z-wholesale]: pages=2 urls_page=59 total=59
+2026-03-02 13:46:36,528 - PassiveExtractionWorkflow - INFO -  DETAILED PRE-EXTRACTION FILTERING: Analyzing 59 collected URLs
+2026-03-02 13:46:36,528 - PassiveExtractionWorkflow - DEBUG -  UNIFIED FILTER: Loaded 0 EANs and 0 URLs from linking map
+2026-03-02 13:46:36,530 - PassiveExtractionWorkflow - INFO -  LINKING MAP FILTER RESULTS:
+  Total URLs: 59
+  Skipped (in linking map): 0
+  Remaining for processing: 59
+2026-03-02 13:46:36,530 - PassiveExtractionWorkflow - INFO -  NO CACHE FOUND: No supplier cache file found for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:36,531 - PassiveExtractionWorkflow - DEBUG -  No supplier cache file found for angelwholesale.co.uk__angelwholesale_co_uk__sandbox__aebdad60
+2026-03-02 13:46:36,531 - PassiveExtractionWorkflow - INFO -  Product cache indexes built: keys=0, url_idx=0, ean_idx=0
+2026-03-02 13:46:36,532 - PassiveExtractionWorkflow - INFO -  STEP 1 - LINKING MAP CHECK: 0 complete (skipped)
+2026-03-02 13:46:36,532 - PassiveExtractionWorkflow - INFO -  STEP 2 - PRODUCT CACHE CHECK (stable_key): 0 cached; 59 need extraction
+2026-03-02 13:46:36,533 - PassiveExtractionWorkflow - INFO -  Filter Invariant: in=59 == skip=0 + cached=0 + full=59
+2026-03-02 13:46:36,533 - PassiveExtractionWorkflow - INFO -  FILTER INVARIANT VALIDATED:
+  in=59 == skip=0 + cached=0 + full=59
+2026-03-02 13:46:36,533 - PassiveExtractionWorkflow - INFO -  FROZEN DENOMINATOR: https://angelwholesale.co.uk/Category/A-To-Z-wholesale = 59
+2026-03-02 13:46:36,533 - PassiveExtractionWorkflow - INFO -  RESUMING IN SUPPLIER PHASE:
+  Resume from product: 1
+  Skipping:
+    - 0 in linking map (already complete)
+    - 0 in cache (already extracted)
+  Products to process: 59
+2026-03-02 13:46:36,533 - PassiveExtractionWorkflow - INFO -  FILE-BASED RESUME CALCULATION:
+  Phase (AUTHORITY): supplier
+  Category: https://angelwholesale.co.uk/Category/A-To-Z-wholesale
+  Resume from product: 1
+  Denominator: 59
+  Evidence:
+    - Total URLs extracted: 59
+    - Linking map (skip): 0
+    - Supplier cache: 0
+    - Need full extraction: 59
+  Filter invariant:  PASS
+  Worklist type: full_extraction
+  Worklist size: 59
+2026-03-02 13:46:36,533 - PassiveExtractionWorkflow - INFO -  RESUME STATE: phase=supplier cat=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale supplier=0/59 amazon=0/59
+2026-03-02 13:46:36,534 - PassiveExtractionWorkflow - INFO -  STEP-2 ALLOWED KEYS (category): 59 (amazon-only=0 + full=59)
+2026-03-02 13:46:36,535 - PassiveExtractionWorkflow - INFO -  WORK DEFINED (resume): denominators frozen  supplier=59, amazon=59
+2026-03-02 13:46:36,535 - PassiveExtractionWorkflow - INFO -  NEEDS_FULL_EXTRACTION (59): ['https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571', 'https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615', 'https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613', 'https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472', 'https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776']...
+2026-03-02 13:46:36,535 - PassiveExtractionWorkflow - INFO -  FILTERING EFFICIENCY: 0/59 = 0.0% already processed
+2026-03-02 13:46:36,535 - PassiveExtractionWorkflow - INFO -  CACHE UTILIZATION: 0/59 = 0.0% have supplier data
+2026-03-02 13:46:36,535 - PassiveExtractionWorkflow - INFO -  EXTRACTION NEEDED: 59/59 = 100.0% need fresh extraction
+2026-03-02 13:46:36,535 - PassiveExtractionWorkflow - INFO -  RESUME CATEGORY: category 1 at resume point, total products=59, resume index=0, remaining=59
+2026-03-02 13:46:36,536 - PassiveExtractionWorkflow - INFO -  PROCEEDING: category 1 at resume point with 59 products remaining.
+2026-03-02 13:46:36,536 - PassiveExtractionWorkflow - INFO -  PROCEEDING WITH EXTRACTION: category 1 has work to do.
+2026-03-02 13:46:36,538 - PassiveExtractionWorkflow - INFO -  FULL CATEGORY PROCESSING: Processing all 59 products
+2026-03-02 13:46:36,538 - PassiveExtractionWorkflow - INFO -  LINEAGE: manifest=f72aaeb8acb4c0fc1f89b367861bff42b73990d0f453880e72f83a55c527b253 cat_url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59
+2026-03-02 13:46:36,538 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:36,538 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:36,538 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:36,539 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:36,539 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:36,539 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:36,539 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:36,566 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:36,567 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:36,568 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:36,568 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=0/59
+2026-03-02 13:46:36,568 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:46:36,568 - utils.fixed_enhanced_state_manager - INFO -  FIRST AFTER-RESUME KEY: phase=supplier cat=1/1 prod=0/59 commit_type=supplier-commit
+2026-03-02 13:46:36,569 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=0/59 phase=supplier
+2026-03-02 13:46:36,569 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=0/59 commit_type=SUPPLIER
+2026-03-02 13:46:36,569 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (SUPPLIER): cat=1/1 prod=0/59 phase=supplier
+2026-03-02 13:46:36,569 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS COMMITTED: cat=1, prod_idx=0, total=59
+2026-03-02 13:46:36,569 - PassiveExtractionWorkflow - INFO -  PROCEEDING WITH EXTRACTION: 59 products need full extraction
+2026-03-02 13:46:36,569 - PassiveExtractionWorkflow - INFO -  EXTRACTION CONTRACT: Promising to extract exactly 59 products
+2026-03-02 13:46:36,570 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION: Processing 59 pre-approved URLs
+2026-03-02 13:46:36,570 - configurable_supplier_scraper - INFO - 🔍 Extracting product 1/59: https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571
+2026-03-02 13:46:36,570 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571 (attempt 1/3)
+2026-03-02 13:46:36,570 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:36,570 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:36,571 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571
+2026-03-02 13:46:39,037 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571 in 1.81s...
+2026-03-02 13:46:40,850 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571 (attempt 2/3)
+2026-03-02 13:46:40,850 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:40,850 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:40,850 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571
+2026-03-02 13:46:43,213 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571
+2026-03-02 13:46:43,213 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571
+2026-03-02 13:46:43,956 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/4-Trucks--by-AtoZ-Toys-toy021571 (Size: 912361 bytes)
+2026-03-02 13:46:44,457 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 5012866020288
+2026-03-02 13:46:44,471 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:44,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:44,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:44,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:44,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:44,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:44,473 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:44,479 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:44,480 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:44,480 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:44,480 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=0/59
+2026-03-02 13:46:44,480 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:46:44,480 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=0/59 commit_type=supplier-commit
+2026-03-02 13:46:44,481 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=0/59 phase=supplier
+2026-03-02 13:46:44,481 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:46:44,481 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 1/59
+2026-03-02 13:46:44,481 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 1 processed (total in cache: 1)
+2026-03-02 13:46:44,481 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 1/59 (remaining=58)
+2026-03-02 13:46:44,482 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:46:44,482 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 1
+2026-03-02 13:46:44,482 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 1, frequency=1, enabled=True
+2026-03-02 13:46:44,482 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=1, modulo=0
+2026-03-02 13:46:44,482 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:44,483 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:46:44,483 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:44,483 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:46:44,483 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 1 products to cache...
+2026-03-02 13:46:44,484 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:44,484 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 0 existing + 1 new = 1 total
+2026-03-02 13:46:44,489 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (1 entries) saved successfully
+2026-03-02 13:46:44,490 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 1 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 457 bytes)
+2026-03-02 13:46:44,490 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (1 products)
+2026-03-02 13:46:44,491 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:44,491 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:44,491 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:44,491 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:44,491 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:44,492 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:44,550 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:44,551 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:44,551 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:44,551 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=0/59
+2026-03-02 13:46:44,551 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 1 products (1 new) to cache (every 1 products)
+2026-03-02 13:46:44,551 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:44,552 - configurable_supplier_scraper - INFO - ✅ Extracted: Bath Crayons  by AtoZ Toys - £11.76
+2026-03-02 13:46:44,552 - configurable_supplier_scraper - INFO - 🔍 Extracting product 2/59: https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615
+2026-03-02 13:46:44,552 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615 (attempt 1/3)
+2026-03-02 13:46:44,552 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:44,552 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:44,552 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615
+2026-03-02 13:46:46,025 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615 in 2.38s...
+2026-03-02 13:46:48,412 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615 (attempt 2/3)
+2026-03-02 13:46:48,412 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:48,412 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:48,412 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615
+2026-03-02 13:46:49,901 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615
+2026-03-02 13:46:49,901 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615
+2026-03-02 13:46:50,751 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Farm-Train-Set-55210--by-AtoZ-Toys-toy021615 (Size: 912601 bytes)
+2026-03-02 13:46:51,206 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 028503059219
+2026-03-02 13:46:51,219 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:51,219 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:51,219 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:51,220 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:51,220 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:51,220 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:51,220 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:51,225 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:51,226 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:51,226 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:51,226 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=1/59
+2026-03-02 13:46:51,226 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:46:51,227 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=1/59 commit_type=supplier-commit
+2026-03-02 13:46:51,227 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=1/59 phase=supplier
+2026-03-02 13:46:51,227 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:46:51,227 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 2/59
+2026-03-02 13:46:51,227 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 2 processed (total in cache: 2)
+2026-03-02 13:46:51,227 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 2/59 (remaining=57)
+2026-03-02 13:46:51,227 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:46:51,228 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 2
+2026-03-02 13:46:51,228 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 2, frequency=1, enabled=True
+2026-03-02 13:46:51,228 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=2, modulo=0
+2026-03-02 13:46:51,228 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:51,228 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:46:51,228 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:51,229 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:46:51,229 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 2 products to cache...
+2026-03-02 13:46:51,229 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:51,253 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 1 existing products for deduplication
+2026-03-02 13:46:51,253 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:46:51,253 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 1 existing + 1 new = 2 total
+2026-03-02 13:46:51,258 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (2 entries) saved successfully
+2026-03-02 13:46:51,259 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 2 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 932 bytes)
+2026-03-02 13:46:51,259 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (2 products)
+2026-03-02 13:46:51,260 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:51,260 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:51,260 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:51,260 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:51,260 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:51,261 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:51,316 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:51,317 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:51,317 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:51,317 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=1/59
+2026-03-02 13:46:51,317 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 2 products (1 new) to cache (every 1 products)
+2026-03-02 13:46:51,318 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:51,318 - configurable_supplier_scraper - INFO - ✅ Extracted: B/o Train Set By Atoz Toys - £6.5
+2026-03-02 13:46:51,318 - configurable_supplier_scraper - INFO - 🔍 Extracting product 3/59: https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613
+2026-03-02 13:46:51,318 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613 (attempt 1/3)
+2026-03-02 13:46:51,318 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:51,319 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:51,319 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613
+2026-03-02 13:46:52,897 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613 in 1.92s...
+2026-03-02 13:46:54,817 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613 (attempt 2/3)
+2026-03-02 13:46:54,817 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:54,817 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:54,817 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613
+2026-03-02 13:46:57,451 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613
+2026-03-02 13:46:57,451 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613
+2026-03-02 13:46:57,686 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Rdc-2-In-1-Bmw-I8--Helicopter-toy07613 (Size: 912520 bytes)
+2026-03-02 13:46:58,154 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 6930751308053
+2026-03-02 13:46:58,167 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:58,167 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:58,167 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:58,167 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:58,167 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:58,168 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:58,168 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:58,173 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:58,174 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:58,174 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:58,174 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=2/59
+2026-03-02 13:46:58,175 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:46:58,175 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=2/59 commit_type=supplier-commit
+2026-03-02 13:46:58,175 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=2/59 phase=supplier
+2026-03-02 13:46:58,175 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:46:58,175 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 3/59
+2026-03-02 13:46:58,175 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 3 processed (total in cache: 3)
+2026-03-02 13:46:58,176 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 3/59 (remaining=56)
+2026-03-02 13:46:58,176 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:46:58,176 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 3
+2026-03-02 13:46:58,176 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 3, frequency=1, enabled=True
+2026-03-02 13:46:58,176 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=3, modulo=0
+2026-03-02 13:46:58,177 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:58,177 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:46:58,177 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:58,177 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:46:58,178 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 3 products to cache...
+2026-03-02 13:46:58,178 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:46:58,208 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 2 existing products for deduplication
+2026-03-02 13:46:58,208 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:46:58,208 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 2 existing + 1 new = 3 total
+2026-03-02 13:46:58,213 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (3 entries) saved successfully
+2026-03-02 13:46:58,214 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 3 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 1403 bytes)
+2026-03-02 13:46:58,214 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (3 products)
+2026-03-02 13:46:58,214 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:46:58,215 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:46:58,215 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:46:58,215 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:46:58,215 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:46:58,215 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:46:58,268 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:46:58,269 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:46:58,269 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:46:58,270 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=2/59
+2026-03-02 13:46:58,270 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 3 products (1 new) to cache (every 1 products)
+2026-03-02 13:46:58,270 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:46:58,270 - configurable_supplier_scraper - INFO - ✅ Extracted: Try Me Helicopter & Fire Engine - £29.35
+2026-03-02 13:46:58,270 - configurable_supplier_scraper - INFO - 🔍 Extracting product 4/59: https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472
+2026-03-02 13:46:58,271 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472 (attempt 1/3)
+2026-03-02 13:46:58,271 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:46:58,271 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:46:58,271 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472
+2026-03-02 13:46:59,781 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472 in 2.32s...
+2026-03-02 13:47:02,114 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472 (attempt 2/3)
+2026-03-02 13:47:02,115 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:02,115 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:02,115 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472
+2026-03-02 13:47:03,445 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472
+2026-03-02 13:47:03,445 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472
+2026-03-02 13:47:03,576 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Shape-Sorter-Ball-toy0472 (Size: 899398 bytes)
+2026-03-02 13:47:04,065 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 028503003052
+2026-03-02 13:47:04,079 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:04,080 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:04,080 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:04,080 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:04,080 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:04,080 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:04,081 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:04,087 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:04,088 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:04,088 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:04,089 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=3/59
+2026-03-02 13:47:04,090 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:47:04,090 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=3/59 commit_type=supplier-commit
+2026-03-02 13:47:04,091 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=3/59 phase=supplier
+2026-03-02 13:47:04,091 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:47:04,091 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 4/59
+2026-03-02 13:47:04,091 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 4 processed (total in cache: 4)
+2026-03-02 13:47:04,092 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 4/59 (remaining=55)
+2026-03-02 13:47:04,092 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:47:04,092 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 4
+2026-03-02 13:47:04,092 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 4, frequency=1, enabled=True
+2026-03-02 13:47:04,092 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=4, modulo=0
+2026-03-02 13:47:04,093 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:04,093 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:47:04,093 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:04,094 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:47:04,094 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 4 products to cache...
+2026-03-02 13:47:04,094 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:04,113 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 3 existing products for deduplication
+2026-03-02 13:47:04,113 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:47:04,114 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 3 existing + 1 new = 4 total
+2026-03-02 13:47:04,120 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (4 entries) saved successfully
+2026-03-02 13:47:04,122 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 4 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 1841 bytes)
+2026-03-02 13:47:04,122 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (4 products)
+2026-03-02 13:47:04,122 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:04,122 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:04,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:04,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:04,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:04,123 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:04,165 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:04,166 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:04,166 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:04,166 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=3/59
+2026-03-02 13:47:04,166 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 4 products (1 new) to cache (every 1 products)
+2026-03-02 13:47:04,167 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:04,167 - configurable_supplier_scraper - INFO - ✅ Extracted: 12 Brick Shape Sorter Ball - £5.92
+2026-03-02 13:47:04,167 - configurable_supplier_scraper - INFO - 🔍 Extracting product 5/59: https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776
+2026-03-02 13:47:04,167 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776 (attempt 1/3)
+2026-03-02 13:47:04,167 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:04,167 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:04,167 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776
+2026-03-02 13:47:06,532 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776 in 1.75s...
+2026-03-02 13:47:08,288 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776 (attempt 2/3)
+2026-03-02 13:47:08,288 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:08,289 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:08,289 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776
+2026-03-02 13:47:10,904 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776
+2026-03-02 13:47:10,905 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776
+2026-03-02 13:47:13,021 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Hammering-Bench-bac0776 (Size: 912654 bytes)
+2026-03-02 13:47:13,498 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 028503050216
+2026-03-02 13:47:13,512 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:13,513 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:13,513 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:13,513 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:13,513 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:13,513 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:13,514 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:13,521 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:13,522 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:13,522 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:13,522 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=4/59
+2026-03-02 13:47:13,522 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:47:13,522 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=4/59 commit_type=supplier-commit
+2026-03-02 13:47:13,522 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=4/59 phase=supplier
+2026-03-02 13:47:13,522 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:47:13,523 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 5/59
+2026-03-02 13:47:13,523 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 5 processed (total in cache: 5)
+2026-03-02 13:47:13,523 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 5/59 (remaining=54)
+2026-03-02 13:47:13,523 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:47:13,523 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 5
+2026-03-02 13:47:13,524 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 5, frequency=1, enabled=True
+2026-03-02 13:47:13,524 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=5, modulo=0
+2026-03-02 13:47:13,524 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:13,525 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:47:13,525 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:13,525 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:47:13,525 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 5 products to cache...
+2026-03-02 13:47:13,526 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:13,557 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 4 existing products for deduplication
+2026-03-02 13:47:13,558 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:47:13,558 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 4 existing + 1 new = 5 total
+2026-03-02 13:47:13,563 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (5 entries) saved successfully
+2026-03-02 13:47:13,564 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 5 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 2277 bytes)
+2026-03-02 13:47:13,564 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (5 products)
+2026-03-02 13:47:13,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:13,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:13,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:13,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:13,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:13,566 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:13,601 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:13,602 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:13,602 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:13,602 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=4/59
+2026-03-02 13:47:13,603 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 5 products (1 new) to cache (every 1 products)
+2026-03-02 13:47:13,603 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:13,603 - configurable_supplier_scraper - INFO - ✅ Extracted: Wood Unicorn Hammering Bench - £6.5
+2026-03-02 13:47:13,603 - configurable_supplier_scraper - INFO - 🔍 Extracting product 6/59: https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743
+2026-03-02 13:47:13,603 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743 (attempt 1/3)
+2026-03-02 13:47:13,603 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:13,603 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:13,604 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743
+2026-03-02 13:47:15,388 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743 in 2.26s...
+2026-03-02 13:47:17,656 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743 (attempt 2/3)
+2026-03-02 13:47:17,657 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:17,657 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:17,657 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743
+2026-03-02 13:47:19,641 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743
+2026-03-02 13:47:19,641 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743
+2026-03-02 13:47:19,896 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Wooden-Princess-Dress-Up-Puzzle--by-AtoZ-Toys-toy021743 (Size: 902456 bytes)
+2026-03-02 13:47:20,362 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 5012866625223
+2026-03-02 13:47:20,375 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:20,375 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:20,376 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:20,376 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:20,376 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:20,376 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:20,376 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:20,383 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:20,384 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:20,384 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:20,384 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=5/59
+2026-03-02 13:47:20,384 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:47:20,384 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=5/59 commit_type=supplier-commit
+2026-03-02 13:47:20,385 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=5/59 phase=supplier
+2026-03-02 13:47:20,385 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:47:20,385 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 6/59
+2026-03-02 13:47:20,385 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 6 processed (total in cache: 6)
+2026-03-02 13:47:20,385 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 6/59 (remaining=53)
+2026-03-02 13:47:20,385 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:47:20,385 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 6
+2026-03-02 13:47:20,386 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 6, frequency=1, enabled=True
+2026-03-02 13:47:20,386 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=6, modulo=0
+2026-03-02 13:47:20,386 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:20,386 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:47:20,386 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:20,387 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:47:20,387 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 6 products to cache...
+2026-03-02 13:47:20,387 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:20,419 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 5 existing products for deduplication
+2026-03-02 13:47:20,420 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:47:20,420 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 5 existing + 1 new = 6 total
+2026-03-02 13:47:20,426 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (6 entries) saved successfully
+2026-03-02 13:47:20,427 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 6 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 2793 bytes)
+2026-03-02 13:47:20,427 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (6 products)
+2026-03-02 13:47:20,428 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:20,428 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:20,428 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:20,428 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:20,428 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:20,429 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:20,472 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:20,473 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:20,473 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:20,474 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=5/59
+2026-03-02 13:47:20,474 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 6 products (1 new) to cache (every 1 products)
+2026-03-02 13:47:20,474 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:20,474 - configurable_supplier_scraper - INFO - ✅ Extracted: Wooden Pirate Puzzle 2 Asstd  by AtoZ Toys - £0.59
+2026-03-02 13:47:20,474 - configurable_supplier_scraper - INFO - 🔍 Extracting product 7/59: https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554
+2026-03-02 13:47:20,475 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554 (attempt 1/3)
+2026-03-02 13:47:20,475 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:20,475 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:20,476 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554
+2026-03-02 13:47:22,149 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554 in 2.05s...
+2026-03-02 13:47:24,208 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554 (attempt 2/3)
+2026-03-02 13:47:24,208 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:24,209 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:24,209 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554
+2026-03-02 13:47:25,461 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554
+2026-03-02 13:47:25,462 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554
+2026-03-02 13:47:28,350 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Baby-Doll-30cm-In-Cdu-By-Atoz-Toys-toy07554 (Size: 916134 bytes)
+2026-03-02 13:47:28,863 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 5012866310402
+2026-03-02 13:47:28,877 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:28,878 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:28,878 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:28,878 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:28,878 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:28,878 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:28,879 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:28,885 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:28,886 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:28,887 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:28,887 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=6/59
+2026-03-02 13:47:28,887 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:47:28,887 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=6/59 commit_type=supplier-commit
+2026-03-02 13:47:28,887 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=6/59 phase=supplier
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 7/59
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 7 processed (total in cache: 7)
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 7/59 (remaining=52)
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 7
+2026-03-02 13:47:28,888 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 7, frequency=1, enabled=True
+2026-03-02 13:47:28,889 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=7, modulo=0
+2026-03-02 13:47:28,889 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:28,890 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:47:28,890 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:28,890 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:47:28,890 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 7 products to cache...
+2026-03-02 13:47:28,891 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:28,928 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 6 existing products for deduplication
+2026-03-02 13:47:28,928 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:47:28,928 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 6 existing + 1 new = 7 total
+2026-03-02 13:47:28,934 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (7 entries) saved successfully
+2026-03-02 13:47:28,935 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 7 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 3260 bytes)
+2026-03-02 13:47:28,935 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (7 products)
+2026-03-02 13:47:28,935 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:28,935 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:28,935 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:28,936 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:28,936 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:28,936 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:28,986 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:28,987 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:28,987 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:28,987 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=6/59
+2026-03-02 13:47:28,988 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 7 products (1 new) to cache (every 1 products)
+2026-03-02 13:47:28,988 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:28,988 - configurable_supplier_scraper - INFO - ✅ Extracted: Dinosaur Assorted By Atoz Toys - £4.75
+2026-03-02 13:47:28,988 - configurable_supplier_scraper - INFO - 🔍 Extracting product 8/59: https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817
+2026-03-02 13:47:28,988 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817 (attempt 1/3)
+2026-03-02 13:47:28,989 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:28,989 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:28,989 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817
+2026-03-02 13:47:30,378 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817 in 1.99s...
+2026-03-02 13:47:32,375 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817 (attempt 2/3)
+2026-03-02 13:47:32,375 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:32,375 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:32,375 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817
+2026-03-02 13:47:34,704 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817
+2026-03-02 13:47:34,704 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817
+2026-03-02 13:47:34,831 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/My-1st-Bath-Book-toy0817 (Size: 918931 bytes)
+2026-03-02 13:47:35,456 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 5012866632085
+2026-03-02 13:47:35,471 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:35,471 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:35,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:35,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:35,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:35,472 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:35,473 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:35,478 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:35,479 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:35,479 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:35,479 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=7/59
+2026-03-02 13:47:35,479 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:47:35,480 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=7/59 commit_type=supplier-commit
+2026-03-02 13:47:35,480 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=7/59 phase=supplier
+2026-03-02 13:47:35,480 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:47:35,480 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 8/59
+2026-03-02 13:47:35,480 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 8 processed (total in cache: 8)
+2026-03-02 13:47:35,480 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 8/59 (remaining=51)
+2026-03-02 13:47:35,480 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:47:35,481 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 8
+2026-03-02 13:47:35,481 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 8, frequency=1, enabled=True
+2026-03-02 13:47:35,481 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=8, modulo=0
+2026-03-02 13:47:35,481 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:35,481 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:47:35,482 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:35,482 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:47:35,482 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 8 products to cache...
+2026-03-02 13:47:35,482 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:35,519 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 7 existing products for deduplication
+2026-03-02 13:47:35,519 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:47:35,520 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 7 existing + 1 new = 8 total
+2026-03-02 13:47:35,524 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (8 entries) saved successfully
+2026-03-02 13:47:35,525 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 8 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 3717 bytes)
+2026-03-02 13:47:35,525 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (8 products)
+2026-03-02 13:47:35,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:35,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:35,526 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:35,526 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:35,526 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:35,526 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:35,578 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:35,579 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:35,579 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:35,579 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=7/59
+2026-03-02 13:47:35,579 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 8 products (1 new) to cache (every 1 products)
+2026-03-02 13:47:35,579 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:35,580 - configurable_supplier_scraper - INFO - ✅ Extracted: Colour-changing Bath Book (Assorted Designs) - £1.49
+2026-03-02 13:47:35,580 - configurable_supplier_scraper - INFO - 🔍 Extracting product 9/59: https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742
+2026-03-02 13:47:35,580 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742 (attempt 1/3)
+2026-03-02 13:47:35,580 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:35,580 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:35,580 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742
+2026-03-02 13:47:40,230 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742 in 1.96s...
+2026-03-02 13:47:42,200 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742 (attempt 2/3)
+2026-03-02 13:47:42,200 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:42,200 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:42,200 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742
+2026-03-02 13:47:44,884 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742
+2026-03-02 13:47:44,884 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742
+2026-03-02 13:47:44,982 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Wooden-Time-To-Brush-Fairy--by-AtoZ-Toys-toy021742 (Size: 890342 bytes)
+2026-03-02 13:47:45,456 - configurable_supplier_scraper - INFO - 🎯 EAN found via manual iteration (.specs-row): 5012866625094
+2026-03-02 13:47:45,470 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:45,470 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:45,470 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:45,470 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:45,470 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:45,471 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:45,471 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:45,477 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:45,478 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:45,478 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:45,478 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=8/59
+2026-03-02 13:47:45,478 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-03-02 13:47:45,478 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/1 prod=8/59 commit_type=supplier-commit
+2026-03-02 13:47:45,478 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/1 prod=8/59 phase=supplier
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale total=59 (LOCKED)
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 9/59
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 9 processed (total in cache: 9)
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [a-to-z-wholesale]: 9/59 (remaining=50)
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [a-to-z-wholesale]: 0/59 (global_done=0, remaining≈59)
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 9
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 9, frequency=1, enabled=True
+2026-03-02 13:47:45,479 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=9, modulo=0
+2026-03-02 13:47:45,480 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:45,480 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-03-02 13:47:45,480 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:45,481 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-03-02 13:47:45,481 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 9 products to cache...
+2026-03-02 13:47:45,481 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json
+2026-03-02 13:47:45,482 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 8 existing products for deduplication
+2026-03-02 13:47:45,482 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-03-02 13:47:45,482 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 8 existing + 1 new = 9 total
+2026-03-02 13:47:45,486 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (9 entries) saved successfully
+2026-03-02 13:47:45,488 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 9 products (1 new) to cache: angelwholesale-co-uk__angelwholesale_co_uk__sandbox__aebdad60_products_cache.json (size: 4212 bytes)
+2026-03-02 13:47:45,488 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (9 products)
+2026-03-02 13:47:45,488 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-03-02 13:47:45,488 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-03-02 13:47:45,488 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-03-02 13:47:45,488 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-03-02 13:47:45,489 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-03-02 13:47:45,489 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-03-02 13:47:45,529 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json (30 entries) saved successfully
+2026-03-02 13:47:45,530 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-03-02 13:47:45,530 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\angelwholesale_co_uk__angelwholesale_co_uk__sandbox__aebdad60_processing_state.json
+2026-03-02 13:47:45,531 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/1 url=https://angelwholesale.co.uk/Category/A-To-Z-wholesale prod_idx=8/59
+2026-03-02 13:47:45,531 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 9 products (1 new) to cache (every 1 products)
+2026-03-02 13:47:45,531 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-03-02 13:47:45,531 - configurable_supplier_scraper - INFO - ✅ Extracted: Wooden Abacus  Med  by AtoZ Toys - £1.0
+2026-03-02 13:47:45,531 - configurable_supplier_scraper - INFO - 🔍 Extracting product 10/59: https://angelwholesale.co.uk/Item/Rainbow-Rainmaker--by-AtoZ-Toys-toy021624
+2026-03-02 13:47:45,531 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Rainbow-Rainmaker--by-AtoZ-Toys-toy021624 (attempt 1/3)
+2026-03-02 13:47:45,532 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:45,532 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:45,532 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Rainbow-Rainmaker--by-AtoZ-Toys-toy021624
+2026-03-02 13:47:46,862 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Rainbow-Rainmaker--by-AtoZ-Toys-toy021624 in 1.89s...
+2026-03-02 13:47:48,765 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Rainbow-Rainmaker--by-AtoZ-Toys-toy021624 (attempt 2/3)
+2026-03-02 13:47:48,765 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-03-02 13:47:48,765 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-02 13:47:48,765 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Rainbow-Rainmaker--by-AtoZ-Toys-toy021624

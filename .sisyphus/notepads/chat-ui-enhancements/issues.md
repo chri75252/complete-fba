@@ -33,3 +33,13 @@
 ## 2026-03-02 diagnostics environment note
 - lsp_diagnostics could not execute because basedpyright-langserver is not discoverable in PATH, even though basedpyright package is installed in user site-packages.
 - Used python -m py_compile control_plane/tools/run_validation.py as syntax validation fallback.
+
+## 2026-03-05 - Chat cancel/clarify regressions
+
+- `cancel_run` confirmation can loop because the UI resumes autonomous planning immediately after approval and can re-emit `cancel_run` for the same original user text.
+- Prompt/backend mismatch: planner is told to pass empty `run_id` for cancel (expecting backend `last_run_id` resolution), but backend run resolution is filesystem-based and does not use Streamlit `last_run_id` directly.
+- Planner hard rules force `ask_clarify` when any required field is missing and prohibit path guessing, which causes clarification prompts even when path discovery could be done with read tools.
+
+## 2026-03-05 - Remaining open risk after code cross-check
+
+- `cancel_run` can still re-loop after approval because `dashboard/chat_panel.py` resumes the autonomous loop for all approved write tools (via retained `agent_scratchpad` + `agent_user_text`), including cancellation, which can re-propose the same action depending on planner output.

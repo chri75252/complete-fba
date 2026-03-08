@@ -154,13 +154,16 @@ class OpenAiProvider:
         from openai import OpenAI
 
         client = OpenAI(api_key=self.api_key)
+        temperature = 0
+        if self.model == "gpt-5-mini":
+            temperature = 1
         resp = client.chat.completions.create(
             model=self.model,
             messages=[
                 {"role": "system", "content": "Return ONLY valid JSON."},
                 {"role": "user", "content": prompt},
             ],
-            temperature=0,
+            temperature=temperature,
         )
         content = resp.choices[0].message.content or "{}"
         return json.loads(content)
@@ -191,35 +194,6 @@ class OpenAiCompatProvider:
         data = resp.json()
         text = data["choices"][0]["message"]["content"]
         return _safe_json_loads(text)
-
-    def generate_text(self, prompt: str) -> str:
-        """
-        Generate natural language text without JSON formatting.
-        Used for post-tool summarization in responder phase.
-
-        Args:
-            prompt: The prompt to send to the LLM
-
-        Returns:
-            Natural language string response
-        """
-        import requests
-
-        url = self.base_url.rstrip("/") + "/v1/chat/completions"
-        payload = {
-            "model": self.model,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0.3,
-        }
-
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-
-        resp = requests.post(url, json=payload, headers=headers, timeout=60)
-        resp.raise_for_status()
-        data = resp.json()
-        return data["choices"][0]["message"]["content"] or ""
 
 
 @dataclass(frozen=True)

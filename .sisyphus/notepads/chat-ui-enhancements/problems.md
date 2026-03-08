@@ -13,3 +13,9 @@
 ## 2026-03-02 - Remaining open problems after triangulation fallback
 
 - LSP diagnostics for Python files are still blocked by missing `basedpyright-langserver` command resolution in the current tool environment, so static diagnostics are not yet enforceable in-session.
+
+## 2026-03-05 - Open problems from chat planner regressions
+
+- No explicit terminal guard exists after a successful one-shot write tool (for example `cancel_run`), so autonomous resume may re-plan the same write action.
+- Prompt guidance and executor behavior diverge for empty `cancel_run.run_id` resolution (`last_run_id` claim vs filesystem resolver), which can produce repeated non-productive cancel attempts.
+- The planner prompt currently favors user clarification over autonomous file discovery, reducing resilience for tasks that could be solved with `list_repo_dir`/`read_repo_file` chains.

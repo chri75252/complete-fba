@@ -29,18 +29,13 @@ def setup_logger(
         root_logger.handlers.clear()
 
         # Configure logging
-        handlers = [
-            logging.StreamHandler(),
-            logging.FileHandler(debug_log_file, mode="w", encoding="utf-8"),
-        ]
-        cp_log_path = os.environ.get("CONTROL_PLANE_LOG_PATH")
-        if cp_log_path:
-            handlers.append(logging.FileHandler(cp_log_path, mode="a", encoding="utf-8"))
-
         logging.basicConfig(
             level=log_level,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-            handlers=handlers,
+            handlers=[
+                logging.StreamHandler(),
+                logging.FileHandler(debug_log_file, mode="w", encoding="utf-8"),
+            ],
             force=True,
         )
 

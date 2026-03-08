@@ -56,3 +56,17 @@
 - Mirrored expected output derivation by job type inside run validation for run_workflow and run_product_list_refresh.
 - Added physical filesystem verification for each expected output path; wildcard patterns are checked with pathlib.Path.glob and require at least one matching file.
 - Validation payload now exposes missing_expected_files for deterministic downstream diagnosis.
+
+## 2026-03-05 - Chat UI regressions (cancel loop + ask_clarify)
+
+- In `dashboard/chat_panel.py`, `Confirm execute` already clears `pending_tool_call` and calls `st.rerun()`; the repeat-confirm loop is not caused by missing rerun/clear logic.
+- The loop is driven by automatic resume (`agent_scratchpad` + `agent_user_text`) immediately re-entering `_run_agent_loop(...)` after write approval, which can re-propose the same write action.
+- `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md` includes strict hard rules (`if missing -> ask_clarify`, `never guess file paths/run IDs`) that bias the planner toward clarification instead of discovery tools.
+- The prompt says empty `run_id` on `cancel_run` should resolve from `last_run_id`, but `execute_tool_call` resolves context from filesystem folders and does not read Streamlit `last_run_id` directly.
+
+## 2026-03-05 - Cross-check of external report vs current code
+
+- `ask_clarify` is now treated as a terminal planner tool path in `control_plane/chat_orchestrator.py`: it executes once, then returns `AgentStep(kind="final_answer", ..., result=...)`, and that result is persisted into `chat_messages` by `dashboard/chat_panel.py`.
+- Deterministic expected-output handling is active in both planner paths: fallback outputs are computed in Python, placeholder-substituted with run/sandbox IDs, then merged with LLM-proposed outputs with dedupe.
+- Category-cap translation for "N per category across multiple category URLs" is now implemented in orchestrator and pending-param edit logic by multiplying `max_products = max_products_per_category * url_count` when total-intent is not explicit.
+- Worker env propagation is wired: `control_plane/worker.py` calls `ensure_llm_env()` and passes `env=os.environ.copy()` to `subprocess.Popen`, so `.env` values are inherited at process spawn time.

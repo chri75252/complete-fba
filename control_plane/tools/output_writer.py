@@ -12,7 +12,6 @@ _ALLOWED_WRITE_DIRS: tuple[str, ...] = (
 
 
 def _is_allowed_write_path(repo_root: Path, target: Path) -> bool:
-    """Check if target path is under an allowed write directory."""
     try:
         rel = target.resolve().relative_to(repo_root.resolve())
     except ValueError:
@@ -21,16 +20,16 @@ def _is_allowed_write_path(repo_root: Path, target: Path) -> bool:
     return any(rel_posix.startswith(prefix) for prefix in _ALLOWED_WRITE_DIRS)
 
 
-def _is_allowed_code_edit(rel_posix: str, supplier_domain: str = "") -> bool:
-    """Safely allow the LLM to tailor newly generated wizard scripts matching the active domain."""
-    if not supplier_domain:
-        return False
+def _is_allowed_code_edit(rel_posix: str) -> bool:
+    protected_runners = {
+        "run_custom_poundwholesale.py",
+        "run_custom_clearance_king.py",
+        "run_custom_dkwholesale-com.py",
+        "run_custom_efghousewares-co-uk.py",
+        "run_custom_angelwholesale-co-uk.py",
+    }
 
-    # Strip common suffixes/prefixes for fuzzy matching
-    safe_domain = supplier_domain.replace(".co.uk", "").replace(".com", "").replace("-", "")
-    safe_rel = rel_posix.replace("-", "").replace("_", "")
-
-    if safe_domain not in safe_rel:
+    if rel_posix in protected_runners:
         return False
 
     if rel_posix.startswith("run_custom_") and rel_posix.endswith(".py"):
@@ -46,20 +45,15 @@ def write_output_file(
     content: str,
     *,
     overwrite: bool = False,
-    supplier_domain: str = "",
 ) -> dict[str, Any]:
-    """Write a file to an allowed output directory.
-
-    Used by the chat LLM to generate reports (MD), product lists (JSON), etc.
-    """
-    if not rel_path or not content:
+    if not rel_path or content is None:
         return {"ok": False, "error": "missing_path_or_content"}
 
     target = (repo_root / rel_path).resolve()
-
     rel_posix = target.resolve().relative_to(repo_root.resolve()).as_posix()
+
     is_safe_dir = _is_allowed_write_path(repo_root, target)
-    is_safe_code = _is_allowed_code_edit(rel_posix, supplier_domain)
+    is_safe_code = _is_allowed_code_edit(rel_posix)
 
     if not (is_safe_dir or is_safe_code):
         return {

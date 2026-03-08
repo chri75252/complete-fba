@@ -8,9 +8,10 @@ from pathlib import Path
 from typing import Any
 
 from control_plane import job_types
+from control_plane.env_config import ensure_llm_env
 from control_plane.internal.file_io import read_json, write_json_atomic, write_text_atomic
-from control_plane.paths import get_paths
 from control_plane.internal.path_resolver import ensure_control_plane_dirs, get_control_plane_paths
+from control_plane.paths import get_paths
 from dashboard.metrics_core import MetricsLoader
 
 
@@ -64,13 +65,9 @@ def _acquire_lock(lock_file: Path, run_id: str) -> bool:
 def _is_cancelled(run_id: str) -> bool:
     paths = get_paths()
 
-    if (paths.status_dir / f"{run_id}.cancelled").exists():
-        return True
-
-    if (paths.lock_dir / f"cancel_{run_id}.flag").exists():
-        return True
-
-    return False
+    return (paths.status_dir / f"{run_id}.cancelled").exists() or (
+        paths.lock_dir / f"cancel_{run_id}.flag"
+    ).exists()
 
 
 def _release_lock(lock_file: Path) -> None:
@@ -86,14 +83,17 @@ def _move_job(src: Path, dst_dir: Path) -> Path:
     if dst.exists():
         suffix = int(time.time() * 1000)
         dst = dst_dir / f"{src.stem}__dup_{suffix}{src.suffix}"
-    os.replace(src, dst)
+    try:
+        os.replace(src, dst)
+    except FileNotFoundError:
+        return dst
     return dst
 
 
 def _tail_file(path: Path, lines: int) -> list[str]:
     if not path.exists():
         return []
-    with open(path, "r", encoding="utf-8", errors="replace") as f:
+    with open(path, encoding="utf-8", errors="replace") as f:
         all_lines = f.readlines()
     return [ln.rstrip("\n\r") for ln in all_lines[-lines:]]
 
@@ -183,9 +183,7 @@ def _count_linking_map_entries(path):
         return 0
     try:
         data = read_json(Path(path))
-        if isinstance(data, list):
-            return len(data)
-        elif isinstance(data, dict):
+        if isinstance(data, list | dict):
             return len(data)
         return 0
     except Exception:
@@ -257,6 +255,7 @@ class ControlPlaneWorker:
         self.config = config or WorkerConfig()
 
     def run_forever(self) -> None:
+        ensure_llm_env()
         paths = get_control_plane_paths(self.repo_root)
         ensure_control_plane_dirs(paths)
 
@@ -483,9 +482,41 @@ class ControlPlaneWorker:
                         _recompute_refresh_counts(status, job, paths, resolved, loader)
 
                     if proc.returncode == 0:
-                        status["state"] = "done"
-                        write_json_atomic(status_path, status)
-                        _move_job(running_job_path, paths.jobs_done)
+                        # Check log tail for tracebacks that escaped without causing a non-zero exit
+                        log_tail_text = "\n".join(status["error"]["last_log_lines"])
+                        has_traceback = "Traceback (most recent call last):" in log_tail_text
+                        has_index_error = "IndexError" in log_tail_text
+
+                        # Known non-fatal artifacts to ignore if they appear alone
+                        shutdown_artifacts = [
+                            "Exception ignored in: <function BaseSubprocessTransport.__del__",
+                            "RuntimeError: Event loop is closed",
+                            "asyncio.base_subprocess",
+                        ]
+
+                        is_fatal_traceback = False
+                        if has_traceback:
+                            is_fatal_traceback = True
+                            # If it's *only* a known shutdown artifact, we don't fail the run
+                            if (
+                                any(artifact in log_tail_text for artifact in shutdown_artifacts)
+                                and not has_index_error
+                                and "Exception in callback"
+                                not in log_tail_text.split("Traceback")[0]
+                            ):
+                                is_fatal_traceback = False
+
+                        if is_fatal_traceback:
+                            status["state"] = "failed"
+                            status["error"]["summary"] = (
+                                "Process exited 0 but log contains fatal Traceback"
+                            )
+                            write_json_atomic(status_path, status)
+                            _move_job(running_job_path, paths.jobs_failed)
+                        else:
+                            status["state"] = "done"
+                            write_json_atomic(status_path, status)
+                            _move_job(running_job_path, paths.jobs_done)
                     else:
                         status["state"] = "failed"
                         status["error"]["summary"] = f"Process exited with code {proc.returncode}"
@@ -504,6 +535,7 @@ class ControlPlaneWorker:
 
 
 def main() -> None:
+    ensure_llm_env()
     ControlPlaneWorker().run_forever()
 
 

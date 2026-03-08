@@ -1,0 +1,27 @@
+# 1. THE MONSTERS (Blocking 100MB+ files strictly)
+logs/debug/run_custom_poundwholesale_*.log
+OUTPUTS/DIAGNOSTICS/save_telemetry.log
+.serena/cache/python/*.pkl
+OUTPUTS - Copy/DIAGNOSTICS/
+
+# 2. SYSTEM JUNK (Standard to exclude - these cause crashes like 'venv/bin/python')
+venv/
+node_modules/
+.next/
+.DS_Store
+**/*.pyc
+**/__pycache__/
+
+# 3. WINDOWS RESERVED (Crashing Git)
+**/nul
+**/con
+**/prn
+**/aux
+**/com[1-9]
+**/lpt[1-9]
+
+# 4. TEMP FILES
+**/*.patch
+~$*
+
+# NOTE: Everything else (OUTPUTS, src, utils, tools) is TRACKED and will be pushed.

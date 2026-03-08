@@ -9,14 +9,15 @@ from .jobs import (
     write_merged_system_config,
 )
 from .logs import tail_file
-from .output_writer import write_output_file
-from .run_outputs import get_run_outputs
 from .state import read_processing_state
 from .status import read_status
 from .trace import read_trace_summary
 from .cached_products import find_cached_products, read_cached_products
 from .linking_map import find_linking_entries, read_linking_map
 from .amazon_cache import read_amazon_cache_by_asin
+from .run_outputs import get_run_outputs
+from .output_writer import write_output_file
+from .run_validation import validate_run_integrity
 from .repo_files import (
     list_repo_dir,
     read_repo_file,
@@ -26,7 +27,6 @@ from .repo_files import (
 from .clarify import ClarifyResponse, ask_clarify
 from .product_list_refresh import ProductListRefreshRequest, enqueue_product_list_refresh
 from control_plane.checklists import onboarding_sanity_check, run_readiness_check
-from .run_validation import validate_run_integrity
 
 
 def _touch_exports() -> None:
@@ -40,8 +40,6 @@ def _touch_exports() -> None:
         write_categories_subset,
         write_merged_system_config,
         tail_file,
-        write_output_file,
-        get_run_outputs,
         read_processing_state,
         read_status,
         read_trace_summary,
@@ -50,6 +48,9 @@ def _touch_exports() -> None:
         find_linking_entries,
         read_linking_map,
         read_amazon_cache_by_asin,
+        get_run_outputs,
+        write_output_file,
+        validate_run_integrity,
         list_repo_dir,
         read_repo_file,
         enqueue_onboarding_job,
@@ -60,7 +61,6 @@ def _touch_exports() -> None:
         enqueue_product_list_refresh,
         onboarding_sanity_check,
         run_readiness_check,
-        validate_run_integrity,
     )
 
 
