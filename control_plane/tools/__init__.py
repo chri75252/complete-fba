@@ -26,6 +26,12 @@ from .repo_files import (
 )
 from .clarify import ClarifyResponse, ask_clarify
 from .product_list_refresh import ProductListRefreshRequest, enqueue_product_list_refresh
+from .product_list_builder import (
+    ProductListBuildRequest,
+    build_product_list_from_cached,
+    default_product_list_rel_path,
+    normalize_product_list_rel_path,
+)
 from control_plane.checklists import onboarding_sanity_check, run_readiness_check
 
 
@@ -59,6 +65,10 @@ def _touch_exports() -> None:
         ask_clarify,
         ProductListRefreshRequest,
         enqueue_product_list_refresh,
+        ProductListBuildRequest,
+        build_product_list_from_cached,
+        default_product_list_rel_path,
+        normalize_product_list_rel_path,
         onboarding_sanity_check,
         run_readiness_check,
     )

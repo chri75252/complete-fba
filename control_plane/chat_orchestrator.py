@@ -16,9 +16,13 @@ from control_plane.rd2_policy import RagConfig, default_rag_config, should_use_r
 from control_plane.tools import (
     FinancialQuery,
     OnboardingWizardRequest,
+    ProductListBuildRequest,
     ProductListRefreshRequest,
     RunRequest,
     ask_clarify,
+    build_product_list_from_cached,
+    default_product_list_rel_path,
+    normalize_product_list_rel_path,
     enqueue_onboarding_job,
     enqueue_product_list_refresh,
     enqueue_run_job,
@@ -64,6 +68,7 @@ WRITE_TOOLS = {
     "cancel_run": "cancel_run",
     "enqueue_onboarding": "enqueue_onboarding",
     "enqueue_product_list_refresh": "enqueue_product_list_refresh",
+    "build_product_list_from_cached": "build_product_list_from_cached",
     "write_output_file": "write_output_file",
 }
 
@@ -72,6 +77,64 @@ TERMINAL_TOOLS = {
     "final_answer": "final_answer",
     "ask_clarify": "ask_clarify",
 }
+
+
+def _is_duplicate_write_call(
+    tool_name: str, params: dict[str, Any], scratchpad: list[dict[str, Any]]
+) -> bool:
+    """Check if a write tool call is a duplicate of one already in the scratchpad."""
+    if tool_name not in WRITE_TOOLS:
+        return False
+
+    for entry in scratchpad:
+        if entry.get("role") == "action" and entry.get("tool") == tool_name:
+            # Compare key parameters to determine if it's the same logical action
+            prev_params = entry.get("params") or {}
+            if not isinstance(prev_params, dict):
+                continue
+
+            # Key parameters that define a unique write action
+            match = True
+            for key in [
+                "run_id",
+                "supplier_domain",
+                "workflow_key",
+                "rel_path",
+                "products_path",
+                "output_path",
+            ]:
+                if key in params or key in prev_params:
+                    if params.get(key) != prev_params.get(key):
+                        match = False
+                        break
+
+            if match:
+                return True
+    return False
+    return False
+
+
+def _prune_value(val: Any, max_list: int = 10, max_str: int = 1000, depth: int = 0) -> Any:
+    """Recursively prune large values in a nested structure."""
+    if depth > 5:
+        return "...<max depth reached>"
+
+    if isinstance(val, dict):
+        return {k: _prune_value(v, max_list, max_str, depth + 1) for k, v in val.items()}
+
+    if isinstance(val, list):
+        if len(val) > max_list:
+            pruned = [_prune_value(item, max_list, max_str, depth + 1) for item in val[:max_list]]
+            pruned.append(f"...<{len(val) - max_list} more items>")
+            return pruned
+        return [_prune_value(item, max_list, max_str, depth + 1) for item in val]
+
+    if isinstance(val, str):
+        if len(val) > max_str:
+            return val[:max_str] + "...<truncated>"
+        return val
+
+    return val
 
 
 def _sanitize_chat_history(
@@ -84,15 +147,13 @@ def _sanitize_chat_history(
 ) -> list[dict[str, Any]]:
     """Return a small, safe chat history for planner prompt injection.
 
-
-
     Policy:
 
     - Keep only the last `max_messages` messages.
 
     - Keep only `role` and a truncated `content` string.
 
-    - Drop large `tool_result` payloads; include only a tiny scalar summary when possible.
+    - Prune large `tool_result` payloads recursively.
 
     - Enforce `max_total_chars` across all message content.
 
@@ -127,48 +188,8 @@ def _sanitize_chat_history(
         msg: dict[str, Any] = {"role": role, "content": content}
 
         tool_result = raw.get("tool_result")
-
-        if isinstance(tool_result, dict):
-            summary: dict[str, Any] = {}
-
-            for key in (
-                "ok",
-                "error",
-                "run_id",
-                "sandbox_supplier",
-                "message",
-                "job_path",
-                "log_path",
-                "merged_config",
-                "categories",
-                "report_path",
-                "row_count",
-                "count",
-                "path",
-                "hint",
-                "questions",
-                "missing_params",
-            ):
-                v = tool_result.get(key)
-
-                if isinstance(v, bool | int | float | str):
-                    if not isinstance(v, str) or len(v) <= 300:
-                        summary[key] = v
-
-                elif key in {"questions", "missing_params"} and isinstance(v, list):
-                    items: list[str] = []
-                    for item in v[:10]:
-                        s = str(item).strip()
-                        if s:
-                            items.append(s)
-                    if items:
-                        joined = "; ".join(items)
-                        if len(joined) > 300:
-                            joined = joined[:300] + "...<truncated>"
-                        summary[key] = joined
-
-            if summary:
-                msg["tool_result"] = summary
+        if tool_result is not None:
+            msg["tool_result"] = _prune_value(tool_result)
 
         out.append(msg)
 
@@ -259,6 +280,38 @@ def _ensure_enqueue_preview_run_id(params: dict[str, Any]) -> str:
     return run_id
 
 
+def _normalize_sandbox_suffix(raw: object, run_id: str) -> str:
+    value = str(raw or "").strip()
+
+    if not value or value in {"<optional_for_resuming>", "sandbox"}:
+        return f"sandbox__{run_id[:8]}"
+
+    if value.startswith("sandbox__"):
+        return value
+
+    if re.fullmatch(r"[0-9a-fA-F]{8}", value):
+        return f"sandbox__{value.lower()}"
+
+    if re.fullmatch(
+        r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+        value,
+    ):
+        return f"sandbox__{value[:8].lower()}"
+
+    return value
+
+
+def _build_sandbox_supplier(domain: str, raw_suffix: object, run_id: str) -> str:
+    return f"{domain}__{_normalize_sandbox_suffix(raw_suffix, run_id)}"
+
+
+def _sandbox_slug_parts(sandbox_supplier: str) -> tuple[str, str]:
+    return (
+        sandbox_supplier.replace(".", "_").replace("-", "_"),
+        sandbox_supplier.replace(".", "-"),
+    )
+
+
 def _substitute_expected_output_placeholders(
     expected_outputs: list[object], *, run_id: str, sandbox_id: str
 ) -> list[str]:
@@ -277,7 +330,7 @@ def _substitute_expected_output_placeholders(
         "{RUN-ID}",
     ]
 
-    id_tokens = ["<id>", "<ID>", "{id}", "{ID}"]
+    id_tokens = ["<id>", "<ID>", "{id}", "{ID}", "{sandbox_id}", "{SANDBOX_ID}"]
 
     for item in expected_outputs:
         if not isinstance(item, str):
@@ -314,10 +367,8 @@ def _fallback_expected_outputs_for_enqueue_tool(
 
     if tool == "enqueue_run":
         domain = str(params.get("supplier_domain") or "").strip()
-        sandbox_suffix = str(params.get("sandbox_suffix") or "").strip()
-        has_real_suffix = bool(
-            sandbox_suffix and sandbox_suffix not in {"<optional_for_resuming>", "sandbox"}
-        )
+        raw_suffix = str(params.get("sandbox_suffix") or "").strip()
+        has_real_suffix = bool(raw_suffix and raw_suffix not in {"<optional_for_resuming>", "sandbox"})
 
         if params.get("category_urls") or has_real_suffix:
             outputs.extend(
@@ -326,11 +377,8 @@ def _fallback_expected_outputs_for_enqueue_tool(
                     f"OUTPUTS/CONTROL_PLANE/overrides/{run_id}/categories_subset.json",
                 ]
             )
-            if not has_real_suffix:
-                sandbox_suffix = f"sandbox__{sandbox_id}"
-            sandbox_supplier = f"{domain}__{sandbox_suffix}"
-            us_domain = sandbox_supplier.replace(".", "_").replace("-", "_")
-            h_domain = sandbox_supplier.replace(".", "-")
+            sandbox_supplier = _build_sandbox_supplier(domain, raw_suffix, run_id)
+            us_domain, h_domain = _sandbox_slug_parts(sandbox_supplier)
             outputs.extend(
                 [
                     f"OUTPUTS/CACHE/processing_states/{us_domain}_processing_state.json",
@@ -356,16 +404,25 @@ def _fallback_expected_outputs_for_enqueue_tool(
 
     if tool == "enqueue_product_list_refresh":
         domain = str(params.get("supplier_domain") or "").strip()
-
-        h_domain = domain.replace(".", "-")
+        sandbox_supplier = f"{domain}__sandbox__{sandbox_id}"
+        us_domain, h_sandbox = _sandbox_slug_parts(sandbox_supplier)
 
         outputs.extend(
             [
-                f"OUTPUTS/cached_products/{h_domain}_products_cache.json",
-                f"OUTPUTS/FBA_ANALYSIS/financial_reports/{h_domain}/fba_financial_report_*.csv",
-                f"OUTPUTS/FBA_ANALYSIS/linking_maps/{domain}/linking_map.json",
+                f"OUTPUTS/CACHE/processing_states/{us_domain}_processing_state.json",
+                f"OUTPUTS/FBA_ANALYSIS/linking_maps/{sandbox_supplier}/linking_map.json",
+                f"OUTPUTS/FBA_ANALYSIS/financial_reports/{h_sandbox}/fba_financial_report_*.csv",
+                str(params.get("products_path") or ""),
             ]
         )
+
+    if tool == "build_product_list_from_cached":
+        domain = str(params.get("supplier_domain") or "").strip()
+        try:
+            output_path = normalize_product_list_rel_path(params.get("output_path"), domain)
+        except ValueError:
+            output_path = default_product_list_rel_path(domain)
+        outputs.append(output_path.replace("\\", "/"))
 
     return outputs
 
@@ -674,6 +731,18 @@ def build_prompt(
                 "dry_run": False,
             },
         },
+        "build_product_list_from_cached": {
+            "type": "write",
+            "params": {
+                "supplier_domain": "poundwholesale.co.uk",
+                "output_path": "OUTPUTS/PRODUCTS_LISTS/product_list_poundwholesale.co.uk_080326.json",
+                "sample_size": 8,
+                "category_count": 3,
+                "overwrite": False,
+                "selection_mode": "random_categories",
+                "require_ean": False,
+            },
+        },
         "write_output_file": {
             "type": "write",
             "params": {
@@ -692,6 +761,14 @@ def build_prompt(
             "params": {"run_id": "uuid-string"},
         },
     }
+
+    active_context_block = ""
+    if planner_hints:
+        active_context_block = "\n<active_context priority='critical'>\n"
+        for k, v in planner_hints.items():
+            if v:
+                active_context_block += f"  <{k}>{v}</{k}>\n"
+        active_context_block += "</active_context>\n"
 
     base_prompt = (
         system_instructions
@@ -715,6 +792,7 @@ def build_prompt(
         + json.dumps(rag_meta or {}, indent=2)
         + "\n\nRAG context (may be empty):\n"
         + (rag_context or "")
+        + active_context_block
         + "\n\nUser: "
         + user_text
     )
@@ -808,7 +886,7 @@ def _parse_runtime_constraints(user_text: str) -> dict[str, int | None]:
     return constraints
 
 
-def _compute_planner_hints(user_text: str, repo_root: Path) -> dict[str, Any]:
+def _compute_planner_hints(user_text: str, repo_root: Path, session_state: dict[str, Any] | None = None) -> dict[str, Any]:
     system_index = _load_system_index(repo_root)
 
     category_urls = _extract_category_urls(user_text, system_index)
@@ -840,23 +918,68 @@ def _compute_planner_hints(user_text: str, repo_root: Path) -> dict[str, Any]:
 
     planner_hints["parsed_constraints"] = _parse_runtime_constraints(user_text)
 
-    try:
-        import streamlit as st
+    if session_state is None:
+        try:
+            import streamlit as st
+            session_state = st.session_state
+        except Exception:
+            session_state = {}
 
-        last_run_id = st.session_state.get("last_run_id")
+    if not isinstance(session_state, dict) and not hasattr(session_state, "get"):
+        session_state = {}
 
-        if isinstance(last_run_id, str) and last_run_id.strip():
-            planner_hints["last_run_id"] = last_run_id.strip()
+    last_run_id = session_state.get("last_run_id")
+    last_products_path = session_state.get("last_products_path")
+    last_supplier_domain = session_state.get("last_supplier_domain")
+    last_sandbox = session_state.get("last_sandbox_supplier")
 
-        last_sandbox = st.session_state.get("last_sandbox_supplier")
+    if isinstance(last_run_id, str) and last_run_id.strip():
+        planner_hints["last_run_id"] = last_run_id.strip()
 
-        if isinstance(last_sandbox, str) and last_sandbox.strip():
-            planner_hints["last_sandbox_supplier"] = last_sandbox.strip()
+    if isinstance(last_sandbox, str) and last_sandbox.strip():
+        planner_hints["last_sandbox_supplier"] = last_sandbox.strip()
 
-    except Exception:
-        pass
+    if isinstance(last_supplier_domain, str) and last_supplier_domain.strip():
+        planner_hints["last_supplier_domain"] = last_supplier_domain.strip()
+
+    if isinstance(last_products_path, str) and last_products_path.strip():
+        planner_hints["last_products_path"] = last_products_path.strip()
 
     return planner_hints
+
+
+def _looks_like_resume_request(user_text: str) -> bool:
+    text = (user_text or "").lower()
+    return any(token in text for token in ("resume", "continue", "where you left off", "pick up"))
+
+
+def _should_rewrite_product_list_resume(
+    user_text: str, tool: str, params: dict[str, Any], planner_hints: dict[str, Any]
+) -> bool:
+    if tool != "enqueue_run":
+        return False
+    if not _looks_like_resume_request(user_text):
+        return False
+
+    urls = params.get("category_urls") or []
+    if isinstance(urls, list) and any(isinstance(u, str) and u.strip() for u in urls):
+        return False
+
+    return bool(planner_hints.get("last_products_path")) and bool(
+        planner_hints.get("last_supplier_domain")
+    )
+
+
+def _sandbox_supplier_aliases(name: str) -> set[str]:
+    value = str(name or "").strip().lower()
+    aliases = {value} if value else set()
+    m = re.fullmatch(r"(.+)__sandbox__([0-9a-f]{8})", value)
+    if m:
+        aliases.add(f"{m.group(1)}__{m.group(2)}")
+    m2 = re.fullmatch(r"(.+)__([0-9a-f]{8})", value)
+    if m2:
+        aliases.add(f"{m2.group(1)}__sandbox__{m2.group(2)}")
+    return aliases
 
 
 def _compute_rag_info(user_text: str) -> tuple[dict[str, Any], str]:
@@ -912,12 +1035,13 @@ def agent_plan_step(
     scratchpad: list[dict[str, Any]],
     chat_history: list[dict[str, Any]],
     rag_info_tuple: tuple[dict[str, Any], str],
+    session_state: dict[str, Any] | None = None,
 ) -> AgentStep:
     """One iteration of the autonomous agent loop."""
 
     system_index = _load_system_index(repo_root)
 
-    planner_hints = _compute_planner_hints(user_text, repo_root)
+    planner_hints = _compute_planner_hints(user_text, repo_root, session_state=session_state)
 
     provider = get_provider()
 
@@ -982,6 +1106,28 @@ def agent_plan_step(
             }
 
             break
+
+        if _should_rewrite_product_list_resume(user_text, tool, params, planner_hints):
+            rewritten: dict[str, Any] = {
+                "supplier_domain": str(planner_hints["last_supplier_domain"]),
+                "products_path": str(planner_hints["last_products_path"]),
+                "notes": params.get("notes")
+                or "Resume cancelled product-list refresh from active context",
+                "dry_run": False,
+            }
+            last_run_id = planner_hints.get("last_run_id")
+            if isinstance(last_run_id, str) and last_run_id.strip():
+                rewritten["run_id"] = last_run_id.strip()
+            tool = "enqueue_product_list_refresh"
+            params = rewritten
+
+        if _is_duplicate_write_call(tool, params, scratchpad):
+            if attempt < 2:
+                prompt += (
+                    f"\n\nCRITICAL: You just executed '{tool}' with these parameters. "
+                    "Do NOT repeat it. Move to the next step or provide a final answer."
+                )
+                continue
 
         if tool == "enqueue_run":
             urls = params.get("category_urls")
@@ -1057,7 +1203,7 @@ def agent_plan_step(
         text = respond_to_tool_result(user_text, tc, result)
         return AgentStep(kind="final_answer", tool_call=tc, text=text, result=result)
 
-    if tool in {"enqueue_run", "enqueue_product_list_refresh"}:
+    if tool in {"enqueue_run", "enqueue_product_list_refresh", "build_product_list_from_cached"}:
         run_id = _ensure_enqueue_preview_run_id(params)
 
         sandbox_id = run_id[:8]
@@ -1214,7 +1360,7 @@ def plan_tool_call(
 
         break
 
-    if tool in {"enqueue_run", "enqueue_product_list_refresh"}:
+    if tool in {"enqueue_run", "enqueue_product_list_refresh", "build_product_list_from_cached"}:
         run_id = _ensure_enqueue_preview_run_id(params)
         sandbox_id = run_id[:8]
 
@@ -1266,16 +1412,100 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
 
         return run_id
 
-    def _resolve_contextual_run_id(repo_root: Path, raw: object) -> str:
+    def _normalize_context_path(raw: object) -> str:
+        value = str(raw or "").strip()
+
+        if not value:
+            return ""
+
+        try:
+            path = Path(value)
+            if path.is_absolute():
+                try:
+                    return str(path.resolve().relative_to(repo_root.resolve())).replace("\\", "/")
+                except ValueError:
+                    return str(path.resolve()).replace("\\", "/")
+        except Exception:
+            pass
+
+        return value.replace("\\", "/")
+
+    def _read_candidate_context(candidate: Path) -> dict[str, str]:
+        try:
+            data = read_json(candidate)
+        except Exception:
+            return {}
+
+        if not isinstance(data, dict):
+            return {}
+
+        refresh = data.get("refresh") if isinstance(data.get("refresh"), dict) else {}
+        source_supplier = str(data.get("source_supplier_domain") or "").strip()
+        supplier = str(data.get("supplier_domain") or "").strip()
+        products_path = _normalize_context_path(refresh.get("products_path") or data.get("products_path"))
+
+        return {
+            "supplier_domain": source_supplier or supplier,
+            "products_path": products_path,
+        }
+
+    def _pick_best_contextual_run_id(
+        candidates: list[Path], *, supplier_domain: str = "", products_path: str = ""
+    ) -> str:
+        normalized_products = _normalize_context_path(products_path)
+        normalized_supplier = str(supplier_domain or "").strip().lower()
+        best_path = candidates[0] if candidates else None
+        best_score = -1
+
+        for candidate in candidates:
+            context = _read_candidate_context(candidate)
+            score = 0
+            candidate_supplier = str(context.get("supplier_domain") or "").strip().lower()
+            candidate_products = str(context.get("products_path") or "").strip()
+
+            if normalized_supplier and candidate_supplier:
+                supplier_aliases = _sandbox_supplier_aliases(normalized_supplier)
+                if candidate_supplier in supplier_aliases:
+                    score += 3
+                elif candidate_supplier.startswith(normalized_supplier + "__"):
+                    score += 2
+
+            if normalized_products and candidate_products and candidate_products == normalized_products:
+                score += 4
+
+            if score > best_score:
+                best_score = score
+                best_path = candidate
+
+        if best_path is None:
+            return ""
+
+        return best_path.stem.replace("job_", "", 1)
+
+    def _resolve_contextual_run_id(
+        raw: object,
+        *,
+        supplier_domain: object = None,
+        products_path: object = None,
+    ) -> str:
         normalized = _normalize_run_id(raw)
 
         if normalized:
             return normalized
 
+        contextual_supplier = str(supplier_domain or "").strip()
+        contextual_products_path = _normalize_context_path(products_path)
+
         try:
             import streamlit as st
 
             last_run_id = _normalize_run_id(st.session_state.get("last_run_id"))
+            if not contextual_supplier:
+                contextual_supplier = str(st.session_state.get("last_supplier_domain") or "").strip()
+            if not contextual_products_path:
+                contextual_products_path = _normalize_context_path(
+                    st.session_state.get("last_products_path")
+                )
         except Exception:
             last_run_id = ""
 
@@ -1302,7 +1532,11 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             )
 
             if candidates:
-                return candidates[0].stem.replace("job_", "", 1)
+                return _pick_best_contextual_run_id(
+                    candidates,
+                    supplier_domain=contextual_supplier,
+                    products_path=contextual_products_path,
+                )
 
         pending_dir = paths.jobs_pending
 
@@ -1318,7 +1552,11 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             )
 
             if candidates:
-                return candidates[0].stem.replace("job_", "", 1)
+                return _pick_best_contextual_run_id(
+                    candidates,
+                    supplier_domain=contextual_supplier,
+                    products_path=contextual_products_path,
+                )
 
         status_dir = paths.status_dir
 
@@ -1334,7 +1572,11 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             )
 
             if candidates:
-                return candidates[0].stem
+                return _pick_best_contextual_run_id(
+                    candidates,
+                    supplier_domain=contextual_supplier,
+                    products_path=contextual_products_path,
+                )
 
         return ""
 
@@ -1395,6 +1637,7 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
     if name in {
         "enqueue_run",
         "enqueue_product_list_refresh",
+        "build_product_list_from_cached",
         "query_financial",
         "enqueue_onboarding",
         "cancel_run",
@@ -1430,7 +1673,11 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         return query_financial_rows(repo_root, q)
 
     if name == "show_status":
-        run_id = _resolve_contextual_run_id(repo_root, p.get("run_id"))
+        run_id = _resolve_contextual_run_id(
+            p.get("run_id"),
+            supplier_domain=p.get("supplier_domain"),
+            products_path=p.get("products_path"),
+        )
 
         if not run_id:
             return {
@@ -1441,7 +1688,11 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         return {"ok": True, "status": read_status(run_id)}
 
     if name == "tail_logs":
-        run_id = _resolve_contextual_run_id(repo_root, p.get("run_id"))
+        run_id = _resolve_contextual_run_id(
+            p.get("run_id"),
+            supplier_domain=p.get("supplier_domain"),
+            products_path=p.get("products_path"),
+        )
 
         if not run_id:
             return {
@@ -1635,12 +1886,10 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
 
             run_id = str(uuid.uuid4())
 
-        sandbox_suffix = str(p.get("sandbox_suffix") or "").strip()
-        if not sandbox_suffix or sandbox_suffix in {"<optional_for_resuming>", "sandbox"}:
-            sandbox_suffix = f"sandbox__{run_id[:8]}"
+        sandbox_suffix = _normalize_sandbox_suffix(p.get("sandbox_suffix"), run_id)
 
         # Build sandbox_supplier for output paths/polling, but keep supplier_name canonical for credential lookup
-        sandbox_supplier = f"{req.supplier_domain}__{sandbox_suffix}"
+        sandbox_supplier = _build_sandbox_supplier(req.supplier_domain, sandbox_suffix, run_id)
 
         # Resume safety: If user did not provide category URLs, fallback to previous sandbox run
 
@@ -1666,7 +1915,7 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
                     try:
                         data = read_json(subset_path)
 
-                        if data.get("supplier_domain") == sandbox_supplier and data.get(
+                        if str(data.get("supplier_domain") or "").strip().lower() in _sandbox_supplier_aliases(sandbox_supplier) and data.get(
                             "category_urls"
                         ):
                             category_urls = data.get("category_urls")
@@ -1727,6 +1976,8 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             "ok": True,
             "run_id": run_id,
             "sandbox_supplier": sandbox_supplier,
+            "normalized_sandbox_suffix": sandbox_suffix,
+            "resume_requested": bool(str(p.get("sandbox_suffix") or "").strip()),
             "job_path": str(job_path),
             "merged_config": str(merged_cfg_path),
             "categories": str(categories_path),
@@ -1759,8 +2010,25 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
 
         return enqueue_product_list_refresh(repo_root, req)
 
+    if name == "build_product_list_from_cached":
+        req = ProductListBuildRequest(
+            supplier_domain=str(p.get("supplier_domain") or ""),
+            output_path=str(p.get("output_path") or "") or None,
+            sample_size=int(p.get("sample_size") or 8),
+            category_count=int(p.get("category_count") or 3),
+            overwrite=bool(p.get("overwrite")),
+            selection_mode=str(p.get("selection_mode") or "random_categories"),
+            require_ean=bool(p.get("require_ean")),
+        )
+
+        return build_product_list_from_cached(repo_root, req)
+
     if name == "cancel_run":
-        run_id = _resolve_contextual_run_id(repo_root, p.get("run_id"))
+        run_id = _resolve_contextual_run_id(
+            p.get("run_id"),
+            supplier_domain=p.get("supplier_domain"),
+            products_path=p.get("products_path"),
+        )
 
         if not run_id:
             return {
@@ -1771,6 +2039,31 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         paths = get_paths()
 
         cancel_path = paths.status_dir / f"{run_id}.cancelled"
+
+        status_path = paths.status_dir / f"{run_id}.json"
+
+        terminal_state = ""
+        if status_path.exists():
+            try:
+                status_payload = read_json(status_path)
+            except Exception:
+                status_payload = {}
+
+            if isinstance(status_payload, dict):
+                state = str(status_payload.get("state") or "").strip().lower()
+                if state in {"done", "failed", "cancelled"}:
+                    terminal_state = state
+
+        if cancel_path.exists() or terminal_state:
+            legacy_path = paths.lock_dir / f"cancel_{run_id}.flag"
+            return {
+                "ok": True,
+                "run_id": run_id,
+                "already_terminal": True,
+                "terminal_state": terminal_state or "cancelled",
+                "cancel_marker": str(cancel_path),
+                "cancel_marker_legacy": str(legacy_path),
+            }
 
         cancel_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -2099,7 +2392,11 @@ def _fallback_responder(tool_call: ToolCall, result: dict[str, Any]) -> str:
             result.get("cancel_marker") if isinstance(result.get("cancel_marker"), str) else ""
         )
 
-        lines = ["Cancellation marker written."]
+        if result.get("already_terminal"):
+            state = str(result.get("terminal_state") or "terminal").strip()
+            lines = [f"Run was already in terminal state (`{state}`); no new cancellation was needed."]
+        else:
+            lines = ["Cancellation marker written."]
 
         if run_id:
             lines.append(f"Run ID: `{run_id}`")
@@ -2107,6 +2404,26 @@ def _fallback_responder(tool_call: ToolCall, result: dict[str, Any]) -> str:
         if cancel_marker:
             lines.append(f"Cancel marker: `{cancel_marker}`")
 
+        return "\n".join(lines)
+
+    if tool == "build_product_list_from_cached" and ok is True:
+        path = result.get("path") if isinstance(result.get("path"), str) else ""
+        rel_path = result.get("rel_path") if isinstance(result.get("rel_path"), str) else ""
+        count = result.get("count")
+        categories = result.get("selected_categories") if isinstance(result.get("selected_categories"), list) else []
+
+        lines = ["Product list file created successfully."]
+
+        if path:
+            lines.append(f"Path: `{path}`")
+        if rel_path:
+            lines.append(f"Relative path: `{rel_path}`")
+        if isinstance(count, int | float):
+            lines.append(f"Products written: `{int(count)}`")
+        if categories:
+            lines.append(f"Categories selected: `{len(categories)}`")
+
+        lines.append("\nSee the Tool output expander for the full creation details.")
         return "\n".join(lines)
 
     if tool == "show_status" and ok is True:

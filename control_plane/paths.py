@@ -17,6 +17,10 @@ class ControlPlanePaths:
         return self.control_plane_root / "audit"
 
     @property
+    def transcripts_dir(self) -> Path:
+        return self.control_plane_root / "transcripts"
+
+    @property
     def rag_index_path(self) -> Path:
         return self.index_dir / "rag_index.json"
 
@@ -103,5 +107,6 @@ def ensure_dirs() -> None:
         p.index_dir,
         p.lock_dir,
         p.audit_dir,
+        p.transcripts_dir,
     ]:
         d.mkdir(parents=True, exist_ok=True)

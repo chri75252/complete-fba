@@ -10,7 +10,7 @@ try:
 except ImportError:
     # If running from root, dashboard.metrics_core might be needed or just add dashboard to sys.path
     sys.path.append(os.getcwd())
-    from dashboard.metrics_core import MetricsLoader
+    from dashboard_legacy_streamlit.metrics_core import MetricsLoader
 
 def test_paths():
     base_dir = os.getcwd()

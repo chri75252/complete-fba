@@ -12,7 +12,7 @@ from control_plane.env_config import ensure_llm_env
 from control_plane.internal.file_io import read_json, write_json_atomic, write_text_atomic
 from control_plane.internal.path_resolver import ensure_control_plane_dirs, get_control_plane_paths
 from control_plane.paths import get_paths
-from dashboard.metrics_core import MetricsLoader
+from dashboard_legacy_streamlit.metrics_core import MetricsLoader
 
 
 @dataclass(frozen=True)
@@ -486,6 +486,13 @@ class ControlPlaneWorker:
                         log_tail_text = "\n".join(status["error"]["last_log_lines"])
                         has_traceback = "Traceback (most recent call last):" in log_tail_text
                         has_index_error = "IndexError" in log_tail_text
+                        semantic_abort_markers = [
+                            "CUSTOM MODE FAILED: No URLs found in predefined list. Aborting.",
+                            "Successfully loaded 0 predefined category URLs",
+                        ]
+                        has_semantic_abort = any(
+                            marker in log_tail_text for marker in semantic_abort_markers
+                        )
 
                         # Known non-fatal artifacts to ignore if they appear alone
                         shutdown_artifacts = [
@@ -506,10 +513,12 @@ class ControlPlaneWorker:
                             ):
                                 is_fatal_traceback = False
 
-                        if is_fatal_traceback:
+                        if is_fatal_traceback or has_semantic_abort:
                             status["state"] = "failed"
                             status["error"]["summary"] = (
-                                "Process exited 0 but log contains fatal Traceback"
+                                "Process exited 0 but workflow aborted semantically"
+                                if has_semantic_abort
+                                else "Process exited 0 but log contains fatal Traceback"
                             )
                             write_json_atomic(status_path, status)
                             _move_job(running_job_path, paths.jobs_failed)

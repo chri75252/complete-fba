@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "b812fa66-c640-4e7e-a1ef-237632bdfab0",
+  "state": "running",
+  "supplier_domain": "angelwholesale.co.uk",
+  "started_at": "2026-03-12T18:23:33Z",
+  "ended_at": null,
+  "pid": 44716,
+  "resolved_paths": {
+    "processing_state": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\angelwholesale_co_uk__sandbox__0f3425c8_processing_state.json",
+    "linking_map": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\linking_maps\\angelwholesale.co.uk__sandbox__0f3425c8\\linking_map.json",
+    "financial_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\financial_reports\\angelwholesale-co-uk__sandbox__0f3425c8",
+    "logs_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\logs\\debug",
+    "runner_log": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\logs\\b812fa66-c640-4e7e-a1ef-237632bdfab0.log"
+  },
+  "progress": {
+    "current_phase": "amazon_analysis",
+    "persistent_category_index": 2,
+    "total_categories": 2,
+    "current_category_url": "https://angelwholesale.co.uk/Category/All-School-bags"
+  },
+  "artifacts": {
+    "cached_products_exists": true,
+    "linking_map_exists": true,
+    "financial_report_exists": false
+  },
+  "error": {
+    "summary": "",
+    "last_log_lines": [
+      "2026-03-12 22:24:22,999 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=2/2 prod=5/10 phase=amazon_analysis",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://angelwholesale.co.uk/Category/All-School-bags total=6 (LOCKED)",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - WARNING - [INDEX_CLAMP] display_idx=7->6 reason=exceeds_denominator",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 6/6",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 6 processed (total in cache: 21)",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [all-school-bags]: 6/6 (remaining=0)",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [all-school-bags]: 5/10 (global_done=5, remaining≈5)",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 6",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 6, frequency=1, enabled=True",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=21, modulo=0",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\cached_products\\angelwholesale-co-uk__sandbox__0f3425c8_products_cache.json",
+      "2026-03-12 22:24:22,999 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True",
+      "2026-03-12 22:24:23,000 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__0f3425c8_products_cache.json",
+      "2026-03-12 22:24:23,000 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\cached_products",
+      "2026-03-12 22:24:23,000 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 21 products to cache...",
+      "2026-03-12 22:24:23,000 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\cached_products\\angelwholesale-co-uk__sandbox__0f3425c8_products_cache.json",
+      "2026-03-12 22:24:23,000 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 20 existing products for deduplication",
+      "2026-03-12 22:24:23,000 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed",
+      "2026-03-12 22:24:23,001 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 20 existing + 1 new = 21 total",
+      "2026-03-12 22:24:23,004 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: angelwholesale-co-uk__sandbox__0f3425c8_products_cache.json (21 entries) saved successfully",
+      "2026-03-12 22:24:23,004 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale-co-uk__sandbox__0f3425c8_products_cache.json (21 entries) saved successfully",
+      "2026-03-12 22:24:23,004 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 21 products (1 new) to cache: angelwholesale-co-uk__sandbox__0f3425c8_products_cache.json (size: 10776 bytes)",
+      "2026-03-12 22:24:23,004 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (21 products)",
+      "2026-03-12 22:24:23,004 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)",
+      "2026-03-12 22:24:23,004 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute",
+      "2026-03-12 22:24:23,004 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability",
+      "2026-03-12 22:24:23,004 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations",
+      "2026-03-12 22:24:23,004 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback",
+      "2026-03-12 22:24:23,005 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic",
+      "2026-03-12 22:24:23,007 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: angelwholesale_co_uk__sandbox__0f3425c8_processing_state.json (31 entries) saved successfully",
+      "2026-03-12 22:24:23,007 - windows_save_guardian - INFO - ? ATOMIC SAVE: angelwholesale_co_uk__sandbox__0f3425c8_processing_state.json (31 entries) saved successfully",
+      "2026-03-12 22:24:23,008 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True",
+      "2026-03-12 22:24:23,008 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\angelwholesale_co_uk__sandbox__0f3425c8_processing_state.json",
+      "2026-03-12 22:24:23,008 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=2/2 url=https://angelwholesale.co.uk/Category/All-School-bags prod_idx=5/10",
+      "2026-03-12 22:24:23,008 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 21 products (1 new) to cache (every 1 products)",
+      "2026-03-12 22:24:23,008 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)",
+      "2026-03-12 22:24:23,008 - configurable_supplier_scraper - INFO - ✅ Extracted: Dm3 Glitter Fluffy Unicorn 10 inch Plush - £4.49",
+      "2026-03-12 22:24:23,008 - configurable_supplier_scraper - INFO - 🔍 Extracting product 6/6: https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890",
+      "2026-03-12 22:24:23,008 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890 (attempt 1/3)",
+      "2026-03-12 22:24:23,008 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy",
+      "2026-03-12 22:24:23,009 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.",
+      "2026-03-12 22:24:23,009 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890",
+      "2026-03-12 22:24:24,626 - configurable_supplier_scraper - INFO - Retrying https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890 in 1.89s...",
+      "2026-03-12 22:24:26,519 - configurable_supplier_scraper - INFO - Fetching page content from: https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890 (attempt 2/3)",
+      "2026-03-12 22:24:26,519 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy",
+      "2026-03-12 22:24:26,519 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.",
+      "2026-03-12 22:24:26,519 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890",
+      "2026-03-12 22:24:29,384 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890",
+      "2026-03-12 22:24:29,384 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890",
+      "2026-03-12 22:24:29,508 - configurable_supplier_scraper - INFO - Successfully fetched content from https://angelwholesale.co.uk/Item/Iridescent-Embossed-Pocket-Backpack-B19890 (Size: 914413 bytes)"
+    ]
+  },
+  "refresh": {
+    "last_updated": null,
+    "paths": {
+      "products_path": null,
+      "overrides_run_dir": null,
+      "amazon_cache_dir": null,
+      "linking_map": null,
+      "processing_state": null
+    },
+    "counts": {
+      "input_products": 0,
+      "linking_map_entries": 0,
+      "amazon_cache_files": 0,
+      "matched_asins": 0
+    },
+    "source_supplier_domain": null
+  }
+}

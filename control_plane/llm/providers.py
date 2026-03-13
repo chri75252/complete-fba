@@ -35,6 +35,17 @@ def _safe_json_loads(text: str) -> dict[str, Any]:
         raise
 
 
+def _resolve_openai_compat_url(base_url: str) -> str:
+    base = (base_url or "").strip().rstrip("/")
+    if not base:
+        raise RuntimeError("Missing base URL for OpenAI-compatible provider")
+    if base.endswith("/v1/chat/completions"):
+        return base
+    if base.endswith("/v1"):
+        return f"{base}/chat/completions"
+    return f"{base}/v1/chat/completions"
+
+
 @dataclass(frozen=True)
 class OllamaProvider:
     base_url: str
@@ -154,6 +165,16 @@ class OpenAiProvider:
         from openai import OpenAI
 
         client = OpenAI(api_key=self.api_key)
+        if self.model == "gpt-5.3-codex":
+            resp = client.responses.create(
+                model=self.model,
+                input=[
+                    {"role": "system", "content": "Return ONLY valid JSON."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            return _safe_json_loads(resp.output_text or "{}")
+
         temperature = 0
         if self.model == "gpt-5-mini":
             temperature = 1
@@ -166,7 +187,7 @@ class OpenAiProvider:
             temperature=temperature,
         )
         content = resp.choices[0].message.content or "{}"
-        return json.loads(content)
+        return _safe_json_loads(content)
 
 
 @dataclass(frozen=True)
@@ -178,7 +199,7 @@ class OpenAiCompatProvider:
     def generate_json(self, prompt: str) -> dict[str, Any]:
         import requests
 
-        url = self.base_url.rstrip("/") + "/v1/chat/completions"
+        url = _resolve_openai_compat_url(self.base_url)
         payload = {
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
@@ -200,11 +221,15 @@ class OpenAiCompatProvider:
 class AnthropicProvider:
     api_key: str
     model: str
+    base_url: str | None = None
 
     def generate_json(self, prompt: str) -> dict[str, Any]:
         import anthropic
 
-        client = anthropic.Anthropic(api_key=self.api_key)
+        if self.base_url:
+            client = anthropic.Anthropic(api_key=self.api_key, base_url=self.base_url)
+        else:
+            client = anthropic.Anthropic(api_key=self.api_key)
         msg = client.messages.create(
             model=self.model,
             max_tokens=800,
@@ -213,7 +238,13 @@ class AnthropicProvider:
             messages=[{"role": "user", "content": prompt}],
         )
         text = "".join([b.text for b in msg.content if getattr(b, "text", None)])
-        return json.loads(text or "{}")
+        try:
+            return _safe_json_loads(text or "{}")
+        except Exception as exc:
+            preview = (text or "").strip().replace("\n", " ")[:240]
+            raise RuntimeError(
+                f"anthropic_provider_non_json_response: {preview or '<empty response>'}"
+            ) from exc
 
 
 def get_provider() -> LlmProvider:
@@ -244,6 +275,16 @@ def get_provider() -> LlmProvider:
         if not api_key:
             raise RuntimeError("OPENCODE_API_KEY not set")
         return OpenAiCompatProvider(base_url=base_url, model=model, api_key=api_key)
+
+    if provider == "kimi":
+        base_url = os.environ.get("CONTROL_PLANE_LLM_BASE_URL", "https://api.kimi.com/coding")
+        model = os.environ.get("KIMI_MODEL") or os.environ.get(
+            "CONTROL_PLANE_LLM_MODEL", "kimi-for-coding"
+        )
+        api_key = os.environ.get("KIMI_API_KEY", "")
+        if not api_key:
+            raise RuntimeError("KIMI_API_KEY not set")
+        return AnthropicProvider(api_key=api_key, model=model, base_url=base_url)
 
     if provider == "openai":
         api_key = os.environ.get("OPENAI_API_KEY", "")

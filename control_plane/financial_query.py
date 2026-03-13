@@ -6,7 +6,7 @@ from typing import Any
 
 import pandas as pd
 
-from dashboard.metrics_core import MetricsLoader
+from dashboard_legacy_streamlit.metrics_core import MetricsLoader
 
 
 def _normalize_col(name: str) -> str:

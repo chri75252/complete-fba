@@ -1,0 +1,669 @@
+"""
+FBA Dashboard Metrics Core Module
+Handles all file I/O and metrics calculation with chunked processing for large files
+"""
+
+import json
+import os
+import csv
+import re
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple, Any
+import pandas as pd
+
+
+class MetricsLoader:
+    """Efficient metrics loader with chunked processing for large files"""
+
+    # Column detection patterns - case insensitive
+    ROI_COLUMNS = [
+        "roi",
+        "roi_percent",
+        "roi_percentage",
+        "return_on_investment",
+        "return_on_investment_percent",
+        "return_rate",
+    ]
+
+    PROFIT_COLUMNS = [
+        "profit",
+        "net_profit",
+        "estimated_profit",
+        "margin",
+        "gross_profit",
+        "total_profit",
+        "potential_profit",
+    ]
+
+    def __init__(self, base_dir: str = None):
+        self.base_dir = base_dir or os.getcwd()
+        self._cache = {}
+        self._file_mtimes = {}
+
+    def resolve_paths(self, supplier_hint: str) -> Dict[str, str]:
+        """
+        Resolve file paths for supplier data, handling both domain formats
+        domain.tld -> domain_tld normalization
+        Supports multiple supplier name formats:
+        - dotted: poundwholesale.co.uk (linking map dir)
+        - underscored: poundwholesale_co_uk (processing state filename)
+        - hyphenated: poundwholesale-co-uk (preferred subfolder for financial reports)
+        """
+        supplier_hint = (supplier_hint or "").strip()
+        base_hint = supplier_hint
+        suffix = ""
+        if "__" in supplier_hint:
+            base_hint, tail = supplier_hint.split("__", 1)
+            suffix = f"__{tail}" if tail else "__"
+
+        normalized_base = base_hint.replace(".", "_").lower()
+        hyphenated_base = base_hint.replace(".", "-").replace("_", "-").lower()
+
+        normalized_supplier = f"{normalized_base}{suffix}"
+        hyphenated_supplier = f"{hyphenated_base}{suffix}"
+
+        # Find processing state file
+        state_dir = os.path.join(self.base_dir, "OUTPUTS", "CACHE", "processing_states")
+        state_file = None
+
+        # Try both formats
+        patterns = [
+            f"{normalized_supplier}_processing_state.json",
+            f"{supplier_hint}_processing_state.json",
+        ]
+
+        for pattern in patterns:
+            candidate = os.path.join(state_dir, pattern)
+            if os.path.exists(candidate):
+                state_file = candidate
+                break
+
+        # Find linking map directory
+        linking_dir = os.path.join(self.base_dir, "OUTPUTS", "FBA_ANALYSIS", "linking_maps")
+        linking_file = None
+
+        # Try dotted form first, then underscore
+        for subdir in [supplier_hint, normalized_supplier]:
+            candidate_file = os.path.join(linking_dir, subdir, "linking_map.json")
+            if os.path.exists(candidate_file):
+                linking_file = candidate_file
+                break
+
+        # Find financial reports directory - prefer supplier subfolder
+        financial_root = os.path.join(self.base_dir, "OUTPUTS", "FBA_ANALYSIS", "financial_reports")
+        preferred_dir = os.path.join(financial_root, hyphenated_supplier)
+        financial_dir = (
+            preferred_dir
+            if os.path.exists(preferred_dir)
+            else (financial_root if os.path.exists(financial_root) else None)
+        )
+
+        # Find logs directory
+        logs_dir = os.path.join(self.base_dir, "logs", "debug")
+
+        # Find Amazon cache directory
+        amazon_cache_dir = os.path.join(self.base_dir, "OUTPUTS", "FBA_ANALYSIS", "amazon_cache")
+        if not os.path.exists(amazon_cache_dir):
+            amazon_cache_dir = None
+
+        # Find supplier cache file
+        cached_products_dir = os.path.join(self.base_dir, "OUTPUTS", "cached_products")
+        cached_products_file = None
+        cache_patterns = [
+            f"{hyphenated_supplier}_products_cache.json",
+            f"{normalized_supplier}_products_cache.json",
+            f"{supplier_hint}_products_cache.json",
+        ]
+        for pattern in cache_patterns:
+            candidate = os.path.join(cached_products_dir, pattern)
+            if os.path.exists(candidate):
+                cached_products_file = candidate
+                break
+
+        # Find config file for category count
+        config_dir = os.path.join(self.base_dir, "config", "supplier_configs")
+        # Fallback to parent config dir if not found in supplier_configs
+        if not os.path.exists(config_dir):
+            config_dir = os.path.join(self.base_dir, "config")
+
+        config_file = None
+        config_patterns = [
+            f"{normalized_supplier}_categories.json",
+            f"{supplier_hint.replace('.', '')}_categories.json",
+            # Fallback: try base domain pattern (e.g., poundwholesale_categories.json)
+            f"{supplier_hint.split('.')[0]}_categories.json" if "." in supplier_hint else None,
+            # NEW: Add standard config files
+            f"{supplier_hint}.json",
+            f"{normalized_supplier}.json",
+            f"{hyphenated_supplier}.json",
+        ]
+        for pattern in config_patterns:
+            if pattern is None:
+                continue
+            candidate = os.path.join(config_dir, pattern)
+            if os.path.exists(candidate):
+                config_file = candidate
+                break
+
+        return {
+            "state_file": state_file,
+            "linking_file": linking_file,
+            "financial_dir": financial_dir,
+            "logs_dir": logs_dir if os.path.exists(logs_dir) else None,
+            "amazon_cache_dir": amazon_cache_dir,
+            "cached_products_file": cached_products_file,
+            "config_file": config_file,
+            "supplier_variants": {
+                "dotted": supplier_hint,
+                "underscored": normalized_supplier,
+                "hyphenated": hyphenated_supplier,
+            },
+        }
+
+    def load_state_metrics(self, state_file: str, config_file: str = None) -> Dict[str, Any]:
+        """Load state metrics with chunked processing for large JSON files"""
+        if not state_file or not os.path.exists(state_file):
+            return {
+                "state_file_found": False,
+                "observed_categories": None,
+                "configured_categories": None,
+                "last_updated": None,
+                "processing_status": None,
+                "successful_products": None,
+                "processed_products": None,
+                "fresh_starts": None,
+            }
+
+        # Check cache first
+        mtime = os.path.getmtime(state_file)
+        cache_key = f"state_{state_file}_{mtime}"
+
+        if cache_key in self._cache:
+            cached = self._cache[cache_key]
+            # Add configured_categories if not present
+            if "configured_categories" not in cached and config_file:
+                cached["configured_categories"] = self._load_configured_categories(config_file)
+            return cached
+
+        try:
+            # Chunked reading for large JSON files
+            data = self._read_json_chunked(state_file)
+
+            # Extract system progression data
+            system_progression = data.get("system_progression", {})
+            category_performance = data.get("category_performance", {})
+
+            # Get category index and total from system_progression (source of truth)
+            persistent_category_index = system_progression.get("persistent_category_index", 0)
+            total_categories = system_progression.get("total_categories", 0)
+
+            # Load configured categories from config file as fallback
+            configured_categories = (
+                self._load_configured_categories(config_file) if config_file else None
+            )
+            if configured_categories is None:
+                configured_categories = total_categories
+
+            # Extract current category URL with fallbacks
+            current_category_url = (
+                system_progression.get("current_category_url")
+                or system_progression.get("original_category_url")
+                or data.get("category_url")
+                or ""
+            )
+
+            # Per-category progress: read directly from system_progression (not category_performance)
+            category_progress = {
+                "supplier_products_needing_extraction": system_progression.get(
+                    "supplier_products_needing_extraction", 0
+                ),
+                "supplier_products_completed": system_progression.get(
+                    "supplier_products_completed", 0
+                ),
+                "amazon_products_needing_analysis": system_progression.get(
+                    "amazon_products_needing_analysis", 0
+                ),
+                "amazon_products_completed": system_progression.get("amazon_products_completed", 0),
+            }
+
+            metrics = {
+                "state_file_found": True,
+                "observed_categories": persistent_category_index,  # Use index, not len(dict)
+                "configured_categories": configured_categories,
+                "persistent_category_index": persistent_category_index,  # Explicit field
+                "total_categories": total_categories,  # Explicit field
+                "current_category_url": current_category_url,
+                "category_progress": category_progress,
+                "last_updated": self._parse_datetime(data.get("last_updated")),
+                "processing_status": data.get("processing_status"),
+                "successful_products": data.get("successful_products", 0),
+                "processed_products": data.get(
+                    "successful_products", 0
+                ),  # Using successful as processed
+                "fresh_starts": 1 if data.get("is_fresh_start", False) else 0,
+                "total_products": data.get("total_products", 0),
+                "last_processed_index": data.get("last_processed_index", 0),
+            }
+
+            self._cache[cache_key] = metrics
+            return metrics
+
+        except Exception as e:
+            return {
+                "state_file_found": True,
+                "observed_categories": None,
+                "configured_categories": None,
+                "last_updated": None,
+                "processing_status": f"Error: {str(e)}",
+                "successful_products": None,
+                "processed_products": None,
+                "fresh_starts": None,
+            }
+
+    def load_linking_map_metrics(self, linking_file: str) -> Dict[str, Any]:
+        """Load linking map metrics with robust parsing for array, dict, and JSONL formats"""
+        if not linking_file or not os.path.exists(linking_file):
+            return {
+                "total_matches": 0,
+                "high_confidence_rate": 0.0,
+                "confidence_counts": {},
+                "match_method_counts": {},
+                "no_ean_count": 0,
+            }
+
+        # Check cache first
+        mtime = os.path.getmtime(linking_file)
+        cache_key = f"linking_{linking_file}_{mtime}"
+
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+
+        try:
+            # Robust parsing: support JSON array, dict, and JSONL
+            items = []
+            try:
+                with open(linking_file, "r", encoding="utf-8") as f:
+                    obj = json.load(f)
+                    if isinstance(obj, list):
+                        items = obj
+                    elif isinstance(obj, dict):
+                        items = list(obj.values())
+            except json.JSONDecodeError:
+                # Try JSONL format (one JSON object per line)
+                with open(linking_file, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith("{") and line.endswith("}"):
+                            try:
+                                items.append(json.loads(line))
+                            except json.JSONDecodeError:
+                                pass
+
+            # Count metrics from items
+            confidence_counts = {"high": 0, "medium": 0, "low": 0}
+            method_counts = {}
+            no_ean_count = 0
+            total_matches = len(items)
+
+            for item in items:
+                # Confidence counting (handle both string and numeric)
+                confidence = item.get("confidence", "unknown")
+                if isinstance(confidence, (int, float)):
+                    # Numeric confidence - map to categories
+                    if confidence >= 0.8:
+                        conf_key = "high"
+                    elif confidence >= 0.5:
+                        conf_key = "medium"
+                    else:
+                        conf_key = "low"
+                else:
+                    conf_key = str(confidence).lower()
+
+                if conf_key in confidence_counts:
+                    confidence_counts[conf_key] += 1
+                else:
+                    confidence_counts[conf_key] = confidence_counts.get(conf_key, 0) + 1
+
+                # Method counting
+                method = str(item.get("match_method", "unknown")).lower()
+                method_counts[method] = method_counts.get(method, 0) + 1
+
+                # EAN counting
+                if not item.get("supplier_ean") or item.get("supplier_ean") == "":
+                    no_ean_count += 1
+
+            # Calculate high confidence rate
+            high_conf_count = confidence_counts.get("high", 0)
+            high_confidence_rate = (
+                (high_conf_count / total_matches * 100) if total_matches > 0 else 0
+            )
+
+            metrics = {
+                "total_matches": total_matches,
+                "high_confidence_rate": round(high_confidence_rate, 2),
+                "confidence_counts": confidence_counts,
+                "match_method_counts": method_counts,
+                "no_ean_count": no_ean_count,
+            }
+
+            self._cache[cache_key] = metrics
+            return metrics
+
+        except Exception as e:
+            return {
+                "total_matches": 0,
+                "high_confidence_rate": 0.0,
+                "confidence_counts": {},
+                "match_method_counts": {},
+                "no_ean_count": 0,
+                "error": str(e),
+            }
+
+    def load_financial_metrics(self, financial_dir: str) -> Dict[str, Any]:
+        """Load financial metrics from the LATEST report only"""
+        if not financial_dir or not os.path.exists(financial_dir):
+            return {
+                "files_scanned": 0,
+                "rows_total": 0,
+                "count_profitable": 0,
+                "avg_roi": 0.0,
+                "total_profit": 0.0,
+                "notes": ["Financial reports directory not found"],
+            }
+
+        try:
+            # Root-only: exclude subdirectories
+            csv_files = [
+                f
+                for f in os.listdir(financial_dir)
+                if f.endswith(".csv") and os.path.isfile(os.path.join(financial_dir, f))
+            ]
+
+            if not csv_files:
+                return {
+                    "files_scanned": 0,
+                    "rows_total": 0,
+                    "count_profitable": 0,
+                    "avg_roi": 0.0,
+                    "total_profit": 0.0,
+                    "notes": ["No CSV files found in financial reports directory"],
+                }
+
+            # Find the LATEST file by modification time
+            latest_file = max(
+                csv_files, key=lambda f: os.path.getmtime(os.path.join(financial_dir, f))
+            )
+            file_path = os.path.join(financial_dir, latest_file)
+
+            total_rows = 0
+            profitable_count = 0
+            avg_roi = 0.0
+            total_profit_sum = 0.0
+            notes = [f"Loaded latest report: {latest_file}"]
+
+            try:
+                # Read CSV with dtype=str first to avoid type inference issues
+                df = pd.read_csv(file_path, dtype=str, nrows=5)  # Sample first for column detection
+
+                # Detect columns
+                roi_col = self._find_column(df.columns, self.ROI_COLUMNS)
+                profit_col = self._find_column(df.columns, self.PROFIT_COLUMNS)
+
+                if roi_col is None and profit_col is None:
+                    notes.append(f"Could not infer ROI/profit columns from {latest_file}")
+                else:
+                    # Read full file with detected columns
+                    df_full = pd.read_csv(file_path, dtype=str)
+                    total_rows = len(df_full)
+
+                    if roi_col:
+                        # Convert ROI values (handle both decimal and percentage formats)
+                        roi_values = pd.to_numeric(
+                            df_full[roi_col].astype(str).str.replace("%", "").astype(float) / 100,
+                            errors="coerce",
+                        )
+                        # Average ROI
+                        avg_roi = roi_values.mean() * 100 if not roi_values.empty else 0.0
+
+                    if profit_col:
+                        # Convert profit values with explicit numeric coercion
+                        df_full[profit_col] = pd.to_numeric(df_full[profit_col], errors="coerce")
+                        profit_values = df_full[profit_col]
+
+                        # Profitable products: NetProfit > 0 (explicit definition)
+                        profitable_count = int((profit_values > 0).sum())
+
+                        # Total profit sum
+                        total_profit_sum = profit_values.sum()
+
+            except Exception as e:
+                notes.append(f"Error processing {latest_file}: {str(e)}")
+
+            return {
+                "files_scanned": 1,  # Only one file is relevant now
+                "rows_total": total_rows,
+                "count_profitable": int(profitable_count),
+                "avg_roi": round(avg_roi, 2),
+                "total_profit": round(total_profit_sum, 2),
+                "notes": notes,
+                "latest_file": latest_file,  # Return filename for UI display
+            }
+
+        except Exception as e:
+            return {
+                "files_scanned": 0,
+                "rows_total": 0,
+                "count_profitable": 0,
+                "avg_roi": 0.0,
+                "total_profit": 0.0,
+                "notes": [f"Error processing financial reports: {str(e)}"],
+            }
+
+    def tail_logs(
+        self,
+        logs_dir: str,
+        supplier_hint: str = None,
+        pattern: str = "run_custom_.*\\.log",
+        lines: int = 200,
+    ) -> Tuple[List[str], Optional[str]]:
+        """Tail the latest log file with efficient reading"""
+        if not logs_dir or not os.path.exists(logs_dir):
+            return [], None
+
+        try:
+            # Normalize supplier_hint if provided
+            normalized_supplier = None
+            if supplier_hint:
+                normalized_supplier = supplier_hint.replace(".", "-").lower()
+
+            # Find matching log files
+            log_files = [
+                f for f in os.listdir(logs_dir) if re.match(pattern, f) and f.endswith(".log")
+            ]
+
+            # Filter by supplier if hint provided
+            if normalized_supplier:
+                log_files = [f for f in log_files if f"run_custom_{normalized_supplier}" in f]
+
+            if not log_files:
+                return [], None
+
+            # Get the most recent file
+            log_files.sort(key=lambda x: os.path.getmtime(os.path.join(logs_dir, x)), reverse=True)
+            latest_log = os.path.join(logs_dir, log_files[0])
+
+            # Read last N lines efficiently
+            with open(latest_log, "r", encoding="utf-8", errors="replace") as f:
+                # Read all lines and take last N
+                all_lines = f.readlines()
+                tail_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
+
+                # Clean up line endings and decode
+                clean_lines = [line.rstrip("\n\r") for line in tail_lines]
+
+                return clean_lines, log_files[0]
+
+        except Exception as e:
+            return [f"Error reading logs: {str(e)}"], None
+
+    def _read_json_chunked(self, filepath: str) -> Dict[str, Any]:
+        """Read JSON file efficiently for large files"""
+        # For JSON objects (not arrays), we can read normally but with error handling
+        with open(filepath, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    def _stream_json_array(self, filepath: str):
+        """Stream JSON array items one by one to avoid memory issues"""
+        with open(filepath, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+
+            # Handle both array and object formats
+            if content.startswith("["):
+                # JSON array - stream items
+                content = content[1:-1]  # Remove [ and ]
+
+                # Simple streaming approach for well-formed JSON
+                brace_count = 0
+                current_item = ""
+                in_string = False
+                escape_next = False
+
+                for char in content:
+                    if escape_next:
+                        current_item += char
+                        escape_next = False
+                        continue
+
+                    if char == "\\":
+                        escape_next = True
+                        current_item += char
+                        continue
+
+                    if char == '"' and not escape_next:
+                        in_string = not in_string
+                        current_item += char
+                        continue
+
+                    if not in_string:
+                        if char == "{":
+                            brace_count += 1
+                        elif char == "}":
+                            brace_count -= 1
+
+                            if brace_count == 0:
+                                current_item += char
+                                try:
+                                    yield json.loads(current_item)
+                                except json.JSONDecodeError:
+                                    pass  # Skip malformed items
+                                current_item = ""
+                                continue
+
+                    current_item += char
+
+            elif content.startswith("{"):
+                # JSON object - parse directly
+                yield json.loads(content)
+
+    def _find_column(self, df_columns: List[str], potential_names: List[str]) -> Optional[str]:
+        """Find matching column name from potential names (case-insensitive)"""
+        df_lower = [col.lower().replace("_", "").replace(" ", "") for col in df_columns]
+
+        for potential in potential_names:
+            normalized = potential.lower().replace("_", "").replace(" ", "")
+            if normalized in df_lower:
+                return df_columns[df_lower.index(normalized)]
+
+        return None
+
+    def _parse_datetime(self, dt_str: str) -> Optional[datetime]:
+        """Parse datetime string in various formats"""
+        if not dt_str:
+            return None
+
+        try:
+            # Handle ISO format with timezone
+            if "T" in dt_str:
+                # Remove timezone info for parsing
+                dt_clean = dt_str.split("+")[0].replace("Z", "")
+                return datetime.fromisoformat(dt_clean)
+            else:
+                # Try other formats
+                return datetime.fromisoformat(dt_str)
+        except (ValueError, TypeError):
+            return None
+
+    def _load_configured_categories(self, config_file: str) -> Optional[int]:
+        """Load configured category count from config file"""
+        if not config_file or not os.path.exists(config_file):
+            return None
+
+        try:
+            with open(config_file, "r", encoding="utf-8") as f:
+                config_data = json.load(f)
+                category_urls = config_data.get("category_urls", [])
+                return len(category_urls)
+        except Exception:
+            return None
+
+    def load_supplier_cache_metrics(self, cached_file: str) -> Dict[str, Any]:
+        """Load supplier cache product count"""
+        if not cached_file or not os.path.exists(cached_file):
+            return {"product_count": 0}
+
+        try:
+            with open(cached_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                # Handle both list format and dict with 'products' key
+                if isinstance(data, list):
+                    count = len(data)
+                elif isinstance(data, dict):
+                    products = data.get("products", [])
+                    count = len(products) if isinstance(products, list) else 0
+                else:
+                    count = 0
+
+                return {"product_count": count}
+        except Exception as e:
+            return {"product_count": 0, "error": str(e)}
+
+    def load_amazon_cache_metrics(self, amazon_cache_dir: str) -> Dict[str, Any]:
+        """Load Amazon cache metrics (file count and latest mtime)"""
+        if not amazon_cache_dir or not os.path.exists(amazon_cache_dir):
+            return {"file_count": 0, "latest_mtime": None}
+
+        try:
+            cache_files = [
+                f
+                for f in os.listdir(amazon_cache_dir)
+                if f.startswith("amazon_") and f.endswith(".json")
+            ]
+            file_count = len(cache_files)
+
+            latest_mtime = None
+            if cache_files:
+                full_paths = [os.path.join(amazon_cache_dir, f) for f in cache_files]
+                latest_path = max(full_paths, key=os.path.getmtime)
+                latest_mtime = datetime.fromtimestamp(os.path.getmtime(latest_path))
+
+            return {"file_count": file_count, "latest_mtime": latest_mtime}
+        except Exception as e:
+            return {"file_count": 0, "latest_mtime": None, "error": str(e)}
+
+
+def load_metrics(base_dir: str, supplier_hint: str) -> Dict[str, Any]:
+    """Main function to load all metrics"""
+    loader = MetricsLoader(base_dir)
+    paths = loader.resolve_paths(supplier_hint)
+
+    return {
+        "paths": paths,
+        "state_metrics": loader.load_state_metrics(paths["state_file"], paths.get("config_file")),
+        "linking_metrics": loader.load_linking_map_metrics(paths["linking_file"]),
+        "financial_metrics": loader.load_financial_metrics(paths["financial_dir"]),
+        "supplier_cache_metrics": loader.load_supplier_cache_metrics(
+            paths.get("cached_products_file")
+        ),
+        "amazon_cache_metrics": loader.load_amazon_cache_metrics(paths.get("amazon_cache_dir")),
+        "log_data": loader.tail_logs(paths["logs_dir"], supplier_hint=supplier_hint),
+    }

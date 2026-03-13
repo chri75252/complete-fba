@@ -33,6 +33,7 @@ def ensure_llm_env() -> None:
     llm_base = _set_clean("CONTROL_PLANE_LLM_BASE_URL")
     llm_model = _set_clean("CONTROL_PLANE_LLM_MODEL")
     opencode_model = _set_clean("OPENCODE_MODEL")
+    kimi_model = _set_clean("KIMI_MODEL")
     ollama_base = _set_clean("CONTROL_PLANE_OLLAMA_BASE_URL")
     ollama_model = _set_clean("CONTROL_PLANE_OLLAMA_MODEL")
 
@@ -48,6 +49,9 @@ def ensure_llm_env() -> None:
 
     if provider == "opencode" and opencode_model:
         os.environ["CONTROL_PLANE_LLM_MODEL"] = opencode_model
+
+    if provider == "kimi" and kimi_model:
+        os.environ["CONTROL_PLANE_LLM_MODEL"] = kimi_model
 
 
 def _load_dotenv_if_present() -> None:

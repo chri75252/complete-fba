@@ -52,6 +52,14 @@ def load_llm_config() -> LLMConfig:
             base_url=os.environ.get("CONTROL_PLANE_LLM_BASE_URL", "https://opencode.ai/zen"),
         )
 
+    if provider == "kimi":
+        return LLMConfig(
+            provider=provider,
+            model=os.environ.get("KIMI_MODEL") or model or "kimi-for-coding",
+            api_key=os.environ.get("KIMI_API_KEY"),
+            base_url=os.environ.get("CONTROL_PLANE_LLM_BASE_URL", "https://api.kimi.com/coding"),
+        )
+
     return LLMConfig(provider="none")
 
 
@@ -82,6 +90,28 @@ def _safe_json_loads(text: str) -> dict[str, Any]:
         if start >= 0 and end > start:
             return json.loads(raw[start : end + 1])
         raise
+
+
+def _resolve_openai_compat_url(base_url: str) -> str:
+    base = (base_url or "").strip().rstrip("/")
+    if not base:
+        raise RuntimeError("Missing base URL for OpenAI-compatible provider")
+    if base.endswith("/v1/chat/completions"):
+        return base
+    if base.endswith("/v1"):
+        return f"{base}/chat/completions"
+    return f"{base}/v1/chat/completions"
+
+
+def _resolve_anthropic_messages_url(base_url: str) -> str:
+    base = (base_url or "").strip().rstrip("/")
+    if not base:
+        raise RuntimeError("Missing base URL for Anthropic-compatible provider")
+    if base.endswith("/v1/messages"):
+        return base
+    if base.endswith("/v1"):
+        return f"{base}/messages"
+    return f"{base}/v1/messages"
 
 
 def generate_json(prompt: str) -> dict[str, Any]:
@@ -116,8 +146,7 @@ def generate_json(prompt: str) -> dict[str, Any]:
         return _safe_json_loads(text)
 
     if cfg.provider == "opencode":
-        base = (cfg.base_url or "https://opencode.ai/zen").rstrip("/")
-        url = f"{base}/v1/chat/completions"
+        url = _resolve_openai_compat_url(cfg.base_url or "https://opencode.ai/zen")
         payload = {
             "model": cfg.model,
             "messages": [{"role": "user", "content": prompt}],
@@ -126,6 +155,33 @@ def generate_json(prompt: str) -> dict[str, Any]:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {cfg.api_key}"}
         out = _post_json(url, payload, headers=headers)
         text = out["choices"][0]["message"]["content"]
+        return _safe_json_loads(text)
+
+    if cfg.provider == "kimi":
+        url = _resolve_anthropic_messages_url(cfg.base_url or "https://api.kimi.com/coding")
+        payload = {
+            "model": cfg.model,
+            "max_tokens": 800,
+            "temperature": 0,
+            "system": "Return ONLY valid JSON.",
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "x-api-key": str(cfg.api_key or ""),
+            "anthropic-version": "2023-06-01",
+        }
+        out = _post_json(url, payload, headers=headers)
+        parts = out.get("content")
+        text = ""
+        if isinstance(parts, list):
+            for part in parts:
+                if isinstance(part, dict) and part.get("type") == "text":
+                    val = part.get("text")
+                    if isinstance(val, str):
+                        text += val
+        if not text:
+            raise RuntimeError("kimi_response_missing_text_content")
         return _safe_json_loads(text)
 
     raise RuntimeError(f"Unsupported provider: {cfg.provider}")

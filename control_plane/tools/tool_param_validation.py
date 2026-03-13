@@ -131,6 +131,8 @@ def validate_tool_params(tool: str, params: object) -> dict[str, Any]:
         return _validate_enqueue_run(tool, params)
     if tool == "enqueue_product_list_refresh":
         return _validate_enqueue_product_list_refresh(tool, params)
+    if tool == "build_product_list_from_cached":
+        return _validate_build_product_list_from_cached(tool, params)
     if tool == "query_financial":
         return _validate_query_financial(tool, params)
     if tool == "enqueue_onboarding":
@@ -250,6 +252,63 @@ def _validate_enqueue_product_list_refresh(tool: str, p: dict[str, Any]) -> dict
     if not ok:
         return _err(tool=tool, field="dry_run", message=msg or "dry_run must be a boolean")
     cleaned["dry_run"] = bool(dry_run) if dry_run is not None else False
+
+    return {"ok": True, "params": cleaned}
+
+
+def _validate_build_product_list_from_cached(tool: str, p: dict[str, Any]) -> dict[str, Any]:
+    cleaned: dict[str, Any] = {}
+
+    ok, supplier_domain, msg = _non_empty_str("supplier_domain", p.get("supplier_domain"))
+    if not ok:
+        return _err(
+            tool=tool, field="supplier_domain", message=msg or "supplier_domain is required"
+        )
+    cleaned["supplier_domain"] = supplier_domain
+
+    ok, output_path, msg = _optional_str("output_path", p.get("output_path"))
+    if not ok:
+        return _err(tool=tool, field="output_path", message=msg or "output_path must be a string")
+    cleaned["output_path"] = output_path
+
+    ok, sample_size, msg = _parse_int("sample_size", p.get("sample_size"))
+    if not ok:
+        return _err(tool=tool, field="sample_size", message=msg or "sample_size must be an integer")
+    sample_size = sample_size if sample_size is not None else 8
+    if sample_size <= 0:
+        return _err(tool=tool, field="sample_size", message="sample_size must be > 0")
+    cleaned["sample_size"] = sample_size
+
+    ok, category_count, msg = _parse_int("category_count", p.get("category_count"))
+    if not ok:
+        return _err(
+            tool=tool, field="category_count", message=msg or "category_count must be an integer"
+        )
+    category_count = category_count if category_count is not None else 3
+    if category_count <= 0:
+        return _err(tool=tool, field="category_count", message="category_count must be > 0")
+    cleaned["category_count"] = category_count
+
+    ok, overwrite, msg = _parse_bool("overwrite", p.get("overwrite"))
+    if not ok:
+        return _err(tool=tool, field="overwrite", message=msg or "overwrite must be a boolean")
+    cleaned["overwrite"] = bool(overwrite) if overwrite is not None else False
+
+    ok, selection_mode, msg = _optional_str("selection_mode", p.get("selection_mode"))
+    if not ok:
+        return _err(
+            tool=tool,
+            field="selection_mode",
+            message=msg or "selection_mode must be a string",
+        )
+    cleaned["selection_mode"] = selection_mode or "random_categories"
+
+    ok, require_ean, msg = _parse_bool("require_ean", p.get("require_ean"))
+    if not ok:
+        return _err(
+            tool=tool, field="require_ean", message=msg or "require_ean must be a boolean"
+        )
+    cleaned["require_ean"] = bool(require_ean) if require_ean is not None else False
 
     return {"ok": True, "params": cleaned}
 

@@ -45,7 +45,10 @@ def write_output_file(
     content: str,
     *,
     overwrite: bool = False,
+    supplier_domain: str | None = None,
 ) -> dict[str, Any]:
+    _ = supplier_domain
+
     if not rel_path or content is None:
         return {"ok": False, "error": "missing_path_or_content"}
 

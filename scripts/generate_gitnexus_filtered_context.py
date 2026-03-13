@@ -308,15 +308,32 @@ def build_financial_items(
     return items
 
 
+def projection_relative_path(item: SelectedItem) -> Path:
+    source_relative = Path(item.source_relative_path)
+    parts = list(source_relative.parts)
+
+    # GitNexus hard-ignores literal `cache` and `logs` path segments, so remap only
+    # those projection roots while preserving the original source path in metadata.
+    if item.category == "processing_states" and len(parts) >= 2:
+        if parts[0] == "OUTPUTS" and parts[1].lower() == "cache":
+            parts[1] = "CACHE_VISIBLE"
+    elif item.category == "logs_debug" and parts:
+        if parts[0].lower() == "logs":
+            parts[0] = "logs_visible"
+
+    return Path(*parts)
+
+
 def write_selected_item(out_root: Path, item: SelectedItem, index: int) -> Path:
     source_relative = Path(item.source_relative_path)
+    projection_relative = projection_relative_path(item)
     digest = hashlib.sha1(item.source_relative_path.encode("utf-8")).hexdigest()[:10]
     if item.source_path.is_dir():
-        out_file = out_root / source_relative / f"__folder_summary__{digest}.py"
+        out_file = out_root / projection_relative / f"__folder_summary__{digest}.py"
     else:
-        original_name = source_relative.name
+        original_name = projection_relative.name
         mirror_name = f"{original_name}__{digest}.py"
-        out_file = out_root / source_relative.parent / mirror_name
+        out_file = out_root / projection_relative.parent / mirror_name
     out_file.parent.mkdir(parents=True, exist_ok=True)
 
     content = (
