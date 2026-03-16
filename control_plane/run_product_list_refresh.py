@@ -10,6 +10,7 @@ from typing import Any
 
 from control_plane.internal.file_io import read_json, write_json_atomic
 from tools.amazon_playwright_extractor import FixedAmazonExtractor
+from tools.configurable_supplier_scraper import ConfigurableSupplierScraper
 from utils.fixed_enhanced_state_manager import FixedEnhancedStateManager
 
 import logging
@@ -52,6 +53,48 @@ def _amazon_cache_path(repo_root: Path, run_id: str, asin: str, ean: str) -> Pat
     return _amazon_cache_dir(repo_root, run_id) / f"amazon_{asin}_{ean_safe}.json"
 
 
+def _canonical_amazon_cache_path(repo_root: Path, asin: str, ean: str) -> Path:
+    ean_safe = _sanitize_ean(ean) or "N"
+    return (
+        repo_root
+        / "OUTPUTS"
+        / "FBA_ANALYSIS"
+        / "amazon_cache"
+        / f"amazon_{asin}_{ean_safe}.json"
+    )
+
+
+def _cancel_marker_path(repo_root: Path, run_id: str) -> Path:
+    return repo_root / "OUTPUTS" / "CONTROL_PLANE" / "status" / f"{run_id}.cancelled"
+
+
+def _legacy_cancel_marker_path(repo_root: Path, run_id: str) -> Path:
+    return repo_root / "OUTPUTS" / "CONTROL_PLANE" / "locks" / f"cancel_{run_id}.flag"
+
+
+def _cancel_requested(repo_root: Path, run_id: str) -> bool:
+    return _cancel_marker_path(repo_root, run_id).exists() or _legacy_cancel_marker_path(
+        repo_root, run_id
+    ).exists()
+
+
+def _normalize_match_method(extraction_result: dict[str, Any]) -> str:
+    raw = str(extraction_result.get("_search_method_used") or "").strip().lower()
+    if raw in {
+        "ean",
+        "ean_cached",
+        "ean_verified",
+        "ean_visibility",
+        "ean_search_bar_with_verification",
+    }:
+        return "EAN"
+    if raw in {"title", "title_cached", "ean_verification_failed"}:
+        return "title"
+    if raw == "captcha":
+        return "captcha"
+    return "unknown"
+
+
 def _parse_price(text: str | None) -> float | None:
     if not text:
         return None
@@ -89,6 +132,27 @@ def _write_supplier_cache(
     path.parent.mkdir(parents=True, exist_ok=True)
     write_json_atomic(path, products)
     return path
+
+
+def _setup_debug_log(repo_root: Path, sandbox_supplier: str) -> None:
+    debug_dir = repo_root / "logs" / "debug"
+    debug_dir.mkdir(parents=True, exist_ok=True)
+    safe = sandbox_supplier.replace(".", "-").replace("/", "-")
+    ts = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
+    log_file = debug_dir / f"run_custom_{safe}__product_list_refresh_{ts}.log"
+
+    root = logging.getLogger()
+    if any(getattr(handler, "baseFilename", None) == str(log_file) for handler in root.handlers):
+        return
+
+    file_handler = logging.FileHandler(log_file, encoding="utf-8")
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(
+        logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+    )
+    if root.level > logging.INFO:
+        root.setLevel(logging.INFO)
+    root.addHandler(file_handler)
 
 
 def _backup_existing(path: Path, backups_dir: Path, max_backups: int = 5) -> None:
@@ -216,6 +280,63 @@ def _load_existing_linking_results(repo_root: Path, sandbox_supplier: str) -> li
     return out
 
 
+def _finalize_refresh_run(
+    *,
+    repo_root: Path,
+    sandbox_supplier: str,
+    state_manager: FixedEnhancedStateManager,
+    products: list[dict[str, Any]],
+    results: list[dict[str, Any]],
+    dry_run: bool,
+    cancelled: bool,
+) -> dict[str, Any]:
+    _write_linking_map(repo_root, sandbox_supplier, results)
+
+    total_products = len(products)
+    successful_matches = sum(1 for r in results if r.get("amazon_asin"))
+    sp = state_manager.state_data["system_progression"]
+    sp["supplier_products_completed"] = min(total_products, len(results))
+    sp["supplier_products_needing_extraction"] = max(
+        0, total_products - sp["supplier_products_completed"]
+    )
+    sp["amazon_products_completed"] = len(results)
+    sp["amazon_products_needing_analysis"] = max(0, total_products - len(results))
+    sp["current_phase"] = "cancelled" if cancelled else "complete"
+    state_manager.save_state_atomic()
+
+    sd = state_manager.state_data
+    sd["total_products"] = total_products
+    sd["session_products_processed"] = sp.get("amazon_products_completed", 0)
+    sd["successful_products"] = successful_matches
+    sd["processing_status"] = "cancelled" if cancelled else "complete"
+    sd["is_fresh_start"] = False
+    sd["last_updated"] = _utc_now_iso()
+    state_manager.save_state_atomic()
+
+    if not dry_run and successful_matches > 0:
+        try:
+            from tools.FBA_Financial_calculator import run_calculations
+
+            supplier_cache_path = str(_supplier_cache_path(repo_root, sandbox_supplier))
+            financial_results = run_calculations(
+                sandbox_supplier,
+                supplier_cache_path=supplier_cache_path,
+            )
+            output_file = (financial_results or {}).get("statistics", {}).get("output_file")
+            if output_file:
+                log.info("Financial report generated: %s", output_file)
+            else:
+                log.warning("Financial report ran but did not return output_file")
+        except Exception as e:
+            log.error("Financial report generation failed: %s", e, exc_info=True)
+
+    return {
+        "cancelled": cancelled,
+        "successful_matches": successful_matches,
+        "total_results": len(results),
+    }
+
+
 def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     job_env = os.environ.get("CONTROL_PLANE_JOB_PATH")
@@ -232,6 +353,8 @@ def main() -> None:
 
     if not sandbox_supplier or not run_id or not products_path:
         raise RuntimeError("Invalid job payload: missing supplier_domain, run_id, or products_path")
+
+    _setup_debug_log(repo_root, sandbox_supplier)
 
     sandbox_from_file, products = _load_products_from_subset(repo_root, products_path)
     if sandbox_from_file and sandbox_from_file != sandbox_supplier:
@@ -251,28 +374,75 @@ def main() -> None:
     # Initialize Amazon extractor for full Keepa data extraction
     extractor = FixedAmazonExtractor(chrome_debug_port=9222)
 
+    # Initialize supplier scraper for live re-scraping (main script not edited, only called)
+    scraper = ConfigurableSupplierScraper()
+
+    if not dry_run:
+        try:
+            _write_supplier_cache(repo_root, sandbox_supplier, products)
+        except Exception as e:
+            log.warning("Failed to write sandbox supplier cache: %s", e)
+
+    products_by_source = _group_products_by_source(products)
+    state_manager = FixedEnhancedStateManager(sandbox_supplier)
+    sp = state_manager.state_data["system_progression"]
+    sp["current_phase"] = "supplier"
+    sp["total_categories"] = len(products_by_source)
+    sp.setdefault("persistent_category_index", 0)
+    sp.setdefault("current_category_url", "")
+    sp["supplier_products_completed"] = min(len(products), len(results))
+    sp["supplier_products_needing_extraction"] = max(0, len(products) - len(results))
+    sp["amazon_products_completed"] = len(results)
+    sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
+    state_manager.enter_runtime_phase()
+    state_manager.save_state_atomic()
+
+    cancel_requested = False
+
     async def run() -> None:
+        nonlocal cancel_requested
         await extractor.connect()  # Ensure extractor is connected before use
         page = await _ensure_playwright_page(cdp_port=9222)
+        await scraper._ensure_browser()  # Connect scraper to shared BrowserManager singleton
+        # --- Resolve Auth Service (Login executes inside the category loop) ---
+        auth_svc = None
+        base_supplier = sandbox_supplier.split("__sandbox__")[0]
+        try:
+            import importlib
+            supplier_slug = base_supplier.split(".")[0].replace("-", "_")
+            auth_mod = importlib.import_module(f"tools.{supplier_slug}.supplier_authentication_service")
+            auth_svc = getattr(auth_mod, "SupplierAuthenticationService")(page)
+        except ModuleNotFoundError:
+            log.info("ℹ️ No auth service for %s; supplier may not require login", sandbox_supplier)
+        except Exception as auth_err:
+            log.warning("⚠️ Auth setup failed for %s: %s", sandbox_supplier, auth_err)
+        # ----------------------------------------------------------------------
         linking_map_batch_size = 1
+        financial_report_batch_size = 10
         try:
             from config.system_config_loader import SystemConfigLoader
 
+            sys_cfg = SystemConfigLoader().get_system_config() or {}
             linking_map_batch_size = max(
                 1,
-                int(
-                    (SystemConfigLoader().get_system_config() or {}).get("linking_map_batch_size")
-                    or 1
-                ),
+                int(sys_cfg.get("linking_map_batch_size") or 1),
+            )
+            financial_report_batch_size = max(
+                1,
+                int(sys_cfg.get("financial_report_batch_size") or 10),
             )
         except Exception:
             linking_map_batch_size = 1
+            financial_report_batch_size = 10
 
         results_since_flush = 0
+        successful_matches_since_financial_flush = 0
 
-        def _flush_if_needed() -> None:
-            nonlocal results_since_flush
+        def _flush_if_needed(*, matched: bool = False) -> None:
+            nonlocal results_since_flush, successful_matches_since_financial_flush
             results_since_flush += 1
+            if matched:
+                successful_matches_since_financial_flush += 1
             if results_since_flush >= linking_map_batch_size:
                 _write_linking_map(repo_root, sandbox_supplier, results)
                 log.info("Linking map periodic flush: %d entries", len(results))
@@ -280,31 +450,105 @@ def main() -> None:
                 sp["amazon_products_completed"] = len(results)
                 sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
                 state_manager.save_state_atomic()
+            if (
+                not dry_run
+                and successful_matches_since_financial_flush >= financial_report_batch_size
+            ):
+                try:
+                    from tools.FBA_Financial_calculator import run_calculations
 
-        products_by_source = _group_products_by_source(products)
-        state_manager = FixedEnhancedStateManager(sandbox_supplier)
-        sp = state_manager.state_data["system_progression"]
-        sp["current_phase"] = "supplier"
-        sp["total_categories"] = len(products_by_source)
-        sp["persistent_category_index"] = 0
-        sp["current_category_url"] = ""
-        sp["supplier_products_completed"] = 0
-        sp["supplier_products_needing_extraction"] = len(products)
-        sp["amazon_products_completed"] = len(results)
-        sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
-
-        state_manager.enter_runtime_phase()
-        state_manager.save_state_atomic()
+                    supplier_cache_path = str(_supplier_cache_path(repo_root, sandbox_supplier))
+                    fin = run_calculations(
+                        sandbox_supplier, supplier_cache_path=supplier_cache_path
+                    )
+                    output_file = (fin or {}).get("statistics", {}).get("output_file")
+                    if output_file:
+                        log.info("Mid-run financial report: %s", output_file)
+                    else:
+                        log.warning("Mid-run financial report ran but returned no output_file")
+                except Exception as fin_err:
+                    log.error("Mid-run financial report failed: %s", fin_err, exc_info=True)
+                successful_matches_since_financial_flush = 0
 
         source_items = list(products_by_source.items())
 
         for category_index, (source_url, source_products) in enumerate(source_items, start=1):
+            # --- Verify Authentication per Category ---
+            if auth_svc:
+                try:
+                    if not await auth_svc.is_authenticated(page):
+                        from config.system_config_loader import SystemConfigLoader as _SCL
+                        _creds = _SCL().get_credentials(base_supplier)
+                        if _creds:
+                            log.info("🔐 Category %d requires login; authenticating %s…", category_index, base_supplier)
+                            if await auth_svc.login(_creds, page=page):
+                                log.info("✅ Category %d: Authentication successful", category_index)
+                            else:
+                                log.warning("❌ Category %d: Authentication failed", category_index)
+                        else:
+                            log.warning("⚠️ Category %d: No credentials found for %s", category_index, base_supplier)
+                    else:
+                        log.info("✅ Category %d: Already authenticated", category_index)
+                except Exception as cat_auth_err:
+                    log.warning("⚠️ Category %d: Auth check failed: %s", category_index, cat_auth_err)
+            # ------------------------------------------
+
+            # --- Option A: Visit individual product pages directly (no category navigation) ---
+            if source_url.startswith("http"):
+                from bs4 import BeautifulSoup as _BS4
+                refreshed_products = []
+                for prod_idx, _prod in enumerate(source_products, start=1):
+                    _prod_url = _prod.get("url") or _prod.get("normalized_url")
+                    if _prod_url and _prod_url.startswith("http"):
+                        try:
+                            _html = await scraper.get_page_content(_prod_url)
+                            if _html:
+                                _soup = _BS4(_html, "html.parser")
+                                _page_data = await scraper._extract_product_data_from_soup(
+                                    _soup, _prod_url, category_url=source_url
+                                )
+                                if _page_data and _page_data.get("title"):
+                                    log.info(
+                                        "Live-refreshed %d/%d: %s",
+                                        prod_idx, len(source_products), _page_data["title"],
+                                    )
+                                    refreshed_products.append(_page_data)
+                                else:
+                                    log.warning("No data extracted from %s; using cached", _prod_url)
+                                    refreshed_products.append(_prod)
+                            else:
+                                log.warning("Failed to fetch %s; using cached", _prod_url)
+                                refreshed_products.append(_prod)
+                        except Exception as _refresh_err:
+                            log.warning("Refresh failed for %s (%s); using cached", _prod_url, _refresh_err)
+                            refreshed_products.append(_prod)
+                    else:
+                        refreshed_products.append(_prod)
+                if refreshed_products:
+                    source_products = refreshed_products
+                    log.info("Refreshed %d products for %s", len(refreshed_products), source_url)
+                    # Update cached product file with live data
+                    if not dry_run:
+                        try:
+                            _write_supplier_cache(repo_root, sandbox_supplier, refreshed_products)
+                        except Exception:
+                            pass
+            # --------------------------------------------------------------------------
+            if _cancel_requested(repo_root, run_id):
+                cancel_requested = True
+                log.warning("Cancellation requested before category checkpoint; finalizing partial outputs")
+                break
             sp["current_category_url"] = source_url
-            sp["persistent_category_index"] = category_index
-            sp["supplier_products_completed"] = 0
+            sp["persistent_category_index"] = max(
+                int(sp.get("persistent_category_index") or 0), category_index
+            )
             state_manager.save_state_atomic()
 
             for _idx, product in enumerate(source_products, start=1):
+                if _cancel_requested(repo_root, run_id):
+                    cancel_requested = True
+                    log.warning("Cancellation requested during product refresh; stopping after checkpoint")
+                    break
                 # Initialize variables before try block to prevent NameError in except
                 title = ""
                 supplier_url = ""
@@ -325,7 +569,6 @@ def main() -> None:
                     amazon_title: str | None = None
 
                     query = ean or title
-                    match_method = "EAN" if ean else "title"
 
                     if not query:
                         results.append(
@@ -347,6 +590,7 @@ def main() -> None:
                     extraction_result = await extractor.search_by_ean_and_extract_data(
                         ean=ean, supplier_product_title=title, page=page
                     )
+                    match_method = _normalize_match_method(extraction_result)
 
                     asin = extraction_result.get("asin")
                     amazon_title = extraction_result.get("title")
@@ -391,6 +635,10 @@ def main() -> None:
                         out_path.parent.mkdir(parents=True, exist_ok=True)
                         write_json_atomic(out_path, extraction_result)
 
+                        canonical_path = _canonical_amazon_cache_path(repo_root, asin, ean)
+                        canonical_path.parent.mkdir(parents=True, exist_ok=True)
+                        write_json_atomic(canonical_path, extraction_result)
+
                     results.append(
                         {
                             "supplier_ean": ean,
@@ -407,7 +655,7 @@ def main() -> None:
                     )
                     if product_key:
                         processed_keys.add(product_key)
-                    _flush_if_needed()
+                    _flush_if_needed(matched=True)
                 except Exception as e:
                     log.error(
                         f"Error processing product {product.get('title', 'Unknown')}: {e}",
@@ -428,30 +676,52 @@ def main() -> None:
                         processed_keys.add(product_key)
                     _flush_if_needed()
                     continue
+                finally:
+                    sp["supplier_products_completed"] = min(len(products), len(results))
+                    sp["supplier_products_needing_extraction"] = max(0, len(products) - len(results))
+                    sp["amazon_products_completed"] = len(results)
+                    sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
 
-        sp["supplier_products_completed"] = len(products)
-        sp["amazon_products_completed"] = len(results)
-        sp["amazon_products_needing_analysis"] = 0
-        sp["current_phase"] = "complete"
-        state_manager.save_state_atomic()
+            if cancel_requested:
+                break
 
-        # Sync top-level counters from system_progression (Issue #6 fix)
-        sd = state_manager.state_data
-        sd["total_products"] = sp.get("supplier_products_completed", 0)
-        sd["session_products_processed"] = sp.get("amazon_products_completed", 0)
-        sd["successful_products"] = sum(1 for r in results if r.get("amazon_asin"))
-        sd["processing_status"] = "complete"
-        sd["is_fresh_start"] = False
-        sd["last_updated"] = _utc_now_iso()
-        state_manager.save_state_atomic()
-
+    finalization_error: Exception | None = None
+    summary: dict[str, Any] = {"cancelled": False, "successful_matches": 0, "total_results": len(results)}
     try:
         asyncio.run(run())
+    except KeyboardInterrupt as e:
+        cancel_requested = True
+        finalization_error = e
+        log.warning("Product-list refresh interrupted; finalizing partial outputs")
+    except Exception as e:
+        cancel_requested = cancel_requested or _cancel_requested(repo_root, run_id)
+        finalization_error = e
     finally:
-        _write_linking_map(repo_root, sandbox_supplier, results)
+        summary = _finalize_refresh_run(
+            repo_root=repo_root,
+            sandbox_supplier=sandbox_supplier,
+            state_manager=state_manager,
+            products=products,
+            results=results,
+            dry_run=dry_run,
+            cancelled=cancel_requested or _cancel_requested(repo_root, run_id),
+        )
 
-    successful_matches = sum(1 for r in results if r.get("amazon_asin"))
-    log.info("Product list refresh complete: %d/%d matched", successful_matches, len(results))
+    if finalization_error is not None and not summary["cancelled"]:
+        raise finalization_error
+
+    if summary["cancelled"]:
+        log.warning(
+            "Product list refresh cancelled: %d/%d matched",
+            summary["successful_matches"],
+            summary["total_results"],
+        )
+    else:
+        log.info(
+            "Product list refresh complete: %d/%d matched",
+            summary["successful_matches"],
+            summary["total_results"],
+        )
 
 
 if __name__ == "__main__":

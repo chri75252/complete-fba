@@ -1,0 +1,77 @@
+{
+  "session_id": "20260314T233806Z_3ff47280",
+  "session_started_at": "2026-03-14T23:38:06Z",
+  "reason": "approval_needed",
+  "messages": [
+    {
+      "role": "user",
+      "content": "I WAN YOU TO ANALYZE 4 PRODUCTS FROM THE FOLLWOING CATGEROIES:    \"https://angelwholesale.co.uk/Category/All-Gifts-for-children\",     \"https://angelwholesale.co.uk/Category/All-Hamper-Supplies\",     \"https://angelwholesale.co.uk/Category/All-Items-for-personalisation\",     \"https://angelwholesale.co.uk/Category/All-Occasions\","
+    }
+  ],
+  "scratchpad": [],
+  "trace": [],
+  "tool_executions": [],
+  "turn_history": [],
+  "pending_tool_call": {
+    "name": "enqueue_run",
+    "params": {
+      "workflow_key": "angelwholesale_workflow",
+      "supplier_domain": "angelwholesale.co.uk",
+      "runner_script": "run_custom_angelwholesale-co-uk.py",
+      "category_urls": [
+        "https://angelwholesale.co.uk/Category/All-Gifts-for-children",
+        "https://angelwholesale.co.uk/Category/All-Hamper-Supplies",
+        "https://angelwholesale.co.uk/Category/All-Items-for-personalisation",
+        "https://angelwholesale.co.uk/Category/All-Occasions"
+      ],
+      "max_products": 4,
+      "max_products_per_category": 4,
+      "notes": "User request: analyze 4 products from 4 specified categories",
+      "run_id": "58010368-38e2-4b63-b6e4-9b19649ef472"
+    },
+    "explanation": "I will create a sandboxed run for angelwholesale.co.uk with 4 category URLs, extracting 1 product per category (4 total). You should start the worker to execute it.",
+    "expected_outputs": [
+      "OUTPUTS/CONTROL_PLANE/jobs/pending/job_58010368-38e2-4b63-b6e4-9b19649ef472.json",
+      "OUTPUTS/CONTROL_PLANE/status/58010368-38e2-4b63-b6e4-9b19649ef472.json",
+      "OUTPUTS/CONTROL_PLANE/logs/58010368-38e2-4b63-b6e4-9b19649ef472.log",
+      "OUTPUTS/CONTROL_PLANE/overrides/58010368-38e2-4b63-b6e4-9b19649ef472/system_config.merged.json",
+      "OUTPUTS/CONTROL_PLANE/overrides/58010368-38e2-4b63-b6e4-9b19649ef472/categories_subset.json",
+      "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__58010368_processing_state.json",
+      "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale.co.uk__sandbox__58010368/linking_map.json",
+      "OUTPUTS/cached_products/angelwholesale-co-uk__sandbox__58010368_products_cache.json",
+      "OUTPUTS/FBA_ANALYSIS/financial_reports/angelwholesale-co-uk__sandbox__58010368/fba_financial_report_*.csv",
+      "OUTPUTS/CACHE/processing_states/angelwholesale_co_uk_58010368_processing_state.json",
+      "OUTPUTS/FBA_ANALYSIS/linking_maps/angelwholesale_co_uk_58010368/linking_map.json"
+    ]
+  },
+  "pending_user_text": "I WAN YOU TO ANALYZE 4 PRODUCTS FROM THE FOLLWOING CATGEROIES:    \"https://angelwholesale.co.uk/Category/All-Gifts-for-children\",     \"https://angelwholesale.co.uk/Category/All-Hamper-Supplies\",     \"https://angelwholesale.co.uk/Category/All-Items-for-personalisation\",     \"https://angelwholesale.co.uk/Category/All-Occasions\",",
+  "pending_rag_info": {
+    "meta": {
+      "enabled": true,
+      "ok": true,
+      "doc_count": 1156,
+      "generated_at": "2026-03-08T09:43:19Z",
+      "top_k": 5
+    },
+    "sources_used": [
+      ".qoder\\repowiki\\en\\content\\Project Overview\\Core Components\\Financial Calculator.md",
+      ".qoder\\repowiki\\en\\content\\System Architecture\\Financial Analysis.md",
+      ".qoder\\repowiki\\en\\content\\Project Overview\\Core Components\\Supplier Scraper.md",
+      ".qoder\\repowiki\\en\\content\\API Reference\\Financial Analysis API.md",
+      ".qoder\\repowiki\\en\\content\\System Architecture\\Workflow Engine\\Amazon Data Matching\\Sponsored Ad Filtering.md"
+    ],
+    "scores": [
+      0.13474201390907387,
+      0.11595420713048969,
+      0.11363310286178553,
+      0.11354659116073192,
+      0.11308281825797516
+    ],
+    "context_injected": true
+  },
+  "last_run_id": null,
+  "last_products_path": null,
+  "last_supplier_domain": null,
+  "last_sandbox_supplier": null,
+  "saved_at": "2026-03-14T23:38:47Z"
+}

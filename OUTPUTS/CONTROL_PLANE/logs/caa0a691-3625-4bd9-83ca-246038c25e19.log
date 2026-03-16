@@ -1,0 +1,971 @@
+
+
+===== CONTROL_PLANE ATTEMPT start=2026-03-16T05:59:58Z run_id=caa0a691-3625-4bd9-83ca-246038c25e19 job_type=run_product_list_refresh =====
+2026-03-16 09:59:59,946 - __main__ - WARNING - Ignoring supplier identity from products file; job sandbox is authoritative. job=efghousewares.co.uk__sandbox__caa0a691 file=efghousewares.co.uk
+2026-03-16 09:59:59,946 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2026-03-16 09:59:59,946 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-03-16 09:59:59,946 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-03-16 09:59:59,950 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2026-03-16 09:59:59,951 - tools.configurable_supplier_scraper - INFO - \u2705 Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-03-16 09:59:59,951 - tools.configurable_supplier_scraper - INFO - \u26a0\ufe0f Using legacy browser management (BrowserManager not available or disabled)
+2026-03-16 09:59:59,951 - tools.configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-03-16 09:59:59,951 - tools.configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2026-03-16 09:59:59,951 - tools.configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2026-03-16 09:59:59,953 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (9 entries) saved successfully
+2026-03-16 09:59:59,953 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (9 entries) saved successfully
+2026-03-16 09:59:59,957 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 09:59:59,957 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 09:59:59,957 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 09:59:59,958 - tools.amazon_playwright_extractor - INFO - \U0001f527 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-03-16 09:59:59,958 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-03-16 09:59:59,958 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2026-03-16 10:00:00,399 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2026-03-16 10:00:00,399 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-03-16 10:00:02,452 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/146.0.7680.80
+2026-03-16 10:00:02,452 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2026-03-16 10:00:04,490 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+2026-03-16 10:00:04,855 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2026-03-16 10:00:04,855 - utils.browser_manager - INFO - ?? Using existing context with 2 pages
+2026-03-16 10:00:04,856 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 146.0.7680.80
+2026-03-16 10:00:04,856 - tools.amazon_playwright_extractor - INFO - \u2705 FixedAmazonExtractor connected via BrowserManager singleton
+2026-03-16 10:00:04,856 - utils.browser_manager - INFO - ?? Reusing existing Chrome connection (port 9222)
+2026-03-16 10:00:04,856 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:00:04,857 - tools.configurable_supplier_scraper - INFO - \U0001f527 ConfigurableSupplierScraper connecting via BrowserManager singleton
+2026-03-16 10:00:04,857 - tools.configurable_supplier_scraper - INFO - \u2705 ConfigurableSupplierScraper connected via BrowserManager singleton
+2026-03-16 10:00:24,064 - tools.efghousewares.supplier_authentication_service - INFO - \u274c User is not authenticated (redirected to login)
+2026-03-16 10:00:24,065 - __main__ - INFO - \U0001f510 Supplier requires login; authenticating efghousewares.co.uk…
+2026-03-16 10:00:24,065 - tools.efghousewares.supplier_authentication_service - INFO - \U0001f504 Starting login process for info@theblacksmithmarket.com...
+2026-03-16 10:00:27,843 - tools.efghousewares.supplier_authentication_service - INFO - \u23f3 Waiting for login form...
+2026-03-16 10:00:28,007 - tools.efghousewares.supplier_authentication_service - INFO - \u270f\ufe0f  Entering username...
+2026-03-16 10:00:28,213 - tools.efghousewares.supplier_authentication_service - INFO - \u270f\ufe0f  Entering password...
+2026-03-16 10:00:28,416 - tools.efghousewares.supplier_authentication_service - INFO - \U0001f5b1\ufe0f  Clicking login button...
+2026-03-16 10:00:28,639 - tools.efghousewares.supplier_authentication_service - INFO - \u23f3 Waiting for login response...
+2026-03-16 10:00:42,453 - tools.efghousewares.supplier_authentication_service - INFO - \U0001f50e Verifying price access via test product: https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50
+2026-03-16 10:00:48,209 - tools.efghousewares.supplier_authentication_service - INFO - \u2705 Price access verified (p.price_text span.excUnitPrice -> '3.68')
+2026-03-16 10:00:48,209 - tools.efghousewares.supplier_authentication_service - INFO - \u2705 Login successful
+2026-03-16 10:00:48,210 - __main__ - INFO - \u2705 Authentication successful for efghousewares.co.uk
+2026-03-16 10:00:48,210 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330 (attempt 1/3)
+2026-03-16 10:00:48,211 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:00:48,211 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330
+2026-03-16 10:00:50,852 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330 in 2.21s...
+2026-03-16 10:00:53,068 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330 (attempt 2/3)
+2026-03-16 10:00:53,069 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:00:53,069 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330
+2026-03-16 10:00:54,615 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330
+2026-03-16 10:00:54,615 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330
+2026-03-16 10:00:54,689 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/bright-homely-laundry-bag-medium-pk10-assorted-110330 (Size: 542791 bytes)
+2026-03-16 10:00:54,856 - config.supplier_config_loader - INFO - Loaded supplier selector config for domain: efghousewares.co.uk
+2026-03-16 10:00:54,857 - tools.configurable_supplier_scraper - INFO - \U0001f4c1 Loaded selectors for domain efghousewares.co.uk from legacy config/supplier_configs/
+2026-03-16 10:00:54,944 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5050796010238
+2026-03-16 10:00:54,955 - __main__ - INFO - Live-refreshed 1/3: BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS
+2026-03-16 10:00:54,956 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3 (attempt 1/3)
+2026-03-16 10:00:54,956 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:00:54,956 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3
+2026-03-16 10:00:57,699 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3 in 2.06s...
+2026-03-16 10:00:59,775 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3 (attempt 2/3)
+2026-03-16 10:00:59,775 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:00:59,775 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3
+2026-03-16 10:01:02,774 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3
+2026-03-16 10:01:02,775 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3
+2026-03-16 10:01:02,836 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/jvl-seagras-basket-rect-set3 (Size: 544169 bytes)
+2026-03-16 10:01:02,998 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5017440650103
+2026-03-16 10:01:03,010 - __main__ - INFO - Live-refreshed 2/3: JVL SEAGRASS BASKET RECT SET3
+2026-03-16 10:01:03,011 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933 (attempt 1/3)
+2026-03-16 10:01:03,011 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:01:03,011 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933
+2026-03-16 10:01:05,746 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933 in 1.90s...
+2026-03-16 10:01:07,653 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933 (attempt 2/3)
+2026-03-16 10:01:07,653 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:01:07,653 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933
+2026-03-16 10:01:10,456 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933
+2026-03-16 10:01:10,456 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933
+2026-03-16 10:01:10,548 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/countryclub-storage-bag-with-reinforced-handles-60x40x35cm-119933 (Size: 541570 bytes)
+2026-03-16 10:01:10,796 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5023674227387
+2026-03-16 10:01:10,808 - __main__ - INFO - Live-refreshed 3/3: COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM
+2026-03-16 10:01:10,808 - __main__ - INFO - Refreshed 3 products for https://www.efghousewares.co.uk/shop-by-department/laundry-storage-&-luggage/laundry-baskets-&-storage
+2026-03-16 10:01:10,814 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (3 entries) saved successfully
+2026-03-16 10:01:10,814 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (3 entries) saved successfully
+2026-03-16 10:01:10,821 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:01:10,821 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:01:10,821 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:01:10,822 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5050796010238 for supplier product: 'BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS' (FixedAmazonExtractor)
+2026-03-16 10:01:10,822 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5050796010238
+2026-03-16 10:01:15,638 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5050796010238...
+2026-03-16 10:01:15,681 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:01:16,333 - tools.amazon_playwright_extractor - INFO - Found 6 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:01:16,333 - tools.amazon_playwright_extractor - INFO - Processing 6 search result elements for EAN 5050796010238
+2026-03-16 10:01:16,503 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 0 organic products, 6 sponsored products filtered out
+2026-03-16 10:01:16,503 - tools.amazon_playwright_extractor - WARNING - EAN 5050796010238 returned no organic results - skipping
+2026-03-16 10:01:16,503 - tools.amazon_playwright_extractor - WARNING - No Amazon results or error for EAN '5050796010238'. Details: no_organic_results
+2026-03-16 10:01:16,503 - tools.amazon_playwright_extractor - INFO - Falling back to title search for supplier product: 'BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS'
+2026-03-16 10:01:16,503 - tools.amazon_playwright_extractor - INFO - Searching Amazon by title using search bar: 'BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS'
+2026-03-16 10:01:16,503 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for title: BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS
+2026-03-16 10:01:20,998 - tools.amazon_playwright_extractor - INFO - Title search found 71 elements using selector: div.s-search-results > div[data-asin]
+2026-03-16 10:01:21,773 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-16 10:01:22,386 - tools.amazon_playwright_extractor - INFO - \u2705 Title search: Selected first visible organic product - ASIN B0DYVTVHPK
+2026-03-16 10:01:22,386 - tools.amazon_playwright_extractor - INFO - \U0001f3af ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS'
+2026-03-16 10:01:22,386 - tools.amazon_playwright_extractor - INFO - Title search successful for 'BRIGHT & HOMELY LAUNDRY BAG MEDIUM 56CM PK10 ASSORTED COLOURS' after EAN '5050796010238' failed
+2026-03-16 10:01:22,387 - tools.amazon_playwright_extractor - INFO - Extracting complete data for fallback ASIN B0DYVTVHPK from title search
+2026-03-16 10:01:22,387 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0DYVTVHPK. Getting a new one from BrowserManager.
+2026-03-16 10:01:22,387 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=BRIGHT+%26+HOMELY+LAUNDRY+BAG+MEDIUM+56CM+PK10+ASSORTED+COLOURS&ref=nb_sb_noss
+2026-03-16 10:01:25,350 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:01:25,595 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:01:26,598 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:01:29,614 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:01:29,614 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:01:29,695 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:01:29,695 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:01:34,706 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:01:41,717 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0DYVTVHPK
+2026-03-16 10:01:41,717 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:01:41,792 - tools.amazon_playwright_extractor - INFO - Title found: 'ANSIO Large Laundry Bags Pack of 5 Storage Bags Reusable Laundry Bags with Zips Ideal for Moving House Clothing & Wardrobe Storage (60L x 25W x 50H cm) Assorted Colors' via #productTitle
+2026-03-16 10:01:41,793 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:01:41,841 - tools.amazon_playwright_extractor - INFO - Current price: 8.95 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:01:41,908 - tools.amazon_playwright_extractor - INFO - Original price: 9.42 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-16 10:01:41,967 - tools.amazon_playwright_extractor - INFO - Amazon sales badge found: 500 in container div#socialProofingAsinFaceout_feature_div
+2026-03-16 10:01:41,967 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:01:42,077 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/81Q8AxdEsvL._AC_SL1500_.jpg via #landingImage
+2026-03-16 10:01:42,425 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2026-03-16 10:01:42,433 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:01:42,876 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:01:43,235 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:01:43,316 - tools.amazon_playwright_extractor - INFO - Rating: 4.3 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:01:43,411 - tools.amazon_playwright_extractor - INFO - Review count: 613 via #acrCustomerReviewText
+2026-03-16 10:01:43,412 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:01:43,455 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:01:43,456 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:01:44,116 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:01:44,117 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:01:44,309 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:01:44,778 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:01:44,778 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:01:44,779 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:01:44,779 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:01:44,779 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:01:50,938 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:01:51,106 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:01:51,106 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:01:51,163 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:01:51,164 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:01:53,767 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:01:55,635 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:01:55,904 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:01:56,001 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:01:57,071 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 163 rows found
+2026-03-16 10:01:57,103 - tools.amazon_playwright_extractor - INFO - Processing 163 rows in Keepa Product Details AG Grid.
+2026-03-16 10:02:00,323 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.05' in Keepa AG Grid.
+2026-03-16 10:02:00,569 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 1.16' in Keepa AG Grid.
+2026-03-16 10:02:06,861 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 47 items from Keepa Product Details AG Grid.
+2026-03-16 10:02:06,861 - tools.amazon_playwright_extractor - INFO - ASIN B0DYVTVHPK: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:02:06,862 - tools.amazon_playwright_extractor - INFO - ASIN B0DYVTVHPK: EAN '5056184171437' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:02:06,862 - tools.amazon_playwright_extractor - INFO - ASIN B0DYVTVHPK: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:02:06,862 - tools.amazon_playwright_extractor - INFO - ASIN B0DYVTVHPK: BSR 4695 in 'Home & Kitchen 23' from Keepa SalesRankDetailsTable.
+2026-03-16 10:02:06,868 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0DYVTVHPK_5050796010238.json (29 entries) saved successfully
+2026-03-16 10:02:06,868 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0DYVTVHPK_5050796010238.json (29 entries) saved successfully
+2026-03-16 10:02:06,874 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0DYVTVHPK_5050796010238.json (29 entries) saved successfully
+2026-03-16 10:02:06,874 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0DYVTVHPK_5050796010238.json (29 entries) saved successfully
+2026-03-16 10:02:06,880 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (1 entries) saved successfully
+2026-03-16 10:02:06,880 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (1 entries) saved successfully
+2026-03-16 10:02:06,881 - __main__ - INFO - Linking map periodic flush: 1 entries
+2026-03-16 10:02:06,887 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:02:06,887 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:02:06,888 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:02:06,888 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5017440650103 for supplier product: 'JVL SEAGRASS BASKET RECT SET3' (FixedAmazonExtractor)
+2026-03-16 10:02:06,888 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5017440650103
+2026-03-16 10:02:12,949 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5017440650103...
+2026-03-16 10:02:13,185 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:02:13,965 - tools.amazon_playwright_extractor - INFO - Found 13 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:02:13,966 - tools.amazon_playwright_extractor - INFO - Processing 13 search result elements for EAN 5017440650103
+2026-03-16 10:02:14,170 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B09RGMLV1S - JVL Seagrass Set of 3 Rectangular Storage Baskets, Natural...
+2026-03-16 10:02:14,670 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 1 organic products, 12 sponsored products filtered out
+2026-03-16 10:02:14,670 - tools.amazon_playwright_extractor - INFO - \u2705 EAN SEARCH: Selected first organic result - ASIN B09RGMLV1S
+2026-03-16 10:02:14,670 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5017440650103
+2026-03-16 10:02:14,670 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-03-16 10:02:14,671 - tools.amazon_playwright_extractor - INFO - Single ASIN B09RGMLV1S found for EAN 5017440650103.
+2026-03-16 10:02:14,671 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B09RGMLV1S for EAN: 5017440650103
+2026-03-16 10:02:14,671 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B09RGMLV1S. Getting a new one from BrowserManager.
+2026-03-16 10:02:14,671 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5017440650103&ref=nb_sb_noss
+2026-03-16 10:02:17,329 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:02:18,597 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:02:19,603 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:02:22,613 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:02:22,613 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:02:22,691 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:02:22,691 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:02:27,706 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:02:34,709 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B09RGMLV1S
+2026-03-16 10:02:34,709 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:02:34,756 - tools.amazon_playwright_extractor - INFO - Title found: 'JVL Seagrass Set of 3 Rectangular Storage Baskets, Natural' via #productTitle
+2026-03-16 10:02:34,757 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:02:34,809 - tools.amazon_playwright_extractor - INFO - Current price: 19.99 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:02:34,869 - tools.amazon_playwright_extractor - INFO - Original price: 34.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-16 10:02:34,932 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:02:34,981 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/61DVmbSsUaL._AC_SL1000_.jpg via #landingImage
+2026-03-16 10:02:35,120 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2026-03-16 10:02:35,131 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:02:35,462 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:02:35,698 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:02:35,726 - tools.amazon_playwright_extractor - INFO - Rating: 4.6 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:02:35,753 - tools.amazon_playwright_extractor - INFO - Review count: 48 via #acrCustomerReviewText
+2026-03-16 10:02:35,754 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:02:35,821 - tools.amazon_playwright_extractor - INFO - Availability text: 'Only 6 left in stock.' via #availability span.a-color-price
+2026-03-16 10:02:35,821 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:02:36,211 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:02:36,211 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:02:36,234 - tools.amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2026-03-16 10:02:36,235 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:02:37,018 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:02:37,018 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:02:37,019 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:02:37,019 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:02:37,019 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:02:43,170 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:02:43,329 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:02:43,329 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:02:43,367 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:02:43,368 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:02:45,898 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:02:47,045 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:02:47,116 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:02:47,206 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:02:48,267 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 151 rows found
+2026-03-16 10:02:48,290 - tools.amazon_playwright_extractor - INFO - Processing 151 rows in Keepa Product Details AG Grid.
+2026-03-16 10:02:50,868 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.54' in Keepa AG Grid.
+2026-03-16 10:02:51,044 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 1.60' in Keepa AG Grid.
+2026-03-16 10:02:55,778 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 45 items from Keepa Product Details AG Grid.
+2026-03-16 10:02:55,779 - tools.amazon_playwright_extractor - INFO - ASIN B09RGMLV1S: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:02:55,779 - tools.amazon_playwright_extractor - INFO - ASIN B09RGMLV1S: EAN '5017440650103' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:02:55,779 - tools.amazon_playwright_extractor - INFO - ASIN B09RGMLV1S: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:02:55,779 - tools.amazon_playwright_extractor - INFO - ASIN B09RGMLV1S: BSR 101058 in 'Home & Kitchen 14' from Keepa SalesRankDetailsTable.
+2026-03-16 10:02:55,779 - tools.amazon_playwright_extractor - INFO - \u2705 Recorded search method 'EAN' for ASIN B09RGMLV1S
+2026-03-16 10:02:55,780 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B09RGMLV1S (EAN on page: 5017440650103)
+2026-03-16 10:02:55,785 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B09RGMLV1S_5017440650103.json (29 entries) saved successfully
+2026-03-16 10:02:55,785 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B09RGMLV1S_5017440650103.json (29 entries) saved successfully
+2026-03-16 10:02:55,791 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B09RGMLV1S_5017440650103.json (29 entries) saved successfully
+2026-03-16 10:02:55,791 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B09RGMLV1S_5017440650103.json (29 entries) saved successfully
+2026-03-16 10:02:55,797 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (2 entries) saved successfully
+2026-03-16 10:02:55,797 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (2 entries) saved successfully
+2026-03-16 10:02:55,798 - __main__ - INFO - Linking map periodic flush: 2 entries
+2026-03-16 10:02:55,803 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:02:55,803 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:02:55,804 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:02:56,567 - tools.FBA_Financial_calculator - INFO - FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-16 10:02:56,569 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5050796010238, ASIN=None, Price=£8.95 (from current_price)
+2026-03-16 10:02:56,570 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5017440650103, ASIN=None, Price=£19.99 (from current_price)
+2026-03-16 10:02:56,628 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5023674227387, ASIN=None, Price=£16.98 (from current_price)
+2026-03-16 10:02:56,642 - __main__ - INFO - Mid-run financial report: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691\fba_financial_report_efghousewares-co-uk__sandbox__caa0a691_20260316_100256.csv
+2026-03-16 10:02:56,643 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5023674227387 for supplier product: 'COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM' (FixedAmazonExtractor)
+2026-03-16 10:02:56,643 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5023674227387
+2026-03-16 10:03:08,717 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5023674227387...
+2026-03-16 10:03:08,925 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:03:09,567 - tools.amazon_playwright_extractor - INFO - Found 5 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:03:09,567 - tools.amazon_playwright_extractor - INFO - Processing 5 search result elements for EAN 5023674227387
+2026-03-16 10:03:10,041 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 0 organic products, 5 sponsored products filtered out
+2026-03-16 10:03:10,041 - tools.amazon_playwright_extractor - WARNING - EAN 5023674227387 returned no organic results - skipping
+2026-03-16 10:03:10,041 - tools.amazon_playwright_extractor - WARNING - No Amazon results or error for EAN '5023674227387'. Details: no_organic_results
+2026-03-16 10:03:10,041 - tools.amazon_playwright_extractor - INFO - Falling back to title search for supplier product: 'COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM'
+2026-03-16 10:03:10,042 - tools.amazon_playwright_extractor - INFO - Searching Amazon by title using search bar: 'COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM'
+2026-03-16 10:03:10,042 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for title: COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM
+2026-03-16 10:03:20,015 - tools.amazon_playwright_extractor - INFO - Title search found 71 elements using selector: div.s-search-results > div[data-asin]
+2026-03-16 10:03:23,143 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-16 10:03:25,079 - tools.amazon_playwright_extractor - INFO - \u2705 Title search: Selected first visible organic product - ASIN B0FNKMB6C4
+2026-03-16 10:03:25,080 - tools.amazon_playwright_extractor - INFO - \U0001f3af ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM'
+2026-03-16 10:03:25,080 - tools.amazon_playwright_extractor - INFO - Title search successful for 'COUNTRY CLUB STORAGE BAG WITH REINFORCED HANDLES 60X40X35CM' after EAN '5023674227387' failed
+2026-03-16 10:03:25,080 - tools.amazon_playwright_extractor - INFO - Extracting complete data for fallback ASIN B0FNKMB6C4 from title search
+2026-03-16 10:03:25,080 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0FNKMB6C4. Getting a new one from BrowserManager.
+2026-03-16 10:03:25,080 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=COUNTRY+CLUB+STORAGE+BAG+WITH+REINFORCED+HANDLES+60X40X35CM&crid=22EYZPK8TAVS4&sprefix=country+club+storage+bag+with+reinforced+handles+60x40x35cm%2Caps%2C755&ref=nb_sb_noss
+2026-03-16 10:03:27,815 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:03:29,455 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:03:30,465 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:03:33,475 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:03:33,475 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:03:33,657 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:03:33,657 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:03:38,667 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:03:45,670 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0FNKMB6C4
+2026-03-16 10:03:45,671 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:03:45,769 - tools.amazon_playwright_extractor - INFO - Title found: '90L Storage Bags 6 Pack with Clear Window - Large Moving Boxes & Storage Organisers for Clothes, Bedding, Seasonal Storage, Reinforced Handles & Seams (60x40x35cm)' via #productTitle
+2026-03-16 10:03:45,769 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:03:45,831 - tools.amazon_playwright_extractor - INFO - Current price: 16.14 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:03:45,900 - tools.amazon_playwright_extractor - INFO - Original price: 18.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-16 10:03:46,009 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:03:46,146 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/81NCNk1wKGL._AC_SL1500_.jpg via #landingImage
+2026-03-16 10:03:46,519 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2026-03-16 10:03:46,526 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:03:46,660 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:03:46,936 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:03:46,975 - tools.amazon_playwright_extractor - INFO - Rating: 4.2 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:03:47,009 - tools.amazon_playwright_extractor - INFO - Review count: 31 via #acrCustomerReviewText
+2026-03-16 10:03:47,010 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:03:47,035 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:03:47,035 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:03:47,502 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:03:47,502 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:03:47,556 - tools.amazon_playwright_extractor - INFO - Description found using selector: #aplus_feature_div
+2026-03-16 10:03:47,556 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:03:47,869 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:03:47,869 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:03:47,869 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:03:47,870 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:03:47,870 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:03:53,975 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:03:54,110 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:03:54,111 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:03:54,159 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:03:54,160 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:03:56,497 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:03:58,501 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:03:58,526 - tools.amazon_playwright_extractor - WARNING - Product-Details tab visible, but inner grid still not ready – extending wait with retry logic.
+2026-03-16 10:03:58,527 - tools.amazon_playwright_extractor - INFO - Grid attempt 1/3: Waiting 15000ms for grid container...
+2026-03-16 10:03:58,682 - tools.amazon_playwright_extractor - INFO - ? Grid became visible after attempt 1 – continuing.
+2026-03-16 10:03:58,723 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:03:58,772 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:03:59,822 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 136 rows found
+2026-03-16 10:03:59,839 - tools.amazon_playwright_extractor - INFO - Processing 136 rows in Keepa Product Details AG Grid.
+2026-03-16 10:04:01,812 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.34' in Keepa AG Grid.
+2026-03-16 10:04:01,980 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 2.10' in Keepa AG Grid.
+2026-03-16 10:04:05,539 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 39 items from Keepa Product Details AG Grid.
+2026-03-16 10:04:05,539 - tools.amazon_playwright_extractor - INFO - ASIN B0FNKMB6C4: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:04:05,539 - tools.amazon_playwright_extractor - INFO - ASIN B0FNKMB6C4: EAN '0721545755100' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:04:05,539 - tools.amazon_playwright_extractor - INFO - ASIN B0FNKMB6C4: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:04:05,540 - tools.amazon_playwright_extractor - INFO - ASIN B0FNKMB6C4: BSR 60496 in 'Home & Kitchen 10' from Keepa SalesRankDetailsTable.
+2026-03-16 10:04:05,547 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0FNKMB6C4_5023674227387.json (29 entries) saved successfully
+2026-03-16 10:04:05,547 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0FNKMB6C4_5023674227387.json (29 entries) saved successfully
+2026-03-16 10:04:05,552 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0FNKMB6C4_5023674227387.json (29 entries) saved successfully
+2026-03-16 10:04:05,552 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0FNKMB6C4_5023674227387.json (29 entries) saved successfully
+2026-03-16 10:04:05,558 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (3 entries) saved successfully
+2026-03-16 10:04:05,558 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (3 entries) saved successfully
+2026-03-16 10:04:05,559 - __main__ - INFO - Linking map periodic flush: 3 entries
+2026-03-16 10:04:05,565 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:04:05,565 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:04:05,566 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:04:05,566 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249 (attempt 1/3)
+2026-03-16 10:04:05,566 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:05,566 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249
+2026-03-16 10:04:10,308 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249 in 1.98s...
+2026-03-16 10:04:12,293 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249 (attempt 2/3)
+2026-03-16 10:04:12,293 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:12,293 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249
+2026-03-16 10:04:14,677 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249
+2026-03-16 10:04:14,678 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249
+2026-03-16 10:04:14,741 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/tidyz-50-white-pedal-bin-liners-handle-106249 (Size: 541229 bytes)
+2026-03-16 10:04:14,963 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5025364024801
+2026-03-16 10:04:14,974 - __main__ - INFO - Live-refreshed 1/5: TIDYZ 50 WHITE PEDAL BIN LINERS+HANDLE 15L
+2026-03-16 10:04:14,974 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5 (attempt 1/3)
+2026-03-16 10:04:14,974 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:14,974 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5
+2026-03-16 10:04:18,053 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5 in 1.57s...
+2026-03-16 10:04:19,636 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5 (attempt 2/3)
+2026-03-16 10:04:19,636 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:19,636 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5
+2026-03-16 10:04:21,595 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5
+2026-03-16 10:04:21,595 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5
+2026-03-16 10:04:21,680 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/euro-bin-liner-swing-bin-50-bag-pk5 (Size: 540893 bytes)
+2026-03-16 10:04:21,916 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5022458004565
+2026-03-16 10:04:21,928 - __main__ - INFO - Live-refreshed 2/5: EURO BIN LINER SWING BIN 50 BAG PK5
+2026-03-16 10:04:21,928 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239 (attempt 1/3)
+2026-03-16 10:04:21,928 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:21,928 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239
+2026-03-16 10:04:25,308 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239 in 2.19s...
+2026-03-16 10:04:27,513 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239 (attempt 2/3)
+2026-03-16 10:04:27,513 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:27,513 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239
+2026-03-16 10:04:28,589 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239
+2026-03-16 10:04:28,590 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239
+2026-03-16 10:04:28,699 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/tidyz-food-bag-300pc-106239 (Size: 540666 bytes)
+2026-03-16 10:04:28,942 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5025364005572
+2026-03-16 10:04:28,953 - __main__ - INFO - Live-refreshed 3/5: TIDYZ FOOD BAG 300PCS
+2026-03-16 10:04:28,954 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237 (attempt 1/3)
+2026-03-16 10:04:28,954 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:28,954 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237
+2026-03-16 10:04:32,438 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237 in 2.48s...
+2026-03-16 10:04:34,927 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237 (attempt 2/3)
+2026-03-16 10:04:34,928 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:34,928 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237
+2026-03-16 10:04:36,639 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237
+2026-03-16 10:04:36,640 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237
+2026-03-16 10:04:36,706 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/tidyz-90-doggy-bags-fragnanced-106237 (Size: 540837 bytes)
+2026-03-16 10:04:37,038 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5025364005893
+2026-03-16 10:04:37,048 - __main__ - INFO - Live-refreshed 4/5: TIDYZ 90 DOGGY BAGS FRAGNANCED
+2026-03-16 10:04:37,048 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-100-freezer-bags (attempt 1/3)
+2026-03-16 10:04:37,048 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:37,048 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-100-freezer-bags
+2026-03-16 10:04:40,551 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/tidyz-100-freezer-bags in 2.38s...
+2026-03-16 10:04:42,944 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/tidyz-100-freezer-bags (attempt 2/3)
+2026-03-16 10:04:42,944 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:04:42,944 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/tidyz-100-freezer-bags
+2026-03-16 10:04:45,346 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/tidyz-100-freezer-bags
+2026-03-16 10:04:45,346 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/tidyz-100-freezer-bags
+2026-03-16 10:04:45,416 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/tidyz-100-freezer-bags (Size: 539858 bytes)
+2026-03-16 10:04:45,668 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 5025364005671
+2026-03-16 10:04:45,679 - __main__ - INFO - Live-refreshed 5/5: TIDYZ FREEZER BAGS 100 PCS XLLARGE
+2026-03-16 10:04:45,679 - __main__ - INFO - Refreshed 5 products for https://www.efghousewares.co.uk/shop-by-department/disposable-bags-&-tableware/bin-bag-carrier-bag-paper-bag
+2026-03-16 10:04:45,685 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (5 entries) saved successfully
+2026-03-16 10:04:45,685 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (5 entries) saved successfully
+2026-03-16 10:04:45,690 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:04:45,690 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:04:45,691 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:04:45,691 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5025364024801 for supplier product: 'TIDYZ 50 WHITE PEDAL BIN LINERS+HANDLE 15L' (FixedAmazonExtractor)
+2026-03-16 10:04:45,691 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5025364024801
+2026-03-16 10:04:50,160 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5025364024801...
+2026-03-16 10:04:50,219 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:04:50,884 - tools.amazon_playwright_extractor - INFO - Found 12 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:04:50,884 - tools.amazon_playwright_extractor - INFO - Processing 12 search result elements for EAN 5025364024801
+2026-03-16 10:04:51,051 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0C8V88Z9D - Arduino UNO R4 WiFi [ABX00087] - Microcontroller Dev Board w...
+2026-03-16 10:04:51,215 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0C7BX3Q3Z - LG Soundbar Power Cable,HKY 25V Power Supply Adapter for LG ...
+2026-03-16 10:04:51,352 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0FCRTW4LC - Remote Control Battle Robots, RC Fighting Robots Toys for Ki...
+2026-03-16 10:04:51,503 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0BGXHKMN3 - 4Pcs Servo Arm Horn RC Products 25T Aluminum Horn Steering A...
+2026-03-16 10:04:51,645 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B08FXYW458 - DXF RC 7.4V LIPO BATTERY 2Pack - 8400mAh 2S LIPO Battery for...
+2026-03-16 10:04:51,646 - tools.amazon_playwright_extractor - INFO - Found 5 organic results, stopping search to improve performance.
+2026-03-16 10:04:51,646 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 5 organic products, 7 sponsored products filtered out
+2026-03-16 10:04:51,647 - tools.amazon_playwright_extractor - INFO - \u2705 EAN SEARCH: Selected first organic result - ASIN B0C8V88Z9D
+2026-03-16 10:04:51,647 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5025364024801
+2026-03-16 10:04:51,647 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-03-16 10:04:51,647 - tools.amazon_playwright_extractor - INFO - Single ASIN B0C8V88Z9D found for EAN 5025364024801.
+2026-03-16 10:04:51,648 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B0C8V88Z9D for EAN: 5025364024801
+2026-03-16 10:04:51,648 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0C8V88Z9D. Getting a new one from BrowserManager.
+2026-03-16 10:04:51,648 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5025364024801&ref=nb_sb_noss
+2026-03-16 10:04:54,175 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:04:54,438 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:04:55,451 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:04:58,461 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:04:58,461 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:04:58,548 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:04:58,548 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:05:03,560 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:05:10,561 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0C8V88Z9D
+2026-03-16 10:05:10,562 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:05:10,631 - tools.amazon_playwright_extractor - INFO - Title found: 'Arduino UNO R4 WiFi [ABX00087] - Microcontroller Dev Board with ESP32-S3 | Integrated Wi-Fi & Bluetooth | USB-C | Ideal for IoT & Education' via #productTitle
+2026-03-16 10:05:10,632 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:05:10,666 - tools.amazon_playwright_extractor - INFO - Current price: 25.87 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:05:10,786 - tools.amazon_playwright_extractor - INFO - Original price: 85.99 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-03-16 10:05:10,867 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:05:10,944 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/614tXIQWSRL._AC_SL1000_.jpg via #landingImage
+2026-03-16 10:05:11,316 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2026-03-16 10:05:11,324 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:05:11,661 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:05:11,952 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:05:11,992 - tools.amazon_playwright_extractor - INFO - Rating: 4.7 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:05:12,035 - tools.amazon_playwright_extractor - INFO - Review count: 1912 via #acrCustomerReviewText
+2026-03-16 10:05:12,035 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:05:12,174 - tools.amazon_playwright_extractor - INFO - Availability text: 'Stock30+' via #availability
+2026-03-16 10:05:12,174 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:05:12,590 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:05:12,590 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:05:12,660 - tools.amazon_playwright_extractor - INFO - Description found using selector: #aplus_feature_div
+2026-03-16 10:05:12,660 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:05:13,671 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:05:13,672 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:05:13,672 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:05:13,672 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:05:13,672 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:05:19,835 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:05:19,907 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:05:19,960 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:05:19,961 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:05:22,577 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:05:22,616 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:05:22,748 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:05:22,810 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:05:23,866 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 130 rows found
+2026-03-16 10:05:23,882 - tools.amazon_playwright_extractor - INFO - Processing 130 rows in Keepa Product Details AG Grid.
+2026-03-16 10:05:26,268 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.89' in Keepa AG Grid.
+2026-03-16 10:05:26,574 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 1.81' in Keepa AG Grid.
+2026-03-16 10:05:31,065 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 37 items from Keepa Product Details AG Grid.
+2026-03-16 10:05:31,065 - tools.amazon_playwright_extractor - INFO - ASIN B0C8V88Z9D: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:05:31,065 - tools.amazon_playwright_extractor - INFO - ASIN B0C8V88Z9D: EAN '7630049204591' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:05:31,065 - tools.amazon_playwright_extractor - INFO - ASIN B0C8V88Z9D: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:05:31,065 - tools.amazon_playwright_extractor - WARNING - ASIN B0C8V88Z9D: Could not find BSR in any Keepa data source.
+2026-03-16 10:05:31,066 - tools.amazon_playwright_extractor - INFO - \u2705 Recorded search method 'EAN' for ASIN B0C8V88Z9D
+2026-03-16 10:05:31,066 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B0C8V88Z9D (EAN on page: 7630049204591)
+2026-03-16 10:05:31,071 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0C8V88Z9D_5025364024801.json (27 entries) saved successfully
+2026-03-16 10:05:31,071 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0C8V88Z9D_5025364024801.json (27 entries) saved successfully
+2026-03-16 10:05:31,077 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0C8V88Z9D_5025364024801.json (27 entries) saved successfully
+2026-03-16 10:05:31,077 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0C8V88Z9D_5025364024801.json (27 entries) saved successfully
+2026-03-16 10:05:31,082 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (4 entries) saved successfully
+2026-03-16 10:05:31,082 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (4 entries) saved successfully
+2026-03-16 10:05:31,082 - __main__ - INFO - Linking map periodic flush: 4 entries
+2026-03-16 10:05:31,091 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:05:31,091 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:05:31,092 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:05:31,094 - tools.FBA_Financial_calculator - INFO - FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-16 10:05:31,152 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364024801, ASIN=None, Price=£7.59 (from current_price)
+2026-03-16 10:05:31,208 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5022458004565, ASIN=None, Price=£8.99 (from current_price)
+2026-03-16 10:05:31,275 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005572, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:05:31,333 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005893, ASIN=None, Price=£4.8 (from current_price)
+2026-03-16 10:05:31,399 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005671, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:05:31,419 - __main__ - INFO - Mid-run financial report: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691\fba_financial_report_efghousewares-co-uk__sandbox__caa0a691_20260316_100531.csv
+2026-03-16 10:05:31,419 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5022458004565 for supplier product: 'EURO BIN LINER SWING BIN 50 BAG PK5' (FixedAmazonExtractor)
+2026-03-16 10:05:31,420 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5022458004565
+2026-03-16 10:05:37,454 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5022458004565...
+2026-03-16 10:05:38,154 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:05:39,067 - tools.amazon_playwright_extractor - INFO - Found 13 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:05:39,067 - tools.amazon_playwright_extractor - INFO - Processing 13 search result elements for EAN 5022458004565
+2026-03-16 10:05:39,227 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B09TL98GGH - 50 x 35L Medium Duty Swing Bin Liners Flat Top 555x710mm (22...
+2026-03-16 10:05:39,550 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 1 organic products, 12 sponsored products filtered out
+2026-03-16 10:05:39,550 - tools.amazon_playwright_extractor - INFO - \u2705 EAN SEARCH: Selected first organic result - ASIN B09TL98GGH
+2026-03-16 10:05:39,550 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5022458004565
+2026-03-16 10:05:39,550 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-03-16 10:05:39,551 - tools.amazon_playwright_extractor - INFO - Single ASIN B09TL98GGH found for EAN 5022458004565.
+2026-03-16 10:05:39,551 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B09TL98GGH for EAN: 5022458004565
+2026-03-16 10:05:39,551 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B09TL98GGH. Getting a new one from BrowserManager.
+2026-03-16 10:05:39,551 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5022458004565&ref=nb_sb_noss
+2026-03-16 10:05:41,518 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:05:42,048 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:05:43,059 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:05:46,073 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:05:46,073 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:05:46,175 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:05:46,175 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:05:51,176 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:05:58,186 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B09TL98GGH
+2026-03-16 10:05:58,186 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:05:58,231 - tools.amazon_playwright_extractor - INFO - Title found: '50 x 35L Medium Duty Swing Bin Liners Flat Top 555x710mm (22x28") White' via #productTitle
+2026-03-16 10:05:58,231 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:05:58,263 - tools.amazon_playwright_extractor - INFO - Current price: 6.49 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:05:58,449 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:05:58,501 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/61wfdWkKL-L._AC_SL1500_.jpg via #landingImage
+2026-03-16 10:05:58,572 - tools.amazon_playwright_extractor - INFO - Found 1 thumbnails.
+2026-03-16 10:05:58,588 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:05:58,819 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:05:59,243 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:05:59,275 - tools.amazon_playwright_extractor - INFO - Rating: 2.0 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:05:59,305 - tools.amazon_playwright_extractor - INFO - Review count: 1 via #acrCustomerReviewText
+2026-03-16 10:05:59,306 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:05:59,338 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:05:59,338 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:05:59,819 - tools.amazon_playwright_extractor - INFO - Found 6 features.
+2026-03-16 10:05:59,819 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:05:59,997 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:06:00,238 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:06:00,238 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:06:00,238 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:06:00,238 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:06:00,238 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:06:06,351 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:06:06,436 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:06:06,436 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:06:06,459 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:06:06,459 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:06:08,702 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:06:10,596 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:06:10,667 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:06:10,764 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:06:11,824 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 100 rows found
+2026-03-16 10:06:11,842 - tools.amazon_playwright_extractor - INFO - Processing 100 rows in Keepa Product Details AG Grid.
+2026-03-16 10:06:15,768 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 29 items from Keepa Product Details AG Grid.
+2026-03-16 10:06:15,768 - tools.amazon_playwright_extractor - INFO - ASIN B09TL98GGH: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:06:15,769 - tools.amazon_playwright_extractor - INFO - ASIN B09TL98GGH: EAN '5022458004565' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:06:15,769 - tools.amazon_playwright_extractor - INFO - ASIN B09TL98GGH: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:06:15,769 - tools.amazon_playwright_extractor - INFO - ASIN B09TL98GGH: BSR 396200 in 'Grocery' from Keepa SalesRankDetailsTable.
+2026-03-16 10:06:15,769 - tools.amazon_playwright_extractor - INFO - \u2705 Recorded search method 'EAN' for ASIN B09TL98GGH
+2026-03-16 10:06:15,769 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B09TL98GGH (EAN on page: 5022458004565)
+2026-03-16 10:06:15,777 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B09TL98GGH_5022458004565.json (29 entries) saved successfully
+2026-03-16 10:06:15,777 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B09TL98GGH_5022458004565.json (29 entries) saved successfully
+2026-03-16 10:06:15,785 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B09TL98GGH_5022458004565.json (29 entries) saved successfully
+2026-03-16 10:06:15,785 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B09TL98GGH_5022458004565.json (29 entries) saved successfully
+2026-03-16 10:06:15,794 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (5 entries) saved successfully
+2026-03-16 10:06:15,794 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (5 entries) saved successfully
+2026-03-16 10:06:15,795 - __main__ - INFO - Linking map periodic flush: 5 entries
+2026-03-16 10:06:15,801 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:06:15,801 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:06:15,802 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:06:15,802 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5025364005572 for supplier product: 'TIDYZ FOOD BAG 300PCS' (FixedAmazonExtractor)
+2026-03-16 10:06:15,802 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5025364005572
+2026-03-16 10:06:21,861 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5025364005572...
+2026-03-16 10:06:21,989 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:06:22,679 - tools.amazon_playwright_extractor - INFO - Found 9 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:06:22,679 - tools.amazon_playwright_extractor - INFO - Processing 9 search result elements for EAN 5025364005572
+2026-03-16 10:06:22,857 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0FF4C3CSZ - Tidy 300 Food Bags Reusable Fresh Food Storage Bags For Long...
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 1 organic products, 8 sponsored products filtered out
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO - \u2705 EAN SEARCH: Selected first organic result - ASIN B0FF4C3CSZ
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5025364005572
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO - Single ASIN B0FF4C3CSZ found for EAN 5025364005572.
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B0FF4C3CSZ for EAN: 5025364005572
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0FF4C3CSZ. Getting a new one from BrowserManager.
+2026-03-16 10:06:23,143 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5025364005572&ref=nb_sb_noss
+2026-03-16 10:06:25,681 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:06:26,605 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:06:27,614 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:06:30,632 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:06:30,632 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:06:30,720 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:06:30,720 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:06:35,727 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:06:42,732 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0FF4C3CSZ
+2026-03-16 10:06:42,733 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:06:42,781 - tools.amazon_playwright_extractor - INFO - Title found: 'Tidy 300 Food Bags Reusable Fresh Food Storage Bags For Longer All Food Type used Standard Strength |19cm x 17cm (Pack of 1)' via #productTitle
+2026-03-16 10:06:42,781 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:06:42,815 - tools.amazon_playwright_extractor - INFO - Current price: 4.56 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:06:42,905 - tools.amazon_playwright_extractor - INFO - Original price: 16.99 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-03-16 10:06:42,988 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:06:43,046 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/51TYbDlXq2L._AC_SL1200_.jpg via #landingImage
+2026-03-16 10:06:43,158 - tools.amazon_playwright_extractor - INFO - Found 1 thumbnails.
+2026-03-16 10:06:43,168 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:06:43,698 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:06:44,012 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:06:44,052 - tools.amazon_playwright_extractor - INFO - Rating: 3.5 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:06:44,096 - tools.amazon_playwright_extractor - INFO - Review count: 3 via #acrCustomerReviewText
+2026-03-16 10:06:44,096 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:06:44,167 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:06:44,167 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:06:44,566 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:06:44,566 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:06:44,600 - tools.amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2026-03-16 10:06:44,600 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:06:45,346 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:06:45,346 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:06:45,346 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:06:45,346 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:06:45,347 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:06:51,483 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:06:51,693 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:06:51,693 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:06:51,731 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:06:51,732 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:06:54,033 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:06:58,686 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:06:58,888 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:06:58,977 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:07:00,035 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 145 rows found
+2026-03-16 10:07:00,053 - tools.amazon_playwright_extractor - INFO - Processing 145 rows in Keepa Product Details AG Grid.
+2026-03-16 10:07:02,338 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.42' in Keepa AG Grid.
+2026-03-16 10:07:02,560 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.36' in Keepa AG Grid.
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 44 items from Keepa Product Details AG Grid.
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - ASIN B0FF4C3CSZ: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - ASIN B0FF4C3CSZ: EAN '5025364005572' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - ASIN B0FF4C3CSZ: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - ASIN B0FF4C3CSZ: BSR 139174 in 'Home & Kitchen 8' from Keepa SalesRankDetailsTable.
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - \u2705 Recorded search method 'EAN' for ASIN B0FF4C3CSZ
+2026-03-16 10:07:07,869 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B0FF4C3CSZ (EAN on page: 5025364005572)
+2026-03-16 10:07:07,874 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0FF4C3CSZ_5025364005572.json (31 entries) saved successfully
+2026-03-16 10:07:07,874 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0FF4C3CSZ_5025364005572.json (31 entries) saved successfully
+2026-03-16 10:07:07,879 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0FF4C3CSZ_5025364005572.json (31 entries) saved successfully
+2026-03-16 10:07:07,879 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0FF4C3CSZ_5025364005572.json (31 entries) saved successfully
+2026-03-16 10:07:07,886 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (6 entries) saved successfully
+2026-03-16 10:07:07,886 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (6 entries) saved successfully
+2026-03-16 10:07:07,887 - __main__ - INFO - Linking map periodic flush: 6 entries
+2026-03-16 10:07:07,891 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:07:07,891 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:07:07,893 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:07:07,894 - tools.FBA_Financial_calculator - INFO - FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-16 10:07:07,951 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364024801, ASIN=None, Price=£7.59 (from current_price)
+2026-03-16 10:07:08,010 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5022458004565, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:07:08,069 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005572, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:07:08,124 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005893, ASIN=None, Price=£4.8 (from current_price)
+2026-03-16 10:07:08,186 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005671, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:07:08,198 - __main__ - INFO - Mid-run financial report: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691\fba_financial_report_efghousewares-co-uk__sandbox__caa0a691_20260316_100708.csv
+2026-03-16 10:07:08,199 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5025364005893 for supplier product: 'TIDYZ 90 DOGGY BAGS FRAGNANCED' (FixedAmazonExtractor)
+2026-03-16 10:07:08,199 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5025364005893
+2026-03-16 10:07:14,592 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5025364005893...
+2026-03-16 10:07:14,972 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:07:15,639 - tools.amazon_playwright_extractor - INFO - Found 5 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:07:15,639 - tools.amazon_playwright_extractor - INFO - Processing 5 search result elements for EAN 5025364005893
+2026-03-16 10:07:15,788 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 0 organic products, 5 sponsored products filtered out
+2026-03-16 10:07:15,789 - tools.amazon_playwright_extractor - WARNING - EAN 5025364005893 returned no organic results - skipping
+2026-03-16 10:07:15,789 - tools.amazon_playwright_extractor - WARNING - No Amazon results or error for EAN '5025364005893'. Details: no_organic_results
+2026-03-16 10:07:15,789 - tools.amazon_playwright_extractor - INFO - Falling back to title search for supplier product: 'TIDYZ 90 DOGGY BAGS FRAGNANCED'
+2026-03-16 10:07:15,789 - tools.amazon_playwright_extractor - INFO - Searching Amazon by title using search bar: 'TIDYZ 90 DOGGY BAGS FRAGNANCED'
+2026-03-16 10:07:15,789 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for title: TIDYZ 90 DOGGY BAGS FRAGNANCED
+2026-03-16 10:07:24,675 - tools.amazon_playwright_extractor - INFO - Title search found 72 elements using selector: div.s-search-results > div[data-asin]
+2026-03-16 10:07:26,131 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-16 10:07:26,514 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-16 10:07:26,758 - tools.amazon_playwright_extractor - INFO - \u2705 Title search: Selected first visible organic product - ASIN B06XJ5CVGD
+2026-03-16 10:07:26,758 - tools.amazon_playwright_extractor - INFO - \U0001f3af ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'TIDYZ 90 DOGGY BAGS FRAGNANCED'
+2026-03-16 10:07:26,758 - tools.amazon_playwright_extractor - INFO - Title search successful for 'TIDYZ 90 DOGGY BAGS FRAGNANCED' after EAN '5025364005893' failed
+2026-03-16 10:07:26,758 - tools.amazon_playwright_extractor - INFO - Extracting complete data for fallback ASIN B06XJ5CVGD from title search
+2026-03-16 10:07:26,758 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B06XJ5CVGD. Getting a new one from BrowserManager.
+2026-03-16 10:07:26,758 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=TIDYZ+90+DOGGY+BAGS+FRAGNANCED&ref=nb_sb_noss
+2026-03-16 10:07:30,036 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:07:33,334 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:07:34,337 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:07:37,359 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:07:37,359 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:07:37,431 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:07:37,431 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:07:42,436 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:07:49,441 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B06XJ5CVGD
+2026-03-16 10:07:49,441 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:07:49,531 - tools.amazon_playwright_extractor - INFO - Title found: 'Tidyz 1, 100, 200 or 600 - PREMIUM FRAGRANCED EXTRA STRONG BLACK Doggy Poo Poop Bags (1 x Box of 100)' via #productTitle
+2026-03-16 10:07:49,531 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:07:49,595 - tools.amazon_playwright_extractor - INFO - Current price: 4.44 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:07:49,899 - tools.amazon_playwright_extractor - INFO - Original price: 4.8 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-16 10:07:49,959 - tools.amazon_playwright_extractor - INFO - Amazon sales badge found: 50 in container div#socialProofingAsinFaceout_feature_div
+2026-03-16 10:07:49,959 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:07:50,019 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/61yneBBfk7L._AC_.jpg via #landingImage
+2026-03-16 10:07:50,097 - tools.amazon_playwright_extractor - INFO - Found 1 thumbnails.
+2026-03-16 10:07:50,107 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:07:50,500 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:07:50,967 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:07:51,001 - tools.amazon_playwright_extractor - INFO - Rating: 4.3 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:07:51,034 - tools.amazon_playwright_extractor - INFO - Review count: 3319 via #acrCustomerReviewText
+2026-03-16 10:07:51,034 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:07:51,088 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:07:51,089 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:07:51,541 - tools.amazon_playwright_extractor - INFO - Found 4 features.
+2026-03-16 10:07:51,541 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:07:51,578 - tools.amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2026-03-16 10:07:51,578 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:07:52,114 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:07:52,114 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:07:52,114 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:07:52,114 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:07:52,114 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:07:58,344 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:07:58,543 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:07:58,543 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:07:58,605 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:07:58,605 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:08:01,586 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:08:12,383 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:08:12,481 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:08:12,531 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:08:13,599 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 160 rows found
+2026-03-16 10:08:13,623 - tools.amazon_playwright_extractor - INFO - Processing 160 rows in Keepa Product Details AG Grid.
+2026-03-16 10:08:17,551 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.42' in Keepa AG Grid.
+2026-03-16 10:08:17,818 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.74' in Keepa AG Grid.
+2026-03-16 10:08:24,531 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 47 items from Keepa Product Details AG Grid.
+2026-03-16 10:08:24,531 - tools.amazon_playwright_extractor - INFO - ASIN B06XJ5CVGD: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:08:24,531 - tools.amazon_playwright_extractor - INFO - ASIN B06XJ5CVGD: EAN '7426805959900' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:08:24,531 - tools.amazon_playwright_extractor - INFO - ASIN B06XJ5CVGD: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:08:24,531 - tools.amazon_playwright_extractor - INFO - ASIN B06XJ5CVGD: BSR 1015 in 'Pet Supplies 36' from Keepa SalesRankDetailsTable.
+2026-03-16 10:08:24,537 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B06XJ5CVGD_5025364005893.json (32 entries) saved successfully
+2026-03-16 10:08:24,537 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B06XJ5CVGD_5025364005893.json (32 entries) saved successfully
+2026-03-16 10:08:24,544 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B06XJ5CVGD_5025364005893.json (32 entries) saved successfully
+2026-03-16 10:08:24,544 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B06XJ5CVGD_5025364005893.json (32 entries) saved successfully
+2026-03-16 10:08:24,551 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (7 entries) saved successfully
+2026-03-16 10:08:24,551 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (7 entries) saved successfully
+2026-03-16 10:08:24,556 - __main__ - INFO - Linking map periodic flush: 7 entries
+2026-03-16 10:08:24,563 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:08:24,563 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:08:24,564 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:08:24,565 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5025364005671 for supplier product: 'TIDYZ FREEZER BAGS 100 PCS XLLARGE' (FixedAmazonExtractor)
+2026-03-16 10:08:24,565 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5025364005671
+2026-03-16 10:08:29,104 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5025364005671...
+2026-03-16 10:08:29,450 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:08:30,197 - tools.amazon_playwright_extractor - INFO - Found 12 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:08:30,197 - tools.amazon_playwright_extractor - INFO - Processing 12 search result elements for EAN 5025364005671
+2026-03-16 10:08:31,166 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 0 organic products, 12 sponsored products filtered out
+2026-03-16 10:08:31,166 - tools.amazon_playwright_extractor - WARNING - EAN 5025364005671 returned no organic results - skipping
+2026-03-16 10:08:31,166 - tools.amazon_playwright_extractor - WARNING - No Amazon results or error for EAN '5025364005671'. Details: no_organic_results
+2026-03-16 10:08:31,166 - tools.amazon_playwright_extractor - INFO - Falling back to title search for supplier product: 'TIDYZ FREEZER BAGS 100 PCS XLLARGE'
+2026-03-16 10:08:31,166 - tools.amazon_playwright_extractor - INFO - Searching Amazon by title using search bar: 'TIDYZ FREEZER BAGS 100 PCS XLLARGE'
+2026-03-16 10:08:31,166 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for title: TIDYZ FREEZER BAGS 100 PCS XLLARGE
+2026-03-16 10:08:37,422 - tools.amazon_playwright_extractor - INFO - Title search found 71 elements using selector: div.s-search-results > div[data-asin]
+2026-03-16 10:08:37,569 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-16 10:08:37,649 - tools.amazon_playwright_extractor - WARNING - ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-16 10:08:37,922 - tools.amazon_playwright_extractor - INFO - \u2705 Title search: Selected first visible organic product - ASIN B0F24X8FY5
+2026-03-16 10:08:37,922 - tools.amazon_playwright_extractor - INFO - \U0001f3af ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'TIDYZ FREEZER BAGS 100 PCS XLLARGE'
+2026-03-16 10:08:37,922 - tools.amazon_playwright_extractor - INFO - Title search successful for 'TIDYZ FREEZER BAGS 100 PCS XLLARGE' after EAN '5025364005671' failed
+2026-03-16 10:08:37,922 - tools.amazon_playwright_extractor - INFO - Extracting complete data for fallback ASIN B0F24X8FY5 from title search
+2026-03-16 10:08:37,922 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0F24X8FY5. Getting a new one from BrowserManager.
+2026-03-16 10:08:37,923 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=TIDYZ+FREEZER+BAGS+100+PCS+XLLARGE&ref=nb_sb_noss
+2026-03-16 10:08:40,601 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:08:42,751 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:08:43,754 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:08:46,766 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:08:46,766 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:08:46,892 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:08:46,892 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:08:51,901 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:08:58,909 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0F24X8FY5
+2026-03-16 10:08:58,909 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:08:58,966 - tools.amazon_playwright_extractor - INFO - Title found: '100 TidyZ Large Slide Zip Freezer Bags. Resealable. Zip Lock Food Bags. BPA Free. For Freezing Fruit, Vegetables, Meat. Keeps food Fresh. In a Dispenser Box' via #productTitle
+2026-03-16 10:08:58,966 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:08:58,998 - tools.amazon_playwright_extractor - INFO - Current price: 5.99 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:08:59,546 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:08:59,609 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/61SFWj0zdQL._AC_SL1182_.jpg via #landingImage
+2026-03-16 10:08:59,740 - tools.amazon_playwright_extractor - INFO - Found 6 thumbnails.
+2026-03-16 10:08:59,751 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:09:00,000 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:09:00,311 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:09:00,345 - tools.amazon_playwright_extractor - INFO - Rating: 4.5 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:09:00,382 - tools.amazon_playwright_extractor - INFO - Review count: 189 via #acrCustomerReviewText
+2026-03-16 10:09:00,382 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:09:00,429 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:09:00,429 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:09:00,760 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:09:00,761 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:09:00,796 - tools.amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2026-03-16 10:09:00,796 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:09:01,667 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:09:01,668 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:09:01,668 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:09:01,668 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:09:01,668 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:09:07,826 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:09:07,975 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:09:07,975 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:09:08,023 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:09:08,023 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:09:10,614 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:09:13,144 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:09:13,368 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:09:13,435 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:09:14,498 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 145 rows found
+2026-03-16 10:09:14,524 - tools.amazon_playwright_extractor - INFO - Processing 145 rows in Keepa Product Details AG Grid.
+2026-03-16 10:09:17,647 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.65' in Keepa AG Grid.
+2026-03-16 10:09:17,865 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.48' in Keepa AG Grid.
+2026-03-16 10:09:22,856 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 42 items from Keepa Product Details AG Grid.
+2026-03-16 10:09:22,856 - tools.amazon_playwright_extractor - INFO - ASIN B0F24X8FY5: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:09:22,856 - tools.amazon_playwright_extractor - INFO - ASIN B0F24X8FY5: EAN '5025364007330' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:09:22,856 - tools.amazon_playwright_extractor - INFO - ASIN B0F24X8FY5: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:09:22,856 - tools.amazon_playwright_extractor - INFO - ASIN B0F24X8FY5: BSR 627 in 'Home & Kitchen 43' from Keepa SalesRankDetailsTable.
+2026-03-16 10:09:22,862 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0F24X8FY5_5025364005671.json (30 entries) saved successfully
+2026-03-16 10:09:22,862 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0F24X8FY5_5025364005671.json (30 entries) saved successfully
+2026-03-16 10:09:22,868 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B0F24X8FY5_5025364005671.json (30 entries) saved successfully
+2026-03-16 10:09:22,868 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0F24X8FY5_5025364005671.json (30 entries) saved successfully
+2026-03-16 10:09:22,873 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (8 entries) saved successfully
+2026-03-16 10:09:22,873 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (8 entries) saved successfully
+2026-03-16 10:09:22,874 - __main__ - INFO - Linking map periodic flush: 8 entries
+2026-03-16 10:09:22,878 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:09:22,878 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:09:22,879 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:09:22,880 - tools.FBA_Financial_calculator - INFO - FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-16 10:09:22,935 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364024801, ASIN=None, Price=£7.59 (from current_price)
+2026-03-16 10:09:22,994 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5022458004565, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:09:23,049 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005572, ASIN=None, Price=£6.49 (from current_price)
+2026-03-16 10:09:23,105 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005893, ASIN=None, Price=£4.44 (from current_price)
+2026-03-16 10:09:23,160 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=5025364005671, ASIN=None, Price=£5.99 (from current_price)
+2026-03-16 10:09:23,169 - __main__ - INFO - Mid-run financial report: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691\fba_financial_report_efghousewares-co-uk__sandbox__caa0a691_20260316_100923.csv
+2026-03-16 10:09:23,169 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217 (attempt 1/3)
+2026-03-16 10:09:23,170 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:09:23,170 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217
+2026-03-16 10:09:27,507 - tools.configurable_supplier_scraper - INFO - Retrying https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217 in 2.34s...
+2026-03-16 10:09:29,856 - tools.configurable_supplier_scraper - INFO - Fetching page content from: https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217 (attempt 2/3)
+2026-03-16 10:09:29,857 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context.
+2026-03-16 10:09:29,857 - tools.configurable_supplier_scraper - INFO - \U0001f527 Using BrowserManager page for https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217
+2026-03-16 10:09:31,944 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager already navigated to https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217
+2026-03-16 10:09:31,944 - tools.configurable_supplier_scraper - INFO - \U0001f527 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217
+2026-03-16 10:09:32,056 - tools.configurable_supplier_scraper - INFO - Successfully fetched content from https://www.efghousewares.co.uk/luminarc-martini-cocktail-set-5-piece-set-120217 (Size: 541363 bytes)
+2026-03-16 10:09:32,391 - tools.configurable_supplier_scraper - WARNING - \u26a0\ufe0f EAN found via pattern matching (fallback): 0883314359374
+2026-03-16 10:09:32,402 - __main__ - INFO - Live-refreshed 1/1: LUMINARC MARTINI COCKTAIL SET 5 PIECE SET
+2026-03-16 10:09:32,402 - __main__ - INFO - Refreshed 1 products for https://www.efghousewares.co.uk/shop-by-department/glassware/glass-decorative-&-gift
+2026-03-16 10:09:32,406 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (1 entries) saved successfully
+2026-03-16 10:09:32,406 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares-co-uk__sandbox__caa0a691_products_cache.json (1 entries) saved successfully
+2026-03-16 10:09:32,412 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:09:32,412 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:09:32,413 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:09:32,413 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 0883314359374 for supplier product: 'LUMINARC MARTINI COCKTAIL SET 5 PIECE SET' (FixedAmazonExtractor)
+2026-03-16 10:09:32,413 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 0883314359374
+2026-03-16 10:09:39,813 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 0883314359374...
+2026-03-16 10:09:40,201 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-03-16 10:09:40,928 - tools.amazon_playwright_extractor - INFO - Found 5 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-16 10:09:40,928 - tools.amazon_playwright_extractor - INFO - Processing 5 search result elements for EAN 0883314359374
+2026-03-16 10:09:41,499 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B00D771PBQ - Creatable 15911 5-Piece Luminarc Cocktail Series Glasses Set...
+2026-03-16 10:09:41,643 - tools.amazon_playwright_extractor - INFO - \U0001f4ca SPONSORED FILTERING RESULTS: 1 organic products, 4 sponsored products filtered out
+2026-03-16 10:09:41,644 - tools.amazon_playwright_extractor - INFO - \u2705 EAN SEARCH: Selected first organic result - ASIN B00D771PBQ
+2026-03-16 10:09:41,644 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 0883314359374
+2026-03-16 10:09:41,644 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-03-16 10:09:41,644 - tools.amazon_playwright_extractor - INFO - Single ASIN B00D771PBQ found for EAN 0883314359374.
+2026-03-16 10:09:41,644 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B00D771PBQ for EAN: 0883314359374
+2026-03-16 10:09:41,645 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B00D771PBQ. Getting a new one from BrowserManager.
+2026-03-16 10:09:41,645 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=0883314359374&ref=nb_sb_noss
+2026-03-16 10:09:43,800 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:09:45,078 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:09:46,093 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-03-16 10:09:49,111 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-03-16 10:09:49,112 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-03-16 10:09:49,241 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-16 10:09:49,241 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-03-16 10:09:54,242 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-16 10:10:01,247 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B00D771PBQ
+2026-03-16 10:10:01,248 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-16 10:10:01,301 - tools.amazon_playwright_extractor - INFO - Title found: 'Creatable 15911 5-Piece Luminarc Cocktail Series Glasses Set, Transparent' via #productTitle
+2026-03-16 10:10:01,301 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-03-16 10:10:01,339 - tools.amazon_playwright_extractor - INFO - Current price: 18.96 via #corePrice_feature_div .a-offscreen
+2026-03-16 10:10:01,426 - tools.amazon_playwright_extractor - INFO - Original price: 24.99 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-03-16 10:10:01,523 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-03-16 10:10:01,600 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/81ml7cdnHSL._AC_SL1500_.jpg via #landingImage
+2026-03-16 10:10:01,673 - tools.amazon_playwright_extractor - INFO - Found 1 thumbnails.
+2026-03-16 10:10:01,682 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-03-16 10:10:01,843 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-03-16 10:10:02,118 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-03-16 10:10:02,160 - tools.amazon_playwright_extractor - INFO - Rating: 3.8 via #acrPopover[title*='out of 5 stars']
+2026-03-16 10:10:02,191 - tools.amazon_playwright_extractor - INFO - Review count: 3 via #acrCustomerReviewText
+2026-03-16 10:10:02,192 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-03-16 10:10:02,222 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-16 10:10:02,222 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-03-16 10:10:02,560 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-03-16 10:10:02,560 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-03-16 10:10:02,594 - tools.amazon_playwright_extractor - INFO - Description found using selector: #productDescription
+2026-03-16 10:10:02,594 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-03-16 10:10:03,277 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-16 10:10:03,277 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-03-16 10:10:03,277 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-16 10:10:03,278 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-03-16 10:10:03,278 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-03-16 10:10:09,419 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-03-16 10:10:09,595 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-03-16 10:10:09,596 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-16 10:10:09,640 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-03-16 10:10:09,641 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-03-16 10:10:12,030 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-16 10:10:12,657 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-03-16 10:10:12,819 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-16 10:10:12,918 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-16 10:10:14,021 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 118 rows found
+2026-03-16 10:10:14,041 - tools.amazon_playwright_extractor - INFO - Processing 118 rows in Keepa Product Details AG Grid.
+2026-03-16 10:10:16,168 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.54' in Keepa AG Grid.
+2026-03-16 10:10:16,385 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 2.84' in Keepa AG Grid.
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 36 items from Keepa Product Details AG Grid.
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - ASIN B00D771PBQ: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - ASIN B00D771PBQ: EAN '0883314359374' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - ASIN B00D771PBQ: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - ASIN B00D771PBQ: BSR 2896369 in 'Home & Kitchen 0.3' from Keepa SalesRankDetailsTable.
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - \u2705 Recorded search method 'EAN' for ASIN B00D771PBQ
+2026-03-16 10:10:20,241 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B00D771PBQ (EAN on page: 0883314359374)
+2026-03-16 10:10:20,250 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B00D771PBQ_0883314359374.json (31 entries) saved successfully
+2026-03-16 10:10:20,250 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B00D771PBQ_0883314359374.json (31 entries) saved successfully
+2026-03-16 10:10:20,262 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: amazon_B00D771PBQ_0883314359374.json (31 entries) saved successfully
+2026-03-16 10:10:20,262 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B00D771PBQ_0883314359374.json (31 entries) saved successfully
+2026-03-16 10:10:20,273 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (9 entries) saved successfully
+2026-03-16 10:10:20,273 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (9 entries) saved successfully
+2026-03-16 10:10:20,273 - __main__ - INFO - Linking map periodic flush: 9 entries
+2026-03-16 10:10:20,279 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:10:20,279 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:10:20,280 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:10:20,288 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: linking_map.json (9 entries) saved successfully
+2026-03-16 10:10:20,288 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (9 entries) saved successfully
+2026-03-16 10:10:20,293 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:10:20,293 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:10:20,294 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:10:20,300 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:10:20,300 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__caa0a691_processing_state.json (27 entries) saved successfully
+2026-03-16 10:10:20,301 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-03-16 10:10:20,302 - tools.FBA_Financial_calculator - INFO - FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-16 10:10:20,366 - tools.FBA_Financial_calculator - INFO - ? PRICE FOUND: EAN=0883314359374, ASIN=None, Price=£18.96 (from current_price)
+2026-03-16 10:10:20,373 - __main__ - INFO - Financial report generated: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691\fba_financial_report_efghousewares-co-uk__sandbox__caa0a691_20260316_101020.csv
+2026-03-16 10:10:20,374 - __main__ - INFO - Product list refresh complete: 9/9 matched
+2026-03-16 10:10:20,374 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
+Loading supplier products from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk__sandbox__caa0a691_products_cache.json
+Using Amazon data from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+Output will be saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691
+Processing 3 supplier products...
+Loaded supplier-specific linking map with 2 entries
+Found Amazon data via linking map (EAN): 5050796010238 -> B0DYVTVHPK
+Found Amazon data via linking map (EAN): 5017440650103 -> B09RGMLV1S
+Loading supplier products from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk__sandbox__caa0a691_products_cache.json
+Using Amazon data from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+Output will be saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691
+Processing 5 supplier products...
+Loading supplier products from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk__sandbox__caa0a691_products_cache.json
+Using Amazon data from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+Output will be saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691
+Processing 5 supplier products...
+Loading supplier products from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk__sandbox__caa0a691_products_cache.json
+Using Amazon data from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+Output will be saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691
+Processing 5 supplier products...
+Loading supplier products from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\efghousewares-co-uk__sandbox__caa0a691_products_cache.json
+Using Amazon data from: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+Output will be saved to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\efghousewares-co-uk__sandbox__caa0a691
+Processing 1 supplier products...
+Exception ignored in: <function BaseSubprocessTransport.__del__ at 0x0000026EEDC28E00>
+Traceback (most recent call last):
+  File "C:\Python313\Lib\asyncio\base_subprocess.py", line 129, in __del__
+  File "C:\Python313\Lib\asyncio\base_subprocess.py", line 73, in __repr__
+  File "C:\Python313\Lib\asyncio\proactor_events.py", line 80, in __repr__
+  File "C:\Python313\Lib\asyncio\windows_utils.py", line 102, in fileno
+ValueError: I/O operation on closed pipe

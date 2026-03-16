@@ -1,0 +1,549 @@
+2026-03-15 03:18:32,402 WARNING __main__: Ignoring supplier identity from products file; job sandbox is authoritative. job=clearance-king.co.uk__sandbox__5d4d7fd5 file=clearance-king.co.uk
+2026-03-15 03:18:32,403 WARNING tools.amazon_playwright_extractor: ?? BrowserCircuitBreaker not available - health management disabled
+2026-03-15 03:18:32,403 INFO tools.amazon_playwright_extractor: AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-03-15 03:18:32,403 INFO tools.amazon_playwright_extractor: Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-03-15 03:18:32,403 WARNING tools.amazon_playwright_extractor: ?? BrowserManager not available, using legacy browser connection
+2026-03-15 03:18:32,404 INFO tools.configurable_supplier_scraper: ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-03-15 03:18:32,404 INFO tools.configurable_supplier_scraper: ⚠️ Using legacy browser management (BrowserManager not available or disabled)
+2026-03-15 03:18:32,404 INFO tools.configurable_supplier_scraper: [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-03-15 03:18:32,404 INFO tools.configurable_supplier_scraper: [TARGET] Extraction targets loaded: []
+2026-03-15 03:18:32,404 INFO tools.configurable_supplier_scraper: [ASSIST] Discovery assistance enabled: False
+2026-03-15 03:18:32,407 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king-co-uk__sandbox__5d4d7fd5_products_cache.json (9 entries) saved successfully
+2026-03-15 03:18:32,412 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king_co_uk__sandbox__5d4d7fd5_processing_state.json (27 entries) saved successfully
+2026-03-15 03:18:32,412 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-15 03:18:32,413 INFO tools.amazon_playwright_extractor: 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-03-15 03:18:32,414 INFO utils.browser_circuit_breaker: BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-03-15 03:18:32,414 INFO utils.browser_manager: ?? BrowserManager singleton initialized with health management
+2026-03-15 03:18:32,946 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance on port 9222
+2026-03-15 03:18:32,946 INFO utils.browser_manager: ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-03-15 03:18:35,001 INFO utils.browser_manager: ? Chrome debug accessible on IPv4: Chrome/145.0.7632.160
+2026-03-15 03:18:35,001 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance...
+2026-03-15 03:18:37,056 INFO utils.browser_manager: ?? Using endpoint: http://localhost:9222
+2026-03-15 03:18:37,297 INFO utils.browser_manager: ? Successfully connected to existing Chrome debug instance
+2026-03-15 03:18:37,297 INFO utils.browser_manager: ?? Using existing context with 1 pages
+2026-03-15 03:18:37,298 INFO utils.browser_manager: ?? Connected to existing Chrome: 145.0.7632.160
+2026-03-15 03:18:37,298 INFO tools.amazon_playwright_extractor: ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-03-15 03:18:37,298 INFO utils.browser_manager: ?? Reusing existing Chrome connection (port 9222)
+2026-03-15 03:18:37,298 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:18:37,298 INFO tools.configurable_supplier_scraper: 🔧 ConfigurableSupplierScraper connecting via BrowserManager singleton
+2026-03-15 03:18:37,298 INFO tools.configurable_supplier_scraper: ✅ ConfigurableSupplierScraper connected via BrowserManager singleton
+2026-03-15 03:18:37,299 INFO tools.configurable_supplier_scraper: Starting enhanced scraping from https://www.clearance-king.co.uk/books/children-s-books.html with memory management
+2026-03-15 03:18:49,750 INFO tools.configurable_supplier_scraper: 🧠 Pre-scraping Memory: Chrome=1876MB, Python=82MB, System=82.7%
+2026-03-15 03:18:49,750 INFO tools.configurable_supplier_scraper: Setting page limiter for https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:18:49,751 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:18:49,751 INFO config.supplier_config_loader: Loaded supplier selector config for domain: clearance-king.co.uk
+2026-03-15 03:18:49,751 INFO tools.configurable_supplier_scraper: 📁 Loaded selectors for domain clearance-king.co.uk from legacy config/supplier_configs/
+2026-03-15 03:18:59,772 WARNING tools.configurable_supplier_scraper: Failed to set page limiter for https://www.clearance-king.co.uk/books/children-s-books.html: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("a[data-role=\"limiter\"][data-value=\"60\"]") to be visible
+
+2026-03-15 03:18:59,773 INFO tools.configurable_supplier_scraper: 🔗 Using URL pagination for www.clearance-king.co.uk
+2026-03-15 03:18:59,773 INFO tools.configurable_supplier_scraper: Collecting product URLs from paginated pages starting at: https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:18:59,773 INFO tools.configurable_supplier_scraper: Processing page 1: https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:18:59,773 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.clearance-king.co.uk/books/children-s-books.html (attempt 1/3)
+2026-03-15 03:18:59,773 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:18:59,774 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:19:02,349 INFO tools.configurable_supplier_scraper: Retrying https://www.clearance-king.co.uk/books/children-s-books.html in 2.34s...
+2026-03-15 03:19:04,705 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.clearance-king.co.uk/books/children-s-books.html (attempt 2/3)
+2026-03-15 03:19:04,705 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:19:04,705 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:19:06,502 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:19:06,503 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:19:06,596 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.clearance-king.co.uk/books/children-s-books.html (Size: 392567 bytes)
+2026-03-15 03:19:06,738 INFO tools.configurable_supplier_scraper: Found 24 new product URLs on page 1
+2026-03-15 03:19:06,739 INFO tools.configurable_supplier_scraper: Processing page 2: https://www.clearance-king.co.uk/books/children-s-books.html?p=2
+2026-03-15 03:19:06,739 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.clearance-king.co.uk/books/children-s-books.html?p=2 (attempt 1/3)
+2026-03-15 03:19:06,739 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:19:06,739 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/books/children-s-books.html?p=2
+2026-03-15 03:19:08,917 INFO tools.configurable_supplier_scraper: Retrying https://www.clearance-king.co.uk/books/children-s-books.html?p=2 in 1.90s...
+2026-03-15 03:19:10,813 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.clearance-king.co.uk/books/children-s-books.html?p=2 (attempt 2/3)
+2026-03-15 03:19:10,814 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:19:10,814 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/books/children-s-books.html?p=2
+2026-03-15 03:19:13,541 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.clearance-king.co.uk/books/children-s-books.html?p=2
+2026-03-15 03:19:13,541 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.clearance-king.co.uk/books/children-s-books.html?p=2
+2026-03-15 03:19:13,588 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.clearance-king.co.uk/books/children-s-books.html?p=2 (Size: 385791 bytes)
+2026-03-15 03:19:13,672 INFO tools.configurable_supplier_scraper: Found 23 new product URLs on page 2
+2026-03-15 03:19:13,672 INFO tools.configurable_supplier_scraper: Processing page 3: https://www.clearance-king.co.uk/books/children-s-books.html?p=3
+2026-03-15 03:19:13,672 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.clearance-king.co.uk/books/children-s-books.html?p=3 (attempt 1/3)
+2026-03-15 03:19:13,672 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:19:13,672 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/books/children-s-books.html?p=3
+2026-03-15 03:19:14,916 INFO tools.configurable_supplier_scraper: Retrying https://www.clearance-king.co.uk/books/children-s-books.html?p=3 in 2.10s...
+2026-03-15 03:19:17,018 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.clearance-king.co.uk/books/children-s-books.html?p=3 (attempt 2/3)
+2026-03-15 03:19:17,019 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-15 03:19:17,019 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.clearance-king.co.uk/books/children-s-books.html?p=3
+2026-03-15 03:19:19,451 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.clearance-king.co.uk/books/children-s-books.html?p=3
+2026-03-15 03:19:19,451 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.clearance-king.co.uk/books/children-s-books.html?p=3
+2026-03-15 03:19:19,522 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.clearance-king.co.uk/books/children-s-books.html?p=3 (Size: 209814 bytes)
+2026-03-15 03:19:19,593 INFO tools.configurable_supplier_scraper: No products found on page 3, stopping pagination
+2026-03-15 03:19:19,594 INFO tools.configurable_supplier_scraper: Collected 47 total product URLs across 3 pages
+2026-03-15 03:19:19,594 INFO tools.configurable_supplier_scraper: Found 47 total product URLs across all pages
+2026-03-15 03:19:19,602 INFO utils.url_cache_filter: 🚀 CachedURLManager initialized with output_root: OUTPUTS
+2026-03-15 03:19:19,603 INFO utils.url_cache_filter: ✅ Loaded 162 URLs from clearance-king.co.uk cache
+2026-03-15 03:19:19,603 INFO utils.url_cache_filter: 📊 Total cached URLs: 162 (+162 new)
+2026-03-15 03:19:19,603 INFO tools.configurable_supplier_scraper: 🚀 URL Cache: Loaded 162 cached URLs for efficiency filtering
+2026-03-15 03:19:19,604 INFO utils.url_cache_filter: 🔗 Loaded 132 URLs from linking map
+2026-03-15 03:19:19,604 INFO tools.configurable_supplier_scraper: 🚀 URL Linking Map: Loaded {'https://www.clearance-king.co.uk/floral-crossword-book-0-48-ck.html', 'https://www.clearance-king.co.uk/boohbah-the-enormous-sunflowers-storybook.html', 'https://www.clearance-king.co.uk/first-tooth-boy-ceramic-trinket-box-3-24.html', 'https://www.clearance-king.co.uk/turbo-potty-trainer-seat-colours-may-vary-36-x-25-x-24cm.html', 'https://www.clearance-king.co.uk/bru-multi-purpose-appliance-lock.html', 'https://www.clearance-king.co.uk/johnsons-baby-soap-honey-90gm-2-pk-0-18-ck.html', 'https://www.clearance-king.co.uk/2-burpies-winding-cloth.html', 'https://www.clearance-king.co.uk/4pc-baby-blanket-asst-design-0-50.html', 'https://www.clearance-king.co.uk/tree-fu-tom-treetopolis-treasure-hunt.html', 'https://www.clearance-king.co.uk/johnsons-pure-gentle-daily-care-baby-oil-300ml-price-marked-2-00.html', 'https://www.clearance-king.co.uk/ed-hardy-baby-soother-holder.html', 'https://www.clearance-king.co.uk/first-curl-girl-ceramic-trinket-box.html', 'https://www.clearance-king.co.uk/swan-baby-cloth-hanger-assorted-colours-pack-of-6.html', 'https://www.clearance-king.co.uk/baby-clothes-hangers-assorted-colours-colours-may-vary-pack-of-8.html', 'https://www.clearance-king.co.uk/4pk-bath-toys-asst-characters-12-48.html', 'https://www.clearance-king.co.uk/rysons-children-clothes-hangers-white-10-pc.html', 'https://www.clearance-king.co.uk/soothing-gel-and-cold-compress-pack-animated-designs-colours-and-designs-may-vary.html', 'https://www.clearance-king.co.uk/kids-hair-clips-asstd-colours-288-nbc.html', 'https://www.clearance-king.co.uk/200ml-my-little-baby-oil-gel-milk-honey-12-ck.html', 'https://www.clearance-king.co.uk/travel-bowls-with-lids-assorted-colours-pack-of-2.html', 'https://www.clearance-king.co.uk/12pk-toddler-spoons-assorted-12-48.html', 'https://www.clearance-king.co.uk/disney-power-ranger-boot-cover-green-ranger.html', 'https://www.clearance-king.co.uk/cuddle-glowers-baby-owl.html', 'https://www.clearance-king.co.uk/narnia-prince-caspian-this-is-narnia.html', 'https://www.clearance-king.co.uk/zombie-sticker-book-only-english.html', 'https://www.clearance-king.co.uk/waterproof-bed-cover-child-s-single-bed-200cm-x-100cm-approx.html', 'https://www.clearance-king.co.uk/bottle-brush.html', 'https://www.clearance-king.co.uk/indiana-jones-and-the-kingdom-of-the-crystal-skull-meet-mutt-book.html', 'https://www.clearance-king.co.uk/suki-baby-socks-isla-28.html', 'https://www.clearance-king.co.uk/disney-frozen-wet-wipes-fragrance-free-pack-of-72-exp-8-17.html', 'https://www.clearance-king.co.uk/from-bath-chaps-to-bara-birth-book.html', 'https://www.clearance-king.co.uk/pristine-gleam-kids-toothbrush-with-cover.html', 'https://www.clearance-king.co.uk/baby-grooming-manicure-set-3-piece.html', 'https://www.clearance-king.co.uk/waterproof-bed-cover.html', 'https://www.clearance-king.co.uk/500ml-my-little-baby-bath-12-ck.html', 'https://www.clearance-king.co.uk/children-s-wrist-link-assorted-12-48.html', 'https://www.clearance-king.co.uk/500ml-my-little-baby-lotion-12-ck.html', 'https://www.clearance-king.co.uk/razz-baby-bath-wash-cloths-rinse-cups.html', 'https://www.clearance-king.co.uk/upsy-daisy-freddy-frog-bath-sponge-for-baby-green-18-x-15-5-x-3cm.html', 'https://www.clearance-king.co.uk/wooden-twisty-rainbow-ring-toy-0-m.html', 'https://www.clearance-king.co.uk/diamond-jubilee-life-in-pictures-book.html', 'https://www.clearance-king.co.uk/500ml-my-little-baby-wash-top-to-toe-12-ck.html', 'https://www.clearance-king.co.uk/cuddle-glower-baby-bear-pink-13in.html', 'https://www.clearance-king.co.uk/upsy-daisy-bandana-style-dribble-bib-assorted-colours.html', 'https://www.clearance-king.co.uk/one-direction-plasters-pack-of-20.html', 'https://www.clearance-king.co.uk/megamind-the-noval.html', 'https://www.clearance-king.co.uk/pink-bunny-kids-hair-band-12-449.html', 'https://www.clearance-king.co.uk/baby-thermal-blanket-twin-pack.html', 'https://www.clearance-king.co.uk/cuddle-glowers-baby-penguin.html', 'https://www.clearance-king.co.uk/mr-tumble-something-special-painting-coat.html', 'https://www.clearance-king.co.uk/baby-bottle-brush.html', 'https://www.clearance-king.co.uk/how-to-stop-bullying-101-strategies-book.html', 'https://www.clearance-king.co.uk/baby-changing-mat-67x47cm.html', 'https://www.clearance-king.co.uk/baby-stroller-rain-cover.html', 'https://www.clearance-king.co.uk/rysons-children-clothes-hangers-multi-coloured-10-pc.html', 'https://www.clearance-king.co.uk/shrek-the-third-king-for-a-day-ogre-for-life-book.html', 'https://www.clearance-king.co.uk/suki-baby-socks-abigail.html', 'https://www.clearance-king.co.uk/emmay-toy-ties-for-pushchairs-and-prams.html', 'https://www.clearance-king.co.uk/the-official-map-of-the-x-files.html', 'https://www.clearance-king.co.uk/tidyz-nappy-bags-with-tie-handles-28-x-30cm-roll-of-100.html', 'https://www.clearance-king.co.uk/from-eccles-cake-to-hawkshead-wig-book.html', 'https://www.clearance-king.co.uk/kids-activity-press-out-book-team-kits.html', 'https://www.clearance-king.co.uk/b-friends-cute-unicorn-outfit.html', 'https://www.clearance-king.co.uk/from-petticoat-tails-to-arbroath-smokies-book.html', 'https://www.clearance-king.co.uk/tidyz-very-strong-degradable-nappy-bags-with-tie-handles-32-x-36cm-pack-of-100.html', 'https://www.clearance-king.co.uk/mr-men-baby-bib-asstd-french-24.html', 'https://www.clearance-king.co.uk/the-short-second-life-of-bree-tanner-book.html', 'https://www.clearance-king.co.uk/tidyz-extra-strong-nappy-bags-with-tie-handles-28-x-34cm-roll-of-100.html', 'https://www.clearance-king.co.uk/moshi-monsters-kids-snack-pot-10-5-x-11-x-5cm.html', 'https://www.clearance-king.co.uk/harry-hill-livin-the-dream.html', 'https://www.clearance-king.co.uk/disposable-bed-mats-3-pack.html', 'https://www.clearance-king.co.uk/baby-travel-feeding-set.html', 'https://www.clearance-king.co.uk/swimming-3d-star-wars-arm-band-age-3-5-0-200.html', 'https://www.clearance-king.co.uk/tree-fu-tom-hide-and-squeak-book.html', 'https://www.clearance-king.co.uk/baby-first-travel-feeding-bowl-spoon-set-pink-blue.html', 'https://www.clearance-king.co.uk/kids-toothbrushes-5-pc.html', 'https://www.clearance-king.co.uk/go-local-extra-strong-nappy-bags-with-tie-handles-28-x-34cm-pack-of-100-price-marked-1.html', 'https://www.clearance-king.co.uk/transition-a-peer-mentoring-system-spiral-book.html', 'https://www.clearance-king.co.uk/dragon-s-den-fired-up-set-book.html', 'https://www.clearance-king.co.uk/baby-nappy-pins-pack-of-12.html', 'https://www.clearance-king.co.uk/little-wonders-wide-neck-teats-pack-of-2.html', 'https://www.clearance-king.co.uk/baby-1st-teddy-bear-pink-blue.html', 'https://www.clearance-king.co.uk/child-s-bathrobes.html', 'https://www.clearance-king.co.uk/baby-feeding-bowl-assorted-colours-pack-of-2.html', 'https://www.clearance-king.co.uk/12pk-safety-plug-socket-covers-0-8-ck.html', 'https://www.clearance-king.co.uk/nappy-bags-white.html', 'https://www.clearance-king.co.uk/disney-frozen-handy-wet-wipes-berry-scented-pack-of-60-exp-4-17.html', 'https://www.clearance-king.co.uk/baby-oil-300ml-0-24-ck.html', 'https://www.clearance-king.co.uk/from-norfolk-knobs-to-fidget-pie-book.html', 'https://www.clearance-king.co.uk/6pc-baby-wash-clothes.html', 'https://www.clearance-king.co.uk/baby-first-re-usable-bowls-with-lids-assorted-colours-236ml-pack-of-2.html', 'https://www.clearance-king.co.uk/bath-crayons-6-pc.html', 'https://www.clearance-king.co.uk/plug-socket-covers-10-pc.html', 'https://www.clearance-king.co.uk/baby-food-bib-easy-clean.html', 'https://www.clearance-king.co.uk/baby-grooming-set.html', 'https://www.clearance-king.co.uk/despicable-me-2-sticker-book-english.html', 'https://www.clearance-king.co.uk/christmas-book-w-personalised-cd-sophie.html', 'https://www.clearance-king.co.uk/lorraine-kelly-colours-book.html', 'https://www.clearance-king.co.uk/deluxe-heavy-duty-plastic-clothes-hangers-with-sliding-clips-pack-of-4-colours-may-vary.html', 'https://www.clearance-king.co.uk/stardoll-superstar-stylist-hardback-book.html', 'https://www.clearance-king.co.uk/cherubs-baby-soothers.html', 'https://www.clearance-king.co.uk/my-little-baby-oil-gel-shea-cocoa-12-ck.html', 'https://www.clearance-king.co.uk/breez-standard-fragranced-nappy-bags-with-tie-handles-28-x-31cm-pack-of-150.html', 'https://www.clearance-king.co.uk/kids-toothbrushes-pack-of-4-4-colours.html', 'https://www.clearance-king.co.uk/huggies-baby-wipes-all-over-clean-pack-of-56.html', 'https://www.clearance-king.co.uk/the-chronicles-of-narnia-prince-caspian-movie-storybook.html', 'https://www.clearance-king.co.uk/tree-fu-tom-twigs-and-the-wishing-pebble.html', 'https://www.clearance-king.co.uk/harry-hill-the-further-adventures-of-the-queen-mum.html', 'https://www.clearance-king.co.uk/cuddle-glowers-baby-puppy-blue-13in.html', 'https://www.clearance-king.co.uk/chrubs-feeding-bottle-250-ml-12-144-ck.html', 'https://www.clearance-king.co.uk/my-page-clip-2pc-magnetic-bookmark-360.html', 'https://www.clearance-king.co.uk/200ml-my-little-baby-oil-gel-lavender-12-ck.html', 'https://www.clearance-king.co.uk/the-games-special-souvenier-edition-book.html', 'https://www.clearance-king.co.uk/johnsons-baby-cotton-buds-pack-of-100.html', 'https://www.clearance-king.co.uk/mr-men-and-little-miss-sandwich-box-assorted-designs.html', 'https://www.clearance-king.co.uk/how-can-i-stop-climate-change-book.html', 'https://www.clearance-king.co.uk/smash-fantasy-feet-baby-feeding-bowl-with-spoon-assorted-designs.html', 'https://www.clearance-king.co.uk/postman-pat-bathtime-sponge-with-string.html', 'https://www.clearance-king.co.uk/cuddle-glowers-baby-bear-blue-13in.html', 'https://www.clearance-king.co.uk/26pc-numbers-letter-magnetic-0-48.html', 'https://www.clearance-king.co.uk/stardoll-autumn-winter-top-trend-hardback-book.html', 'https://www.clearance-king.co.uk/upsy-daisy-bpa-free-standard-neck-feeding-bottle-with-silicone-teat-for-baby-250ml.html', 'https://www.clearance-king.co.uk/500ml-little-baby-shampoo-12-ck.html', 'https://www.clearance-king.co.uk/cuddle-glowers-baby-puppy-brown-13in.html', 'https://www.clearance-king.co.uk/bru-mini-non-slip-bath-mats-6-pc.html', 'https://www.clearance-king.co.uk/boohbah-the-springy-zingy-box-storybook.html', 'https://www.clearance-king.co.uk/500ml-my-little-baby-oil-12-ck.html', 'https://www.clearance-king.co.uk/beautiful-beginnings-child-s-safety-wrist-link-assorted-colours.html', 'https://www.clearance-king.co.uk/baby-hangers-10-pcs.html', 'https://www.clearance-king.co.uk/play-better-games-spiral-book.html', 'https://www.clearance-king.co.uk/johnson-s-pure-gentle-daily-care-baby-shampoo-200ml.html', 'https://www.clearance-king.co.uk/kids-ice-coolers.html'} processed URLs from OUTPUTS\FBA_ANALYSIS\linking_maps\clearance-king.co.uk\linking_map.json
+2026-03-15 03:19:19,604 INFO utils.url_cache_filter: 🔍 URL Filter Results: 0 new URLs, 47 already cached
+2026-03-15 03:19:19,605 INFO tools.configurable_supplier_scraper: ✅ URL Classification: 0 new URLs to scrape, 47 already cached (will be returned as Stubs)
+2026-03-15 03:19:33,772 INFO tools.configurable_supplier_scraper: 🧠 Post-scraping Memory: Chrome=2317MB, Python=98MB, System=82.0%
+2026-03-15 03:19:33,773 INFO tools.configurable_supplier_scraper: Successfully extracted 47 products from https://www.clearance-king.co.uk/books/children-s-books.html
+2026-03-15 03:19:33,773 WARNING __main__: Live scrape returned 0 valid products for https://www.clearance-king.co.uk/books/children-s-books.html; falling back to 4 cached products
+2026-03-15 03:19:33,776 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king_co_uk__sandbox__5d4d7fd5_processing_state.json (27 entries) saved successfully
+2026-03-15 03:19:33,776 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-15 03:19:33,777 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 9781844220991 for supplier product: 'BOOHBAH: THE BIG BASS DRUM (STORYBOOK)' (FixedAmazonExtractor)
+2026-03-15 03:19:33,777 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 9781844220991
+2026-03-15 03:19:39,177 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 9781844220991...
+2026-03-15 03:19:39,236 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-15 03:19:39,896 INFO tools.amazon_playwright_extractor: Found 7 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-15 03:19:39,896 INFO tools.amazon_playwright_extractor: Processing 7 search result elements for EAN 9781844220991
+2026-03-15 03:19:39,990 INFO tools.amazon_playwright_extractor: Found organic result: ASIN 1844220990 - 28 Aug 2003...
+2026-03-15 03:19:40,132 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 1 organic products, 6 sponsored products filtered out
+2026-03-15 03:19:40,132 INFO tools.amazon_playwright_extractor: ✅ EAN SEARCH: Selected first organic result - ASIN 1844220990
+2026-03-15 03:19:40,132 INFO tools.amazon_playwright_extractor:    Trusting Amazon's search relevance for EAN 9781844220991
+2026-03-15 03:19:40,132 INFO tools.amazon_playwright_extractor:    EAN will be extracted by Keepa during full product data extraction
+2026-03-15 03:19:40,132 INFO tools.amazon_playwright_extractor: Single ASIN 1844220990 found for EAN 9781844220991.
+2026-03-15 03:19:40,132 INFO tools.amazon_playwright_extractor: Proceeding with ASIN: 1844220990 for EAN: 9781844220991
+2026-03-15 03:19:40,132 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN 1844220990. Getting a new one from BrowserManager.
+2026-03-15 03:19:40,133 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=9781844220991&ref=nb_sb_noss
+2026-03-15 03:19:42,151 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:19:42,285 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:19:43,301 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-15 03:19:46,309 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-15 03:19:46,309 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:19:46,436 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:19:46,436 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-15 03:19:51,443 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-15 03:19:58,443 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: 1844220990
+2026-03-15 03:19:58,444 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-15 03:19:58,512 INFO tools.amazon_playwright_extractor: Title found: 'Big Bass Drum Storybook ("Boohbah" Storybook: The Big Bass Drum)' via #productTitle
+2026-03-15 03:19:58,513 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-15 03:19:58,547 INFO tools.amazon_playwright_extractor: Current price: 1.92 via #corePrice_feature_div .a-offscreen
+2026-03-15 03:19:58,667 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-15 03:19:58,737 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/91x9s5vXcqL._SL1500_.jpg via #landingImage
+2026-03-15 03:19:58,752 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-15 03:19:59,311 INFO tools.amazon_playwright_extractor: EAN 9781844220991 extracted via pattern matching in 'ISBN-10
+                                            ‏
+                                            :
+                                            ‎'
+2026-03-15 03:19:59,372 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-15 03:19:59,461 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-15 03:19:59,541 INFO tools.amazon_playwright_extractor: Rating: 5.0 via i[class*='a-icon-star'] span.a-icon-alt
+2026-03-15 03:19:59,582 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-15 03:19:59,628 INFO tools.amazon_playwright_extractor: Availability text: 'Only 1 left in stock.' via #availability span.a-color-price
+2026-03-15 03:19:59,628 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-15 03:19:59,653 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-15 03:19:59,795 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-15 03:19:59,844 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-15 03:19:59,844 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-15 03:19:59,844 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-15 03:19:59,844 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-15 03:20:05,914 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-15 03:20:05,998 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-15 03:20:06,033 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-15 03:20:06,033 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-15 03:20:08,306 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-15 03:20:13,752 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-15 03:20:13,800 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-15 03:20:13,849 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-15 03:20:14,910 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 115 rows found
+2026-03-15 03:20:14,929 INFO tools.amazon_playwright_extractor: Processing 115 rows in Keepa Product Details AG Grid.
+2026-03-15 03:20:15,921 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.10' in Keepa AG Grid.
+2026-03-15 03:20:18,505 INFO tools.amazon_playwright_extractor: ? Successfully parsed 36 items from Keepa Product Details AG Grid.
+2026-03-15 03:20:18,505 INFO tools.amazon_playwright_extractor: ASIN 1844220990: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-15 03:20:18,506 INFO tools.amazon_playwright_extractor: ASIN 1844220990: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-15 03:20:18,506 WARNING tools.amazon_playwright_extractor: ASIN 1844220990: Could not find BSR in any Keepa data source.
+2026-03-15 03:20:18,506 INFO tools.amazon_playwright_extractor: ✅ Recorded search method 'EAN' for ASIN 1844220990
+2026-03-15 03:20:18,506 INFO tools.amazon_playwright_extractor: Successfully extracted data for ASIN 1844220990 (EAN on page: 9781844220991)
+2026-03-15 03:20:18,511 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_1844220990_9781844220991.json (22 entries) saved successfully
+2026-03-15 03:20:18,517 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_1844220990_9781844220991.json (22 entries) saved successfully
+2026-03-15 03:20:18,521 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (1 entries) saved successfully
+2026-03-15 03:20:18,522 INFO __main__: Linking map periodic flush: 1 entries
+2026-03-15 03:20:18,526 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king_co_uk__sandbox__5d4d7fd5_processing_state.json (27 entries) saved successfully
+2026-03-15 03:20:18,527 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-15 03:20:18,527 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 9780857511652 for supplier product: 'TREE FU TOM: RANCHER TOM & BABY BEETLES' (FixedAmazonExtractor)
+2026-03-15 03:20:18,528 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 9780857511652
+2026-03-15 03:20:23,557 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 9780857511652...
+2026-03-15 03:20:23,807 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-15 03:20:24,479 INFO tools.amazon_playwright_extractor: Found 7 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-15 03:20:24,479 INFO tools.amazon_playwright_extractor: Processing 7 search result elements for EAN 9780857511652
+2026-03-15 03:20:24,560 INFO tools.amazon_playwright_extractor: Found organic result: ASIN 0857511653 - 29 Aug 2013...
+2026-03-15 03:20:24,673 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 1 organic products, 6 sponsored products filtered out
+2026-03-15 03:20:24,673 INFO tools.amazon_playwright_extractor: ✅ EAN SEARCH: Selected first organic result - ASIN 0857511653
+2026-03-15 03:20:24,674 INFO tools.amazon_playwright_extractor:    Trusting Amazon's search relevance for EAN 9780857511652
+2026-03-15 03:20:24,674 INFO tools.amazon_playwright_extractor:    EAN will be extracted by Keepa during full product data extraction
+2026-03-15 03:20:24,674 INFO tools.amazon_playwright_extractor: Single ASIN 0857511653 found for EAN 9780857511652.
+2026-03-15 03:20:24,674 INFO tools.amazon_playwright_extractor: Proceeding with ASIN: 0857511653 for EAN: 9780857511652
+2026-03-15 03:20:24,674 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN 0857511653. Getting a new one from BrowserManager.
+2026-03-15 03:20:24,674 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=9780857511652&ref=nb_sb_noss
+2026-03-15 03:20:27,130 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:20:27,342 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:20:28,344 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-15 03:20:31,353 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-15 03:20:31,353 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:20:31,429 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:20:31,429 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-15 03:20:36,435 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-15 03:20:43,448 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: 0857511653
+2026-03-15 03:20:43,448 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-15 03:20:43,505 INFO tools.amazon_playwright_extractor: Title found: 'Tree Fu Tom: Rancher Tom and the Baby Beetles' via #productTitle
+2026-03-15 03:20:43,505 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-15 03:20:43,764 INFO tools.amazon_playwright_extractor: Original price: 69.9 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-03-15 03:20:43,835 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-15 03:20:43,880 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/61u8VEekXDL._SY342_.jpg via #landingImage
+2026-03-15 03:20:43,896 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-15 03:20:44,688 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-15 03:20:44,860 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-15 03:20:44,890 INFO tools.amazon_playwright_extractor: Rating: 5.0 via #acrPopover[title*='out of 5 stars']
+2026-03-15 03:20:44,914 INFO tools.amazon_playwright_extractor: Review count: 1 via #acrCustomerReviewText
+2026-03-15 03:20:44,914 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-15 03:20:44,948 INFO tools.amazon_playwright_extractor: Availability text: 'Only 1 left in stock.' via #availability span.a-color-price
+2026-03-15 03:20:44,948 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-15 03:20:44,963 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-15 03:20:45,053 INFO tools.amazon_playwright_extractor: Description found using selector: div#bookDescription_feature_div
+2026-03-15 03:20:45,053 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-15 03:20:45,105 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-15 03:20:45,105 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-15 03:20:45,106 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-15 03:20:45,106 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-15 03:20:51,189 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-15 03:20:51,282 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-15 03:20:51,282 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-15 03:20:51,307 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-15 03:20:51,307 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-15 03:20:53,561 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-15 03:20:58,852 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-15 03:20:58,906 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-15 03:20:58,977 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-15 03:21:00,511 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 118 rows found
+2026-03-15 03:21:00,530 INFO tools.amazon_playwright_extractor: Processing 118 rows in Keepa Product Details AG Grid.
+2026-03-15 03:21:02,519 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.73' in Keepa AG Grid.
+2026-03-15 03:21:07,251 INFO tools.amazon_playwright_extractor: ? Successfully parsed 37 items from Keepa Product Details AG Grid.
+2026-03-15 03:21:07,251 INFO tools.amazon_playwright_extractor: ASIN 0857511653: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-15 03:21:07,251 INFO tools.amazon_playwright_extractor: ASIN 0857511653: EAN '9780857511652' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-15 03:21:07,251 INFO tools.amazon_playwright_extractor: ASIN 0857511653: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-15 03:21:07,251 INFO tools.amazon_playwright_extractor: ASIN 0857511653: BSR 2542758 in 'Books' from Keepa SalesRankDetailsTable.
+2026-03-15 03:21:07,251 INFO tools.amazon_playwright_extractor: ASIN 0857511653: Current price missing/zero. Attempting fallback from Keepa Product Details.
+2026-03-15 03:21:07,252 WARNING tools.amazon_playwright_extractor: ASIN 0857511653: Could not find a suitable current price in Keepa Product Details for fallback.
+2026-03-15 03:21:07,252 INFO tools.amazon_playwright_extractor: ✅ Recorded search method 'EAN' for ASIN 0857511653
+2026-03-15 03:21:07,252 INFO tools.amazon_playwright_extractor: Successfully extracted data for ASIN 0857511653 (EAN on page: 9780857511652)
+2026-03-15 03:21:07,254 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_0857511653_9780857511652.json (29 entries) saved successfully
+2026-03-15 03:21:07,257 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_0857511653_9780857511652.json (29 entries) saved successfully
+2026-03-15 03:21:07,259 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (2 entries) saved successfully
+2026-03-15 03:21:07,260 INFO __main__: Linking map periodic flush: 2 entries
+2026-03-15 03:21:07,262 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king_co_uk__sandbox__5d4d7fd5_processing_state.json (27 entries) saved successfully
+2026-03-15 03:21:07,263 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-15 03:21:07,645 INFO tools.FBA_Financial_calculator: FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-15 03:21:07,646 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781844220991, ASIN=None, Price=£1.92 (from current_price)
+2026-03-15 03:21:07,681 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5056239401014, ASIN=None, Price=£9.99 (from current_price)
+2026-03-15 03:21:07,710 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781907410369, ASIN=None, Price=£9.19 (from current_price)
+2026-03-15 03:21:07,743 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9780007258376, ASIN=None, Price=£14.35 (from original_price)
+2026-03-15 03:21:07,743 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9780857511652, ASIN=None, Price=£69.9 (from original_price)
+2026-03-15 03:21:07,781 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=3574661642864, ASIN=None, Price=£6.49 (from original_price)
+2026-03-15 03:21:07,811 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781405905794, ASIN=None, Price=£7.99 (from current_price)
+2026-03-15 03:21:07,840 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9780571236015, ASIN=None, Price=£9.79 (from current_price)
+2026-03-15 03:21:07,952 INFO __main__: Mid-run financial report: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\clearance-king-co-uk__sandbox__5d4d7fd5\fba_financial_report_clearance-king-co-uk__sandbox__5d4d7fd5_20260315_032107.csv
+2026-03-15 03:21:07,953 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 9780571236015 for supplier product: 'HARRY HILL THE FURTHER ADVENTURES OF THE QUEEN MUM' (FixedAmazonExtractor)
+2026-03-15 03:21:07,953 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 9780571236015
+2026-03-15 03:21:14,847 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 9780571236015...
+2026-03-15 03:21:15,851 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-15 03:21:16,740 INFO tools.amazon_playwright_extractor: Found 7 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-15 03:21:16,740 INFO tools.amazon_playwright_extractor: Processing 7 search result elements for EAN 9780571236015
+2026-03-15 03:21:16,880 INFO tools.amazon_playwright_extractor: Found organic result: ASIN 0571236014 - 4 Oct 2007...
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 1 organic products, 6 sponsored products filtered out
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor: ✅ EAN SEARCH: Selected first organic result - ASIN 0571236014
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor:    Trusting Amazon's search relevance for EAN 9780571236015
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor:    EAN will be extracted by Keepa during full product data extraction
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor: Single ASIN 0571236014 found for EAN 9780571236015.
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor: Proceeding with ASIN: 0571236014 for EAN: 9780571236015
+2026-03-15 03:21:17,816 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN 0571236014. Getting a new one from BrowserManager.
+2026-03-15 03:21:17,816 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=9780571236015&crid=3PD3N161ZCQ0J&sprefix=9780571236015%2Caps%2C660&ref=nb_sb_noss
+2026-03-15 03:21:20,416 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:21:20,798 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:21:21,809 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-15 03:21:24,814 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-15 03:21:24,815 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:21:24,943 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:21:24,943 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-15 03:21:29,957 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-15 03:21:36,969 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: 0571236014
+2026-03-15 03:21:36,969 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-15 03:21:37,066 INFO tools.amazon_playwright_extractor: Title found: 'The Further Adventures of the Queen Mum' via #productTitle
+2026-03-15 03:21:37,067 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-15 03:21:37,101 INFO tools.amazon_playwright_extractor: Current price: 9.79 via #corePrice_feature_div .a-offscreen
+2026-03-15 03:21:37,218 INFO tools.amazon_playwright_extractor: Original price: 12.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-15 03:21:37,281 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-15 03:21:37,339 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/91wx7pU323L._SL1500_.jpg via #landingImage
+2026-03-15 03:21:37,361 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-15 03:21:38,490 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-15 03:21:38,959 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-15 03:21:38,982 INFO tools.amazon_playwright_extractor: Rating: 4.0 via #acrPopover[title*='out of 5 stars']
+2026-03-15 03:21:39,016 INFO tools.amazon_playwright_extractor: Review count: 13 via #acrCustomerReviewText
+2026-03-15 03:21:39,017 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-15 03:21:39,054 INFO tools.amazon_playwright_extractor: Availability text: 'Only 9 left in stock.' via #availability span.a-color-price
+2026-03-15 03:21:39,054 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-15 03:21:39,071 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-15 03:21:39,195 INFO tools.amazon_playwright_extractor: Description found using selector: div#bookDescription_feature_div
+2026-03-15 03:21:39,195 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-15 03:21:39,362 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-15 03:21:39,362 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-15 03:21:39,362 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-15 03:21:39,363 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-15 03:21:45,527 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-15 03:21:45,673 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-15 03:21:45,673 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-15 03:21:45,717 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-15 03:21:45,718 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-15 03:21:47,993 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-15 03:21:54,974 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-15 03:21:55,002 WARNING tools.amazon_playwright_extractor: Product-Details tab visible, but inner grid still not ready – extending wait with retry logic.
+2026-03-15 03:21:55,002 INFO tools.amazon_playwright_extractor: Grid attempt 1/3: Waiting 15000ms for grid container...
+2026-03-15 03:21:55,241 INFO tools.amazon_playwright_extractor: ? Grid became visible after attempt 1 – continuing.
+2026-03-15 03:21:55,286 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-15 03:21:55,396 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-15 03:21:56,496 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 136 rows found
+2026-03-15 03:21:56,525 INFO tools.amazon_playwright_extractor: Processing 136 rows in Keepa Product Details AG Grid.
+2026-03-15 03:21:58,567 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.04' in Keepa AG Grid.
+2026-03-15 03:21:58,884 INFO tools.amazon_playwright_extractor: Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 1.47' in Keepa AG Grid.
+2026-03-15 03:22:02,883 INFO tools.amazon_playwright_extractor: ? Successfully parsed 43 items from Keepa Product Details AG Grid.
+2026-03-15 03:22:02,883 INFO tools.amazon_playwright_extractor: ASIN 0571236014: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-15 03:22:02,883 INFO tools.amazon_playwright_extractor: ASIN 0571236014: EAN '9780571236015' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-15 03:22:02,883 INFO tools.amazon_playwright_extractor: ASIN 0571236014: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-15 03:22:02,884 INFO tools.amazon_playwright_extractor: ASIN 0571236014: BSR 1755341 in 'Books 0.3' from Keepa SalesRankDetailsTable.
+2026-03-15 03:22:02,884 INFO tools.amazon_playwright_extractor: ✅ Recorded search method 'EAN' for ASIN 0571236014
+2026-03-15 03:22:02,884 INFO tools.amazon_playwright_extractor: Successfully extracted data for ASIN 0571236014 (EAN on page: 9780571236015)
+2026-03-15 03:22:02,891 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_0571236014_9780571236015.json (30 entries) saved successfully
+2026-03-15 03:22:02,896 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_0571236014_9780571236015.json (30 entries) saved successfully
+2026-03-15 03:22:02,901 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (3 entries) saved successfully
+2026-03-15 03:22:02,902 INFO __main__: Linking map periodic flush: 3 entries
+2026-03-15 03:22:02,916 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king_co_uk__sandbox__5d4d7fd5_processing_state.json (27 entries) saved successfully
+2026-03-15 03:22:02,917 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-15 03:22:02,918 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 9781844222445 for supplier product: 'BOOHBAH: FLIP FLAP FLOP (STORYBOOK)' (FixedAmazonExtractor)
+2026-03-15 03:22:02,918 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 9781844222445
+2026-03-15 03:22:07,222 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 9781844222445...
+2026-03-15 03:22:07,413 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-15 03:22:08,145 INFO tools.amazon_playwright_extractor: Found 7 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-15 03:22:08,145 INFO tools.amazon_playwright_extractor: Processing 7 search result elements for EAN 9781844222445
+2026-03-15 03:22:08,238 INFO tools.amazon_playwright_extractor: Found organic result: ASIN 1844222446 - 4 Mar 2004...
+2026-03-15 03:22:08,706 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 1 organic products, 6 sponsored products filtered out
+2026-03-15 03:22:08,706 INFO tools.amazon_playwright_extractor: ✅ EAN SEARCH: Selected first organic result - ASIN 1844222446
+2026-03-15 03:22:08,706 INFO tools.amazon_playwright_extractor:    Trusting Amazon's search relevance for EAN 9781844222445
+2026-03-15 03:22:08,707 INFO tools.amazon_playwright_extractor:    EAN will be extracted by Keepa during full product data extraction
+2026-03-15 03:22:08,707 INFO tools.amazon_playwright_extractor: Single ASIN 1844222446 found for EAN 9781844222445.
+2026-03-15 03:22:08,707 INFO tools.amazon_playwright_extractor: Proceeding with ASIN: 1844222446 for EAN: 9781844222445
+2026-03-15 03:22:08,707 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN 1844222446. Getting a new one from BrowserManager.
+2026-03-15 03:22:08,707 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=9781844222445&ref=nb_sb_noss
+2026-03-15 03:22:11,041 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:22:11,393 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:22:12,403 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-15 03:22:15,413 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-15 03:22:15,413 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-15 03:22:15,689 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-15 03:22:15,689 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-15 03:22:20,697 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-15 03:22:27,708 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: 1844222446
+2026-03-15 03:22:27,708 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-15 03:22:27,859 INFO tools.amazon_playwright_extractor: Title found: '"Boohbah" Flip Flap Flop: Flip Flap Flop ("Boohbah" Storybook S.)' via #productTitle
+2026-03-15 03:22:27,859 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-15 03:22:28,202 INFO tools.amazon_playwright_extractor: Original price: 19.99 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-03-15 03:22:28,272 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-15 03:22:28,329 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/21LwpwJtsaL.jpg via #landingImage
+2026-03-15 03:22:28,354 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-15 03:22:29,202 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-15 03:22:29,365 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-15 03:22:29,434 INFO tools.amazon_playwright_extractor: Rating: 5.0 via i[class*='a-icon-star'] span.a-icon-alt
+2026-03-15 03:22:29,480 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-15 03:22:29,556 INFO tools.amazon_playwright_extractor: Availability text: 'Currently unavailable.   We don't know when or if this item will be back in stock.                             
+                        
+                        
+                            Deliver to the - London NW10 7‌
+                        
+                    
+                                                                                           (function(f) {var _np=(window.P._namespace("ListsDPXJavaScriptBlock"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) {
+window.atwlEarlyClick = function (e) {
+    try {
+        e.preventDefault();
+        if (window.atwlLoaded) {
+            return; //if JS is loaded then we can ignore the early click case
+        }
+        if (window.ue) {
+            window.ue.count("Lists:Dpx:atwlEarlyClick:Handled", 1);
+        }
+        var ADD_TO_LIST_FROM_DETAIL_PAGE_VENDOR_ID = "website.wishlist.detail.add.earlyclick";
+        var csrfTokenForm = document.querySelector('input[id="lists-sp-csrf-form-token"]');
+        var csrfToken = csrfTokenForm ? csrfTokenForm.value : "";
+
+        var paramMap = {
+            "asin": "1844222446",
+            "vendorId": ADD_TO_LIST_FROM_DETAIL_PAGE_VENDOR_ID,
+            "isAjax": "false"
+        }
+
+        var url = "/hz/wishlist/additemtolist?ie=UTF8";
+
+        for (var param in paramMap) {
+            url += "&" + param + "=" + paramMap[param];
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, false);
+        xhr.setRequestHeader("anti-csrftoken-a2z", csrfToken);
+        xhr.onload = function() {
+            window.location = xhr.responseURL; //Needed to force a redirect; not supported on IE!
+        }
+        xhr.send();
+    } catch (exception) {
+        if (window.ueLogError) {
+            window.ueLogError(exception, {
+                logLevel: 'FATAL',
+                attribution: 'ListsDPXJavaScriptBlock',
+                message: 'atwlEarlyClick failed with exception'
+            });
+        }
+    }
+};
+}));              {"isHorizonte":true}                    {"createHeader":"Create a List","addHeader":"Add to List","addWidth":"900","vendorId":"website.wishlist.detail.add","createHeight":"auto","streaming":"1","isFirstCreate":true,"createWidth":"650","addUrl":"/hz/wishlist/additemtolist?ie=UTF8","addHeight":"700","action":"create","createUrl":"/hz/wishlist/create?ie=UTF8&isPopover=1&isCreateAndAdd=1","firstcreateHeader":"Add to your list"}                                 Save this item                                   (function(f) {var _np=(window.P._namespace("ListsDPXJavaScriptBlock"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) {
+    'use strict';
+
+    P.when('A').execute(function(A){
+        A.declarative('atwlDropdownClickDeclarative', 'click', function(e){                  
+          window.wlArrowEv = e;
+          e.$event.preventDefault();
+          (function () {
+             
+             if (window.P && window.atwlLoaded) {
+                 window.P.when('A').execute(function (A) {A.trigger('wl-drop-down', window.wlArrowEv);})
+                 return;
+             }
+              
+             window.atwlEc = true;
+             
+             var b = document.getElementById('add-to-wishlist-button-group');
+             
+             var s = document.getElementById('atwl-dd-spinner-holder');
+             
+             if (!(s && b)) {
+                 return;
+             }
+             s.classList.remove('a-hidden');
+             s.style.position = 'absolute';
+             s.style.width = b.clientWidth + 'px';
+             s.style.zIndex = 1;
+             return;
+          })();
+          return false;
+        });
+    });
+}));                
+                    Add to List    
+                    (function(f) {var _np=(window.P._namespace("ListsDPXJavaScriptBlock"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) {
+    'use strict';
+
+    P.now('A').execute('atwl-a11y-override', function(A){
+        
+        var addToWishListButtonGroup = document.getElementById('add-to-wishlist-button-group');
+        
+        if (addToWishListButtonGroup) {
+            addToWishListButtonGroup.removeAttribute("role");
+        }
+        var wishListMainButtonElem = document.getElementById('wishListMainButton');
+        if (wishListMainButtonElem) {
+            var wishListMainButton = wishListMainButtonElem.querySelector('input');
+            if (wishListMainButton) {
+                wishListMainButton.setAttribute('role', 'button');
+                wishListMainButton.setAttribute('tabindex', '0');
+            }
+        }
+        var wishListDropDownElem = document.getElementById('wishListDropDown');
+        if (wishListDropDownElem) {
+            var wishListDropDown = wishListDropDownElem.querySelector('input');
+            if (wishListDropDown) {
+                wishListDropDown.setAttribute('role', 'button');
+                wishListDropDown.setAttribute('aria-haspopup', 'dialog');
+                wishListDropDown.setAttribute('tabindex', '0');
+            }
+        }
+    });
+}));                Added to                  Unable to add item to List. Please try again.                     Sorry, there was a problem.   There was an error retrieving your Wish Lists. Please try again.           Sorry, there was a problem.   List unavailable.      {"showInlineLink":false,"hzPopover":true,"wishlistButtonId":"add-to-wishlist-button","dropDownHtml":"","inlineJsFix":true,"wishlistButtonSubmitId":"add-to-wishlist-button-submit","maxAjaxFailureCount":"3","asin":"1844222446","dropdownAriaLabel":"Select a list from the drop-down","closeButtonAriaLabel":"Close"}         {"formId":"addToCart","showWishListDropDown":false,"wishlistPopoverWidth":206,"isAddToWishListDropDownAuiEnabled":true,"showPopover":true}  (function(f) {var _np=(window.P._namespace("ListsDPXJavaScriptBlock"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) {
+    'use strict';
+
+    
+    window.P.now('atwl-ready').execute(function (atwlModule) {
+        var isRegistered = (typeof atwlModule !== 'undefined');
+        if (!isRegistered) {
+            window.P.register('atwl-ready');
+        }
+    });
+})); 
+    
+
+
+    
+
+   (function(f) {var _np=(window.P._namespace("ListsDPXJavaScriptBlock"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) {
+        "use strict";
+
+        window.P.now('atwl-cf').execute(function (module) {
+            var isRegistered = (typeof module !== 'undefined');
+            if (!isRegistered) {
+                window.P.register('atwl-cf');
+            }
+        });
+    }));                    
+    .registry-button-width {
+        width: 100%;
+        margin-left: ;
+        margin-right: ;
+    }
+
+    .add-to-baby-button-spacing-bottom {
+        margin-bottom: 0;
+    }' via #outOfStock
+2026-03-15 03:22:29,557 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-15 03:22:29,574 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-15 03:22:29,700 INFO tools.amazon_playwright_extractor: Description found using selector: div#bookDescription_feature_div
+2026-03-15 03:22:29,701 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-15 03:22:29,759 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-15 03:22:29,759 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-15 03:22:29,759 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-15 03:22:29,759 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-15 03:22:35,892 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-15 03:22:36,011 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-15 03:22:36,011 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-15 03:22:36,045 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-15 03:22:36,045 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-15 03:22:38,335 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-15 03:22:38,359 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-15 03:22:38,404 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-15 03:22:38,440 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-15 03:22:39,490 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 103 rows found
+2026-03-15 03:22:39,509 INFO tools.amazon_playwright_extractor: Processing 103 rows in Keepa Product Details AG Grid.
+2026-03-15 03:22:40,918 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.16' in Keepa AG Grid.
+2026-03-15 03:22:43,961 INFO tools.amazon_playwright_extractor: ? Successfully parsed 31 items from Keepa Product Details AG Grid.
+2026-03-15 03:22:43,961 INFO tools.amazon_playwright_extractor: ASIN 1844222446: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-15 03:22:43,961 INFO tools.amazon_playwright_extractor: ASIN 1844222446: EAN '9781844222445' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-15 03:22:43,962 INFO tools.amazon_playwright_extractor: ASIN 1844222446: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-15 03:22:43,962 WARNING tools.amazon_playwright_extractor: ASIN 1844222446: Could not find BSR in any Keepa data source.
+2026-03-15 03:22:43,962 INFO tools.amazon_playwright_extractor: ASIN 1844222446: Current price missing/zero. Attempting fallback from Keepa Product Details.
+2026-03-15 03:22:43,962 WARNING tools.amazon_playwright_extractor: ASIN 1844222446: Could not find a suitable current price in Keepa Product Details for fallback.
+2026-03-15 03:22:43,962 INFO tools.amazon_playwright_extractor: ✅ Recorded search method 'EAN' for ASIN 1844222446
+2026-03-15 03:22:43,962 INFO tools.amazon_playwright_extractor: Successfully extracted data for ASIN 1844222446 (EAN on page: 9781844222445)
+2026-03-15 03:22:43,967 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_1844222446_9781844222445.json (22 entries) saved successfully
+2026-03-15 03:22:43,971 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_1844222446_9781844222445.json (22 entries) saved successfully
+2026-03-15 03:22:43,977 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (4 entries) saved successfully
+2026-03-15 03:22:43,977 INFO __main__: Linking map periodic flush: 4 entries
+2026-03-15 03:22:43,982 INFO windows_save_guardian: ? ATOMIC SAVE: clearance-king_co_uk__sandbox__5d4d7fd5_processing_state.json (27 entries) saved successfully
+2026-03-15 03:22:43,983 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-15 03:22:43,984 INFO tools.FBA_Financial_calculator: FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-15 03:22:43,985 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781844220991, ASIN=None, Price=£1.92 (from current_price)
+2026-03-15 03:22:44,045 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5056239401014, ASIN=None, Price=£9.99 (from current_price)
+2026-03-15 03:22:44,102 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781907410369, ASIN=None, Price=£9.19 (from current_price)
+2026-03-15 03:22:44,158 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9780007258376, ASIN=None, Price=£14.35 (from original_price)
+2026-03-15 03:22:44,159 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9780857511652, ASIN=None, Price=£69.9 (from original_price)
+2026-03-15 03:22:44,218 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=3574661642864, ASIN=None, Price=£6.49 (from original_price)
+2026-03-15 03:22:44,276 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781405905794, ASIN=None, Price=£7.99 (from current_price)
+2026-03-15 03:22:44,331 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9780571236015, ASIN=None, Price=£9.79 (from current_price)
+2026-03-15 03:22:44,381 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=9781844222445, ASIN=None, Price=£19.99 (from original_price)
+2026-03-15 03:22:44,388 INFO __main__: Mid-run financial report: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\clearance-king-co-uk__sandbox__5d4d7fd5\fba_financial_report_clearance-king-co-uk__sandbox__5d4d7fd5_20260315_032244.csv
+2026-03-15 03:22:44,389 INFO tools.configurable_supplier_scraper: Starting enhanced scraping from https://www.clearance-king.co.uk/baby-kids/baby-care.html with memory management
+2026-03-15 03:23:22,229 INFO tools.configurable_supplier_scraper: 🧠 Pre-scraping Memory: Chrome=2965MB, Python=142MB, System=85.3%
+2026-03-15 03:23:22,229 INFO tools.configurable_supplier_scraper: Setting page limiter for https://www.clearance-king.co.uk/baby-kids/baby-care.html
+2026-03-15 03:23:22,231 INFO utils.browser_manager: ?? Reusing existing page in persistent context.

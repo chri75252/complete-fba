@@ -21,6 +21,9 @@ class WorkerConfig:
     status_refresh_seconds: int = 2
 
 
+REFRESH_CANCEL_GRACE_SECONDS = 10.0
+
+
 def _status_template(run_id: str, supplier_domain: str) -> dict[str, Any]:
     return {
         "schema_version": "1.0",
@@ -340,7 +343,13 @@ class ControlPlaneWorker:
 
                 write_json_atomic(status_path, status)
 
-                with open(log_path, "w", encoding="utf-8") as log_file:
+                with open(log_path, "a", encoding="utf-8") as log_file:
+                    log_file.write(
+                        "\n\n===== CONTROL_PLANE ATTEMPT "
+                        f"start={time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} "
+                        f"run_id={run_id} job_type={job.get('job_type')} =====\n"
+                    )
+                    log_file.flush()
                     env["CONTROL_PLANE_LOG_PATH"] = str(log_path)
                     try:
                         proc = subprocess.Popen(
@@ -363,22 +372,58 @@ class ControlPlaneWorker:
 
                     last_status_refresh = 0.0
                     start_ts = time.time()
+                    cancel_grace_started_at: float | None = None
+                    cancel_force_sent = False
                     try:
                         while True:
                             ret = proc.poll()
                             now = time.time()
 
                             if _is_cancelled(run_id):
-                                proc.terminate()
-                                status["state"] = "cancelled"
-                                status["ended_at"] = time.strftime(
-                                    "%Y-%m-%dT%H:%M:%SZ", time.gmtime()
+                                is_refresh_job = (
+                                    job.get("job_type")
+                                    == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH
                                 )
-                                status["error"]["summary"] = "Run cancelled"
-                                status["error"]["last_log_lines"] = _tail_file(log_path, 200)
-                                write_json_atomic(status_path, status)
-                                _move_job(running_job_path, paths.jobs_failed)
-                                break
+                                if is_refresh_job:
+                                    if cancel_grace_started_at is None:
+                                        cancel_grace_started_at = now
+                                        status["state"] = "cancelling"
+                                        status["error"]["summary"] = (
+                                            "Cancellation requested; waiting for refresh finalization"
+                                        )
+                                        status["error"]["last_log_lines"] = _tail_file(
+                                            log_path, 50
+                                        )
+                                        write_json_atomic(status_path, status)
+                                    elif (
+                                        ret is None
+                                        and not cancel_force_sent
+                                        and now - cancel_grace_started_at
+                                        >= REFRESH_CANCEL_GRACE_SECONDS
+                                    ):
+                                        proc.terminate()
+                                        cancel_force_sent = True
+                                        status["state"] = "cancelling"
+                                        status["error"]["summary"] = (
+                                            "Cancellation requested; grace period expired, process terminated"
+                                        )
+                                        status["error"]["last_log_lines"] = _tail_file(
+                                            log_path, 50
+                                        )
+                                        write_json_atomic(status_path, status)
+                                else:
+                                    proc.terminate()
+                                    status["state"] = "cancelled"
+                                    status["ended_at"] = time.strftime(
+                                        "%Y-%m-%dT%H:%M:%SZ", time.gmtime()
+                                    )
+                                    status["error"]["summary"] = "Run cancelled"
+                                    status["error"]["last_log_lines"] = _tail_file(
+                                        log_path, 200
+                                    )
+                                    write_json_atomic(status_path, status)
+                                    _move_job(running_job_path, paths.jobs_failed)
+                                    break
 
                             if now - last_status_refresh >= self.config.status_refresh_seconds:
                                 poll_supplier = job.get("sandbox_supplier", supplier_domain)
@@ -467,12 +512,16 @@ class ControlPlaneWorker:
                             proc.kill()
                             proc.wait(timeout=10)
 
-                if status.get("state") != "cancelled":
+                is_refresh_job = (
+                    job.get("job_type") == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH
+                )
+
+                if is_refresh_job or status.get("state") != "cancelled":
                     status["ended_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
                     status["error"]["last_log_lines"] = _tail_file(log_path, 200)
 
                     # Recompute refresh counts from disk before final status write (Issue #7 fix)
-                    if job.get("job_type") == job_types.JOB_TYPE_RUN_PRODUCT_LIST_REFRESH:
+                    if is_refresh_job:
                         poll_supplier = job.get("sandbox_supplier", supplier_domain)
                         resolved, _ = _read_processing_progress(
                             loader,
@@ -481,7 +530,15 @@ class ControlPlaneWorker:
                         )
                         _recompute_refresh_counts(status, job, paths, resolved, loader)
 
-                    if proc.returncode == 0:
+                    if is_refresh_job and _is_cancelled(run_id):
+                        status["state"] = "cancelled"
+                        if not status["error"]["summary"] or status["error"]["summary"].startswith(
+                            "Cancellation requested"
+                        ):
+                            status["error"]["summary"] = "Run cancelled"
+                        write_json_atomic(status_path, status)
+                        _move_job(running_job_path, paths.jobs_failed)
+                    elif proc.returncode == 0:
                         # Check log tail for tracebacks that escaped without causing a non-zero exit
                         log_tail_text = "\n".join(status["error"]["last_log_lines"])
                         has_traceback = "Traceback (most recent call last):" in log_tail_text

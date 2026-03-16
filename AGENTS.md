@@ -4,6 +4,13 @@ Authoritative contributor guide for the Amazon FBA Agent System. This file conso
 
 ---
 
+## 0. ABSOLUTE RULES (CRITICAL)
+
+- **NO PROACTIVE SCRIPT EDITS**
+  NEVER proactive edit any script, configuration, or structural file if the user explicitly instructs "DO NOT EDIT ANY FILES/SCRIPTS FOR NOW" or gives a similar directive to only investigate/report. Do not ignore this instruction under *any* circumstances, even if you spot an obvious or trivial bug that is blocking progress. You must report the issue and WAIT for explicit permission to edit.
+
+---
+
 ## 1. Verification, Backup, and Update Protocols
 
 ### 1.1 Mandatory Verification Protocols
@@ -69,6 +76,25 @@ Key rules:
   - Back up the original file under `backup\state_repair_<YYYYMMDD>\`.  
   - Record what changed and why in a small markdown note under `docs\` or `wiki-dec-3\11. Troubleshooting Guide\11.3. State Management Issues\`.
 
+### 1.5 Agreed Implementation Workflow Additions (Word-For-Word)
+
+The following instruction text is intentionally preserved word-for-word from the agreed Oracle/Momus review outcomes and workflow reconstruction:
+
+- "Before any non-trivial implementation, produce a surgical plan for user review that names target files, minimum required fixes, explicit non-goals, edit order, validation order, and rollback scope."
+- "Create `backup/<reason>_<YYYYMMDD>/REVERT_TRACKING.md` before edits; list each planned file, intended scope, planned validation, and exact restore source paths."
+- "When notes, handoffs, memory, and code disagree, current code plus concrete artifacts/logs/outputs are the source of truth; stale handoffs must be marked superseded, not trusted."
+- "After compaction or multi-session interruption, update `.sisyphus/notepads/handoff/session_handoff.md` with authoritative current state, superseded claims, completed work, open questions, next checks, and backup location."
+- "For surgical passes, follow explicit step order: evidence gathering -> plan/review -> backup + revert tracker -> implementation -> targeted verification -> docs/memory updates only if verified and approved."
+- "In plans and reports, separate minimum required fixes from supporting corrections and optional mitigations; do not present plausible mitigations as mandatory work."
+- "Immediately after a compaction event or session resume, you MUST read the latest handoff to re-anchor context and explicitly ignore stale prior interpretations."
+- "Create a `REVERT_TRACKING.md` in the backup directory for every implementation pass, mapping each file to its specific change scope, backup path, and validation status."
+- "Execute implementation tasks in the exact order specified in the approved plan to maintain dependency integrity and prevent cascading failures."
+- "Verify all claims using triangulation across code, logs, and raw run artifacts (e.g., `chat_tool_calls.jsonl`) rather than relying on single-source assertions or heuristic previews."
+- "Before editing, generate a surgical implementation plan for review that identifies the minimum necessary changes to address the root cause without over-scoping."
+- "Perform verification (LSP, compilation, and targeted sanity checks) after each logical phase of implementation, not just at the end of the session."
+- "When internal agent reports or prior handoffs conflict, the current codebase and raw run artifacts are the only authoritative tie-breakers."
+- "Explicitly verify that all prompt-defined placeholders (e.g., `{sandbox_id}`, `{run_id}`) are correctly handled and substituted in the implementation logic."
+
 ---
 
 ## 2. Architecture Overview (Code-Grounded)
@@ -128,6 +154,13 @@ For detailed sequence diagrams and method-level breakdowns, see:
 
 - `wiki-dec-3\3. Core Architecture\3.1. Workflow Engine.md`
 - `wiki-dec-3\5. Data Processing Workflow\5.2. Amazon Product Matching\`
+
+###  No Git Operations During Execution
+Do NOT use git commands for verification. No git operations of any kind during execution.
+
+Do not run any git commands (`pull`, `push`, `fetch`, `merge`, `rebase`, `reset`, `checkout`, `commit`, `stash`, etc.) during automated execution. If git becomes necessary, STOP and ask the user.
+
+Note: ** SPECIALLY WHEN ASKED TO REVERTT CHANGES DO NOT USE GIT CMMANDS ( LIKE:git checkout) , when asked to revert you should trace back your steps and revert any edits based on previous steps/responses executed **.
 
 ### 2.3 Browser Management
 
@@ -513,15 +546,11 @@ import hashlib, pathlib
 h = hashlib.sha256(pathlib.Path(filepath).read_bytes()).hexdigest()[:8]
 ```
 
-Do NOT use git commands for verification. No git operations of any kind during execution.
 
 ### 13.3 Where to Make Changes
 
 Prefer changes in `control_plane/*` and `dashboard/*`. If behaviour needs adjusting in a runner or tool, prefer fixing the control plane layer or regenerating via the supplier-onboarding skill.
 
-### 13.4 No Git Operations During Execution
-
-Do not run any git commands (`pull`, `push`, `fetch`, `merge`, `rebase`, `reset`, `checkout`, `commit`, `stash`, etc.) during automated execution. If git becomes necessary, STOP and ask the user.
 
 ### 13.5 Control Plane Diagnostics
 
@@ -627,7 +656,7 @@ Supermemory gives you the "what" and "how". Serena gives you the "why".
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-** (11605 symbols, 26996 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-** (11674 symbols, 27137 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

@@ -160,6 +160,33 @@ class MetricsLoader:
             },
         }
 
+    def discover_latest_sandbox_supplier(self, base_supplier: str) -> Optional[str]:
+        base_supplier = (base_supplier or "").strip()
+        if not base_supplier or "__sandbox__" in base_supplier:
+            return base_supplier or None
+
+        state_dir = os.path.join(self.base_dir, "OUTPUTS", "CACHE", "processing_states")
+        if not os.path.exists(state_dir):
+            return None
+
+        normalized_base = base_supplier.replace(".", "_").lower()
+        prefix = f"{normalized_base}__sandbox__"
+        suffix = "_processing_state.json"
+        candidates = [
+            filename
+            for filename in os.listdir(state_dir)
+            if filename.startswith(prefix) and filename.endswith(suffix)
+        ]
+        if not candidates:
+            return None
+
+        candidates.sort(
+            key=lambda filename: os.path.getmtime(os.path.join(state_dir, filename)),
+            reverse=True,
+        )
+        sandbox_id = candidates[0][len(prefix) : -len(suffix)]
+        return f"{base_supplier}__sandbox__{sandbox_id}" if sandbox_id else None
+
     def load_state_metrics(self, state_file: str, config_file: str = None) -> Dict[str, Any]:
         """Load state metrics with chunked processing for large JSON files"""
         if not state_file or not os.path.exists(state_file):

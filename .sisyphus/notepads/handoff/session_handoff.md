@@ -1,128 +1,5 @@
 # Deep Session Handoff
 
-## Superseding Addendum - 2026-03-12 Post-Plan Implementation
-
-This addendum supersedes any earlier handoff statements that said transcript persistence was optional or that implementation had not started.
-
-Current authoritative state:
-- The surgical implementation has now been applied in the allowed file set only.
-- Transcript persistence is now treated as a required implemented feature, not an optional enhancement.
-- The old statements in this handoff that say transcript persistence is optional are now stale and should be ignored.
-- Optional mitigations `H` and `I` remain unimplemented by design.
-
-### What Was Implemented
-- `A` implemented in `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-  - Added explicit product-list resume routing rules.
-  - Added explicit distinction between product-list resume and category sandbox resume.
-- `B` implemented in `control_plane/chat_orchestrator.py`
-  - Added deterministic wrong-tool rewrite for product-list resume requests inside `agent_plan_step(...)`.
-  - If the model chooses `enqueue_run` for a resume-style request with no category URLs but active context has `last_products_path` and `last_supplier_domain`, the backend rewrites to `enqueue_product_list_refresh`.
-- `C` implemented in `control_plane/chat_orchestrator.py`
-  - `_normalize_sandbox_suffix(...)` now canonicalizes bare 8-char suffixes and full UUID-style values to `sandbox__<id>`.
-- `D` implemented in `control_plane/chat_orchestrator.py`
-  - Added narrowly scoped legacy sandbox alias recovery for resume lookup only.
-  - This is used in contextual candidate scoring and in category subset recovery.
-  - It is not propagated into tool or workflow layers.
-- `E` implemented in `dashboard/api.py`
-  - `/api/chat/reset` now clears `last_run_id`, `last_products_path`, `last_supplier_domain`, and `last_sandbox_supplier`.
-  - Reset now starts a new chat session id after persisting the prior one.
-- `F` implemented in `control_plane/chat_orchestrator.py`
-  - `{sandbox_id}` placeholder substitution now works in expected output previews.
-- `G` implemented in `control_plane/worker.py`
-  - Exit-code-0 runs that contain known semantic abort markers are now marked `failed` rather than `done`.
-- `J` implemented in `dashboard/api.py`, `control_plane/audit.py`, and `control_plane/paths.py`
-  - Per-session transcript persistence now writes distinct files under `OUTPUTS/CONTROL_PLANE/transcripts/session_<session_id>.json`.
-  - Transcripts are persisted before RAM wipe on `/api/chat/reset`.
-  - Transcripts are also persisted on final answer, step-limit final answer, approval rejection, and approval execution.
-
-### Files Edited In This Implementation Pass
-- `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-- `control_plane/chat_orchestrator.py`
-- `dashboard/api.py`
-- `control_plane/audit.py`
-- `control_plane/paths.py`
-- `control_plane/worker.py`
-- `backup/chat_resume_surgical_20260312/REVERT_TRACKING.md`
-
-### Backup Set Created Before Editing
-- Root backup dir: `backup/chat_resume_surgical_20260312/`
-- Backed up files:
-  - `backup/chat_resume_surgical_20260312/.sisyphus/notepads/handoff/session_handoff.md`
-  - `backup/chat_resume_surgical_20260312/dashboard/api.py`
-  - `backup/chat_resume_surgical_20260312/control_plane/chat_orchestrator.py`
-  - `backup/chat_resume_surgical_20260312/control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-  - `backup/chat_resume_surgical_20260312/control_plane/audit.py`
-  - `backup/chat_resume_surgical_20260312/control_plane/paths.py`
-  - `backup/chat_resume_surgical_20260312/control_plane/worker.py`
-
-### Prometheus Final Review Outcome
-Prometheus / plan-builder review was performed before coding. The actionable final review was:
-- edit order:
-  1. planner instructions
-  2. `chat_orchestrator.py`
-  3. `dashboard/api.py`
-  4. `control_plane/audit.py`
-  5. change-tracking markdown
-  6. `control_plane/worker.py` last
-- backup set:
-  - create full dated backup for all edited files
-- validation order:
-  - planner routing
-  - sandbox normalization
-  - reset semantics
-  - transcript persistence
-  - worker semantic-abort behavior last
-- risk note:
-  - keep backward-compatibility recovery narrow; do not relax validation broadly
-
-### Verification Performed After Implementation
-- `lsp_diagnostics` run on:
-  - `dashboard/api.py`
-  - `control_plane/chat_orchestrator.py`
-  - `control_plane/audit.py`
-  - `control_plane/paths.py`
-  - `control_plane/worker.py`
-- Results:
-  - no errors
-  - only pre-existing or non-blocking hints remained:
-    - unused imports in `dashboard/api.py`
-    - unreachable-code hint in `control_plane/chat_orchestrator.py`
-    - unused-parameter hint in `control_plane/worker.py`
-- `python -m py_compile` passed for:
-  - `dashboard/api.py`
-  - `control_plane/chat_orchestrator.py`
-  - `control_plane/audit.py`
-  - `control_plane/paths.py`
-  - `control_plane/worker.py`
-- runtime sanity check passed:
-  - `_normalize_sandbox_suffix('a7ce7aa2', 'ignored-run-id')` -> `sandbox__a7ce7aa2`
-  - `_normalize_sandbox_suffix('', '12345678-aaaa-bbbb-cccc-1234567890ab')` -> `sandbox__12345678`
-  - `write_session_transcript('sanitycheck', {'ok': True})` created a session transcript successfully, then the disposable file was removed
-
-### Important Behavioral Changes
-- FastAPI chat sessions now have explicit `session_id` and `session_started_at` stored in RAM state.
-- `chat_state["trace"]` is now populated during the streaming loop so persisted session files can contain meaningful step traces rather than an always-empty trace list.
-- Reset now persists the current session file before wiping RAM and then starts a fresh session id.
-- Current source still contains New Chat button and SSE trace plumbing. This implementation does not add cache-busting or change visible explanation wording.
-
-### Still Not Implemented
-- `H` cache-busting query strings for static assets
-- `I` stronger explanation wording for richer visible step rationale
-
-### Current Open Questions After Implementation
-- UNKNOWN (not verified): whether the live browser symptom that previously hid New Chat or step trace was caused by stale assets, different deployment, or another runtime issue.
-- UNKNOWN (not verified): whether the new transcript persistence should later be mirrored into append-only audit JSONL as well as per-session files. Current implementation only guarantees distinct per-session JSON files.
-
-### Continuation Guidance From This Point
-- Do not resume from the earlier "plan-only" state in this handoff.
-- The implementation is now in place and the next session should focus on targeted behavioral validation against the known problematic resume scenarios.
-- Highest-priority regression checks next session:
-  1. product-list resume now routes to `enqueue_product_list_refresh`
-  2. malformed bare suffixes are normalized to `sandbox__<id>`
-  3. `/api/chat/reset` clears all `last_*` keys
-  4. per-session transcript files are written before RAM reset
-  5. semantic-abort log markers now land in failed status rather than done
-
 ## Phase 1 - Work Type Classification
 
 Primary work type:
@@ -134,711 +11,772 @@ Primary work type:
 - [ ] RESEARCH
 
 Secondary work types that materially applied in this session:
+- CODE_IMPLEMENTATION
 - ARCHITECTURE
 - RESEARCH
 - DOCUMENTATION
 
-Reason for primary classification:
-- This session was primarily a read-only debugging / root-cause investigation of FastAPI chat, control-plane resume behavior, planner tool choice, sandbox naming, reset semantics, status reporting, and stale UI hypotheses.
-- No production code was edited for the underlying bug set during the investigation phase.
-- The user explicitly asked for a comprehensive report and surgical implementation plan for review before any implementation.
+Why DEBUGGING is primary:
+- The dominant thread across the full session was repeated root-cause investigation of inconsistent FastAPI chat behavior, resume failures, sandbox lineage mistakes, dashboard metrics confusion, transcript persistence gaps, and workflow artifact mismatches.
+- A surgical implementation pass did happen earlier in this same session lineage, but most of the session volume and the latest active state were about validating, correcting, and extending the debugging findings.
+- The ending state of the session is not "feature build complete"; it is "implementation already landed in a prior subphase, then extensive post-implementation investigation/reporting uncovered additional workflow issues and clarified what is and is not broken."
 
----
+## Authority Order - Read This First
+
+This handoff supersedes older contradictory continuity notes.
+
+Authoritative order for future continuation:
+1. Direct code/artifact evidence from the current repo and output files.
+2. This handoff.
+3. `backup/chat_resume_surgical_20260312/REVERT_TRACKING.md` for the earlier surgical implementation pass.
+4. Existing transcript/session artifacts under `OUTPUTS/CONTROL_PLANE/transcripts/`.
+5. Older handoff claims only if re-verified.
+
+Superseded / stale statements that must NOT control future reasoning:
+- "FastAPI never injected active context".
+- "New Chat was not added in source".
+- "Transcript persistence was still optional / not implemented".
+- "The session is still in plan-only state before any surgical implementation".
+- "Cache-busting is the proven root cause of the live UI mismatch".
+- "Product-list resume failure is only a suffix-normalization bug".
+
+Current authoritative end-state at handoff time:
+- The repo is post-surgical-implementation for the earlier chat/resume fix pass in allowed files only.
+- That implementation pass was backed up under `backup/chat_resume_surgical_20260312/` and tracked in `backup/chat_resume_surgical_20260312/REVERT_TRACKING.md`.
+- After that implementation, the user reran multiple workflows and requested a new read-only triangulation of the resulting behaviors.
+- The latest state is therefore: implementation exists, read-only validation/investigation continued, and a further detailed implementation plan for the newly uncovered workflow issues has NOT yet been generated.
 
 ## Phase 2 - Universal Foundation
 
 ### 1. Session Metadata
+
 - Session ID: `ses_325d21b4effeGxyxq3jsXPXr1p`
-- Work Type: `DEBUGGING` (primary), `ARCHITECTURE` / `RESEARCH` / `DOCUMENTATION` (secondary)
-- Duration: `1 days, 7 hours` according to `session_info`
+- Work Type: `DEBUGGING` primary; `CODE_IMPLEMENTATION`, `ARCHITECTURE`, `RESEARCH`, `DOCUMENTATION` secondary
+- Message Count: `280`
+- Date Range: `2026-03-10T23:56:06.795Z` to `2026-03-13T04:34:30.631Z`
+- Duration: `2 days, 4 hours`
 - Token Utilization: `UNKNOWN (not verified)`
-- Context Window Target Mentioned By User: `600K token Gemini 3.1 Pro session`
-- Compaction Events: current session metadata shows agent list includes `compaction`; exact count `UNKNOWN (not verified)`
+- Compaction Events: session metadata shows `compaction`; exact count `UNKNOWN (not verified)`
 - Models Used:
-  - Current agent runtime: `openai/gpt-5.4`
-  - User continuity target: `Gemini 3.1 Pro 600K` (from user handoff instruction)
+  - runtime model: `openai/gpt-5.4`
+  - user continuity target: `Gemini 3.1 Pro 600K`
 - Start Time: `2026-03-10T23:56:06.795Z`
-- End Time for this handoff write: `2026-03-12` current local session time; exact ISO end timestamp `UNKNOWN (not verified at write time)`
-- Current repository path: `C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`
+- End Time at handoff generation: `2026-03-13` current session end context; exact final write timestamp will be implied by file mtime
+- Current working directory: `C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`
 - Platform: `Windows`
-- Git repository: `No (per environment metadata)`
+- Shell used during session: PowerShell via CLI/bash wrapper where needed
+- Git repo present: `No`
 
 ### 2. Executive Objective
-Produce an evidence-backed, read-only investigation of the FastAPI chat / control-plane behavior, correct earlier misinterpretations, verify disputed findings through triangulation, generate an updated comprehensive report plus a surgical fix plan for user review, and then write a continuity-grade handoff for compaction / next-session continuation.
+
+Produce a fully evidence-backed understanding of the FastAPI chat/control-plane system after the earlier surgical implementation pass, explain inconsistent resume/workflow behavior using triangulation across code and artifacts, identify what is truly broken versus merely confusing by design, and preserve all of that in a continuity handoff that a future agent can resume from without asking clarifying questions.
 
 ### 3. Session Narrative Arc
 
 #### Where we started
-- The session began with a user request to investigate previously observed issues in the FastAPI chat UI / control-plane behavior.
-- The user explicitly required a read-only investigation at first: no code edits, no background agents performing edits, and only an extensive detailed report.
-- The user wanted triangulation across multiple sources of truth:
-  - existing handoff notes
-  - current code
-  - run artifacts
-  - logs
-  - job/status files
-  - generated outputs
-  - expected output predictions
-- The user also wanted answers to specific questions:
-  - where injected prompt context comes from
+
+- The session began from a stale inherited handoff that overemphasized a Streamlit-vs-FastAPI mismatch and suggested some prior assumptions that no longer matched the current code.
+- The user wanted a read-only investigation first, not implementation.
+- The user required multiple sources of truth for every conclusion: code, logs, job files, status files, processing states, linking maps, expected outputs, transcript artifacts, and pasted chat transcripts.
+- The user specifically wanted answers about:
+  - how injected chat context is actually sourced
   - whether restarting `uvicorn` refreshes that context
-  - why the New Chat button "wasn't added"
-  - any other issues discovered
-- The initial inherited handoff in `.sisyphus/notepads/handoff/session_handoff.md` strongly asserted a Streamlit-vs-FastAPI architecture mismatch and claimed prior fixes were irrelevant to FastAPI.
+  - why New Chat seemed absent
+  - why resume behavior was inconsistent across product-list and category sandbox workflows
+  - whether the failures were caused by recent changes or were older issues newly exposed
 
-#### The exploration path
-- We first read the existing handoff and compared its claims against the current codebase instead of trusting it.
-- We inspected `dashboard/api.py` and `control_plane/chat_orchestrator.py` to verify whether FastAPI actually passed active context into planner hints and prompt construction.
-- We then inspected `dashboard/templates/index.html` and `dashboard/static/js/app.js` to verify whether the New Chat button and SSE trace UI existed in current source.
-- Next, we investigated resume behavior by reading:
-  - `control_plane/tools/product_list_refresh.py`
+#### How the investigation unfolded
+
+- First, the existing handoff was treated as a hypothesis, not truth.
+- The current FastAPI backend path was read directly in `dashboard/api.py`.
+- The current planner/prompt path was read directly in `control_plane/chat_orchestrator.py`.
+- The frontend path was verified in `dashboard/templates/index.html` and `dashboard/static/js/app.js`.
+- Control-plane run execution and status handling were inspected in `control_plane/worker.py` and job/status/log artifacts under `OUTPUTS/CONTROL_PLANE/`.
+- Product-list refresh behavior was investigated using `control_plane/run_product_list_refresh.py` plus concrete output files.
+- Resume behaviors were checked using real run IDs instead of code-only reasoning.
+- `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl` was used to prove which tool the model actually selected in bad resume scenarios.
+- Internal review agents were used to cross-check specific claims, but direct code/artifact evidence was treated as higher authority when agent outputs were stale or memory-polluted.
+
+#### The first major breakthrough
+
+- The old handoff was materially stale.
+- Current FastAPI chat absolutely does use in-memory `chat_state` and passes it into `agent_plan_step(...)`.
+- Current prompt assembly absolutely does include an `<active_context>` block when planner hints exist.
+- That eliminated one major false theory and shifted the session from "architecture mismatch" toward "resume semantics, partial reset, and observability correctness."
+
+#### The second major breakthrough
+
+- The New Chat button was found in current source.
+- The live symptom of not seeing it therefore could not be explained by "feature missing in code".
+- The issue became either partial reset, stale assets, or a deployment/runtime mismatch rather than missing source implementation.
+
+#### The third major breakthrough
+
+- Product-list refresh jobs themselves were correctly sandboxed.
+- The bad lineage was introduced later during resume in certain scenarios.
+- That refined the failure model from "product refresh is fundamentally broken" to "resume path can select the wrong tool family and/or malformed lineage."
+
+#### The fourth major breakthrough
+
+- Wrong-tool selection was proven to be a real issue, not just a side effect of malformed sandbox suffixes.
+- The audit JSONL showed product-list resume prompts sometimes triggered `enqueue_run` rather than `enqueue_product_list_refresh`.
+- That meant the planner path and the naming path both mattered.
+
+#### The implementation subphase
+
+- After the report/plan stage, a surgical implementation pass landed in allowed files only.
+- Implemented files in that pass:
+  - `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
   - `control_plane/chat_orchestrator.py`
+  - `dashboard/api.py`
+  - `control_plane/audit.py`
+  - `control_plane/paths.py`
   - `control_plane/worker.py`
-  - job/status/log/override files under `OUTPUTS/CONTROL_PLANE/...`
-  - processing states under `OUTPUTS/CACHE/processing_states/...`
-- We matched code behavior to concrete runs using specific run IDs rather than reasoning from code alone.
-- We also inspected `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl` to confirm which planner tool the LLM actually selected in the problematic resume scenarios.
-- After establishing a first-pass report, the user supplied a second agent's report extract claiming several missed or understated findings.
-- We then re-investigated each disputed point in depth:
-  - wrong tool selection vs wrong suffix
-  - cache-busting
-  - SSE reasoning-step visibility
-  - transcript persistence
-- We consulted multiple internal agents:
-  - explore agents for resume/tool-selection and frontend/transcript/cache issues
-  - oracle for correctness / blind-spot validation
-  - Momus (Plan Critic) for scope control on the surgical fix plan
+- That pass added planner routing rules, backend rewrite guard, sandbox canonicalization, narrow alias recovery, reset cleanup, placeholder support, semantic-abort detection, and per-session transcript persistence.
+- That implementation was backed up in `backup/chat_resume_surgical_20260312/` and documented in `backup/chat_resume_surgical_20260312/REVERT_TRACKING.md`.
 
-#### Key discoveries made along the way
-- The old handoff is materially stale for the current codebase.
-- Current FastAPI chat **does** use `chat_state` and **does** pass it into `agent_plan_step(...)`.
-- Current prompt assembly **does** inject `<active_context>` from FastAPI state; the old handoff’s blanket statement that FastAPI never populated planner hints is false for current code.
-- The New Chat button already exists in current source.
-- The real New Chat problem is partial reset, not absence of the button in source.
-- Product-list refresh jobs themselves are correctly sandboxed.
-- The bad non-sandbox lineage is introduced later during resume, not during the original refresh job.
-- Product-list resume failures are not caused by only one thing:
-  - there is a wrong-tool problem in the planner path for product-list resume
-  - there is also a sandbox naming mismatch in `enqueue_run` resume handling
-- The category-resume case that looked fixed was actually a false positive caused by reusing a previously created malformed non-sandbox fork.
-- Expected output previews are heuristic and can be wrong.
-- Worker status can say `done` even when workflow semantics clearly aborted.
+#### The post-implementation validation/investigation phase
 
-#### How direction shifted based on findings
-- Early direction: validate whether the stale handoff’s Streamlit-vs-FastAPI explanation was still true.
-- First pivot: once we confirmed FastAPI `chat_state` is actually wired into planner hints and `<active_context>`, the session changed from “architecture mismatch” to “current FastAPI state + resume semantics + UI reset correctness”.
-- Second pivot: after verifying the New Chat button existed in source, the question changed from “why wasn’t it added?” to “why did the live UI behave as if it wasn’t there?” and “what is reset actually clearing?”
-- Third pivot: after comparing initial product-list refresh jobs to later resume jobs, the root cause shifted from “refresh resume broke state” to “resume selected the wrong path and created a new malformed lineage.”
-- Fourth pivot: after the second agent’s report extract, we explicitly re-tested whether wrong tool choice was merely a consequence of bad suffix handling or a deeper independent issue.
-- Fifth pivot: after Oracle and Momus review, the plan was tightened to distinguish core required fixes from optional mitigations.
+- The user reran multiple workflows after the surgical fixes.
+- That created a new branch of investigation focused on what still failed or behaved confusingly.
+- The user wanted the new runs analyzed with the same triangulation rigor.
+- This phase looked at:
+  - category sandbox runs and interruptions
+  - product-list refresh runs and interruptions
+  - dashboard metrics sourcing
+  - transcript persistence behavior versus desired visible-chat persistence
+  - why one Clearance King category (`car-accessories`) repeatedly produced zero extracted products
+  - whether category-sandbox lineage handling and product-list same-run-id handling were truly broken or just hard to audit
 
-#### Side investigations (including dead ends or incomplete branches)
-- We explored whether the old handoff’s explanation about missing FastAPI active-context injection was still accurate; it was not.
-- We checked whether the current source truly lacked a New Chat button; it did not.
-- We explored whether missing visible reasoning steps were caused by stale JS alone; this remained unproven.
-- We explored whether transcript persistence should be in the essential fix set; conclusion: no, not for this bug cluster.
-- Two late explore agents launched specifically for handoff mining returned stale / mixed conclusions drawn from older memory context and are **not** authoritative for current-session facts; do not rely on them over direct code/artifact evidence.
+#### The car-accessories deep dive
 
-#### Where we ended and why
-- We ended with a verified, evidence-backed report and a surgical implementation plan for user review, not implementation.
-- We also ended with reviewer feedback from Oracle and Momus that tightened the wording and scope:
-  - treat cache-busting as optional mitigation, not proven root cause
-  - keep transcript persistence out of the core fix set
-  - distinguish minimum required fixes from recovery / preview / status improvements
-- The final continuity need is to preserve this corrected state for compaction and future continuation so the next agent does **not** revert to the stale Streamlit-centered narrative in the previous handoff.
+- A focused investigation showed the page itself is real and accessible, but the workflow repeatedly failed its browser-backed fetch path for that category.
+- Authentication succeeded.
+- Category override loading succeeded.
+- The failure occurred before usable HTML/product extraction in the browser-backed path.
+- This established that `0 products` there means "workflow failed to fetch/process the page", not "the storefront category actually contains zero products".
+
+#### The dashboard/discrepancy deep dive
+
+- The dashboard was verified to still rely on `dashboard_legacy_streamlit/metrics_core.py` through `dashboard/api.py`.
+- That means selecting a base supplier often resolves base supplier files and `logs/debug`, not the newest sandbox lineage under control-plane outputs.
+- This explained why the dashboard could look stale or inconsistent even when sandbox artifacts existed and were correct.
+
+#### The product-list financial-report deep dive
+
+- The user later noticed product-list runs were not generating financial reports.
+- Further investigation showed the problem is not only Amazon cache path mismatch.
+- The deeper issue is that the product-list refresh path writes Amazon cache under run-scoped overrides, does not write the sandbox supplier cache the financial calculator also expects, and does not invoke the financial calculator at all.
+- Therefore the missing report is a multi-part gap, not a single-path bug.
+
+#### Where we ended
+
+- We ended with:
+  - an earlier surgical implementation already present in the repo
+  - a large read-only validation/investigation layer completed after that implementation
+  - a concise summary delivered to the user for the newly identified workflow issues
+  - no detailed follow-up implementation plan for those newly identified workflow issues yet
+- The next agent should therefore resume from a post-implementation, post-investigation state and should not assume either:
+  - that the repo is still pre-implementation, or
+  - that the newly identified workflow issues already have an approved fix plan.
 
 ### 4. User Direction Changes & Corrections
 
 #### Initial approach
-- Initial approach in this session: perform a read-only investigation and generate a detailed report.
+- Read-only investigation only, no edits, no speculative claims.
 
 #### Direction Change #1
-- What you told me: do not edit any files for now; background agents must also be read-only; generate only an extensive detailed report.
-- New approach: fully read-only investigation; no code edits; use background agents only for analysis.
-- Files affected: none (read-only phase).
+- What the user said: do not edit any files for now, and ensure any agents launched are also read-only.
+- New approach: all initial exploration was strictly read-only; any delegated task prompt explicitly prohibited edits.
+- Files affected: none during that phase.
 
 #### Direction Change #2
-- What you told me: use triangulation with as many sources of truth as needed; review handoff, pasted chat context, referred files, generated files, whether present or absent.
-- New approach: artifact-first investigation across code, logs, status files, job payloads, overrides, processing states, audit JSONL, and prior handoff.
-- Files affected: read-only inspection of `dashboard/api.py`, `control_plane/chat_orchestrator.py`, `control_plane/tools/product_list_refresh.py`, `control_plane/worker.py`, run artifacts under `OUTPUTS/CONTROL_PLANE`, processing states under `OUTPUTS/CACHE`, and the old handoff file.
+- What the user said: use triangulation and as many sources of truth as needed.
+- New approach: every major conclusion was cross-checked against code plus at least one or more of logs, statuses, processing states, linking maps, expected outputs, transcripts, or external fetch evidence.
+- Files affected: multiple read-only inspections across `dashboard/`, `control_plane/`, `OUTPUTS/`, and `.sisyphus/notepads/handoff/`.
 
 #### Direction Change #3
-- What you told me: verify how the chat retrieves injected information and why New Chat wasn’t added.
-- New approach: inspect current FastAPI path and frontend source directly rather than inferring from prior docs.
-- Files affected: `dashboard/api.py`, `dashboard/templates/index.html`, `dashboard/static/js/app.js`, `control_plane/chat_orchestrator.py`.
+- What the user said: verify where injected context comes from and why New Chat was not added.
+- New approach: direct inspection of `dashboard/api.py`, `control_plane/chat_orchestrator.py`, `dashboard/templates/index.html`, and `dashboard/static/js/app.js`.
 
 #### Direction Change #4
-- What you told me: after reading the other agent’s report extract, verify whether those points were correct or misinterpreted and update the report and plan accordingly.
-- New approach: re-open investigation and explicitly verify C1-C4 (wrong tool, cache-busting, SSE reasoning visibility, transcript persistence) rather than only defending the prior report.
-- Files affected: `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl`, `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`, `dashboard/api.py`, `dashboard/static/js/app.js`, `control_plane/audit.py`, `control_plane/tools/product_list_refresh.py`, `control_plane/worker.py`.
+- What the user said: after another agent's report was supplied, re-check whether some earlier conclusions missed important factors.
+- New approach: re-opened investigation on wrong-tool selection, cache-busting, transcript persistence, visible SSE reasoning, and later workflow-specific issues.
 
 #### Direction Change #5
-- What you told me: once the updated report and plan are complete, run Oracle and Momus to verify correctness and ensure the plan is surgical.
-- New approach: consult Oracle and Momus after synthesizing the report / plan, then incorporate their critique before finalizing handoff.
-- Files affected: no code edits; analysis and review only.
+- What the user said: run Oracle and Momus review once the report/plan is complete.
+- New approach: reviewer agents were used to sharpen certainty language and keep the implementation scope surgical.
 
 #### Direction Change #6
-- What you told me: generate a full handoff report to be referenced during compaction summary; after handoff, continuation should pick up exactly where it left off until the earlier prompt is fully addressed.
-- New approach: write a new exhaustive handoff that supersedes the stale previous one and preserves the fact that the earlier deliverable is a review-ready report + fix plan, not an implementation yet.
-- Files affected:
-  - `.sisyphus/notepads/handoff/session_handoff.md` (to overwrite with corrected handoff)
-  - backup copy required first
+- What the user said later: before a detailed plan, provide a concise summary of each issue, root cause, and how behavior would look after fixes.
+- New approach: a concise issue summary was produced instead of jumping straight to a full implementation plan.
+
+#### Direction Change #7
+- What the user said after that: generate a full deep-session handoff written to `.sisyphus/notepads/handoff/session_handoff.md`, plus at least 12 Supermemory entries.
+- New approach: current work pivoted to continuity preservation rather than drafting the detailed plan.
 
 ### 5. Exact User Requirements (verbatim where possible)
+
+- "MAKE SURE YOU DONT EDIT ANYFILES AND HWHENEVER YOU LAUNCH ANY AGENT/BACKGRUND TASKS, INCLUDE INSTRUCTIONS STATNIG THE SAME"
+- "I ONLY EXPECT A DETAILED REPORT WITH AL YOUR FINDINGS/ANALYSES"
+- "AS ALWAYS USING TRIANGUALTION ANALYSIS/APPROACH"
+- "WHEN LISTING YOUR SUGGESTIONS MAKE SURE YOU PROVIDE REAL LIFE USE CASES/EXAMPLES"
 - "MAKE SURE YOU DONT EDIT ANY FILES FOR NOW"
-- "MAKE SURE WHENVER ANY AGENTS ARE LAUNCHED YOU INSTUCT THEM NOT TO PERFORM ANY EDITS."
-- "YOU WILL ** ONLY GENERATE AN EXTENSIVE A DETAILED REPORT"
 - "YOU WILL USE TRIANGULATION APPROACH"
-- "I EXPECT YOU TO GO THROUGH EVERY CHAT I PASTED BELOW, ALL THE DIFFERENT FILES REEFERED BELOW AND THE GERNATED FILES"
-- "ALSO WHILE YOURRE AT IT, I WANT YOU TO CONFIRM HOW AND FROM WHERE IS THE CHAT RETIEVING THE INFORMATION WHICH IS BEING INJECTED ALONG WITH EVERY PROMPT I NIPUTE"
-- "AND OF COURSE WHY 'NEWCHAT BUTTON WASNT ADDED.'"
-- "YOU WILL ALSO OF COURSE MENTION ANY OTHER ISSUE ( OR ISSUES YOU COME ACCROSS."
-- "once the report and plan are complete you will use @oracle and @Momus (Plan Critic)"
-- "** once the report and plan have gon through and includeed all the above ... you will generate i for me to review prior to iiimplementing it. **"
-- "generate a hadoff report that you willr efernce during the compaction summary"
-- "nce you complete the handoff reprt in full, you will continue as you were from exactly where you left off until youd have completed answered/addressed my earlier pmpt/youd have generated the complete report and plan needed"
+- "I EXPECT YOU TO GO THROUGH EVERY CHAT I PASTED BELOW, ALL THE DIFFERENT FILES REFERRED BELOW AND THE GENERATED FILES"
+- "ALSO WHILE YOU'RE AT IT, I WANT YOU TO CONFIRM HOW AND FROM WHERE IS THE CHAT RETRIEVING THE INFORMATION WHICH IS BEING INJECTED ALONG WITH EVERY PROMPT"
+- "AND OF COURSE WHY NEWCHAT BUTTON WASNT ADDED"
+- "once the report and plan are complete you will use @oracle and @Momus"
+- "once i have a clear picture on each one of them i will ask you to generate the detailed plan"
+- For this handoff step: output must be written to `.sisyphus/notepads/handoff/session_handoff.md` and Supermemory must be updated with at least 12 atomic facts.
 
 ### 6. Environment + Constraints
-- Current working directory: `C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`
+
+- Working directory: `C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`
 - OS: `Windows`
-- Shell environment used for backup copy: `PowerShell via bash tool`
-- Git repo present: `No`
-- Git operations allowed: `No` (explicitly forbidden by repo instructions and user preference)
-- Protected files: do not edit `tools/passive_extraction_workflow_latest.py`, `tools/configurable_supplier_scraper.py`, or `run_custom_*.py`
-- User preference: keep fixes surgical and confined to `control_plane/*` and `dashboard/*`
-- This investigation phase was intentionally read-only except for writing this handoff and its required backup
-- Existing handoff backup created at:
-  - `backup/session_handoff_refresh_20260312/session_handoff.md`
-- Important caveat:
-  - the older handoff content currently in `.sisyphus/notepads/handoff/session_handoff.md` before overwrite was stale and Streamlit-centered; do not continue from it.
+- Git repository: none
+- No git operations allowed
+- Protected files remain read-only by policy:
+  - `tools/passive_extraction_workflow_latest.py`
+  - `tools/configurable_supplier_scraper.py`
+  - all `run_custom_*.py`
+- User preference: surgical fixes only; confine modifications to `control_plane/*` and `dashboard/*` whenever possible
+- User preference: backup every edited file before modifying it
+- User preference: maintain / create `REVERT_TRACKING.md` for implementation passes
+- User preference: no extra features, no unsolicited scope expansion
+- Current backup created for this handoff overwrite: `backup/session_handoff_refresh_20260313/session_handoff.md`
 
 ### 7. Topic Inventory - Everything Discussed This Session
 
 #### Primary Topics
-- FastAPI prompt injection path — confirmed current active-context data flow
-- New Chat button / reset semantics — button exists, reset incomplete
-- Product-list resume failure — wrong tool + sandbox naming mismatch
-- Category resume false-positive — malformed non-sandbox fork reused
-- Empty `categories_subset.json` aborts — caused by strict supplier-name equality after malformed resume
-- Expected output path prediction — heuristic / preview-only, not authoritative runtime truth
-- Worker false `done` state — semantic aborts can still land in `done`
+- FastAPI active-context injection path
+- New Chat source presence versus live behavior
+- Product-list resume wrong-tool selection
+- Sandbox suffix normalization and malformed lineage creation
+- Category resume fallback and empty `categories_subset.json`
+- Expected outputs preview correctness
+- Worker semantic-abort versus false `done`
+- Earlier surgical implementation pass and its verification
+- Category sandbox validation after user reruns
+- Product-list refresh validation after user reruns
+- Dashboard metrics sourcing and stale/sandbox mismatch
+- Transcript persistence versus desired full visible-chat persistence
+- Clearance King `car-accessories` repeated zero-extraction case
+- Product-list missing financial report generation
+- Product-list log overwrite/continuation behavior
+- Dashboard latest-file-by-timestamp request and lineage risks
+- Additional matching-quality risk in linking maps
 
 #### Secondary Topics Explored
-- Whether old handoff remained accurate — it did not
-- Whether stale browser assets plausibly explain missing live button / trace — plausible, not proven
-- Whether SSE reasoning-step visibility was broken in current code — not proven; code path exists
-- Whether transcript persistence is essential to this fix set — no, observability only
-- Whether product-list resume could be handled by `enqueue_product_list_refresh` with the same run ID — yes
+- stale browser assets / cache-busting as a possible but unproven UI mismatch factor
+- whether SSE trace pipeline was broken in source (not proven)
+- whether transcript persistence was required for the core resume bug cluster (not required)
+- whether different category/product-list lineage models are truly broken or mostly design choices with auditability issues
+- whether interruptions themselves deleted data (generally no; observed totals matched outputs)
 
 #### Investigations (Completed)
-- Existing handoff validity → stale / misleading for current code
-- FastAPI state injection path → confirmed via `dashboard/api.py` and `control_plane/chat_orchestrator.py`
-- New Chat presence in source → confirmed in template + JS + API
-- Reset completeness → confirmed incomplete
-- Original product-list refresh namespace formation → confirmed correct sandboxing
-- Resume path namespace formation → confirmed malformed non-sandbox lineage possible
-- Actual tool selection in bad resume cases → confirmed in `chat_tool_calls.jsonl`
-- Empty override subset cause → matched to strict supplier equality
-- Worker semantic status labeling → confirmed `done` can hide semantic abort
-- Oracle / Momus review → completed and incorporated
+- old handoff validity check
+- FastAPI planner/state injection verification
+- frontend New Chat / SSE source verification
+- partial reset verification
+- product-list refresh happy-path sandbox verification
+- bad resume tool-family verification via audit JSONL
+- bad resume lineage verification via generated files
+- category sandbox lineage interpretation
+- product-list same-run-id resume interpretation
+- transcript persistence path verification
+- dashboard metric source verification
+- car-accessories category failure deep dive
+- product-list interruption snapshot versus final state comparison
+- product-list financial-report pathing investigation
+- log overwrite / append feasibility investigation
+- dashboard latest-file selection risk investigation
+- reviewer completeness / scope review for handoff generation
 
 #### Investigations (Incomplete / Open)
-- Exact reason the live browser instance lacked a visible New Chat button despite current source containing it → UNKNOWN (not verified)
-- Exact reason some live traces may have shown only "Thinking" instead of step trace → UNKNOWN (not verified)
-- Whether future implementation should include transcript persistence → not required for current bug cluster; decision still open if user wants observability improvements
+- precise low-level browser exception behind `car-accessories` fetch failure remains UNKNOWN
+- whether live missing/hidden UI behavior was stale assets, deployment mismatch, or another runtime factor remains UNKNOWN
+- detailed implementation plan for the newly discovered workflow issues has not yet been written
+- dashboard base-vs-latest-sandbox preference is still undecided by user
 
 #### External Resources Consulted
-- External web documentation: none in this session
-- Internal agent consultations:
-  - resume tool-selection explore
-  - frontend cache / SSE / transcript explore
-  - Oracle validation
-  - Momus scope critique
-- Internal session metadata tools:
-  - `session_list`
-  - `session_info`
+- `https://www.clearance-king.co.uk/car-bike/car-accessories.html` via external fetch
+- `https://www.clearance-king.co.uk/auto-accessories/car-accessories.html` via external fetch
+- No third-party documentation or GitHub issues were used in the latest branch
 
 #### Tools / Technologies Discussed
-- FastAPI chat path in `dashboard/api.py`
-- frontend JS in `dashboard/static/js/app.js`
-- prompt/planner construction in `control_plane/chat_orchestrator.py`
-- planner instructions in `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-- refresh enqueue path in `control_plane/tools/product_list_refresh.py`
-- worker terminal state logic in `control_plane/worker.py`
-- audit logging in `control_plane/audit.py`
-- artifact locations under `OUTPUTS/CONTROL_PLANE/*` and `OUTPUTS/CACHE/*`
+- FastAPI
+- SSE event streaming
+- control-plane job/status/log system
+- processing-state files under `OUTPUTS/CACHE/processing_states`
+- linking maps under `OUTPUTS/FBA_ANALYSIS/linking_maps`
+- financial reports under `OUTPUTS/FBA_ANALYSIS/financial_reports`
+- transcript persistence under `OUTPUTS/CONTROL_PLANE/transcripts`
+- Amazon cache handling under both canonical and run-scoped override paths
 
-#### Key Terms / Concepts Defined This Session
-- Product-list resume wrong-tool issue: planner selected `enqueue_run` for a previously cancelled product-list refresh resume
-- Resume sandbox naming mismatch: `_normalize_sandbox_suffix` accepts bare run fragments like `a7ce7aa2`, causing `supplier__a7ce7aa2` instead of canonical `supplier__sandbox__a7ce7aa2`
-- False-positive resume success: later resume appears correct only because it reuses an already malformed lineage
-- Partial reset bug: New Chat clears visible chat but leaves `last_*` context keys in memory
-- Preview / expected-output mismatch: predicted paths are heuristic, not authoritative runtime lineage
-
----
+#### Key Terms / Concepts Defined
+- canonical sandbox lineage = `supplier__sandbox__<id>`
+- malformed lineage = `supplier__<id>` without `sandbox__`
+- snapshot transcript = per-session JSON snapshot of selected chat state
+- raw event log = append-only record of every user-visible SSE event needed to replay the UI
+- mixed-truth state file = a state file where some nested sections are accurate while some top-level/dashboard-facing summary fields are stale or contradictory
 
 ## Phase 3 - Work-Type-Specific Sections (DEBUGGING)
 
 ### Error Pattern Analysis
 
-#### Error / Problem Types Encountered
-- Wrong active-context assumptions from old handoff
-  - Description: prior handoff claimed FastAPI was not populating planner hints / active context
-  - Frequency: foundational to earlier misdirection
-- Resume tool mis-selection for product-list resume
-  - Description: bad resume prompt selected `enqueue_run` instead of `enqueue_product_list_refresh`
-  - Frequency: confirmed in audited product-list resume cases
-- Resume sandbox naming mismatch
-  - Description: `enqueue_run` resume accepted bare suffix fragments and built malformed supplier namespace
-  - Frequency: confirmed in pound / clearance and angel resume lineage
-- Partial reset state leakage
-  - Description: New Chat reset leaves `last_*` values in `chat_state`
-  - Frequency: deterministic in current code
-- Semantic failure mislabeled as done
-  - Description: `worker.py` marks `done` on exit code 0 even when logs show workflow aborted semantically
-  - Frequency: confirmed in specific runs
-- Live UI stale-asset hypothesis
-  - Description: source contains button/trace code, but live UI symptoms suggested old assets or different deployment
-  - Frequency: observed symptom, exact cause unverified
+#### Error Types Encountered
+- stale-hand-off-induced misdiagnosis
+- wrong tool selected for product-list resume
+- malformed sandbox lineage creation
+- partial reset state leakage
+- semantic aborts mislabeled as successful/done in some earlier logic
+- one-category browser-backed fetch failure (`car-accessories`)
+- dashboard reading base supplier artifacts instead of latest sandbox lineage
+- missing financial reports in product-list workflow
+- product-list log history being overwritten/continued instead of preserving attempt history
+- transcript files not reflecting the full visible UI conversation
 
-#### Conditions Triggering Errors / Misbehavior
-- Product-list refresh resumed by vague natural language after cancel:
-  - example user text: `i now want you to resume the session you cancelled from where you left off`
-  - resulting wrong tool in audit: `enqueue_run`
-- Resume logic using bare sandbox suffix such as `a7ce7aa2` or `6c89a211`
-- Product-list resume via `enqueue_run` with no category URLs and malformed sandbox supplier name
-- FastAPI New Chat reset without clearing `last_run_id`, `last_products_path`, `last_supplier_domain`, `last_sandbox_supplier`
-- Worker process exiting 0 despite semantic abort string in logs
+#### Conditions Triggering Errors
+- vague resume request after a cancelled product-list run
+- passing/using bare 8-character suffixes without guaranteed canonicalization
+- category resume via workflow tool with empty/failed category fallback
+- selecting a base supplier in dashboard while latest data is stored in sandbox-specific files
+- product-list refresh completing Amazon matches without writing canonical downstream artifacts needed by the financial calculator
+- same run ID reused in product-list refresh with worker opening one control-plane log file in write mode
 
-#### Concrete Artifact Patterns
-- Initial correct product-list refresh job types:
-  - `run_product_list_refresh`
-- Wrong resumed job types:
-  - `run_workflow`
-- Empty subset file pattern:
-  - `category_urls: []`
-- Log pattern proving semantic failure:
-  - `CUSTOM MODE FAILED: No URLs found in predefined list. Aborting.`
+#### Representative Log / Artifact Patterns
+- bad product-list resume expected outputs showing malformed paths like `poundwholesale_co_uk__a7ce7aa2_processing_state.json`
+- duplicate lineage outputs for both canonical and malformed variants
+- `CUSTOM MODE FAILED` / empty category subsets in bad resume workflows
+- `car-accessories` retry/fetch failure with no successful HTML capture before category completion at zero products
+- status showing `financial_report_exists: false` while refresh counts show matched ASINs and override Amazon cache files
 
 ### Debugging Hypothesis Registry
 
 | Hypothesis | Evidence For | Evidence Against | Status |
 |---|---|---|---|
-| FastAPI was never injecting active context | old handoff said so | `dashboard/api.py` passes `session_state=chat_state`; `chat_orchestrator.py` consumes planner hints and builds `<active_context>` | RULED OUT |
-| New Chat button was never added to current source | live user symptom suggested absence | `dashboard/templates/index.html` and `dashboard/static/js/app.js` show it exists | RULED OUT |
-| Product-list refresh job itself creates bad namespace | malformed states appeared after resume | initial refresh enqueue path uses canonical `__sandbox__<id>` | RULED OUT |
-| Resume failure is only a naming bug | malformed supplier names confirmed | audit proves wrong tool selection also happened | RULED OUT |
-| Resume failure is only a wrong-tool bug | audit proves wrong tool | malformed sandbox suffix also independently corrupts lineage and category recovery | RULED OUT |
-| Missing visible trace is definitely stale JS | no cache-busting, plausible | current backend/frontend trace path exists; no direct runtime proof | PENDING / UNPROVEN |
-| Transcript persistence is required to fix current bug cluster | can help observability | not part of current FastAPI control path, not needed to fix resume/reset bugs | RULED OUT |
-| Worker `done` status is reliable | normal expectation | `worker.py` logic only detects fatal traceback, not semantic abort markers | RULED OUT |
+| FastAPI never injected active context | old handoff said so | `dashboard/api.py` passes `session_state=chat_state`; `chat_orchestrator.py` builds `<active_context>` | RULED OUT |
+| New Chat was never added | live symptom suggested absence | current HTML/JS source contains the feature | RULED OUT |
+| Product-list refresh itself created malformed lineage | malformed files appeared after resume | initial refresh runs were correctly sandboxed | RULED OUT |
+| Resume issue was only suffix naming | malformed files proved naming mattered | audit proved wrong-tool selection also occurred | RULED OUT |
+| Resume issue was only wrong-tool selection | audit supported wrong-tool issue | malformed suffix handling independently corrupted lineage/fallback | RULED OUT |
+| `car-accessories` really had zero products | workflow extracted zero | external fetch proved page is real and populated | RULED OUT |
+| Missing product-list financial reports are explained only by Amazon cache path split | cache path split is real | runner also skips sandbox supplier cache write and financial-calculator invocation | RULED OUT |
+| Dashboard should simply pick the latest timestamp across all files | would show newer-looking data | risks mixing base and sandbox lineages or malformed historical variants | RULED OUT |
+| Same-run-id product-list resume is inherently broken | log confusion exists | resume semantics themselves are intentional and can be correct | RULED OUT |
 
 ### Failed Approaches (DO NOT RETRY)
-1. Trusting the old Streamlit-centered handoff as source of truth -> failed because current FastAPI code contradicts it -> DO NOT RETRY.
-2. Treating the absence of the New Chat button in the live UI as proof the current source lacked the feature -> failed because source already contains it -> DO NOT RETRY.
-3. Explaining product-list resume failure as only a suffix normalization issue -> incomplete because audit logs prove wrong tool selection also happened -> DO NOT RETRY.
-4. Treating cache-busting as a proven root cause -> unsupported by current evidence -> DO NOT RETRY.
-5. Elevating transcript persistence into the essential fix set for this bug cluster -> over-scoped for the confirmed issues -> DO NOT RETRY.
-6. Using stale handoff-mining explore outputs that reintroduced old `_extract_active_context` / Streamlit narrative -> inconsistent with current direct code/artifact evidence -> DO NOT RETRY.
+
+1. Trusting the stale Streamlit-centered handoff without re-verifying current code -> DO NOT RETRY.
+2. Treating live UI symptoms as proof the feature was absent from current source -> DO NOT RETRY.
+3. Explaining product-list resume as only a naming issue -> DO NOT RETRY.
+4. Explaining product-list missing financial reports as only an Amazon-cache-path issue -> DO NOT RETRY.
+5. Treating naive timestamp-latest dashboard selection as automatically safe -> DO NOT RETRY.
+6. Treating interruptions alone as proof data-loss bugs happened -> DO NOT RETRY without artifact comparison.
+7. Treating transcript persistence as equivalent to full visible-chat replay -> DO NOT RETRY.
+8. Trusting agent outputs over direct code/artifact evidence when they conflict -> DO NOT RETRY.
 
 ### Current Debugging Theory
-The currently supported theory is a coupled failure chain:
-1. In product-list resume conversations, the planner can select `enqueue_run` instead of `enqueue_product_list_refresh`.
-2. If `enqueue_run` is selected with a bare suffix like `6c89a211`, `_normalize_sandbox_suffix` accepts it raw.
-3. That creates a malformed supplier lineage like `clearance-king.co.uk__6c89a211` instead of `clearance-king.co.uk__sandbox__6c89a211`.
-4. Resume fallback then tries to recover categories by strict exact supplier-domain equality and fails to match the canonical prior sandbox context.
-5. Empty `category_urls` are written to `categories_subset.json`.
-6. The workflow aborts semantically with "CUSTOM MODE FAILED".
-7. The worker can still report `done` because process exit code is 0 and log parsing only treats fatal tracebacks as failure.
+
+The current highest-confidence understanding is a cluster of related but distinct issues:
+
+1. The earlier core FastAPI chat/resume bugs were real and were surgically implemented in allowed files.
+2. After that implementation, new user reruns showed additional workflow issues that are downstream or adjacent rather than proof the entire earlier fix set failed.
+3. Product-list resume semantics are intentional, but observability and downstream artifact handling remain incomplete.
+4. Category sandbox multiple-control-plane-run-ID behavior is intentional, but auditability and dashboard surfacing remain confusing.
+5. `car-accessories` zero extraction is a browser-fetch/process failure with poor diagnostics, not a true empty category.
+6. Dashboard confusion is primarily a path-resolution and lineage-selection problem.
+7. Product-list missing financial reports is caused by a multi-step downstream gap: run-scoped override cache only, no sandbox supplier cache write, and no financial-calculator invocation.
 
 ### Next Debugging Step
-If the next session is still in report / plan mode, do this first:
-1. Re-read this handoff.
-2. Re-read the validated core fix set A+B+C+E and scoped extras D/F/G.
-3. Do **not** reopen the old Streamlit-centered theory.
-4. If the user asks to implement, implement the approved fix set surgically in `control_plane/*` and `dashboard/*` only.
 
----
+If the next session continues from this handoff, the immediate next debugging/planning action should be:
+- re-state the newly confirmed workflow issues as a separate post-implementation fix set,
+- decide dashboard lineage behavior policy,
+- then draft the detailed surgical implementation plan for those newly discovered issues without re-opening the already settled earlier FastAPI architecture debate.
 
-## Architecture / Decision Registry (Secondary but important)
+## Decision Registry
 
 | Decision | Rationale | Alternatives Considered | Status |
 |---|---|---|---|
-| Treat current FastAPI code and artifacts as authority over old handoff | direct code/artifact evidence outranks stale notes | continue from old handoff | FINAL - DO NOT REVISIT |
-| Split findings into CONFIRMED / LIKELY / UNPROVEN | user asked for maximum precision | collapse all into one certainty level | FINAL - DO NOT REVISIT |
-| Keep implementation plan surgical and review-only | user explicitly asked for review before implementation | implement immediately | FINAL - DO NOT REVISIT |
-| Core required fix set = A+B+C+E | Oracle validated these as minimum necessary for the chat/resume bug cluster | broader implementation immediately | FINAL - DO NOT REVISIT |
-| Recovery / correctness extras D/F/G are separate from minimum bug fix set | they address backward recovery, previews, and worker status correctness | lump all as mandatory core | FINAL - DO NOT REVISIT |
-| Cache-busting belongs in optional mitigation, not proven RCA | plausible stale asset explanation but not directly proven | classify as confirmed root cause | FINAL - DO NOT REVISIT |
-| Transcript persistence excluded from essential fix set | observability improvement, not required to fix current issues | include as required fix | FINAL - DO NOT REVISIT |
+| Current repo/code/artifacts outrank stale handoff notes | direct evidence is stronger than old prose | trust old handoff blindly | FINAL - DO NOT REVISIT |
+| Keep certainty labels explicit (`CONFIRMED`, `LIKELY`, `UNKNOWN`) | user requires evidence-backed precision | flatten all findings into one certainty level | FINAL - DO NOT REVISIT |
+| Keep implementation scope surgical and confined to allowed files | user explicitly required this and protected-file policy enforces it | broad refactor touching tools/runners | FINAL - DO NOT REVISIT |
+| Product-list resume should remain same-run logical continuation when appropriate | this preserves lineage continuity | force new run ID per resume | PREFERRED, NOT YET RE-PLANNED FOR NEW ISSUES |
+| Category sandbox can keep distinct control-plane run IDs with one stable output lineage | behavior is mostly intentional | force one control-plane run ID forever | FINAL AS DESIGN INTERPRETATION |
+| Transcript persistence now exists and is implemented | code + artifacts verify it | continue treating it as hypothetical | FINAL - DO NOT REVISIT |
+| Current transcript persistence is not the same as full UI-visible replay | snapshot design verified in code | assume session JSON already stores every approval/result card | FINAL - DO NOT REVISIT |
+| Product-list missing financial reports are not explained by frequency alone | direct code/artifact evidence shows deeper gaps | blame config frequency only | FINAL - DO NOT REVISIT |
+| Dashboard latest-file strategy must be lineage-aware | broad latest selection is unsafe | naive latest timestamp across all matching files | FINAL - DO NOT REVISIT |
 
 ### Architecture Relationships
+
 ```text
-User message
+User prompt
   -> dashboard/api.py
-       -> chat_state (messages, scratchpad, last_*)
+       -> chat_state (messages, scratchpad, trace, last_*)
        -> agent_plan_step(..., session_state=chat_state)
             -> control_plane/chat_orchestrator.py
-                 -> _compute_planner_hints(..., session_state)
-                 -> build_prompt(..., planner_hints)
-                 -> <active_context>
-                 -> LLM chooses tool
-            -> execute / approval path
-       -> SSE trace_update / final_answer / approval_needed
+                 -> _compute_planner_hints(...)
+                 -> build prompt + <active_context>
+                 -> model chooses tool
+       -> approval flow / execute_tool_call
+       -> session transcript snapshot persistence
 
-Product-list happy path
+Category sandbox path
+  -> enqueue_run
+  -> sandbox supplier lineage
+  -> control-plane run artifacts (run-id-specific)
+  -> processing state / cached products / linking map / reports (lineage-specific)
+
+Product-list path
+  -> build product list
   -> enqueue_product_list_refresh
-       -> same run_id allowed
-       -> canonical supplier__sandbox__<id>
-       -> refresh job type
+  -> same-run-id continuation possible
+  -> override amazon cache + lineage linking map/state
+  -> currently missing canonical downstream financial/report path completion
 
-Bad resume path
-  -> enqueue_run chosen for product-list resume
-       -> bare suffix accepted
-       -> supplier__<id>
-       -> wrong lineage
-       -> strict fallback misses canonical categories
-       -> empty subset
-       -> semantic abort
-       -> worker may still mark done
+Dashboard path
+  -> dashboard/api.py /api/metrics/{supplier}
+  -> dashboard_legacy_streamlit.metrics_core.load_metrics(...)
+  -> base or explicitly named supplier path resolution
+  -> does not automatically surface latest sandbox lineage by default
 ```
 
 ### Open Design Questions
-- [ ] Should the backend keep a deterministic resume rewrite guard even after prompt guidance is improved? Current answer: yes, likely minimal and worthwhile.
-- [ ] Should existing malformed resume lineages be recoverable? Current answer: likely yes via narrowly scoped recovery lookup.
-- [ ] Should cache-busting be implemented now even though it is only a plausible explanation? Current answer: probably yes as optional low-risk mitigation, but do not present it as proven root cause.
-- [ ] Should reasoning-step explanations be made richer than “short user-facing prose”? Current answer: optional only if user wants richer visible trace.
-- [ ] Should per-session transcript persistence be added later? Current answer: open, but not part of essential fix set.
+
+- Should post-fix dashboard behavior default to base supplier, latest sandbox lineage, or a toggle between both?
+- Should product-list refresh write canonical Amazon cache directly, or write run-scoped override cache and mirror/copy canonical equivalents?
+- Should product-list log preservation use append markers in one file or segmented files per attempt?
+- Should transcript persistence remain snapshot-only plus optional raw event log, or should the raw event log become mandatory?
+- Should the car-accessories fetch failure be represented in state as a fetch-failed category rather than silently counted as zero extracted products?
 
 ### Constraints & Non-Negotiables
+
 - No git operations.
-- Do not edit protected runner/core workflow files.
-- Keep changes confined to `control_plane/*` and `dashboard/*`.
-- Do not present optional mitigations as mandatory fixes.
-- Do not revert to the stale Streamlit-centered diagnosis.
-- Do not implement code until the user reviews / approves the report + plan.
+- Do not edit protected files.
+- Prefer fixes in `control_plane/*` and `dashboard/*`.
+- Keep backup discipline before any edit.
+- Keep a revert-tracking document for implementation passes.
+- Do not present optional mitigations as proven root causes.
+- Do not assume earlier implementation resolved the newly uncovered workflow issues.
 
----
+## Research Questions Answered
 
-## The Verified Updated Findings (for continuation)
+| Question | Finding | Source | Confidence |
+|---|---|---|---|
+| Where does injected chat context come from? | from FastAPI `chat_state` via `dashboard/api.py` into `agent_plan_step(..., session_state=chat_state)` and planner hints / `<active_context>` | `dashboard/api.py`, `control_plane/chat_orchestrator.py` | High |
+| Does restarting uvicorn refresh injected context? | in-memory `chat_state` belongs to the running FastAPI process, so restart clears RAM state for the process; this is distinct from persisted transcript files and output artifacts | `dashboard/api.py` in-memory state structure and reset/session handling | High |
+| Was New Chat absent from source? | no, it already existed in current source | frontend files | High |
+| Why did product-list resume create malformed non-sandbox artifacts in bad cases? | wrong tool selection and/or malformed sandbox suffix handling in resume path | audit JSONL + code + artifacts | High |
+| Why did category totals end at 5 in the earlier Clearance King case? | actual workflow result was 0 + 4 + 1, not interruption deleting products | state/linking/log evidence | High |
+| Why did `car-accessories` show zero despite visible products? | browser-backed workflow fetch/process failure, not a truly empty category | logs + external fetch + successful same-chat comparison | High |
+| Why is the dashboard stale/misaligned for sandbox runs? | metrics loader resolves base/exact supplier files and `logs/debug`, not latest sandbox lineage by default | `dashboard/api.py`, `metrics_core.py` | High |
+| Why are product-list financial reports missing? | deeper gap: override-only Amazon cache, no sandbox supplier cache write, no calculator invocation; frequency alone is not the explanation | `run_product_list_refresh.py`, `FBA_Financial_calculator.py`, status/artifacts | High |
 
-### Confirmed findings
-1. FastAPI currently injects active context from `dashboard/api.py` `chat_state` into planner hints and `<active_context>`.
-2. `/api/chat/reset` is partial because it does not clear the `last_*` context keys.
-3. The New Chat button exists in current source.
-4. Product-list refresh enqueue path is correctly sandboxed.
-5. Bad non-sandbox lineages are introduced later during resume.
-6. Actual bad product-list resume tool choice was `enqueue_run`, confirmed in `chat_tool_calls.jsonl`.
-7. `enqueue_product_list_refresh` can reuse the same run ID and therefore the same sandbox lineage.
-8. `_normalize_sandbox_suffix` currently returns bare suffixes unchanged.
-9. Resume category recovery currently depends on exact supplier-domain equality and can therefore fail after malformed resume names.
-10. Empty `categories_subset.json` files directly explain the immediate aborts in resumed pound / clearance runs.
-11. Worker status can say `done` on semantically failed runs.
-12. `{sandbox_id}` placeholder support is missing in actual substitution logic even though the prompt requires it.
-13. `append_transcript()` exists, but current FastAPI path does not use it.
+## Key Insights Discovered
 
-### Likely but not proven findings
-1. Live missing New Chat button / live missing visible step trace were likely caused by stale cached assets or different deployed version.
-2. Sparse visible reasoning may also be influenced by prompt wording that asks only for short user-facing explanation.
-3. A deterministic backend guard would likely be safer than relying only on prompt instructions for correct resume tool choice.
+1. The repo has two layers of truth now: earlier surgical chat/control-plane fixes are implemented, but later workflow reruns revealed additional downstream issues unrelated to the stale Streamlit narrative.
+2. Several things that looked like one bug are actually coupled but distinct issues; especially product-list reporting and resume behavior.
+3. The dashboard discrepancy is mostly a surfacing/path-resolution issue, not always a state-generation issue.
+4. State files can contain both true nested progress and stale top-level summary fields at the same time.
+5. Transcript persistence being implemented still does not satisfy the user's desire for a full UI-visible replay.
 
-### Overstatements to avoid
-1. Do not say FastAPI never injected active context.
-2. Do not say cache-busting is the confirmed root cause of the live UI mismatch.
-3. Do not say transcript persistence is required for the core bug fix.
-4. Do not say current reasoning-step visibility pipeline is fully proven end-to-end in live UI; the code path is present, but live rendering root cause remains unverified.
+## Research Questions Remaining
 
----
+- exact browser exception/details for the `car-accessories` fetch failure
+- chosen future dashboard lineage selection UX/policy
+- exact implementation strategy for financial-report restoration in product-list flow
+- whether raw UI-event transcript logging should become part of the next implementation wave
 
-## The Surgical Fix Plan Already Prepared For User Review
+## Tools / Resources Evaluated
 
-### Fix Letters
-- A = explicit product-list resume guidance in `SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-- B = deterministic backend guard in `agent_plan_step` to rewrite wrong-tool product-list resume from `enqueue_run` to `enqueue_product_list_refresh`
-- C = canonicalize bare run fragments in `_normalize_sandbox_suffix`
-- D = narrowly scoped backward-recovery logic for legacy malformed names when recovering category URLs / resume context
-- E = clear all `last_*` keys in `/api/chat/reset`
-- F = add `{sandbox_id}` placeholder substitution support
-- G = mark semantic-abort log markers as failed in `worker.py` even when exit code is 0
-- H = optional cache-busting on CSS/JS references
-- I = optional stronger explanation wording for visible trace quality
-- J = transcript persistence enhancement (explicitly non-core)
+- direct file reads via `read`
+- path and content discovery via `glob` and `grep`
+- session metadata tools (`session_info`, `session_list`, `session_read`, `session_search`)
+- background read-only explore/oracle agents for cross-checking
+- external fetch for live Clearance King page verification
+- no external library docs were needed for the latest investigative branch
 
-### Minimum necessary set (validated by Oracle)
-- A + B + C + E
+## Next Research Target
 
-### Additional recommended-but-separate fixes
-- D for backward recovery of already malformed runs
-- F for expected-output preview correctness
-- G for truthful status reporting
-
-### Optional only
-- H cache-busting mitigation
-- I richer trace wording
-- J transcript persistence enhancement
-
-### Review notes from Oracle
-- Oracle agreed the following are confirmed / supported:
-  - partial reset
-  - bare suffix normalization issue
-  - missing `{sandbox_id}` replacement
-  - worker can falsely mark `done`
-  - planner prompt lacks explicit product-list resume rule from active context
-- Oracle recommended wording discipline:
-  - call tool mis-selection a primary failure mode rather than the only root cause
-  - keep stale-asset theory plausible, not proven
-  - describe UI trace pipeline conservatively
-- Oracle conclusion on scope:
-  - minimum set for chat/resume bug = A+B+C+E
-  - D/F/G are valid but separate concerns
-
-### Review notes from Momus
-- Momus endorsed A, B, C, E, F, G as keepers.
-- Momus agreed cache-busting is not proven root cause and should remain non-mandatory.
-- Momus agreed transcript persistence should stay out of the essential fix set.
-- Momus’s useful narrowing on D: keep legacy-name compatibility scoped only to resume-recovery lookup paths; do not relax validation broadly.
-
----
+The next research/planning target should be the detailed surgical plan for the newly identified workflow issues, grouped into:
+- product-list downstream artifact/report fixes
+- dashboard lineage/latest selection behavior
+- log preservation behavior
+- category fetch-failure diagnostics/state semantics
+- transcript raw-event augmentation decision
 
 ## Phase 4 - Universal Closure
 
 ### 7. Completed Worklog (Chronological)
-1. Read the existing handoff and identified that it was stale and Streamlit-centered.
-2. Verified current FastAPI state flow in `dashboard/api.py` and `control_plane/chat_orchestrator.py`.
-3. Verified current source contains New Chat button and reset handler.
-4. Verified New Chat reset is incomplete because `last_*` context keys survive.
-5. Inspected `control_plane/tools/product_list_refresh.py` and confirmed refresh enqueue path is correctly sandboxed.
-6. Inspected concrete run/job/status/log artifacts for pound, angel, and clearance resume cases.
-7. Confirmed malformed non-sandbox lineage appears during resume, not initial refresh.
-8. Confirmed empty `categories_subset.json` files and semantic abort messages in resumed pound / clearance runs.
-9. Confirmed the angel “second resume worked” case was a false positive caused by reusing a malformed non-sandbox fork.
-10. Confirmed expected output predictions are heuristic and can diverge from actual runtime lineage.
-11. Verified worker status logic can mark semantically failed workflows as `done`.
-12. Re-opened investigation after user supplied another agent’s report extract.
-13. Verified wrong-tool selection is a real issue in product-list resume, not just naming mismatch.
-14. Verified cache-busting absence, SSE trace code presence, and transcript persistence status.
-15. Consulted Oracle and Momus; integrated their scope/certainty corrections.
-16. Backed up the old handoff file.
-17. Began writing this replacement handoff.
+
+1. Read the inherited handoff and flagged it as partially stale.
+2. Verified FastAPI `chat_state` plumbing in `dashboard/api.py`.
+3. Verified `<active_context>` prompt injection in `control_plane/chat_orchestrator.py`.
+4. Verified New Chat button and SSE trace UI in frontend source.
+5. Investigated product-list refresh enqueue behavior.
+6. Investigated bad product-list resume runs using audit JSONL and concrete artifacts.
+7. Investigated category resume behavior and malformed/non-malformed lineage cases.
+8. Produced an initial evidence-backed report.
+9. Reopened investigation after new user feedback and contradictory observations.
+10. Reconstructed the Clearance King category sandbox lineage and output counts.
+11. Investigated repeated `car-accessories` failure against successful same-chat category runs.
+12. Verified external storefront accessibility for the problematic category.
+13. Investigated dashboard metrics sourcing from frontend to loader.
+14. Re-examined product-list interruption snapshot versus final state for run `44b12007`.
+15. Clarified snapshot transcripts versus desired full visible-chat persistence.
+16. Produced a detailed user-facing report covering four major clarification points.
+17. Investigated new user observations about product-list Amazon cache pathing versus financial reports.
+18. Investigated product-list log overwrite behavior.
+19. Investigated dashboard latest-file selection request and lineage risks.
+20. Produced a concise summary of the newly identified issues and post-fix behavioral expectations.
+21. Began deep continuity handoff generation.
+22. Created a backup of the existing handoff file at `backup/session_handoff_refresh_20260313/session_handoff.md`.
 
 ### 8. Validation Performed
-No build/test/lint cycle was run against application code because this session’s investigation phase was read-only.
 
-Commands / operations with concrete outputs:
+Validation during earlier surgical implementation pass:
+
+```text
+lsp_diagnostics on:
+- dashboard/api.py
+- control_plane/chat_orchestrator.py
+- control_plane/audit.py
+- control_plane/paths.py
+- control_plane/worker.py
+Result:
+- no errors
+- only pre-existing/non-blocking hints remained
+```
+
+```text
+python -m py_compile on:
+- dashboard/api.py
+- control_plane/chat_orchestrator.py
+- control_plane/audit.py
+- control_plane/paths.py
+- control_plane/worker.py
+Result:
+- passed
+```
+
+```text
+runtime sanity checks:
+- _normalize_sandbox_suffix('a7ce7aa2', 'ignored-run-id') -> sandbox__a7ce7aa2
+- _normalize_sandbox_suffix('', '12345678-aaaa-bbbb-cccc-1234567890ab') -> sandbox__12345678
+- write_session_transcript('sanitycheck', {'ok': True}) created a disposable transcript successfully
+```
+
+Validation during later read-only investigation phase:
 
 ```text
 session_info(ses_325d21b4effeGxyxq3jsXPXr1p)
-- Messages: 85
-- Date Range: 2026-03-10T23:56:06.795Z to 2026-03-12T07:08:56.296Z
-- Agents Used: Hephaestus (Deep Agent), general, compaction
-- Duration: 1 days, 7 hours
+- Messages: 280
+- Date Range: 2026-03-10T23:56:06.795Z to 2026-03-13T04:34:30.631Z
+- Duration: 2 days, 4 hours
 ```
 
 ```text
-read(dashboard/api.py)
-- Confirmed agent_plan_step(..., session_state=chat_state)
-- Confirmed state tracking of last_run_id / last_products_path / last_supplier_domain / last_sandbox_supplier
-- Confirmed /api/chat/reset leaves last_* keys untouched
+web fetches
+- https://www.clearance-king.co.uk/car-bike/car-accessories.html returned a real page
+- https://www.clearance-king.co.uk/auto-accessories/car-accessories.html returned a real page
+Implication: workflow zero extraction != dead category page
 ```
 
 ```text
-read(dashboard/static/js/app.js)
-- Confirmed progressive SSE read loop via res.body.getReader()
-- Confirmed trace_update rendering path exists
-- Confirmed approval buttons are disabled before approve/reject fetch
-- Confirmed window.resetChat() exists and only clears UI after POST /api/chat/reset
-```
-
-```text
-read(OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl:248-260)
-- Confirmed pound resume after cancel used enqueue_run with sandbox_suffix a7ce7aa2
-- Confirmed initial clearance product-list analyze used enqueue_product_list_refresh
-- Confirmed clearance resume after cancel used enqueue_run with sandbox_suffix 6c89a211
-```
-
-```text
-read(control_plane/worker.py:484-517)
-- Confirmed worker marks done on returncode == 0 unless fatal traceback detected
-```
-
-```text
-powershell backup command
-- Created backup/session_handoff_refresh_20260312/session_handoff.md
-- Verified backup file exists with non-zero length
+backup verification
+- Created backup/session_handoff_refresh_20260313/session_handoff.md
+- Verified non-zero length: 52538 bytes
 ```
 
 Validation posture summary:
-- Evidence type used: direct code reads, grep, audit JSONL, status files, job payloads, logs, processing states, internal agent review
-- Evidence type not used: runtime browser execution, live manual UI test in this session, build, pytest, mypy, ruff
+- static verification of earlier implementation: completed
+- read-only triangulation of later workflow behavior: completed
+- live manual browser regression validation of every scenario: not fully performed in this branch
+- exact low-level `car-accessories` exception: not yet surfaced by current logs
 
 ### 9. Known Issues / Risks
 
 | Issue | Severity | Impact | Mitigation |
 |---|---|---|---|
-| Old handoff is stale and misleading | High | Next agent may restart from wrong Streamlit theory | Use this handoff instead; ignore prior conclusions unless re-verified |
-| Exact live cause of missing New Chat / missing visible trace remains unproven | Medium | Could misattribute UI symptom | Treat cache-busting as plausible mitigation, not confirmed RCA |
-| Handoff-mining explore outputs reintroduced stale memory-based claims | Medium | Could pollute continuation | Prefer direct code/artifact findings and Oracle/Momus over those outputs |
-| Worker status false `done` can hide real failure | High | User may think run succeeded when it semantically aborted | Include G in plan if user wants status accuracy improved |
-| Transcript persistence still absent in FastAPI path | Low | Harder forensic review later | Keep as optional enhancement only |
-| No code implementation done yet | Medium | Next session must avoid assuming fixes are already applied | Treat current state as report+plan only |
+| Existing stale narratives may reappear from older handoff/memory context | High | future agent can reopen closed theories | follow authority order in this handoff |
+| `car-accessories` exact browser failure reason remains hidden | High | difficult to separate timeout/challenge/empty DOM causes | future fix should add deeper fetch diagnostics |
+| Product-list financial reports still not generated | High | workflow appears incomplete downstream | plan must restore canonical downstream artifacts + invocation path |
+| Dashboard base-vs-sandbox confusion remains unresolved by policy | High | user sees stale or mismatched values | choose lineage-aware dashboard behavior before implementing |
+| Product-list logs overwrite/continue under same run ID | Medium | attempt history is hard to audit | append markers or segmented attempt logging |
+| Snapshot transcripts still omit full visible UI content | Medium | forensic review misses approval/result detail | decide whether raw event log is needed |
+| Some linking-map matches remain materially wrong despite high confidence | High | financial conclusions can be based on bad product pairings | keep this separate but visible as business risk |
 
 ### 10. External Resources Referenced
-- External documentation consulted this session: none
-- GitHub issues referenced: none
-- Internal resources / generated evidence:
-  - `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl`
-  - `OUTPUTS/CONTROL_PLANE/jobs/...`
-  - `OUTPUTS/CONTROL_PLANE/status/...`
-  - `OUTPUTS/CONTROL_PLANE/logs/...`
-  - `OUTPUTS/CONTROL_PLANE/overrides/...`
-  - `OUTPUTS/CACHE/processing_states/...`
-- Internal reviewers:
-  - Oracle (`bg_9ef3bb7b`) for correctness / overstatement review
-  - Momus (`bg_61128c74`) for plan scope / surgicality review
+
+- `https://www.clearance-king.co.uk/car-bike/car-accessories.html` - live page existence/content check
+- `https://www.clearance-king.co.uk/auto-accessories/car-accessories.html` - alternate live page/content check
+- No formal external docs or GitHub issues were referenced for the latest branch
 
 ### 11. Quick-Reference Index
 
 #### Key file paths
+- `.sisyphus/notepads/handoff/session_handoff.md`
+- `backup/chat_resume_surgical_20260312/REVERT_TRACKING.md`
+- `backup/session_handoff_refresh_20260313/session_handoff.md`
 - `dashboard/api.py`
 - `dashboard/templates/index.html`
 - `dashboard/static/js/app.js`
-- `dashboard/static/css/styles.css`
+- `dashboard_legacy_streamlit/metrics_core.py`
 - `control_plane/chat_orchestrator.py`
-- `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-- `control_plane/tools/product_list_refresh.py`
+- `control_plane/run_product_list_refresh.py`
 - `control_plane/worker.py`
 - `control_plane/audit.py`
-- `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl`
+- `control_plane/paths.py`
+- `tools/FBA_Financial_calculator.py`
+- `control_plane/tools/amazon_cache.py`
 
-#### Important symbols / functions / areas
-- `agent_plan_step` in `control_plane/chat_orchestrator.py`
-- `_compute_planner_hints` in `control_plane/chat_orchestrator.py`
-- `build_prompt` in `control_plane/chat_orchestrator.py`
-- `_normalize_sandbox_suffix` in `control_plane/chat_orchestrator.py`
-- `_substitute_expected_output_placeholders` in `control_plane/chat_orchestrator.py`
-- resume fallback around supplier-domain equality in `control_plane/chat_orchestrator.py`
-- `enqueue_product_list_refresh` in `control_plane/tools/product_list_refresh.py`
-- `chat_reset` in `dashboard/api.py`
+#### Important symbols / functions
+- `agent_plan_step`
+- `_compute_planner_hints`
+- `_normalize_sandbox_suffix`
+- `_sandbox_supplier_aliases`
+- `_persist_chat_session`
+- `chat_reset`
+- `write_session_transcript`
+- `_amazon_cache_dir` in `control_plane/run_product_list_refresh.py`
+- `_write_supplier_cache` in `control_plane/run_product_list_refresh.py`
+- `_has_run_scoped_financial_report` and `_recompute_refresh_counts` in `control_plane/worker.py`
 
 #### Critical commands / operations
-- No git commands allowed
-- No protected runner/tool edits
-- Backup before modifying handoff or docs
+- `python -m control_plane worker`
+- `python dashboard/run_dashboard.py` or uvicorn-backed dashboard launcher depending current setup
+- No git commands
 
-#### Configuration / prompt files
+#### Configuration files
+- `config/system_config.json`
 - `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-
-#### Critical run IDs
-- `a7ce7aa2-e6df-455a-ac48-4c3867131ce6` - pound product-list refresh lineage key
-- `25577d05-9f59-4f55-acd5-f780ae1ecb1d` - bad pound resume run via `enqueue_run`
-- `dcd2841b-256f-4ffd-8fb5-9442dc3442b8` - angel initial category run
-- `f2f90444-2fb9-46ac-bac2-73ea4735239b` - first angel bad/non-canonical resume fork
-- `1477ef96-56c5-4958-972a-958b7a0ab951` - second angel resume that looked like success but reused malformed fork
-- `6c89a211-052e-462a-864a-b31980348724` - clearance product-list refresh lineage key
-- `8d92f994-eb1c-4049-9401-e6f98a529efc` - bad clearance resume run via `enqueue_run`
-- `01c00bf8-a4fa-4a78-b940-40a0f869ec12` - clearance product-list build run immediately preceding refresh
 
 ### 12. Recovery Instructions If Context Is Lost
-If the next agent has zero context except this section:
-1. Ignore the previous handoff’s claim that FastAPI lacks active-context injection; that is outdated.
-2. The current state is **report + surgical fix plan complete, not implemented**.
-3. The confirmed minimum fix set for the core bug cluster is A+B+C+E.
-4. The confirmed supporting-but-separate fixes are D/F/G.
-5. H/J are not mandatory; do not over-scope.
-6. The most important direct evidence file for wrong-tool selection is `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl:248-260`.
-7. The most important direct evidence file for partial reset is `dashboard/api.py:391-401` plus `dashboard/api.py:271-280` and `dashboard/api.py:343-358`.
-8. The most important direct evidence for worker false done is `control_plane/worker.py:484-517`.
-9. Do not implement anything until the user confirms they want the reviewed plan applied.
-10. Continue from the verified report/plan state, not from the stale Streamlit narrative.
+
+If a new agent has only this section:
+
+1. The repo is post-implementation for the earlier surgical FastAPI/chat fix pass.
+2. The latest work was read-only validation/investigation of new workflow issues after user reruns.
+3. Do not reopen the old Streamlit-centered theory.
+4. Product-list missing financial reports are not a frequency-only issue.
+5. Dashboard latest-file logic must be lineage-aware.
+6. `car-accessories` zero extraction is a workflow fetch/process failure, not proof of an empty category.
+7. Current transcript files are snapshots, not full UI-visible replays.
+8. The detailed implementation plan for these newer workflow issues has not yet been drafted.
+9. Before editing this handoff, note backup exists at `backup/session_handoff_refresh_20260313/session_handoff.md`.
+10. If implementation is requested, back up all edited files first and keep changes in `control_plane/*` and `dashboard/*` only.
 
 ### 13. Startup Plan For Next Session (First 10 Actions)
-1. Read this handoff fully.
-2. Read `dashboard/api.py:230-401`.
-3. Read `control_plane/chat_orchestrator.py` sections for `_normalize_sandbox_suffix`, `_compute_planner_hints`, `build_prompt`, placeholder substitution, and resume fallback.
-4. Read `control_plane/tools/product_list_refresh.py` to confirm same-run-id resume path.
-5. Read `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl:248-260` to re-anchor on actual wrong-tool selections.
-6. Re-state the confirmed fix set to the user before editing: A+B+C+E minimum; D/F/G scoped extras; H/I/J optional.
-7. If the user still wants review only, do not edit code; only present the final report/plan.
-8. If the user approves implementation, back up affected files first under a new dated backup dir.
-9. Implement only in `control_plane/*` and `dashboard/*`; do not touch protected files.
-10. After implementation, run targeted verification on modified files and compare behavior against the exact artifact-backed failure cases from this handoff.
 
----
+1. Read this handoff fully.
+2. Read `backup/chat_resume_surgical_20260312/REVERT_TRACKING.md`.
+3. Re-read `dashboard/api.py` sections for in-memory state, SSE stream, approval execution, and session persistence.
+4. Re-read `control_plane/chat_orchestrator.py` sections for active-context injection, sandbox normalization, resume fallback, and tool execution paths.
+5. Re-read `control_plane/run_product_list_refresh.py` and `tools/FBA_Financial_calculator.py` together.
+6. Inspect `OUTPUTS/CONTROL_PLANE/status/44b12007-86f0-4c2c-a93b-dd80f10b7b9c.json` as the anchor for the product-list financial-report gap.
+7. Inspect `OUTPUTS/CONTROL_PLANE/logs/bd339a63-aa5a-4e16-bca5-5cb422164bb2.log`, `OUTPUTS/CONTROL_PLANE/logs/53c2d715-094f-44b9-a931-a8834b03f3cf.log`, and `OUTPUTS/CONTROL_PLANE/logs/012a4d1f-b6c3-4339-a8fb-0edc28f7d7be.log` as the anchor for the `car-accessories` investigation.
+8. Ask whether the user now wants the detailed surgical implementation plan for the newly identified workflow issues.
+9. If yes, structure the plan into discrete fix groups and keep scope surgical.
+10. If implementation is approved after plan review, create a new dated backup root and update `REVERT_TRACKING.md` before changing files.
+
+## Work-Type-Specific Continuation Notes
+
+### Error Pattern Analysis
+
+- Earlier implemented fixes addressed planner routing, suffix normalization, narrow alias recovery, reset cleanup, placeholder substitution, semantic-abort detection, and transcript persistence.
+- Later investigations found additional, separate issues in workflow/reporting/observability paths.
+- These later issues should be treated as a second wave, not as proof the first wave was invalid.
+
+### Debugging Hypothesis Registry
+
+| Hypothesis | Evidence For | Evidence Against | Status |
+|---|---|---|---|
+| Earlier surgical fixes failed completely | user still saw odd behaviors after reruns | many earlier fixes are verifiably present and working in code/artifacts | RULED OUT |
+| Later workflow issues are just dashboard display problems | dashboard mismatch is real | product-list reporting/logging/pathing issues also exist in underlying artifacts | RULED OUT |
+| Product-list financial reports can be fixed only by copying Amazon cache files | copy helps path mismatch | still missing supplier cache writes and financial invocation | RULED OUT |
+| Category sandbox lineage is inherently broken | multiple control-plane IDs caused confusion | stable sandbox lineage outputs can still be correct by design | RULED OUT |
+
+### Current Debugging Theory
+
+Current system state is best understood as:
+- earlier chat/resume fixes implemented,
+- later reruns exposed downstream workflow/reporting/observability issues,
+- next step should be a second surgical plan rather than a wholesale redesign.
+
+### Next Debugging Step
+
+Draft the second-wave surgical plan only after confirming with the user that they want the detailed plan next.
+
+## Quality Scorecard
+
+| Area | Status | Notes |
+|---|---|---|
+| Earlier surgical implementation | PASS | allowed-file-only, backed up, verified with diagnostics/py_compile/sanity checks |
+| Read-only workflow investigation | PASS | multiple runs/artifacts/code paths reviewed |
+| Root cause clarity for old Streamlit/FastAPI narrative | PASS | stale narrative disproven |
+| Root cause clarity for product-list missing financial reports | PASS | multi-factor cause identified |
+| Root cause clarity for `car-accessories` low-level failure | PARTIAL | workflow failure location known, exact browser exception unknown |
+| Dashboard policy decision for latest/base/sandbox behavior | PENDING | user has not chosen preferred behavior |
+| Detailed second-wave implementation plan | NOT STARTED | concise summary delivered, full plan pending |
+
+## Blockers
+
+| Blocker | Impact | Owner | Next Approach |
+|---|---|---|---|
+| User has not yet requested the full second-wave implementation plan after the concise summary | cannot safely proceed to implementation planning assumptions | user | next agent should confirm this is the next deliverable |
+| Dashboard behavior policy not chosen | implementation details differ materially | user + next agent | present safe options with recommendation |
+| `car-accessories` exact low-level fetch failure not exposed by logs | harder to target the smallest diagnostics fix | code/logging design | include deeper fetch diagnostics in plan |
+
+## Breakthrough Moments
+
+1. Discovering the stale handoff was wrong about FastAPI active-context injection.
+2. Proving New Chat already existed in source.
+3. Proving product-list resume failure involved wrong-tool selection, not just naming.
+4. Realizing later workflow issues were a second-wave problem rather than invalidating the earlier fix set.
+5. Realizing product-list financial report absence was a three-part downstream gap, not a single missing cache copy.
+
+## Appendix A - Key Artifacts For Later Validation
+
+- `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl`
+- `OUTPUTS/CONTROL_PLANE/transcripts/session_20260313T005310Z_91283eff.json`
+- `OUTPUTS/CONTROL_PLANE/logs/bd339a63-aa5a-4e16-bca5-5cb422164bb2.log`
+- `OUTPUTS/CONTROL_PLANE/logs/53c2d715-094f-44b9-a931-a8834b03f3cf.log`
+- `OUTPUTS/CONTROL_PLANE/logs/012a4d1f-b6c3-4339-a8fb-0edc28f7d7be.log`
+- `OUTPUTS/CONTROL_PLANE/status/44b12007-86f0-4c2c-a93b-dd80f10b7b9c.json`
+- `OUTPUTS/CACHE/processing_states/PRODUCTLIST_44b12007_INTERUPTION.json`
+- `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk__sandbox__44b12007_processing_state.json`
+- `OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk__sandbox__44b12007/linking_map.json`
+- `OUTPUTS/CONTROL_PLANE/overrides/44b12007-86f0-4c2c-a93b-dd80f10b7b9c/amazon_cache/*`
+- `OUTPUTS/CACHE/processing_states/clearance-king_co_uk__sandbox__a0ff0ecc_processing_state.json`
+- `OUTPUTS/cached_products/clearance-king-co-uk__sandbox__a0ff0ecc_products_cache.json`
+- `OUTPUTS/FBA_ANALYSIS/linking_maps/clearance-king.co.uk__sandbox__a0ff0ecc/linking_map.json`
+
+## Appendix B - Sessions / Agents Used
+
+- Main session: `ses_325d21b4effeGxyxq3jsXPXr1p`
+- Prior internal review / exploration sessions are listed in earlier handoff content and session metadata tools
+- Latest handoff-mining tasks in this branch:
+  - `bg_d1a3c974`
+  - `bg_3b022cae`
+  - `bg_bdaf60bf`
 
 ## Phase 5 - Supermemory Persistence Plan
-The prompt that triggered this handoff explicitly requires at least 12 distilled Supermemory entries after writing the handoff. These entries should reflect the verified current state, not the stale prior handoff.
 
-Required coverage to persist:
-1. Current objective/state
-2. Core architecture touched
-3. Key bug fixes planned
-4. Validation pattern used
-5. Critical constraints/policies
-6. Open risk
-7. Next-step plan
-8. User workflow preferences
-9. Failed approaches to avoid
-10. Key architectural decisions
-11. External dependencies/blockers
-12. Performance / behavior characteristics discovered
+At least 12 distilled memories must be added after this handoff write, covering:
+- current objective/state
+- architecture touched
+- bug/fix patterns
+- validation pattern
+- constraints/policies
+- open risks
+- next-step plan
+- user preferences
+- failed approaches
+- key decisions
+- blockers
+- performance/behavior characteristics
 
-Planned entries are listed after this file write and will be added via `supermemory(mode="add", ...)`.
-
----
-
-## Appendix A - Files Investigated In This Session
-- `.sisyphus/notepads/handoff/session_handoff.md` (old stale handoff)
-- `dashboard/api.py`
-- `dashboard/templates/index.html`
-- `dashboard/static/js/app.js`
-- `dashboard/static/css/styles.css`
-- `control_plane/chat_orchestrator.py`
-- `control_plane/prompts/SYSTEM_INSTRUCTIONS_CHAT_PLANNER.md`
-- `control_plane/tools/product_list_refresh.py`
-- `control_plane/worker.py`
-- `control_plane/audit.py`
-- `OUTPUTS/CONTROL_PLANE/audit/chat_tool_calls.jsonl`
-- `OUTPUTS/CONTROL_PLANE/jobs/failed/job_a7ce7aa2-e6df-455a-ac48-4c3867131ce6.json`
-- `OUTPUTS/CONTROL_PLANE/jobs/done/job_25577d05-9f59-4f55-acd5-f780ae1ecb1d.json`
-- `OUTPUTS/CONTROL_PLANE/jobs/failed/job_f2f90444-2fb9-46ac-bac2-73ea4735239b.json`
-- `OUTPUTS/CONTROL_PLANE/jobs/failed/job_1477ef96-56c5-4958-972a-958b7a0ab951.json`
-- `OUTPUTS/CONTROL_PLANE/jobs/failed/job_6c89a211-052e-462a-864a-b31980348724.json`
-- `OUTPUTS/CONTROL_PLANE/jobs/done/job_8d92f994-eb1c-4049-9401-e6f98a529efc.json`
-- `OUTPUTS/CONTROL_PLANE/status/25577d05-9f59-4f55-acd5-f780ae1ecb1d.json`
-- `OUTPUTS/CONTROL_PLANE/status/8d92f994-eb1c-4049-9401-e6f98a529efc.json`
-- `OUTPUTS/CONTROL_PLANE/logs/25577d05-9f59-4f55-acd5-f780ae1ecb1d.log`
-- `OUTPUTS/CONTROL_PLANE/logs/8d92f994-eb1c-4049-9401-e6f98a529efc.log`
-- `OUTPUTS/CONTROL_PLANE/overrides/25577d05-9f59-4f55-acd5-f780ae1ecb1d/categories_subset.json`
-- `OUTPUTS/CONTROL_PLANE/overrides/8d92f994-eb1c-4049-9401-e6f98a529efc/categories_subset.json`
-- `OUTPUTS/CONTROL_PLANE/overrides/f2f90444-2fb9-46ac-bac2-73ea4735239b/categories_subset.json`
-- `OUTPUTS/CONTROL_PLANE/overrides/1477ef96-56c5-4958-972a-958b7a0ab951/categories_subset.json`
-- `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk__sandbox__a7ce7aa2_processing_state.json`
-- `OUTPUTS/CACHE/processing_states/poundwholesale_co_uk__a7ce7aa2_processing_state.json`
-- `OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__sandbox__dcd2841b_processing_state.json`
-- `OUTPUTS/CACHE/processing_states/angelwholesale_co_uk__dcd2841b_processing_state.json`
-- backup results and internal reviewer outputs
-
-## Appendix B - Background Tasks Used In This Session
-- `bg_9c9ff462` / prior explore: inspect resume workflow logic
-- `bg_254b025e` / prior explore: inspect dashboard UI missing button
-- `bg_ab8d70a7` / prior explore: inspect prompt injection behavior
-- `bg_3b0f2fbd` / prior oracle: validate root causes and blind spots
-- `bg_698c6bf3` / explore: verify resume tool-selection root cause
-- `bg_3460afb8` / explore: verify frontend cache/SSE/transcript claims
-- `bg_9ef3bb7b` / oracle: validate report findings and surgical fixes
-- `bg_61128c74` / Momus: critique surgical fix plan for scope and risk
-- `bg_1e05470c` / explore: mine constraints / risks / next actions for handoff
-- `bg_d633b204` / explore: mine session artifacts for handoff
-
-## Appendix C - Notes On Authority Hierarchy
-This session explicitly superseded an older authority-hierarchy / Streamlit-centric narrative. The previous handoff focused on older "LLM amnesia" fixes (`_prune_value`, Streamlit assumptions, `_extract_active_context` memory narrative). That older narrative is not the authoritative description of the current FastAPI/control-plane investigation state. The next session must not reopen that branch unless the user explicitly asks to revisit it.
-
-## Appendix D - Stop Condition For Continuation
-A new agent can continue seamlessly if it understands:
-- this session already produced the review-ready report + plan
-- current code/artifact truth overrides the old handoff
-- the next likely user action is either:
-  - ask for the finalized report/plan again after compaction, or
-  - approve implementation of the surgical fixes
-- implementation is not yet done
-- if implementation is requested, apply only the approved scoped fixes
+This write should be followed immediately by those additions.

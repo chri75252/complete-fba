@@ -1,0 +1,588 @@
+2026-03-14 09:54:16,917 WARNING __main__: Ignoring supplier identity from products file; job sandbox is authoritative. job=poundwholesale.co.uk__sandbox__71d4f372 file=poundwholesale.co.uk
+2026-03-14 09:54:16,918 WARNING tools.amazon_playwright_extractor: ?? BrowserCircuitBreaker not available - health management disabled
+2026-03-14 09:54:16,918 INFO tools.amazon_playwright_extractor: AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-03-14 09:54:16,918 INFO tools.amazon_playwright_extractor: Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-03-14 09:54:16,922 WARNING tools.amazon_playwright_extractor: ?? BrowserManager not available, using legacy browser connection
+2026-03-14 09:54:16,925 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale-co-uk__sandbox__71d4f372_products_cache.json (9 entries) saved successfully
+2026-03-14 09:54:16,929 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:54:16,929 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:54:16,930 INFO tools.amazon_playwright_extractor: 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-03-14 09:54:16,930 INFO utils.browser_circuit_breaker: BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-03-14 09:54:16,930 INFO utils.browser_manager: ?? BrowserManager singleton initialized with health management
+2026-03-14 09:54:17,424 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance on port 9222
+2026-03-14 09:54:17,424 INFO utils.browser_manager: ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-03-14 09:54:19,598 INFO utils.browser_manager: ? Chrome debug accessible on IPv4: Chrome/145.0.7632.160
+2026-03-14 09:54:19,599 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance...
+2026-03-14 09:54:21,646 INFO utils.browser_manager: ?? Using endpoint: http://localhost:9222
+2026-03-14 09:54:21,747 INFO utils.browser_manager: ? Successfully connected to existing Chrome debug instance
+2026-03-14 09:54:21,747 INFO utils.browser_manager: ?? Using existing context with 1 pages
+2026-03-14 09:54:21,748 INFO utils.browser_manager: ?? Connected to existing Chrome: 145.0.7632.160
+2026-03-14 09:54:21,748 INFO tools.amazon_playwright_extractor: ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-03-14 09:54:21,748 INFO utils.browser_manager: ?? Reusing existing Chrome connection (port 9222)
+2026-03-14 09:54:21,748 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-03-14 09:54:21,750 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:54:21,751 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:54:21,751 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 50532492622605053249262246 for supplier product: 'Bin Brite Berry Blast & Citronella Stick-On Bin Freshener CDU Mixed' (FixedAmazonExtractor)
+2026-03-14 09:54:21,751 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 50532492622605053249262246
+2026-03-14 09:54:29,456 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 50532492622605053249262246...
+2026-03-14 09:54:29,689 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 09:54:30,787 INFO tools.amazon_playwright_extractor: Found 11 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 09:54:30,787 INFO tools.amazon_playwright_extractor: Processing 11 search result elements for EAN 50532492622605053249262246
+2026-03-14 09:54:31,634 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 11 sponsored products filtered out
+2026-03-14 09:54:31,635 WARNING tools.amazon_playwright_extractor: EAN 50532492622605053249262246 returned no organic results - skipping
+2026-03-14 09:54:31,635 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '50532492622605053249262246'. Details: no_organic_results
+2026-03-14 09:54:31,635 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'Bin Brite Berry Blast & Citronella Stick-On Bin Freshener CDU Mixed'
+2026-03-14 09:54:31,635 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'Bin Brite Berry Blast & Citronella Stick-On Bin Freshener CDU Mixed'
+2026-03-14 09:54:31,635 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: Bin Brite Berry Blast & Citronella Stick-On Bin Freshener CDU Mixed
+2026-03-14 09:54:39,291 INFO tools.amazon_playwright_extractor: Title search found 70 elements using selector: div.s-search-results > div[data-asin]
+2026-03-14 09:54:40,614 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-14 09:54:40,902 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B0CMMSTQ3R
+2026-03-14 09:54:40,902 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Bin Brite Berry Blast & Citronella Stick-On Bin Freshener CDU Mixed'
+2026-03-14 09:54:40,903 INFO tools.amazon_playwright_extractor: Title search successful for 'Bin Brite Berry Blast & Citronella Stick-On Bin Freshener CDU Mixed' after EAN '50532492622605053249262246' failed
+2026-03-14 09:54:40,903 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B0CMMSTQ3R from title search
+2026-03-14 09:54:40,903 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0CMMSTQ3R. Getting a new one from BrowserManager.
+2026-03-14 09:54:40,903 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=Bin+Brite+Berry+Blast+%26+Citronella+Stick-On+Bin+Freshener+CDU+Mixed&ref=nb_sb_noss
+2026-03-14 09:54:43,542 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:54:44,041 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:54:45,042 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 09:54:48,051 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 09:54:48,051 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:54:48,101 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:54:48,101 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 09:54:53,101 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 09:55:00,113 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0CMMSTQ3R
+2026-03-14 09:55:00,114 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 09:55:00,155 INFO tools.amazon_playwright_extractor: Title found: '4 x Stick ON Bin Freshener Smelling FRESH Dustbins Swing Pedal Air Fragrance Berry Blast | Citronella & Lemongrass | UK FREE P&P' via #productTitle
+2026-03-14 09:55:00,155 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 09:55:00,177 INFO tools.amazon_playwright_extractor: Current price: 4.3 via #corePrice_feature_div .a-offscreen
+2026-03-14 09:55:00,213 INFO tools.amazon_playwright_extractor: Original price: 4.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-14 09:55:00,238 INFO tools.amazon_playwright_extractor: Amazon sales badge found: 400 in container div#socialProofingAsinFaceout_feature_div
+2026-03-14 09:55:00,238 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 09:55:00,272 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/71d7FFqJuNL._AC_SL1500_.jpg via #landingImage
+2026-03-14 09:55:00,303 INFO tools.amazon_playwright_extractor: Found 2 thumbnails.
+2026-03-14 09:55:00,307 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 09:55:00,576 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 09:55:00,756 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 09:55:00,774 INFO tools.amazon_playwright_extractor: Rating: 3.6 via #acrPopover[title*='out of 5 stars']
+2026-03-14 09:55:00,792 INFO tools.amazon_playwright_extractor: Review count: 242 via #acrCustomerReviewText
+2026-03-14 09:55:00,792 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 09:55:00,808 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-14 09:55:00,808 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 09:55:01,035 INFO tools.amazon_playwright_extractor: Found 5 features.
+2026-03-14 09:55:01,035 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 09:55:01,050 INFO tools.amazon_playwright_extractor: Description found using selector: #productDescription
+2026-03-14 09:55:01,050 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 09:55:01,309 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-14 09:55:01,309 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 09:55:01,309 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 09:55:01,309 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 09:55:01,309 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 09:55:07,386 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 09:55:07,458 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-14 09:55:07,458 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 09:55:07,477 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 09:55:07,477 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 09:55:09,705 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 09:55:17,962 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 09:55:17,978 WARNING tools.amazon_playwright_extractor: Product-Details tab visible, but inner grid still not ready – extending wait with retry logic.
+2026-03-14 09:55:17,979 INFO tools.amazon_playwright_extractor: Grid attempt 1/3: Waiting 15000ms for grid container...
+2026-03-14 09:55:18,419 INFO tools.amazon_playwright_extractor: ? Grid became visible after attempt 1 – continuing.
+2026-03-14 09:55:18,449 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 09:55:18,484 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 09:55:19,535 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 145 rows found
+2026-03-14 09:55:19,552 INFO tools.amazon_playwright_extractor: Processing 145 rows in Keepa Product Details AG Grid.
+2026-03-14 09:55:21,499 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.52' in Keepa AG Grid.
+2026-03-14 09:55:21,719 INFO tools.amazon_playwright_extractor: Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.35' in Keepa AG Grid.
+2026-03-14 09:55:26,422 INFO tools.amazon_playwright_extractor: ? Successfully parsed 43 items from Keepa Product Details AG Grid.
+2026-03-14 09:55:26,422 INFO tools.amazon_playwright_extractor: ASIN B0CMMSTQ3R: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 09:55:26,422 INFO tools.amazon_playwright_extractor: ASIN B0CMMSTQ3R: EAN '5060931935487' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-14 09:55:26,422 INFO tools.amazon_playwright_extractor: ASIN B0CMMSTQ3R: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 09:55:26,422 INFO tools.amazon_playwright_extractor: ASIN B0CMMSTQ3R: BSR 6995 in 'Grocery 56' from Keepa SalesRankDetailsTable.
+2026-03-14 09:55:26,425 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0CMMSTQ3R_50532492622605053249262246.json (34 entries) saved successfully
+2026-03-14 09:55:26,428 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0CMMSTQ3R_50532492622605053249262246.json (34 entries) saved successfully
+2026-03-14 09:55:26,430 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (3 entries) saved successfully
+2026-03-14 09:55:26,431 INFO __main__: Linking map periodic flush: 3 entries
+2026-03-14 09:55:26,433 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:55:26,433 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:55:26,435 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:55:26,435 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:55:26,436 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5015302400064 for supplier product: 'Coco & Gray Overshoe Microfibre Floor Duster Shoes 2 Pack' (FixedAmazonExtractor)
+2026-03-14 09:55:26,436 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5015302400064
+2026-03-14 09:55:34,197 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5015302400064...
+2026-03-14 09:55:34,911 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 09:55:35,801 INFO tools.amazon_playwright_extractor: Found 9 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 09:55:35,801 INFO tools.amazon_playwright_extractor: Processing 9 search result elements for EAN 5015302400064
+2026-03-14 09:55:36,044 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 9 sponsored products filtered out
+2026-03-14 09:55:36,044 WARNING tools.amazon_playwright_extractor: EAN 5015302400064 returned no organic results - skipping
+2026-03-14 09:55:36,044 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '5015302400064'. Details: no_organic_results
+2026-03-14 09:55:36,044 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'Coco & Gray Overshoe Microfibre Floor Duster Shoes 2 Pack'
+2026-03-14 09:55:36,044 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'Coco & Gray Overshoe Microfibre Floor Duster Shoes 2 Pack'
+2026-03-14 09:55:36,044 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: Coco & Gray Overshoe Microfibre Floor Duster Shoes 2 Pack
+2026-03-14 09:55:40,587 INFO tools.amazon_playwright_extractor: Title search found 70 elements using selector: div.s-search-results > div[data-asin]
+2026-03-14 09:55:40,794 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-14 09:55:40,927 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B07LD52RZK
+2026-03-14 09:55:40,928 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Coco & Gray Overshoe Microfibre Floor Duster Shoes 2 Pack'
+2026-03-14 09:55:40,928 INFO tools.amazon_playwright_extractor: Title search successful for 'Coco & Gray Overshoe Microfibre Floor Duster Shoes 2 Pack' after EAN '5015302400064' failed
+2026-03-14 09:55:40,928 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B07LD52RZK from title search
+2026-03-14 09:55:40,928 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B07LD52RZK. Getting a new one from BrowserManager.
+2026-03-14 09:55:40,928 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=Coco+%26+Gray+Overshoe+Microfibre+Floor+Duster+Shoes+2+Pack&ref=nb_sb_noss
+2026-03-14 09:55:44,482 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:55:45,780 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:55:46,787 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 09:55:49,793 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 09:55:49,794 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:55:50,006 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:55:50,006 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 09:55:55,011 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 09:56:02,024 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B07LD52RZK
+2026-03-14 09:56:02,024 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 09:56:02,082 INFO tools.amazon_playwright_extractor: Title found: 'pengxiaomei 3 Pairs/ 6PCS Mop Slippers, Microfiber Dust Mop Shoes Multifunction Floor Cleaning Shoe Covers Hair Cleaner Foot Socks Caps' via #productTitle
+2026-03-14 09:56:02,082 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 09:56:02,109 INFO tools.amazon_playwright_extractor: Current price: 5.94 via #corePrice_feature_div .a-offscreen
+2026-03-14 09:56:02,158 INFO tools.amazon_playwright_extractor: Original price: 6.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-14 09:56:02,188 INFO tools.amazon_playwright_extractor: Amazon sales badge found: 100 in container div#socialProofingAsinFaceout_feature_div
+2026-03-14 09:56:02,188 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 09:56:02,229 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/71S9sw0mFRL._AC_SL1500_.jpg via #landingImage
+2026-03-14 09:56:02,325 INFO tools.amazon_playwright_extractor: Found 7 thumbnails.
+2026-03-14 09:56:02,331 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 09:56:02,744 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 09:56:02,972 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 09:56:02,999 INFO tools.amazon_playwright_extractor: Rating: 4.2 via #acrPopover[title*='out of 5 stars']
+2026-03-14 09:56:03,023 INFO tools.amazon_playwright_extractor: Review count: 946 via #acrCustomerReviewText
+2026-03-14 09:56:03,023 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 09:56:03,044 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-14 09:56:03,044 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 09:56:03,285 INFO tools.amazon_playwright_extractor: Found 5 features.
+2026-03-14 09:56:03,285 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 09:56:03,341 INFO tools.amazon_playwright_extractor: Description found using selector: #aplus_feature_div
+2026-03-14 09:56:03,342 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 09:56:03,644 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: #productDetails_techSpec_section_1
+2026-03-14 09:56:03,645 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 09:56:03,645 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 09:56:03,645 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 09:56:03,645 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 09:56:09,744 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 09:56:09,859 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-14 09:56:09,860 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 09:56:09,898 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 09:56:09,898 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 09:56:12,304 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 09:56:12,329 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 09:56:12,392 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 09:56:12,439 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 09:56:13,511 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 139 rows found
+2026-03-14 09:56:13,543 INFO tools.amazon_playwright_extractor: Processing 139 rows in Keepa Product Details AG Grid.
+2026-03-14 09:56:16,990 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.64' in Keepa AG Grid.
+2026-03-14 09:56:17,203 INFO tools.amazon_playwright_extractor: Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 1.05' in Keepa AG Grid.
+2026-03-14 09:56:22,001 INFO tools.amazon_playwright_extractor: ? Successfully parsed 40 items from Keepa Product Details AG Grid.
+2026-03-14 09:56:22,001 INFO tools.amazon_playwright_extractor: ASIN B07LD52RZK: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 09:56:22,001 INFO tools.amazon_playwright_extractor: ASIN B07LD52RZK: EAN '0714035008572' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-14 09:56:22,001 INFO tools.amazon_playwright_extractor: ASIN B07LD52RZK: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 09:56:22,001 INFO tools.amazon_playwright_extractor: ASIN B07LD52RZK: BSR 13784 in 'Grocery 14' from Keepa SalesRankDetailsTable.
+2026-03-14 09:56:22,004 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B07LD52RZK_5015302400064.json (34 entries) saved successfully
+2026-03-14 09:56:22,006 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B07LD52RZK_5015302400064.json (34 entries) saved successfully
+2026-03-14 09:56:22,009 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (4 entries) saved successfully
+2026-03-14 09:56:22,010 INFO __main__: Linking map periodic flush: 4 entries
+2026-03-14 09:56:22,012 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:56:22,012 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:56:22,012 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5038673240084 for supplier product: 'Marksman Stiff Black PVC Broom Head 12"' (FixedAmazonExtractor)
+2026-03-14 09:56:22,012 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5038673240084
+2026-03-14 09:56:28,891 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5038673240084...
+2026-03-14 09:56:29,610 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 09:56:30,341 INFO tools.amazon_playwright_extractor: Found 6 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 09:56:30,342 INFO tools.amazon_playwright_extractor: Processing 6 search result elements for EAN 5038673240084
+2026-03-14 09:56:30,690 INFO tools.amazon_playwright_extractor: Found organic result: ASIN B0CFF9QW6N - 30cm(12") Stiff Black PVC Broom Head Brush...
+2026-03-14 09:56:30,930 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 1 organic products, 5 sponsored products filtered out
+2026-03-14 09:56:30,931 INFO tools.amazon_playwright_extractor: ✅ EAN SEARCH: Selected first organic result - ASIN B0CFF9QW6N
+2026-03-14 09:56:30,931 INFO tools.amazon_playwright_extractor:    Trusting Amazon's search relevance for EAN 5038673240084
+2026-03-14 09:56:30,931 INFO tools.amazon_playwright_extractor:    EAN will be extracted by Keepa during full product data extraction
+2026-03-14 09:56:30,931 INFO tools.amazon_playwright_extractor: Single ASIN B0CFF9QW6N found for EAN 5038673240084.
+2026-03-14 09:56:30,931 INFO tools.amazon_playwright_extractor: Proceeding with ASIN: B0CFF9QW6N for EAN: 5038673240084
+2026-03-14 09:56:30,931 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0CFF9QW6N. Getting a new one from BrowserManager.
+2026-03-14 09:56:30,931 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=5038673240084&ref=nb_sb_noss
+2026-03-14 09:56:33,151 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:56:33,775 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:56:34,788 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 09:56:37,806 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 09:56:37,807 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:56:37,866 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:56:37,867 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 09:56:42,882 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 09:56:49,893 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0CFF9QW6N
+2026-03-14 09:56:49,893 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 09:56:49,949 INFO tools.amazon_playwright_extractor: Title found: '30cm(12") Stiff Black PVC Broom Head Brush' via #productTitle
+2026-03-14 09:56:49,949 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 09:56:49,972 INFO tools.amazon_playwright_extractor: Current price: 12.99 via #corePrice_feature_div .a-offscreen
+2026-03-14 09:56:50,070 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 09:56:50,108 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/41zO84W-44L._AC_SY300_SX300_QL70_ML2_.jpg via #landingImage
+2026-03-14 09:56:50,143 INFO tools.amazon_playwright_extractor: Found 1 thumbnails.
+2026-03-14 09:56:50,148 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 09:56:50,459 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 09:56:50,573 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 09:56:50,617 INFO tools.amazon_playwright_extractor: Rating: 5.0 via i[class*='a-icon-star'] span.a-icon-alt
+2026-03-14 09:56:50,649 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 09:56:50,674 INFO tools.amazon_playwright_extractor: Availability text: 'Usually dispatched within 2 to 3 days' via #availability span.a-color-price
+2026-03-14 09:56:50,674 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 09:56:50,719 INFO tools.amazon_playwright_extractor: Found 1 features.
+2026-03-14 09:56:50,719 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 09:56:50,806 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 09:56:51,149 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-14 09:56:51,149 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 09:56:51,149 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 09:56:51,149 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 09:56:51,149 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 09:56:57,302 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 09:56:57,364 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 09:56:57,402 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 09:56:57,402 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 09:56:59,762 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 09:57:02,393 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 09:57:02,510 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 09:57:02,552 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 09:57:03,629 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 106 rows found
+2026-03-14 09:57:03,651 INFO tools.amazon_playwright_extractor: Processing 106 rows in Keepa Product Details AG Grid.
+2026-03-14 09:57:05,409 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 3.58' in Keepa AG Grid.
+2026-03-14 09:57:05,614 INFO tools.amazon_playwright_extractor: Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 3.00' in Keepa AG Grid.
+2026-03-14 09:57:08,909 INFO tools.amazon_playwright_extractor: ? Successfully parsed 31 items from Keepa Product Details AG Grid.
+2026-03-14 09:57:08,910 INFO tools.amazon_playwright_extractor: ASIN B0CFF9QW6N: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 09:57:08,910 INFO tools.amazon_playwright_extractor: ASIN B0CFF9QW6N: EAN '5038673240084' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-14 09:57:08,910 INFO tools.amazon_playwright_extractor: ASIN B0CFF9QW6N: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 09:57:08,910 WARNING tools.amazon_playwright_extractor: ASIN B0CFF9QW6N: Could not find BSR in any Keepa data source.
+2026-03-14 09:57:08,910 INFO tools.amazon_playwright_extractor: ✅ Recorded search method 'EAN' for ASIN B0CFF9QW6N
+2026-03-14 09:57:08,910 INFO tools.amazon_playwright_extractor: Successfully extracted data for ASIN B0CFF9QW6N (EAN on page: 5038673240084)
+2026-03-14 09:57:08,919 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0CFF9QW6N_5038673240084.json (27 entries) saved successfully
+2026-03-14 09:57:08,921 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0CFF9QW6N_5038673240084.json (27 entries) saved successfully
+2026-03-14 09:57:08,924 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (5 entries) saved successfully
+2026-03-14 09:57:08,924 INFO __main__: Linking map periodic flush: 5 entries
+2026-03-14 09:57:08,927 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:57:08,928 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:57:08,928 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5015302475239 for supplier product: 'Coco & Gray Rubber Edge Dustpan & Brush Assorted Colours' (FixedAmazonExtractor)
+2026-03-14 09:57:08,928 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5015302475239
+2026-03-14 09:57:15,193 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5015302475239...
+2026-03-14 09:57:15,617 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 09:57:17,315 INFO tools.amazon_playwright_extractor: Found 12 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 09:57:17,315 INFO tools.amazon_playwright_extractor: Processing 12 search result elements for EAN 5015302475239
+2026-03-14 09:57:18,058 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 12 sponsored products filtered out
+2026-03-14 09:57:18,058 WARNING tools.amazon_playwright_extractor: EAN 5015302475239 returned no organic results - skipping
+2026-03-14 09:57:18,058 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '5015302475239'. Details: no_organic_results
+2026-03-14 09:57:18,058 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'Coco & Gray Rubber Edge Dustpan & Brush Assorted Colours'
+2026-03-14 09:57:18,058 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'Coco & Gray Rubber Edge Dustpan & Brush Assorted Colours'
+2026-03-14 09:57:18,058 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: Coco & Gray Rubber Edge Dustpan & Brush Assorted Colours
+2026-03-14 09:57:26,308 INFO tools.amazon_playwright_extractor: Title search found 70 elements using selector: div.s-search-results > div[data-asin]
+2026-03-14 09:57:26,683 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-14 09:57:26,927 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B0896516T5
+2026-03-14 09:57:26,927 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Coco & Gray Rubber Edge Dustpan & Brush Assorted Colours'
+2026-03-14 09:57:26,927 INFO tools.amazon_playwright_extractor: Title search successful for 'Coco & Gray Rubber Edge Dustpan & Brush Assorted Colours' after EAN '5015302475239' failed
+2026-03-14 09:57:26,928 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B0896516T5 from title search
+2026-03-14 09:57:26,928 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0896516T5. Getting a new one from BrowserManager.
+2026-03-14 09:57:26,928 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=Coco+%26+Gray+Rubber+Edge+Dustpan+%26+Brush+Assorted+Colours&ref=nb_sb_noss
+2026-03-14 09:57:29,959 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:57:30,315 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:57:31,316 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 09:57:34,333 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 09:57:34,333 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:57:34,419 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:57:34,419 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 09:57:39,433 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 09:57:46,444 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0896516T5
+2026-03-14 09:57:46,444 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 09:57:46,516 INFO tools.amazon_playwright_extractor: Title found: 'Beldray Pet Plus+ Rubber Dustpan And Brush Set - Non-Scratch Broom Bristles, Built In Squeegee Edge For Pet Hair & Spills, Suitable For Hard Floors, Surfaces, Clips Together For Compact Storage' via #productTitle
+2026-03-14 09:57:46,516 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 09:57:46,547 INFO tools.amazon_playwright_extractor: Current price: 4.66 via #corePrice_feature_div .a-offscreen
+2026-03-14 09:57:46,597 INFO tools.amazon_playwright_extractor: Original price: 6.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-14 09:57:46,631 INFO tools.amazon_playwright_extractor: Amazon sales badge found: 400 in container div#socialProofingAsinFaceout_feature_div
+2026-03-14 09:57:46,631 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 09:57:46,674 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/81aivkdnaiL._AC_SL1500_.jpg via #landingImage
+2026-03-14 09:57:46,777 INFO tools.amazon_playwright_extractor: Found 7 thumbnails.
+2026-03-14 09:57:46,783 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 09:57:46,969 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 09:57:47,175 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 09:57:47,214 INFO tools.amazon_playwright_extractor: Rating: 4.5 via #acrPopover[title*='out of 5 stars']
+2026-03-14 09:57:47,252 INFO tools.amazon_playwright_extractor: Review count: 1040 via #acrCustomerReviewText
+2026-03-14 09:57:47,252 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 09:57:47,273 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-14 09:57:47,273 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 09:57:47,603 INFO tools.amazon_playwright_extractor: Found 6 features.
+2026-03-14 09:57:47,603 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 09:57:47,693 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 09:57:48,511 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-14 09:57:48,511 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 09:57:48,511 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 09:57:48,511 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 09:57:48,511 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 09:57:54,624 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 09:57:54,737 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-14 09:57:54,737 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 09:57:54,776 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 09:57:54,776 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 09:57:57,139 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 09:58:00,664 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 09:58:00,706 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 09:58:00,758 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 09:58:01,819 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 178 rows found
+2026-03-14 09:58:01,840 INFO tools.amazon_playwright_extractor: Processing 178 rows in Keepa Product Details AG Grid.
+2026-03-14 09:58:03,738 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 2.70' in Keepa AG Grid.
+2026-03-14 09:58:03,875 INFO tools.amazon_playwright_extractor: Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.61' in Keepa AG Grid.
+2026-03-14 09:58:08,076 INFO tools.amazon_playwright_extractor: ? Successfully parsed 52 items from Keepa Product Details AG Grid.
+2026-03-14 09:58:08,077 INFO tools.amazon_playwright_extractor: ASIN B0896516T5: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 09:58:08,077 INFO tools.amazon_playwright_extractor: ASIN B0896516T5: EAN '5053191069351' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-14 09:58:08,077 INFO tools.amazon_playwright_extractor: ASIN B0896516T5: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 09:58:08,077 INFO tools.amazon_playwright_extractor: ASIN B0896516T5: BSR 1942 in 'Grocery 27' from Keepa SalesRankDetailsTable.
+2026-03-14 09:58:08,081 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0896516T5_5015302475239.json (29 entries) saved successfully
+2026-03-14 09:58:08,084 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0896516T5_5015302475239.json (29 entries) saved successfully
+2026-03-14 09:58:08,089 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (6 entries) saved successfully
+2026-03-14 09:58:08,090 INFO __main__: Linking map periodic flush: 6 entries
+2026-03-14 09:58:08,094 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:58:08,094 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:58:08,095 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5038673233314 for supplier product: 'Twine Plastic Socket Mop Head 280g' (FixedAmazonExtractor)
+2026-03-14 09:58:08,095 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5038673233314
+2026-03-14 09:58:13,942 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5038673233314...
+2026-03-14 09:58:14,146 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 09:58:15,007 INFO tools.amazon_playwright_extractor: Found 6 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 09:58:15,007 INFO tools.amazon_playwright_extractor: Processing 6 search result elements for EAN 5038673233314
+2026-03-14 09:58:15,226 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 6 sponsored products filtered out
+2026-03-14 09:58:15,226 WARNING tools.amazon_playwright_extractor: EAN 5038673233314 returned no organic results - skipping
+2026-03-14 09:58:15,226 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '5038673233314'. Details: no_organic_results
+2026-03-14 09:58:15,226 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'Twine Plastic Socket Mop Head 280g'
+2026-03-14 09:58:15,226 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'Twine Plastic Socket Mop Head 280g'
+2026-03-14 09:58:15,226 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: Twine Plastic Socket Mop Head 280g
+2026-03-14 09:58:24,682 INFO tools.amazon_playwright_extractor: Title search found 68 elements using selector: div.s-search-results > div[data-asin]
+2026-03-14 09:58:25,566 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-14 09:58:26,584 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B0BM4KNXD2
+2026-03-14 09:58:26,585 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Twine Plastic Socket Mop Head 280g'
+2026-03-14 09:58:26,585 INFO tools.amazon_playwright_extractor: Title search successful for 'Twine Plastic Socket Mop Head 280g' after EAN '5038673233314' failed
+2026-03-14 09:58:26,585 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B0BM4KNXD2 from title search
+2026-03-14 09:58:26,585 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0BM4KNXD2. Getting a new one from BrowserManager.
+2026-03-14 09:58:26,585 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=Twine+Plastic+Socket+Mop+Head+280g&ref=nb_sb_noss
+2026-03-14 09:58:28,905 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:58:30,163 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:58:31,169 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 09:58:34,178 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 09:58:34,178 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:58:34,225 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:58:34,225 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 09:58:39,237 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 09:58:46,247 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0BM4KNXD2
+2026-03-14 09:58:46,247 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 09:58:46,282 INFO tools.amazon_playwright_extractor: Title found: 'New Pack of 3 Push FIT Socket MOP Head Size 16 280G Plastic Cotton Twine' via #productTitle
+2026-03-14 09:58:46,282 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 09:58:46,305 INFO tools.amazon_playwright_extractor: Current price: 6.99 via #corePrice_feature_div .a-offscreen
+2026-03-14 09:58:46,406 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 09:58:46,447 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/41L7Q7qPvvL._AC_.jpg via #landingImage
+2026-03-14 09:58:46,481 INFO tools.amazon_playwright_extractor: Found 1 thumbnails.
+2026-03-14 09:58:46,487 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 09:58:46,659 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 09:58:46,807 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 09:58:46,848 INFO tools.amazon_playwright_extractor: Rating: 4.5 via i[class*='a-icon-star'] span.a-icon-alt
+2026-03-14 09:58:46,881 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 09:58:46,903 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-14 09:58:46,904 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 09:58:47,066 INFO tools.amazon_playwright_extractor: Found 4 features.
+2026-03-14 09:58:47,066 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 09:58:47,085 INFO tools.amazon_playwright_extractor: Description found using selector: #productDescription
+2026-03-14 09:58:47,085 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 09:58:47,152 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: #productDetails_techSpec_section_1
+2026-03-14 09:58:47,152 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 09:58:47,152 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 09:58:47,152 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 09:58:47,152 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 09:58:53,225 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 09:58:53,251 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 09:58:53,273 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 09:58:53,273 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 09:58:55,504 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 09:58:59,498 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 09:58:59,516 WARNING tools.amazon_playwright_extractor: Product-Details tab visible, but inner grid still not ready – extending wait with retry logic.
+2026-03-14 09:58:59,517 INFO tools.amazon_playwright_extractor: Grid attempt 1/3: Waiting 15000ms for grid container...
+2026-03-14 09:58:59,581 INFO tools.amazon_playwright_extractor: ? Grid became visible after attempt 1 – continuing.
+2026-03-14 09:58:59,610 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 09:58:59,654 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 09:59:00,704 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 73 rows found
+2026-03-14 09:59:00,724 INFO tools.amazon_playwright_extractor: Processing 73 rows in Keepa Product Details AG Grid.
+2026-03-14 09:59:02,350 INFO tools.amazon_playwright_extractor: ? Successfully parsed 20 items from Keepa Product Details AG Grid.
+2026-03-14 09:59:02,350 INFO tools.amazon_playwright_extractor: ASIN B0BM4KNXD2: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 09:59:02,350 WARNING tools.amazon_playwright_extractor: ASIN B0BM4KNXD2: Could not find EAN in Keepa product_details_tab_data.
+2026-03-14 09:59:02,350 INFO tools.amazon_playwright_extractor: ASIN B0BM4KNXD2: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 09:59:02,350 WARNING tools.amazon_playwright_extractor: ASIN B0BM4KNXD2: Could not find BSR in any Keepa data source.
+2026-03-14 09:59:02,354 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0BM4KNXD2_5038673233314.json (24 entries) saved successfully
+2026-03-14 09:59:02,359 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0BM4KNXD2_5038673233314.json (24 entries) saved successfully
+2026-03-14 09:59:02,364 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (7 entries) saved successfully
+2026-03-14 09:59:02,364 INFO __main__: Linking map periodic flush: 7 entries
+2026-03-14 09:59:02,368 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:59:02,369 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:59:02,374 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:59:02,374 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:59:02,375 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5022092018416 for supplier product: 'Strawberry Planter Black Stackable Plant Pot' (FixedAmazonExtractor)
+2026-03-14 09:59:02,375 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5022092018416
+2026-03-14 09:59:08,042 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5022092018416...
+2026-03-14 09:59:08,122 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 09:59:08,776 INFO tools.amazon_playwright_extractor: Found 6 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 09:59:08,776 INFO tools.amazon_playwright_extractor: Processing 6 search result elements for EAN 5022092018416
+2026-03-14 09:59:08,898 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 6 sponsored products filtered out
+2026-03-14 09:59:08,898 WARNING tools.amazon_playwright_extractor: EAN 5022092018416 returned no organic results - skipping
+2026-03-14 09:59:08,898 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '5022092018416'. Details: no_organic_results
+2026-03-14 09:59:08,898 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'Strawberry Planter Black Stackable Plant Pot'
+2026-03-14 09:59:08,899 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'Strawberry Planter Black Stackable Plant Pot'
+2026-03-14 09:59:08,899 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: Strawberry Planter Black Stackable Plant Pot
+2026-03-14 09:59:13,965 INFO tools.amazon_playwright_extractor: Title search found 71 elements using selector: div.s-search-results > div[data-asin]
+2026-03-14 09:59:14,419 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-14 09:59:14,709 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B0B2WVPLGC
+2026-03-14 09:59:14,710 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Strawberry Planter Black Stackable Plant Pot'
+2026-03-14 09:59:14,710 INFO tools.amazon_playwright_extractor: Title search successful for 'Strawberry Planter Black Stackable Plant Pot' after EAN '5022092018416' failed
+2026-03-14 09:59:14,710 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B0B2WVPLGC from title search
+2026-03-14 09:59:14,710 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0B2WVPLGC. Getting a new one from BrowserManager.
+2026-03-14 09:59:14,710 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=Strawberry+Planter+Black+Stackable+Plant+Pot&ref=nb_sb_noss
+2026-03-14 09:59:18,038 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:59:22,056 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:59:23,071 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 09:59:26,078 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 09:59:26,078 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 09:59:26,149 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 09:59:26,149 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 09:59:31,164 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 09:59:38,177 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0B2WVPLGC
+2026-03-14 09:59:38,178 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 09:59:38,236 INFO tools.amazon_playwright_extractor: Title found: 'Stackable Strawberry Planter – Tiered Vertical Garden Pots for Herbs, Flowers & Vegetables – Space-Saving Planter for Patio, Balcony & Garden – Indoor & Outdoor | Black, 6-Tier' via #productTitle
+2026-03-14 09:59:38,237 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 09:59:38,262 INFO tools.amazon_playwright_extractor: Current price: 12.69 via #corePrice_feature_div .a-offscreen
+2026-03-14 09:59:38,303 INFO tools.amazon_playwright_extractor: Original price: 14.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-03-14 09:59:38,337 INFO tools.amazon_playwright_extractor: Amazon sales badge found: 200 in container div#socialProofingAsinFaceout_feature_div
+2026-03-14 09:59:38,338 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 09:59:38,378 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/61qoyU7KSdL._AC_SL1500_.jpg via #landingImage
+2026-03-14 09:59:38,462 INFO tools.amazon_playwright_extractor: Found 7 thumbnails.
+2026-03-14 09:59:38,466 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 09:59:38,734 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 09:59:38,911 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 09:59:38,929 INFO tools.amazon_playwright_extractor: Rating: 4.2 via #acrPopover[title*='out of 5 stars']
+2026-03-14 09:59:38,945 INFO tools.amazon_playwright_extractor: Review count: 180 via #acrCustomerReviewText
+2026-03-14 09:59:38,945 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 09:59:38,965 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-14 09:59:38,965 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 09:59:39,164 INFO tools.amazon_playwright_extractor: Found 6 features.
+2026-03-14 09:59:39,164 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 09:59:39,203 INFO tools.amazon_playwright_extractor: Description found using selector: #aplus_feature_div
+2026-03-14 09:59:39,203 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 09:59:39,467 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-14 09:59:39,467 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 09:59:39,467 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 09:59:39,467 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 09:59:39,467 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 09:59:45,555 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 09:59:45,665 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-14 09:59:45,665 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 09:59:45,698 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 09:59:45,698 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 09:59:48,071 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 09:59:51,801 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 09:59:51,892 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 09:59:51,936 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 09:59:52,975 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 130 rows found
+2026-03-14 09:59:52,990 INFO tools.amazon_playwright_extractor: Processing 130 rows in Keepa Product Details AG Grid.
+2026-03-14 09:59:58,425 INFO tools.amazon_playwright_extractor: ? Successfully parsed 38 items from Keepa Product Details AG Grid.
+2026-03-14 09:59:58,426 INFO tools.amazon_playwright_extractor: ASIN B0B2WVPLGC: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 09:59:58,426 INFO tools.amazon_playwright_extractor: ASIN B0B2WVPLGC: EAN '5056569506311' found in Keepa details via key 'Product Codes - EAN'.
+2026-03-14 09:59:58,426 INFO tools.amazon_playwright_extractor: ASIN B0B2WVPLGC: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 09:59:58,426 INFO tools.amazon_playwright_extractor: ASIN B0B2WVPLGC: BSR 579 in 'Garden 18' from Keepa SalesRankDetailsTable.
+2026-03-14 09:59:58,428 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0B2WVPLGC_5022092018416.json (32 entries) saved successfully
+2026-03-14 09:59:58,430 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0B2WVPLGC_5022092018416.json (32 entries) saved successfully
+2026-03-14 09:59:58,433 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (8 entries) saved successfully
+2026-03-14 09:59:58,433 INFO __main__: Linking map periodic flush: 8 entries
+2026-03-14 09:59:58,435 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 09:59:58,435 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 09:59:58,436 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5038673704166 for supplier product: 'Marksman Hanging Basket Replacement Chain 16"' (FixedAmazonExtractor)
+2026-03-14 09:59:58,436 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5038673704166
+2026-03-14 10:00:06,069 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5038673704166...
+2026-03-14 10:00:06,615 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-03-14 10:00:07,640 INFO tools.amazon_playwright_extractor: Found 12 search result elements using selector: div[data-component-type='s-search-result']
+2026-03-14 10:00:07,640 INFO tools.amazon_playwright_extractor: Processing 12 search result elements for EAN 5038673704166
+2026-03-14 10:00:08,283 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 12 sponsored products filtered out
+2026-03-14 10:00:08,283 WARNING tools.amazon_playwright_extractor: EAN 5038673704166 returned no organic results - skipping
+2026-03-14 10:00:08,283 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '5038673704166'. Details: no_organic_results
+2026-03-14 10:00:08,283 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'Marksman Hanging Basket Replacement Chain 16"'
+2026-03-14 10:00:08,283 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'Marksman Hanging Basket Replacement Chain 16"'
+2026-03-14 10:00:08,283 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: Marksman Hanging Basket Replacement Chain 16"
+2026-03-14 10:00:18,496 INFO tools.amazon_playwright_extractor: Title search found 70 elements using selector: div.s-search-results > div[data-asin]
+2026-03-14 10:00:20,228 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-03-14 10:00:20,440 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B0D7C2M19D
+2026-03-14 10:00:20,440 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'Marksman Hanging Basket Replacement Chain 16"'
+2026-03-14 10:00:20,440 INFO tools.amazon_playwright_extractor: Title search successful for 'Marksman Hanging Basket Replacement Chain 16"' after EAN '5038673704166' failed
+2026-03-14 10:00:20,440 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B0D7C2M19D from title search
+2026-03-14 10:00:20,440 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0D7C2M19D. Getting a new one from BrowserManager.
+2026-03-14 10:00:20,440 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=Marksman+Hanging+Basket+Replacement+Chain+16%22&ref=nb_sb_noss
+2026-03-14 10:00:26,832 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 10:00:27,998 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 10:00:29,008 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-03-14 10:00:32,013 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-03-14 10:00:32,013 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-03-14 10:00:32,090 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-03-14 10:00:32,090 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-03-14 10:00:37,105 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-03-14 10:00:44,106 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0D7C2M19D
+2026-03-14 10:00:44,106 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-03-14 10:00:44,165 INFO tools.amazon_playwright_extractor: Title found: '5 Pcs Hanging Basket Chains 3 Point Heavy Duty,Flower Hanging Basket For Hanging Plants, Replacement Chain Flower Pot Chains for Hangings Baskets with Inch for Bird Feeders Planters(Black)' via #productTitle
+2026-03-14 10:00:44,165 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-03-14 10:00:44,196 INFO tools.amazon_playwright_extractor: Current price: 3.99 via #corePrice_feature_div .a-offscreen
+2026-03-14 10:00:44,264 INFO tools.amazon_playwright_extractor: Original price: 7.79 via span.a-price.a-text-price[data-a-strike='true'] span.a-offscreen
+2026-03-14 10:00:44,297 INFO tools.amazon_playwright_extractor: Amazon sales badge found: 100 in container div#socialProofingAsinFaceout_feature_div
+2026-03-14 10:00:44,297 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-03-14 10:00:44,333 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/61jl9A7MVeL._AC_SL1342_.jpg via #landingImage
+2026-03-14 10:00:44,415 INFO tools.amazon_playwright_extractor: Found 7 thumbnails.
+2026-03-14 10:00:44,419 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-03-14 10:00:44,624 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-03-14 10:00:44,823 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-03-14 10:00:44,844 INFO tools.amazon_playwright_extractor: Rating: 4.1 via #acrPopover[title*='out of 5 stars']
+2026-03-14 10:00:44,864 INFO tools.amazon_playwright_extractor: Review count: 54 via #acrCustomerReviewText
+2026-03-14 10:00:44,864 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-03-14 10:00:44,883 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-03-14 10:00:44,883 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-03-14 10:00:45,096 INFO tools.amazon_playwright_extractor: Found 5 features.
+2026-03-14 10:00:45,097 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-03-14 10:00:45,119 INFO tools.amazon_playwright_extractor: Description found using selector: #productDescription
+2026-03-14 10:00:45,119 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-03-14 10:00:45,345 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-03-14 10:00:45,345 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-03-14 10:00:45,345 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-03-14 10:00:45,345 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-03-14 10:00:45,345 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...
+2026-03-14 10:00:51,426 INFO tools.amazon_playwright_extractor: Keepa iframe found: iframe[id*='keepa']
+2026-03-14 10:00:51,550 INFO tools.amazon_playwright_extractor: Keepa Sales Rank Details Table parsed.
+2026-03-14 10:00:51,550 INFO tools.amazon_playwright_extractor: Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-03-14 10:00:51,573 INFO tools.amazon_playwright_extractor: Keepa Data tab found. Currently active: False
+2026-03-14 10:00:51,573 INFO tools.amazon_playwright_extractor: Clicking Keepa 'Data' tab...
+2026-03-14 10:00:53,805 INFO tools.amazon_playwright_extractor: Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-03-14 10:00:59,244 INFO tools.amazon_playwright_extractor: ? Product-Details wrapper appeared on attempt 1
+2026-03-14 10:00:59,450 INFO tools.amazon_playwright_extractor: Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-03-14 10:00:59,516 INFO tools.amazon_playwright_extractor: Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-03-14 10:01:00,570 INFO tools.amazon_playwright_extractor: ? Primary attempt successful: 136 rows found
+2026-03-14 10:01:00,586 INFO tools.amazon_playwright_extractor: Processing 136 rows in Keepa Product Details AG Grid.
+2026-03-14 10:01:02,403 INFO tools.amazon_playwright_extractor: Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.87' in Keepa AG Grid.
+2026-03-14 10:01:02,534 INFO tools.amazon_playwright_extractor: Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.60' in Keepa AG Grid.
+2026-03-14 10:01:06,643 INFO tools.amazon_playwright_extractor: ? Successfully parsed 40 items from Keepa Product Details AG Grid.
+2026-03-14 10:01:06,643 INFO tools.amazon_playwright_extractor: ASIN B0D7C2M19D: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-03-14 10:01:06,643 WARNING tools.amazon_playwright_extractor: ASIN B0D7C2M19D: Could not find EAN in Keepa product_details_tab_data.
+2026-03-14 10:01:06,644 INFO tools.amazon_playwright_extractor: ASIN B0D7C2M19D: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-03-14 10:01:06,644 INFO tools.amazon_playwright_extractor: ASIN B0D7C2M19D: BSR 4193 in 'Garden 23' from Keepa SalesRankDetailsTable.
+2026-03-14 10:01:06,647 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0D7C2M19D_5038673704166.json (29 entries) saved successfully
+2026-03-14 10:01:06,650 INFO windows_save_guardian: ? ATOMIC SAVE: amazon_B0D7C2M19D_5038673704166.json (29 entries) saved successfully
+2026-03-14 10:01:06,652 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (9 entries) saved successfully
+2026-03-14 10:01:06,653 INFO __main__: Linking map periodic flush: 9 entries
+2026-03-14 10:01:06,655 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 10:01:06,655 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 10:01:06,660 INFO windows_save_guardian: ? ATOMIC SAVE: linking_map.json (9 entries) saved successfully
+2026-03-14 10:01:06,663 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 10:01:06,664 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 10:01:06,667 INFO windows_save_guardian: ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__71d4f372_processing_state.json (27 entries) saved successfully
+2026-03-14 10:01:06,667 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-03-14 10:01:07,088 INFO tools.FBA_Financial_calculator: FBA_Financial_calculator: amazon_dir confirmed to exist and is a directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-03-14 10:01:07,089 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5053249255347, ASIN=None, Price=£4.54 (from current_price)
+2026-03-14 10:01:07,089 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5015302400064, ASIN=None, Price=£5.94 (from current_price)
+2026-03-14 10:01:07,089 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5025416330034, ASIN=None, Price=£7.52 (from current_price)
+2026-03-14 10:01:07,090 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5038673240084, ASIN=None, Price=£12.99 (from current_price)
+2026-03-14 10:01:07,090 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5015302475239, ASIN=None, Price=£4.66 (from current_price)
+2026-03-14 10:01:07,090 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5053249262260 5053249262246, ASIN=None, Price=£4.3 (from current_price)
+2026-03-14 10:01:07,091 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5038673233314, ASIN=None, Price=£6.99 (from current_price)
+2026-03-14 10:01:07,091 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5022092018416, ASIN=None, Price=£12.69 (from current_price)
+2026-03-14 10:01:07,091 INFO tools.FBA_Financial_calculator: ? PRICE FOUND: EAN=5038673704166, ASIN=None, Price=£3.99 (from current_price)
+2026-03-14 10:01:07,106 INFO __main__: Financial report generated: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\financial_reports\poundwholesale-co-uk__sandbox__71d4f372\fba_financial_report_poundwholesale-co-uk__sandbox__71d4f372_20260314_100107.csv
+2026-03-14 10:01:07,106 INFO __main__: Product list refresh complete: 9/9 matched
+2026-03-14 10:01:07,106 WARNING utils.browser_manager: Error during global cleanup: no running event loop

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "google_auth": false,
+  "claude_code": {
+    "mcp": false,
+    "hooks": false,
+    "plugins": false,
+    "agents": false,
+    "commands": false,
+    "skills": false
+  },
+  "agents": {
+    "sisyphus": {
+      "model": "openai/gpt-5.4",
+      "variant": "high",
+      "mode": "all",
+      "prompt_append": "When the user request has multiple separable workstreams, delegate.\n\nPrefer parallelism when tasks are independent. Ask clarifying questions when the file paths/sheets/ranges or success criteria are unclear.\n\nRouting rule: for spreadsheet or financial-report workflows (preflight \u2192 analysis \u2192 guide \u2192 final), delegate to `@financial-analyst` and load skill `xlsx-intake-qc`.\n\nMinimize token waste:\n- Do not paste large contents into agent calls; pass file references/paths and focused questions.\n- When context is large, call `librarian` first to produce a tight brief, then delegate.\n"
+    },
+    "atlas": {
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high",
+      "mode": "all"
+    },
+    "prometheus": {
+      "model": "openai/gpt-5.4",
+      "variant": "high"
+    },
+    "hephaestus": {
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high",
+      "mode": "all"
+    },
+    "plan": {
+      "model": "openai/gpt-5.4",
+      "variant": "medium"
+    },
+    "metis": {
+      "model": "google-vertex/gemini-3-flash-preview"
+    },
+    "momus": {
+      "model": "google-vertex/gemini-3-flash-preview"
+    },
+    "oracle": {
+      "model": "openai/gpt-5.4",
+      "variant": "xhigh"
+    },
+    "librarian": {
+      "model": "kimi-for-coding/k2p5"
+    },
+    "explore": {
+      "model": "opencode/minimax-m2.5-free"
+    },
+    "multimodal-looker": {
+      "model": "google-vertex/gemini-3.1-pro-preview"
+    },
+    "sisyphus-junior": {
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high"
+    },
+    "build": {
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high"
+    },
+    "opencode-builder": {
+      "model": "opencode/big-pickle"
+    }
+  },
+  "sisyphus_agent": {
+    "disabled": false,
+    "planner_enabled": true,
+    "replace_plan": true
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "google-vertex/gemini-3.1-pro-preview"
+    },
+    "ultrabrain": {
+      "model": "openai/gpt-5.4",
+      "variant": "xhigh"
+    },
+    "artistry": {
+      "model": "google-vertex/gemini-3.1-pro-preview"
+    },
+    "quick": {
+      "model": "google-vertex/gemini-3-flash-preview"
+    },
+    "unspecified-low": {
+      "model": "google-vertex/gemini-3-flash-preview"
+    },
+    "unspecified-high": {
+      "model": "openai/gpt-5.4",
+      "variant": "high"
+    },
+    "writing": {
+      "model": "kimi-for-coding/k2p5"
+    },
+    "exploration": {
+      "model": "opencode/minimax-m2.5-free"
+    },
+    "code-review": {
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high"
+    }
+  }
+}

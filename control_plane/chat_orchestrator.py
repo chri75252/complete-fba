@@ -312,6 +312,96 @@ def _sandbox_slug_parts(sandbox_supplier: str) -> tuple[str, str]:
     )
 
 
+def _extract_sandbox_suffix(sandbox_supplier: object) -> str:
+    value = str(sandbox_supplier or "").strip()
+    m = re.fullmatch(r".+__(sandbox__.+)", value)
+    return m.group(1) if m else ""
+
+
+def _read_json_dict(path: Path) -> dict[str, Any]:
+    try:
+        data = read_json(path)
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _load_last_category_resume_context(
+    repo_root: Path, session_state: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    session_state = session_state or {}
+    if not isinstance(session_state, dict) and not hasattr(session_state, "get"):
+        session_state = {}
+
+    last_run_id = str(session_state.get("last_run_id") or "").strip()
+    last_supplier_domain = str(session_state.get("last_supplier_domain") or "").strip()
+    last_sandbox_supplier = str(session_state.get("last_sandbox_supplier") or "").strip()
+
+    if not last_run_id or not last_supplier_domain:
+        return {}
+
+    paths = get_paths()
+    overrides_dir = paths.overrides_dir / last_run_id
+    categories_path = overrides_dir / "categories_subset.json"
+    merged_cfg_path = overrides_dir / "system_config.merged.json"
+    status_path = paths.status_dir / f"{last_run_id}.json"
+    job_candidates = [
+        paths.jobs_running / f"job_{last_run_id}.json",
+        paths.jobs_pending / f"job_{last_run_id}.json",
+        paths.jobs_done / f"job_{last_run_id}.json",
+        paths.jobs_failed / f"job_{last_run_id}.json",
+    ]
+
+    categories_data = _read_json_dict(categories_path)
+    category_urls = categories_data.get("category_urls") or []
+    category_urls = [str(u).strip() for u in category_urls if isinstance(u, str) and u.strip()]
+    if not category_urls:
+        return {}
+
+    merged_cfg = _read_json_dict(merged_cfg_path)
+    system_cfg = merged_cfg.get("system") if isinstance(merged_cfg.get("system"), dict) else {}
+    status_payload = _read_json_dict(status_path)
+
+    job_payload: dict[str, Any] = {}
+    for job_path in job_candidates:
+        job_payload = _read_json_dict(job_path)
+        if job_payload:
+            break
+
+    sandbox_supplier = last_sandbox_supplier or str(job_payload.get("sandbox_supplier") or "").strip()
+    sandbox_suffix = _extract_sandbox_suffix(sandbox_supplier)
+
+    try:
+        workflow_key, runner_script = _resolve_workflow_params(repo_root, last_supplier_domain)
+    except ValueError:
+        return {}
+
+    context: dict[str, Any] = {
+        "run_id": last_run_id,
+        "supplier_domain": last_supplier_domain,
+        "workflow_key": workflow_key,
+        "runner_script": runner_script,
+        "category_urls": category_urls,
+    }
+
+    if sandbox_supplier:
+        context["sandbox_supplier"] = sandbox_supplier
+    if sandbox_suffix:
+        context["sandbox_suffix"] = sandbox_suffix
+
+    if system_cfg.get("max_products") is not None:
+        context["max_products"] = int(system_cfg.get("max_products") or 0)
+    if system_cfg.get("max_products_per_category") is not None:
+        context["max_products_per_category"] = int(system_cfg.get("max_products_per_category") or 0)
+
+    if status_payload:
+        state = str(status_payload.get("state") or "").strip()
+        if state:
+            context["last_known_state"] = state
+
+    return context
+
+
 def _substitute_expected_output_placeholders(
     expected_outputs: list[object], *, run_id: str, sandbox_id: str
 ) -> list[str]:
@@ -945,6 +1035,10 @@ def _compute_planner_hints(user_text: str, repo_root: Path, session_state: dict[
     if isinstance(last_products_path, str) and last_products_path.strip():
         planner_hints["last_products_path"] = last_products_path.strip()
 
+    category_resume_context = _load_last_category_resume_context(repo_root, session_state)
+    if category_resume_context:
+        planner_hints["last_category_resume_context"] = category_resume_context
+
     return planner_hints
 
 
@@ -968,6 +1062,21 @@ def _should_rewrite_product_list_resume(
     return bool(planner_hints.get("last_products_path")) and bool(
         planner_hints.get("last_supplier_domain")
     )
+
+
+def _should_rewrite_category_resume(
+    user_text: str, tool: str, params: dict[str, Any], planner_hints: dict[str, Any]
+) -> bool:
+    if tool != "enqueue_run":
+        return False
+    if not _looks_like_resume_request(user_text):
+        return False
+    if planner_hints.get("detected_category_urls"):
+        return False
+    urls = params.get("category_urls") or []
+    if isinstance(urls, list) and any(isinstance(u, str) and u.strip() for u in urls):
+        return False
+    return bool(planner_hints.get("last_category_resume_context"))
 
 
 def _sandbox_supplier_aliases(name: str) -> set[str]:
@@ -1106,6 +1215,27 @@ def agent_plan_step(
             }
 
             break
+
+        if _should_rewrite_category_resume(user_text, tool, params, planner_hints):
+            ctx = planner_hints["last_category_resume_context"]
+            rewritten = {
+                "workflow_key": str(ctx["workflow_key"]),
+                "supplier_domain": str(ctx["supplier_domain"]),
+                "runner_script": str(ctx["runner_script"]),
+                "category_urls": list(ctx.get("category_urls") or []),
+                "notes": params.get("notes")
+                or "Resume cancelled category sandbox run from authoritative context",
+            }
+            if ctx.get("max_products") is not None:
+                rewritten["max_products"] = int(ctx["max_products"])
+            if ctx.get("max_products_per_category") is not None:
+                rewritten["max_products_per_category"] = int(ctx["max_products_per_category"])
+            if isinstance(ctx.get("sandbox_suffix"), str) and ctx["sandbox_suffix"].strip():
+                rewritten["sandbox_suffix"] = ctx["sandbox_suffix"].strip()
+            if isinstance(ctx.get("run_id"), str) and ctx["run_id"].strip():
+                rewritten["run_id"] = ctx["run_id"].strip()
+            tool = "enqueue_run"
+            params = rewritten
 
         if _should_rewrite_product_list_resume(user_text, tool, params, planner_hints):
             rewritten: dict[str, Any] = {
@@ -1860,15 +1990,6 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             raw_max_products_per_category,
             per_cat_default,
         )
-
-        if (
-            raw_max_products is not None
-            and raw_max_products_per_category is not None
-            and len(requested_category_urls) > 1
-            and max_products_val == max_products_per_cat_val
-            and max_products_per_cat_val > 0
-        ):
-            max_products_val = max_products_per_cat_val * len(requested_category_urls)
 
         req = RunRequest(
             supplier_domain=str(p.get("supplier_domain") or ""),
