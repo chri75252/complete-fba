@@ -3,7 +3,7 @@ Do not edit manually.
 """
 
 SOURCE_CATEGORY = "processing_states"
-SOURCE_KIND = "main"
+SOURCE_KIND = "main_latest_per_supplier"
 SOURCE_RELATIVE_PATH = "OUTPUTS/CACHE/processing_states/efghousewares_co_uk_processing_state.json"
 SOURCE_SIZE_BYTES = 7058
 SOURCE_MTIME_ISO = "2026-03-05T04:09:58.199941+00:00"

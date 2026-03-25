@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FBA Analytics Engine v2.4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#003824",
+                        "on-primary": "#1000a9",
+                        "surface": "#131314",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "primary": "#c0c1ff",
+                        "on-error-container": "#ffdad6",
+                        "secondary": "#4edea3",
+                        "tertiary-container": "#ca8100",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-low": "#1c1b1c",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container": "#201f20",
+                        "surface-bright": "#3a393a",
+                        "primary-container": "#8083ff",
+                        "secondary-fixed": "#6ffbbe",
+                        "outline-variant": "#464554",
+                        "secondary-container": "#00a572",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-dim": "#131314",
+                        "inverse-primary": "#494bd6",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#313031",
+                        "on-primary-container": "#0d0096",
+                        "on-tertiary-container": "#3e2400",
+                        "background": "#131314",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb95f",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-fixed-dim": "#4edea3",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#353436",
+                        "outline": "#908fa0",
+                        "on-surface": "#e5e2e3",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary-fixed": "#07006c",
+                        "surface-tint": "#c0c1ff",
+                        "primary-fixed": "#e1e0ff",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-background": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "surface-container-high": "#2a2a2b",
+                        "on-secondary-container": "#00311f",
+                        "on-tertiary": "#472a00"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(53, 52, 54, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .metallic-gradient {
+            background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%);
+        }
+        .zebra-stripe:nth-child(even) {
+            background-color: #1c1b1c;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-64 flex-shrink-0 bg-surface-container-lowest flex flex-col border-r border-outline-variant/10">
+<div class="p-6 flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<div>
+<h1 class="font-headline font-bold text-sm tracking-tight text-on-surface">FBA Analytics</h1>
+<p class="text-[10px] font-label uppercase tracking-widest text-outline">Engine v2.4</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-2">
+<div class="px-2 py-3 bg-surface-container flex items-center gap-3 rounded-lg border-l-2 border-primary">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</div>
+<div class="px-2 py-3 hover:bg-surface-container-low transition-colors flex items-center gap-3 rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined">settings_remote</span>
+<span class="text-sm font-medium">Operator</span>
+</div>
+<div class="px-2 py-3 hover:bg-surface-container-low transition-colors flex items-center gap-3 rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="text-sm font-medium">AI Assistant</span>
+</div>
+</nav>
+<div class="p-4 border-t border-outline-variant/10 space-y-1">
+<div class="px-2 py-2 hover:bg-surface-container-low transition-colors flex items-center gap-3 rounded text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="text-xs font-medium">Settings</span>
+</div>
+<div class="px-2 py-2 hover:bg-surface-container-low transition-colors flex items-center gap-3 rounded text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">help</span>
+<span class="text-xs font-medium">Support</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<header class="h-16 flex-shrink-0 bg-surface flex items-center justify-between px-8 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-2 px-3 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full border border-secondary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                        System Status: Active
+                    </span>
+<div class="flex gap-6 ml-8">
+<a class="text-xs font-semibold text-primary" href="#">Matches</a>
+<a class="text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors" href="#">Phase</a>
+<a class="text-xs font-semibold text-on-surface-variant hover:text-on-surface transition-colors" href="#">Profitable</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg">search</span>
+<input class="bg-surface-container-lowest border-none rounded px-10 py-2 text-xs w-64 focus:ring-1 focus:ring-primary transition-all" placeholder="Global node search..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-outline">
+<button class="hover:text-on-surface"><span class="material-symbols-outlined">refresh</span></button>
+<button class="hover:text-on-surface relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full border-2 border-surface"></span>
+</button>
+<div class="h-8 w-8 rounded bg-surface-container-highest border border-outline-variant/20 flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Portrait of a modern software engineer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlkpFPNwj3bSXYqSKsEJtCJgn3nyUgWO71kNjQ_ugK8ho5Og6rcv_LH1xdAtXsSafrFHH0NFqb5PPcoOuoOeCNk_mfF9pabqHGvgPpzvMIISAJ8kIFnjWnvx_xKzY991-0LcUfA2c5iztTgSllRDvZKXY_mSEfLh8v4KAZEzKb0MvqQt4CsldtEoPgZp3HzAHLWPqZVanEb9UjUid4l5gTeihA71KuDcfumCBhQAzJTarYwaxXTnPD6VOJW7hm7bQRVvqqd-sLZwE"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Workspace -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8 bg-surface-dim">
+<!-- Hero Bento Section -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Total Profit Potential (Hero Card) -->
+<div class="col-span-12 lg:col-span-4 metallic-gradient p-6 rounded-xl flex flex-col justify-between shadow-2xl shadow-primary/10">
+<div>
+<p class="text-[10px] font-label uppercase tracking-[0.2em] text-on-primary/70 mb-1">Total Profit Potential</p>
+<h2 class="font-headline text-5xl font-bold text-on-primary">$142,892<span class="text-2xl opacity-60">.40</span></h2>
+</div>
+<div class="flex items-end justify-between mt-8">
+<div class="flex flex-col">
+<span class="text-xs font-medium text-on-primary/80">Growth +12.4%</span>
+<div class="w-32 h-8 mt-2 overflow-hidden opacity-40">
+<!-- Sparkline Placeholder -->
+<svg class="w-full h-full stroke-on-primary fill-none stroke-[2]" viewbox="0 0 100 20">
+<path d="M0,15 L10,12 L20,18 L30,10 L40,14 L50,5 L60,8 L70,3 L80,12 L90,5 L100,10"></path>
+</svg>
+</div>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-primary/40">trending_up</span>
+</div>
+</div>
+<!-- KPI Grid -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-secondary/40">
+<p class="text-[10px] font-label uppercase text-outline mb-2">Total Extracted</p>
+<p class="font-headline text-2xl font-semibold">1.2M</p>
+<p class="text-[10px] text-secondary mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_drop_up</span> 204k Today
+                            </p>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary/40">
+<p class="text-[10px] font-label uppercase text-outline mb-2">Total Processed</p>
+<p class="font-headline text-2xl font-semibold">842,109</p>
+<div class="w-full bg-surface-container-lowest h-1 mt-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[70%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-tertiary/40">
+<p class="text-[10px] font-label uppercase text-outline mb-2">Profitable Products</p>
+<p class="font-headline text-2xl font-semibold">12,402</p>
+<p class="text-[10px] text-tertiary mt-1">1.47% Success Rate</p>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-secondary-container/40">
+<p class="text-[10px] font-label uppercase text-outline mb-2">Average ROI</p>
+<p class="font-headline text-2xl font-semibold text-secondary">42.8%</p>
+<p class="text-[10px] text-outline mt-1">Global Aggregate</p>
+</div>
+</div>
+</div>
+<!-- Technical Status Rows -->
+<div class="grid grid-cols-12 gap-6">
+<!-- System Health Card -->
+<div class="col-span-12 md:col-span-5 bg-surface-container p-6 rounded-lg space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">memory</span>
+                                System Core Health
+                            </h3>
+<span class="text-[10px] font-label uppercase text-outline bg-surface-container-low px-2 py-0.5 rounded">Phase: Discovery</span>
+</div>
+<div class="grid grid-cols-2 gap-y-6 gap-x-8">
+<div>
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Category Index</p>
+<div class="flex items-baseline gap-2">
+<span class="text-lg font-headline font-medium">84 / 120</span>
+<span class="text-xs text-outline">70%</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Current Category</p>
+<span class="text-sm font-medium truncate block">Electronics &amp; Wireless</span>
+</div>
+<div class="col-span-2">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-2">Supplier/Amazon Sync Progress</p>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-1.5 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 82%"></div>
+</div>
+<span class="text-xs font-headline">82.4%</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Fresh Starts</p>
+<span class="text-lg font-headline font-medium">14</span>
+</div>
+<div>
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Total Rows</p>
+<span class="text-lg font-headline font-medium">4,902,118</span>
+</div>
+</div>
+</div>
+<!-- Matching Performance -->
+<div class="col-span-12 md:col-span-7 bg-surface-container p-6 rounded-lg">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">compare_arrows</span>
+                                Matching Performance
+                            </h3>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-secondary-container/20 text-secondary text-[9px] font-bold rounded-sm uppercase tracking-tighter">High Conf. 94.2%</span>
+<span class="px-2 py-1 bg-surface-container-lowest text-outline text-[9px] font-bold rounded-sm uppercase tracking-tighter">Primary: EAN_STRICT</span>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<div class="flex flex-col items-center">
+<div class="relative w-28 h-28 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-surface-container-lowest" cx="56" cy="56" fill="transparent" r="48" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="56" cy="56" fill="transparent" r="48" stroke="currentColor" stroke-dasharray="301" stroke-dashoffset="60" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline text-xl font-bold">812k</span>
+<span class="text-[9px] text-outline uppercase">Total Matches</span>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between items-center text-xs">
+<span class="text-outline">No EAN Count</span>
+<span class="font-headline">12,401</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-outline">Fuzzy Logic Threshold</span>
+<span class="font-headline">0.85</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-outline">Title Similarity Mean</span>
+<span class="font-headline">0.92</span>
+</div>
+<div class="pt-2 flex flex-wrap gap-2">
+<span class="bg-surface-container-highest px-3 py-1 rounded text-[10px] text-on-surface">95%+ Conf (412k)</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded text-[10px] text-on-surface">80-95% Conf (302k)</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded text-[10px] text-on-surface text-error/80">&lt; 50% Conf (12k)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Charts & Visualization Grid -->
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-12 lg:col-span-8 bg-surface-container p-6 rounded-lg">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline text-sm font-bold uppercase tracking-widest">ROI Distribution &amp; Net Profit Scatter</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] text-outline">ROI</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] text-outline">Net Profit</span>
+</div>
+</div>
+</div>
+<!-- Analytics Chart Area -->
+<div class="h-64 flex items-end justify-between gap-1 pb-4">
+<!-- Visual placeholder for a complex bar chart -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[35%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[55%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[85%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[65%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[95%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[75%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[45%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[30%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[20%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[60%]"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 rounded-t h-[80%]"></div>
+</div>
+<div class="flex justify-between text-[9px] text-outline pt-2 border-t border-outline-variant/10">
+<span>0% ROI</span>
+<span>25% ROI</span>
+<span>50% ROI</span>
+<span>75% ROI</span>
+<span>100%+ ROI</span>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container p-6 rounded-lg flex-1">
+<h3 class="font-headline text-sm font-bold mb-4">Price Ratio Deviation</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-xs">
+<span class="text-outline">Supplier vs. MSRP</span>
+<span class="text-secondary font-bold">-62.4% Avg</span>
+</div>
+<div class="h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 62%"></div>
+</div>
+<p class="text-[10px] text-outline leading-relaxed">System has flagged 4,201 anomalies where supplier price is significantly lower than typical historical lows.</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-lg flex-1">
+<h3 class="font-headline text-sm font-bold mb-4">Match Quality Cluster</h3>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded bg-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-3xl">hub</span>
+</div>
+<div>
+<p class="text-xs font-bold">Neural Engine v4</p>
+<p class="text-[10px] text-outline mt-1">Processing 4,200 requests/min. Cluster health is optimal.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tables Section -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Top 5 Profitable Products -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container rounded-lg overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant/10 flex items-center justify-between">
+<h3 class="font-headline text-sm font-bold">Top 5 Profitable Products</h3>
+<button class="text-xs text-primary font-medium hover:underline">View All Analysis</button>
+</div>
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-[10px] font-label uppercase text-outline">
+<tr>
+<th class="px-6 py-3 font-medium">Product</th>
+<th class="px-6 py-3 font-medium text-right">Profit</th>
+<th class="px-6 py-3 font-medium text-right">ROI</th>
+<th class="px-6 py-3 font-medium text-center">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="zebra-stripe">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex-shrink-0">
+<img alt="Product 1" class="w-full h-full object-cover rounded opacity-80" data-alt="Red Nike running shoe on black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCibb2bju_uKx--3IUGMCC5SpMEuAv36QxdZaNEQLPo3-liNeWQkX8B0ph7nQSGXZeiBA8yvbVS-Q7j2vR4ajl2KkxqVF_Uj4ybRcnDUk0sKBi0VuwkIzvETtidh93ZftJLtUKBtIq-Dj5-hus8XUjxkQQoCx-I1yjE-vHJH83xiy6N8ALe5wkTm6pCqg09fMxMp9u7Fvs3bbrCZlIpp8dWnnN3wx3Tt3ywzUPf6RMiJ_Mseoq_fdFw3sojU4cwoWGV4GgXmNcPgb8"/>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Nike Air Max 270</p>
+<p class="text-[10px] text-outline">B07D3N2L9W</p>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-headline text-sm font-medium">$42.40</td>
+<td class="px-6 py-4 text-right font-headline text-sm text-secondary">84.2%</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2 py-0.5 bg-secondary-container/20 text-secondary text-[9px] rounded font-bold">MATCHED</span>
+</td>
+</tr>
+<tr class="zebra-stripe">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex-shrink-0">
+<img alt="Product 2" class="w-full h-full object-cover rounded opacity-80" data-alt="Black professional headphones over grey surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH2vzV9olZhcxR6m2zKS7JybwJkwM4I0df3_EMNKo-gfzWpjzf0kYZ1UAOjf7SICqJGxpXuYTtv9_OSxk7ELYlvWJsFzH80Dc7Wk_sf1sbmO_AL9-KOfm0JLLDFuT5rf_-F7Mnr9EpHecBW7N_K9F38WSbrNii0ImLLRzcZJR2sF5ljSymFJRZKF_bwL1jNOZfoDk_f_aOPQWGaxbnle-oiYrkQgTp4t4CqwyMFnL8Mc_DZ80KcF3x8608QW0JqWQXd8wLlbBs44M"/>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Sony WH-1000XM4</p>
+<p class="text-[10px] text-outline">B0863TXGM3</p>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-headline text-sm font-medium">$89.12</td>
+<td class="px-6 py-4 text-right font-headline text-sm text-secondary">41.8%</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2 py-0.5 bg-secondary-container/20 text-secondary text-[9px] rounded font-bold">MATCHED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Fuzzy Match Review -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container rounded-lg flex flex-col">
+<div class="p-6 border-b border-outline-variant/10">
+<h3 class="font-headline text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">warning</span>
+                                Fuzzy Match Review Required
+                            </h3>
+</div>
+<div class="p-0 overflow-y-auto max-h-[320px] no-scrollbar">
+<div class="p-4 border-b border-outline-variant/5 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-tertiary">0.72 Similarity</span>
+<span class="text-[10px] text-outline">2m ago</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-[9px] text-outline uppercase font-label">Supplier Title</p>
+<p class="text-[11px] font-medium leading-tight">Gamin Forrunner 245 Music - Black</p>
+</div>
+<div>
+<p class="text-[9px] text-outline uppercase font-label">Amazon Title</p>
+<p class="text-[11px] font-medium leading-tight">Garmin Forerunner 245 Music, GPS Running</p>
+</div>
+</div>
+<div class="mt-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="flex-1 py-1.5 bg-secondary text-on-secondary text-[10px] font-bold rounded">APPROVE</button>
+<button class="flex-1 py-1.5 bg-surface-container-highest text-on-surface text-[10px] font-bold rounded">DISCARD</button>
+</div>
+</div>
+<div class="p-4 border-b border-outline-variant/5 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-tertiary">0.68 Similarity</span>
+<span class="text-[10px] text-outline">15m ago</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-[9px] text-outline uppercase font-label">Supplier Title</p>
+<p class="text-[11px] font-medium leading-tight">Logitech G Pro X Superlight Wireless</p>
+</div>
+<div>
+<p class="text-[9px] text-outline uppercase font-label">Amazon Title</p>
+<p class="text-[11px] font-medium leading-tight">Logitech G Pro X Wireless Gaming Headset</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Terminal Logs -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded overflow-hidden">
+<div class="bg-surface-container-low px-4 py-2 border-b border-outline-variant/10 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-[10px] font-label uppercase text-outline">System Terminal Log</span>
+<div class="flex gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error/40"></span>
+<span class="w-2 h-2 rounded-full bg-tertiary/40"></span>
+<span class="w-2 h-2 rounded-full bg-secondary/40"></span>
+</div>
+</div>
+<span class="text-[10px] text-outline font-mono">NODE_JS_RUNTIME: v18.12.0</span>
+</div>
+<div class="p-4 font-mono text-[11px] space-y-1.5 max-h-32 overflow-y-auto text-on-surface-variant/80">
+<p><span class="text-outline">[14:22:01]</span> <span class="text-secondary">INFO:</span> Successfully ingested batch 40,211 from <span class="italic">Supplier: GlobalTech</span></p>
+<p><span class="text-outline">[14:22:04]</span> <span class="text-primary">PROCESS:</span> Initiating neural title mapping for cluster_84...</p>
+<p><span class="text-outline">[14:22:15]</span> <span class="text-secondary">INFO:</span> Matching cycle complete. 12,042 matches found, 114 anomalies flagged.</p>
+<p><span class="text-outline">[14:23:42]</span> <span class="text-tertiary">WARN:</span> API rate limit for Amazon MWS reaching 85% threshold. Adjusting throttle...</p>
+<p><span class="text-outline">[14:25:01]</span> <span class="text-secondary">SUCCESS:</span> Database sync initiated for primary shard 04-A.</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

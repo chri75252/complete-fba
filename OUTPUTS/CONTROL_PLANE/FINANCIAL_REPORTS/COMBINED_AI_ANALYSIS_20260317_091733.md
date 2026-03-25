@@ -1,0 +1,23 @@
+# FBA AI Analysis Report
+**Source:** tmpgklrpj0s.csv
+**Total Rows Analyzed:** 1
+**Tiers Included:** ['TIER_1_VERIFIED', 'TIER_2_LIKELY', 'TIER_3_NEEDS_REVIEW']
+**Model:** nemotron-3-super-free
+**Generated:** 2026-03-17T09:17:47.079266
+
+---
+
+## Batch 1
+
+**Analysis Table**
+
+| Row# | SupplierTitle (truncated) | AmazonTitle (truncated) | Verdict | Confidence | Key Evidence | Flags |
+|------|---------------------------|-------------------------|---------|------------|--------------|-------|
+| 7    | CANDY CASTLE CREW BONKERS BANANA SPRAY 50ML D… | BONKERS BANANA SPRAY | TRUE | 70 | EAN identical (5060221247184); core product tokens “BONKERS BANANA SPRAY” match; supplier shows brand “CANDY CASTLE CREW” and pack size “DISPLAY BOX OF 9” | PackSizeMismatch (supplier box of 9 vs Amazon likely single); BrandMissingInAmazonTitle; HighROISuspicious if assuming single; NeedsVerification |
+
+**Summary**
+
+The EAN numbers match exactly, and both titles contain the core phrase “BONKERS BANANA SPRAY,” indicating they refer to the same underlying product. However, the supplier title specifies a “DISPLAY BOX OF 9” (50 ml each) while the Amazon title omits any pack‑size information, suggesting a possible single‑unit listing. This pack‑size discrepancy creates a large apparent profit if the Amazon price is interpreted per unit, which triggers skepticism per the rules. Because the brand (“CANDY CASTLE CREW”) is absent from the Amazon title and the pack size cannot be confirmed from the title alone, the match requires further verification (e.g., checking the Amazon product description or images) before confirming arbitrage viability. Hence, the final category is **NEEDS VERIFICATION**.
+
+---
+

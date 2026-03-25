@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -18,6 +19,9 @@ TEXT_PREVIEW_EXTENSIONS = {
     ".yaml",
     ".yml",
 }
+
+HEX_SUFFIX_RE = re.compile(r"(?:__|_)[0-9a-f]{8}$")
+LOG_TIMESTAMP_RE = re.compile(r"_\d{8}_\d{6}.*$")
 
 
 @dataclass(frozen=True)
@@ -119,6 +123,54 @@ def supplier_token(path: Path) -> str:
     return name
 
 
+def normalize_lookup_text(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", text.lower())
+
+
+def normalize_supplier_base(text: str) -> str:
+    value = text.lower()
+    for marker in ("__sandbox__", "__sandbox_", "_sandbox__", "_sandbox_"):
+        if marker in value:
+            value = value.split(marker, 1)[0]
+            break
+    if "run_id" in value:
+        value = value.split("run_id", 1)[0]
+    value = HEX_SUFFIX_RE.sub("", value)
+    return value.rstrip("_- ")
+
+
+def build_supplier_alias_map(rules: dict) -> dict[str, list[str]]:
+    configured = rules.get("global", {}).get("supplier_aliases", {})
+    alias_map: dict[str, list[str]] = {}
+    for canonical, aliases in configured.items():
+        values = {canonical}
+        values.update(alias for alias in aliases if isinstance(alias, str))
+        normalized_aliases = sorted(
+            {normalize_lookup_text(value) for value in values if normalize_lookup_text(value)},
+            key=len,
+            reverse=True,
+        )
+        if normalized_aliases:
+            alias_map[canonical] = normalized_aliases
+    return alias_map
+
+
+def resolve_supplier_alias(text: str, supplier_alias_map: dict[str, list[str]]) -> str:
+    normalized_text = normalize_lookup_text(text)
+    if not normalized_text:
+        return ""
+
+    best_match = ""
+    best_len = -1
+    for canonical, aliases in supplier_alias_map.items():
+        for alias in aliases:
+            if alias in normalized_text and len(alias) > best_len:
+                best_match = canonical
+                best_len = len(alias)
+                break
+    return best_match
+
+
 def mtime(path: Path) -> float:
     return path.stat().st_mtime
 
@@ -146,6 +198,18 @@ def select_latest(paths: list[Path], count: int) -> list[Path]:
     if count <= 0:
         return []
     return sorted(paths, key=mtime, reverse=True)[:count]
+
+
+def select_latest_per_key(paths: list[Path], key_fn) -> list[Path]:
+    latest_by_key: dict[str, Path] = {}
+    for path in paths:
+        key = key_fn(path)
+        if not key:
+            continue
+        current = latest_by_key.get(key)
+        if current is None or mtime(path) > mtime(current):
+            latest_by_key[key] = path
+    return sorted(latest_by_key.values(), key=lambda p: key_fn(p))
 
 
 def select_latest_with_supplier_floor(
@@ -202,6 +266,63 @@ def build_items_for_files(
     return items
 
 
+def is_canonical_category_file(path: Path) -> bool:
+    name = path.name.lower()
+    return (
+        name.endswith("_categories.json")
+        and "duplicated" not in name
+        and not name.startswith("test_")
+        and not is_archived(path)
+    )
+
+
+def processing_state_supplier_key(path: Path, supplier_alias_map: dict[str, list[str]]) -> str:
+    base = path.name[: -len("_processing_state.json")]
+    return resolve_supplier_alias(base, supplier_alias_map)
+
+
+def cached_products_supplier_key(path: Path, supplier_alias_map: dict[str, list[str]]) -> str:
+    base = path.name[: -len("_products_cache.json")]
+    return resolve_supplier_alias(base, supplier_alias_map)
+
+
+def linking_map_supplier_key(
+    path: Path, root: Path, supplier_alias_map: dict[str, list[str]]
+) -> str:
+    rel = path.relative_to(root)
+    base = rel.parts[0] if len(rel.parts) > 1 else path.parent.name
+    return resolve_supplier_alias(base, supplier_alias_map)
+
+
+def category_supplier_key(path: Path, supplier_alias_map: dict[str, list[str]]) -> str:
+    base = path.name[: -len("_categories.json")]
+    if base.endswith("_workflow"):
+        base = base[: -len("_workflow")]
+    return resolve_supplier_alias(base, supplier_alias_map)
+
+
+def log_supplier_key(path: Path, supplier_alias_map: dict[str, list[str]]) -> str:
+    base = path.name.lower()
+    if base.endswith(".log"):
+        base = base[:-4]
+    if base.startswith("run_custom_"):
+        base = base[len("run_custom_") :]
+    base = LOG_TIMESTAMP_RE.sub("", base)
+    for marker in ("__product", "__category", "__products", "__categories"):
+        if marker in base:
+            base = base.split(marker, 1)[0]
+    return resolve_supplier_alias(base, supplier_alias_map)
+
+
+def is_canonical_product_list(path: Path) -> bool:
+    name = path.name.lower()
+    return path.suffix.lower() == ".json" and name.startswith("product_list_") and not is_archived(path)
+
+
+def product_list_supplier_key(path: Path, supplier_alias_map: dict[str, list[str]]) -> str:
+    return resolve_supplier_alias(path.stem, supplier_alias_map)
+
+
 def folder_latest_mtime(path: Path) -> float:
     files = [file_path for file_path in path.rglob("*") if file_path.is_file()]
     if not files:
@@ -256,43 +377,64 @@ def build_manifest_folder_items(
     return items
 
 
-def financial_supplier_key(path: Path, root: Path) -> str:
+def financial_supplier_key(
+    path: Path, root: Path, supplier_alias_map: dict[str, list[str]]
+) -> str:
     rel = path.relative_to(root)
     if len(rel.parts) >= 2:
-        return rel.parts[0].lower()
+        key = resolve_supplier_alias(rel.parts[0], supplier_alias_map)
+        if key:
+            return key
     name = path.stem.lower()
     marker = "_fba_financial_report"
     if marker in name:
-        return name.split(marker, 1)[0]
-    return "unknown"
+        return resolve_supplier_alias(name.split(marker, 1)[0], supplier_alias_map)
+    return ""
 
 
 def build_financial_items(
     root: Path,
     repo: Path,
+    main_mode: str,
     sandbox_latest: int,
     preview_lines: int,
     supplier_floor: int,
+    supplier_alias_map: dict[str, list[str]],
 ) -> list[SelectedItem]:
     files = [path for path in all_files(root) if is_canonical_financial_report(path)]
     main_files = [path for path in files if is_main(path)]
     sandbox_files = [path for path in files if is_sandbox(path)]
 
-    largest_per_supplier: dict[str, Path] = {}
-    for path in main_files:
-        key = financial_supplier_key(path, root)
-        current = largest_per_supplier.get(key)
-        if current is None or path.stat().st_size > current.stat().st_size:
-            largest_per_supplier[key] = path
+    selected_main: list[Path]
+    if main_mode == "latest":
+        latest_per_supplier: dict[str, Path] = {}
+        for path in main_files:
+            key = financial_supplier_key(path, root, supplier_alias_map)
+            if not key:
+                continue
+            current = latest_per_supplier.get(key)
+            if current is None or mtime(path) > mtime(current):
+                latest_per_supplier[key] = path
+        selected_main = sorted(latest_per_supplier.values(), key=lambda p: p.name.lower())
+    else:
+        largest_per_supplier: dict[str, Path] = {}
+        for path in main_files:
+            key = financial_supplier_key(path, root, supplier_alias_map)
+            if not key:
+                continue
+            current = largest_per_supplier.get(key)
+            if current is None or path.stat().st_size > current.stat().st_size:
+                largest_per_supplier[key] = path
+        selected_main = sorted(largest_per_supplier.values(), key=lambda p: p.name.lower())
 
     sandbox_selected = select_latest_with_supplier_floor(
         sandbox_files, sandbox_latest, supplier_floor
     )
 
     items = build_items_for_files(
-        sorted(largest_per_supplier.values(), key=lambda p: p.name.lower()),
+        selected_main,
         category="financial_reports",
-        kind="main_largest_per_supplier",
+        kind=f"main_{main_mode}_per_supplier",
         repo=repo,
         preview_lines=preview_lines,
     )
@@ -300,6 +442,50 @@ def build_financial_items(
         build_items_for_files(
             sandbox_selected,
             category="financial_reports",
+            kind="sandbox_latest",
+            repo=repo,
+            preview_lines=preview_lines,
+        )
+    )
+    return items
+
+
+def build_category_items(
+    root: Path,
+    repo: Path,
+    main_mode: str,
+    sandbox_latest: int,
+    preview_lines: int,
+    supplier_floor: int,
+    supplier_alias_map: dict[str, list[str]],
+) -> list[SelectedItem]:
+    files = [path for path in all_files(root) if is_canonical_category_file(path)]
+    main_files = [path for path in files if is_main(path)]
+    sandbox_files = [path for path in files if is_sandbox(path)]
+
+    if main_mode == "latest":
+        selected_main = select_latest_per_key(
+            main_files,
+            lambda path: category_supplier_key(path, supplier_alias_map),
+        )
+    else:
+        selected_main = sorted(main_files, key=lambda p: p.name.lower())
+
+    sandbox_selected = select_latest_with_supplier_floor(
+        sandbox_files, sandbox_latest, supplier_floor
+    )
+
+    items = build_items_for_files(
+        selected_main,
+        category="category_files",
+        kind=f"main_{main_mode}_per_supplier",
+        repo=repo,
+        preview_lines=preview_lines,
+    )
+    items.extend(
+        build_items_for_files(
+            sandbox_selected,
+            category="category_files",
             kind="sandbox_latest",
             repo=repo,
             preview_lines=preview_lines,
@@ -351,20 +537,36 @@ def write_selected_item(out_root: Path, item: SelectedItem, index: int) -> Path:
     return out_file
 
 
-def generate_context(repo: Path, rules: dict, out_dir: Path, dry_run: bool) -> dict:
+def generate_context(
+    repo: Path, rules: dict, rules_reference: str, out_dir: Path, dry_run: bool
+) -> dict:
     global_rules = rules.get("global", {})
     supplier_floor = int(global_rules.get("sandbox_min_unique_suppliers", 0))
     preview_lines = int(global_rules.get("preview_lines", 20))
+    supplier_alias_map = build_supplier_alias_map(rules)
 
     selected_items: list[SelectedItem] = []
 
     processing_root = repo / rules["processing_states"]["root"]
     processing_files = [path for path in all_files(processing_root) if is_canonical_processing_state(path)]
+    processing_main_mode = rules["processing_states"].get("main_per_supplier")
+    if processing_main_mode == "latest":
+        processing_main_selected = select_latest_per_key(
+            [path for path in processing_files if is_main(path)],
+            lambda path: processing_state_supplier_key(path, supplier_alias_map),
+        )
+        processing_main_kind = "main_latest_per_supplier"
+    else:
+        processing_main_selected = sorted(
+            [path for path in processing_files if is_main(path)],
+            key=lambda p: p.name.lower(),
+        )
+        processing_main_kind = "main"
     selected_items.extend(
         build_items_for_files(
-            sorted([path for path in processing_files if is_main(path)], key=lambda p: p.name.lower()),
+            processing_main_selected,
             "processing_states",
-            "main",
+            processing_main_kind,
             repo,
             preview_lines,
         )
@@ -385,11 +587,24 @@ def generate_context(repo: Path, rules: dict, out_dir: Path, dry_run: bool) -> d
 
     cached_root = repo / rules["cached_products"]["root"]
     cached_files = [path for path in all_files(cached_root) if is_canonical_cached_products(path)]
+    cached_main_mode = rules["cached_products"].get("main_per_supplier")
+    if cached_main_mode == "latest":
+        cached_main_selected = select_latest_per_key(
+            [path for path in cached_files if is_main(path)],
+            lambda path: cached_products_supplier_key(path, supplier_alias_map),
+        )
+        cached_main_kind = "main_latest_per_supplier"
+    else:
+        cached_main_selected = sorted(
+            [path for path in cached_files if is_main(path)],
+            key=lambda p: p.name.lower(),
+        )
+        cached_main_kind = "main"
     selected_items.extend(
         build_items_for_files(
-            sorted([path for path in cached_files if is_main(path)], key=lambda p: p.name.lower()),
+            cached_main_selected,
             "cached_products",
-            "main",
+            cached_main_kind,
             repo,
             preview_lines,
         )
@@ -410,11 +625,24 @@ def generate_context(repo: Path, rules: dict, out_dir: Path, dry_run: bool) -> d
 
     linking_root = repo / rules["linking_maps"]["root"]
     linking_files = [path for path in all_files(linking_root) if is_canonical_linking_map(path)]
+    linking_main_mode = rules["linking_maps"].get("main_per_supplier")
+    if linking_main_mode == "latest":
+        linking_main_selected = select_latest_per_key(
+            [path for path in linking_files if is_main(path)],
+            lambda path: linking_map_supplier_key(path, linking_root, supplier_alias_map),
+        )
+        linking_main_kind = "main_latest_per_supplier"
+    else:
+        linking_main_selected = sorted(
+            [path for path in linking_files if is_main(path)],
+            key=lambda p: p.name.lower(),
+        )
+        linking_main_kind = "main"
     selected_items.extend(
         build_items_for_files(
-            sorted([path for path in linking_files if is_main(path)], key=lambda p: p.name.lower()),
+            linking_main_selected,
             "linking_maps",
-            "main",
+            linking_main_kind,
             repo,
             preview_lines,
         )
@@ -456,26 +684,86 @@ def generate_context(repo: Path, rules: dict, out_dir: Path, dry_run: bool) -> d
     )
 
     products_root = repo / rules["products_lists"]["root"]
-    selected_items.extend(
-        build_items_for_files(
-            select_latest(all_files(products_root), int(rules["products_lists"]["latest"])),
-            "products_lists",
-            "latest",
-            repo,
-            preview_lines,
+    product_files = [path for path in all_files(products_root) if is_canonical_product_list(path)]
+    if "main_per_supplier" in rules["products_lists"] or "sandbox_latest" in rules["products_lists"]:
+        if rules["products_lists"].get("main_per_supplier") == "latest":
+            product_main_selected = select_latest_per_key(
+                [path for path in product_files if is_main(path)],
+                lambda path: product_list_supplier_key(path, supplier_alias_map),
+            )
+            product_main_kind = "main_latest_per_supplier"
+        else:
+            product_main_selected = select_latest(
+                [path for path in product_files if is_main(path)],
+                int(rules["products_lists"].get("main_latest", 0)),
+            )
+            product_main_kind = "main_latest"
+        selected_items.extend(
+            build_items_for_files(
+                product_main_selected,
+                "products_lists",
+                product_main_kind,
+                repo,
+                preview_lines,
+            )
         )
-    )
+        selected_items.extend(
+            build_items_for_files(
+                select_latest_with_supplier_floor(
+                    [path for path in product_files if is_sandbox(path)],
+                    int(rules["products_lists"].get("sandbox_latest", 0)),
+                    supplier_floor,
+                ),
+                "products_lists",
+                "sandbox_latest",
+                repo,
+                preview_lines,
+            )
+        )
+    else:
+        selected_items.extend(
+            build_items_for_files(
+                select_latest(product_files, int(rules["products_lists"]["latest"])),
+                "products_lists",
+                "latest",
+                repo,
+                preview_lines,
+            )
+        )
+
+    if "category_files" in rules:
+        category_root = repo / rules["category_files"]["root"]
+        selected_items.extend(
+            build_category_items(
+                category_root,
+                repo,
+                main_mode=str(rules["category_files"].get("main_per_supplier", "all")),
+                sandbox_latest=int(rules["category_files"].get("sandbox_latest", 0)),
+                preview_lines=preview_lines,
+                supplier_floor=supplier_floor,
+                supplier_alias_map=supplier_alias_map,
+            )
+        )
 
     logs_root = repo / rules["logs_debug"]["root"]
     log_files = [path for path in all_files(logs_root) if path.suffix.lower() == ".log"]
+    if rules["logs_debug"].get("main_per_supplier") == "latest":
+        logs_main_selected = select_latest_per_key(
+            [path for path in log_files if is_main(path)],
+            lambda path: log_supplier_key(path, supplier_alias_map),
+        )
+        logs_main_kind = "main_latest_per_supplier"
+    else:
+        logs_main_selected = select_latest(
+            [path for path in log_files if is_main(path)],
+            int(rules["logs_debug"].get("main_latest", 0)),
+        )
+        logs_main_kind = "main_latest"
     selected_items.extend(
         build_items_for_files(
-            select_latest(
-                [path for path in log_files if is_main(path)],
-                int(rules["logs_debug"]["main_latest"]),
-            ),
+            logs_main_selected,
             "logs_debug",
-            "main_latest",
+            logs_main_kind,
             repo,
             preview_lines,
         )
@@ -499,9 +787,11 @@ def generate_context(repo: Path, rules: dict, out_dir: Path, dry_run: bool) -> d
         build_financial_items(
             financial_root,
             repo,
+            main_mode=str(rules["financial_reports"].get("main_per_supplier", "largest")),
             sandbox_latest=int(rules["financial_reports"]["sandbox_latest"]),
             preview_lines=preview_lines,
             supplier_floor=supplier_floor,
+            supplier_alias_map=supplier_alias_map,
         )
     )
 
@@ -512,7 +802,7 @@ def generate_context(repo: Path, rules: dict, out_dir: Path, dry_run: bool) -> d
 
     summary = {
         "generated_at_utc": datetime.now(tz=timezone.utc).isoformat(),
-        "rules_file": str((repo / "config/gitnexus_scope_rules.json").as_posix()),
+        "rules_file": rules_reference,
         "sandbox_min_unique_suppliers": supplier_floor,
         "total_selected_items": len(selected_items),
         "categories": {},
@@ -567,7 +857,13 @@ def main() -> int:
     out_dir = (repo / args.output_dir).resolve()
 
     rules = load_rules(rules_path)
-    summary = generate_context(repo, rules, out_dir, dry_run=args.dry_run)
+    summary = generate_context(
+        repo,
+        rules,
+        rules_path.relative_to(repo).as_posix(),
+        out_dir,
+        dry_run=args.dry_run,
+    )
 
     print("GitNexus filtered context summary:")
     print(json.dumps(summary["categories"], indent=2, ensure_ascii=True))

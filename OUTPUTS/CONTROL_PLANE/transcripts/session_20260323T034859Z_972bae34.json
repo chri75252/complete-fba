@@ -1,0 +1,223 @@
+{
+  "session_id": "20260323T034859Z_972bae34",
+  "session_started_at": "2026-03-23T03:48:59Z",
+  "reason": "final_answer",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Launch the main workflow for poundwholesale with no limits"
+    },
+    {
+      "role": "assistant",
+      "content": "Action `enqueue_run` executed successfully."
+    },
+    {
+      "role": "user",
+      "content": "Show me all active runs"
+    },
+    {
+      "role": "assistant",
+      "content": "## Active Runs\n\n**1 Run Currently Active**\n\n| Run ID | Supplier | State | Phase | Progress | Started |\n|--------|----------|-------|-------|----------|---------|\n| `593d6189-fc17-42be-b78d-88f9cceb4ab6` | poundwholesale.co.uk | 🟢 **RUNNING** | Amazon Analysis | Category 24/230 | 2026-03-23 03:49 UTC |\n\n**Current Activity:**\n- Processing category: `https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/animals`\n- Last activity: Extracting ASIN B0FPXQLVBV (LEGO Star Wars Millennium Falcon)\n- PID: 51256\n\n**Artifacts:**\n- ✅ Cached products: Exists\n- ✅ Linking map: Exists  \n- ⏳ Financial report: Pending completion\n\n**Recent Trace History:**\n- efghousewares workflow (2026-01-25) — 18 files read, 2 files written\n\nThe poundwholesale run is actively processing Amazon analysis. You can tail logs with `tail_logs` for the run ID above if you need more detail."
+    }
+  ],
+  "scratchpad": [],
+  "trace": [],
+  "tool_executions": [],
+  "turn_history": [
+    {
+      "reason": "approval_executed",
+      "archived_at": "2026-03-23T03:49:46Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Launch the main workflow for poundwholesale with no limits"
+        },
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [
+        {
+          "tool": "enqueue_run",
+          "params": {
+            "workflow_key": "poundwholesale_workflow",
+            "supplier_domain": "poundwholesale.co.uk",
+            "runner_script": "run_custom_poundwholesale.py",
+            "category_urls": [],
+            "max_products": null,
+            "max_products_per_category": null,
+            "notes": "Launch main workflow for poundwholesale with no limits",
+            "run_id": "593d6189-fc17-42be-b78d-88f9cceb4ab6"
+          },
+          "expected_outputs": [
+            "OUTPUTS/CONTROL_PLANE/jobs/pending/job_593d6189-fc17-42be-b78d-88f9cceb4ab6.json",
+            "OUTPUTS/CONTROL_PLANE/status/593d6189-fc17-42be-b78d-88f9cceb4ab6.json",
+            "OUTPUTS/CONTROL_PLANE/logs/593d6189-fc17-42be-b78d-88f9cceb4ab6.log",
+            "OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_processing_state.json",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json",
+            "OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json",
+            "OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk/fba_financial_report_*.csv",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale_co_uk/linking_map.json"
+          ],
+          "result": {
+            "ok": true,
+            "run_id": "593d6189-fc17-42be-b78d-88f9cceb4ab6",
+            "mode": "main_workflow",
+            "runner_script": "run_custom_poundwholesale.py",
+            "supplier_domain": "poundwholesale.co.uk",
+            "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_593d6189-fc17-42be-b78d-88f9cceb4ab6.json",
+            "note": "Main workflow enqueued. No sandbox overrides applied. Runner will use its built-in config.",
+            "processing_state": {
+              "current_phase": "<truncated>",
+              "persistent_category_index": "<truncated>",
+              "total_categories": "<truncated>",
+              "current_category_url": "<truncated>",
+              "supplier_products_completed": "<truncated>",
+              "supplier_products_needing_extraction": "<truncated>",
+              "amazon_products_completed": "<truncated>",
+              "amazon_products_needing_analysis": "<truncated>"
+            }
+          },
+          "executed_at": "2026-03-23T03:49:46Z"
+        }
+      ],
+      "executed_tool": "enqueue_run",
+      "executed_result": {
+        "ok": true,
+        "run_id": "593d6189-fc17-42be-b78d-88f9cceb4ab6",
+        "mode": "main_workflow",
+        "runner_script": "run_custom_poundwholesale.py",
+        "supplier_domain": "poundwholesale.co.uk",
+        "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_593d6189-fc17-42be-b78d-88f9cceb4ab6.json",
+        "note": "Main workflow enqueued. No sandbox overrides applied. Runner will use its built-in config.",
+        "processing_state": {
+          "current_phase": "amazon_analysis",
+          "persistent_category_index": 23,
+          "total_categories": 230,
+          "current_category_url": "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military",
+          "supplier_products_completed": 1,
+          "supplier_products_needing_extraction": 132,
+          "amazon_products_completed": 136,
+          "amazon_products_needing_analysis": 132
+        }
+      }
+    },
+    {
+      "reason": "final_answer",
+      "archived_at": "2026-03-23T03:54:08Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        },
+        {
+          "role": "user",
+          "content": "Show me all active runs"
+        },
+        {
+          "role": "assistant",
+          "content": "## Active Runs\n\n**1 Run Currently Active**\n\n| Run ID | Supplier | State | Phase | Progress | Started |\n|--------|----------|-------|-------|----------|---------|\n| `593d6189-fc17-42be-b78d-88f9cceb4ab6` | poundwholesale.co.uk | 🟢 **RUNNING** | Amazon Analysis | Category 24/230 | 2026-03-23 03:49 UTC |\n\n**Current Activity:**\n- Processing category: `https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/animals`\n- Last activity: Extracting ASIN B0FPXQLVBV (LEGO Star Wars Millennium Falcon)\n- PID: 51256\n\n**Artifacts:**\n- ✅ Cached products: Exists\n- ✅ Linking map: Exists  \n- ⏳ Financial report: Pending completion\n\n**Recent Trace History:**\n- efghousewares workflow (2026-01-25) — 18 files read, 2 files written\n\nThe poundwholesale run is actively processing Amazon analysis. You can tail logs with `tail_logs` for the run ID above if you need more detail."
+        }
+      ],
+      "scratchpad": [
+        {
+          "role": "action",
+          "tool": "show_trace_summary",
+          "params": {
+            "limit": 10
+          }
+        },
+        {
+          "role": "observation",
+          "result": {
+            "ok": true,
+            "count": 3,
+            "traces": [
+              "<truncated>",
+              "<truncated>",
+              "<truncated>"
+            ]
+          }
+        },
+        {
+          "role": "action",
+          "tool": "show_status",
+          "params": {
+            "run_id": ""
+          }
+        },
+        {
+          "role": "observation",
+          "result": {
+            "ok": true,
+            "status": {
+              "schema_version": "<truncated>",
+              "run_id": "<truncated>",
+              "state": "<truncated>",
+              "supplier_domain": "<truncated>",
+              "started_at": "<truncated>",
+              "ended_at": "<truncated>",
+              "pid": "<truncated>",
+              "resolved_paths": "<truncated>",
+              "progress": "<truncated>",
+              "artifacts": "<truncated>",
+              "error": "<truncated>",
+              "refresh": "<truncated>"
+            }
+          }
+        }
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "tool": "show_trace_summary",
+          "explanation": "I will retrieve the most recent run traces from the system to show you all active and recently completed runs. This will display run IDs, statuses, and basic metadata.",
+          "result": {
+            "ok": true,
+            "count": 3,
+            "traces": [
+              "<truncated>",
+              "<truncated>",
+              "<truncated>"
+            ]
+          }
+        },
+        {
+          "step": 2,
+          "tool": "show_status",
+          "explanation": "Checking the status of the most recent run (poundwholesale main workflow) to show active run information.",
+          "result": {
+            "ok": true,
+            "status": {
+              "schema_version": "<truncated>",
+              "run_id": "<truncated>",
+              "state": "<truncated>",
+              "supplier_domain": "<truncated>",
+              "started_at": "<truncated>",
+              "ended_at": "<truncated>",
+              "pid": "<truncated>",
+              "resolved_paths": "<truncated>",
+              "progress": "<truncated>",
+              "artifacts": "<truncated>",
+              "error": "<truncated>",
+              "refresh": "<truncated>"
+            }
+          }
+        }
+      ],
+      "tool_executions": [],
+      "final_answer": "## Active Runs\n\n**1 Run Currently Active**\n\n| Run ID | Supplier | State | Phase | Progress | Started |\n|--------|----------|-------|-------|----------|---------|\n| `593d6189-fc17-42be-b78d-88f9cceb4ab6` | poundwholesale.co.uk | 🟢 **RUNNING** | Amazon Analysis | Category 24/230 | 2026-03-23 03:49 UTC |\n\n**Current Activity:**\n- Processing category: `https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/animals`\n- Last activity: Extracting ASIN B0FPXQLVBV (LEGO Star Wars Millennium Falcon)\n- PID: 51256\n\n**Artifacts:**\n- ✅ Cached products: Exists\n- ✅ Linking map: Exists  \n- ⏳ Financial report: Pending completion\n\n**Recent Trace History:**\n- efghousewares workflow (2026-01-25) — 18 files read, 2 files written\n\nThe poundwholesale run is actively processing Amazon analysis. You can tail logs with `tail_logs` for the run ID above if you need more detail."
+    }
+  ],
+  "pending_tool_call": null,
+  "pending_user_text": null,
+  "pending_rag_info": null,
+  "last_run_id": "593d6189-fc17-42be-b78d-88f9cceb4ab6",
+  "last_products_path": null,
+  "last_supplier_domain": "poundwholesale.co.uk",
+  "last_sandbox_supplier": null,
+  "saved_at": "2026-03-23T03:54:08Z"
+}

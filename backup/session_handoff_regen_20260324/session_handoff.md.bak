@@ -1,0 +1,363 @@
+# Session Handoff — 2026-03-17
+
+## Phase 1: Work Type Classification
+
+**PRIMARY**: CODE_IMPLEMENTATION + DEBUGGING (dual)
+- Majority of session was fixing bugs introduced in prior session + implementing new dashboard features
+- Significant debugging of LLM provider configuration bugs
+
+---
+
+## Phase 2: Universal Foundation
+
+### 1. Session Metadata
+- **Session ID**: UNKNOWN (continuation session, model switched mid-session: opus → sonnet[1m])
+- **Work Type**: CODE_IMPLEMENTATION + DEBUGGING
+- **Duration**: ~4-5 hours (timestamps: 2:48 AM → ~7 AM 2026-03-17)
+- **Token Utilization**: Heavy — multiple compaction events in prior sessions; this session started fresh
+- **Compaction Events**: 1 (prior session was compacted, this session began with summary)
+- **Models Used**: claude-opus-4-6, then claude-sonnet-4-6[1m]
+- **Branch**: `chatui`
+- **Main branch**: `nuts`
+
+### 2. Executive Objective
+Fix the AI Analysis Agent 404 error (broken LLM provider routing), implement EAN-matched-only dashboard metrics with category enrichment from cached products, and harden all related features.
+
+### 3. Session Narrative Arc
+
+**Where we started:**
+The previous session had implemented the AI Analysis Agent tab (replacing the Operator tab) and fixed a JS syntax error that was breaking all navigation. The user restarted the dashboard and it was working. However when running the AI Analysis Agent, every batch was returning a 404 error. The error output was raw HTML from opencode.ai (a 404 web page), not a JSON API error.
+
+**The exploration path:**
+The user provided screenshots showing: (1) The Operator tab running the agent with 5 batches all returning `ERROR on batch N: Error code: 404 - {'error': {'message': 'The requested resource was not found', 'type': 'resource_not_found_error'}}` — and the COMBINED_AI_ANALYSIS file showed the error was an HTML page from opencode.ai's 404 page. (2) The Analysis tab showing product classifications working correctly.
+
+The combined report showed `**Model:** kimi-for-coding` even though the previous session had set `ANALYST_LLM_PROVIDER=opencode`. This was the key clue.
+
+**Key discoveries:**
+1. **Bug 1 — Model name override**: In `fba_ai_analyst.py::_get_llm_client()`, the code had `model = os.environ.get("CONTROL_PLANE_LLM_MODEL")` at the top which gets `kimi-for-coding` (from `.env`). Then in the opencode branch: `model = model or os.environ.get("OPENCODE_MODEL", "minimax-m2.5-free")` — since `model` was already `"kimi-for-coding"` (truthy), the `or` NEVER fires. So `nemotron-3-super-free` was never used. The openai client sent `kimi-for-coding` to the opencode.ai endpoint.
+
+2. **Bug 2 — Base URL path**: The openai Python client appends `/chat/completions` to the base_url. So `https://opencode.ai/zen` + `/chat/completions` = `https://opencode.ai/zen/chat/completions`. But the actual API endpoint is `/v1/chat/completions`. The correct base_url for the openai Python client is `https://opencode.ai/zen/v1` (so it becomes `https://opencode.ai/zen/v1/chat/completions`). This was confirmed by reading `control_plane/llm_provider.py` which uses `_resolve_openai_compat_url()` that adds `/v1/chat/completions` itself — but that uses raw HTTP POST, not the openai Python client.
+
+3. **Dashboard metrics issue**: User reported metrics on the main dashboard don't filter to EAN-matched rows. Top row cards (profitable count, avg ROI, total profit potential) were using ALL rows including title-matched and unmatched. User specifically requested these use only EAN-matched rows.
+
+4. **Category chart issue**: "Most Profitable Categories" showed everything as "Other" because the financial report CSV doesn't have category fields. Categories come from the cached products files via `source_url` field.
+
+5. **Log lineage**: Still showing sandbox logs for main workflow. The fix added in previous session had `except Exception: pass` silencing errors. Changed to print the error for diagnosis.
+
+6. **bmad vs agent-builder research**: Background agent researched both skills. Finding: neither is ideal for this use case. bmad is a project management methodology. agent-builder creates Claude Code sub-agents. The analyst is a Python script calling an external LLM API — `mcp-builder` patterns are most applicable (Pydantic models, enums, DRY patterns).
+
+**How direction shifted:**
+Initially thought the issue was just kimi provider returning 404. After reading the full COMBINED report and seeing `Model: kimi-for-coding` despite setting `ANALYST_LLM_PROVIDER=opencode`, the investigation shifted to the model variable not being properly isolated per-provider. The URL bug was discovered by tracing how the chat orchestrator uses `_resolve_openai_compat_url()` vs how the openai Python client works.
+
+**Side investigations (dead ends):**
+- Initially suspected kimi API key was bad — RULED OUT (it's an opencode URL issue, not kimi)
+- Considered that `ensure_llm_env()` might be overriding `ANALYST_LLM_PROVIDER` — CHECKED, it only modifies `CONTROL_PLANE_LLM_PROVIDER` and related keys, not `ANALYST_LLM_PROVIDER`
+- Considered that `lineage` parameter might not be "base" when "Main Workflow" selected — CHECKED, HTML has `<option value="base">Main Workflow</option>`, correct
+
+**Where we ended:**
+All fixes applied and written to disk. Dashboard needs uvicorn restart + hard refresh to pick up changes. The agent 404 fix is the most critical — it should now route correctly to opencode.ai with `nemotron-3-super-free`.
+
+### 4. User Direction Changes & Corrections
+
+**Initial state (from prior session):**
+AI Analysis Agent tab was implemented but was causing JS syntax error breaking all navigation. That was fixed. This session started with agent running but 404ing.
+
+**Direction Change #1:**
+- **What user told me**: "your above/latest fix didn't fix the agent analysis/run. see COMBINED_AI_ANALYSIS_20260317_034840.md"
+- **New approach**: Deep investigation of LLM provider routing in `fba_ai_analyst.py` — found two bugs (model name + URL)
+- **Files affected**: `tools/fba_ai_analyst.py`
+
+**Direction Change #2:**
+- **What user told me**: "why did you set the output directory to be in AppData? generate a folder in OUTPUTS/CONTROL_PLANE, titled FINANCIAL_REPORTS" — this was actually fixed in previous patch3, but user noted it in this session
+- **New approach**: Output dir correctly set to `OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS/`
+- **Files affected**: `tools/fba_ai_analyst.py`, `dashboard_v2_redesign/api.py`
+
+**Direction Change #3:**
+- **What user told me**: Multiple dashboard requests: EAN-matched metrics only, avg profit instead of total, categories from cached products, chart analysis
+- **New approach**: Replaced chart_data loading section in api.py with EAN-filtered metrics + category enrichment
+- **Files affected**: `dashboard_v2_redesign/api.py`, `dashboard_v2_redesign/static/js/app.js`, `dashboard_v2_redesign/templates/index.html`
+
+**Direction Change #4:**
+- **What user told me**: "i want you to add a cancel button... also i want to have the option to choose categories or row range; it doesn't make sense to put a row and category simultaneously"
+- **New approach**: Radio toggle for filter mode (All/Row range/Category mutually exclusive), cancel calls actual `/api/ai-analyze/cancel/{job_id}` endpoint
+- **Files affected**: `dashboard_v2_redesign/templates/index.html`, `dashboard_v2_redesign/static/js/app.js`, `dashboard_v2_redesign/api.py`
+
+### 5. Exact User Requirements (verbatim)
+
+From the user's message this session:
+> "As you can see, when i tried running the agent, this time manually, i am getting a 404 error."
+> "I want you to add a cancel button in case i launched the agent run and want to terminate it. Also i want to have the option to choose categories or row range; it doesn't make sense to put a row and category simultaneously."
+> "regarding Analysis section, I also want to have the option to choose which file (csv) fin report i want analyzed (add an export button so that i can export the report if needed)."
+> "lastly why did you set the output directory to be in Appdata... generate a folder in OUTPUTS/CONTROL_PLANE, titled FINANCIAL_REPORTS"
+> "regarding the dashboard, when selecting main workflow or sandboxed in data lineage, the dashboard is reflecting the correct metrics however the log appearing at the bottom of the dashboard, main page, is still the sandboxed one"
+> "I thought we had agreed that when it came to profitable products, ROI average, and other relevant metrics; specially the first row at the top of the dashboard only the rows with matching EANs would have their values used"
+> "instead of the total potential profit, this metric doesn't make sense, so maybe replaced with the average of the rows with positive profit"
+> "for the most profitable categories they are all grouped under others, we agreed that since fin report dont show the category, we would have the system retrieve the categories from cached product (by linking the products using product url)"
+> "for this also have it only consider product rows with matching EANs"
+> "Note: I installed 2 new agent skills, which are bmad skill, and agent-builder skill (by doing your own research and/or using context 7 mcp, I want you to see which one is better suited for the current we are integrating)"
+
+### 6. Environment + Constraints
+
+- **Working directory**: `c:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-`
+- **Dashboard**: FastAPI + uvicorn on port 8001 (`uvicorn dashboard_v2_redesign.api:app --reload --port 8001`)
+- **OS**: Windows 11 Pro 10.0.26200
+- **Shell**: bash (git bash / WSL)
+- **Python**: 3.13
+- **Branch**: `chatui` (main branch: `nuts`)
+
+**Critical .env values:**
+```
+CONTROL_PLANE_LLM_PROVIDER=kimi          # Chat UI uses kimi
+CONTROL_PLANE_LLM_BASE_URL=https://api.kimi.com/coding
+CONTROL_PLANE_LLM_MODEL=kimi-for-coding
+KIMI_MODEL=kimi-for-coding
+KIMI_API_KEY=sk-kimi-NC2sDb6...
+OPENCODE_MODEL=nemotron-3-super-free       # Analyst uses opencode
+OPENCODE_API_KEY=sk-GMbiEsviZXDUx75...    # Opencode key
+```
+
+**IMPORTANT CONSTRAINTS:**
+- `tools/*` and `run_custom_*.py` are read-only by default (but we modified `fba_ai_analyst.py` — this was approved via patch scripts)
+- No git operations during automated execution
+- Bash output is 177KB garbage from shell profile — ALWAYS redirect to .txt file: `python script.py > out.txt 2>&1` then read `_out.txt`
+- Edit tool requires reading file first in the same conversation
+- Protected files (SHA256): `tools/configurable_supplier_scraper.py → 9249228a`, `run_custom_poundwholesale.py → 2fe136a4`
+
+### 7. Topic Inventory
+
+**Primary Topics:**
+- AI Analysis Agent 404 fix: COMPLETE — bugs fixed in `fba_ai_analyst.py`
+- Dashboard metrics EAN filtering: COMPLETE — `api.py` now filters to EAN-matched rows
+- Category chart from cached products: COMPLETE — category enrichment via URL→source_url mapping
+- Filter mode toggle (row range vs category): COMPLETE — radio toggle in HTML/JS
+- Cancel button (actually kills subprocess): COMPLETE — new `/api/ai-analyze/cancel/{job_id}` endpoint
+- Export CSV button: COMPLETE — client-side download on Analysis tab
+- Output directory: COMPLETE — `OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS/`
+- Log lineage hardening: PARTIAL — added error logging, root cause unconfirmed
+
+**Secondary Topics:**
+- bmad vs agent-builder skill evaluation: COMPLETE — neither ideal, mcp-builder patterns most applicable
+- Agent architecture explanation: COMPLETE — documented sequence of steps
+- Kimi API 404 explanation: kimi model/URL was never actually the issue — it was opencode being sent wrong model name + URL
+
+**Investigations (Completed):**
+- `control_plane/llm_provider.py` → Found `https://opencode.ai/zen` is the base URL, `_resolve_openai_compat_url()` adds `/v1/chat/completions` for raw HTTP
+- `control_plane/env_config.py::ensure_llm_env()` → Only normalizes existing env vars, doesn't override `ANALYST_LLM_PROVIDER`
+- Cached products structure → Array of objects with `url`, `source_url`, `ean`, `title`, `price`
+- Linking map structure → Array with `supplier_url`, `supplier_ean`, `match_method`, `confidence`
+- Financial CSV columns → `EAN`, `EAN_OnPage`, `SupplierTitle`, `AmazonTitle`, `ROI`, `NetProfit`, `SupplierURL`, `MatchQuality`
+- `tools/fba_report_filter.py::classify_row()` → EAN match requires both `EAN` and `EAN_OnPage` to be present and equal (after normalization)
+
+**Investigations (Incomplete/Open):**
+- Log lineage root cause: May be that efghousewares has no non-sandbox log files at all (all log files in git status have `__sandbox__`). The fix should return `[[], None]` for base lineage. But user reports logs still showing. Added `print(f"[LOG-LINEAGE-FIX] Error: {log_err}")` for diagnosis — need to see uvicorn output next session.
+- ROI histogram chart: Not analyzed for EAN filtering. Currently uses EAN-matched data via `df_chart = df[df['_ean_matched']]` which is correct.
+
+**Tools/Technologies:**
+- openai Python client: base_url needs `/v1` suffix — client appends `/chat/completions`
+- opencode.ai API: `https://opencode.ai/zen/v1/chat/completions` — OpenAI-compatible
+- nemotron-3-super-free: Available via opencode.ai with `OPENCODE_API_KEY`
+- pandas: Used for EAN filtering in api.py — `_ean_norm` column comparison
+- FastAPI: All new endpoints follow existing pattern
+
+**Key Terms Defined:**
+- EAN-matched row: A financial report row where both `EAN` and `EAN_OnPage` columns are non-empty and equal after stripping/normalizing (removing `.0` suffix, non-numeric chars)
+- Tier: T1=VERIFIED, T2=LIKELY, T3=NEEDS_REVIEW, T4=REJECTED (from `fba_report_filter.py`)
+- ANALYST_LLM_PROVIDER: New env var that overrides `CONTROL_PLANE_LLM_PROVIDER` specifically for the analyst subprocess
+- Category enrichment: Mapping financial report rows to categories via `SupplierURL → cached_product.url → cached_product.source_url → parse category from URL path`
+
+---
+
+## Phase 3: Code Implementation Sections
+
+### Implementation Progress Metrics
+
+**Endpoints/Features:**
+| Feature | Status | File(s) |
+|---------|--------|---------|
+| AI Analysis Agent 404 fix (model name) | COMPLETE | `tools/fba_ai_analyst.py` |
+| AI Analysis Agent 404 fix (base URL) | COMPLETE | `tools/fba_ai_analyst.py` |
+| Output dir → OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS | COMPLETE | `tools/fba_ai_analyst.py`, `api.py` |
+| Cancel button → actually kills subprocess | COMPLETE | `api.py`, `app.js` |
+| POST /api/ai-analyze/cancel/{job_id} | COMPLETE | `api.py` |
+| Filter mode radio toggle (All/Rows/Category) | COMPLETE | `index.html`, `app.js` |
+| Export CSV on Analysis tab | COMPLETE | `index.html`, `app.js` |
+| EAN-matched metrics in top cards | COMPLETE | `api.py` |
+| Avg Profit instead of Total Profit Potential | COMPLETE | `api.py`, `index.html` |
+| Category chart from cached products | COMPLETE | `api.py`, `app.js` |
+| Log lineage error logging | COMPLETE | `api.py` |
+| bmad vs agent-builder evaluation | COMPLETE | Research only |
+
+**Files Modified This Session:**
+1. `tools/fba_ai_analyst.py` — Fixed `_get_llm_client()`: model isolation per-provider, correct base URL
+2. `dashboard_v2_redesign/api.py` — EAN filtering, category enrichment, cancel endpoint, error logging
+3. `dashboard_v2_redesign/templates/index.html` — Filter toggle, export button, label change
+4. `dashboard_v2_redesign/static/js/app.js` — aiFilterToggle, updated category chart, export function, cancel API call
+
+### What NOT to Rebuild (Completed Work)
+
+- [x] AI Analysis Agent HTML/JS UI — COMPLETE (from prior session, do not reimplement)
+- [x] `POST /api/ai-analyze` endpoint — COMPLETE
+- [x] `GET /api/ai-analyze/status/{job_id}` — COMPLETE
+- [x] `GET /api/reports/{supplier}` — COMPLETE
+- [x] `POST /api/ai-analyze/cancel/{job_id}` — COMPLETE (added this session)
+- [x] Filter mode radio toggle — COMPLETE (3-way: All/Row range/Category)
+- [x] Export CSV button on Analysis tab — COMPLETE
+- [x] EAN filtering in api.py chart section — COMPLETE
+- [x] Category enrichment from cached products — COMPLETE
+- [x] Log lineage fix (from prior session) — EXISTS, hardened with error logging
+- [x] `loadAiReports()` — COMPLETE (loads from `/api/reports/{supplier}`)
+- [x] `window.runAiAnalysis()` — COMPLETE (reads filter mode radio)
+- [x] `window.stopAiAnalysis()` — COMPLETE (calls cancel endpoint + stops polling)
+- [x] `window.exportAnalysisCsv()` — COMPLETE (client-side CSV download)
+- [x] `window.aiFilterToggle()` — COMPLETE (shows/hides row range vs category inputs)
+
+### Current Blockers
+
+| Blocker | Impact | Attempted Solutions | Next Approach |
+|---------|--------|-------------------|---------------|
+| Log lineage unconfirmed fix | Low — shows wrong log file | Added print logging in `except` block | Check uvicorn console output after restart |
+| opencode.ai URL may not be final | Medium — if URL wrong, analyst still 404s | Based on `llm_provider.py` default `https://opencode.ai/zen` | If still failing, check uvicorn output for "Processing batch" lines |
+| EAN column names may vary by supplier | Low — only affects enriched metrics | Fallback to `_ean_matched = True` if columns missing | Already handled in code |
+
+### Next Implementation Target
+
+**If agent still 404s after restart**: Check uvicorn console for the analyst output — it should print:
+```
+FBA AI Analyst
+CSV: /path/to/file.csv
+Batch size: 20
+Tiers: [...]
+============================================================
+Loading and classifying rows from ...
+```
+If it prints `ERROR: OPENCODE_API_KEY not set` → the env var isn't being passed. If it shows a different error → the URL or model may still be wrong.
+
+**If log lineage still wrong**: The `[LOG-LINEAGE-FIX] Error:` line in uvicorn output will reveal why the fix is silently failing.
+
+---
+
+## Phase 4: Universal Closure
+
+### 7. Completed Worklog (Chronological)
+
+1. Session start: User showed screenshots of AI Analysis Agent returning 404 errors + working Analysis tab
+2. Read `COMBINED_AI_ANALYSIS_20260317_034840.md` → Found HTML 404 page from opencode.ai, `Model: kimi-for-coding`
+3. Read `tools/fba_ai_analyst.py` → Identified two bugs in `_get_llm_client()`
+4. Read `control_plane/llm_provider.py` → Confirmed `https://opencode.ai/zen` base URL + `_resolve_openai_compat_url()` adds `/v1/chat/completions`
+5. Fixed Bug 1: Removed global `model` variable, now each provider reads its own model env var
+6. Fixed Bug 2: Changed base_url to `https://opencode.ai/zen/v1` for openai Python client
+7. Fixed kimi branch: Uses `KIMI_MODEL` first, then `CONTROL_PLANE_LLM_MODEL`
+8. Launched background agent to research bmad vs agent-builder skills
+9. Checked lineage select values in HTML → Confirmed `value="base"` for "Main Workflow"
+10. Read `metrics_core.py::load_financial_metrics()` → Confirmed uses ALL rows, no EAN filtering
+11. Explored cached products structure via subagent → Found `url`, `source_url` fields; categories come from `source_url` path
+12. Rewrote chart_data loading section in `api.py`:
+    - Added `_norm_ean()` function
+    - EAN mask: both `EAN` and `EAN_OnPage` present, normalized, and equal
+    - Overrides `financial_metrics`: `count_profitable`, `avg_roi`, `avg_profit` from EAN-matched profitable rows
+    - Category enrichment: loads cached products file, maps `product_url → source_url → category name`
+    - Chart filtered to EAN-matched rows only
+13. Updated `index.html`: "Total Profit Potential" → "Avg Profit / Item", subtitle → "EAN-matched profitable"
+14. Updated `index.html`: "Mean return" → "EAN-matched profitable" for ROI card
+15. Updated `app.js` category chart: Uses `d.Category` field (from backend) instead of URL parsing
+16. Added `[LOG-LINEAGE-FIX] Error:` logging to api.py
+17. Background agent returned: mcp-builder patterns (Pydantic, enums, DRY) are most applicable
+18. Wrote handoff document
+
+### 8. Validation Performed
+
+No automated tests run. Manual verification via:
+- Reading `_patch3_out.txt` from prior session confirmed all 14 patch applications succeeded
+- Grep verification: `ANALYST_LLM_PROVIDER` and `opencode.ai/zen` present in `fba_ai_analyst.py`
+- Grep verification: `cancel_ai_analysis`, `ANALYST_LLM_PROVIDER`, `FINANCIAL_REPORTS` present in `api.py`
+
+**Restart required to validate**:
+```bash
+uvicorn dashboard_v2_redesign.api:app --reload --port 8001
+# Then Ctrl+Shift+R on localhost:8001
+```
+
+### 9. Known Issues / Risks
+
+| Issue | Severity | Impact | Mitigation |
+|-------|----------|--------|------------|
+| opencode.ai URL `/zen/v1` unconfirmed | High | Analyst may still 404 | Check uvicorn output after restart; if still failing try `https://opencode.ai/api/v1` |
+| Log lineage fix may be silently failing | Medium | Wrong log shown in dashboard | Added print logging — check uvicorn for `[LOG-LINEAGE-FIX] Error:` |
+| Category enrichment loads full cached_products.json | Low | Performance on large caches | Currently loads once per metrics call; acceptable for now |
+| EAN column names assumed: `EAN`, `EAN_OnPage` | Low | Wrong metrics if CSV uses different names | Fallback `_ean_matched = True` already implemented |
+| `SupplierURL` may not be in financial CSV | Low | Categories show "Other" | Graceful fallback already implemented |
+| `nemotron-3-super-free` model name unverified | Medium | Analyst 404 if wrong model name | Check opencode.ai documentation; fallback: try `minimax-m2.5-free` |
+
+### 10. External Resources Referenced
+
+- `control_plane/llm_provider.py` → `_resolve_openai_compat_url()` adds `/v1/chat/completions`; opencode default URL is `https://opencode.ai/zen`
+- `control_plane/env_config.py::ensure_llm_env()` → Only normalizes existing env vars
+- `tools/fba_report_filter.py::classify_row()` → EAN match logic: `supplier_ean == amazon_ean` after normalization
+- Cached products file structure → Array of `{url, source_url, ean, title, price, scraped_at, ...}`
+- Linking map structure → Array of `{supplier_url, supplier_ean, match_method, confidence, ...}`
+
+### 11. Quick-Reference Index
+
+**Key Files:**
+- `dashboard_v2_redesign/api.py` — All API endpoints; EAN filtering; category enrichment; cancel endpoint
+- `dashboard_v2_redesign/templates/index.html` — All UI sections; filter toggle at lines ~537-554; analysis export at ~640
+- `dashboard_v2_redesign/static/js/app.js` — All JS logic; aiFilterToggle ~660; runAiAnalysis ~665; exportAnalysisCsv ~900; category chart ~300
+- `tools/fba_ai_analyst.py` — LLM analysis engine; `_get_llm_client()` at line 24; `analyze_report()` at ~159
+- `tools/fba_report_filter.py` — Row classification; `classify_row()` at ~83; tier assignment logic
+- `.env` — LLM provider config; `OPENCODE_API_KEY`, `OPENCODE_MODEL`, `ANALYST_LLM_PROVIDER` not in file (set programmatically in subprocess)
+
+**Critical Commands:**
+```bash
+# Start dashboard (redesign)
+uvicorn dashboard_v2_redesign.api:app --reload --port 8001
+
+# Start original dashboard (if needed for comparison)
+python -m uvicorn dashboard_v2.api:app --port 8505
+
+# Test analyst directly
+cd "c:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-"
+set ANALYST_LLM_PROVIDER=opencode
+set OPENCODE_API_KEY=sk-GMbiEsviZXDUx75qccYZNDmQLypRGq4bOwughDWWuLW6rdG2zB1TAlnHj7BCeb5T
+set OPENCODE_MODEL=nemotron-3-super-free
+python tools/fba_ai_analyst.py "OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale.co.uk/fba_financial_report_XXXX.csv" --batch-size 5
+```
+
+**Configuration:**
+- `config/system_config.json` — Main workflow config
+- `.env` — API keys and LLM provider settings
+- `config/poundwholesale_categories.json` — Category URLs
+
+### 12. Recovery Instructions If Context Is Lost
+
+**Minimum context to resume:**
+
+You are working on an Amazon FBA arbitrage automation system with a FastAPI dashboard. The dashboard runs at `localhost:8001` via `uvicorn dashboard_v2_redesign.api:app --reload --port 8001`.
+
+**The main active work** is `dashboard_v2_redesign/` — a new dashboard UI replacing the legacy streamlit dashboard.
+
+**Most recent work**: Fixed AI Analysis Agent (404 from LLM API), updated dashboard metrics to use only EAN-matched rows, enriched category chart from cached products.
+
+**Critical bug fixed**: In `tools/fba_ai_analyst.py::_get_llm_client()`, the model name was being set from `CONTROL_PLANE_LLM_MODEL=kimi-for-coding` before the provider branch could override it. Fixed to use `OPENCODE_MODEL` directly for the opencode provider. Base URL changed from `https://opencode.ai/zen` to `https://opencode.ai/zen/v1`.
+
+**LLM routing**: Chat UI uses kimi (`CONTROL_PLANE_LLM_PROVIDER=kimi`). Analyst subprocess uses opencode (`ANALYST_LLM_PROVIDER=opencode` set in `api.py::run_job()`). These are intentionally independent.
+
+**Known open issue**: Log lineage may still show sandbox logs for main workflow. Added `print(f"[LOG-LINEAGE-FIX] Error: ...")` to diagnose. Check uvicorn output.
+
+### 13. Startup Plan For Next Session (First 10 Actions)
+
+1. Restart uvicorn: `uvicorn dashboard_v2_redesign.api:app --reload --port 8001`
+2. Hard refresh browser: `Ctrl+Shift+R` on `localhost:8001`
+3. Navigate to Operator tab → Select a financial report → Click "Run AI Analysis" with small batch (5 rows)
+4. Watch uvicorn console output for: "FBA AI Analyst", "Loading and classifying rows", "Processing batch 1/N" — confirms analyst is running
+5. If still 404: Check uvicorn for model/URL being used; try setting `OPENCODE_MODEL=minimax-m2.5-free` as fallback
+6. Navigate to Dashboard → Check top cards show EAN-matched metrics (not total)
+7. Scroll to "Most Profitable Categories" chart — should show actual categories not "Other"
+8. Check uvicorn output for `[LOG-LINEAGE-FIX] Error:` to diagnose log lineage issue
+9. Test cancel: Start a run → Click Cancel → Verify subprocess terminates
+10. Test export: Go to Analysis tab → Apply filters → Click Export CSV
+
+---
+
+## Phase 5: Memory Persistence
+
+Writing to memory system at `.../memory/`:

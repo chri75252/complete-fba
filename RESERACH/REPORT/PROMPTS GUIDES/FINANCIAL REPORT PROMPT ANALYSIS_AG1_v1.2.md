@@ -921,9 +921,9 @@ No tabs. Spaces only. Column width calculation is mandatory. Header separator ro
 - Table safety: replace literal `|` with `/` and replace embedded newlines with spaces inside any cell before writing the row.
 **Example:**
 ```text
-| Verdict  | Confidence | SupplierTitle                    | AmazonTitle                                           | Supplier EAN  | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI    | Sales | Pack Verdict                    | Adjusted Profit | Key Match Evidence              | Filter Reason |
-|----------|------------|----------------------------------|-------------------------------------------------------|---------------|---------------|------------|---------------|--------------|-----------|--------|-------|---------------------------------|-----------------|---------------------------------|---------------|
-| VERIFIED | 95         | AMTECH LED MINI TORCH            | Amtech S1532 9 LED mini Torch                         | 5032759031078 | 5032759031078 | B003XKPUSQ | £1.72         | £7.99        | £2.35     | 118.6% | 200   | 1:1 (9 LED is spec)             | £2.35           | Exact EAN match; titles align   | -             |
+| Verdict  | Confidence | SupplierTitle                    | AmazonTitle                                           | Supplier EAN  | Amazon EAN    | ASIN       | SupplierPrice | SellingPrice | NetProfit | ROI    | Sales | Pack Verdict                    | Adjusted Profit | Key Match Evidence              |key risk / notes   |
+|----------|------------|----------------------------------|-------------------------------------------------------|---------------|---------------|------------|---------------|--------------|-----------|--------|-------|---------------------------------|-----------------|---------------------------------| ----   -----------|
+| VERIFIED | 95         | AMTECH LED MINI TORCH            | Amtech S1532 9 LED mini Torch                         | 5032759031078 | 5032759031078 | B003XKPUSQ | £1.72         | £7.99        | £2.35     | 118.6% | 200   | 1:1 (9 LED is spec)             | £2.35           | Exact EAN match; titles align   |     -             |
 ```
 **Column Notes:**
 - **Verdict**: VERIFIED, HIGHLY LIKELY, NEEDS VERIFICATION, or AUDITED OUT

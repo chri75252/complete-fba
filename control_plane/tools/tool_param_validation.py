@@ -171,7 +171,8 @@ def _validate_enqueue_run(tool: str, p: dict[str, Any]) -> dict[str, Any]:
     category_urls = category_urls or []
     # If resuming a sandbox run, we might not need category URLs directly (the system pulls from previous overrides)
     sandbox_suffix = p.get("sandbox_suffix")
-    if not category_urls and not sandbox_suffix:
+    runner_script = cleaned.get("runner_script", "")
+    if not category_urls and not sandbox_suffix and not runner_script:
         return _err(
             tool=tool, field="category_urls", message="category_urls must contain at least one URL"
         )

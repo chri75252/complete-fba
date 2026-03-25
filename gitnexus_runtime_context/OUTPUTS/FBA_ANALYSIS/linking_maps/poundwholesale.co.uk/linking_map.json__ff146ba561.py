@@ -3,10 +3,10 @@ Do not edit manually.
 """
 
 SOURCE_CATEGORY = "linking_maps"
-SOURCE_KIND = "main"
+SOURCE_KIND = "main_latest_per_supplier"
 SOURCE_RELATIVE_PATH = "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk/linking_map.json"
-SOURCE_SIZE_BYTES = 5928908
-SOURCE_MTIME_ISO = "2026-01-25T08:20:58.524514+00:00"
+SOURCE_SIZE_BYTES = 6251053
+SOURCE_MTIME_ISO = "2026-03-23T15:08:07.507597+00:00"
 SOURCE_PREVIEW = [
   "[",
   "  {",

@@ -42,6 +42,17 @@
 - If the user asks to create/generate/build a new product-list JSON from a supplier's cached products:
   - Choose tool: `build_product_list_from_cached`
 
+## Main Workflow Rules
+
+- If the user asks to **run the main workflow**, **run all categories**, **execute run_custom_**, or **process the full supplier** WITHOUT providing specific category URLs:
+  - Choose tool: `enqueue_run`
+  - Set `runner_script` to the appropriate `run_custom_{supplier}.py`
+  - Set `category_urls` to an empty list `[]`
+  - Set `max_products` to `null` and `max_products_per_category` to `null` (no limits) unless the user explicitly specifies limits.
+  - Do NOT ask for category URLs — the runner script uses its pre-configured categories.
+- The `processing_state` is automatically included in the enqueue_run response. Present these metrics to the user:
+  - Phase, category progress (current/total), supplier extraction progress, amazon analysis progress, current category URL.
+
 ## Read-only Rules
 
 - Only choose `find_linking_entries` when the user explicitly asks to *show* or *lookup* existing linking map entries.

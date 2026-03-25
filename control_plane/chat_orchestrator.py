@@ -784,8 +784,8 @@ def build_prompt(
                 "supplier_domain": "poundwholesale.co.uk",
                 "runner_script": "<runner-script>",
                 "category_urls": ["<category-url>"],
-                "max_products": 50,
-                "max_products_per_category": 50,
+                "max_products": None,
+                "max_products_per_category": None,
                 "sandbox_suffix": "<optional_for_resuming>",
                 "notes": "user request",
             },
@@ -1261,11 +1261,12 @@ def agent_plan_step(
 
         if tool == "enqueue_run":
             urls = params.get("category_urls")
+            runner = params.get("runner_script", "")
 
             if (
                 not isinstance(urls, list)
                 or not [u for u in urls if isinstance(u, str) and u.strip()]
-            ) and not params.get("sandbox_suffix"):
+            ) and not params.get("sandbox_suffix") and not runner:
                 tool = "ask_clarify"
                 params = {"user_text": user_text, "missing_params": ["category_urls"]}
                 explanation = explanation or "To proceed, I need one or more category URLs to run."
@@ -1439,10 +1440,11 @@ def plan_tool_call(
 
         if tool == "enqueue_run":
             urls = params.get("category_urls")
+            runner = params.get("runner_script", "")
             if (
                 not isinstance(urls, list)
                 or not [u for u in urls if isinstance(u, str) and u.strip()]
-            ) and not params.get("sandbox_suffix"):
+            ) and not params.get("sandbox_suffix") and not runner:
                 tool = "ask_clarify"
                 params = {"user_text": user_text, "missing_params": ["category_urls"]}
                 expected_outputs = []
@@ -2009,6 +2011,55 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
 
         sandbox_suffix = _normalize_sandbox_suffix(p.get("sandbox_suffix"), run_id)
 
+        # ---- MAIN WORKFLOW PATH (no sandbox) ----
+        # When runner_script is provided with empty category_urls and no sandbox_suffix,
+        # skip sandbox machinery entirely. Let the runner use its own built-in config.
+        is_main_workflow = (
+            req.runner_script
+            and not req.category_urls
+            and not str(p.get("sandbox_suffix") or "").strip()
+        )
+
+        if is_main_workflow:
+            from control_plane.tools.jobs import enqueue_run_job
+            from control_plane.tools.state import summarize_processing_state
+
+            default_cfg_path = repo_root / "config" / "system_config.json"
+            cat_stem = req.supplier_domain.replace(".co.uk", "").replace(".", "_")
+            default_cat_path = repo_root / "config" / f"{cat_stem}_categories.json"
+
+            job_path = enqueue_run_job(
+                run_id, req, default_cfg_path, default_cat_path, sandbox_supplier=req.supplier_domain
+            )
+
+            result: dict[str, Any] = {
+                "ok": True,
+                "run_id": run_id,
+                "mode": "main_workflow",
+                "runner_script": req.runner_script,
+                "supplier_domain": req.supplier_domain,
+                "job_path": str(job_path),
+                "note": "Main workflow enqueued. No sandbox overrides applied. Runner will use its built-in config.",
+            }
+
+            state = read_processing_state(repo_root, req.supplier_domain)
+            if state:
+                result["processing_state"] = summarize_processing_state(state)
+            else:
+                result["processing_state"] = {
+                    "current_phase": "not_started",
+                    "persistent_category_index": 0,
+                    "total_categories": 0,
+                    "current_category_url": None,
+                    "supplier_products_completed": 0,
+                    "supplier_products_needing_extraction": 0,
+                    "amazon_products_completed": 0,
+                    "amazon_products_needing_analysis": 0,
+                }
+
+            return result
+
+        # ---- SANDBOX PATH (existing behavior, unchanged) ----
         # Build sandbox_supplier for output paths/polling, but keep supplier_name canonical for credential lookup
         sandbox_supplier = _build_sandbox_supplier(req.supplier_domain, sandbox_suffix, run_id)
 
@@ -2093,7 +2144,7 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             run_id, req, merged_cfg_path, categories_path, sandbox_supplier=sandbox_supplier
         )
 
-        return {
+        sandbox_result: dict[str, Any] = {
             "ok": True,
             "run_id": run_id,
             "sandbox_supplier": sandbox_supplier,
@@ -2103,6 +2154,18 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
             "merged_config": str(merged_cfg_path),
             "categories": str(categories_path),
         }
+
+        # Auto-attach processing state for sandbox runs too
+        from control_plane.tools.state import summarize_processing_state
+        state = read_processing_state(repo_root, sandbox_supplier)
+        if not state:
+            state = read_processing_state(repo_root, req.supplier_domain)
+        if state:
+            sandbox_result["processing_state"] = summarize_processing_state(state)
+        else:
+            sandbox_result["processing_state"] = {"current_phase": "fresh_run", "persistent_category_index": 0, "total_categories": 0}
+
+        return sandbox_result
 
     if name == "enqueue_onboarding":
         import uuid

@@ -19,11 +19,11 @@ This is the exact setup used to make GitNexus work reliably in this project.
 
 ### Core Project Config Files
 
-- `.gitnexus/config.json`:
-  - hard excludes (vendor/generated/noisy folders)
-  - includes your requested exclusions such as `OUTPUTS - Copy`, `diagnostics`, `backup`, `archive`, `archive_new`, `keepa-sas`, `Recovered`, `node_modules`, `venv`, and `blacksmith_landing_page`
+- `.gitnexusignore`:
+  - hard excludes for raw generated/runtime/noisy folders
+  - preserves the curated `gitnexus_runtime_context/` mirror plus the live workflow code/config/docs layer
 - `config/gitnexus_scope_rules.json`:
-  - selective mirror rules (latest N, sandbox quotas, financial/report logic)
+  - selective mirror rules (latest per live supplier, sandbox quotas, financial/report logic)
 - `scripts/generate_gitnexus_filtered_context.py`:
   - generates mirror files from selected `OUTPUTS/...` and `logs/debug/...`
   - preserves path hierarchy under `gitnexus_runtime_context/OUTPUTS/...` and `gitnexus_runtime_context/logs/...`
@@ -89,14 +89,17 @@ Rules file: `config/gitnexus_scope_rules.json`
 
 Selected runtime files are mirrored into `gitnexus_runtime_context/OUTPUTS/...` and `gitnexus_runtime_context/logs/...` so the graph preserves the original folder shape instead of flattening everything into category buckets.
 
-- `OUTPUTS/CACHE/processing_states`: all main workflow + latest 10 sandbox
-- `OUTPUTS/cached_products`: all main workflow + latest 10 sandbox
-- `OUTPUTS/FBA_ANALYSIS/linking_maps`: all main workflow + latest 10 sandbox
-- `OUTPUTS/FBA_ANALYSIS/amazon_cache`: latest 20 files
-- `OUTPUTS/manifests`: all main folders + latest 5 sandbox folders
-- `OUTPUTS/PRODUCTS_LISTS`: latest 5 files
-- `logs/debug`: latest 5 main + latest 5 sandbox
-- `OUTPUTS/FBA_ANALYSIS/financial_reports`: largest main report per supplier + latest 5 sandbox
+- `OUTPUTS/CACHE/processing_states`: latest main file per live supplier + latest 1 sandbox file
+- `OUTPUTS/cached_products`: latest main file per live supplier + latest 1 sandbox file
+- `OUTPUTS/FBA_ANALYSIS/linking_maps`: latest main linking map per live supplier + latest 1 sandbox file
+- `OUTPUTS/FBA_ANALYSIS/amazon_cache`: latest 1 file
+- `OUTPUTS/manifests`: all main folders + latest 1 sandbox folder
+- `OUTPUTS/PRODUCTS_LISTS`: latest main product list per live supplier + latest 1 sandbox file
+- `config/*categories*.json`: latest main category file per live supplier + latest 1 sandbox file
+- `logs/debug`: latest main log per live supplier + latest 1 sandbox file
+- `OUTPUTS/FBA_ANALYSIS/financial_reports`: latest main report per live supplier + latest 1 sandbox file
+
+The large orchestration file `tools/passive_extraction_workflow_latest.py` remains explicitly included in the GitNexus scope, and its supporting configuration layer is preserved via `config/system_config.json`, `config/system_config_loader.py`, `config/supplier_configs/`, and the curated category files.
 
 Sandbox detection is based on path/name containing `sandbox` or `run_id`.
 
@@ -104,7 +107,7 @@ Sandbox detection is based on path/name containing `sandbox` or `run_id`.
 
 Edit `config/gitnexus_scope_rules.json`.
 
-Edit `.gitnexus/config.json` for hard exclusions. Current exclusions include `node_modules`, `venv`, `OUTPUTS`, `logs`, `OUTPUTS - Copy`, `diagnostics`, `backup`, `archive`, `archive_new`, `keepa-sas`, `Recovered`, and `blacksmith_landing_page`.
+Edit `.gitnexusignore` for hard exclusions. Current exclusions include raw `OUTPUTS`, raw `logs`, `OUTPUTS - Copy`, `backup`, `archive`, `archive_new`, legacy copy trees, and vendor/tool caches.
 
 Key knobs:
 

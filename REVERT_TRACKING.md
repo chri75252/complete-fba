@@ -1,3 +1,44 @@
+# Revert Tracking - incremental financial report (2026-03-16)
+
+Task: Use `run_calculations_incremental()` for mid-run financial triggers instead of full `run_calculations()`.
+Date: 2026-03-16
+
+## Backup
+- `backup/incremental_fin_report_20260316/FBA_Financial_calculator.py`
+
+## Changes
+
+### Change 1 — `tools/FBA_Financial_calculator.py`
+
+**Added** new function `run_calculations_incremental()` after `run_calculations()` ends (before `def main()`).
+
+`run_calculations()` is UNCHANGED. The new function processes only the last `financial_batch_size` linking map entries and appends to a `_combined.csv`, deduping by ASIN+EAN.
+
+**Revert**: Delete the `run_calculations_incremental()` function block (everything between `run_calculations()` return and `def main():`).
+
+---
+
+### Change 2 — `tools/passive_extraction_workflow_latest.py`
+
+**Changed** the financial report trigger block (lines ~2935-2937):
+
+```python
+# BEFORE:
+from tools.FBA_Financial_calculator import run_calculations
+financial_results = run_calculations(self.supplier_name)
+
+# AFTER:
+from tools.FBA_Financial_calculator import run_calculations_incremental
+batch_entries = list(self.linking_map.values())[-financial_batch_size:]
+financial_results = run_calculations_incremental(self.supplier_name, batch_entries)
+```
+
+The finalization call to `run_calculations()` at workflow completion is UNCHANGED.
+
+**Revert**: Replace the 4-line block above with the 2-line original.
+
+---
+
 # Revert Tracking - max_products corruption fix
 
 Task: Remove silent `max_products` multiplier that corrupted values post-approval.

@@ -3,6 +3,11 @@ import json
 import pandas as pd
 from datetime import datetime
 import logging
+# INCREMENTAL CHANGE (2026-03-16): Added run_calculations_incremental() function below (after run_calculations).
+# This processes only new linking map entries instead of the full report each trigger.
+# run_calculations() is UNCHANGED and still used for the final full report at workflow completion.
+# REVERT: Delete the run_calculations_incremental() function block and the 3-line change in
+# passive_extraction_workflow_latest.py (lines 2935-2937). See REVERT_TRACKING.md for details.
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -628,6 +633,12 @@ def run_calculations(
     dt = datetime.now().strftime("%Y%m%d_%H%M%S")
     normalized_supplier_name = supplier_name.replace(".", "-")
     out_path = os.path.join(out_dir, f"fba_financial_report_{normalized_supplier_name}_{dt}.csv")
+    # C1 FIX: Preserve EAN columns as text strings to prevent pandas float64 scientific notation
+    for _ean_col in ["EAN", "EAN_OnPage"]:
+        if _ean_col in df.columns:
+            df[_ean_col] = df[_ean_col].apply(
+                lambda x: str(int(float(x))) if pd.notna(x) and str(x).strip() not in ("", "nan", "None") else ""
+            )
     df.to_csv(out_path, index=False)
 
     # Calculate statistics
@@ -661,6 +672,134 @@ def run_calculations(
         "statistics": stats,
         "records": records,
         "supplier_products_total": len(supplier_products),
+    }
+
+
+def run_calculations_incremental(supplier_name, new_entries, existing_csv_path=None):
+    """
+    Process ONLY new linking map entries and append to existing report.
+
+    This avoids regenerating the full report from scratch every N products.
+    The existing run_calculations() is still used for the final full report.
+
+    Args:
+        supplier_name: Supplier identifier (supports sandbox names)
+        new_entries: List of new linking map entry dicts with keys:
+            supplier_ean, amazon_asin, supplier_title, supplier_price,
+            supplier_url, amazon_title, amazon_price, match_method, confidence
+        existing_csv_path: Path to existing CSV to append to (optional)
+
+    Returns:
+        dict with same structure as run_calculations()
+    """
+    if not supplier_name:
+        raise ValueError("supplier_name is required")
+
+    supplier_paths = get_supplier_specific_paths(supplier_name)
+    out_dir = supplier_paths["financial_reports_dir"]
+    os.makedirs(out_dir, exist_ok=True)
+
+    normalized = supplier_name.replace(".", "-")
+    combined_path = existing_csv_path or os.path.join(
+        out_dir, f"fba_financial_report_{normalized}_combined.csv"
+    )
+
+    records = []
+    for entry in new_entries:
+        ean = entry.get("supplier_ean") or entry.get("ean")
+        asin = entry.get("amazon_asin") or entry.get("asin")
+        title = entry.get("supplier_title") or entry.get("title")
+        url = entry.get("supplier_url")
+
+        supplier_price_raw = entry.get("supplier_price", 0)
+        try:
+            supplier_price = float(supplier_price_raw) if supplier_price_raw else 0
+        except (ValueError, TypeError):
+            supplier_price = 0
+
+        amazon = find_amazon_json(ean, asin, title, url, supplier_name)
+        if not amazon:
+            continue
+
+        # Extract Amazon price (same logic as run_calculations)
+        price = None
+        for field in ["current_price", "price", "original_price", "amazon_price"]:
+            if field in amazon and amazon[field] is not None:
+                try:
+                    price = float(amazon[field])
+                    break
+                except (ValueError, TypeError):
+                    continue
+        if not price:
+            continue
+
+        amazon_url = amazon.get("url")
+        if not amazon_url and "asin_queried" in amazon:
+            amazon_url = f"https://www.amazon.co.uk/dp/{amazon['asin_queried']}"
+
+        amazon_title = amazon.get("title", amazon.get("product_title", "N/A"))
+
+        row = {
+            "EAN": ean,
+            "EAN_OnPage": amazon.get("ean_on_page"),
+            "ASIN": asin if asin else amazon.get("asin_queried", amazon.get("asin_from_details")),
+            "SupplierTitle": title,
+            "AmazonTitle": amazon_title,
+            "SupplierURL": url,
+            "AmazonURL": amazon_url,
+        }
+
+        enhanced_metrics = extract_enhanced_metrics(amazon)
+        row.update(enhanced_metrics)
+
+        sp_obj = {"price": supplier_price, "ean": ean, "title": title, "url": url}
+        financial_data = financials(sp_obj, amazon, supplier_price)
+        if financial_data:
+            row.update(financial_data)
+            records.append(row)
+
+    if not records:
+        return {"statistics": {"generated_calculations": 0, "new_records": 0}}
+
+    df_new = pd.DataFrame(records)
+
+    # Append to existing or create new
+    if os.path.exists(combined_path):
+        try:
+            df_existing = pd.read_csv(
+                combined_path, engine="python",
+                on_bad_lines="skip", encoding="utf-8",
+                encoding_errors="replace",
+            )
+            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+            # Dedup by ASIN+EAN to prevent duplicate rows
+            if "ASIN" in df_combined.columns and "EAN" in df_combined.columns:
+                df_combined = df_combined.drop_duplicates(subset=["ASIN", "EAN"], keep="last")
+        except Exception as e:
+            log.warning(f"Could not read existing combined CSV, creating new: {e}")
+            df_combined = df_new
+    else:
+        df_combined = df_new
+
+    if "ROI" in df_combined.columns:
+        df_combined = df_combined.sort_values(by="ROI", ascending=False)
+
+    # C2 FIX: Preserve EAN columns as text strings to prevent pandas float64 scientific notation
+    for _ean_col in ["EAN", "EAN_OnPage"]:
+        if _ean_col in df_combined.columns:
+            df_combined[_ean_col] = df_combined[_ean_col].apply(
+                lambda x: str(int(float(x))) if pd.notna(x) and str(x).strip() not in ("", "nan", "None") else ""
+            )
+    df_combined.to_csv(combined_path, index=False)
+
+    return {
+        "dataframe": df_combined,
+        "statistics": {
+            "new_records": len(records),
+            "total_records": len(df_combined),
+            "output_file": combined_path,
+            "generated_calculations": len(records),
+        },
     }
 
 

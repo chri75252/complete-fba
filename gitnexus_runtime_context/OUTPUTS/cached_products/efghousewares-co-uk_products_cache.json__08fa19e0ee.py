@@ -3,7 +3,7 @@ Do not edit manually.
 """
 
 SOURCE_CATEGORY = "cached_products"
-SOURCE_KIND = "main"
+SOURCE_KIND = "main_latest_per_supplier"
 SOURCE_RELATIVE_PATH = "OUTPUTS/cached_products/efghousewares-co-uk_products_cache.json"
 SOURCE_SIZE_BYTES = 11499120
 SOURCE_MTIME_ISO = "2026-01-07T01:09:15.774421+00:00"

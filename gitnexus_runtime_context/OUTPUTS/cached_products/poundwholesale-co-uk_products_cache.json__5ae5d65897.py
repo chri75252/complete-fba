@@ -3,10 +3,10 @@ Do not edit manually.
 """
 
 SOURCE_CATEGORY = "cached_products"
-SOURCE_KIND = "main"
+SOURCE_KIND = "main_latest_per_supplier"
 SOURCE_RELATIVE_PATH = "OUTPUTS/cached_products/poundwholesale-co-uk_products_cache.json"
-SOURCE_SIZE_BYTES = 6115274
-SOURCE_MTIME_ISO = "2026-01-26T19:01:04.237651+00:00"
+SOURCE_SIZE_BYTES = 6403854
+SOURCE_MTIME_ISO = "2026-03-23T15:06:36.168305+00:00"
 SOURCE_PREVIEW = [
   "[",
   "  {",

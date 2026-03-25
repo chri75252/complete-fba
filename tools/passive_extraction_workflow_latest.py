@@ -1,3 +1,8 @@
+# INCREMENTAL CHANGE (2026-03-16): Lines ~2935-2937 changed to use run_calculations_incremental()
+# instead of run_calculations() for mid-run financial report triggers. run_calculations() is still
+# called at workflow finalization for the final complete report. REVERT: Replace the 3 lines in the
+# financial report trigger block with: from tools.FBA_Financial_calculator import run_calculations
+# and: financial_results = run_calculations(self.supplier_name). See REVERT_TRACKING.md for details.
 """
 passive_extraction_workflow_latest.py - Architectural Summary & Script Index
 ================================================================================
@@ -2932,9 +2937,13 @@ class PassiveExtractionWorkflow:
                                 self.log.info(
                                     f" FINANCIAL REPORT TRIGGER: Reached {current_linking_map_count} linking map entries (trigger every {financial_batch_size})"
                                 )
-                                from tools.FBA_Financial_calculator import run_calculations
+                                from tools.FBA_Financial_calculator import run_calculations_incremental
 
-                                financial_results = run_calculations(self.supplier_name)
+                                # Collect last batch_size entries from linking map for incremental report
+                                batch_entries = self.linking_map[-financial_batch_size:]
+                                financial_results = run_calculations_incremental(
+                                    self.supplier_name, batch_entries
+                                )
                                 if financial_results and financial_results.get(
                                     "statistics", {}
                                 ).get("output_file"):
@@ -7920,9 +7929,11 @@ Return ONLY valid JSON, no additional text."""
                 self.log.info(
                     f" FINANCIAL REPORT TRIGGER: Reached {current_linking_map_count} linking map entries (trigger every {financial_batch_size})"
                 )
-                from tools.FBA_Financial_calculator import run_calculations
+                from tools.FBA_Financial_calculator import run_calculations_incremental
 
-                financial_results = run_calculations(supplier_name)
+                # Collect last batch_size entries from linking map for incremental report
+                batch_entries = self.linking_map[-financial_batch_size:]
+                financial_results = run_calculations_incremental(supplier_name, batch_entries)
                 if financial_results and financial_results.get("statistics", {}).get("output_file"):
                     self.log.info(
                         f" Financial report EXECUTED: {financial_results['statistics']['output_file']}"
@@ -11608,9 +11619,13 @@ Return ONLY valid JSON, no additional text."""
                                 self.log.info(
                                     f" FINANCIAL REPORT TRIGGER: Reached {current_linking_map_count} linking map entries (trigger every {financial_batch_size})"
                                 )
-                                from tools.FBA_Financial_calculator import run_calculations
+                                from tools.FBA_Financial_calculator import run_calculations_incremental
 
-                                financial_results = run_calculations(self.supplier_name)
+                                # Collect last batch_size entries from linking map for incremental report
+                                batch_entries = self.linking_map[-financial_batch_size:]
+                                financial_results = run_calculations_incremental(
+                                    self.supplier_name, batch_entries
+                                )
                                 if financial_results and financial_results.get(
                                     "statistics", {}
                                 ).get("output_file"):

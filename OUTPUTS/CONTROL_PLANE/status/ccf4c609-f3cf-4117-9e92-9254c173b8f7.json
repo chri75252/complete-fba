@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "ccf4c609-f3cf-4117-9e92-9254c173b8f7",
+  "state": "running",
+  "supplier_domain": "angelwholesale.co.uk",
+  "started_at": "2026-03-21T19:16:51Z",
+  "ended_at": null,
+  "pid": 13188,
+  "resolved_paths": {
+    "processing_state": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CACHE\\processing_states\\angelwholesale_co_uk_processing_state.json",
+    "linking_map": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\linking_maps\\angelwholesale.co.uk\\linking_map.json",
+    "financial_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\FBA_ANALYSIS\\financial_reports\\angelwholesale-co-uk",
+    "logs_dir": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\logs\\debug",
+    "runner_log": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\logs\\ccf4c609-f3cf-4117-9e92-9254c173b8f7.log"
+  },
+  "progress": {
+    "current_phase": "amazon_analysis",
+    "persistent_category_index": 3,
+    "total_categories": 326,
+    "current_category_url": "https://angelwholesale.co.uk/Category/A-To-Z-wholesale"
+  },
+  "artifacts": {
+    "cached_products_exists": true,
+    "linking_map_exists": true,
+    "financial_report_exists": false
+  },
+  "error": {
+    "summary": "",
+    "last_log_lines": [
+      "2026-03-21 23:16:58,107 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 11 EANs, 11 URLs, 9 ASINs in 0.000s",
+      "2026-03-21 23:16:58,107 - PassiveExtractionWorkflow - INFO -  HASH INDEXES BUILT: Ready for O(1) lookups on 11 entries",
+      "2026-03-21 23:16:58,107 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.",
+      "2026-03-21 23:16:58,107 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for angelwholesale.co.uk",
+      "2026-03-21 23:16:58,107 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 326 predefined category URLs from config\\angelwholesale_categories.json",
+      "2026-03-21 23:16:58,107 - PassiveExtractionWorkflow - INFO -  INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=2000",
+      "2026-03-21 23:16:58,108 - PassiveExtractionWorkflow - INFO -  Processing ALL 326 predefined categories (infinite mode)",
+      "2026-03-21 23:16:58,108 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING MODE: Enabled (resume_context=True)",
+      "2026-03-21 23:16:58,108 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING: Mode configuration loaded",
+      "2026-03-21 23:16:58,108 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1",
+      "2026-03-21 23:16:58,108 - PassiveExtractionWorkflow - INFO -  HYBRID MODE: Chunked processing (chunk size: 1 categories)",
+      "2026-03-21 23:16:58,108 - PassiveExtractionWorkflow - INFO -  Processing chunk 1: categories 1-1",
+      "2026-03-21 23:16:58,138 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 11087 products in angelwholesale-co-uk_products_cache.json",
+      "2026-03-21 23:16:58,139 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping",
+      "2026-03-21 23:16:58,139 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories",
+      "2026-03-21 23:16:58,139 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100",
+      "2026-03-21 23:16:58,185 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 11087 products in angelwholesale-co-uk_products_cache.json",
+      "2026-03-21 23:16:58,233 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 11087 products available for progress tracking",
+      "2026-03-21 23:16:58,233 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 3",
+      "2026-03-21 23:16:58,233 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches",
+      "2026-03-21 23:16:58,234 - PassiveExtractionWorkflow - INFO -  Processing chunk 2: categories 2-2",
+      "2026-03-21 23:16:58,262 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 11087 products in angelwholesale-co-uk_products_cache.json",
+      "2026-03-21 23:16:58,263 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping",
+      "2026-03-21 23:16:58,263 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories",
+      "2026-03-21 23:16:58,263 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100",
+      "2026-03-21 23:16:58,292 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 11087 products in angelwholesale-co-uk_products_cache.json",
+      "2026-03-21 23:16:58,324 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 11087 products available for progress tracking",
+      "2026-03-21 23:16:58,325 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 3",
+      "2026-03-21 23:16:58,325 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches",
+      "2026-03-21 23:16:58,326 - PassiveExtractionWorkflow - INFO -  Processing chunk 3: categories 3-3",
+      "2026-03-21 23:16:58,361 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 11087 products in angelwholesale-co-uk_products_cache.json",
+      "2026-03-21 23:16:58,362 - PassiveExtractionWorkflow - INFO -  NO PROCESSING PROGRESS: index=0, proceeding with scraping",
+      "2026-03-21 23:16:58,362 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories",
+      "2026-03-21 23:16:58,363 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100",
+      "2026-03-21 23:16:58,485 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 11087 products in angelwholesale-co-uk_products_cache.json",
+      "2026-03-21 23:16:58,529 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 11087 products available for progress tracking",
+      "2026-03-21 23:16:58,530 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 1 categories starting from index 3",
+      "2026-03-21 23:16:58,530 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 1 categories in 1 batches",
+      "2026-03-21 23:16:58,530 - PassiveExtractionWorkflow - INFO -  Processing category batch 1/1 (1 categories)",
+      "2026-03-21 23:16:58,530 - PassiveExtractionWorkflow - INFO -  LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1",
+      "2026-03-21 23:16:58,530 - PassiveExtractionWorkflow - WARNING -  LOGIN SCRIPT TRIGGER ERROR: No module named 'tools.angelwholesale' in category_batch_1, continuing processing",
+      "2026-03-21 23:16:58,533 - PassiveExtractionWorkflow - INFO - Scraping category: https://angelwholesale.co.uk/Category/A-To-Z-wholesale",
+      "2026-03-21 23:16:58,533 - PassiveExtractionWorkflow - WARNING -  PCI/URL mismatch at entry: pci=3 expected=None actual=https://angelwholesale.co.uk/Category/A-To-Z-wholesale (aligning PCI to i=3)",
+      "2026-03-21 23:16:58,533 - PassiveExtractionWorkflow - INFO -  CATEGORY_INDEX_TRACKER: URL mismatch detected but NOT overriding category index (preserving increment logic)",
+      "2026-03-21 23:16:58,534 - config.supplier_config_loader - INFO - Loaded supplier selector config for domain: angelwholesale.co.uk",
+      "2026-03-21 23:16:58,534 - configurable_supplier_scraper - INFO - 📁 Loaded selectors for domain angelwholesale.co.uk from legacy config/supplier_configs/",
+      "2026-03-21 23:16:58,534 - configurable_supplier_scraper - INFO - 🔘 Config specifies BUTTON pagination for angelwholesale.co.uk",
+      "2026-03-21 23:16:58,534 - configurable_supplier_scraper - INFO - 🔄 Using BUTTON pagination for: https://angelwholesale.co.uk/Category/A-To-Z-wholesale",
+      "2026-03-21 23:16:58,534 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy",
+      "2026-03-21 23:16:58,534 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context."
+    ]
+  },
+  "refresh": {
+    "last_updated": null,
+    "paths": {
+      "products_path": null,
+      "overrides_run_dir": null,
+      "amazon_cache_dir": null,
+      "linking_map": null,
+      "processing_state": null
+    },
+    "counts": {
+      "input_products": 0,
+      "linking_map_entries": 0,
+      "amazon_cache_files": 0,
+      "matched_asins": 0
+    },
+    "source_supplier_domain": null
+  }
+}

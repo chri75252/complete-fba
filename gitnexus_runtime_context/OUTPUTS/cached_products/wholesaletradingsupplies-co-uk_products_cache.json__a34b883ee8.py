@@ -3,7 +3,7 @@ Do not edit manually.
 """
 
 SOURCE_CATEGORY = "cached_products"
-SOURCE_KIND = "main"
+SOURCE_KIND = "main_latest_per_supplier"
 SOURCE_RELATIVE_PATH = "OUTPUTS/cached_products/wholesaletradingsupplies-co-uk_products_cache.json"
 SOURCE_SIZE_BYTES = 1993
 SOURCE_MTIME_ISO = "2025-12-03T05:22:08.581896+00:00"

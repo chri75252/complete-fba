@@ -1,0 +1,128 @@
+# GitNexus ignore rules for this repo.
+# Goal: keep the live workflow code/config/docs and the curated runtime mirror,
+# while excluding raw heavy outputs, backups, stale copies, and vendor noise.
+
+# Generated/runtime roots are mirrored into gitnexus_runtime_context instead.
+OUTPUTS/**
+logs/**
+diagnostics/**
+diagnostics_output/**
+processing_states/**
+results/**
+runs/**
+report/**
+AGENT REPORT/**
+RESERACH/**
+LLM_ANALYSIS_PACKAGE/**
+control_plane/OUTPUTS/**
+
+# Explicitly keep the curated mirror that GitNexus should index.
+!gitnexus_runtime_context/
+!gitnexus_runtime_context/**
+
+# Archives, backups, and copy trees.
+archive/
+archive_new/
+backup/
+Recovered/
+legacy_system/
+src-Copy*/
+supplier-onboarding - backup/
+OUTPUTS - Copy/
+monitoring - OLD/
+DASHBOARD - old/
+older version/
+
+# Local tool metadata and cache noise.
+.git/
+.github/
+.agent/
+.agents/
+.gemini/
+.kilocode/
+.kiro/
+.qoder/
+.qwen/
+.serena/
+node_modules/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.venv/
+venv/
+env/
+ENV/
+
+# Backup / duplicate / transient file patterns.
+*.bak
+*.bak_*
+*.backup
+*.old
+*.orig
+*.rej
+* - Copy.*
+* - Copy (*
+*.tmp
+*.temp
+*.log~
+
+# Large binary/media/archive file types.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.svg
+*.pdf
+*.docx
+*.xlsx
+*.xls
+*.zip
+*.7z
+*.tar
+*.gz
+*.rar
+*.mp4
+*.mov
+*.avi
+*.mp3
+*.wav
+
+# Keep the current live workflow surface and governance/config layer.
+!run_custom_*.py
+!tools/passive_extraction_workflow_latest.py
+!tools/configurable_supplier_scraper.py
+!tools/FBA_Financial_calculator.py
+!utils/browser_manager.py
+!utils/fixed_enhanced_state_manager.py
+!utils/path_manager.py
+!utils/sentinel_monitor.py
+!utils/windows_save_guardian.py
+!config/system_config.json
+!config/system_config_loader.py
+!config/supplier_configs/
+!config/supplier_configs/**
+!config/*categories*.json
+!dashboard/
+!dashboard/**
+!dashboard_web/
+!dashboard_web/**
+!control_plane/
+!control_plane/**
+!.claude/
+!.claude/skills/
+!.claude/skills/**
+!docs/
+!docs/**
+!wiki-dec-3/
+!wiki-dec-3/**
+!AGENTS.md
+!CLAUDE.md
+!GITNEXUS_GUIDE.md
+!scripts/generate_gitnexus_filtered_context.py
+!config/gitnexus_scope_rules.json
+!config/gitnexus_scope_rules_curated.json

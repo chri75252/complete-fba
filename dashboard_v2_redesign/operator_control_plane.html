@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FBA Operator Control Plane</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed": "#2a1700",
+                        "tertiary-container": "#ca8100",
+                        "surface-dim": "#131314",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary": "#003824",
+                        "on-primary-container": "#0d0096",
+                        "tertiary-fixed": "#ffddb8",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#3a393a",
+                        "inverse-surface": "#e5e2e3",
+                        "on-background": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "background": "#131314",
+                        "surface-container-low": "#1c1b1c",
+                        "surface-container-highest": "#353436",
+                        "tertiary": "#ffb95f",
+                        "inverse-primary": "#494bd6",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-fixed": "#07006c",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#00311f",
+                        "surface": "#131314",
+                        "surface-tint": "#c0c1ff",
+                        "outline": "#908fa0",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary": "#1000a9",
+                        "on-tertiary": "#472a00",
+                        "primary-container": "#8083ff",
+                        "outline-variant": "#464554",
+                        "on-surface": "#e5e2e3",
+                        "on-error": "#690005",
+                        "primary-fixed": "#e1e0ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "on-tertiary-container": "#3e2400",
+                        "surface-container": "#201f20",
+                        "on-error-container": "#ffdad6",
+                        "secondary": "#4edea3",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#002113",
+                        "secondary-container": "#00a572",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "primary": "#c0c1ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "inverse-on-surface": "#313031",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary-fixed-variant": "#653e00"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #131314;
+            color: #e5e2e3;
+        }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .glass-panel {
+            background: rgba(53, 52, 54, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .volt-accent {
+            background: linear-gradient(135deg, #4edea3 0%, #00a572 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #131314; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #353436; border-radius: 2px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-64 flex flex-col bg-surface-container-lowest border-r border-outline-variant/10">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<div>
+<h1 class="font-headline font-bold text-sm tracking-tight leading-none">FBA Analytics</h1>
+<p class="text-[10px] font-label uppercase tracking-widest text-outline mt-1">Engine v2.4</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2.5 text-on-surface-variant hover:bg-surface-container rounded-md transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span>
+<span class="font-body text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-on-surface bg-surface-container border-l-2 border-primary rounded-r-md transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg">settings_remote</span>
+<span class="font-body text-sm font-medium">Operator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-on-surface-variant hover:bg-surface-container rounded-md transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+<span class="font-body text-sm font-medium">AI Assistant</span>
+</a>
+</nav>
+<div class="p-4 border-t border-outline-variant/10 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+<span class="font-label text-xs uppercase tracking-wider">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">help</span>
+<span class="font-label text-xs uppercase tracking-wider">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<header class="h-16 flex items-center justify-between px-8 bg-surface-container-lowest/50 backdrop-blur-md border-b border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label text-xs font-semibold uppercase tracking-widest text-secondary">System Status: Active</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/20 mx-2"></div>
+<div class="flex gap-6">
+<a class="text-xs font-label uppercase tracking-widest text-on-surface/60 hover:text-primary transition-colors" href="#">Matches</a>
+<a class="text-xs font-label uppercase tracking-widest text-on-surface/60 hover:text-primary transition-colors" href="#">Phase</a>
+<a class="text-xs font-label uppercase tracking-widest text-on-surface/60 hover:text-primary transition-colors" href="#">Profitable</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center">
+<input class="bg-surface-container-low border-none rounded-md py-1.5 pl-9 pr-4 text-sm focus:ring-1 focus:ring-primary w-64 text-on-surface placeholder:text-outline/50" placeholder="Search operational logs..." type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 text-outline text-lg">search</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-container rounded-md transition-colors"><span class="material-symbols-outlined text-outline">refresh</span></button>
+<button class="p-2 hover:bg-surface-container rounded-md transition-colors relative">
+<span class="material-symbols-outlined text-outline">notifications</span>
+<span class="absolute top-2 right-2 w-1.5 h-1.5 bg-primary rounded-full"></span>
+</button>
+<div class="ml-2 w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgbmInmLQ4JKAbJk5fhFnJuPf_ShrGvDVN54VLp2rQCl5aHggfPRMydop2n3hgegwaEl75n65oMZi_kArj_jOGG_a6CoCGITEdtuMArY8RR2LQmST2k3UeYUfLhFbIolpqi5ZoCBvzNLi030bwc3fDtRIiA2gwLkB-FTP4RKoyT9-cK_vSy7_wIlBgSbig7GAuGL2EGcqc4VJ_5qCn_Qm9579lePOAKJynSQ2dZsUyzctWXZTXB-EB-bqIJ74PwMrlTYZeu6t8jSU"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8 bg-surface-dim">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Hero Section / Context -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Operator Control Plane</h2>
+<p class="text-on-surface-variant font-body mt-2">Manage automated extraction workflows and real-time FBA telemetry.</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-low p-4 rounded-md border-l-2 border-primary">
+<span class="block font-label text-[10px] uppercase tracking-widest text-outline">Uptime</span>
+<span class="block font-headline text-xl font-medium">142h 12m</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-md border-l-2 border-secondary">
+<span class="block font-label text-[10px] uppercase tracking-widest text-outline">Success Rate</span>
+<span class="block font-headline text-xl font-medium">99.4%</span>
+</div>
+</div>
+</div>
+<!-- Control Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Trigger Workflow Card -->
+<section class="col-span-12 lg:col-span-5 bg-surface-container-low p-6 rounded-md border border-outline-variant/5 shadow-2xl relative overflow-hidden">
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<h3 class="font-headline text-xl font-semibold uppercase tracking-tight">Trigger Workflow</h3>
+</div>
+<div class="space-y-6 flex-1">
+<div class="space-y-2">
+<label class="font-label text-xs uppercase tracking-widest text-outline">Target Workflow</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-md py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary/40 appearance-none">
+<option>poundwholesale</option>
+<option>clearance-king</option>
+<option>harrisons-direct</option>
+<option>mx-wholesale</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label text-xs uppercase tracking-widest text-outline">Max Products</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-md py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary/40 font-headline" placeholder="5000" type="number"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-xs uppercase tracking-widest text-outline">Max Per Cat.</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-md py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary/40 font-headline" placeholder="250" type="number"/>
+</div>
+</div>
+<div class="bg-surface-container-lowest/50 p-4 rounded-md space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-body text-xs text-outline">Priority Queue</span>
+<div class="w-8 h-4 bg-primary/20 rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body text-xs text-outline">Deep Inspection</span>
+<div class="w-8 h-4 bg-surface-container rounded-full relative">
+<div class="absolute left-0.5 top-0.5 w-3 h-3 bg-outline rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-8 volt-accent w-full py-4 rounded-md text-on-secondary font-headline font-bold text-lg flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-lg shadow-secondary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+                                Deploy Job
+                            </button>
+</div>
+<div class="absolute -bottom-12 -right-12 w-48 h-48 bg-primary/5 blur-[80px] rounded-full"></div>
+</section>
+<!-- Active Jobs Section -->
+<section class="col-span-12 lg:col-span-7 flex flex-col">
+<div class="bg-surface-container-low p-6 rounded-md border border-outline-variant/5 h-full flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">pending_actions</span>
+<h3 class="font-headline text-xl font-semibold uppercase tracking-tight">Active Jobs</h3>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface-container-highest px-3 py-1 rounded text-[10px] font-label uppercase tracking-widest text-outline">Total: 12</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-3">
+<!-- Job Item: Running -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border-l-4 border-secondary transition-all hover:bg-surface-container">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">sync</span>
+</div>
+<div>
+<h4 class="font-headline text-sm font-semibold">poundwholesale_core_sweep</h4>
+<p class="text-[10px] font-label text-outline uppercase tracking-wider mt-0.5">ID: JOB-9281-XC</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<div class="flex items-center gap-2 justify-end">
+<span class="font-headline text-sm font-medium">84%</span>
+<div class="w-16 h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[84%]"></div>
+</div>
+</div>
+<span class="text-[10px] font-label text-secondary uppercase tracking-widest">Running</span>
+</div>
+<button class="text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">cancel</span>
+</button>
+</div>
+</div>
+<!-- Job Item: Pending -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-md border-l-4 border-tertiary transition-all hover:bg-surface-container">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">hourglass_top</span>
+</div>
+<div>
+<h4 class="font-headline text-sm font-semibold">clearance-king_weekly_cat</h4>
+<p class="text-[10px] font-label text-outline uppercase tracking-wider mt-0.5">ID: JOB-4412-MK</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<span class="block font-headline text-sm font-medium">Queued</span>
+<span class="text-[10px] font-label text-tertiary uppercase tracking-widest">Pending</span>
+</div>
+<button class="text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">cancel</span>
+</button>
+</div>
+</div>
+<!-- Job Item: Completed -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest/40 rounded-md border-l-4 border-outline transition-all hover:bg-surface-container opacity-60">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-outline/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</div>
+<div>
+<h4 class="font-headline text-sm font-semibold">amazon_pricing_validation</h4>
+<p class="text-[10px] font-label text-outline uppercase tracking-wider mt-0.5">ID: JOB-1209-AB</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<span class="block font-headline text-sm font-medium">100%</span>
+<span class="text-[10px] font-label text-outline uppercase tracking-widest">Completed</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">file_download</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Telemetry Cards (High Density) -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-4 rounded-md border border-outline-variant/5">
+<span class="text-[10px] font-label text-outline uppercase tracking-widest">Proxy Health</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-headline text-2xl font-bold">98.2%</span>
+<div class="flex gap-1 h-8 items-end">
+<div class="w-1 bg-secondary h-4"></div>
+<div class="w-1 bg-secondary h-6"></div>
+<div class="w-1 bg-secondary h-5"></div>
+<div class="w-1 bg-secondary h-8"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-md border border-outline-variant/5">
+<span class="text-[10px] font-label text-outline uppercase tracking-widest">Data Ingestion</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-headline text-2xl font-bold">4.2GB/s</span>
+<div class="flex gap-1 h-8 items-end">
+<div class="w-1 bg-primary h-2"></div>
+<div class="w-1 bg-primary h-4"></div>
+<div class="w-1 bg-primary h-7"></div>
+<div class="w-1 bg-primary h-5"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-md border border-outline-variant/5">
+<span class="text-[10px] font-label text-outline uppercase tracking-widest">Errors (24h)</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-headline text-2xl font-bold">14</span>
+<span class="text-error font-headline text-xs mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_down</span> -2.4%
+                                </span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-md border border-outline-variant/5">
+<span class="text-[10px] font-label text-outline uppercase tracking-widest">Nodes Active</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-headline text-2xl font-bold">244</span>
+<span class="text-secondary font-headline text-xs mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_upward</span> +12
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Industrial Log Section -->
+<section class="bg-surface-container-lowest border border-outline-variant/10 rounded-md overflow-hidden">
+<div class="bg-surface-container-high px-6 py-2 border-b border-outline-variant/10 flex justify-between items-center">
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Operational Terminal Logs</span>
+<div class="flex gap-4">
+<span class="font-label text-[10px] text-outline">v2.4.0-STABLE</span>
+<span class="font-label text-[10px] text-outline">Region: EU-WEST-1</span>
+</div>
+</div>
+<div class="p-4 h-48 font-mono text-xs overflow-y-auto custom-scrollbar space-y-1">
+<p class="text-secondary-fixed-dim">[14:22:01] <span class="text-on-surface">SYSTEM: Workflow 'poundwholesale_core' initialized.</span></p>
+<p class="text-primary">[14:22:05] <span class="text-on-surface">EXTRACTOR: Rotating proxy IPs... 14 active connections found.</span></p>
+<p class="text-secondary-fixed-dim">[14:23:12] <span class="text-on-surface">DATA_HUB: Record matched for ASIN B07W5JK... Calculated profit: £4.12.</span></p>
+<p class="text-tertiary">[14:23:45] <span class="text-on-surface">NOTICE: Rate limit approached on harrisons-direct. Backing off 2s.</span></p>
+<p class="text-secondary-fixed-dim">[14:24:00] <span class="text-on-surface">SYSTEM: Worker node #12 reports healthy heartbeat.</span></p>
+<p class="text-secondary-fixed-dim">[14:24:55] <span class="text-on-surface">ENGINE: 1,402 items processed in 120 seconds.</span></p>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

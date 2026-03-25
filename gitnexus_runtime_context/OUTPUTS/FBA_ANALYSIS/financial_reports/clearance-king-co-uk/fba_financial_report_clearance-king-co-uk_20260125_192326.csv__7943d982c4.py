@@ -3,7 +3,7 @@ Do not edit manually.
 """
 
 SOURCE_CATEGORY = "financial_reports"
-SOURCE_KIND = "main_largest_per_supplier"
+SOURCE_KIND = "main_latest_per_supplier"
 SOURCE_RELATIVE_PATH = "OUTPUTS/FBA_ANALYSIS/financial_reports/clearance-king-co-uk/fba_financial_report_clearance-king-co-uk_20260125_192326.csv"
 SOURCE_SIZE_BYTES = 55882
 SOURCE_MTIME_ISO = "2026-01-25T15:23:26.414986+00:00"

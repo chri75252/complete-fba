@@ -1,42 +1,130 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -c:*)",
-      "Bash(ls -la config/dkwholesale*.json:*)",
-      "Bash(python -m py_compile:*)",
-      "Bash(curl:*)",
-      "Bash(python -m:*)",
-      "Bash(findstr:*)",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs",
-      "Bash(python run_custom_dkwholesale-com.py:*)",
-      "mcp__zen__thinkdeep",
-      "mcp__sequential-thinking__sequentialthinking",
-      "Bash(ls -la \"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\config\")",
-      "Bash(ls:*)",
-      "mcp__zen__planner",
-      "Bash(cat:*)",
+      "Read(//tmp/claude-code-bmad-skills-main/**)",
+      "Read(//tmp/claude-code-bmad-skills-main/bmad-v6/**)",
+      "Bash(tee c:/temp/ean_results.txt)",
+      "Read(//c/Users/chris/claude-clean/**)",
+      "Bash(grep -r bought_in_past_month '/c/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy \\(8\\) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/' --include=*.py --include=*.js)",
+      "Bash(tasklist)",
+      "mcp__chrome-devtools__click",
+      "mcp__chrome-devtools__list_network_requests",
+      "Bash(mkdir -p backup/dashboard_v2_fixes_20260320)",
+      "Bash(cp dashboard_v2_redesign/api.py backup/dashboard_v2_fixes_20260320/api.py)",
+      "Bash(cp dashboard_v2_redesign/static/js/app.js backup/dashboard_v2_fixes_20260320/app.js)",
+      "Bash(cp dashboard_v2_redesign/templates/index.html backup/dashboard_v2_fixes_20260320/index.html)",
+      "Bash(cp tools/fba_report_filter.py backup/dashboard_v2_fixes_20260320/fba_report_filter.py)",
+      "WebFetch(domain:www.rysons.com)",
+      "WebFetch(domain:www.puckator.co.uk)",
+      "WebFetch(domain:www.direct2public.co.uk)",
+      "WebFetch(domain:www.harrisonsdirect.com)",
+      "WebFetch(domain:avarteksourcing.co.uk)",
+      "WebFetch(domain:dealhuntersfba.com)",
+      "WebFetch(domain:www.gemimports.co.uk)",
+      "WebFetch(domain:adtuk.co.uk)",
+      "WebFetch(domain:www.webretailer.com)",
+      "WebFetch(domain:www.thesellingguys.com)",
+      "WebFetch(domain:www.mxwholesale.co.uk)",
+      "WebFetch(domain:www.pinkliquidation.com)",
+      "WebFetch(domain:samar.pro)",
+      "WebFetch(domain:www.nda-toys.com)",
+      "WebFetch(domain:www.fbashipuk.com)",
+      "WebFetch(domain:www.harrisonsdirect.co.uk)",
+      "Bash(ls 'C:\\\\Users\\\\chris\\\\Desktop\\\\Amazon-FBA-Agent-System-v32 - latest good - Copy \\(8\\) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-')",
       "mcp__chrome-devtools__navigate_page",
-      "mcp__chrome-devtools__take_snapshot",
-      "mcp__chrome-devtools__evaluate_script",
-      "mcp__chrome-devtools__take_screenshot",
-      "mcp__chrome-devtools__list_console_messages",
-      "Bash(wc -l:*)",
-      "Bash(\"C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\process_fba_matches.py\")",
-      "Bash(python:*)",
-      "Bash(head -5:*)",
-      "WebSearch",
-      "Bash(head:*)",
-      "Skill(supplier-onboarding)",
-      "Bash(dir /B)",
-      "Bash(find:*)",
-      "mcp__chrome-devtools__list_pages",
-      "Bash(dir \"C:\\\\Users\\\\chris\\\\Desktop\\\\Amazon-FBA-Agent-System-v32 - latest good - Copy \\(8\\) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\\\OUTPUTS\\\\FBA_ANALYSIS\\\\linking_maps\" /s /b)",
-      "Bash(dir \"C:\\\\Users\\\\chris\\\\Desktop\\\\Amazon-FBA-Agent-System-v32 - latest good - Copy \\(8\\) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\\\OUTPUTS\\\\FBA_ANALYSIS\\\\financial_reports\\\\efghousewares-co-uk\" /b /o-d)",
-      "Bash(dir:*)"
+      "mcp__chrome-devtools__take_screenshot"
     ],
-    "deny": [],
-    "ask": []
+    "additionalDirectories": [
+      "C:\\Users\\chris\\.claude\\skills\\agent-builder",
+      "C:\\Users\\chris\\claude-clean\\skills\\agent-builder",
+      "c:\\Users\\chris\\claude-clean\\projects\\c--Users-chris-Desktop-Amazon-FBA-Agent-System-v32---latest-good---Copy--8----Copy---Copy---POSTLONGRUNPREKIRO2-beforecompletion-\\memory",
+      "c:\\temp"
+    ]
   },
-  "outputStyle": "default"
+  "model": "sonnet[1m]",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.bun/bin/bun.exe\" \"$HOME/.claude/plugins/cache/thedotmack/claude-mem/10.6.1/scripts/worker-service\" start",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.bun/bin/bun.exe\" \"$HOME/.claude/plugins/cache/thedotmack/claude-mem/10.6.1/scripts/worker-service\" hook claude-code session-init",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.bun/bin/bun.exe\" \"$HOME/.claude/plugins/cache/thedotmack/claude-mem/10.6.1/scripts/worker-service\" hook claude-code observation",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.bun/bin/bun.exe\" \"$HOME/.claude/plugins/cache/thedotmack/claude-mem/10.6.1/scripts/worker-service\" hook claude-code summarize",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.bun/bin/bun.exe\" \"$HOME/.claude/plugins/cache/thedotmack/claude-mem/10.6.1/scripts/worker-service\" hook claude-code session-complete",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "claude-mem@thedotmack": true,
+    "everything-claude-code@everything-claude-code": true,
+    "pyright-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "ui-ux-pro-max-skill": {
+      "source": {
+        "source": "github",
+        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    },
+    "everything-claude-code": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/everything-claude-code"
+      }
+    }
+  }
 }

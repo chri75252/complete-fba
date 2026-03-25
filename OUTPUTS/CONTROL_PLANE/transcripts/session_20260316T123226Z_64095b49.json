@@ -1,0 +1,99 @@
+{
+  "session_id": "20260316T123226Z_64095b49",
+  "session_started_at": "2026-03-16T12:32:26Z",
+  "reason": "approval_executed",
+  "messages": [
+    {
+      "role": "user",
+      "content": "I want you to analyze 10 products from these catgeroies  :  \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/food---drink\",     \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/haberdashery-hosiery\",     \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/household-cleaning\",     \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/household-products\","
+    },
+    {
+      "role": "assistant",
+      "content": "Action `enqueue_run` executed successfully."
+    }
+  ],
+  "scratchpad": [],
+  "trace": [],
+  "tool_executions": [],
+  "turn_history": [
+    {
+      "reason": "approval_executed",
+      "archived_at": "2026-03-16T12:32:46Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I want you to analyze 10 products from these catgeroies  :  \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/food---drink\",     \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/haberdashery-hosiery\",     \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/household-cleaning\",     \"https://www.efghousewares.co.uk/shop-by-department/pound-lines/household-products\","
+        },
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [
+        {
+          "tool": "enqueue_run",
+          "params": {
+            "workflow_key": "efghousewares_workflow",
+            "supplier_domain": "efghousewares.co.uk",
+            "runner_script": "run_custom_efghousewares-co-uk.py",
+            "category_urls": [
+              "<truncated>",
+              "<truncated>",
+              "<truncated>",
+              "<truncated>"
+            ],
+            "max_products": 10,
+            "max_products_per_category": 10,
+            "notes": "User requested analysis of 10 products from 4 EFG Housewares pound-lines categories",
+            "run_id": "cea25747-dbf8-41f6-b57e-0e58a0eed3c0"
+          },
+          "expected_outputs": [
+            "OUTPUTS/CONTROL_PLANE/jobs/pending/job_cea25747-dbf8-41f6-b57e-0e58a0eed3c0.json",
+            "OUTPUTS/CONTROL_PLANE/status/cea25747-dbf8-41f6-b57e-0e58a0eed3c0.json",
+            "OUTPUTS/CONTROL_PLANE/logs/cea25747-dbf8-41f6-b57e-0e58a0eed3c0.log",
+            "OUTPUTS/CONTROL_PLANE/overrides/cea25747-dbf8-41f6-b57e-0e58a0eed3c0/system_config.merged.json",
+            "OUTPUTS/CONTROL_PLANE/overrides/cea25747-dbf8-41f6-b57e-0e58a0eed3c0/categories_subset.json",
+            "OUTPUTS/CACHE/processing_states/efghousewares_co_uk__sandbox__cea25747_processing_state.json",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/efghousewares.co.uk__sandbox__cea25747/linking_map.json",
+            "OUTPUTS/cached_products/efghousewares-co-uk__sandbox__cea25747_products_cache.json",
+            "OUTPUTS/FBA_ANALYSIS/financial_reports/efghousewares-co-uk__sandbox__cea25747/fba_financial_report_*.csv",
+            "OUTPUTS/CACHE/processing_states/efghousewares_co_uk_cea25747_processing_state.json",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/efghousewares_co_uk_cea25747/linking_map.json"
+          ],
+          "result": {
+            "ok": true,
+            "run_id": "cea25747-dbf8-41f6-b57e-0e58a0eed3c0",
+            "sandbox_supplier": "efghousewares.co.uk__sandbox__cea25747",
+            "normalized_sandbox_suffix": "sandbox__cea25747",
+            "resume_requested": false,
+            "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_cea25747-dbf8-41f6-b57e-0e58a0eed3c0.json",
+            "merged_config": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\cea25747-dbf8-41f6-b57e-0e58a0eed3c0\\system_config.merged.json",
+            "categories": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\cea25747-dbf8-41f6-b57e-0e58a0eed3c0\\categories_subset.json"
+          },
+          "executed_at": "2026-03-16T12:32:46Z"
+        }
+      ],
+      "executed_tool": "enqueue_run",
+      "executed_result": {
+        "ok": true,
+        "run_id": "cea25747-dbf8-41f6-b57e-0e58a0eed3c0",
+        "sandbox_supplier": "efghousewares.co.uk__sandbox__cea25747",
+        "normalized_sandbox_suffix": "sandbox__cea25747",
+        "resume_requested": false,
+        "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_cea25747-dbf8-41f6-b57e-0e58a0eed3c0.json",
+        "merged_config": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\cea25747-dbf8-41f6-b57e-0e58a0eed3c0\\system_config.merged.json",
+        "categories": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\cea25747-dbf8-41f6-b57e-0e58a0eed3c0\\categories_subset.json"
+      }
+    }
+  ],
+  "pending_tool_call": null,
+  "pending_user_text": null,
+  "pending_rag_info": null,
+  "last_run_id": "cea25747-dbf8-41f6-b57e-0e58a0eed3c0",
+  "last_products_path": null,
+  "last_supplier_domain": "efghousewares.co.uk",
+  "last_sandbox_supplier": "efghousewares.co.uk__sandbox__cea25747",
+  "saved_at": "2026-03-16T12:32:46Z"
+}
