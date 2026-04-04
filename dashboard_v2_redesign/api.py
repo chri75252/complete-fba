@@ -391,7 +391,7 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                  min_roi: Optional[float] = None, min_profit: Optional[float] = None,
                  sort: str = "confidence", min_sales: Optional[int] = None,
                  page: int = 1, page_size: int = 50000,  # C3 FIX: removed 500-row cap; frontend paginates
-                 report: Optional[str] = None):
+                 report: Optional[str] = None, category: Optional[str] = None):
     """Classify financial report rows into confidence tiers and return filtered results."""
     base_dir = get_base_directory()
     try:
@@ -468,6 +468,35 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                     return 0
             rows = [r for r in rows if _safe_sales(r.get("bought_in_past_month")) >= min_sales]
 
+        # Category enrichment from cached products
+        url_to_category = {}
+        try:
+            loader_cat = MetricsLoader(base_dir)
+            cat_paths = loader_cat.resolve_paths(effective_supplier)
+            cache_path = cat_paths.get("cached_products_file")
+            if cache_path and os.path.exists(cache_path):
+                cached = json.loads(Path(cache_path).read_text(encoding="utf-8"))
+                for item in (cached if isinstance(cached, list) else []):
+                    prod_url = item.get("url", "")
+                    src_url = item.get("source_url", "")
+                    if prod_url and src_url:
+                        parts = [p for p in src_url.split("/") if p and "." not in p and "http" not in p and len(p) > 2]
+                        cat_name = parts[-1].replace("-", " ").title() if parts else "Other"
+                        url_to_category[prod_url.rstrip("/")] = cat_name
+        except Exception:
+            pass
+
+        for r in rows:
+            sup_url = r.get("SupplierURL", "").rstrip("/")
+            r["Category"] = url_to_category.get(sup_url, "Other") if url_to_category else "Other"
+
+        # Collect distinct categories before applying category filter (for dropdown population)
+        distinct_categories = sorted(set(r["Category"] for r in rows))
+
+        # Apply category filter
+        if category:
+            rows = [r for r in rows if r.get("Category") == category]
+
         # Sort
         if sort == "confidence":
             rows.sort(key=lambda r: r.get("confidence_score", 0), reverse=True)
@@ -502,6 +531,7 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                 "SupplierURL": r.get("SupplierURL", ""),
                 "AmazonURL": r.get("AmazonURL", ""),
                 "fba_seller_count": r.get("fba_seller_count"),
+                "Category": r.get("Category", "Other"),
             })
 
         return {
@@ -511,6 +541,7 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
             "filtered_count": len(clean_rows),
             "source_file": os.path.basename(csv_path),
             "effective_supplier": effective_supplier,
+            "distinct_categories": distinct_categories,
         }
 
     except Exception as e:

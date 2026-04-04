@@ -322,7 +322,7 @@ class ControlPlaneWorker:
                     refresh = job.get("refresh") or {}
                     env["CONTROL_PLANE_JOB_PATH"] = str(running_job_path)
                     cmd = ["python", "-m", "control_plane.run_product_list_refresh"]
-                    timeout_seconds = int(refresh.get("timeout_seconds") or 7200)
+                    timeout_seconds = int(refresh.get("timeout_seconds") or 216000)
                 elif job.get("job_type") == job_types.JOB_TYPE_RUN_ONBOARDING_WIZARD:
                     wizard = job.get("wizard") or {}
                     cmd = [

@@ -1,0 +1,41 @@
+2026-04-03 16:25:44,131 WARNING __main__: Ignoring supplier identity from products file; job sandbox is authoritative. job=efghousewares.co.uk__sandbox__4e269fb4 file=efghousewares.co.uk
+2026-04-03 16:25:44,140 WARNING tools.amazon_playwright_extractor: ?? BrowserCircuitBreaker not available - health management disabled
+2026-04-03 16:25:44,141 INFO tools.amazon_playwright_extractor: AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-04-03 16:25:44,142 INFO tools.amazon_playwright_extractor: Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-04-03 16:25:44,142 WARNING tools.amazon_playwright_extractor: ?? BrowserManager not available, using legacy browser connection
+2026-04-03 16:25:44,143 INFO tools.configurable_supplier_scraper: ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-04-03 16:25:44,143 INFO tools.configurable_supplier_scraper: ⚠️ Using legacy browser management (BrowserManager not available or disabled)
+2026-04-03 16:25:44,143 INFO tools.configurable_supplier_scraper: [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-04-03 16:25:44,143 INFO tools.configurable_supplier_scraper: [TARGET] Extraction targets loaded: []
+2026-04-03 16:25:44,143 INFO tools.configurable_supplier_scraper: [ASSIST] Discovery assistance enabled: False
+2026-04-03 16:25:44,158 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares-co-uk__sandbox__4e269fb4_products_cache.json (1776 entries) saved successfully
+2026-04-03 16:25:44,162 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-03 16:25:44,162 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-03 16:25:44,163 INFO tools.amazon_playwright_extractor: 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-04-03 16:25:44,164 INFO utils.browser_circuit_breaker: BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-04-03 16:25:44,164 INFO utils.browser_manager: ?? BrowserManager singleton initialized with health management
+2026-04-03 16:25:44,656 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance on port 9222
+2026-04-03 16:25:44,656 INFO utils.browser_manager: ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-04-03 16:25:46,719 INFO utils.browser_manager: ? Chrome debug accessible on IPv4: Chrome/146.0.7680.178
+2026-04-03 16:25:46,719 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance...
+2026-04-03 16:25:48,758 INFO utils.browser_manager: ?? Using endpoint: http://localhost:9222
+2026-04-03 16:25:48,965 INFO utils.browser_manager: ? Successfully connected to existing Chrome debug instance
+2026-04-03 16:25:48,965 INFO utils.browser_manager: ?? Using existing context with 2 pages
+2026-04-03 16:25:48,965 INFO utils.browser_manager: ?? Connected to existing Chrome: 146.0.7680.178
+2026-04-03 16:25:48,966 INFO tools.amazon_playwright_extractor: ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-04-03 16:25:48,966 INFO utils.browser_manager: ?? Reusing existing Chrome connection (port 9222)
+2026-04-03 16:25:48,966 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-04-03 16:26:09,138 WARNING tools.efghousewares.supplier_authentication_service: Authentication check failed: Page.goto: Timeout 20000ms exceeded.
+Call log:
+  - navigating to "https://www.efghousewares.co.uk/MyAccount", waiting until "domcontentloaded"
+
+2026-04-03 16:26:09,139 INFO __main__: 🔐 Category 1 requires login; authenticating efghousewares.co.uk…
+2026-04-03 16:26:09,139 INFO tools.efghousewares.supplier_authentication_service: 🔄 Starting login process for info@theblacksmithmarket.com...
+2026-04-03 16:26:29,191 ERROR tools.efghousewares.supplier_authentication_service: Login failed with exception: Page.goto: Navigation to "https://www.efghousewares.co.uk/Login" is interrupted by another navigation to "https://www.efghousewares.co.uk/Login"
+Call log:
+  - navigating to "https://www.efghousewares.co.uk/Login", waiting until "domcontentloaded"
+
+2026-04-03 16:26:29,191 WARNING __main__: ❌ Category 1: Authentication failed
+2026-04-03 16:26:29,192 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm (attempt 1/3)
+2026-04-03 16:26:29,192 INFO utils.browser_manager: ?? Reusing existing page in persistent context.
+2026-04-03 16:26:29,192 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager singleton page for https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm

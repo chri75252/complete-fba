@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let refreshTimer = null;
     let lastExtractedCount = null;
     let lastExtractTime = null;
+    let _lastChartData = [];
+    let _catProfitSorted = [];
+    let _catSalesSorted = [];
 
     // 1. Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
@@ -239,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Charts ---
         const chartData = data.chart_data || [];
+        _lastChartData = chartData;
         if (chartData.length > 0) {
             renderAllCharts(chartData);
             renderTables(chartData);
@@ -346,6 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sorted = Object.entries(catProfits)
             .sort((a, b) => b[1].total - a[1].total)
             .slice(0, 10);
+        _catProfitSorted = sorted;
 
         if (sorted.length === 0) return;
 
@@ -385,6 +390,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     x: { title: { display: true, text: 'Total Profit (GBP)' } },
                     y: { ticks: { font: { size: 11 } } }
+                },
+                onClick: (evt, elements) => {
+                    if (elements.length > 0) {
+                        const catName = _catProfitSorted[elements[0].index][0];
+                        showCategoryModal(catName, 'profit');
+                    }
                 }
             }
         });
@@ -456,6 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
             catData[cat].totalProfit += d.NetProfit;
         });
         const sorted = Object.entries(catData).sort((a, b) => b[1].count - a[1].count).slice(0, 10);
+        _catSalesSorted = sorted;
         if (sorted.length === 0) return;
         const labels = sorted.map(([cat, v]) => {
             const name = cat.length > 20 ? cat.slice(0, 17) + '...' : cat;
@@ -479,9 +491,36 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 },
-                scales: { x: { title: { display: true, text: 'Profitable Products with Sales' } }, y: { ticks: { font: { size: 11 } } } }
+                scales: { x: { title: { display: true, text: 'Profitable Products with Sales' } }, y: { ticks: { font: { size: 11 } } } },
+                onClick: (evt, elements) => {
+                    if (elements.length > 0) {
+                        const catName = _catSalesSorted[elements[0].index][0];
+                        showCategoryModal(catName, 'sales');
+                    }
+                }
             }
         });
+    }
+
+    function showCategoryModal(categoryName, filterMode) {
+        let products = _lastChartData.filter(d => (d.Category || 'Other') === categoryName);
+        if (filterMode === 'profit') {
+            products = products.filter(d => d.NetProfit > 0);
+        } else if (filterMode === 'sales') {
+            products = products.filter(d => d.NetProfit > 0 && Number(d.bought_in_past_month) > 0);
+        }
+        products.sort((a, b) => (b.NetProfit || 0) - (a.NetProfit || 0));
+        document.getElementById('categoryModalTitle').textContent = `${categoryName} — ${products.length} products`;
+        const tbody = document.getElementById('categoryModalBody');
+        tbody.innerHTML = products.map((p, i) => `<tr>
+            <td>${i + 1}</td>
+            <td title="${escapeHtml(p.SupplierTitle || '')}">${escapeHtml((p.SupplierTitle || '').substring(0, 40))}</td>
+            <td title="${escapeHtml(p.AmazonTitle || '')}">${escapeHtml((p.AmazonTitle || '').substring(0, 40))}</td>
+            <td>${p.ROI != null ? Number(p.ROI).toFixed(1) + '%' : '--'}</td>
+            <td class="${p.NetProfit > 0 ? 'success-text' : ''}">${p.NetProfit != null ? '\u00a3' + Number(p.NetProfit).toFixed(2) : '--'}</td>
+            <td>${p.bought_in_past_month ? Number(p.bought_in_past_month).toLocaleString() : '--'}</td>
+        </tr>`).join('') || '<tr><td colspan="6" class="empty-state">No products</td></tr>';
+        document.getElementById('categoryModal').style.display = 'block';
     }
 
     function renderSellerMixChart(data) {
@@ -915,6 +954,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const minProfit = document.getElementById('analysisMinProfit').value;
         const minSales = document.getElementById('analysisMinSales').value;
         const sortBy = document.getElementById('analysisSortBy').value;
+        const categoryFilter = (document.getElementById('analysisCategoryFilter') || {}).value || '';
 
         try {
             const report = (document.getElementById('analysisReportSelect') || {}).value || '';
@@ -924,6 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ...(minRoi ? { min_roi: minRoi } : {}),
                 ...(minProfit ? { min_profit: minProfit } : {}),
                 ...(minSales ? { min_sales: minSales } : {}),
+                ...(categoryFilter ? { category: categoryFilter } : {}),
             });
             const res = await fetch(`/api/analysis/${encodeURIComponent(supplier)}?${params}`);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -946,6 +987,14 @@ document.addEventListener('DOMContentLoaded', () => {
             analysisData = data.rows || [];
             analysisPage = 1;
             renderAnalysisTable();
+            // Populate category dropdown
+            const catSel = document.getElementById('analysisCategoryFilter');
+            if (catSel && data.distinct_categories) {
+                const cur = catSel.value;
+                catSel.innerHTML = '<option value="">All Categories</option>' +
+                    data.distinct_categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+                catSel.value = cur;
+            }
             const expBtn = document.getElementById('exportAnalysisBtn');
             if (expBtn) expBtn.style.display = analysisData.length > 0 ? 'inline-flex' : 'none';
 
@@ -965,7 +1014,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tbody = document.getElementById('analysisTableBody');
         if (pageData.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No products match filters</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="10" class="empty-state">No products match filters</td></tr>';
             document.getElementById('analysisPagination').innerHTML = '';
             return;
         }
@@ -987,6 +1036,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${start + i + 1}</td>
                 <td title="${escapeHtml(row.SupplierTitle || '')}">${escapeHtml((row.SupplierTitle || '').substring(0, 35))}</td>
                 <td title="${escapeHtml(row.AmazonTitle || '')}">${escapeHtml((row.AmazonTitle || '').substring(0, 35))}</td>
+                <td style="font-size:0.75rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(row.Category || '')}">${escapeHtml((row.Category || '').substring(0, 18))}</td>
                 <td><span class="badge" style="background:${tierColor}; color: #131314;">${tierShort}</span></td>
                 <td>${row.confidence_score || 0}</td>
                 <td>${roi}</td>

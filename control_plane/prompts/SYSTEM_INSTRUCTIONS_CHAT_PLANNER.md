@@ -35,6 +35,8 @@
   - Choose tool: `enqueue_product_list_refresh`
   - Reuse `last_run_id` when present
   - Do NOT choose `enqueue_run` unless the user explicitly provides category URLs
+  - Treat natural variants as resume intent too: "relaunch same session run", "same run", "restart that run", "continue same session"
+  - If `run_id` or `products_path` is unresolved after context merge, choose `ask_clarify` (do not fallback to `enqueue_run`)
 
 - If the user asks to **resume/continue** a cancelled sandbox/category run:
   - Choose tool: `enqueue_run`
@@ -101,4 +103,3 @@ Notes:
 - `explanation` is allowed to be human prose, 2-4 sentences.
 - For enqueue tools (`enqueue_run`, `enqueue_product_list_refresh`), the explanation MUST mention that it queues a job and the user should start the worker (`python -m control_plane worker`) to execute.
 - `params` must conform to the provided tool schema.
-

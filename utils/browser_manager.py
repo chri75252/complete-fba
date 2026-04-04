@@ -48,6 +48,8 @@ class BrowserManager:
             self.browser = None
             self.context = None
             self.page_cache = {}
+            self._active_run_id = ""
+            self._active_run_page = None
             self.page_usage_order = []
             self.max_cache_size = 10
             
@@ -78,6 +80,14 @@ class BrowserManager:
         if self.browser and self.browser.is_connected():
             log.info(f"?? Reusing existing Chrome connection (port {cdp_port})")
             return
+
+        # Clean up stale playwright instance before creating a new one (reconnect safety)
+        if self.playwright:
+            try:
+                await self.playwright.stop()
+            except Exception:
+                pass
+            self.playwright = None
 
         self.playwright = await async_playwright().start()
 
@@ -138,39 +148,139 @@ class BrowserManager:
             await self._provide_chrome_debug_troubleshooting(cdp_port)
             raise Exception(f"Failed to connect to existing Chrome debug instance on port {cdp_port}. Chrome must be manually launched first.")
 
+    async def ensure_run_page(self, run_id: str) -> Page:
+        if not self.context:
+            raise Exception("Browser context not initialized. Call launch_browser() first.")
+
+        page_count_before = len(self.context.pages)
+
+        if (
+            self._active_run_id == run_id
+            and self._active_run_page is not None
+            and not self._active_run_page.is_closed()
+        ):
+            log.info(
+                "?? Reusing dedicated run page for %s (pages_before=%s, url=%s)",
+                run_id,
+                page_count_before,
+                getattr(self._active_run_page, "url", ""),
+            )
+            return self._active_run_page
+
+        self._active_run_id = run_id
+        self._active_run_page = await self.context.new_page()
+        log.info(
+            "?? Created dedicated run page for %s (pages_before=%s, pages_after=%s, url=%s)",
+            run_id,
+            page_count_before,
+            len(self.context.pages),
+            getattr(self._active_run_page, "url", ""),
+        )
+        return self._active_run_page
+
+    async def release_run_page(self, run_id: str) -> None:
+        if self._active_run_id != run_id:
+            return
+
+        page = self._active_run_page
+        self._active_run_id = ""
+        self._active_run_page = None
+
+        if page is not None and not page.is_closed():
+            await page.close()
+            log.info("?? Closed dedicated run page for %s", run_id)
+
     async def get_page(self, url: Optional[str] = None, reuse_existing: bool = True) -> Page:
         if not self.context:
             raise Exception("Browser context not initialized. Call launch_browser() first.")
 
-        # Health check before operations
+        # Health check — attempt reconnection if connection is dead.
+        # This is safe: if the connection is alive, this is a no-op.
+        # If dead, reconnecting is strictly better than permanent failure.
         if not await self.verify_connection_health():
-            log.warning("?? Browser health check failed - attempting restart")
-            if await self.should_restart_browser():
-                await self.restart_browser_gracefully()
+            log.warning("?? Browser connection lost — attempting reconnection")
+            cdp_port = int(os.getenv('CHROME_DEBUG_PORT', DEFAULT_CHROME_DEBUG_PORT))
+            try:
+                await self.launch_browser(cdp_port=cdp_port)
+                if await self.verify_connection_health():
+                    log.info("?? Browser reconnection successful")
+                else:
+                    log.error("?? Browser reconnection failed — connection still unhealthy")
+            except Exception as reconnect_err:
+                log.error("?? Browser reconnection failed: %s", reconnect_err)
 
-        if url and url in self.page_cache:
+        page = None
+
+        if self._active_run_page is not None:
+            if self._active_run_page.is_closed():
+                log.warning("?? Dedicated run page is closed; clearing run page reference")
+                self._active_run_page = None
+                self._active_run_id = ""
+            else:
+                page = self._active_run_page
+                log.info(
+                    "?? Reusing dedicated run page for %s via get_page(url=%s, reuse_existing=%s)",
+                    self._active_run_id,
+                    url or "",
+                    reuse_existing,
+                )
+
+        if page is None and url and url in self.page_cache:
             log.info(f"?? Reusing cached page for {url}")
             page = self.page_cache[url]
-            # REMOVED: Bring cached page to front - prevents aggressive browser focus
-            # try:
-            #     await page.bring_to_front()
-            #     log.debug(f"Brought cached page to front for {url}")
-            # except Exception as e:
-            #     log.debug(f"Could not bring cached page to front: {e}")
-            self.page_usage_order.remove(url)
-            self.page_usage_order.append(url)
-            return page
+            if page.is_closed():
+                log.warning(f"?? Cached page for {url} is closed; removing from cache")
+                try:
+                    del self.page_cache[url]
+                except Exception:
+                    pass
+                try:
+                    self.page_usage_order.remove(url)
+                except ValueError:
+                    pass
+            else:
+                # REMOVED: Bring cached page to front - prevents aggressive browser focus
+                # try:
+                #     await page.bring_to_front()
+                #     log.debug(f"Brought cached page to front for {url}")
+                # except Exception as e:
+                #     log.debug(f"Could not bring cached page to front: {e}")
+                if url in self.page_usage_order:
+                    self.page_usage_order.remove(url)
+                self.page_usage_order.append(url)
+                return page
 
-        if self.context.pages:
-            page = self.context.pages[0]
-            log.info(f"?? Reusing existing page in persistent context.")
+        if page is None and self.context.pages:
+            if url:
+                url_l = url.lower()
+                for existing_page in self.context.pages:
+                    if existing_page.is_closed():
+                        continue
+                    try:
+                        existing_url = str(existing_page.url or "").lower()
+                    except Exception:
+                        existing_url = ""
+                    if existing_url and (existing_url == url_l or existing_url.startswith(url_l) or url_l.startswith(existing_url)):
+                        page = existing_page
+                        log.info(f"?? Reusing matching page in persistent context for {url}")
+                        break
+            if page is None:
+                for existing_page in self.context.pages:
+                    if not existing_page.is_closed():
+                        page = existing_page
+                        break
+            if page is None:
+                page = await self.context.new_page()
+                log.info("?? No live pages found; created new page in persistent context.")
+            else:
+                log.info(f"?? Reusing existing page in persistent context.")
             # REMOVED: Bring reused page to front - prevents aggressive browser focus  
             # try:
             #     await page.bring_to_front()
             #     log.debug("Brought reused page to front for visibility")
             # except Exception as e:
             #     log.debug(f"Could not bring reused page to front: {e}")
-        else:
+        elif page is None:
             page = await self.context.new_page()
             log.info("?? Created new page in persistent context.")
             
@@ -217,7 +327,7 @@ class BrowserManager:
             
             # Launch bundled Chromium in visible mode
             self.browser = await self.playwright.chromium.launch(
-                headless=True,  # CRITICAL FIX: Use headless mode to prevent popup
+                headless=False,  # Visible mode - user can see browser in taskbar without focus stealing
                 args=[
                     "--no-first-run",
                     "--no-default-browser-check",
@@ -348,7 +458,7 @@ class BrowserManager:
             # Use different profile directory to avoid conflicts with user's Chrome
             self.context = await self.playwright.chromium.launch_persistent_context(
                 user_data_dir=profile_dir,
-                headless=True,  # FORCE HEADLESS to prevent popup
+                headless=False,  # Visible mode - no focus stealing, user sees it in taskbar
                 args=[
                     f"--remote-debugging-port={cdp_port + 1}",  # Use different port
                     "--no-first-run",

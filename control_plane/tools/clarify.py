@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 
@@ -24,9 +25,20 @@ def ask_clarify(
             "workflow_key": "Which workflow key should I use (e.g. poundwholesale_workflow)?",
             "runner_script": "Which runner script should I use (e.g. run_custom_poundwholesale.py)?",
             "max_products": "How many products should I process in total?",
-            "run_id": "Which run ID should I check?",
+            "run_id": "Which run ID should I use? Please provide the full UUID (example: 4e269fb4-8eea-4589-97ad-d76c0a5a1e30).",
+            "products_path": "Which products JSON path should I use (example: OUTPUTS/PRODUCTS_LISTS/your_file.json)?",
         }
         questions = [param_questions.get(p, f"Please provide: {p}") for p in missing_params]
+    elif re.search(
+        r"product[- ]list|products_path|resume|continue|sandbox_suffix|run_id",
+        text,
+        re.IGNORECASE,
+    ):
+        questions = [
+            "Which supplier domain should I use (e.g. efghousewares.co.uk)?",
+            "Which run ID should I use? Please provide the full UUID (example: 4e269fb4-8eea-4589-97ad-d76c0a5a1e30).",
+            "Which products JSON path should I use (example: OUTPUTS/PRODUCTS_LISTS/your_file.json)?",
+        ]
     else:
         questions = [
             "What would you like me to do? (e.g., analyze categories, check status, query financials)",

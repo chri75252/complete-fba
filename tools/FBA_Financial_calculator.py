@@ -319,25 +319,37 @@ def extract_keepa_fees(product_details):
 def extract_enhanced_metrics(amazon_data):
     """
     Extract enhanced metrics from Amazon data including:
-    - Bought in past month data
+    - Bought in past month data (Keepa primary, Amazon badge fallback)
+    - Amazon sales badge (separate column for reference)
     - FBA/FBM seller counts from Keepa
     """
     enhanced_metrics = {
         "bought_in_past_month": None,
+        "amazon_sales_badge": None,
         "fba_seller_count": None,
         "fbm_seller_count": None,
         "total_offer_count": None,
     }
 
-    # Extract "Bought in past month" data
+    # Amazon listing badge — stored separately for reference
     if amazon_data.get("amazon_monthly_sales_badge"):
-        enhanced_metrics["bought_in_past_month"] = amazon_data["amazon_monthly_sales_badge"]
+        enhanced_metrics["amazon_sales_badge"] = amazon_data["amazon_monthly_sales_badge"]
 
     # Extract seller counts from Keepa data
     keepa_data = amazon_data.get("keepa", {})
     if keepa_data:
         product_details = keepa_data.get("product_details_tab_data", {})
         if product_details:
+            # Primary sales source: Keepa "Bought in past month" (e.g. "10,000+")
+            keepa_bought = product_details.get("Bought in past month")
+            if keepa_bought:
+                try:
+                    enhanced_metrics["bought_in_past_month"] = int(
+                        str(keepa_bought).replace(",", "").replace("+", "").strip()
+                    )
+                except (ValueError, TypeError):
+                    pass
+
             # Extract total offer count
             if "Total Offer Count" in product_details:
                 try:
@@ -373,6 +385,10 @@ def extract_enhanced_metrics(amazon_data):
                 and "Lowest FBM Seller" in product_details
             ):
                 enhanced_metrics["fbm_seller_count"] = "Available (see Keepa data)"
+
+    # Fallback: if Keepa had no "Bought in past month", use Amazon badge
+    if enhanced_metrics["bought_in_past_month"] is None and enhanced_metrics["amazon_sales_badge"] is not None:
+        enhanced_metrics["bought_in_past_month"] = enhanced_metrics["amazon_sales_badge"]
 
     return enhanced_metrics
 

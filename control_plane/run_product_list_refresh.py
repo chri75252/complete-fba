@@ -194,6 +194,13 @@ def _ensure_playwright_page(cdp_port: int = 9222):
         mgr = BrowserManager.get_instance()
         await mgr.launch_browser(cdp_port=cdp_port)
         page = await mgr.get_page(reuse_existing=True)
+        # Bring the run tab to front once at startup so the user can see navigations.
+        # This is NOT called on every get_page() — only here at session start.
+        try:
+            await page.bring_to_front()
+            log.info("Brought run page to front for visibility")
+        except Exception:
+            pass
         return page
 
     return _inner()
@@ -374,8 +381,9 @@ def main() -> None:
     # Initialize Amazon extractor for full Keepa data extraction
     extractor = FixedAmazonExtractor(chrome_debug_port=9222)
 
-    # Initialize supplier scraper for live re-scraping (main script not edited, only called)
-    scraper = ConfigurableSupplierScraper()
+    # Scraper is initialized after browser connection inside async run() —
+    # must receive browser_manager to match how main runners work.
+    scraper = None  # Set inside run() after BrowserManager is connected
 
     if not dry_run:
         try:
@@ -385,6 +393,12 @@ def main() -> None:
 
     products_by_source = _group_products_by_source(products)
     state_manager = FixedEnhancedStateManager(sandbox_supplier)
+    # Load existing state from disk so resume progress is preserved
+    resumed = state_manager.load_state()
+    if resumed:
+        log.info("Loaded existing processing state for %s — resuming", sandbox_supplier)
+    else:
+        log.info("No existing processing state for %s — starting fresh", sandbox_supplier)
     sp = state_manager.state_data["system_progression"]
     sp["current_phase"] = "supplier"
     sp["total_categories"] = len(products_by_source)
@@ -400,10 +414,13 @@ def main() -> None:
     cancel_requested = False
 
     async def run() -> None:
-        nonlocal cancel_requested
+        nonlocal cancel_requested, scraper
         await extractor.connect()  # Ensure extractor is connected before use
         page = await _ensure_playwright_page(cdp_port=9222)
-        await scraper._ensure_browser()  # Connect scraper to shared BrowserManager singleton
+        # Create scraper AFTER browser is connected, passing browser_manager
+        # (matches how main runners work — prevents singleton fallback path)
+        from utils.browser_manager import BrowserManager
+        scraper = ConfigurableSupplierScraper(browser_manager=BrowserManager.get_instance())
         # --- Resolve Auth Service (Login executes inside the category loop) ---
         auth_svc = None
         base_supplier = sandbox_supplier.split("__sandbox__")[0]
@@ -561,6 +578,11 @@ def main() -> None:
                     product_key = _product_identity(product)
 
                     if product_key and product_key in processed_keys:
+                        log.info("Skipping already-processed product %d/%d: %s", _idx, len(source_products), product_key)
+                        sp["supplier_products_completed"] = min(len(products), len(results))
+                        sp["amazon_products_completed"] = len(results)
+                        if _idx % 10 == 0 or _idx == len(source_products):
+                            state_manager.save_state_atomic()
                         continue
 
                     match_method = "title"
@@ -681,6 +703,7 @@ def main() -> None:
                     sp["supplier_products_needing_extraction"] = max(0, len(products) - len(results))
                     sp["amazon_products_completed"] = len(results)
                     sp["amazon_products_needing_analysis"] = max(0, len(products) - len(results))
+                    state_manager.save_state_atomic()
 
             if cancel_requested:
                 break
@@ -706,6 +729,7 @@ def main() -> None:
             dry_run=dry_run,
             cancelled=cancel_requested or _cancel_requested(repo_root, run_id),
         )
+        # Page cleanup handled by BrowserManager singleton lifecycle
 
     if finalization_error is not None and not summary["cancelled"]:
         raise finalization_error

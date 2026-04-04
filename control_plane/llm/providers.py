@@ -247,6 +247,45 @@ class AnthropicProvider:
             ) from exc
 
 
+@dataclass(frozen=True)
+class AnthropicBearerProvider:
+    """Anthropic-compatible endpoint using Authorization: Bearer (e.g. opencode Go provider)."""
+    base_url: str
+    model: str
+    api_key: str
+
+    def generate_json(self, prompt: str) -> dict[str, Any]:
+        import requests
+
+        url = self.base_url.rstrip("/")
+        if not url.endswith("/v1/messages"):
+            if url.endswith("/v1"):
+                url = f"{url}/messages"
+            else:
+                url = f"{url}/v1/messages"
+
+        payload = {
+            "model": self.model,
+            "max_tokens": 800,
+            "temperature": 0,
+            "system": "Return ONLY valid JSON.",
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "x-api-key": self.api_key,
+            "anthropic-version": "2023-06-01",
+        }
+        resp = requests.post(url, json=payload, headers=headers, timeout=60)
+        resp.raise_for_status()
+        data = resp.json()
+        parts = data.get("content", [])
+        text = "".join(p.get("text", "") for p in parts if isinstance(p, dict) and p.get("type") == "text")
+        if not text:
+            raise RuntimeError(f"anthropic_bearer_provider_empty_response: {str(data)[:200]}")
+        return _safe_json_loads(text)
+
+
 def get_provider() -> LlmProvider:
     ensure_llm_env()
     provider = os.environ.get("CONTROL_PLANE_LLM_PROVIDER", "none").strip().lower()
@@ -284,7 +323,7 @@ def get_provider() -> LlmProvider:
         api_key = os.environ.get("KIMI_API_KEY", "")
         if not api_key:
             raise RuntimeError("KIMI_API_KEY not set")
-        return AnthropicProvider(api_key=api_key, model=model, base_url=base_url)
+        return AnthropicBearerProvider(base_url=base_url, model=model, api_key=api_key)
 
     if provider == "openai":
         api_key = os.environ.get("OPENAI_API_KEY", "")

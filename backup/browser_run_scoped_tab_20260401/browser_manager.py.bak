@@ -1,0 +1,1187 @@
+"""
+Browser Manager with LRU Cache for Amazon FBA Agent System v3
+Provides centralized browser resource management with LRU page caching.
+Singleton pattern ensures all tools share the same Chrome instance.
+Max 2 tabs with proper overflow cleanup to prevent memory leaks.
+"""
+
+import os
+import logging
+import asyncio
+import atexit
+import time
+import psutil
+from typing import Dict, Any, List, Optional, Tuple
+from datetime import datetime
+from pathlib import Path
+from collections import OrderedDict
+
+# Playwright imports
+from playwright.async_api import async_playwright, Browser, BrowserContext, Page, TimeoutError as PlaywrightTimeoutError
+
+# Import circuit breaker for health management
+from .browser_circuit_breaker import BrowserCircuitBreaker
+
+# Configure logging
+log = logging.getLogger(__name__)
+
+# Browser configuration constants
+DEFAULT_CHROME_DEBUG_PORT = 9222
+MAX_CACHED_PAGES = 1  # CRITICAL FIX: Force single-page mode for stability and prevent Keepa extension failures
+PAGE_TIMEOUT_MS = 60000
+STABILIZE_WAIT_SECONDS = 3
+
+
+class BrowserManager:
+    """
+    Singleton browser manager with LRU page cache.
+    Provides shared Chrome instance and manages up to 5 cached pages.
+    """
+    
+    _instance = None
+    
+    def __init__(self):
+        if BrowserManager._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            self.playwright = None
+            self.browser = None
+            self.context = None
+            self.page_cache = {}
+            self.page_usage_order = []
+            self.max_cache_size = 10
+            
+            # Health management attributes
+            self._last_health_check = time.time()
+            self._memory_usage_history = []
+            self._connection_failures = 0
+            self._last_restart = time.time()
+            self._restart_interval_hours = 2.5  # Restart every 2.5 hours to prevent connection issues
+            self._memory_threshold_mb = 2048  # 2GB memory threshold
+            self._circuit_breaker = BrowserCircuitBreaker(failure_threshold=3, timeout_seconds=300)
+            
+            # Supplier scraping specific attributes
+            self._supplier_session_start = time.time()
+            self._products_processed = 0
+            self._last_memory_cleanup = time.time()
+            
+            BrowserManager._instance = self
+            log.info("?? BrowserManager singleton initialized with health management")
+
+    @classmethod
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = BrowserManager()
+        return cls._instance
+
+    async def launch_browser(self, cdp_port: int, headless: bool = False):
+        if self.browser and self.browser.is_connected():
+            log.info(f"?? Reusing existing Chrome connection (port {cdp_port})")
+            return
+
+        self.playwright = await async_playwright().start()
+
+        # ?? CRITICAL: ONLY connect to existing Chrome debug instance
+        # NEVER launch new Chromium instances - user has existing Chrome running
+        # Documentation: "Connect to user's existing Chrome debug instance"
+
+        log.info(f"?? Connecting to existing Chrome debug instance on port {cdp_port}")
+        log.info("?? Per troubleshooting docs: Using existing Chrome debug only")
+        
+        # Verify Chrome debug is accessible first
+        chrome_accessible = await self._verify_chrome_debug_accessible(cdp_port)
+        if not chrome_accessible:
+            if self.playwright:
+                await self.playwright.stop()
+                self.playwright = None
+            raise Exception(f"Chrome debug port {cdp_port} not accessible. Please ensure Chrome is running with --remote-debugging-port={cdp_port} --user-data-dir=C:\\ChromeDebugProfile")
+        
+        # Connect to existing Chrome debug instance with Playwright 1.40.0 compatibility
+        try:
+            log.info("?? Connecting to existing Chrome debug instance...")
+            
+            # Get the correct CDP endpoint (IPv6 for v139+, IPv4 fallback)
+            cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+            log.info(f"?? Using endpoint: {cdp_endpoint}")
+            
+            # Connect to existing Chrome (headed and persistent by design)
+            self.browser = await self.playwright.chromium.connect_over_cdp(
+                cdp_endpoint,
+                timeout=30000,  # 30 second timeout
+                slow_mo=150     # Conservative timing for stability
+            )
+            
+            log.info("? Successfully connected to existing Chrome debug instance")
+            
+            # Get existing context or create new one within the existing Chrome
+            if self.browser.contexts:
+                self.context = self.browser.contexts[0]
+                log.info(f"?? Using existing context with {len(self.context.pages)} pages")
+            else:
+                self.context = await self.browser.new_context()
+                log.info("?? Created new context in existing Chrome")
+            
+            # Validate connection
+            if self.browser:
+                browser_version = getattr(self.browser, 'version', 'Unknown')
+                log.info(f"?? Connected to existing Chrome: {browser_version}")
+            
+        except Exception as e:
+            log.error(f"? Failed to connect to existing Chrome debug instance: {e}")
+            
+            # Clean up playwright if connection failed
+            if self.playwright:
+                await self.playwright.stop()
+                self.playwright = None
+            
+            # Provide detailed troubleshooting based on docs
+            await self._provide_chrome_debug_troubleshooting(cdp_port)
+            raise Exception(f"Failed to connect to existing Chrome debug instance on port {cdp_port}. Chrome must be manually launched first.")
+
+    async def get_page(self, url: Optional[str] = None, reuse_existing: bool = True) -> Page:
+        if not self.context:
+            raise Exception("Browser context not initialized. Call launch_browser() first.")
+
+        # Health check before operations
+        if not await self.verify_connection_health():
+            log.warning("?? Browser health check failed - attempting restart")
+            if await self.should_restart_browser():
+                await self.restart_browser_gracefully()
+
+        if url and url in self.page_cache:
+            log.info(f"?? Reusing cached page for {url}")
+            page = self.page_cache[url]
+            if page.is_closed():
+                log.warning(f"?? Cached page for {url} is closed; removing from cache")
+                try:
+                    del self.page_cache[url]
+                except Exception:
+                    pass
+                try:
+                    self.page_usage_order.remove(url)
+                except ValueError:
+                    pass
+            else:
+                # REMOVED: Bring cached page to front - prevents aggressive browser focus
+                # try:
+                #     await page.bring_to_front()
+                #     log.debug(f"Brought cached page to front for {url}")
+                # except Exception as e:
+                #     log.debug(f"Could not bring cached page to front: {e}")
+                if url in self.page_usage_order:
+                    self.page_usage_order.remove(url)
+                self.page_usage_order.append(url)
+                return page
+
+        if self.context.pages:
+            page = None
+            if url:
+                url_l = url.lower()
+                for existing_page in self.context.pages:
+                    if existing_page.is_closed():
+                        continue
+                    try:
+                        existing_url = str(existing_page.url or "").lower()
+                    except Exception:
+                        existing_url = ""
+                    if existing_url and (existing_url == url_l or existing_url.startswith(url_l) or url_l.startswith(existing_url)):
+                        page = existing_page
+                        log.info(f"?? Reusing matching page in persistent context for {url}")
+                        break
+            if page is None:
+                for existing_page in self.context.pages:
+                    if not existing_page.is_closed():
+                        page = existing_page
+                        break
+            if page is None:
+                page = await self.context.new_page()
+                log.info("?? No live pages found; created new page in persistent context.")
+            else:
+                log.info(f"?? Reusing existing page in persistent context.")
+            # REMOVED: Bring reused page to front - prevents aggressive browser focus  
+            # try:
+            #     await page.bring_to_front()
+            #     log.debug("Brought reused page to front for visibility")
+            # except Exception as e:
+            #     log.debug(f"Could not bring reused page to front: {e}")
+        else:
+            page = await self.context.new_page()
+            log.info("?? Created new page in persistent context.")
+            
+        if url:
+            log.info(f"?? Navigating to {url}")
+            try:
+                # Use circuit breaker for navigation
+                await self._circuit_breaker.execute_with_breaker(
+                    page.goto, url, wait_until='domcontentloaded', timeout=60000
+                )
+                log.info(f"? Page ready for {url}")
+                
+                # REMOVED: Ensure page visibility after navigation - prevents aggressive browser focus
+                # try:
+                #     await page.bring_to_front()
+                #     log.debug(f"Brought page to front after navigation to {url}")
+                # except Exception as e:
+                #     log.debug(f"Could not bring page to front after navigation: {e}")
+                
+                self._add_to_cache(url, page)
+            except Exception as e:
+                log.error(f"? Navigation failed for {url}: {e}")
+                raise
+            
+        return page
+
+    def _add_to_cache(self, url: str, page: Page):
+        if len(self.page_cache) >= self.max_cache_size:
+            oldest_url = self.page_usage_order.pop(0)
+            del self.page_cache[oldest_url]
+            log.info(f"??? Evicted oldest cached page: {oldest_url}")
+        
+        self.page_cache[url] = page
+        self.page_usage_order.append(url)
+    
+    async def _fallback_to_bundled_chromium(self):
+        """Fallback to Playwright's bundled Chromium when Chrome CDP fails"""
+        try:
+            log.warning("?? Activating Playwright bundled Chromium fallback")
+            log.warning("?? FALLBACK MODE: Using Playwright bundled Chromium")
+            log.warning("?? Chrome profile sync and extensions will NOT be available")
+            log.warning("? All automation will remain visible and functional")
+            log.warning("??? To restore Chrome profile: Close Chrome completely and restart system")
+            
+            # Launch bundled Chromium in visible mode
+            self.browser = await self.playwright.chromium.launch(
+                headless=False,  # Visible mode - user can see browser in taskbar without focus stealing
+                args=[
+                    "--no-first-run",
+                    "--no-default-browser-check",
+                    "--disable-web-security",      # Allow extension access in headless
+                    "--disable-features=VizDisplayCompositor",  # Prevent display issues
+                    "--enable-automation",         # Keep automation features
+                    "--no-sandbox"                 # Ensure compatibility
+                ]
+            )
+            
+            self.context = await self.browser.new_context()
+            log.info("? Bundled Chromium fallback activated successfully")
+            
+        except Exception as fallback_error:
+            log.error(f"? Bundled Chromium fallback failed: {fallback_error}")
+            # Clean up playwright if both methods failed
+            if self.playwright:
+                await self.playwright.stop()
+                self.playwright = None
+            raise Exception(f"All browser connection methods failed. Last error: {fallback_error}")
+
+    async def _verify_chrome_debug_accessible(self, cdp_port: int) -> bool:
+        """Verify Chrome debug port is accessible (IPv6/IPv4 dual-stack for v139 compatibility)"""
+        import aiohttp
+        timeout = aiohttp.ClientTimeout(total=5)
+        
+        # Chrome v139+ prefers IPv6 binding - test IPv6 first
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://[::1]:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        chrome_info = await response.json()
+                        log.info(f"? Chrome debug accessible on IPv6: {chrome_info.get('Browser', 'Unknown')}")
+                        return True
+        except Exception as e:
+            log.debug(f"?? IPv6 connection failed: {e}")
+        
+        # Fallback to IPv4 for older Chrome versions
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://localhost:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        chrome_info = await response.json()
+                        log.info(f"? Chrome debug accessible on IPv4: {chrome_info.get('Browser', 'Unknown')}")
+                        return True
+                    else:
+                        log.error(f"? Chrome debug returned HTTP {response.status}")
+                        return False
+        except Exception as e:
+            log.error(f"? Chrome debug port {cdp_port} not accessible on IPv4 or IPv6: {e}")
+            return False
+
+    async def _get_chrome_cdp_endpoint(self, cdp_port: int) -> str:
+        """Determine the correct CDP endpoint (IPv6 or IPv4) for Chrome connection"""
+        import aiohttp
+        timeout = aiohttp.ClientTimeout(total=3)
+        
+        # Test IPv6 first (Chrome v139+ preference)
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://[::1]:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        log.debug("?? Using IPv6 endpoint for CDP connection")
+                        return f"http://[::1]:{cdp_port}"
+        except Exception:
+            pass
+        
+        # Fallback to IPv4
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(f"http://localhost:{cdp_port}/json/version") as response:
+                    if response.status == 200:
+                        log.debug("?? Using IPv4 endpoint for CDP connection")
+                        return f"http://localhost:{cdp_port}"
+        except Exception:
+            pass
+        
+        # Default to IPv6 if both fail (Chrome v139 behavior)
+        log.warning("?? Could not verify endpoint, defaulting to IPv6")
+        return f"http://[::1]:{cdp_port}"
+    
+    async def _provide_chrome_debug_troubleshooting(self, cdp_port: int):
+        """Provide detailed troubleshooting steps based on documentation"""
+        log.error("?? CHROME DEBUG TROUBLESHOOTING STEPS:")
+        log.error(f"   1. Ensure Chrome is manually launched with debug flags:")
+        log.error(f"      chrome --remote-debugging-port={cdp_port} --user-data-dir=C:\\ChromeDebugProfile")
+        log.error(f"   2. Verify Chrome debug is accessible:")
+        log.error(f"      curl http://localhost:{cdp_port}/json/version")
+        log.error(f"   3. Check if port {cdp_port} is in use:")
+        log.error(f"      netstat -an | findstr :{cdp_port}")
+        log.error(f"   4. Kill existing Chrome processes if needed:")
+        log.error(f"      taskkill /F /IM chrome.exe")
+        log.error(f"   5. Restart Chrome with proper debug flags and try again")
+        log.error(f"   ?? Reference: TROUBLESHOOTING.md - Browser & Chrome Issues")
+
+    async def _try_connect_to_existing_chrome(self, cdp_port: int) -> bool:
+        """Try to connect to existing Chrome debug instance"""
+        try:
+            log.debug(f"?? Attempting connection to existing Chrome on port {cdp_port}")
+            
+            # Get the correct CDP endpoint (IPv6/IPv4 detection)
+            cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+            
+            # Try with minimal timeout to fail fast if Chrome isn't responsive
+            self.browser = await self.playwright.chromium.connect_over_cdp(
+                cdp_endpoint,
+                timeout=15000,  # 15 second timeout
+                slow_mo=100
+            )
+            
+            log.info("? Connected to existing Chrome debug instance")
+
+            # CRITICAL FIX: Minimize all Chrome windows immediately after connection
+            await self._minimize_chrome_windows()
+
+            return True
+            
+        except Exception as e:
+            log.debug(f"?? Existing Chrome connection failed: {e}")
+            return False
+    
+    async def _launch_persistent_context_fallback(self, cdp_port: int, headless: bool) -> bool:
+        """Launch persistent context as fallback when no existing Chrome"""
+        try:
+            profile_dir = "C:\\ChromeDebugProfile_Playwright"
+            log.info(f"?? Using separate Playwright profile directory: {profile_dir}")
+            
+            # Use different profile directory to avoid conflicts with user's Chrome
+            self.context = await self.playwright.chromium.launch_persistent_context(
+                user_data_dir=profile_dir,
+                headless=False,  # Visible mode - no focus stealing, user sees it in taskbar
+                args=[
+                    f"--remote-debugging-port={cdp_port + 1}",  # Use different port
+                    "--no-first-run",
+                    "--no-default-browser-check",
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-web-security",
+                    "--window-position=2000,2000",  # Position window off-screen
+                    "--window-size=800,600",        # Small window size
+                    "--no-startup-window"           # Prevent startup window focus
+                ],
+                ignore_default_args=["--enable-automation"],
+                timeout=45000,
+                slow_mo=200
+            )
+            
+            self.browser = self.context.browser
+            log.info(f"? Launched persistent context fallback")
+            return True
+            
+        except Exception as e:
+            log.error(f"? Persistent context fallback failed: {e}")
+            return False
+
+    async def _minimize_chrome_windows(self):
+        """This function is disabled to prevent interference with the user's browser."""
+        log.warning("Window minimization is currently disabled.")
+        pass
+
+    async def _keep_chrome_minimized(self):
+        """Continuously ensure Chrome stays minimized during processing"""
+        try:
+            # Set up a background task to keep Chrome minimized
+            import asyncio
+
+            async def minimize_loop():
+                while True:
+                    await asyncio.sleep(5)  # Check every 5 seconds
+                    await self._minimize_chrome_windows()
+
+            # Start the minimize loop in the background
+            asyncio.create_task(minimize_loop())
+            log.info("🔄 Started Chrome minimize monitor")
+
+        except Exception as e:
+            log.warning(f"⚠️ Could not start Chrome minimize monitor: {e}")
+
+    async def _connect_with_enhanced_compatibility(self, cdp_port: int, chrome_info: dict) -> bool:
+        """Enhanced compatibility mode for Chrome 139.x Protocol 1.3"""
+        max_attempts = 5  # More attempts for compatibility mode
+        for attempt in range(max_attempts):
+            try:
+                log.info(f"?? Enhanced compatibility attempt {attempt + 1}/{max_attempts}")
+                
+                # Progressive timeout increases for Chrome 139.x
+                timeout = 20000 + (attempt * 10000)  # 20s, 30s, 40s, 50s, 60s
+                slow_mo = 300 + (attempt * 100)      # 300ms, 400ms, 500ms, 600ms, 700ms
+                
+                # Get dynamic endpoint for Chrome v139+ compatibility
+                cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+                
+                self.browser = await self.playwright.chromium.connect_over_cdp(
+                    cdp_endpoint,
+                    timeout=timeout,
+                    slow_mo=slow_mo
+                )
+                
+                log.info(f"? Enhanced compatibility connection successful on attempt {attempt + 1}")
+                return True
+                
+            except Exception as e:
+                log.warning(f"?? Enhanced compatibility attempt {attempt + 1} failed: {e}")
+                if attempt < max_attempts - 1:
+                    delay = 3 + attempt  # 3s, 4s, 5s, 6s delays
+                    log.info(f"?? Retrying in {delay} seconds...")
+                    await asyncio.sleep(delay)
+        
+        return False
+    
+    async def _connect_with_standard_cdp(self, cdp_port: int, chrome_info: dict) -> bool:
+        """Standard CDP connection for non-139.x Chrome versions"""
+        max_attempts = 3
+        for attempt in range(max_attempts):
+            try:
+                log.info(f"?? Standard CDP attempt {attempt + 1}/{max_attempts}")
+                
+                # Get dynamic endpoint for Chrome v139+ compatibility  
+                cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+                
+                self.browser = await self.playwright.chromium.connect_over_cdp(
+                    cdp_endpoint,
+                    timeout=30000,
+                    slow_mo=150
+                )
+                
+                log.info(f"? Standard CDP connection successful")
+                return True
+                
+            except Exception as e:
+                log.warning(f"?? Standard CDP attempt {attempt + 1} failed: {e}")
+                if attempt < max_attempts - 1:
+                    await asyncio.sleep(2)
+        
+        return False
+    
+    async def _connect_with_websocket_fallback(self, cdp_port: int, chrome_info: dict) -> bool:
+        """WebSocket direct fallback approach for maximum compatibility"""
+        try:
+            log.info("?? Attempting WebSocket direct fallback approach...")
+            
+            # Get dynamic endpoint and try with minimal configuration for maximum compatibility
+            cdp_endpoint = await self._get_chrome_cdp_endpoint(cdp_port)
+            
+            self.browser = await self.playwright.chromium.connect_over_cdp(
+                cdp_endpoint,
+                timeout=60000,  # Maximum timeout
+                slow_mo=1000    # Very slow for maximum stability
+            )
+            
+            log.info("? WebSocket fallback connection successful")
+            return True
+            
+        except Exception as e:
+            log.error(f"? WebSocket fallback failed: {e}")
+            return False
+
+    async def _detect_chrome_protocol_version(self, cdp_port: int) -> dict:
+        """Detect Chrome version and protocol version for compatibility assessment"""
+        try:
+            import aiohttp
+            log.debug(f"?? Attempting Chrome protocol detection on port {cdp_port}")
+            timeout = aiohttp.ClientTimeout(total=5)  # Shorter timeout to fail fast
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                url = f"http://localhost:{cdp_port}/json/version"
+                log.debug(f"?? Making request to: {url}")
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        log.info(f"? Chrome protocol detected: {result.get('Browser', 'Unknown')} Protocol {result.get('Protocol-Version', 'Unknown')}")
+                        return result
+                    else:
+                        log.warning(f"?? HTTP {response.status} from Chrome debug port {cdp_port}")
+                        raise Exception(f"HTTP {response.status}")
+        except Exception as e:
+            log.warning(f"?? Async Chrome detection failed: {type(e).__name__}: {e}")
+            
+            # Fallback to synchronous detection
+            try:
+                log.debug("?? Trying synchronous detection fallback...")
+                result = self._detect_chrome_sync(cdp_port)
+                if result.get('Browser') != 'Unknown Chrome':
+                    log.info(f"? Sync fallback detected: {result.get('Browser', 'Unknown')} Protocol {result.get('Protocol-Version', 'Unknown')}")
+                    return result
+            except Exception as sync_error:
+                log.debug(f"?? Sync detection also failed: {sync_error}")
+            
+            # Return unknown - will trigger enhanced compatibility mode
+            return {
+                "Browser": "Unknown Chrome",
+                "Protocol-Version": "Unknown",
+                "webSocketDebuggerUrl": f"ws://localhost:{cdp_port}/devtools/browser"
+            }
+    
+    def _detect_chrome_sync(self, cdp_port: int) -> dict:
+        """Synchronous fallback for Chrome version detection"""
+        import requests
+        try:
+            response = requests.get(f"http://localhost:{cdp_port}/json/version", timeout=3)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"HTTP {response.status_code}")
+        except Exception as e:
+            log.debug(f"?? Sync detection failed: {e}")
+            raise
+    
+    def _get_cdp_connection_config(self, chrome_info: dict) -> dict:
+        """Get CDP connection configuration based on Chrome version and protocol"""
+        browser_version = chrome_info.get('Browser', '')
+        protocol_version = chrome_info.get('Protocol-Version', '')
+        
+        # Chrome 139.x with Protocol 1.3 requires enhanced compatibility settings
+        if '139.' in browser_version and protocol_version == '1.3':
+            return {
+                'timeout': 45000,  # Longer timeout for Chrome 139.x
+                'slow_mo': 200,    # More conservative timing
+            }
+        # Default configuration for other versions
+        return {
+            'timeout': 30000,
+            'slow_mo': 100
+        }
+    
+    async def _validate_cdp_connection_stability(self):
+        """Validate CDP connection stability with protocol handshake"""
+        try:
+            # Test basic browser connectivity
+            if self.browser:
+                browser_version = self.browser.version
+                log.debug(f"?? CDP connection validated - Browser version: {browser_version}")
+        except Exception as e:
+            log.warning(f"?? CDP connection validation warning: {e}")
+            # Don't fail here - connection might still be functional
+    
+    async def _provide_enhanced_troubleshooting(self, cdp_port: int, chrome_info: dict):
+        """Provide enhanced troubleshooting steps with version-specific guidance"""
+        log.error(f"?? Chrome Debug Port {cdp_port} connection failed")
+        log.error(f"?? TROUBLESHOOTING STEPS:")
+        log.error(f"   1. Chrome Status: {chrome_info.get('Browser', 'Unknown')}")
+        log.error(f"   2. Protocol Version: {chrome_info.get('Protocol-Version', 'Unknown')}")
+        log.error(f"   3. WebSocket URL: {chrome_info.get('webSocketDebuggerUrl', 'Unknown')}")
+        log.error(f"   4. Playwright Version: 1.54.0 (installed) vs 1.40.0 (required)")
+        log.error(f"   5. Ensure Chrome launched with: --remote-debugging-port={cdp_port} --user-data-dir=C:\\ChromeDebugProfile")
+        log.error(f"   6. Version Compatibility: Chrome 139.x Protocol 1.3 requires enhanced handling")
+
+    async def _verify_chrome_debug_port(self, port: int) -> bool:
+        """
+        Verify Chrome debug port availability and responsiveness.
+        
+        Args:
+            port: Debug port number to verify
+            
+        Returns:
+            True if Chrome debug port is accessible, False otherwise
+        """
+        try:
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=5)  # Reduced timeout for faster response
+            
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                # Try to get Chrome version info
+                try:
+                    async with session.get(f"http://localhost:{port}/json/version") as response:
+                        if response.status == 200:
+                            version_info = await response.json()
+                            browser_version = version_info.get('Browser', 'Unknown')
+                            log.info(f"? Chrome debug port {port} accessible - {browser_version}")
+                            
+                            # Try to get list of pages/tabs
+                            try:
+                                async with session.get(f"http://localhost:{port}/json") as pages_response:
+                                    if pages_response.status == 200:
+                                        pages = await pages_response.json()
+                                        log.info(f"?? Found {len(pages)} pages/tabs in Chrome")
+                                        return True
+                                    else:
+                                        log.warning(f"?? Could not get pages list from Chrome debug port {port}")
+                                        return True  # Version endpoint worked, so port is accessible
+                            except Exception as pages_error:
+                                log.debug(f"Pages endpoint error (non-critical): {pages_error}")
+                                return True  # Version endpoint worked, so port is accessible
+                        else:
+                            log.error(f"? Chrome debug port {port} returned status {response.status}")
+                            return False
+                except aiohttp.ServerTimeoutError:
+                    log.error(f"? Chrome debug port {port} timed out")
+                    return False
+                except aiohttp.ClientError as client_error:
+                    log.error(f"? Chrome debug port {port} client error: {client_error}")
+                    return False
+                        
+        except aiohttp.ClientConnectorError:
+            log.error(f"? Cannot connect to Chrome debug port {port} - Chrome not running with debug flags")
+            return False
+        except asyncio.TimeoutError:
+            log.error(f"? Chrome debug port {port} connection timed out")
+            return False
+        except Exception as e:
+            log.debug(f"Chrome debug port verification error (will continue): {e}")
+            # Don't fail completely on verification errors - attempt connection anyway
+            return True
+    
+    async def _provide_chrome_troubleshooting_steps(self, port: int):
+        """
+        Provide detailed troubleshooting steps for Chrome debug connection issues.
+        
+        Args:
+            port: Debug port number that failed
+        """
+        log.error("?? Chrome Debug Connection Troubleshooting Steps:")
+        log.error("1?? Close all Chrome instances:")
+        log.error("   - taskkill /f /im chrome.exe")
+        log.error("   - taskkill /f /im chromedriver.exe")
+        log.error("2?? Verify port is free:")
+        log.error(f"   - netstat -an | findstr :{port}")
+        log.error('3?? Start Chrome with proper debug flags:')
+        log.error(f'   - "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --remote-debugging-port={port} --user-data-dir="C:\\ChromeDebugProfile"')
+        log.error("4?? Verify Chrome debug port responds:")
+        log.error(f"   - curl http://localhost:{port}/json/version")
+        log.error("5?? If Chrome version incompatible with Playwright:")
+        log.error("   - pip install --upgrade playwright")
+        log.error("   - playwright install chromium")
+        
+        # Try to detect current Chrome status
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["tasklist", "/fi", "imagename eq chrome.exe", "/fo", "csv"],
+                capture_output=True, text=True, timeout=5
+            )
+            if "chrome.exe" in result.stdout:
+                log.error("?? Chrome processes detected - may need to restart with debug flags")
+            else:
+                log.error("?? No Chrome processes found - need to start Chrome with debug flags")
+        except Exception:
+            log.error("?? Could not check Chrome process status")
+    
+    async def get_browser_memory_usage(self) -> int:
+        """
+        Get current Chrome process memory usage in MB
+        
+        Returns:
+            Memory usage in MB, or -1 if unable to determine
+        """
+        try:
+            if not self.browser or not self.browser.is_connected():
+                return -1
+            
+            # Find Chrome processes with enhanced detection for Windows
+            chrome_memory = 0
+            chrome_processes_found = 0
+            
+            for proc in psutil.process_iter(['pid', 'name', 'memory_info']):
+                try:
+                    proc_name = proc.info['name'].lower()
+                    # Enhanced Chrome process detection
+                    if any(chrome_name in proc_name for chrome_name in ['chrome', 'msedge', 'chromium']):
+                        memory_mb = proc.info['memory_info'].rss / (1024 * 1024)
+                        chrome_memory += memory_mb
+                        chrome_processes_found += 1
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            
+            # ?? FIX A-5: Fallback when Chrome memory reports 0 or no processes found
+            if chrome_memory == 0 or chrome_processes_found == 0:
+                log.debug(f"?? Chrome memory detection fallback: {chrome_memory}MB from {chrome_processes_found} processes")
+                # Try alternative process detection
+                try:
+                    import platform
+                    if platform.system() == "Windows":
+                        # Windows-specific Chrome detection
+                        for proc in psutil.process_iter(['pid', 'name', 'memory_info', 'exe']):
+                            try:
+                                if proc.info['exe'] and 'chrome' in proc.info['exe'].lower():
+                                    memory_mb = proc.info['memory_info'].rss / (1024 * 1024)
+                                    chrome_memory += memory_mb
+                                    chrome_processes_found += 1
+                            except (psutil.NoSuchProcess, psutil.AccessDenied, TypeError):
+                                continue
+                except Exception as e:
+                    log.debug(f"Chrome process fallback detection failed: {e}")
+            
+            if chrome_processes_found > 0:
+                log.debug(f"?? Found {chrome_processes_found} Chrome processes, total memory: {chrome_memory:.1f}MB")
+            
+            # Track memory history
+            current_time = time.time()
+            self._memory_usage_history.append((current_time, chrome_memory))
+            
+            # Keep only last 100 measurements (about 3 hours at 2min intervals)
+            if len(self._memory_usage_history) > 100:
+                self._memory_usage_history = self._memory_usage_history[-100:]
+            
+            log.debug(f"?? Chrome memory usage: {chrome_memory:.1f} MB")
+            return int(chrome_memory)
+            
+        except Exception as e:
+            log.warning(f"?? Could not get browser memory usage: {e}")
+            return -1
+    
+    async def get_total_system_memory_usage(self) -> dict:
+        """
+        Get comprehensive system memory usage for supplier scraping monitoring
+        Enhanced for Windows compatibility with accurate process detection
+        
+        Returns:
+            Dictionary with Chrome, Python, and system memory usage
+        """
+        try:
+            # Get Chrome memory with enhanced detection
+            chrome_memory = await self.get_browser_memory_usage()
+            
+            # Enhanced Chrome process detection for Windows
+            chrome_processes = []
+            total_chrome_memory = 0
+            
+            for proc in psutil.process_iter(['pid', 'name', 'memory_info']):
+                try:
+                    proc_name = proc.info['name'].lower()
+                    if any(chrome_name in proc_name for chrome_name in ['chrome', 'msedge', 'chromium']):
+                        proc_memory_mb = proc.info['memory_info'].rss / (1024 * 1024)
+                        total_chrome_memory += proc_memory_mb
+                        chrome_processes.append({
+                            'pid': proc.info['pid'],
+                            'name': proc.info['name'],
+                            'memory_mb': proc_memory_mb
+                        })
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            
+            # Get Python process memory
+            current_process = psutil.Process()
+            python_memory = current_process.memory_info().rss / (1024 * 1024)
+            
+            # Get Node.js and JavaScript Runtime memory
+            nodejs_processes = []
+            total_nodejs_memory = 0
+            
+            for proc in psutil.process_iter(['pid', 'name', 'memory_info']):
+                try:
+                    proc_name = proc.info['name'].lower()
+                    if any(node_name in proc_name for node_name in ['node', 'nodejs', 'node.exe']):
+                        proc_memory_mb = proc.info['memory_info'].rss / (1024 * 1024)
+                        total_nodejs_memory += proc_memory_mb
+                        nodejs_processes.append({
+                            'pid': proc.info['pid'],
+                            'name': proc.info['name'],
+                            'memory_mb': proc_memory_mb
+                        })
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            
+            # Get total memory info
+            memory_info = psutil.virtual_memory()
+            total_memory = memory_info.total / (1024 * 1024)
+            available_memory = memory_info.available / (1024 * 1024)
+            used_memory = memory_info.used / (1024 * 1024)
+            
+            # Platform detection for Windows-specific features
+            import platform
+            is_windows = platform.system() == "Windows"
+            
+            result = {
+                "chrome_memory_mb": chrome_memory,
+                "chrome_processes_detected": len(chrome_processes),
+                "total_chrome_memory_mb": int(total_chrome_memory),
+                "chrome_process_details": chrome_processes[:3],  # Top 3 processes
+                "python_memory_mb": int(python_memory),
+                "nodejs_memory_mb": int(total_nodejs_memory),
+                "nodejs_processes_detected": len(nodejs_processes),
+                "nodejs_process_details": nodejs_processes[:3],  # Top 3 Node.js processes
+                "total_system_memory_mb": int(total_memory),
+                "used_system_memory_mb": int(used_memory),
+                "available_memory_mb": int(available_memory),
+                "memory_usage_percent": memory_info.percent,
+                "platform": "Windows" if is_windows else "Linux/WSL",
+                "accurate_detection": is_windows
+            }
+            
+            # Enhanced logging for Windows
+            if is_windows and len(chrome_processes) > 0:
+                log.debug(f"?? Windows: {len(chrome_processes)} Chrome processes, {total_chrome_memory:.0f}MB total")
+            
+            return result
+            
+        except Exception as e:
+            log.warning(f"?? Could not get system memory usage: {e}")
+            import platform
+            return {
+                "platform": platform.system(),
+                "error": str(e),
+                "chrome_memory_mb": -1,
+                "python_memory_mb": -1
+            }
+    
+    async def force_memory_cleanup(self) -> bool:
+        """
+        Force aggressive memory cleanup for supplier scraping operations
+        
+        Returns:
+            True if cleanup successful, False otherwise
+        """
+        try:
+            log.info("?? Starting aggressive memory cleanup for supplier scraping...")
+            
+            # Clear page cache
+            if hasattr(self, 'page_cache'):
+                cache_size = len(self.page_cache)
+                self.page_cache.clear()
+                self.page_usage_order.clear()
+                log.info(f"??? Cleared {cache_size} cached pages")
+            
+            # Force Python garbage collection
+            import gc
+            collected = gc.collect()
+            log.info(f"?? Garbage collection freed {collected} objects")
+            
+            # Get memory before/after
+            memory_after = await self.get_browser_memory_usage()
+            log.info(f"?? Memory after cleanup: {memory_after} MB")
+            
+            return True
+            
+        except Exception as e:
+            log.error(f"? Memory cleanup failed: {e}")
+            return False
+    
+    async def verify_connection_health(self) -> bool:
+        """
+        Verify WebSocket connection to Chrome debug port is healthy
+        
+        Returns:
+            True if connection is healthy, False otherwise
+        """
+        try:
+            if not self.browser or not self.browser.is_connected():
+                log.warning("?? Browser connection not established")
+                return False
+            
+            # Try to get browser version as a lightweight health check
+            # Note: browser.version is a property, not a method
+            try:
+                # Use a lightweight page operation to verify connection health
+                contexts = self.browser.contexts
+                if contexts and len(contexts) > 0:
+                    version = "healthy"  # Connection is responsive
+                else:
+                    version = None
+            except Exception:
+                version = None
+            
+            if version:
+                self._last_health_check = time.time()
+                log.debug(f"? Browser connection healthy - version: {version}")
+                return True
+            else:
+                log.warning("?? Browser version check failed")
+                return False
+                
+        except Exception as e:
+            log.warning(f"?? Browser health check failed: {e}")
+            self._connection_failures += 1
+            return False
+    
+    async def should_restart_browser(self) -> bool:
+        """
+        Check if browser should restart based on time interval or memory threshold
+        Enhanced for supplier scraping memory management
+        
+        Returns:
+            True if browser should restart, False otherwise
+        """
+        current_time = time.time()
+        time_since_restart = current_time - self._last_restart
+        restart_interval_seconds = self._restart_interval_hours * 3600
+        
+        # Check time-based restart (2 hours)
+        if time_since_restart > restart_interval_seconds:
+            log.info(f"?? Browser restart needed: {time_since_restart/3600:.1f} hours since last restart")
+            return True
+        
+        # ?? MEMORY-BASED RESTARTS DISABLED - Only time-based restarts allowed
+        # Check memory threshold restart - DISABLED
+        memory_usage = await self.get_browser_memory_usage()
+        if memory_usage > 0 and memory_usage > self._memory_threshold_mb:
+            log.info(f"?? Browser memory usage: {memory_usage:.1f}MB > {self._memory_threshold_mb}MB threshold (monitoring only - restart disabled)")
+            # return True  # DISABLED
+        
+        # CRITICAL: Enhanced memory pressure detection for supplier scraping - DISABLED
+        system_memory = await self.get_total_system_memory_usage()
+        if system_memory:
+            memory_percent = system_memory.get('memory_usage_percent', 0)
+            if memory_percent > 85:
+                log.info(f"?? System memory pressure: {memory_percent:.1f}% (monitoring only - restart disabled)")
+                # return True  # DISABLED
+            
+            python_memory = system_memory.get('python_memory_mb', 0)
+            if python_memory > 3072:  # 3GB Python memory threshold (reduced from 4GB)
+                log.info(f"?? Python memory high: {python_memory}MB (monitoring only - restart disabled)")
+                # Trigger Python garbage collection but don't restart browser
+                import gc
+                gc.collect()
+                log.info(f"?? Python garbage collection completed")
+                # return True  # DISABLED
+            
+            nodejs_memory = system_memory.get('nodejs_memory_mb', 0)
+            if nodejs_memory > 2048:  # 2GB Node.js memory threshold
+                log.info(f"?? Node.js memory high: {nodejs_memory}MB (monitoring only - restart disabled)")
+                # Note: We cannot restart external Node.js processes from within Python
+                # This is just a monitoring/warning system for Node.js memory usage
+                # return True  # DISABLED
+        
+        # Check excessive connection failures
+        if self._connection_failures > 3:
+            log.warning(f"?? Browser restart needed: {self._connection_failures} connection failures")
+            return True
+        
+        return False
+    
+    async def memory_check_with_cleanup(self, product_count: int = 0) -> bool:
+        """
+        Perform memory check with automatic cleanup for supplier scraping
+        
+        Args:
+            product_count: Current product processing count for logging
+            
+        Returns:
+            True if memory is healthy, False if restart needed
+        """
+        try:
+            memory_info = await self.get_total_system_memory_usage()
+            if not memory_info:
+                return True  # Assume healthy if can't get info
+            
+            chrome_memory = memory_info.get('chrome_memory_mb', 0)
+            python_memory = memory_info.get('python_memory_mb', 0)
+            system_percent = memory_info.get('memory_usage_percent', 0)
+            
+            # Log memory status every 100 products or if high
+            if product_count % 100 == 0 or chrome_memory > 1500 or python_memory > 2048 or system_percent > 80:
+                log.info(f"?? Memory Status [Product {product_count}]: Chrome={chrome_memory}MB, Python={python_memory}MB, System={system_percent:.1f}%")
+            
+            # Trigger cleanup at 1.5GB Chrome or 2GB Python or 80% system
+            if chrome_memory > 1500 or python_memory > 2048 or system_percent > 80:
+                log.warning(f"?? Memory pressure detected - triggering cleanup")
+                await self.force_memory_cleanup()
+                
+                # Check if restart is needed after cleanup
+                if await self.should_restart_browser():
+                    log.warning(f"?? Memory cleanup insufficient - browser restart required")
+                    return False
+            
+            return True
+            
+        except Exception as e:
+            log.warning(f"?? Memory check failed: {e}")
+            return True  # Assume healthy if check fails
+    
+    async def restart_browser(self) -> bool:
+        """
+        Restart browser - alias for restart_browser_gracefully for workflow compatibility
+        """
+        return await self.restart_browser_gracefully()
+    
+    async def restart_browser_gracefully(self) -> bool:
+        """
+        Restart Chrome process while preserving session state
+        
+        Returns:
+            True if restart successful, False otherwise
+        """
+        try:
+            log.info("?? Starting graceful browser restart...")
+            
+            # Get current debug port for reconnection
+            chrome_debug_port = int(os.getenv('CHROME_DEBUG_PORT', DEFAULT_CHROME_DEBUG_PORT))
+            
+            # Disconnect from current browser (but don't close it)
+            await self.close_browser()
+            
+            # Wait a moment for cleanup
+            await asyncio.sleep(2)
+            
+            # Reconnect to browser
+            await self.launch_browser(chrome_debug_port, headless=False)
+            
+            # Reset health metrics
+            self._last_restart = time.time()
+            self._connection_failures = 0
+            self._memory_usage_history.clear()
+            self._circuit_breaker.reset()
+            
+            log.info("? Browser restart completed successfully")
+            return True
+            
+        except Exception as e:
+            log.error(f"? Browser restart failed: {e}")
+            return False
+
+    async def close_browser(self):
+        log.info("?? Starting browser cleanup...")
+        
+        # For persistent Chrome instances (debug port), we should NOT close the browser
+        # Only disconnect from it to keep it running
+        if self.browser and self.browser.is_connected():
+            # Check if this is a CDP connection (persistent browser)
+            try:
+                # For CDP connections, we just disconnect without closing
+                log.info("?? Disconnecting from persistent Chrome instance (keeping browser running)")
+                # Don't close pages for persistent browser - just clear our references
+                self.page_cache.clear()
+                self.page_usage_order.clear()
+                
+                # Disconnect playwright but don't close the browser
+                if self.playwright:
+                    await self.playwright.stop()
+                    log.info("?? Stopped Playwright instance (browser remains running)")
+                
+                # Clear references but don't close the actual browser
+                self.browser = None
+                self.context = None
+                self.playwright = None
+                
+                log.info("? Disconnected from persistent browser (Chrome debug port remains active)")
+                return
+                
+            except Exception as e:
+                log.warning(f"Error during persistent browser disconnect: {e}")
+        
+        # Fallback for non-persistent browsers (if any)
+        if self.context:
+            for page in list(self.context.pages):
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+            log.info(f"??? Closed pages from non-persistent context")
+            
+        if self.playwright:
+            await self.playwright.stop()
+            log.info("?? Stopped Playwright instance")
+        
+        self.browser = None
+        self.context = None
+        self.playwright = None
+        self.page_cache.clear()
+        self.page_usage_order.clear()
+        log.info("? Browser cleanup completed")
+
+async def global_cleanup():
+    log.info("?? Performing global cleanup...")
+    manager = BrowserManager.get_instance()
+    await manager.close_browser()
+    log.info("?? Persistent Chrome browser should remain running on debug port 9222")
+
+# This allows the cleanup to be registered with atexit
+def run_global_cleanup():
+    try:
+        loop = asyncio.get_running_loop()
+        if loop.is_running():
+            loop.create_task(global_cleanup())
+        else:
+            asyncio.run(global_cleanup())
+    except Exception as e:
+        log.warning(f"Error during global cleanup: {e}")
+
+
+# Register cleanup function to run on exit
+atexit.register(run_global_cleanup)
+
+
+# Convenience functions for common operations
+async def get_page_for_url(url: str, reuse_existing: bool = True) -> Page:
+    """Convenience function to get page for URL."""
+    manager = BrowserManager.get_instance()
+    
+    # Auto-launch browser if not already launched
+    if not manager.context:
+        chrome_debug_port = int(os.getenv('CHROME_DEBUG_PORT', DEFAULT_CHROME_DEBUG_PORT))
+        # For persistent browser, headless is not relevant since we're connecting to existing Chrome
+        try:
+            await manager.launch_browser(chrome_debug_port, headless=False)
+            
+        except Exception as e:
+            log.error(f"? Failed to connect to persistent Chrome: {e}")
+            raise Exception(f"Cannot connect to persistent Chrome on port {chrome_debug_port}. Please start Chrome with debug port.")
+    
+    return await manager.get_page(url, reuse_existing)
+
+
+async def close_page_for_url(url: str) -> bool:
+    """Convenience function to close page for URL."""
+    manager = BrowserManager.get_instance()
+    return await manager.close_page(url)
+
+
+async def get_browser_status() -> Dict[str, Any]:
+    """Get current browser manager status."""
+    manager = BrowserManager.get_instance()
+    return manager.get_status()
+
+
+if __name__ == "__main__":
+    # Inline smoke test to verify LRU eviction
+    async def _smoke():
+        log.info("?? BrowserManager LRU Smoke Test...")
+        try:
+            bm = BrowserManager.get_instance()
+            
+            # Create 3 pages to trigger LRU eviction (max 2 allowed)
+            page1 = await bm.get_page("https://example.com")
+            page2 = await bm.get_page("https://example.org") 
+            page3 = await bm.get_page("https://example.net")  # Should trigger LRU eviction
+            
+            # Verify LRU cache has max 2 pages
+            assert len(bm._page_cache) == 2, f"Expected 2 pages in cache, got {len(bm._page_cache)}"
+            
+            # Verify example.com was evicted (oldest)
+            domain_keys = list(bm._page_cache.keys())
+            assert "https://example.com" not in domain_keys, "Oldest page should have been evicted"
+            assert "https://example.org" in domain_keys, "Second page should still be cached"
+            assert "https://example.net" in domain_keys, "Newest page should be cached"
+            
+            log.info("? LRU eviction working correctly")
+            
+            await global_cleanup()
+            log.info("? Smoke test passed")
+            
+        except Exception as e:
+            log.error(f"? Smoke test failed: {e}")
+            raise
+    
+    asyncio.run(_smoke())

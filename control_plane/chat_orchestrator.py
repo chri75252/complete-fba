@@ -1044,7 +1044,36 @@ def _compute_planner_hints(user_text: str, repo_root: Path, session_state: dict[
 
 def _looks_like_resume_request(user_text: str) -> bool:
     text = (user_text or "").lower()
-    return any(token in text for token in ("resume", "continue", "where you left off", "pick up"))
+    return any(
+        token in text
+        for token in (
+            "resume",
+            "continue",
+            "where you left off",
+            "pick up",
+            "same run",
+            "same session",
+            "relaunch",
+            "restart that run",
+        )
+    )
+
+
+def _looks_like_product_list_intent(user_text: str, params: dict[str, Any]) -> bool:
+    text = (user_text or "").lower()
+    if any(token in text for token in ("product list", "product-list", "products_path", ".json")):
+        return True
+    products_path = params.get("products_path")
+    return isinstance(products_path, str) and products_path.strip().lower().endswith(".json")
+
+
+def _is_uuid_like(value: str) -> bool:
+    return bool(
+        re.fullmatch(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}",
+            str(value or "").strip().lower(),
+        )
+    )
 
 
 def _should_rewrite_product_list_resume(
@@ -1070,6 +1099,11 @@ def _should_rewrite_category_resume(
     if tool != "enqueue_run":
         return False
     if not _looks_like_resume_request(user_text):
+        return False
+    # Stand down if product-list intent is present — product-list must outrank category resume
+    if _looks_like_product_list_intent(user_text, params):
+        return False
+    if planner_hints.get("last_products_path"):
         return False
     if planner_hints.get("detected_category_urls"):
         return False
@@ -1216,6 +1250,22 @@ def agent_plan_step(
 
             break
 
+        # Product-list rewrite runs FIRST — it must outrank category resume
+        if _should_rewrite_product_list_resume(user_text, tool, params, planner_hints):
+            rewritten: dict[str, Any] = {
+                "supplier_domain": str(planner_hints["last_supplier_domain"]),
+                "products_path": str(planner_hints["last_products_path"]),
+                "notes": params.get("notes")
+                or "Resume cancelled product-list refresh from active context",
+                "dry_run": False,
+            }
+            last_run_id = planner_hints.get("last_run_id")
+            if isinstance(last_run_id, str) and last_run_id.strip():
+                rewritten["run_id"] = last_run_id.strip()
+            tool = "enqueue_product_list_refresh"
+            params = rewritten
+
+        # Category rewrite runs SECOND — only fires if product-list rewrite did not
         if _should_rewrite_category_resume(user_text, tool, params, planner_hints):
             ctx = planner_hints["last_category_resume_context"]
             rewritten = {
@@ -1237,19 +1287,89 @@ def agent_plan_step(
             tool = "enqueue_run"
             params = rewritten
 
-        if _should_rewrite_product_list_resume(user_text, tool, params, planner_hints):
-            rewritten: dict[str, Any] = {
-                "supplier_domain": str(planner_hints["last_supplier_domain"]),
-                "products_path": str(planner_hints["last_products_path"]),
-                "notes": params.get("notes")
-                or "Resume cancelled product-list refresh from active context",
-                "dry_run": False,
-            }
-            last_run_id = planner_hints.get("last_run_id")
-            if isinstance(last_run_id, str) and last_run_id.strip():
-                rewritten["run_id"] = last_run_id.strip()
-            tool = "enqueue_product_list_refresh"
-            params = rewritten
+        if tool == "enqueue_run" and _looks_like_resume_request(user_text):
+            urls = params.get("category_urls") or []
+            has_urls = isinstance(urls, list) and any(
+                isinstance(u, str) and u.strip() for u in urls
+            )
+            if not has_urls and (
+                _looks_like_product_list_intent(user_text, params)
+                or bool(planner_hints.get("last_products_path"))
+            ):
+                missing: list[str] = []
+                supplier_domain = params.get("supplier_domain") or planner_hints.get(
+                    "last_supplier_domain"
+                )
+                products_path = params.get("products_path") or planner_hints.get(
+                    "last_products_path"
+                )
+                run_id = params.get("run_id") or planner_hints.get("last_run_id")
+
+                if not (isinstance(supplier_domain, str) and supplier_domain.strip()):
+                    missing.append("supplier_domain")
+                if not (isinstance(products_path, str) and products_path.strip()):
+                    missing.append("products_path")
+                if not (isinstance(run_id, str) and _is_uuid_like(run_id)):
+                    missing.append("run_id")
+
+                if missing:
+                    tool = "ask_clarify"
+                    params = {"user_text": user_text, "missing_params": missing}
+                    explanation = (
+                        explanation
+                        or "I need these fields to safely resume the product-list refresh."
+                    )
+                else:
+                    tool = "enqueue_product_list_refresh"
+                    params = {
+                        "supplier_domain": str(supplier_domain).strip(),
+                        "products_path": str(products_path).strip(),
+                        "run_id": str(run_id).strip(),
+                        "notes": params.get("notes")
+                        or "Resume product-list refresh from clarified context",
+                        "dry_run": False,
+                    }
+
+        if tool == "enqueue_product_list_refresh":
+            missing: list[str] = []
+            supplier_domain = params.get("supplier_domain")
+            products_path = params.get("products_path")
+            run_id = params.get("run_id")
+
+            if not (isinstance(supplier_domain, str) and supplier_domain.strip()):
+                fallback_supplier = planner_hints.get("last_supplier_domain")
+                if isinstance(fallback_supplier, str) and fallback_supplier.strip():
+                    params["supplier_domain"] = fallback_supplier.strip()
+                else:
+                    missing.append("supplier_domain")
+
+            if not (isinstance(products_path, str) and products_path.strip()):
+                fallback_products_path = planner_hints.get("last_products_path")
+                if isinstance(fallback_products_path, str) and fallback_products_path.strip():
+                    params["products_path"] = fallback_products_path.strip()
+                else:
+                    missing.append("products_path")
+
+            if isinstance(run_id, str) and run_id.strip() and not _is_uuid_like(run_id):
+                missing.append("run_id")
+
+            if _looks_like_resume_request(user_text):
+                run_id = params.get("run_id")
+                if not (isinstance(run_id, str) and _is_uuid_like(run_id)):
+                    fallback_run_id = planner_hints.get("last_run_id")
+                    if isinstance(fallback_run_id, str) and _is_uuid_like(fallback_run_id):
+                        params["run_id"] = fallback_run_id.strip()
+                    else:
+                        missing.append("run_id")
+
+            if missing:
+                deduped_missing = list(dict.fromkeys(missing))
+                tool = "ask_clarify"
+                params = {"user_text": user_text, "missing_params": deduped_missing}
+                explanation = (
+                    explanation
+                    or "I need a valid product-list payload before queuing this run."
+                )
 
         if _is_duplicate_write_call(tool, params, scratchpad):
             if attempt < 2:
@@ -1262,11 +1382,19 @@ def agent_plan_step(
         if tool == "enqueue_run":
             urls = params.get("category_urls")
             runner = params.get("runner_script", "")
+            has_urls = isinstance(urls, list) and any(
+                isinstance(u, str) and u.strip() for u in urls
+            )
 
-            if (
-                not isinstance(urls, list)
-                or not [u for u in urls if isinstance(u, str) and u.strip()]
-            ) and not params.get("sandbox_suffix") and not runner:
+            if not has_urls and _looks_like_resume_request(user_text):
+                # Empty-URL resume must never enqueue — prevents semantic workflow abort
+                tool = "ask_clarify"
+                params = {"user_text": user_text, "missing_params": ["category_urls"]}
+                explanation = (
+                    explanation
+                    or "I cannot safely resume a category workflow without category URLs."
+                )
+            elif not has_urls and not params.get("sandbox_suffix") and not runner:
                 tool = "ask_clarify"
                 params = {"user_text": user_text, "missing_params": ["category_urls"]}
                 explanation = explanation or "To proceed, I need one or more category URLs to run."
@@ -2021,7 +2149,6 @@ def execute_tool_call(tool_call: ToolCall, repo_root: Path) -> dict[str, Any]:
         )
 
         if is_main_workflow:
-            from control_plane.tools.jobs import enqueue_run_job
             from control_plane.tools.state import summarize_processing_state
 
             default_cfg_path = repo_root / "config" / "system_config.json"

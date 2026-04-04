@@ -1,0 +1,408 @@
+/**
+ * claude-mem OpenCode plugin — Full parity with Claude Code
+ *
+ * Three mechanisms for context injection (belt + suspenders + duct tape):
+ *
+ *   1. experimental.chat.system.transform — DIRECT injection into system prompt
+ *      on every LLM call. This is the OpenCode equivalent of Claude Code's
+ *      SessionStart additionalContext. The LLM sees past session context
+ *      BEFORE processing the first prompt.
+ *
+ *   2. experimental.session.compacting — Re-inject context when session is
+ *      compacted so memories survive context window overflow.
+ *
+ *   3. instructions file — Fallback: writes context to a file referenced in
+ *      opencode.json "instructions" array, loaded at session start.
+ *
+ * Recording hooks (same as Claude Code):
+ *   session.created        → ensure worker running + session-init
+ *   tool.execute.after     → observation (records every tool call)
+ *   session.compacted      → summarize
+ *   session.deleted/idle   → session-complete
+ */
+
+import { mkdirSync, writeFileSync, existsSync, renameSync } from "fs";
+import { dirname, basename } from "path";
+
+const HOME = process.env.USERPROFILE ?? process.env.HOME ?? "";
+const BUN = HOME + "\\.bun\\bin\\bun.exe";
+const SCRIPT = HOME + "\\claude-clean\\plugins\\cache\\thedotmack\\claude-mem\\10.6.1\\scripts\\worker-service";
+const WORKER = "http://127.0.0.1:37779";
+const CONTEXT_FILE = HOME + "\\.config\\opencode\\claude-mem-context.md";
+const LOG_PREFIX = "[claude-mem/opencode]";
+
+function warn(op, error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.warn(`${LOG_PREFIX} ${op}: ${message}`);
+}
+
+function getSessionId(value, source, warnIfMissing = true) {
+  const sessionId =
+    value?.properties?.id ??
+    value?.sessionID ??
+    value?.sessionId ??
+    value?.session?.id ??
+    "unknown";
+
+  if (warnIfMissing && sessionId === "unknown") {
+    console.warn(`${LOG_PREFIX} missing session id in ${source}`);
+  }
+
+  return sessionId;
+}
+
+// ── In-memory cache for context (avoids hitting worker on every LLM call) ───
+let cachedContext = "";
+let cachedProject = "";
+let cacheTimestamp = 0;
+const CACHE_TTL_MS = 60_000; // Refresh from worker at most once per minute
+
+// ── Helper: extract project name from directory path ────────────────────────
+function getProjectName(dir) {
+  if (!dir || !dir.trim()) return "unknown-project";
+
+  const clean = dir.replace(/[\\/]+$/, "").replace(/\\/g, "/");
+  const name = basename(clean);
+  if (name) return name;
+
+  const driveMatch = clean.match(/^([A-Za-z]):\\?$/);
+  if (driveMatch) return `drive-${driveMatch[1].toUpperCase()}`;
+
+  return "unknown-project";
+}
+
+function resolveCwd(directory) {
+  if (typeof directory === "string" && directory.trim()) return directory;
+  return process.cwd();
+}
+
+function createFallbackSessionId() {
+  const stamp = Date.now().toString(36);
+  const rand = Math.random().toString(36).slice(2, 8);
+  return `fallback-${stamp}-${rand}`;
+}
+
+function extractTextFromContent(content) {
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    const parts = content
+      .map(item => {
+        if (typeof item === "string") return item;
+        if (item && typeof item.text === "string") return item.text;
+        if (item && item.type === "text" && typeof item.value === "string") return item.value;
+        return "";
+      })
+      .filter(Boolean);
+    return parts.join("\n").trim();
+  }
+  if (content && typeof content.text === "string") return content.text;
+  if (content && typeof content.value === "string") return content.value;
+  return "";
+}
+
+function extractLatestUserPrompt(input) {
+  const candidates = [
+    input?.prompt,
+    input?.userPrompt,
+    input?.message,
+    input?.lastUserMessage,
+  ]
+    .map(value => (typeof value === "string" ? value.trim() : ""))
+    .filter(Boolean);
+
+  if (candidates.length > 0) return candidates[candidates.length - 1];
+
+  const messages = Array.isArray(input?.messages) ? input.messages : [];
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    const message = messages[i];
+    const role = String(message?.role ?? message?.type ?? "").toLowerCase();
+    if (role.includes("user")) {
+      const text = extractTextFromContent(message?.content ?? message?.message ?? message?.parts);
+      if (text) return text;
+    }
+  }
+
+  return "";
+}
+
+function extractPromptFromParts(parts) {
+  if (!Array.isArray(parts)) return "";
+  const text = parts
+    .filter(part => part?.type === "text" && typeof part?.text === "string")
+    .map(part => part.text.trim())
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+  return text;
+}
+
+// ── Helper: check worker health ─────────────────────────────────────────────
+async function workerOk() {
+  try {
+    const r = await fetch(`${WORKER}/api/health`, {
+      signal: AbortSignal.timeout(2000),
+    });
+    return r.ok;
+  } catch (error) {
+    warn("workerOk", error);
+    return false;
+  }
+}
+
+// ── Helper: call claude-mem hook via CLI ─────────────────────────────────────
+async function spawnHook(hookName, stdinPayload) {
+  try {
+    const proc = Bun.spawn(
+      [BUN, SCRIPT, "hook", "claude-code", hookName],
+      {
+        stdin: Buffer.from(JSON.stringify(stdinPayload)),
+        stdout: "ignore",
+        stderr: "ignore",
+      }
+    );
+    await proc.exited;
+  } catch (error) {
+    warn(`spawnHook:${hookName}`, error);
+  }
+}
+
+// ── Core: fetch context from worker ─────────────────────────────────────────
+async function fetchContext(projectDir) {
+  try {
+    const project = getProjectName(projectDir);
+
+    // Return cached if fresh enough and same project
+    const now = Date.now();
+    if (cachedContext && cachedProject === project && (now - cacheTimestamp) < CACHE_TTL_MS) {
+      return cachedContext;
+    }
+
+    const url = `${WORKER}/api/context/inject?project=${encodeURIComponent(project)}`;
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) return cachedContext; // Return stale cache on error
+
+    const text = await response.text();
+    if (text && text.trim()) {
+      cachedContext = text.trim();
+      cachedProject = project;
+      cacheTimestamp = now;
+    }
+
+    return cachedContext;
+  } catch (error) {
+    warn("fetchContext", error);
+    return cachedContext; // Return stale cache on error
+  }
+}
+
+// ── Write context to instructions file (fallback mechanism) ─────────────────
+function writeContextFile(contextText) {
+  try {
+    if (!contextText) return;
+    const dir = dirname(CONTEXT_FILE);
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+
+    const content = `# claude-mem: Past Session Context
+
+> Auto-injected by claude-mem. Contains compressed observations and summaries
+> from past coding sessions. Use claude-mem MCP tools for deeper queries.
+
+${contextText}
+`;
+    const tmp = CONTEXT_FILE + ".tmp";
+    writeFileSync(tmp, content, "utf-8");
+    renameSync(tmp, CONTEXT_FILE);
+  } catch (error) {
+    warn("writeContextFile", error);
+  }
+}
+
+// ── Module-level init: pre-fetch context before session starts ──────────────
+const _initPromise = (async () => {
+  try {
+    if (await workerOk()) {
+      const ctx = await fetchContext(process.cwd());
+      if (ctx) writeContextFile(ctx);
+    }
+  } catch (error) {
+    warn("moduleInit", error);
+  }
+})();
+
+// ── Plugin export ───────────────────────────────────────────────────────────
+export const ClaudeMemPlugin = async ({ $, directory }) => {
+  const cwd = resolveCwd(directory);
+  let activeSessionId = "unknown";
+  let lastPromptSent = "";
+
+  // Pre-fetch context with actual project directory
+  fetchContext(cwd).then(ctx => { if (ctx) writeContextFile(ctx); }).catch(() => {});
+
+  return {
+    // ═══════════════════════════════════════════════════════════════════════
+    // CONTEXT INJECTION — equivalent to Claude Code's SessionStart hook
+    // ═══════════════════════════════════════════════════════════════════════
+
+    // Inject past session context directly into the system prompt.
+    // Fires on EVERY LLM call. Uses in-memory cache to avoid latency.
+    "experimental.chat.system.transform": async (input, output) => {
+      try {
+        // Fetch context (returns from cache if fresh)
+        const context = await fetchContext(cwd);
+        if (!context) return;
+
+        // Inject as a system prompt segment — Claude sees this before user messages
+        output.system.push(`<claude-mem-context>
+# Memory Context from Past Sessions
+
+The following context is from claude-mem, a persistent memory system that tracks
+your coding sessions. Use this to maintain continuity across sessions.
+Use claude-mem MCP search tools (claude-mem_search, claude-mem_smart_search,
+claude-mem_timeline, claude-mem_get_observations) for deeper queries.
+
+${context}
+</claude-mem-context>`);
+      } catch (error) {
+        warn("experimental.chat.system.transform", error);
+      }
+    },
+
+    "chat.message": async (input, output) => {
+      try {
+        const sessionId = input?.sessionID ?? output?.message?.sessionID ?? activeSessionId;
+        if (typeof sessionId === "string" && sessionId !== "unknown") {
+          activeSessionId = sessionId;
+        }
+
+        const prompt = extractPromptFromParts(output?.parts);
+        if (!prompt || activeSessionId === "unknown" || prompt === lastPromptSent) return;
+
+        await spawnHook("session-init", {
+          session_id: `opencode-${activeSessionId}`,
+          transcript_path: "",
+          cwd,
+          project: getProjectName(cwd),
+          prompt,
+        });
+        lastPromptSent = prompt;
+      } catch (error) {
+        warn("chat.message", error);
+      }
+    },
+
+    // Preserve memory context through compaction so it survives context overflow.
+    "experimental.session.compacting": async (input, output) => {
+      try {
+        const context = await fetchContext(cwd);
+        if (!context) return;
+
+        output.context.push(`## claude-mem: Preserved Session Memory
+
+The following persistent memory context should be preserved through compaction:
+
+${context}`);
+      } catch (error) {
+        warn("experimental.session.compacting", error);
+      }
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // SESSION LIFECYCLE — recording hooks
+    // ═══════════════════════════════════════════════════════════════════════
+
+    event: async ({ event }) => {
+      // ── Session start ──────────────────────────────────────────────────
+      if (event.type === "session.created") {
+        const rawSessionId = getSessionId(event, "session.created", false);
+        const sessionId = rawSessionId === "unknown" ? createFallbackSessionId() : rawSessionId;
+        activeSessionId = sessionId;
+        const project = getProjectName(cwd);
+
+        // Start the worker if it isn't already running
+        if (!await workerOk()) {
+          try {
+            await $`${BUN} ${SCRIPT} start`.quiet();
+          } catch (error) {
+            warn("workerStart", error);
+          }
+        }
+
+        // Initialize session in claude-mem
+        await spawnHook("session-init", {
+          session_id: `opencode-${sessionId}`,
+          transcript_path: "",
+          cwd,
+          project,
+        });
+
+        // Force-refresh context cache for this session
+        cacheTimestamp = 0;
+        const ctx = await fetchContext(cwd);
+        if (ctx) writeContextFile(ctx);
+      }
+
+      // ── Session compacted → summarize ──────────────────────────────────
+      if (event.type === "session.compacted") {
+        const compactedSessionId = getSessionId(event, "session.compacted", false);
+        const resolvedSessionId = compactedSessionId !== "unknown" ? compactedSessionId : activeSessionId;
+        if (resolvedSessionId === "unknown") return;
+
+        await spawnHook("summarize", {
+          session_id: `opencode-${resolvedSessionId}`,
+          transcript_path: "",
+          cwd,
+          project: getProjectName(cwd),
+        });
+        // Invalidate cache so next LLM call picks up new summary
+        cacheTimestamp = 0;
+      }
+
+      // ── Session ended → complete + refresh for next session ────────────
+      if (event.type === "session.deleted" || event.type === "session.idle") {
+        const endedSessionId = getSessionId(event, event.type, false);
+        const resolvedSessionId = endedSessionId !== "unknown" ? endedSessionId : activeSessionId;
+        if (resolvedSessionId === "unknown") return;
+
+        await spawnHook("session-complete", {
+          session_id: `opencode-${resolvedSessionId}`,
+          transcript_path: "",
+          cwd,
+          project: getProjectName(cwd),
+        });
+        // Write fresh context file so next session's instructions are current
+        cacheTimestamp = 0;
+        activeSessionId = "unknown";
+        const ctx = await fetchContext(cwd);
+        if (ctx) writeContextFile(ctx);
+      }
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // OBSERVATION RECORDING — equivalent to Claude Code's PostToolUse hook
+    // ═══════════════════════════════════════════════════════════════════════
+
+    "tool.execute.after": async (
+      { tool, sessionID, callID },
+      { title, output }
+    ) => {
+      const safeOutput = typeof output === "string"
+        ? output.slice(0, 4000)
+        : JSON.stringify(output ?? "").slice(0, 4000);
+
+      const resolvedSessionId = typeof sessionID === "string" && sessionID !== "unknown"
+        ? sessionID
+        : activeSessionId;
+      if (resolvedSessionId === "unknown") return;
+
+      await spawnHook("observation", {
+        session_id: `opencode-${resolvedSessionId}`,
+        transcript_path: "",
+        cwd,
+        project: getProjectName(cwd),
+        tool_name: tool ?? "unknown",
+        tool_input: { callID },
+        tool_response: safeOutput,
+      });
+    },
+  };
+};

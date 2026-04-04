@@ -9,6 +9,26 @@ Authoritative contributor guide for the Amazon FBA Agent System. This file conso
 - **NO PROACTIVE SCRIPT EDITS**
   NEVER proactive edit any script, configuration, or structural file if the user explicitly instructs "DO NOT EDIT ANY FILES/SCRIPTS FOR NOW" or gives a similar directive to only investigate/report. Do not ignore this instruction under *any* circumstances, even if you spot an obvious or trivial bug that is blocking progress. You must report the issue and WAIT for explicit permission to edit.
 
+### 0.1 OpenCode Custom Registry
+
+Custom OpenCode assets currently available and intended for active use:
+
+- **Agents** (`C:\Users\chris\.config\opencode\agents\`):
+  - `deep-research-agent`
+  - `root-cause-analyst`
+  - `system-architect`
+  - `business-panel-experts`
+- **Commands** (`C:\Users\chris\.config\opencode\command\`):
+  - `/sc-research`
+  - `/sc-product-brief`
+  - `/sc-brainstorm`
+
+Usage guidance:
+- Use `/sc-research` for broad external research and source-ranked synthesis.
+- Use `/sc-product-brief` when turning ideas into execution-ready briefs.
+- Use `/sc-brainstorm` for structured ideation and prioritized options.
+- Prefer `root-cause-analyst` for failure analysis, `system-architect` for architecture tradeoffs, and `business-panel-experts` for strategic decision framing.
+
 ---
 
 ## 1. Verification, Backup, and Update Protocols
@@ -656,7 +676,7 @@ Supermemory gives you the "what" and "how". Serena gives you the "why".
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-** (14915 symbols, 23779 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-** (14502 symbols, 23853 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

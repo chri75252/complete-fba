@@ -126,3 +126,18 @@ ENV/
 !scripts/generate_gitnexus_filtered_context.py
 !config/gitnexus_scope_rules.json
 !config/gitnexus_scope_rules_curated.json
+
+# Hard backup/archive exclusions (must stay at end to override broad re-includes).
+**/backup_organized_*/**
+**/backups/**
+**/*backup*/**
+**/archive/**
+**/archive_new/**
+**/Recovered/**
+**/*.bak
+**/*.bak_*
+**/*.backup
+**/*.old
+**/*.orig
+**/* - Copy.*
+**/* - Copy (*

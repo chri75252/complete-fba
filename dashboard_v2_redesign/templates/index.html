@@ -725,6 +725,12 @@
                   <option value="TIER_4_REJECTED">T4: Rejected</option>
                 </select>
               </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 180px;">
+                <label>Category</label>
+                <select id="analysisCategoryFilter" class="glass-input">
+                  <option value="">All Categories</option>
+                </select>
+              </div>
               <div class="input-group" style="margin-bottom: 0; min-width: 100px;">
                 <label>Min ROI (%)</label>
                 <input type="number" id="analysisMinRoi" class="glass-input" placeholder="0" />
@@ -761,6 +767,7 @@
                     <th>#</th>
                     <th>Supplier Title</th>
                     <th>Amazon Title</th>
+                    <th>Category</th>
                     <th>Tier</th>
                     <th>Score</th>
                     <th>ROI</th>
@@ -770,7 +777,7 @@
                   </tr>
                 </thead>
                 <tbody id="analysisTableBody">
-                  <tr><td colspan="9" class="empty-state">Click "Refresh Analysis" to load data</td></tr>
+                  <tr><td colspan="10" class="empty-state">Click "Refresh Analysis" to load data</td></tr>
                 </tbody>
               </table>
             </div>
@@ -819,17 +826,19 @@
                   <li>Apply <b>min_sales ≥ 50</b> filter to focus on proven demand</li>
                 </ol>
 
-                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 3 — Deep Validation (Operator Tab)</p>
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 3 — Validate T2/T3 Matches (Operator Tab)</p>
                 <ol style="margin:0 0 14px; padding-left:18px;">
-                  <li>Select the same CSV → click <b>Run AI Analysis</b></li>
-                  <li>LLM catches: pack size mismatches, variant traps, title mismatches</li>
-                  <li>Review report in <code>OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS/run_{timestamp}/</code></li>
+                  <li>Analysis tab → set Tier filter to <b>T2</b> (repeat for T3 if needed) → apply NetProfit &gt; 0, Sales ≥ 50 → <b>Export CSV</b></li>
+                  <li>Copy the downloaded file into <code>OUTPUTS/FBA_ANALYSIS/financial_reports/{supplier}/</code></li>
+                  <li>Operator tab → select that file from the <b>Financial Report</b> dropdown → click <b>Run AI Analysis</b></li>
+                  <li>LLM verdict per row: VERIFIED / HIGH LIKELIHOOD = keep &nbsp;|&nbsp; NEEDS VERIFICATION or pack mismatch flagged = remove</li>
+                  <li>Review full report in <code>OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS/run_{timestamp}/COMBINED_AI_ANALYSIS.md</code></li>
                 </ol>
 
                 <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 4 — Build Final Product List</p>
                 <ol style="margin:0 0 14px; padding-left:18px;">
                   <li>Analysis tab → filter T1+T2, NetProfit &gt; 0, Sales &gt; 0 → <b>Export CSV</b></li>
-                  <li>Cross-reference against operator agent's <b>AUDITED OUT</b> list — remove flagged false positives</li>
+                  <li>Remove any rows the operator agent flagged as false positives in Phase 3</li>
                   <li>Remaining list = actionable sourcing list</li>
                 </ol>
 
@@ -883,8 +892,24 @@
                 </ol>
 
                 <div style="margin-top:16px; padding:10px 12px; background:rgba(255,180,171,0.1); border-left:3px solid #ffb4ab; border-radius:4px; font-size:0.78rem;">
-                  <b style="color:#ffb4ab;">Do NOT</b> export the Analysis CSV and feed it to the operator agent as a "re-analysis" — the LLM only validates title/EAN/category consistency, not whether prices or competition have changed. For stale data: always re-run the system for fresh Amazon data first.
+                  <b style="color:#ffb4ab;">Do NOT</b> use an Analysis export as a substitute for running a fresh system scrape — the LLM validates title/EAN/category match quality only, not whether prices or competition have changed. For stale data: always re-run the system for fresh Amazon data first, then validate T2/T3 matches via the Operator tab on the new report.
                 </div>
+              </div>
+            </div>
+
+            <div class="metric-card" style="grid-column:1/3;">
+              <div class="card-header" style="margin-bottom:16px;">
+                <h3 style="color:var(--accent-blue, #c0c1ff); font-size:1rem; margin:0;">Prompt Triggers Quick Guide</h3>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.7; color:var(--text-secondary);">
+                <ol style="margin:0; padding-left:18px;">
+                  <li><b>Main workflow:</b> "run main workflow for [supplier]" / "run all categories for [supplier]"</li>
+                  <li><b>Category sandbox:</b> "run sandbox analysis for category [URL] on [supplier]"</li>
+                  <li><b>Category sandbox resume:</b> "resume category sandbox run [run_id]"</li>
+                  <li><b>Product-list refresh:</b> "refresh product list [products_path] for [supplier]"</li>
+                  <li><b>Product-list resume:</b> "resume product-list refresh run [run_id] with [products_path]"</li>
+                  <li><b>If chat was reset/rebooted:</b> include both <code>run_id</code> and <code>products_path</code> explicitly.</li>
+                </ol>
               </div>
             </div>
 
@@ -892,6 +917,30 @@
         </section>
 
       </main>
+    </div>
+    <!-- Category Drilldown Modal -->
+    <div id="categoryModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); overflow-y:auto;">
+      <div style="max-width:900px; margin:40px auto; background:#1c1b1c; border:1px solid #464554; border-radius:8px; padding:0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #353436;">
+          <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#e5e2e3;" id="categoryModalTitle">Category Products</h3>
+          <button onclick="document.getElementById('categoryModal').style.display='none'" style="background:none; border:none; color:#908fa0; font-size:20px; cursor:pointer;">&times;</button>
+        </div>
+        <div style="padding:16px 20px; overflow-x:auto;">
+          <table class="data-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Supplier Title</th>
+                <th>Amazon Title</th>
+                <th>ROI</th>
+                <th>Profit</th>
+                <th>Sales/mo</th>
+              </tr>
+            </thead>
+            <tbody id="categoryModalBody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <script src="/static/js/app.js"></script>
   </body>

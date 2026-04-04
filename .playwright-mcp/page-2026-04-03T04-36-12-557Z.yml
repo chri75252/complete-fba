@@ -1,0 +1,156 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: FBA
+      - generic [ref=e6]:
+        - heading "Analytics Engine" [level=2] [ref=e7]
+        - generic [ref=e8]: Amazon Arbitrage System
+    - navigation "Primary navigation" [ref=e9]:
+      - link "Dashboard" [ref=e10] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e11]
+        - text: Dashboard
+      - link "Operator" [ref=e16] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e17]
+        - text: Operator
+      - link "AI Assistant" [ref=e20] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e21]
+        - text: AI Assistant
+      - link "Analysis" [ref=e23] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e24]
+        - text: Analysis
+      - link "Workflows" [active] [ref=e27] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e28]
+        - text: Workflows
+    - generic [ref=e31]:
+      - generic [ref=e32]: Configuration
+      - generic [ref=e33]:
+        - generic [ref=e34]: Supplier Source
+        - combobox [ref=e35]:
+          - option "poundwholesale.co.uk" [selected]
+          - option "clearance-king.co.uk"
+          - option "angelwholesale.co.uk"
+          - option "efghousewares.co.uk"
+      - generic [ref=e36]:
+        - generic [ref=e37]: Data Lineage
+        - combobox [ref=e38]:
+          - option "Main Workflow" [selected]
+          - option "Latest Sandbox"
+      - generic [ref=e39]:
+        - generic [ref=e40]: Financial Report
+        - combobox [ref=e41]:
+          - option "— latest —" [selected]
+          - option "fba_financial_report_poundwholesale-co-uk_combined.csv (433 rows)"
+          - option "fba_financial_report_poundwholesale-co-uk_20260321_195442.csv (6428 rows)"
+          - option "combined_reports.csv (17290 rows)"
+          - option "fba_financial_report_COMPLETE_20250824_224923.csv (7644 rows)"
+          - option "fba_financial_report_20250824_193835.csv (6166 rows)"
+          - option "fba_financial_report_20250824_174741.csv (6109 rows)"
+      - generic [ref=e42]:
+        - generic [ref=e43]: Auto Refresh
+        - combobox [ref=e44]:
+          - option "Disabled"
+          - option "3 seconds"
+          - option "5 seconds"
+          - option "30 seconds"
+          - option "60 seconds" [selected]
+          - option "2 minutes"
+          - option "5 minutes"
+      - generic [ref=e45]: Connected
+      - generic [ref=e47]:
+        - generic [ref=e48]: "Base: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-"
+        - generic [ref=e49]: "Supplier: poundwholesale.co.uk"
+  - main [ref=e50]:
+    - generic [ref=e352]:
+      - generic [ref=e354]:
+        - heading "Operating Workflows" [level=1] [ref=e355]
+        - paragraph [ref=e356]: Step-by-step guidance for fresh runs and stale data re-analysis
+      - generic [ref=e357]:
+        - generic [ref=e358]:
+          - heading "Fresh Run — Identify Profitable & Sellable Products" [level=3] [ref=e360]
+          - generic [ref=e361]:
+            - paragraph [ref=e362]: Phase 1 — Quick Overview (Dashboard Tab)
+            - list [ref=e363]:
+              - listitem [ref=e364]: Select supplier in sidebar → select Main Workflow lineage
+              - listitem [ref=e365]: Select the latest CSV in the Financial Report dropdown
+              - listitem [ref=e366]: "Check top metric cards: Profitable (EAN-matched, NetProfit > 0), With Sales (subset with bought_in_past_month > 0), Avg ROI, Avg Profit"
+              - listitem [ref=e367]:
+                - text: "Scan charts:"
+                - list [ref=e368]:
+                  - listitem [ref=e369]: ROI Distribution — look for concentration points
+                  - listitem [ref=e370]: Profitable Categories — highest total profit bars (count in label)
+                  - listitem [ref=e371]: Net Profit vs Selling Price — green dots (ROI ≥ 30%) are best candidates
+                  - listitem [ref=e372]: Profit vs Competition — green dots with low total_offer_count = best opportunity
+            - paragraph [ref=e373]: Phase 2 — Detailed Analysis (Analysis Tab)
+            - list [ref=e374]:
+              - listitem [ref=e375]: Set tier filter to T1 → sort by NetProfit desc → review VERIFIED matches
+              - listitem [ref=e376]: Switch to T2 — review LIKELY matches that need manual check
+              - listitem [ref=e377]: Apply min_sales ≥ 50 filter to focus on proven demand
+            - paragraph [ref=e378]: Phase 3 — Deep Validation (Operator Tab)
+            - list [ref=e379]:
+              - listitem [ref=e380]: Select the same CSV → click Run AI Analysis
+              - listitem [ref=e381]: "LLM catches: pack size mismatches, variant traps, title mismatches"
+              - listitem [ref=e382]:
+                - text: Review report in
+                - code [ref=e383]: "OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS/run_{timestamp}/"
+            - paragraph [ref=e384]: Phase 4 — Build Final Product List
+            - list [ref=e385]:
+              - listitem [ref=e386]: Analysis tab → filter T1+T2, NetProfit > 0, Sales > 0 → Export CSV
+              - listitem [ref=e387]: Cross-reference against operator agent's AUDITED OUT list — remove flagged false positives
+              - listitem [ref=e388]: Remaining list = actionable sourcing list
+            - paragraph [ref=e389]: Phase 5 — Spot-Check Top Items
+            - list [ref=e390]:
+              - listitem [ref=e391]: Open Amazon listing for top 10-20 products by profit
+              - listitem [ref=e392]: Verify product matches visually, check current price vs report
+              - listitem [ref=e393]: Confirm Buy Box availability, review count and rating
+        - generic [ref=e394]:
+          - heading "Stale Data — Identify Categories & Products to Re-Analyze" [level=3] [ref=e396]
+          - generic [ref=e397]:
+            - paragraph [ref=e398]: Phase 1 — Identify Staleness
+            - list [ref=e399]:
+              - listitem [ref=e400]:
+                - text: Check the Financial Report filename date (e.g.
+                - code [ref=e401]: "20260122"
+                - text: = Jan 22)
+              - listitem [ref=e402]: "> 14 days = moderately stale | > 30 days = significantly stale"
+            - paragraph [ref=e403]: Phase 2 — Identify High-Value Re-Analysis Targets
+            - list [ref=e404]:
+              - listitem [ref=e405]: Analysis tab → filter T1+T2, NetProfit > 0, Sales > 0 → sort by Sales desc
+              - listitem [ref=e406]: High-sales products change fastest — these are top re-check candidates
+              - listitem [ref=e407]: Export CSV — this is your re-analysis candidate list
+            - paragraph [ref=e408]: Phase 3 — Prioritize Categories
+            - list [ref=e409]:
+              - listitem [ref=e410]: Dashboard → Profitable Categories With Sales chart
+              - listitem [ref=e411]: Categories with most products (count in label) AND highest total profit = best re-analysis targets
+              - listitem [ref=e412]: Re-analyzing one category re-scrapes all its products efficiently
+            - paragraph [ref=e413]: Phase 4 — Execute Selective Re-Analysis
+            - list [ref=e414]:
+              - listitem [ref=e415]: "Category-level: AI Assistant tab → \"Run sandbox analysis for category [URL] on [supplier]\" → wait for completion → switch lineage to Latest Sandbox"
+              - listitem [ref=e416]:
+                - text: "Product-level: Build product list JSON → place in"
+                - code [ref=e417]: OUTPUTS/CONTROL_PLANE/inputs/
+                - text: → enqueue sandbox run via chat
+            - paragraph [ref=e418]: Phase 5 — Compare Old vs New
+            - list [ref=e419]:
+              - listitem [ref=e420]: "After sandbox run: switch lineage to Latest Sandbox"
+              - listitem [ref=e421]: Compare NetProfit, Sales, total_offer_count between old and new report
+              - listitem [ref=e422]: NetProfit stable/improved = confirmed opportunity | dropped = deprioritize
+            - generic [ref=e423]: "Do NOT export the Analysis CSV and feed it to the operator agent as a \"re-analysis\" — the LLM only validates title/EAN/category consistency, not whether prices or competition have changed. For stale data: always re-run the system for fresh Amazon data first."
+        - generic [ref=e424]:
+          - heading "Prompt Triggers Quick Guide" [level=3] [ref=e426]
+          - list [ref=e428]:
+            - listitem [ref=e429]: "Main workflow: \"run main workflow for [supplier]\" / \"run all categories for [supplier]\""
+            - listitem [ref=e430]: "Category sandbox: \"run sandbox analysis for category [URL] on [supplier]\""
+            - listitem [ref=e431]: "Category sandbox resume: \"resume category sandbox run [run_id]\""
+            - listitem [ref=e432]: "Product-list refresh: \"refresh product list [products_path] for [supplier]\""
+            - listitem [ref=e433]: "Product-list resume: \"resume product-list refresh run [run_id] with [products_path]\""
+            - listitem [ref=e434]:
+              - text: "If chat was reset/rebooted: include both"
+              - code [ref=e435]: run_id
+              - text: and
+              - code [ref=e436]: products_path
+              - text: explicitly.

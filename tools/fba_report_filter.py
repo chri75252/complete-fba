@@ -112,7 +112,7 @@ def classify_row(row: dict) -> dict:
                 confidence += 50
                 reasons.append("Exact EAN match (checksum verified)")
             else:
-                confidence += 25
+                confidence += 30
                 reasons.append("EAN digits match but checksum invalid")
                 flags.append("EAN_CHECKSUM_FAIL")
         else:
@@ -131,10 +131,10 @@ def classify_row(row: dict) -> dict:
     shared = shared_token_count(supplier_title, amazon_title)
 
     if sim >= 0.6 and shared >= 4:
-        confidence += 30
+        confidence += 35
         reasons.append(f"Strong title match (sim={sim:.2f}, shared={shared})")
     elif sim >= 0.35 and shared >= 3:
-        confidence += 15
+        confidence += 20
         reasons.append(f"Moderate title match (sim={sim:.2f}, shared={shared})")
     elif sim < 0.15 and shared < 2:
         confidence -= 30
@@ -144,14 +144,13 @@ def classify_row(row: dict) -> dict:
         reasons.append(f"Weak title match (sim={sim:.2f}, shared={shared})")
 
     # --- Brand Check ---
-    # NOTE: First-word brand extraction is a rough heuristic. Works for "Philips X" vs "Prima Y" but not universal. Low weight to limit impact.
     supplier_brand = extract_brand(supplier_title)
     amazon_brand = extract_brand(amazon_title)
     if supplier_brand and amazon_brand and supplier_brand == amazon_brand:
-        confidence += 5
+        confidence += 10
         reasons.append(f"Brand match: {supplier_brand}")
     elif supplier_brand and amazon_brand and supplier_brand != amazon_brand:
-        confidence -= 5
+        confidence -= 10
         flags.append("BRAND_MISMATCH")
 
     # --- Financial Sanity ---
@@ -202,18 +201,20 @@ def classify_row(row: dict) -> dict:
         reasons.append(f"Category mismatch: supplier={supplier_cats} vs amazon={amazon_cats}")
 
     # --- Tier Classification ---
+    # Tiers measure MATCH QUALITY (is this the same product?), not profitability.
+    # Profitability is tracked via UNPROFITABLE flag, not tier demotion.
     confidence = max(0, min(100, confidence))
 
-    # EAN match + profitable + no category mismatch -> always T1
-    if ean_exact_match and net_profit > 0 and "CATEGORY_MISMATCH" not in flags:
+    # T1: Confirmed match — EAN verified, no category conflict
+    if ean_exact_match and "CATEGORY_MISMATCH" not in flags:
         tier = "TIER_1_VERIFIED"
-    # EAN match (unprofitable or category mismatch) -> T2
+    # T2: Likely match — EAN with category doubt, or strong title+brand without EAN
     elif ean_exact_match:
         tier = "TIER_2_LIKELY"
-    # No EAN: high confidence, no flags -> T2 max
     elif confidence >= 40 and "TITLE_MISMATCH" not in flags and "CATEGORY_MISMATCH" not in flags:
         tier = "TIER_2_LIKELY"
-    elif confidence >= 15 and net_profit > 0:
+    # T3: Some match signal — needs manual review
+    elif confidence >= 15:
         tier = "TIER_3_NEEDS_REVIEW"
     else:
         tier = "TIER_4_REJECTED"

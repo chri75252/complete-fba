@@ -1,0 +1,396 @@
+{
+  "__comment_exhaustive_mode": "Ã°Å¸Å¡â‚¬ EXHAUSTIVE MODE - Process EVERY product under Ã‚Â£20 from ALL categories",
+  "__comment_no_limits": "ALL artificial limits removed except Ã‚Â£20 price filter",
+  "pipeline_toggles": {
+    "separate_supplier_amazon_loops": true,
+    "mark_cached_only_complete": true,
+    "resume_abs_index_math": true,
+    "frozen_category_denominator": true,
+    "invariant_warn_on_resume": true
+  },
+  "system": {
+    "name": "Amazon FBA Agent System",
+    "version": "3.5.0",
+    "environment": "production",
+    "test_mode": false,
+    "clear_cache": false,
+    "selective_cache_clear": false,
+    "archive_system": {
+      "enabled": false,
+      "mode": "",
+      "target_supplier": "",
+      "description": "Archive system with supplier-specific targeting. Modes: 'full' (all files) or 'specific_supplier' (target_supplier only)"
+    },
+    "force_ai_scraping": true,
+    "max_products": 1000000,
+    "max_analyzed_products": 1000000,
+    "max_products_per_category": 2000,
+    "max_products_per_cycle": 100,
+    "linking_map_batch_size": 1,
+    "financial_report_batch_size": 100,
+    "headless_probe_seconds": 0,
+    "reuse_browser": true,
+    "max_tabs": 2,
+    "supplier_login_max_retries": 3,
+    "supplier_login_backoff_sec": 5,
+    "output_root": "OUTPUTS",
+    "enable_supplier_parser": false,
+    "force_ai_category_suggestion": false,
+    "supplier_extraction_batch_size": 100,
+    "max_categories_to_process": 0
+  },
+  "max_categories_per_request": 0,
+  "dynamic_reordering": {
+    "enabled": false,
+    "trigger_interval_categories": 5,
+    "trigger_interval_products": 100
+  },
+  "processing_limits": {
+    "max_products_per_category": 2000,
+    "max_products_per_run": 1000000,
+    "pagination_safety_limit": 100,
+    "min_price_gbp": 0.01,
+    "max_price_gbp": 20.0,
+    "price_midpoint_gbp": 20.0,
+    "min_products_per_category": 1,
+    "category_validation": {
+      "enabled": true,
+      "min_products_per_category": 1,
+      "timeout_seconds": 15
+    }
+  },
+  "supplier_cache_control": {
+    "enabled": true,
+    "update_frequency_products": 1,
+    "force_update_on_interruption": true,
+    "cache_modes": {
+      "exhaustive": {
+        "update_frequency_products": 1,
+        "force_validation": true,
+        "backup_frequency": 100
+      }
+    },
+    "validation": {
+      "verify_cache_integrity": true,
+      "backup_before_update": true
+    }
+  },
+  "supplier_extraction_progress": {
+    "enabled": true,
+    "track_subcategory_index": true,
+    "track_product_index_within_category": true,
+    "recovery_mode": "product_resume",
+    "progress_display": {
+      "show_subcategory_progress": true,
+      "show_product_progress": true,
+      "update_frequency_products": 1
+    },
+    "state_persistence": {
+      "save_on_category_completion": true,
+      "save_on_product_batch": true,
+      "batch_save_frequency": 1
+    }
+  },
+  "hybrid_processing": {
+    "enabled": true,
+    "switch_to_amazon_after_categories": 1,
+    "process_existing_gap_first": true,
+    "processing_modes": {
+      "sequential": {
+        "description": "Complete all supplier extraction, then Amazon analysis",
+        "enabled": false
+      },
+      "chunked": {
+        "description": "Alternate between supplier extraction and Amazon analysis",
+        "enabled": true,
+        "chunk_size_categories": 1
+      },
+      "balanced": {
+        "description": "Process suppliers in batches, analyze each batch",
+        "enabled": false,
+        "analysis_after_extraction_batch": false
+      }
+    },
+    "memory_management": {
+      "enabled": true,
+      "clear_cache_between_phases": false,
+      "max_memory_threshold_mb": 16384,
+      "clear_frequency_products": 500,
+      "sliding_window_size": 100,
+      "file_based_counting": {
+        "enabled": true,
+        "safe_clear_frequency": 100,
+        "preserve_critical_counters": true,
+        "fallback_to_memory": false
+      }
+    }
+  },
+  "batch_synchronization": {
+    "enabled": false,
+    "synchronize_all_batch_sizes": false,
+    "target_batch_size": 50,
+    "affected_settings": [
+      "system.supplier_extraction_batch_size",
+      "system.linking_map_batch_size",
+      "system.financial_report_batch_size",
+      "system.max_products_per_cycle"
+    ]
+  },
+  "performance": {
+    "max_concurrent_requests": 8,
+    "request_timeout_seconds": 45,
+    "retry_attempts": 5,
+    "retry_delay_seconds": 3,
+    "batch_size": 100,
+    "matching_thresholds": {
+      "title_similarity": 0.25,
+      "medium_title_similarity": 0.5,
+      "high_title_similarity": 0.75
+    },
+    "rate_limiting": {
+      "rate_limit_delay": 1.5,
+      "batch_delay": 8.0,
+      "ai_batch_size": 10
+    },
+    "timeouts": {
+      "navigation_timeout_ms": 90000,
+      "search_input_timeout_ms": 10000,
+      "results_wait_timeout_ms": 30000,
+      "selector_wait_timeout_ms": 45000,
+      "page_load_timeout_ms": 20000,
+      "http_request_timeout_seconds": 30
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_hours": 10000,
+    "max_size_mb": 2048,
+    "selective_clear_config": {
+      "preserve_analyzed_products": true,
+      "preserve_ai_categories": true,
+      "preserve_linking_map": true,
+      "clear_unanalyzed_only": false,
+      "clear_failed_extractions": false
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics_interval": 300,
+    "health_check_interval": 600,
+    "log_level": "INFO",
+    "alert_thresholds": {
+      "cpu_percent": 90,
+      "memory_percent": 90,
+      "error_rate_per_hour": 50
+    }
+  },
+  "output": {
+    "base_dir": "OUTPUTS/FBA_ANALYSIS",
+    "report_format": "json",
+    "save_intermediate_results": true,
+    "file_naming": {
+      "pattern": "{supplier}_{timestamp}",
+      "timestamp_format": "%Y%m%d_%H%M%S"
+    },
+    "retention": {
+      "keep_days": 365,
+      "archive_after_days": 90
+    }
+  },
+  "chrome": {
+    "debug_port": 9222,
+    "headless": false,
+    "extensions": [
+      "Keepa",
+      "SellerAmp"
+    ]
+  },
+  "analysis": {
+    "min_roi_percent": 15.0,
+    "min_profit_per_unit": 0.25,
+    "min_rating": 3.0,
+    "min_reviews": 5,
+    "max_sales_rank": 500000,
+    "min_monthly_sales": 1,
+    "max_competition_level": 20,
+    "excluded_categories": [],
+    "target_categories": [
+      "Home & Kitchen",
+      "Pet Supplies",
+      "Toys",
+      "Health & Personal Care",
+      "Office Products",
+      "Sports & Outdoors",
+      "Baby Products",
+      "Beauty & Personal Care",
+      "Automotive",
+      "Garden & Outdoor",
+      "Tools & Home Improvement",
+      "Electronics",
+      "Clothing & Accessories"
+    ]
+  },
+  "amazon": {
+    "marketplace": "amazon.co.uk",
+    "currency": "GBP",
+    "vat_rate": 0.2,
+    "fba_fees": {
+      "referral_fee_rate": 0.15,
+      "fulfillment_fee_minimum": 2.41,
+      "storage_fee_per_cubic_foot": 0.75,
+      "prep_house_fixed_fee": 0.55
+    }
+  },
+  "credentials": {
+    "poundwholesale.co.uk": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
+    },
+    "clearance-king.co.uk": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
+    },
+    "dkwholesale.com": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
+    },
+    "efghousewares.co.uk": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
+    },
+    "efghousewares.co.uk__sandbox__b90388e1": {
+      "username": "info@theblacksmithmarket.com",
+      "password": "0Dqixm9c&"
+    }
+  },
+  "supplier": {
+    "prices_include_vat": false
+  },
+  "workflows": {
+    "poundwholesale_workflow": {
+      "supplier_name": "poundwholesale.co.uk",
+      "supplier_url": "https://www.poundwholesale.co.uk",
+      "categories_config_path": "config/poundwholesale_categories.json",
+      "test_product_url": "https://www.poundwholesale.co.uk/sealapack-turkey-roasting-bags-2-pack",
+      "use_predefined_categories": true,
+      "ai_client": null
+    },
+    "clearance_king_workflow": {
+      "supplier_name": "clearance-king.co.uk",
+      "supplier_url": "https://www.clearance-king.co.uk",
+      "categories_config_path": "config/clearance-king_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "workflow_type": "passive_extraction",
+      "authentication_required": true,
+      "session_persistence": true,
+      "test_product_url": "https://www.clearance-king.co.uk/sport-line-aquatic-advanced-swimming-goggles-colours-may-vary-1.html"
+    },
+    "angelwholesale_workflow": {
+      "supplier_name": "angelwholesale.co.uk",
+      "supplier_url": "https://angelwholesale.co.uk",
+      "categories_config_path": "config/angelwholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false
+    },
+    "kdwholesale_workflow": {
+      "supplier_name": "kdwholesale.co.uk",
+      "supplier_url": "https://kdwholesale.co.uk",
+      "categories_config_path": "config/kdwholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false,
+      "test_product_url": "https://kdwholesale.co.uk/cleaning-and-laundry-products/cleaning-products/buzz-stainless-steel-scourers-6-pk/"
+    },
+    "laceywholesale_workflow": {
+      "supplier_name": "laceywholesale.co.uk",
+      "supplier_url": "https://laceywholesale.co.uk",
+      "categories_config_path": "config/laceywholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false,
+      "test_product_url": "https://laceywholesale.co.uk/product/aquafresh-toothpaste-125ml-x-12/"
+    },
+    "wholesaletradingsupplies_co_uk_workflow": {
+      "supplier_name": "wholesaletradingsupplies.co.uk",
+      "supplier_url": "https://wholesaletradingsupplies.com",
+      "categories_config_path": "config/wholesaletradingsupplies_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false,
+      "test_product_url": "https://wholesaletradingsupplies.com/product/brut-anti-p-spray-200ml-original/"
+    },
+    "dkwholesale_workflow": {
+      "supplier_name": "dkwholesale.com",
+      "supplier_url": "https://dkwholesale.com",
+      "categories_config_path": "config/dkwholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": true,
+      "test_product_url": "https://dkwholesale.com/products/lorus-ladies-automatic-fashion-day-date-analogue-quartz-silver-sunray-dial-with-blue-leather-strap-watch"
+    },
+    "efghousewares_workflow": {
+      "supplier_name": "efghousewares.co.uk__sandbox__b90388e1",
+      "supplier_url": "https://efghousewares.co.uk",
+      "categories_config_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\b90388e1-4d2a-48a5-b686-59aba9a646af\\categories_subset.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": true,
+      "test_product_url": "https://efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50"
+    },
+    "stationerywholesale_workflow": {
+      "supplier_name": "stationerywholesale.co.uk",
+      "supplier_url": "https://stationerywholesale.co.uk",
+      "categories_config_path": "config/stationerywholesale_categories.json",
+      "use_predefined_categories": true,
+      "ai_client": null,
+      "authentication_required": false
+    }
+  },
+  "ai_features": {
+    "category_selection": {
+      "enabled": false
+    },
+    "product_matching": {
+      "quality_threshold": "low",
+      "skip_low_quality": false,
+      "ean_search_enabled": true,
+      "title_search_fallback": true
+    }
+  },
+  "integrations": {
+    "keepa": {
+      "enabled": true,
+      "api_key": "",
+      "rate_limit": {
+        "requests_per_minute": 100
+      }
+    },
+    "openai": {
+      "enabled": false
+    }
+  },
+  "authentication": {
+    "enabled": true,
+    "startup_verification": true,
+    "consecutive_failure_threshold": 5,
+    "primary_periodic_interval": 300,
+    "secondary_periodic_interval": 450,
+    "max_consecutive_auth_failures": 10,
+    "auth_failure_delay_seconds": 60,
+    "min_products_between_logins": 50,
+    "adaptive_threshold_enabled": true,
+    "circuit_breaker": {
+      "enabled": true,
+      "failure_threshold": 5,
+      "recovery_timeout_seconds": 120
+    }
+  },
+  "surgical_fixes": {
+    "enable_enhanced_fresh_start_detection": true,
+    "enable_state_synchronization_validation": true,
+    "enable_dual_index_system": false,
+    "enable_url_normalization": true
+  }
+}
