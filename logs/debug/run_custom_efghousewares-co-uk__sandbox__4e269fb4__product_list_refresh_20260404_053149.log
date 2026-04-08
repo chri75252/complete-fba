@@ -1,0 +1,289 @@
+2026-04-04 09:31:49,586 WARNING __main__: Ignoring supplier identity from products file; job sandbox is authoritative. job=efghousewares.co.uk__sandbox__4e269fb4 file=efghousewares.co.uk
+2026-04-04 09:31:49,591 INFO __main__: Linking map: excluded 13 foreign entries not in current product list (kept 861)
+2026-04-04 09:31:49,592 WARNING tools.amazon_playwright_extractor: ?? BrowserCircuitBreaker not available - health management disabled
+2026-04-04 09:31:49,592 INFO tools.amazon_playwright_extractor: AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-04-04 09:31:49,596 INFO tools.amazon_playwright_extractor: Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-04-04 09:31:49,596 WARNING tools.amazon_playwright_extractor: ?? BrowserManager not available, using legacy browser connection
+2026-04-04 09:31:49,612 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares-co-uk__sandbox__4e269fb4_products_cache.json (1776 entries) saved successfully
+2026-04-04 09:31:49,614 INFO utils.fixed_enhanced_state_manager: Loaded state for efghousewares.co.uk__sandbox__4e269fb4 - resumption from index 861
+2026-04-04 09:31:49,614 INFO __main__: Loaded existing processing state for efghousewares.co.uk__sandbox__4e269fb4 — resuming
+2026-04-04 09:31:49,614 INFO __main__: Resuming — state counters preserved: supplier_completed=861 amazon_completed=861 filtered_lm_entries=861
+2026-04-04 09:31:49,617 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-04 09:31:49,617 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-04 09:31:49,618 INFO tools.amazon_playwright_extractor: 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-04-04 09:31:49,619 INFO utils.browser_circuit_breaker: BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-04-04 09:31:49,619 INFO utils.browser_manager: ?? BrowserManager singleton initialized with health management
+2026-04-04 09:31:50,162 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance on port 9222
+2026-04-04 09:31:50,162 INFO utils.browser_manager: ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-04-04 09:31:52,205 INFO utils.browser_manager: ? Chrome debug accessible on IPv4: Chrome/146.0.7680.178
+2026-04-04 09:31:52,205 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance...
+2026-04-04 09:31:54,243 INFO utils.browser_manager: ?? Using endpoint: http://localhost:9222
+2026-04-04 09:31:54,494 INFO utils.browser_manager: ? Successfully connected to existing Chrome debug instance
+2026-04-04 09:31:54,494 INFO utils.browser_manager: ?? Using existing context with 2 pages
+2026-04-04 09:31:54,495 INFO utils.browser_manager: ?? Connected to existing Chrome: 146.0.7680.178
+2026-04-04 09:31:54,495 INFO tools.amazon_playwright_extractor: ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-04-04 09:31:54,495 INFO utils.browser_manager: ?? Reusing existing Chrome connection (port 9222)
+2026-04-04 09:31:54,495 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/Account/Login).
+2026-04-04 09:31:54,506 INFO __main__: Brought run page to front for visibility
+2026-04-04 09:31:54,507 INFO tools.configurable_supplier_scraper: ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-04-04 09:31:54,507 INFO tools.configurable_supplier_scraper: 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-04-04 09:31:54,508 INFO tools.configurable_supplier_scraper: [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-04-04 09:31:54,508 INFO tools.configurable_supplier_scraper: [TARGET] Extraction targets loaded: []
+2026-04-04 09:31:54,508 INFO tools.configurable_supplier_scraper: [ASSIST] Discovery assistance enabled: False
+2026-04-04 09:31:56,569 INFO tools.efghousewares.supplier_authentication_service: ❌ User is not authenticated (redirected to login)
+2026-04-04 09:31:56,569 INFO __main__: 🔐 Category 1 requires login; authenticating efghousewares.co.uk…
+2026-04-04 09:31:56,570 INFO tools.efghousewares.supplier_authentication_service: 🔄 Starting login process for info@theblacksmithmarket.com...
+2026-04-04 09:31:57,428 INFO tools.efghousewares.supplier_authentication_service: ⏳ Waiting for login form...
+2026-04-04 09:31:57,522 INFO tools.efghousewares.supplier_authentication_service: ✏️  Entering username...
+2026-04-04 09:31:57,756 INFO tools.efghousewares.supplier_authentication_service: ✏️  Entering password...
+2026-04-04 09:31:58,053 INFO tools.efghousewares.supplier_authentication_service: 🖱️  Clicking login button...
+2026-04-04 09:31:59,683 INFO tools.efghousewares.supplier_authentication_service: ⏳ Waiting for login response...
+2026-04-04 09:32:02,236 INFO tools.efghousewares.supplier_authentication_service: 🔎 Verifying price access via test product: https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50
+2026-04-04 09:32:07,581 INFO tools.efghousewares.supplier_authentication_service: ✅ Price access verified (p.price_text span.excUnitPrice -> '3.68')
+2026-04-04 09:32:07,581 INFO tools.efghousewares.supplier_authentication_service: ✅ Login successful
+2026-04-04 09:32:07,582 INFO __main__: ✅ Category 1: Authentication successful
+2026-04-04 09:32:07,587 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm (attempt 1/3)
+2026-04-04 09:32:07,587 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50).
+2026-04-04 09:32:07,588 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm
+2026-04-04 09:32:09,930 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm in 1.65s...
+2026-04-04 09:32:11,587 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm (attempt 2/3)
+2026-04-04 09:32:11,587 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm).
+2026-04-04 09:32:11,587 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm
+2026-04-04 09:32:12,755 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm
+2026-04-04 09:32:12,755 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm
+2026-04-04 09:32:12,835 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm (Size: 450794 bytes)
+2026-04-04 09:32:13,195 INFO config.supplier_config_loader: Loaded supplier selector config for domain: efghousewares.co.uk
+2026-04-04 09:32:13,195 INFO tools.configurable_supplier_scraper: 📁 Loaded selectors for domain efghousewares.co.uk from legacy config/supplier_configs/
+2026-04-04 09:32:13,292 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759038626
+2026-04-04 09:32:13,318 INFO __main__: Live-refreshed 1/238: AMTECH PADLOCK RHOMBIC IRON 25MM
+2026-04-04 09:32:13,318 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch (attempt 1/3)
+2026-04-04 09:32:13,320 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-rhombic-iron-25mm).
+2026-04-04 09:32:13,320 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch
+2026-04-04 09:32:15,411 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch in 1.83s...
+2026-04-04 09:32:17,250 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch (attempt 2/3)
+2026-04-04 09:32:17,251 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch).
+2026-04-04 09:32:17,251 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch
+2026-04-04 09:32:18,837 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch
+2026-04-04 09:32:18,837 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch
+2026-04-04 09:32:18,896 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch (Size: 450729 bytes)
+2026-04-04 09:32:19,377 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759002122
+2026-04-04 09:32:19,394 INFO __main__: Live-refreshed 2/238: AMTECH SCRAPER W/HANDLE 1INCH
+2026-04-04 09:32:19,395 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc (attempt 1/3)
+2026-04-04 09:32:19,395 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-scraper-w-handle-1inch).
+2026-04-04 09:32:19,395 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc
+2026-04-04 09:32:21,495 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc in 2.30s...
+2026-04-04 09:32:23,797 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc (attempt 2/3)
+2026-04-04 09:32:23,798 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc).
+2026-04-04 09:32:23,798 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc
+2026-04-04 09:32:26,050 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc
+2026-04-04 09:32:26,050 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc
+2026-04-04 09:32:26,108 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc (Size: 450755 bytes)
+2026-04-04 09:32:26,562 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759033102
+2026-04-04 09:32:26,578 INFO __main__: Live-refreshed 3/238: AMTECH BUNGEE CORD+CLIPS 24INC
+2026-04-04 09:32:26,578 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-led-mini-torch (attempt 1/3)
+2026-04-04 09:32:26,578 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-bungee-cord-clips-24inc).
+2026-04-04 09:32:26,578 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-led-mini-torch
+2026-04-04 09:32:28,732 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-led-mini-torch in 2.48s...
+2026-04-04 09:32:31,217 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-led-mini-torch (attempt 2/3)
+2026-04-04 09:32:31,217 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-led-mini-torch).
+2026-04-04 09:32:31,217 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-led-mini-torch
+2026-04-04 09:32:33,890 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-led-mini-torch
+2026-04-04 09:32:33,890 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-led-mini-torch
+2026-04-04 09:32:33,964 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-led-mini-torch (Size: 450768 bytes)
+2026-04-04 09:32:34,222 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759031078
+2026-04-04 09:32:34,236 INFO __main__: Live-refreshed 4/238: AMTECH LED MINI TORCH
+2026-04-04 09:32:34,236 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb (attempt 1/3)
+2026-04-04 09:32:34,236 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-led-mini-torch).
+2026-04-04 09:32:34,236 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb
+2026-04-04 09:32:36,490 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb in 1.75s...
+2026-04-04 09:32:38,250 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb (attempt 2/3)
+2026-04-04 09:32:38,250 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb).
+2026-04-04 09:32:38,250 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb
+2026-04-04 09:32:40,582 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb
+2026-04-04 09:32:40,583 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb
+2026-04-04 09:32:40,646 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb (Size: 450726 bytes)
+2026-04-04 09:32:41,048 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759015887
+2026-04-04 09:32:41,064 INFO __main__: Live-refreshed 5/238: AMTECH MAGNETIC PICK UP TOOL 8LB
+2026-04-04 09:32:41,064 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator (attempt 1/3)
+2026-04-04 09:32:41,064 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-magnetic-pick-up-tool-8lb).
+2026-04-04 09:32:41,064 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator
+2026-04-04 09:32:43,251 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator in 1.81s...
+2026-04-04 09:32:45,064 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator (attempt 2/3)
+2026-04-04 09:32:45,065 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator).
+2026-04-04 09:32:45,065 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator
+2026-04-04 09:32:47,563 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator
+2026-04-04 09:32:47,563 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator
+2026-04-04 09:32:47,628 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator (Size: 450856 bytes)
+2026-04-04 09:32:47,859 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759043378
+2026-04-04 09:32:47,871 INFO __main__: Live-refreshed 6/238: AMTECH FLOOR TILE ADHESIVE APPLICATOR
+2026-04-04 09:32:47,871 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2 (attempt 1/3)
+2026-04-04 09:32:47,872 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-floor-tile-adhesive-applicator).
+2026-04-04 09:32:47,872 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2
+2026-04-04 09:32:50,104 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2 in 2.49s...
+2026-04-04 09:32:52,601 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2 (attempt 2/3)
+2026-04-04 09:32:52,602 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2).
+2026-04-04 09:32:52,602 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2
+2026-04-04 09:32:55,035 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2
+2026-04-04 09:32:55,035 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2
+2026-04-04 09:32:55,109 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2 (Size: 450255 bytes)
+2026-04-04 09:32:55,732 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759038138
+2026-04-04 09:32:55,747 INFO __main__: Live-refreshed 7/238: AMTECH TROWEL MARGIN - SOFT GRIP5X2
+2026-04-04 09:32:55,747 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc (attempt 1/3)
+2026-04-04 09:32:55,747 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-trowel-margin-soft-grip5x2).
+2026-04-04 09:32:55,747 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc
+2026-04-04 09:32:58,110 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc in 2.50s...
+2026-04-04 09:33:00,614 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc (attempt 2/3)
+2026-04-04 09:33:00,614 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc).
+2026-04-04 09:33:00,614 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc
+2026-04-04 09:33:03,181 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc
+2026-04-04 09:33:03,181 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc
+2026-04-04 09:33:03,242 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc (Size: 450155 bytes)
+2026-04-04 09:33:03,461 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759001835
+2026-04-04 09:33:03,473 INFO __main__: Live-refreshed 8/238: AMTECH METRIC WOOD BIT SET 6PC
+2026-04-04 09:33:03,473 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130 (attempt 1/3)
+2026-04-04 09:33:03,473 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-metric-wood-bit-set-6pc).
+2026-04-04 09:33:03,473 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130
+2026-04-04 09:33:05,677 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130 in 2.47s...
+2026-04-04 09:33:08,156 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130 (attempt 2/3)
+2026-04-04 09:33:08,157 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130).
+2026-04-04 09:33:08,157 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130
+2026-04-04 09:33:10,454 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130
+2026-04-04 09:33:10,454 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130
+2026-04-04 09:33:10,515 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130 (Size: 450444 bytes)
+2026-04-04 09:33:10,727 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759051656
+2026-04-04 09:33:10,739 INFO __main__: Live-refreshed 9/238: AMTECH MULTI MATERIAL DRILL BIT 5PC SET
+2026-04-04 09:33:10,739 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-disc-60mm (attempt 1/3)
+2026-04-04 09:33:10,739 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-multi-material-drill-bit-5pc-set-119130).
+2026-04-04 09:33:10,740 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-disc-60mm
+2026-04-04 09:33:12,831 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-padlock-disc-60mm in 2.32s...
+2026-04-04 09:33:15,160 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-disc-60mm (attempt 2/3)
+2026-04-04 09:33:15,161 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-disc-60mm).
+2026-04-04 09:33:15,161 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-disc-60mm
+2026-04-04 09:33:17,810 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-padlock-disc-60mm
+2026-04-04 09:33:17,810 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-padlock-disc-60mm
+2026-04-04 09:33:17,883 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-padlock-disc-60mm (Size: 450561 bytes)
+2026-04-04 09:33:18,396 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759021567
+2026-04-04 09:33:18,409 INFO __main__: Live-refreshed 10/238: AMTECH PADLOCK DISC 60MM
+2026-04-04 09:33:18,409 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm (attempt 1/3)
+2026-04-04 09:33:18,410 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-disc-60mm).
+2026-04-04 09:33:18,410 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm
+2026-04-04 09:33:20,438 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm in 1.70s...
+2026-04-04 09:33:22,147 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm (attempt 2/3)
+2026-04-04 09:33:22,147 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm).
+2026-04-04 09:33:22,148 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm
+2026-04-04 09:33:24,424 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm
+2026-04-04 09:33:24,424 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm
+2026-04-04 09:33:24,478 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm (Size: 450800 bytes)
+2026-04-04 09:33:24,678 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759006182
+2026-04-04 09:33:24,688 INFO __main__: Live-refreshed 11/238: AMTECH PADLOCK BRASS LONG SHACKLE 38MM
+2026-04-04 09:33:24,688 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-ribbed-level12inch (attempt 1/3)
+2026-04-04 09:33:24,688 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-brass-long-shackle-38mm).
+2026-04-04 09:33:24,689 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-ribbed-level12inch
+2026-04-04 09:33:27,024 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-ribbed-level12inch in 1.96s...
+2026-04-04 09:33:28,997 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-ribbed-level12inch (attempt 2/3)
+2026-04-04 09:33:28,997 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-ribbed-level12inch).
+2026-04-04 09:33:28,997 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-ribbed-level12inch
+2026-04-04 09:33:31,195 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-ribbed-level12inch
+2026-04-04 09:33:31,195 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-ribbed-level12inch
+2026-04-04 09:33:31,455 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-ribbed-level12inch (Size: 450620 bytes)
+2026-04-04 09:33:31,679 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759012015
+2026-04-04 09:33:31,689 INFO __main__: Live-refreshed 12/238: AMTECH RIBBED LEVEL12INCH
+2026-04-04 09:33:31,690 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-plier-punch-eyelet (attempt 1/3)
+2026-04-04 09:33:31,690 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-ribbed-level12inch).
+2026-04-04 09:33:31,690 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-plier-punch-eyelet
+2026-04-04 09:33:33,749 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-plier-punch-eyelet in 1.83s...
+2026-04-04 09:33:35,588 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-plier-punch-eyelet (attempt 2/3)
+2026-04-04 09:33:35,588 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-plier-punch-eyelet).
+2026-04-04 09:33:35,588 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-plier-punch-eyelet
+2026-04-04 09:33:36,628 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-plier-punch-eyelet
+2026-04-04 09:33:36,628 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-plier-punch-eyelet
+2026-04-04 09:33:36,690 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-plier-punch-eyelet (Size: 450704 bytes)
+2026-04-04 09:33:36,931 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759030675
+2026-04-04 09:33:36,944 INFO __main__: Live-refreshed 13/238: AMTECH PLIER PUNCH & EYELET
+2026-04-04 09:33:36,944 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty (attempt 1/3)
+2026-04-04 09:33:36,945 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-plier-punch-eyelet).
+2026-04-04 09:33:36,945 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty
+2026-04-04 09:33:39,156 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty in 1.83s...
+2026-04-04 09:33:40,997 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty (attempt 2/3)
+2026-04-04 09:33:40,998 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty).
+2026-04-04 09:33:40,998 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty
+2026-04-04 09:33:42,619 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty
+2026-04-04 09:33:42,619 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty
+2026-04-04 09:33:42,675 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty (Size: 451267 bytes)
+2026-04-04 09:33:42,886 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759016686
+2026-04-04 09:33:42,898 INFO __main__: Live-refreshed 14/238: AMTECH KNEE PADS HEAVY DUTY
+2026-04-04 09:33:42,898 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch (attempt 1/3)
+2026-04-04 09:33:42,898 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-knee-pads-heavy-duty).
+2026-04-04 09:33:42,898 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch
+2026-04-04 09:33:45,101 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch in 2.14s...
+2026-04-04 09:33:47,249 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch (attempt 2/3)
+2026-04-04 09:33:47,249 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch).
+2026-04-04 09:33:47,250 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch
+2026-04-04 09:33:49,937 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch
+2026-04-04 09:33:49,938 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch
+2026-04-04 09:33:50,004 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch (Size: 449540 bytes)
+2026-04-04 09:33:50,211 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759013630
+2026-04-04 09:33:50,221 INFO __main__: Live-refreshed 15/238: AMTECH CLAMP G TYPE HEAVY DUTY 4INCH
+2026-04-04 09:33:50,222 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-trowel-tile-grouting (attempt 1/3)
+2026-04-04 09:33:50,222 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-clamp-g-type-heavy-duty-4inch).
+2026-04-04 09:33:50,222 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-trowel-tile-grouting
+2026-04-04 09:33:52,379 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-trowel-tile-grouting in 1.55s...
+2026-04-04 09:33:53,936 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-trowel-tile-grouting (attempt 2/3)
+2026-04-04 09:33:53,936 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-trowel-tile-grouting).
+2026-04-04 09:33:53,937 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-trowel-tile-grouting
+2026-04-04 09:33:55,071 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-trowel-tile-grouting
+2026-04-04 09:33:55,072 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-trowel-tile-grouting
+2026-04-04 09:33:55,316 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-trowel-tile-grouting (Size: 449457 bytes)
+2026-04-04 09:33:55,621 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759010561
+2026-04-04 09:33:55,644 INFO __main__: Live-refreshed 16/238: AMTECH TROWEL TILE GROUTING
+2026-04-04 09:33:55,644 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp (attempt 1/3)
+2026-04-04 09:33:55,644 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-trowel-tile-grouting).
+2026-04-04 09:33:55,645 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp
+2026-04-04 09:33:58,267 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp in 1.58s...
+2026-04-04 09:33:59,854 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp (attempt 2/3)
+2026-04-04 09:33:59,854 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp).
+2026-04-04 09:33:59,855 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp
+2026-04-04 09:34:02,227 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp
+2026-04-04 09:34:02,227 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp
+2026-04-04 09:34:02,357 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp (Size: 450634 bytes)
+2026-04-04 09:34:02,633 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759018512
+2026-04-04 09:34:02,645 INFO __main__: Live-refreshed 17/238: AMTECH ROPE 30M X 8MM PP
+2026-04-04 09:34:02,645 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz (attempt 1/3)
+2026-04-04 09:34:02,645 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-rope-30m-x-8mm-pp).
+2026-04-04 09:34:02,646 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz
+2026-04-04 09:34:04,883 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz in 1.82s...
+2026-04-04 09:34:06,715 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz (attempt 2/3)
+2026-04-04 09:34:06,716 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz).
+2026-04-04 09:34:06,716 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz
+2026-04-04 09:34:08,260 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz
+2026-04-04 09:34:08,260 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz
+2026-04-04 09:34:08,327 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz (Size: 450695 bytes)
+2026-04-04 09:34:08,559 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759018062
+2026-04-04 09:34:08,571 INFO __main__: Live-refreshed 18/238: AMTECH HAMMER PIN F/G 16OZ
+2026-04-04 09:34:08,571 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm (attempt 1/3)
+2026-04-04 09:34:08,571 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-hammer-pin-f-g-16oz).
+2026-04-04 09:34:08,571 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm
+2026-04-04 09:34:10,927 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm in 1.83s...
+2026-04-04 09:34:12,773 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm (attempt 2/3)
+2026-04-04 09:34:12,773 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm).
+2026-04-04 09:34:12,773 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm
+2026-04-04 09:34:13,848 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm
+2026-04-04 09:34:13,849 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm
+2026-04-04 09:34:13,911 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm (Size: 450769 bytes)
+2026-04-04 09:34:14,134 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759022106
+2026-04-04 09:34:14,145 INFO __main__: Live-refreshed 19/238: AMTECH PADLOCK PVC INSULATED 65MM
+2026-04-04 09:34:14,145 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835 (attempt 1/3)
+2026-04-04 09:34:14,145 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-padlock-pvc-insulated-65mm).
+2026-04-04 09:34:14,146 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835
+2026-04-04 09:34:15,746 INFO tools.configurable_supplier_scraper: Retrying https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835 in 1.99s...
+2026-04-04 09:34:17,748 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835 (attempt 2/3)
+2026-04-04 09:34:17,749 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106).
+2026-04-04 09:34:17,749 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835
+2026-04-04 09:34:18,839 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager already navigated to https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835
+2026-04-04 09:34:18,839 INFO tools.configurable_supplier_scraper: 🔧 BrowserManager navigation assumed successful for https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835
+2026-04-04 09:34:18,915 INFO tools.configurable_supplier_scraper: Successfully fetched content from https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106835 (Size: 379156 bytes)
+2026-04-04 09:34:19,141 WARNING tools.configurable_supplier_scraper: ⚠️ EAN found via pattern matching (fallback): 5032759043736
+2026-04-04 09:34:19,159 INFO __main__: Live-refreshed 20/238: AMTECH 4 DIGIT COMBINATION DISC PADLOCK 70MM
+2026-04-04 09:34:19,159 INFO tools.configurable_supplier_scraper: Fetching page content from: https://www.efghousewares.co.uk/amtech-hatchet-splitting-1kg-46291 (attempt 1/3)
+2026-04-04 09:34:19,161 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.efghousewares.co.uk/amtech-4-digit-combination-disc-padlock-70mm-106).
+2026-04-04 09:34:19,161 INFO tools.configurable_supplier_scraper: 🔧 Using BrowserManager page for https://www.efghousewares.co.uk/amtech-hatchet-splitting-1kg-46291

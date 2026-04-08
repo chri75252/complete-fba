@@ -11,6 +11,7 @@ import asyncio
 import atexit
 import time
 import psutil
+from urllib.parse import urlparse
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 from pathlib import Path
@@ -194,20 +195,8 @@ class BrowserManager:
         if not self.context:
             raise Exception("Browser context not initialized. Call launch_browser() first.")
 
-        # Health check — attempt reconnection if connection is dead.
-        # This is safe: if the connection is alive, this is a no-op.
-        # If dead, reconnecting is strictly better than permanent failure.
         if not await self.verify_connection_health():
-            log.warning("?? Browser connection lost — attempting reconnection")
-            cdp_port = int(os.getenv('CHROME_DEBUG_PORT', DEFAULT_CHROME_DEBUG_PORT))
-            try:
-                await self.launch_browser(cdp_port=cdp_port)
-                if await self.verify_connection_health():
-                    log.info("?? Browser reconnection successful")
-                else:
-                    log.error("?? Browser reconnection failed — connection still unhealthy")
-            except Exception as reconnect_err:
-                log.error("?? Browser reconnection failed: %s", reconnect_err)
+            log.warning("?? Browser health check returned unhealthy — continuing without restart")
 
         page = None
 
@@ -265,15 +254,40 @@ class BrowserManager:
                         log.info(f"?? Reusing matching page in persistent context for {url}")
                         break
             if page is None:
-                for existing_page in self.context.pages:
-                    if not existing_page.is_closed():
-                        page = existing_page
-                        break
+                http_pages = [
+                    p for p in self.context.pages
+                    if not p.is_closed() and str(p.url or "").startswith(("http://", "https://"))
+                ]
+                other_pages = [
+                    p for p in self.context.pages
+                    if not p.is_closed() and not str(p.url or "").startswith(("http://", "https://"))
+                ]
+                google_pages = []
+                for existing_page in http_pages:
+                    try:
+                        host = (urlparse(str(existing_page.url or "")).hostname or "").lower()
+                    except Exception:
+                        host = ""
+                    if host in {"google.com", "www.google.com"} or host.endswith(".google.com"):
+                        google_pages.append(existing_page)
+
+                candidate = None
+                if len(google_pages) == 1:
+                    candidate = google_pages[0]
+                elif http_pages:
+                    candidate = http_pages[0]
+                elif other_pages:
+                    candidate = other_pages[0]
+                if candidate is not None:
+                    page = candidate
             if page is None:
                 page = await self.context.new_page()
                 log.info("?? No live pages found; created new page in persistent context.")
             else:
-                log.info(f"?? Reusing existing page in persistent context.")
+                log.info(
+                    "?? Reusing existing page in persistent context (url=%s).",
+                    str(page.url or "")[:80],
+                )
             # REMOVED: Bring reused page to front - prevents aggressive browser focus  
             # try:
             #     await page.bring_to_front()

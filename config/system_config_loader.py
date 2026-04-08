@@ -44,7 +44,16 @@ class SystemConfigLoader:
         return suppliers.get(supplier_name, {})
 
     def get_credentials(self, supplier_name: str) -> Dict[str, str]:
-        return self._config.get("credentials", {}).get(supplier_name, {})
+        credentials = self._config.get("credentials", {})
+        if supplier_name in credentials:
+            return credentials[supplier_name]
+        # Fallback: match by first domain label so co.uk / co-uk / co_uk variants
+        # (produced by LLM reconstruction from underscored state-file names) all resolve.
+        first_label = supplier_name.replace("-", ".").replace("_", ".").split(".")[0]
+        for key, val in credentials.items():
+            if key.split(".")[0] == first_label:
+                return val
+        return {}
 
     def get_workflow_config(self, workflow_key: str) -> Dict[str, Any]:
         return self._config.get("workflows", {}).get(workflow_key, {})

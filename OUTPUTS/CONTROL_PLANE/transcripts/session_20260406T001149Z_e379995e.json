@@ -1,0 +1,395 @@
+{
+  "session_id": "20260406T001149Z_e379995e",
+  "session_started_at": "2026-04-06T00:11:49Z",
+  "reason": "chat_reset",
+  "messages": [
+    {
+      "role": "user",
+      "content": "analyze the 3 products from each one of these catgroies:   \"https://www.poundwholesale.co.uk/seasonal/wholesale-summer\",     \"https://www.poundwholesale.co.uk/pound-lines/leisure-hobbies-pound-lines\",     \"https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military\","
+    },
+    {
+      "role": "assistant",
+      "content": "Action `enqueue_run` executed successfully."
+    },
+    {
+      "role": "user",
+      "content": "CANCEL THE RNU"
+    },
+    {
+      "role": "assistant",
+      "content": "Action `cancel_run` executed successfully."
+    },
+    {
+      "role": "user",
+      "content": "I NOW WAT YOU TO RESUME THE SAME RUN FROM WHERE IT LEFT OFF AND YOU INTERUPTED IT ."
+    },
+    {
+      "role": "assistant",
+      "content": "Action cancelled by user."
+    },
+    {
+      "role": "user",
+      "content": "YOUR generated output was nearly correct however you didnt re-use the max product and max product by catgeroy, indexes/value. regenerate your json output block accorisngky"
+    },
+    {
+      "role": "assistant",
+      "content": "Action `enqueue_run` executed successfully."
+    },
+    {
+      "role": "user",
+      "content": "cancel the run"
+    },
+    {
+      "role": "assistant",
+      "content": "Action `cancel_run` executed successfully."
+    }
+  ],
+  "scratchpad": [],
+  "trace": [],
+  "tool_executions": [],
+  "turn_history": [
+    {
+      "reason": "approval_executed",
+      "archived_at": "2026-04-06T00:12:37Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "analyze the 3 products from each one of these catgroies:   \"https://www.poundwholesale.co.uk/seasonal/wholesale-summer\",     \"https://www.poundwholesale.co.uk/pound-lines/leisure-hobbies-pound-lines\",     \"https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military\","
+        },
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [
+        {
+          "tool": "enqueue_run",
+          "params": {
+            "workflow_key": "poundwholesale_workflow",
+            "supplier_domain": "poundwholesale.co.uk",
+            "runner_script": "run_custom_poundwholesale.py",
+            "category_urls": [
+              "<truncated>",
+              "<truncated>",
+              "<truncated>"
+            ],
+            "max_products": 3,
+            "max_products_per_category": 3,
+            "notes": "Analyze 3 products from each of 3 categories",
+            "run_id": "93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9"
+          },
+          "expected_outputs": [
+            "OUTPUTS/CONTROL_PLANE/jobs/pending/job_93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.json",
+            "OUTPUTS/CONTROL_PLANE/status/93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.json",
+            "OUTPUTS/CONTROL_PLANE/logs/93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.log",
+            "OUTPUTS/CONTROL_PLANE/overrides/93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9/system_config.merged.json",
+            "OUTPUTS/CONTROL_PLANE/overrides/93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9/categories_subset.json",
+            "OUTPUTS/CACHE/processing_states/poundwholesale_co_uk__sandbox__93bb1f5b_processing_state.json",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk__sandbox__93bb1f5b/linking_map.json",
+            "OUTPUTS/cached_products/poundwholesale-co-uk__sandbox__93bb1f5b_products_cache.json",
+            "OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk__sandbox__93bb1f5b/fba_financial_report_*.csv",
+            "OUTPUTS/CACHE/processing_states/poundwholesale_93bb1f5b_processing_state.json",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale_93bb1f5b/linking_map.json"
+          ],
+          "result": {
+            "ok": true,
+            "run_id": "93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9",
+            "sandbox_supplier": "poundwholesale.co.uk__sandbox__93bb1f5b",
+            "normalized_sandbox_suffix": "sandbox__93bb1f5b",
+            "resume_requested": false,
+            "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.json",
+            "merged_config": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9\\system_config.merged.json",
+            "categories": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9\\categories_subset.json",
+            "processing_state": {
+              "current_phase": "<truncated>",
+              "persistent_category_index": "<truncated>",
+              "total_categories": "<truncated>",
+              "current_category_url": "<truncated>",
+              "supplier_products_completed": "<truncated>",
+              "supplier_products_needing_extraction": "<truncated>",
+              "amazon_products_completed": "<truncated>",
+              "amazon_products_needing_analysis": "<truncated>"
+            }
+          },
+          "executed_at": "2026-04-06T00:12:37Z"
+        }
+      ],
+      "executed_tool": "enqueue_run",
+      "executed_result": {
+        "ok": true,
+        "run_id": "93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9",
+        "sandbox_supplier": "poundwholesale.co.uk__sandbox__93bb1f5b",
+        "normalized_sandbox_suffix": "sandbox__93bb1f5b",
+        "resume_requested": false,
+        "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.json",
+        "merged_config": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9\\system_config.merged.json",
+        "categories": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9\\categories_subset.json",
+        "processing_state": {
+          "current_phase": "amazon_analysis",
+          "persistent_category_index": 231,
+          "total_categories": 230,
+          "current_category_url": "https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets",
+          "supplier_products_completed": 0,
+          "supplier_products_needing_extraction": 1,
+          "amazon_products_completed": 1,
+          "amazon_products_needing_analysis": 1
+        }
+      }
+    },
+    {
+      "reason": "approval_executed",
+      "archived_at": "2026-04-06T00:15:22Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        },
+        {
+          "role": "user",
+          "content": "CANCEL THE RNU"
+        },
+        {
+          "role": "assistant",
+          "content": "Action `cancel_run` executed successfully."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [
+        {
+          "tool": "cancel_run",
+          "params": {
+            "run_id": ""
+          },
+          "expected_outputs": [],
+          "result": {
+            "ok": true,
+            "run_id": "93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9",
+            "cancel_marker": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\status\\93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.cancelled",
+            "cancel_marker_legacy": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\lock\\cancel_93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.flag"
+          },
+          "executed_at": "2026-04-06T00:15:22Z"
+        }
+      ],
+      "executed_tool": "cancel_run",
+      "executed_result": {
+        "ok": true,
+        "run_id": "93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9",
+        "cancel_marker": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\status\\93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.cancelled",
+        "cancel_marker_legacy": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\lock\\cancel_93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.flag"
+      }
+    },
+    {
+      "reason": "approval_rejected",
+      "archived_at": "2026-04-06T00:16:58Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Action `cancel_run` executed successfully."
+        },
+        {
+          "role": "user",
+          "content": "I NOW WAT YOU TO RESUME THE SAME RUN FROM WHERE IT LEFT OFF AND YOU INTERUPTED IT ."
+        },
+        {
+          "role": "assistant",
+          "content": "Action cancelled by user."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [],
+      "pending_tool_call": {
+        "name": "enqueue_run",
+        "params": {
+          "workflow_key": "poundwholesale_workflow",
+          "supplier_domain": "poundwholesale.co.uk",
+          "runner_script": "run_custom_poundwholesale.py",
+          "category_urls": [
+            "https://www.poundwholesale.co.uk/seasonal/wholesale-summer",
+            "https://www.poundwholesale.co.uk/pound-lines/leisure-hobbies-pound-lines",
+            "https://www.poundwholesale.co.uk/toys/wholesale-action-play-sets-vehicle-toys/combat-shooting-military"
+          ],
+          "max_products": null,
+          "max_products_per_category": null,
+          "sandbox_suffix": "sandbox__93bb1f5b",
+          "notes": "Resume cancelled run from active_context",
+          "run_id": "aed23049-d297-41e7-83d0-e290e7cc69fa"
+        },
+        "explanation": "I will resume the cancelled sandboxed run (ID: 93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9) using the same sandbox session. This will continue processing the 3 categories from where it left off. You should start the worker to execute it: python -m control_plane worker",
+        "expected_outputs": [
+          "OUTPUTS/CONTROL_PLANE/jobs/pending/job_aed23049-d297-41e7-83d0-e290e7cc69fa.json",
+          "OUTPUTS/CONTROL_PLANE/status/aed23049-d297-41e7-83d0-e290e7cc69fa.json",
+          "OUTPUTS/CONTROL_PLANE/logs/aed23049-d297-41e7-83d0-e290e7cc69fa.log",
+          "OUTPUTS/CONTROL_PLANE/overrides/aed23049-d297-41e7-83d0-e290e7cc69fa/system_config.merged.json",
+          "OUTPUTS/CONTROL_PLANE/overrides/aed23049-d297-41e7-83d0-e290e7cc69fa/categories_subset.json",
+          "OUTPUTS/CACHE/processing_states/poundwholesale_co_uk__sandbox__93bb1f5b_processing_state.json",
+          "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk__sandbox__93bb1f5b/linking_map.json",
+          "OUTPUTS/cached_products/poundwholesale-co-uk__sandbox__93bb1f5b_products_cache.json",
+          "OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk__sandbox__93bb1f5b/fba_financial_report_*.csv",
+          "OUTPUTS/CACHE/processing_states/poundwholesale_co_uk_sandbox__93bb1f5b_processing_state.json",
+          "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale_co_uk_sandbox__93bb1f5b/linking_map.json",
+          "OUTPUTS/CONTROL_PLANE/logs/93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.log"
+        ]
+      },
+      "pending_user_text": "I NOW WAT YOU TO RESUME THE SAME RUN FROM WHERE IT LEFT OFF AND YOU INTERUPTED IT .",
+      "pending_rag_info": {
+        "meta": {
+          "enabled": false,
+          "ok": false
+        },
+        "sources_used": [],
+        "scores": [],
+        "context_injected": false
+      }
+    },
+    {
+      "reason": "approval_executed",
+      "archived_at": "2026-04-06T00:18:47Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Action cancelled by user."
+        },
+        {
+          "role": "user",
+          "content": "YOUR generated output was nearly correct however you didnt re-use the max product and max product by catgeroy, indexes/value. regenerate your json output block accorisngky"
+        },
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [
+        {
+          "tool": "enqueue_run",
+          "params": {
+            "workflow_key": "poundwholesale_workflow",
+            "supplier_domain": "poundwholesale.co.uk",
+            "runner_script": "run_custom_poundwholesale.py",
+            "category_urls": [
+              "<truncated>",
+              "<truncated>",
+              "<truncated>"
+            ],
+            "max_products": 3,
+            "max_products_per_category": 3,
+            "sandbox_suffix": "sandbox__93bb1f5b",
+            "notes": "Resuming cancelled run with same parameters (3 products per category)",
+            "run_id": "8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f"
+          },
+          "expected_outputs": [
+            "OUTPUTS/CONTROL_PLANE/jobs/pending/job_8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.json",
+            "OUTPUTS/CONTROL_PLANE/status/8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.json",
+            "OUTPUTS/CONTROL_PLANE/logs/8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.log",
+            "OUTPUTS/CONTROL_PLANE/overrides/8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f/system_config.merged.json",
+            "OUTPUTS/CONTROL_PLANE/overrides/8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f/categories_subset.json",
+            "OUTPUTS/CACHE/processing_states/poundwholesale_co_uk__sandbox__93bb1f5b_processing_state.json",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale.co.uk__sandbox__93bb1f5b/linking_map.json",
+            "OUTPUTS/cached_products/poundwholesale-co-uk__sandbox__93bb1f5b_products_cache.json",
+            "OUTPUTS/FBA_ANALYSIS/financial_reports/poundwholesale-co-uk__sandbox__93bb1f5b/fba_financial_report_*.csv",
+            "OUTPUTS/FBA_ANALYSIS/linking_maps/poundwholesale_co_uk__sandbox__93bb1f5b/linking_map.json",
+            "OUTPUTS/CONTROL_PLANE/logs/93bb1f5b-bd5a-4317-8ea5-b0fd3bb658b9.log"
+          ],
+          "result": {
+            "ok": true,
+            "run_id": "8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f",
+            "sandbox_supplier": "poundwholesale.co.uk__sandbox__93bb1f5b",
+            "normalized_sandbox_suffix": "sandbox__93bb1f5b",
+            "resume_requested": true,
+            "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.json",
+            "merged_config": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f\\system_config.merged.json",
+            "categories": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f\\categories_subset.json",
+            "processing_state": {
+              "current_phase": "<truncated>",
+              "persistent_category_index": "<truncated>",
+              "total_categories": "<truncated>",
+              "current_category_url": "<truncated>",
+              "supplier_products_completed": "<truncated>",
+              "supplier_products_needing_extraction": "<truncated>",
+              "amazon_products_completed": "<truncated>",
+              "amazon_products_needing_analysis": "<truncated>"
+            }
+          },
+          "executed_at": "2026-04-06T00:18:47Z"
+        }
+      ],
+      "executed_tool": "enqueue_run",
+      "executed_result": {
+        "ok": true,
+        "run_id": "8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f",
+        "sandbox_supplier": "poundwholesale.co.uk__sandbox__93bb1f5b",
+        "normalized_sandbox_suffix": "sandbox__93bb1f5b",
+        "resume_requested": true,
+        "job_path": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\jobs\\pending\\job_8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.json",
+        "merged_config": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f\\system_config.merged.json",
+        "categories": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\overrides\\8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f\\categories_subset.json",
+        "processing_state": {
+          "current_phase": "amazon_analysis",
+          "persistent_category_index": 1,
+          "total_categories": 1,
+          "current_category_url": "https://www.poundwholesale.co.uk/seasonal/wholesale-summer",
+          "supplier_products_completed": 2,
+          "supplier_products_needing_extraction": 3,
+          "amazon_products_completed": 2,
+          "amazon_products_needing_analysis": 3
+        }
+      }
+    },
+    {
+      "reason": "approval_executed",
+      "archived_at": "2026-04-06T00:21:08Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Action `enqueue_run` executed successfully."
+        },
+        {
+          "role": "user",
+          "content": "cancel the run"
+        },
+        {
+          "role": "assistant",
+          "content": "Action `cancel_run` executed successfully."
+        }
+      ],
+      "scratchpad": [],
+      "trace": [],
+      "tool_executions": [
+        {
+          "tool": "cancel_run",
+          "params": {
+            "run_id": ""
+          },
+          "expected_outputs": [],
+          "result": {
+            "ok": true,
+            "run_id": "8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f",
+            "cancel_marker": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\status\\8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.cancelled",
+            "cancel_marker_legacy": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\lock\\cancel_8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.flag"
+          },
+          "executed_at": "2026-04-06T00:21:08Z"
+        }
+      ],
+      "executed_tool": "cancel_run",
+      "executed_result": {
+        "ok": true,
+        "run_id": "8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f",
+        "cancel_marker": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\status\\8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.cancelled",
+        "cancel_marker_legacy": "C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\\OUTPUTS\\CONTROL_PLANE\\lock\\cancel_8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f.flag"
+      }
+    }
+  ],
+  "pending_tool_call": null,
+  "pending_user_text": null,
+  "pending_rag_info": null,
+  "last_run_id": "8de2f854-ac1b-4fbe-970a-3dea7b0fbe5f",
+  "last_products_path": null,
+  "last_supplier_domain": "poundwholesale.co.uk",
+  "last_sandbox_supplier": "poundwholesale.co.uk__sandbox__93bb1f5b",
+  "saved_at": "2026-04-06T00:21:30Z"
+}

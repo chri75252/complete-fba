@@ -1,0 +1,1064 @@
+2026-04-08 04:09:39,649 WARNING __main__: Ignoring supplier identity from products file; job sandbox is authoritative. job=efghousewares.co.uk__sandbox__4e269fb4 file=efghousewares.co.uk
+2026-04-08 04:09:39,663 INFO __main__: FIX 3 STEP 2 startup: loaded 1776 cached_keys from on-disk cache (1776 entries)
+2026-04-08 04:09:39,663 WARNING tools.amazon_playwright_extractor: ?? BrowserCircuitBreaker not available - health management disabled
+2026-04-08 04:09:39,663 INFO tools.amazon_playwright_extractor: AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-04-08 04:09:39,667 INFO tools.amazon_playwright_extractor: Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-04-08 04:09:39,667 WARNING tools.amazon_playwright_extractor: ?? BrowserManager not available, using legacy browser connection
+2026-04-08 04:09:39,669 INFO utils.fixed_enhanced_state_manager: Loaded state for efghousewares.co.uk__sandbox__4e269fb4 - resumption from index 861
+2026-04-08 04:09:39,669 INFO __main__: Loaded existing processing state for efghousewares.co.uk__sandbox__4e269fb4 — resuming
+2026-04-08 04:09:39,669 INFO __main__: Resuming — state counters preserved: supplier_completed=863 amazon_completed=863 filtered_lm_entries=863
+2026-04-08 04:09:39,672 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:39,672 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:39,673 INFO tools.amazon_playwright_extractor: 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-04-08 04:09:39,673 INFO utils.browser_circuit_breaker: BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-04-08 04:09:39,673 INFO utils.browser_manager: ?? BrowserManager singleton initialized with health management
+2026-04-08 04:09:40,122 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance on port 9222
+2026-04-08 04:09:40,122 INFO utils.browser_manager: ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-04-08 04:09:42,174 INFO utils.browser_manager: ? Chrome debug accessible on IPv4: Chrome/146.0.7680.178
+2026-04-08 04:09:42,175 INFO utils.browser_manager: ?? Connecting to existing Chrome debug instance...
+2026-04-08 04:09:44,232 INFO utils.browser_manager: ?? Using endpoint: http://localhost:9222
+2026-04-08 04:09:44,357 INFO utils.browser_manager: ? Successfully connected to existing Chrome debug instance
+2026-04-08 04:09:44,357 INFO utils.browser_manager: ?? Using existing context with 2 pages
+2026-04-08 04:09:44,357 INFO utils.browser_manager: ?? Connected to existing Chrome: 146.0.7680.178
+2026-04-08 04:09:44,357 INFO tools.amazon_playwright_extractor: ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-04-08 04:09:44,357 INFO utils.browser_manager: ?? Reusing existing Chrome connection (port 9222)
+2026-04-08 04:09:44,358 INFO utils.browser_manager: ?? Reusing existing page in persistent context (url=https://www.amazon.co.uk/dp/B0BNSYTLK9).
+2026-04-08 04:09:44,372 INFO __main__: Brought run page to front for visibility
+2026-04-08 04:09:44,372 INFO tools.configurable_supplier_scraper: ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-04-08 04:09:44,373 INFO tools.configurable_supplier_scraper: 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-04-08 04:09:44,373 INFO tools.configurable_supplier_scraper: [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-04-08 04:09:44,374 INFO tools.configurable_supplier_scraper: [TARGET] Extraction targets loaded: []
+2026-04-08 04:09:44,374 INFO tools.configurable_supplier_scraper: [ASSIST] Discovery assistance enabled: False
+2026-04-08 04:09:44,378 INFO __main__: FIX B: Skipping fully-processed category 1/10 (238 products): https://www.efghousewares.co.uk/shop-by-department/diy/amtech-tools
+2026-04-08 04:09:44,379 INFO __main__: FIX B: Skipping fully-processed category 2/10 (323 products): https://www.efghousewares.co.uk/shop-by-department/disposable-bags-&-tableware/disposable-tableware
+2026-04-08 04:09:45,864 INFO tools.efghousewares.supplier_authentication_service: 🔎 Verifying price access via test product: https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50
+2026-04-08 04:09:50,761 INFO tools.efghousewares.supplier_authentication_service: ✅ Price access verified (p.price_text span.excUnitPrice -> '3.68')
+2026-04-08 04:09:50,761 INFO __main__: ✅ Category 3: Already authenticated
+2026-04-08 04:09:50,762 INFO __main__: FIX 3 STEP 1 - LINKING MAP CHECK: 302 complete (skipped)
+2026-04-08 04:09:50,763 INFO __main__: FIX 3 STEP 2 - PRODUCT CACHE CHECK (stable_key): 163 cached; 0 need extraction
+2026-04-08 04:09:50,763 INFO __main__: FIX 3 Filter Invariant: in=465 == skip=302 + cached=163 + full=0 (PASS)
+2026-04-08 04:09:50,763 INFO __main__: FIX 3 RESUME STATE: phase=supplier cat=3/10 url=https://www.efghousewares.co.uk/shop-by-department/pound-lines/diy---tools supplier=863/465 amazon=863/465
+2026-04-08 04:09:50,764 INFO __main__: FIX A: Refresh loop skipped 465 already-processed products in this category
+2026-04-08 04:09:50,764 INFO __main__: Refreshed 465 products for https://www.efghousewares.co.uk/shop-by-department/pound-lines/diy---tools
+2026-04-08 04:09:50,769 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,770 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,771 INFO __main__: Skipping already-processed product 1/465: ean:5017403136217
+2026-04-08 04:09:50,775 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,776 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,776 INFO __main__: Skipping already-processed product 2/465: ean:5038673591391
+2026-04-08 04:09:50,781 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,782 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,782 INFO __main__: Skipping already-processed product 3/465: ean:5038673571690
+2026-04-08 04:09:50,787 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,788 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,788 INFO __main__: Skipping already-processed product 4/465: ean:5017403136385
+2026-04-08 04:09:50,793 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,793 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,794 INFO __main__: Skipping already-processed product 5/465: ean:5056170305341
+2026-04-08 04:09:50,799 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,799 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,800 INFO __main__: Skipping already-processed product 6/465: ean:5056338310637
+2026-04-08 04:09:50,804 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,805 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,805 INFO __main__: Skipping already-processed product 7/465: ean:5017403842002
+2026-04-08 04:09:50,810 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,811 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,811 INFO __main__: Skipping already-processed product 8/465: ean:5017403137887
+2026-04-08 04:09:50,816 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,816 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,817 INFO __main__: Skipping already-processed product 9/465: ean:5017403136255
+2026-04-08 04:09:50,821 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,822 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,822 INFO __main__: Skipping already-processed product 10/465: ean:5017403012306
+2026-04-08 04:09:50,827 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,828 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,832 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,832 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,833 INFO __main__: Skipping already-processed product 11/465: ean:5017403136224
+2026-04-08 04:09:50,837 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,838 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,838 INFO __main__: Skipping already-processed product 12/465: ean:5017403091028
+2026-04-08 04:09:50,843 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,844 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,844 INFO __main__: Skipping already-processed product 13/465: ean:5017403107644
+2026-04-08 04:09:50,849 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,849 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,850 INFO __main__: Skipping already-processed product 14/465: ean:5017403099659
+2026-04-08 04:09:50,854 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,855 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,855 INFO __main__: Skipping already-processed product 15/465: ean:5017403136422
+2026-04-08 04:09:50,860 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,860 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,861 INFO __main__: Skipping already-processed product 16/465: ean:5017403149064
+2026-04-08 04:09:50,865 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,866 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,866 INFO __main__: Skipping already-processed product 17/465: ean:5017403019442
+2026-04-08 04:09:50,875 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,876 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,876 INFO __main__: Skipping already-processed product 18/465: ean:5017403040057
+2026-04-08 04:09:50,881 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,881 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,882 INFO __main__: Skipping already-processed product 19/465: ean:5056338359384
+2026-04-08 04:09:50,887 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,888 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,889 INFO __main__: Skipping already-processed product 20/465: ean:5038673591452
+2026-04-08 04:09:50,897 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,898 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,906 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,907 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,908 INFO __main__: Skipping already-processed product 21/465: ean:5038673591414
+2026-04-08 04:09:50,915 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,916 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,917 INFO __main__: Skipping already-processed product 22/465: ean:5056170305297
+2026-04-08 04:09:50,922 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,923 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,923 INFO __main__: Skipping already-processed product 23/465: ean:5056239433329
+2026-04-08 04:09:50,928 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,928 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,929 INFO __main__: Skipping already-processed product 24/465: ean:5038673591193
+2026-04-08 04:09:50,933 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,934 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,934 INFO __main__: Skipping already-processed product 25/465: ean:5038673570136
+2026-04-08 04:09:50,939 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,939 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,940 INFO __main__: Skipping already-processed product 26/465: ean:5055319564496
+2026-04-08 04:09:50,945 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,946 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,946 INFO __main__: Skipping already-processed product 27/465: ean:5055319524216
+2026-04-08 04:09:50,957 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,958 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,958 INFO __main__: Skipping already-processed product 28/465: ean:5055319532129
+2026-04-08 04:09:50,963 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,964 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,964 INFO __main__: Skipping already-processed product 29/465: ean:5056338359889
+2026-04-08 04:09:50,969 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,970 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,970 INFO __main__: Skipping already-processed product 30/465: ean:5017403134015
+2026-04-08 04:09:50,975 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,976 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,981 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,982 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,982 INFO __main__: Skipping already-processed product 31/465: ean:5053249247151
+2026-04-08 04:09:50,987 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,988 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,988 INFO __main__: Skipping already-processed product 32/465: ean:5056338356666
+2026-04-08 04:09:50,992 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,993 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,994 INFO __main__: Skipping already-processed product 33/465: ean:5056239422118
+2026-04-08 04:09:50,998 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:50,998 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:50,999 INFO __main__: Skipping already-processed product 34/465: ean:5056239433343
+2026-04-08 04:09:51,003 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,004 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,004 INFO __main__: Skipping already-processed product 35/465: ean:5056239433411
+2026-04-08 04:09:51,009 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,010 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,010 INFO __main__: Skipping already-processed product 36/465: ean:5038673685649
+2026-04-08 04:09:51,015 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,016 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,017 INFO __main__: Skipping already-processed product 37/465: ean:5038673683898
+2026-04-08 04:09:51,022 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,023 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,023 INFO __main__: Skipping already-processed product 38/465: ean:5017403221241
+2026-04-08 04:09:51,030 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,032 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,032 INFO __main__: Skipping already-processed product 39/465: ean:5017403136248
+2026-04-08 04:09:51,037 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,038 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,038 INFO __main__: Skipping already-processed product 40/465: ean:5017403012849
+2026-04-08 04:09:51,044 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,044 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,049 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,050 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,051 INFO __main__: Skipping already-processed product 41/465: ean:5017403143109
+2026-04-08 04:09:51,055 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,056 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,057 INFO __main__: Skipping already-processed product 42/465: ean:5017403137900
+2026-04-08 04:09:51,062 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,063 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,063 INFO __main__: Skipping already-processed product 43/465: ean:5017403059998
+2026-04-08 04:09:51,068 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,069 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,069 INFO __main__: Skipping already-processed product 44/465: ean:5017403135944
+2026-04-08 04:09:51,074 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,075 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,076 INFO __main__: Skipping already-processed product 45/465: ean:5038673640761
+2026-04-08 04:09:51,082 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,082 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,083 INFO __main__: Skipping already-processed product 46/465: ean:5017403136408
+2026-04-08 04:09:51,093 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,109 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,110 INFO __main__: Skipping already-processed product 47/465: ean:5017403137207
+2026-04-08 04:09:51,159 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,198 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,199 INFO __main__: Skipping already-processed product 48/465: ean:5017403018162
+2026-04-08 04:09:51,214 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,217 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,218 INFO __main__: Skipping already-processed product 49/465: ean:5056239460158
+2026-04-08 04:09:51,224 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,227 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,227 INFO __main__: Skipping already-processed product 50/465: ean:5038673640976
+2026-04-08 04:09:51,236 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,237 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,246 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,247 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,247 INFO __main__: Skipping already-processed product 51/465: ean:5050565395412
+2026-04-08 04:09:51,252 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,254 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,254 INFO __main__: Skipping already-processed product 52/465: ean:5056239433428
+2026-04-08 04:09:51,259 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,260 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,260 INFO __main__: Skipping already-processed product 53/465: ean:5056239433381
+2026-04-08 04:09:51,265 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,266 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,266 INFO __main__: Skipping already-processed product 54/465: ean:5056338359445
+2026-04-08 04:09:51,272 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,272 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,273 INFO __main__: Skipping already-processed product 55/465: ean:5056338356598
+2026-04-08 04:09:51,280 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,281 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,282 INFO __main__: Skipping already-processed product 56/465: ean:5056239432049
+2026-04-08 04:09:51,291 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,292 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,293 INFO __main__: Skipping already-processed product 57/465: ean:5056338359377
+2026-04-08 04:09:51,301 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,302 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,303 INFO __main__: Skipping already-processed product 58/465: ean:5056239433046
+2026-04-08 04:09:51,310 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,311 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,311 INFO __main__: Skipping already-processed product 59/465: ean:5038673681368
+2026-04-08 04:09:51,317 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,318 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,319 INFO __main__: Skipping already-processed product 60/465: ean:5038673620077
+2026-04-08 04:09:51,324 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,325 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,331 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,332 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,332 INFO __main__: Skipping already-processed product 61/465: ean:5038673580104
+2026-04-08 04:09:51,337 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,338 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,339 INFO __main__: Skipping already-processed product 62/465: ean:5017403155645
+2026-04-08 04:09:51,343 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,344 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,345 INFO __main__: Skipping already-processed product 63/465: ean:5056175901166
+2026-04-08 04:09:51,349 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,350 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,351 INFO __main__: Skipping already-processed product 64/465: ean:5056170305655
+2026-04-08 04:09:51,356 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,356 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,357 INFO __main__: Skipping already-processed product 65/465: ean:5038673681559
+2026-04-08 04:09:51,362 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,363 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,363 INFO __main__: Skipping already-processed product 66/465: ean:5017403133995
+2026-04-08 04:09:51,368 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,369 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,369 INFO __main__: Skipping already-processed product 67/465: ean:5055319520904
+2026-04-08 04:09:51,374 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,375 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,375 INFO __main__: Skipping already-processed product 68/465: ean:5055319571357
+2026-04-08 04:09:51,380 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,380 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,381 INFO __main__: Skipping already-processed product 69/465: ean:5038673720739
+2026-04-08 04:09:51,386 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,386 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,387 INFO __main__: Skipping already-processed product 70/465: ean:5038673815091
+2026-04-08 04:09:51,391 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,392 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,397 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,398 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,398 INFO __main__: Skipping already-processed product 71/465: ean:5038673601458
+2026-04-08 04:09:51,403 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,404 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,404 INFO __main__: Skipping already-processed product 72/465: ean:5038673620046
+2026-04-08 04:09:51,409 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,410 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,411 INFO __main__: Skipping already-processed product 73/465: ean:5038673640969
+2026-04-08 04:09:51,419 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,420 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,420 INFO __main__: Skipping already-processed product 74/465: ean:5017403134961
+2026-04-08 04:09:51,425 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,426 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,427 INFO __main__: Skipping already-processed product 75/465: ean:5060298505507
+2026-04-08 04:09:51,433 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,434 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,434 INFO __main__: Skipping already-processed product 76/465: ean:5056239433350
+2026-04-08 04:09:51,439 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,440 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,441 INFO __main__: Skipping already-processed product 77/465: ean:5055319521895
+2026-04-08 04:09:51,446 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,447 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,448 INFO __main__: Skipping already-processed product 78/465: ean:5056338356659
+2026-04-08 04:09:51,453 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,454 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,455 INFO __main__: Skipping already-processed product 79/465: ean:5053249281391
+2026-04-08 04:09:51,461 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,466 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,467 INFO __main__: Skipping already-processed product 80/465: ean:5038673683218
+2026-04-08 04:09:51,473 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,474 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,480 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,481 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,481 INFO __main__: Skipping already-processed product 81/465: ean:5060298505774
+2026-04-08 04:09:51,487 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,488 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,488 INFO __main__: Skipping already-processed product 82/465: ean:5060298505217
+2026-04-08 04:09:51,493 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,494 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,495 INFO __main__: Skipping already-processed product 83/465: ean:5017403136361
+2026-04-08 04:09:51,500 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,501 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,502 INFO __main__: Skipping already-processed product 84/465: ean:5055319511216
+2026-04-08 04:09:51,507 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,508 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,509 INFO __main__: Skipping already-processed product 85/465: ean:5055319553896
+2026-04-08 04:09:51,514 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,515 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,516 INFO __main__: Skipping already-processed product 86/465: ean:5056338310644
+2026-04-08 04:09:51,522 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,522 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,523 INFO __main__: Skipping already-processed product 87/465: ean:5017403099611
+2026-04-08 04:09:51,529 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,530 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,530 INFO __main__: Skipping already-processed product 88/465: ean:5060298505767
+2026-04-08 04:09:51,536 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,536 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,537 INFO __main__: Skipping already-processed product 89/465: ean:5056239433336
+2026-04-08 04:09:51,542 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,543 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,543 INFO __main__: Skipping already-processed product 90/465: ean:5038673685595
+2026-04-08 04:09:51,549 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,549 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,555 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,556 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,556 INFO __main__: Skipping already-processed product 91/465: ean:5056239433244
+2026-04-08 04:09:51,561 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,562 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,563 INFO __main__: Skipping already-processed product 92/465: ean:5055319599542
+2026-04-08 04:09:51,569 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,570 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,571 INFO __main__: Skipping already-processed product 93/465: ean:5038673591162
+2026-04-08 04:09:51,576 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,577 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,577 INFO __main__: Skipping already-processed product 94/465: ean:5060298503398
+2026-04-08 04:09:51,582 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,583 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,583 INFO __main__: Skipping already-processed product 95/465: ean:5056239432070
+2026-04-08 04:09:51,589 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,590 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,590 INFO __main__: Skipping already-processed product 96/465: ean:5060298503695
+2026-04-08 04:09:51,596 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,597 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,597 INFO __main__: Skipping already-processed product 97/465: ean:5056239403421
+2026-04-08 04:09:51,603 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,604 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,605 INFO __main__: Skipping already-processed product 98/465: ean:5056338356888
+2026-04-08 04:09:51,610 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,611 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,611 INFO __main__: Skipping already-processed product 99/465: ean:5056338356918
+2026-04-08 04:09:51,617 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,618 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,619 INFO __main__: Skipping already-processed product 100/465: ean:5056239432087
+2026-04-08 04:09:51,624 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,625 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,631 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,632 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,632 INFO __main__: Skipping already-processed product 101/465: ean:5056338357823
+2026-04-08 04:09:51,639 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,640 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,641 INFO __main__: Skipping already-processed product 102/465: ean:5055319529501
+2026-04-08 04:09:51,646 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,647 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,648 INFO __main__: Skipping already-processed product 103/465: ean:5038673591469
+2026-04-08 04:09:51,655 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,656 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,656 INFO __main__: Skipping already-processed product 104/465: ean:5056175935192
+2026-04-08 04:09:51,662 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,663 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,664 INFO __main__: Skipping already-processed product 105/465: ean:5055319529495
+2026-04-08 04:09:51,670 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,671 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,671 INFO __main__: Skipping already-processed product 106/465: ean:5056338357519
+2026-04-08 04:09:51,678 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,679 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,679 INFO __main__: Skipping already-processed product 107/465: ean:5055319530750
+2026-04-08 04:09:51,685 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,686 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,687 INFO __main__: Skipping already-processed product 108/465: ean:5038673540719
+2026-04-08 04:09:51,692 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,694 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,694 INFO __main__: Skipping already-processed product 109/465: ean:5055319511254
+2026-04-08 04:09:51,700 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,700 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,701 INFO __main__: Skipping already-processed product 110/465: ean:5055319522397
+2026-04-08 04:09:51,706 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,707 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,713 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,714 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,714 INFO __main__: Skipping already-processed product 111/465: ean:5055319529143
+2026-04-08 04:09:51,720 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,721 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,721 INFO __main__: Skipping already-processed product 112/465: ean:5055319524247
+2026-04-08 04:09:51,728 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,728 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,729 INFO __main__: Skipping already-processed product 113/465: ean:5055319529051
+2026-04-08 04:09:51,736 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,737 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,737 INFO __main__: Skipping already-processed product 114/465: ean:5055319571371
+2026-04-08 04:09:51,742 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,743 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,744 INFO __main__: Skipping already-processed product 115/465: ean:5056338360274
+2026-04-08 04:09:51,749 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,750 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,751 INFO __main__: Skipping already-processed product 116/465: ean:5056338326294
+2026-04-08 04:09:51,757 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,758 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,758 INFO __main__: Skipping already-processed product 117/465: ean:5056338358110
+2026-04-08 04:09:51,763 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,764 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,765 INFO __main__: Skipping already-processed product 118/465: ean:5056338359964
+2026-04-08 04:09:51,770 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,771 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,771 INFO __main__: Skipping already-processed product 119/465: ean:5055319531139
+2026-04-08 04:09:51,777 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,779 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,779 INFO __main__: Skipping already-processed product 120/465: ean:5056338373519
+2026-04-08 04:09:51,785 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,786 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,791 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,791 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,792 INFO __main__: Skipping already-processed product 121/465: ean:5017403851509
+2026-04-08 04:09:51,797 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,799 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,799 INFO __main__: Skipping already-processed product 122/465: ean:5055319529754
+2026-04-08 04:09:51,805 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,806 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,806 INFO __main__: Skipping already-processed product 123/465: ean:5055319516594
+2026-04-08 04:09:51,812 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,813 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,814 INFO __main__: Skipping already-processed product 124/465: ean:5055319531429
+2026-04-08 04:09:51,819 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,820 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,821 INFO __main__: Skipping already-processed product 125/465: ean:5055319529129
+2026-04-08 04:09:51,827 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,828 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,828 INFO __main__: Skipping already-processed product 126/465: ean:5055319529457
+2026-04-08 04:09:51,834 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,835 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,835 INFO __main__: Skipping already-processed product 127/465: ean:5038673510019
+2026-04-08 04:09:51,841 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,842 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,842 INFO __main__: Skipping already-processed product 128/465: ean:5055319529105
+2026-04-08 04:09:51,848 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,849 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,849 INFO __main__: Skipping already-processed product 129/465: ean:5055319515610
+2026-04-08 04:09:51,855 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,856 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,856 INFO __main__: Skipping already-processed product 130/465: ean:5055319553919
+2026-04-08 04:09:51,862 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,863 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,868 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,869 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,870 INFO __main__: Skipping already-processed product 131/465: ean:5055319571203
+2026-04-08 04:09:51,875 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,876 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,876 INFO __main__: Skipping already-processed product 132/465: ean:5055319559737
+2026-04-08 04:09:51,881 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,882 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,883 INFO __main__: Skipping already-processed product 133/465: ean:5055319559706
+2026-04-08 04:09:51,890 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,891 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,891 INFO __main__: Skipping already-processed product 134/465: ean:5055319553902
+2026-04-08 04:09:51,899 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,900 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,900 INFO __main__: Skipping already-processed product 135/465: ean:5056239433367
+2026-04-08 04:09:51,905 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,906 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,906 INFO __main__: Skipping already-processed product 136/465: ean:5056239432094
+2026-04-08 04:09:51,910 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,911 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,912 INFO __main__: Skipping already-processed product 137/465: ean:5038673815114
+2026-04-08 04:09:51,916 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,916 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,917 INFO __main__: Skipping already-processed product 138/465: ean:5038673680514
+2026-04-08 04:09:51,921 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,922 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,923 INFO __main__: Skipping already-processed product 139/465: ean:5056170319287
+2026-04-08 04:09:51,928 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,928 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,929 INFO __main__: Skipping already-processed product 140/465: ean:5017403134978
+2026-04-08 04:09:51,933 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,934 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,939 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,940 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,940 INFO __main__: Skipping already-processed product 141/465: ean:5055319524698
+2026-04-08 04:09:51,946 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,946 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,947 INFO __main__: Skipping already-processed product 142/465: ean:5055319519052
+2026-04-08 04:09:51,952 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,954 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,955 INFO __main__: Skipping already-processed product 143/465: ean:5055319519007
+2026-04-08 04:09:51,963 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,964 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,965 INFO __main__: Skipping already-processed product 144/465: ean:5055319571265
+2026-04-08 04:09:51,973 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,974 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,975 INFO __main__: Skipping already-processed product 145/465: ean:5038673685618
+2026-04-08 04:09:51,983 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,985 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,986 INFO __main__: Skipping already-processed product 146/465: ean:5055319519106
+2026-04-08 04:09:51,993 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:51,994 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:51,994 INFO __main__: Skipping already-processed product 147/465: ean:5055319571326
+2026-04-08 04:09:52,000 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,002 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,002 INFO __main__: Skipping already-processed product 148/465: ean:5055319552424
+2026-04-08 04:09:52,008 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,009 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,010 INFO __main__: Skipping already-processed product 149/465: ean:5055319551649
+2026-04-08 04:09:52,017 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,018 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,018 INFO __main__: Skipping already-processed product 150/465: ean:5055319555159
+2026-04-08 04:09:52,024 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,025 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,031 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,031 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,032 INFO __main__: Skipping already-processed product 151/465: ean:5055319571364
+2026-04-08 04:09:52,038 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,039 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,040 INFO __main__: Skipping already-processed product 152/465: ean:5055319511056
+2026-04-08 04:09:52,045 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,046 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,046 INFO __main__: Skipping already-processed product 153/465: ean:5055319510707
+2026-04-08 04:09:52,052 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,053 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,054 INFO __main__: Skipping already-processed product 154/465: ean:5056338356864
+2026-04-08 04:09:52,060 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,061 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,061 INFO __main__: Skipping already-processed product 155/465: ean:5017403137139
+2026-04-08 04:09:52,067 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,068 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,068 INFO __main__: Skipping already-processed product 156/465: ean:5017403134336
+2026-04-08 04:09:52,074 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,075 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,076 INFO __main__: Skipping already-processed product 157/465: ean:6923456793460
+2026-04-08 04:09:52,081 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,082 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,083 INFO __main__: Skipping already-processed product 158/465: ean:5055319571968
+2026-04-08 04:09:52,088 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,089 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,090 INFO __main__: Skipping already-processed product 159/465: ean:5038673570181
+2026-04-08 04:09:52,095 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,096 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,096 INFO __main__: Skipping already-processed product 160/465: ean:5017403015192
+2026-04-08 04:09:52,101 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,102 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,107 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,108 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,109 INFO __main__: Skipping already-processed product 161/465: ean:5017403063940
+2026-04-08 04:09:52,114 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,115 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,116 INFO __main__: Skipping already-processed product 162/465: ean:5017403099673
+2026-04-08 04:09:52,121 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,122 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,123 INFO __main__: Skipping already-processed product 163/465: ean:5017403059943
+2026-04-08 04:09:52,128 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,129 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,130 INFO __main__: Skipping already-processed product 164/465: ean:5017403015307
+2026-04-08 04:09:52,135 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,136 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,136 INFO __main__: Skipping already-processed product 165/465: ean:5038673721392
+2026-04-08 04:09:52,141 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,142 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,143 INFO __main__: Skipping already-processed product 166/465: ean:5038673570167
+2026-04-08 04:09:52,148 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,149 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,149 INFO __main__: Skipping already-processed product 167/465: ean:5055319558235
+2026-04-08 04:09:52,154 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,155 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,156 INFO __main__: Skipping already-processed product 168/465: ean:5060298503718
+2026-04-08 04:09:52,161 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,161 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,162 INFO __main__: Skipping already-processed product 169/465: ean:5055319529488
+2026-04-08 04:09:52,167 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,168 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,168 INFO __main__: Skipping already-processed product 170/465: ean:5056338358516
+2026-04-08 04:09:52,173 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,174 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,179 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,180 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,181 INFO __main__: Skipping already-processed product 171/465: ean:5038673540108
+2026-04-08 04:09:52,186 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,187 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,187 INFO __main__: Skipping already-processed product 172/465: ean:5056170305327
+2026-04-08 04:09:52,192 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,193 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,194 INFO __main__: Skipping already-processed product 173/465: ean:5056338359148
+2026-04-08 04:09:52,199 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,200 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,200 INFO __main__: Skipping already-processed product 174/465: ean:5017403137894
+2026-04-08 04:09:52,206 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,207 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,207 INFO __main__: Skipping already-processed product 175/465: ean:5055319529082
+2026-04-08 04:09:52,212 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,213 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,213 INFO __main__: Skipping already-processed product 176/465: ean:5038673571768
+2026-04-08 04:09:52,218 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,219 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,220 INFO __main__: Skipping already-processed product 177/465: ean:5038673550138
+2026-04-08 04:09:52,226 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,226 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,227 INFO __main__: Skipping already-processed product 178/465: ean:5055319510967
+2026-04-08 04:09:52,232 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,233 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,234 INFO __main__: Skipping already-processed product 179/465: ean:5055319529211
+2026-04-08 04:09:52,244 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,245 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,254 INFO __main__: Skipping already-processed product 180/465: ean:5024418541622
+2026-04-08 04:09:52,386 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,387 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,409 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,413 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,414 INFO __main__: Skipping already-processed product 181/465: ean:5038673721071
+2026-04-08 04:09:52,421 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,422 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,423 INFO __main__: Skipping already-processed product 182/465: ean:5055319515597
+2026-04-08 04:09:52,437 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,438 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,439 INFO __main__: Skipping already-processed product 183/465: ean:5056170351386
+2026-04-08 04:09:52,462 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,465 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,468 INFO __main__: Skipping already-processed product 184/465: ean:5056170351348
+2026-04-08 04:09:52,481 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,485 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,485 INFO __main__: Skipping already-processed product 185/465: ean:5056170351355
+2026-04-08 04:09:52,500 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,501 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,504 INFO __main__: Skipping already-processed product 186/465: ean:5055319553889
+2026-04-08 04:09:52,513 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,515 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,516 INFO __main__: Skipping already-processed product 187/465: ean:5055319517492
+2026-04-08 04:09:52,524 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,525 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,526 INFO __main__: Skipping already-processed product 188/465: ean:5017403134008
+2026-04-08 04:09:52,534 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,536 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,536 INFO __main__: Skipping already-processed product 189/465: ean:5017403136309
+2026-04-08 04:09:52,543 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,545 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,545 INFO __main__: Skipping already-processed product 190/465: ean:5024418381969
+2026-04-08 04:09:52,552 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,553 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,559 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,560 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,560 INFO __main__: Skipping already-processed product 191/465: ean:5056170346757
+2026-04-08 04:09:52,566 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,567 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,568 INFO __main__: Skipping already-processed product 192/465: ean:5034537018448
+2026-04-08 04:09:52,573 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,574 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,575 INFO __main__: Skipping already-processed product 193/465: ean:5055319525794
+2026-04-08 04:09:52,581 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,582 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,582 INFO __main__: Skipping already-processed product 194/465: ean:5056338360168
+2026-04-08 04:09:52,588 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,589 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,589 INFO __main__: Skipping already-processed product 195/465: ean:5056338356642
+2026-04-08 04:09:52,595 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,595 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,596 INFO __main__: Skipping already-processed product 196/465: ean:5017403133629
+2026-04-08 04:09:52,602 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,605 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,607 INFO __main__: Skipping already-processed product 197/465: ean:5055319511971
+2026-04-08 04:09:52,619 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,623 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,624 INFO __main__: Skipping already-processed product 198/465: ean:5056170305747
+2026-04-08 04:09:52,633 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,634 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,635 INFO __main__: Skipping already-processed product 199/465: ean:5038673571775
+2026-04-08 04:09:52,643 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,644 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,645 INFO __main__: Skipping already-processed product 200/465: ean:5038673681566
+2026-04-08 04:09:52,652 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,653 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,659 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,660 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,662 INFO __main__: Skipping already-processed product 201/465: ean:5056170317771
+2026-04-08 04:09:52,669 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,670 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,671 INFO __main__: Skipping already-processed product 202/465: ean:5038673720173
+2026-04-08 04:09:52,676 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,677 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,678 INFO __main__: Skipping already-processed product 203/465: ean:5038673620107
+2026-04-08 04:09:52,683 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,684 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,685 INFO __main__: Skipping already-processed product 204/465: ean:5038673570174
+2026-04-08 04:09:52,690 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,691 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,691 INFO __main__: Skipping already-processed product 205/465: ean:5038673720647
+2026-04-08 04:09:52,696 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,697 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,698 INFO __main__: Skipping already-processed product 206/465: ean:5017403146124
+2026-04-08 04:09:52,703 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,704 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,704 INFO __main__: Skipping already-processed product 207/465: ean:5055319510684
+2026-04-08 04:09:52,711 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,712 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,713 INFO __main__: Skipping already-processed product 208/465: ean:5055319528801
+2026-04-08 04:09:52,719 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,720 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,720 INFO __main__: Skipping already-processed product 209/465: ean:5056338357366
+2026-04-08 04:09:52,727 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,728 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,728 INFO __main__: Skipping already-processed product 210/465: ean:5056338356697
+2026-04-08 04:09:52,735 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,736 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,744 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,745 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,745 INFO __main__: Skipping already-processed product 211/465: ean:5056338359872
+2026-04-08 04:09:52,751 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,752 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,753 INFO __main__: Skipping already-processed product 212/465: ean:5056338373533
+2026-04-08 04:09:52,759 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,760 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,761 INFO __main__: Skipping already-processed product 213/465: ean:5056338360045
+2026-04-08 04:09:52,767 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,768 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,769 INFO __main__: Skipping already-processed product 214/465: ean:5038673680781
+2026-04-08 04:09:52,775 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,776 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,777 INFO __main__: Skipping already-processed product 215/465: ean:5038673510057
+2026-04-08 04:09:52,782 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,783 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,784 INFO __main__: Skipping already-processed product 216/465: ean:5038673571744
+2026-04-08 04:09:52,789 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,791 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,791 INFO __main__: Skipping already-processed product 217/465: ean:9333527002938
+2026-04-08 04:09:52,797 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,798 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,798 INFO __main__: Skipping already-processed product 218/465: ean:5053249248714
+2026-04-08 04:09:52,804 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,805 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,806 INFO __main__: Skipping already-processed product 219/465: ean:5050375038066
+2026-04-08 04:09:52,811 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,812 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,813 INFO __main__: Skipping already-processed product 220/465: ean:5017403155850
+2026-04-08 04:09:52,818 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,819 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,824 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,825 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,825 INFO __main__: Skipping already-processed product 221/465: ean:5060298504531
+2026-04-08 04:09:52,830 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,832 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,833 INFO __main__: Skipping already-processed product 222/465: ean:5053249248110
+2026-04-08 04:09:52,840 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,841 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,841 INFO __main__: Skipping already-processed product 223/465: ean:5056239432018
+2026-04-08 04:09:52,847 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,849 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,849 INFO __main__: Skipping already-processed product 224/465: ean:5053249246659
+2026-04-08 04:09:52,856 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,857 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,857 INFO __main__: Skipping already-processed product 225/465: ean:5053249252414
+2026-04-08 04:09:52,862 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,863 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,864 INFO __main__: Skipping already-processed product 226/465: ean:5053249240992
+2026-04-08 04:09:52,869 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,870 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,870 INFO __main__: Skipping already-processed product 227/465: ean:5038673685625
+2026-04-08 04:09:52,875 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,876 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,876 INFO __main__: Skipping already-processed product 228/465: ean:5056338356871
+2026-04-08 04:09:52,882 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,883 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,883 INFO __main__: Skipping already-processed product 229/465: ean:5056239422088
+2026-04-08 04:09:52,888 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,889 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,890 INFO __main__: Skipping already-processed product 230/465: ean:5038673521671
+2026-04-08 04:09:52,894 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,895 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,900 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,901 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,902 INFO __main__: Skipping already-processed product 231/465: ean:5024418549734
+2026-04-08 04:09:52,906 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,907 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,908 INFO __main__: Skipping already-processed product 232/465: ean:5056338310323
+2026-04-08 04:09:52,913 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,914 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,914 INFO __main__: Skipping already-processed product 233/465: ean:5056338360267
+2026-04-08 04:09:52,919 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,920 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,921 INFO __main__: Skipping already-processed product 234/465: ean:5038673540740
+2026-04-08 04:09:52,925 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,926 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,926 INFO __main__: Skipping already-processed product 235/465: ean:5038673542195
+2026-04-08 04:09:52,931 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,932 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,933 INFO __main__: Skipping already-processed product 236/465: ean:5038673684888
+2026-04-08 04:09:52,937 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,937 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,938 INFO __main__: Skipping already-processed product 237/465: ean:5017403339007
+2026-04-08 04:09:52,943 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,944 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,944 INFO __main__: Skipping already-processed product 238/465: ean:5017403028666
+2026-04-08 04:09:52,951 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,952 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,953 INFO __main__: Skipping already-processed product 239/465: ean:5017403136286
+2026-04-08 04:09:52,959 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,960 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,961 INFO __main__: Skipping already-processed product 240/465: ean:5055319517348
+2026-04-08 04:09:52,967 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,968 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,975 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,976 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,977 INFO __main__: Skipping already-processed product 241/465: ean:5055319517508
+2026-04-08 04:09:52,983 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,984 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,984 INFO __main__: Skipping already-processed product 242/465: ean:5056239432032
+2026-04-08 04:09:52,991 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:52,993 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:52,993 INFO __main__: Skipping already-processed product 243/465: ean:5056239432025
+2026-04-08 04:09:53,002 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,003 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,004 INFO __main__: Skipping already-processed product 244/465: ean:5038673560052
+2026-04-08 04:09:53,012 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,013 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,014 INFO __main__: Skipping already-processed product 245/465: ean:5055319558242
+2026-04-08 04:09:53,022 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,023 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,024 INFO __main__: Skipping already-processed product 246/465: ean:5017403841982
+2026-04-08 04:09:53,031 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,032 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,033 INFO __main__: Skipping already-processed product 247/465: ean:5013748035420
+2026-04-08 04:09:53,040 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,042 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,043 INFO __main__: Skipping already-processed product 248/465: ean:5017403123026
+2026-04-08 04:09:53,049 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,052 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,053 INFO __main__: Skipping already-processed product 249/465: ean:5013748062600
+2026-04-08 04:09:53,061 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,063 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,064 INFO __main__: Skipping already-processed product 250/465: ean:5038673631516
+2026-04-08 04:09:53,070 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,073 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,087 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,090 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,091 INFO __main__: Skipping already-processed product 251/465: ean:5055319529228
+2026-04-08 04:09:53,102 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,103 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,104 INFO __main__: Skipping already-processed product 252/465: ean:5050375031784
+2026-04-08 04:09:53,115 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,116 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,117 INFO __main__: Skipping already-processed product 253/465: ean:5055319511230
+2026-04-08 04:09:53,130 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,132 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,133 INFO __main__: Skipping already-processed product 254/465: ean:6923456813588
+2026-04-08 04:09:53,141 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,143 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,144 INFO __main__: Skipping already-processed product 255/465: ean:5038673720692
+2026-04-08 04:09:53,155 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,156 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,157 INFO __main__: Skipping already-processed product 256/465: ean:5038673680644
+2026-04-08 04:09:53,165 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,166 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,167 INFO __main__: Skipping already-processed product 257/465: ean:5056338357250
+2026-04-08 04:09:53,176 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,177 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,177 INFO __main__: Skipping already-processed product 258/465: ean:5056338357410
+2026-04-08 04:09:53,190 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,191 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,192 INFO __main__: Skipping already-processed product 259/465: ean:5055319530378
+2026-04-08 04:09:53,201 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,202 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,203 INFO __main__: Skipping already-processed product 260/465: ean:5034537018462
+2026-04-08 04:09:53,218 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,219 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,226 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,227 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,228 INFO __main__: Skipping already-processed product 261/465: ean:5055319515641
+2026-04-08 04:09:53,235 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,237 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,238 INFO __main__: Skipping already-processed product 262/465: ean:5017403136439
+2026-04-08 04:09:53,244 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,246 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,246 INFO __main__: Skipping already-processed product 263/465: ean:5034537018424
+2026-04-08 04:09:53,253 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,254 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,255 INFO __main__: Skipping already-processed product 264/465: ean:5053249241876
+2026-04-08 04:09:53,261 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,262 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,263 INFO __main__: Skipping already-processed product 265/465: ean:5055319529730
+2026-04-08 04:09:53,269 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,270 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,271 INFO __main__: Skipping already-processed product 266/465: ean:5056239401014
+2026-04-08 04:09:53,278 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,279 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,280 INFO __main__: Skipping already-processed product 267/465: ean:5053249240404
+2026-04-08 04:09:53,286 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,288 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,288 INFO __main__: Skipping already-processed product 268/465: ean:5017403136279
+2026-04-08 04:09:53,295 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,296 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,297 INFO __main__: Skipping already-processed product 269/465: ean:5056338357892
+2026-04-08 04:09:53,303 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,304 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,305 INFO __main__: Skipping already-processed product 270/465: ean:5053249281377
+2026-04-08 04:09:53,311 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,312 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,318 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,319 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,320 INFO __main__: Skipping already-processed product 271/465: ean:5055319528559
+2026-04-08 04:09:53,326 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,327 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,327 INFO __main__: Skipping already-processed product 272/465: ean:5056338357557
+2026-04-08 04:09:53,334 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,336 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,336 INFO __main__: Skipping already-processed product 273/465: ean:5055319511223
+2026-04-08 04:09:53,344 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,345 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,345 INFO __main__: Skipping already-processed product 274/465: ean:5038673601380
+2026-04-08 04:09:53,353 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,354 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,355 INFO __main__: Skipping already-processed product 275/465: ean:5038673683201
+2026-04-08 04:09:53,362 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,363 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,364 INFO __main__: Skipping already-processed product 276/465: ean:5050796010979
+2026-04-08 04:09:53,370 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,371 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,372 INFO __main__: Skipping already-processed product 277/465: ean:5055319517485
+2026-04-08 04:09:53,379 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,380 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,381 INFO __main__: Skipping already-processed product 278/465: ean:5060298504470
+2026-04-08 04:09:53,387 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,388 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,388 INFO __main__: Skipping already-processed product 279/465: ean:5038673551005
+2026-04-08 04:09:53,394 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,395 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,395 INFO __main__: Skipping already-processed product 280/465: ean:5055319528795
+2026-04-08 04:09:53,401 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,402 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,407 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,409 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,409 INFO __main__: Skipping already-processed product 281/465: ean:5038673601144
+2026-04-08 04:09:53,416 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,417 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,418 INFO __main__: Skipping already-processed product 282/465: ean:5038673685885
+2026-04-08 04:09:53,424 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,425 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,426 INFO __main__: Skipping already-processed product 283/465: ean:5060298505415
+2026-04-08 04:09:53,433 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,435 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,436 INFO __main__: Skipping already-processed product 284/465: ean:5060298503725
+2026-04-08 04:09:53,444 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,446 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,446 INFO __main__: Skipping already-processed product 285/465: ean:5038673591476
+2026-04-08 04:09:53,530 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,532 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,533 INFO __main__: Skipping already-processed product 286/465: ean:5050796011228
+2026-04-08 04:09:53,641 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,648 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,649 INFO __main__: Skipping already-processed product 287/465: ean:5060298504524
+2026-04-08 04:09:53,669 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,674 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,677 INFO __main__: Skipping already-processed product 288/465: ean:5050375000254
+2026-04-08 04:09:53,688 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,692 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,692 INFO __main__: Skipping already-processed product 289/465: ean:5017403137191
+2026-04-08 04:09:53,699 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,700 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,701 INFO __main__: Skipping already-processed product 290/465: ean:5050796011921
+2026-04-08 04:09:53,707 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,708 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,714 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,715 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,715 INFO __main__: Skipping already-processed product 291/465: ean:5017403017981
+2026-04-08 04:09:53,722 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,723 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,724 INFO __main__: Skipping already-processed product 292/465: ean:5017403129547
+2026-04-08 04:09:53,730 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,732 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,733 INFO __main__: Skipping already-processed product 293/465: ean:5038673720258
+2026-04-08 04:09:53,739 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,740 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,740 INFO __main__: Skipping already-processed product 294/465: ean:5017403136392
+2026-04-08 04:09:53,746 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,747 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,747 INFO __main__: Skipping already-processed product 295/465: ean:5038673720753
+2026-04-08 04:09:53,753 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,753 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,754 INFO __main__: Skipping already-processed product 296/465: ean:5060298505491
+2026-04-08 04:09:53,760 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,761 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,762 INFO __main__: Skipping already-processed product 297/465: ean:5038673680545
+2026-04-08 04:09:53,767 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,768 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,769 INFO __main__: Skipping already-processed product 298/465: ean:5060298504500
+2026-04-08 04:09:53,784 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,785 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,786 INFO __main__: Skipping already-processed product 299/465: ean:5060298503466
+2026-04-08 04:09:53,792 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,793 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,794 INFO __main__: Skipping already-processed product 300/465: ean:5060298505958
+2026-04-08 04:09:53,800 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,801 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,808 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,809 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,810 INFO __main__: Skipping already-processed product 301/465: ean:5038673610337
+2026-04-08 04:09:53,817 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,818 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,819 INFO __main__: Skipping already-processed product 302/465: ean:5056338357144
+2026-04-08 04:09:53,825 INFO windows_save_guardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__4e269fb4_processing_state.json (27 entries) saved successfully
+2026-04-08 04:09:53,826 INFO utils.fixed_enhanced_state_manager:  ATOMIC SAVE
+2026-04-08 04:09:53,827 INFO tools.amazon_playwright_extractor: Searching Amazon by EAN: 5050796011938 for supplier product: 'BRIGHT & HOMELY HEAVY DUTY BUNGEE CORD 52 INCH' (FixedAmazonExtractor)
+2026-04-08 04:09:53,827 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for EAN: 5050796011938
+2026-04-08 04:09:58,610 INFO tools.amazon_playwright_extractor: Waiting for search results page to load for EAN 5050796011938...
+2026-04-08 04:09:58,836 INFO tools.amazon_playwright_extractor: Found search results container with selector: div.s-search-results
+2026-04-08 04:09:59,506 INFO tools.amazon_playwright_extractor: Found 6 search result elements using selector: div[data-component-type='s-search-result']
+2026-04-08 04:09:59,506 INFO tools.amazon_playwright_extractor: Processing 6 search result elements for EAN 5050796011938
+2026-04-08 04:09:59,954 INFO tools.amazon_playwright_extractor: 📊 SPONSORED FILTERING RESULTS: 0 organic products, 6 sponsored products filtered out
+2026-04-08 04:09:59,955 WARNING tools.amazon_playwright_extractor: EAN 5050796011938 returned no organic results - skipping
+2026-04-08 04:09:59,955 WARNING tools.amazon_playwright_extractor: No Amazon results or error for EAN '5050796011938'. Details: no_organic_results
+2026-04-08 04:09:59,955 INFO tools.amazon_playwright_extractor: Falling back to title search for supplier product: 'BRIGHT & HOMELY HEAVY DUTY BUNGEE CORD 52 INCH'
+2026-04-08 04:09:59,955 INFO tools.amazon_playwright_extractor: Searching Amazon by title using search bar: 'BRIGHT & HOMELY HEAVY DUTY BUNGEE CORD 52 INCH'
+2026-04-08 04:09:59,955 INFO tools.amazon_playwright_extractor: Navigating to Amazon UK to search for title: BRIGHT & HOMELY HEAVY DUTY BUNGEE CORD 52 INCH
+2026-04-08 04:10:06,286 INFO tools.amazon_playwright_extractor: Title search found 71 elements using selector: div.s-search-results > div[data-asin]
+2026-04-08 04:10:06,705 WARNING tools.amazon_playwright_extractor: ASIN extraction failed: All 4 fallbacks exhausted
+2026-04-08 04:10:07,118 INFO tools.amazon_playwright_extractor: ✅ Title search: Selected first visible organic product - ASIN B0BNSYTLK9
+2026-04-08 04:10:07,119 INFO tools.amazon_playwright_extractor: 🎯 ASIN EXTRACTION SUCCESS: Found 1 ASINs for title search: 'BRIGHT & HOMELY HEAVY DUTY BUNGEE CORD 52 INCH'
+2026-04-08 04:10:07,119 INFO tools.amazon_playwright_extractor: Title search successful for 'BRIGHT & HOMELY HEAVY DUTY BUNGEE CORD 52 INCH' after EAN '5050796011938' failed
+2026-04-08 04:10:07,119 INFO tools.amazon_playwright_extractor: Extracting complete data for fallback ASIN B0BNSYTLK9 from title search
+2026-04-08 04:10:07,119 WARNING tools.amazon_playwright_extractor: No page object provided to extract_data for ASIN B0BNSYTLK9. Getting a new one from BrowserManager.
+2026-04-08 04:10:07,119 INFO tools.amazon_playwright_extractor: Reusing existing page: https://www.amazon.co.uk/s?k=BRIGHT+%26+HOMELY+HEAVY+DUTY+BUNGEE+CORD+52+INCH&ref=nb_sb_noss
+2026-04-08 04:10:09,727 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-04-08 04:10:10,039 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-08 04:10:11,047 INFO tools.amazon_playwright_extractor: Checking for CAPTCHA...
+2026-04-08 04:10:14,058 INFO tools.amazon_playwright_extractor: No CAPTCHA page detected by form selector.
+2026-04-08 04:10:14,058 INFO tools.amazon_playwright_extractor: Checking for cookie consent pop-up...
+2026-04-08 04:10:14,174 INFO tools.amazon_playwright_extractor: Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-08 04:10:14,174 INFO tools.amazon_playwright_extractor: Page should be ready. Waiting 5s for stabilization...
+2026-04-08 04:10:19,176 INFO tools.amazon_playwright_extractor: Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-04-08 04:10:26,192 INFO tools.amazon_playwright_extractor: Extracting all product data for ASIN: B0BNSYTLK9
+2026-04-08 04:10:26,192 INFO tools.amazon_playwright_extractor: Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-04-08 04:10:26,234 INFO tools.amazon_playwright_extractor: Title found: 'Xtremeauto Bungee Cords With Hooks 𝐉𝐮𝐦𝐛𝐨 𝐏𝐚𝐜𝐤 Of 12 Heavy Duty [𝐌𝐢𝐥𝐢𝐭𝐚𝐫𝐲 𝐆𝐫𝐚𝐝𝐞] Bungee Cord, UV Resistant Double Braided Elastic Bungee Straps For Securing Tarps Luggage Tents' via #productTitle
+2026-04-08 04:10:26,234 INFO tools.amazon_playwright_extractor: Extracting price details...
+2026-04-08 04:10:26,268 INFO tools.amazon_playwright_extractor: Current price: 9.99 via #corePrice_feature_div .a-offscreen
+2026-04-08 04:10:26,432 INFO tools.amazon_playwright_extractor: Amazon sales badge found: 700 in container div#socialProofingAsinFaceout_feature_div
+2026-04-08 04:10:26,432 INFO tools.amazon_playwright_extractor: Extracting image URLs...
+2026-04-08 04:10:26,497 INFO tools.amazon_playwright_extractor: Main image: https://m.media-amazon.com/images/I/81KEjgWiO4L._AC_SL1500_.jpg via #landingImage
+2026-04-08 04:10:26,657 INFO tools.amazon_playwright_extractor: Found 7 thumbnails.
+2026-04-08 04:10:26,665 INFO tools.amazon_playwright_extractor: Extracting Amazon product details section...
+2026-04-08 04:10:26,829 INFO tools.amazon_playwright_extractor: Extracting sales rank information...
+2026-04-08 04:10:27,275 INFO tools.amazon_playwright_extractor: Extracting ratings and reviews...
+2026-04-08 04:10:27,329 INFO tools.amazon_playwright_extractor: Rating: 4.4 via #acrPopover[title*='out of 5 stars']
+2026-04-08 04:10:27,362 INFO tools.amazon_playwright_extractor: Review count: 1223 via #acrCustomerReviewText
+2026-04-08 04:10:27,362 INFO tools.amazon_playwright_extractor: Extracting stock information...
+2026-04-08 04:10:27,402 INFO tools.amazon_playwright_extractor: Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-04-08 04:10:27,403 INFO tools.amazon_playwright_extractor: Extracting features/bullets...
+2026-04-08 04:10:27,760 INFO tools.amazon_playwright_extractor: Found 5 features.
+2026-04-08 04:10:27,760 INFO tools.amazon_playwright_extractor: Extracting product description...
+2026-04-08 04:10:27,815 INFO tools.amazon_playwright_extractor: Description found using selector: #aplus_feature_div
+2026-04-08 04:10:27,816 INFO tools.amazon_playwright_extractor: Extracting product specifications table...
+2026-04-08 04:10:28,840 INFO tools.amazon_playwright_extractor: Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-04-08 04:10:28,840 INFO tools.amazon_playwright_extractor: Extracting SellerAmp data (if present)...
+2026-04-08 04:10:28,841 INFO tools.amazon_playwright_extractor: SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-04-08 04:10:28,841 INFO tools.amazon_playwright_extractor: Extracting Keepa data (if present)...
+2026-04-08 04:10:28,841 INFO tools.amazon_playwright_extractor: Attempting to extract Keepa data...

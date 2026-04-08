@@ -1,0 +1,956 @@
+2026-04-07 06:53:45,502 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale-co-uk__sandbox__5c16a91c_20260407_065345.log
+2026-04-07 06:53:45,502 - __main__ - INFO - 📋 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_poundwholesale-co-uk__sandbox__5c16a91c_20260407_065345.log
+2026-04-07 06:53:45,506 - __main__ - DEBUG - Debug logging initialized - full system execution details will be captured
+2026-04-07 06:53:45,507 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-04-07 06:53:45,507 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2026-04-07 06:53:46,141 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2026-04-07 06:53:46,141 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-04-07 06:53:48,178 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]
+2026-04-07 06:53:48,186 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/146.0.7680.178
+2026-04-07 06:53:48,187 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2026-04-07 06:53:50,203 - utils.browser_manager - DEBUG - ?? Using IPv4 endpoint for CDP connection
+2026-04-07 06:53:50,204 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+2026-04-07 06:53:50,644 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2026-04-07 06:53:50,645 - utils.browser_manager - INFO - ?? Using existing context with 2 pages
+2026-04-07 06:53:50,645 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 146.0.7680.178
+2026-04-07 06:53:50,645 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:53:50,645 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.amazon.co.uk/dp/B0DLWBCD36?th=1).
+2026-04-07 06:53:50,645 - __main__ - INFO - 🔐 Initializing Poundwholesale authentication helper...
+2026-04-07 06:53:50,645 - __main__ - INFO - ✅ Using hardcoded credentials for poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:53:50,645 - __main__ - INFO - 🌐 Connecting to existing Chrome debug port 9222 for authentication...
+2026-04-07 06:54:11,818 - tools.standalone_playwright_login - INFO - 🔍 Verifying price access...
+2026-04-07 06:54:16,216 - tools.standalone_playwright_login - INFO - ✅ Price access confirmed: £0.99
+2026-04-07 06:54:16,216 - tools.poundwholesale.supplier_authentication_service - INFO - ✅ Price access verified - user is authenticated
+2026-04-07 06:54:16,216 - __main__ - INFO - ✅ Already authenticated!
+2026-04-07 06:54:16,220 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2026-04-07 06:54:16,221 - PassiveExtractionWorkflow - INFO -  DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2026-04-07 06:54:16,222 - PassiveExtractionWorkflow - INFO -  DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2026-04-07 06:54:16,222 - PassiveExtractionWorkflow - INFO -  Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-04-07 06:54:16,223 - PassiveExtractionWorkflow - INFO -  Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-04-07 06:54:16,224 - PassiveExtractionWorkflow - INFO -  Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:54:16,227 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 16 products in poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:16,228 - PassiveExtractionWorkflow - INFO -  State manager initialized with accurate totals: 16 products, 0 categories
+2026-04-07 06:54:16,229 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2026-04-07 06:54:16,229 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-04-07 06:54:16,233 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-04-07 06:54:16,233 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2026-04-07 06:54:16,234 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-04-07 06:54:16,234 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-04-07 06:54:16,234 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2026-04-07 06:54:16,234 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2026-04-07 06:54:16,234 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2026-04-07 06:54:16,235 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-04-07 06:54:16,235 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2026-04-07 06:54:16,235 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2026-04-07 06:54:16,235 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map initialized as type: <class 'list'>
+2026-04-07 06:54:16,236 - PassiveExtractionWorkflow - INFO - ?? HashLookupOptimizer initialized - ready for O(1) lookups
+2026-04-07 06:54:16,236 - PassiveExtractionWorkflow - INFO -  Hash-based lookup optimization system initialized
+2026-04-07 06:54:16,236 - PassiveExtractionWorkflow - INFO -  SENTINEL MONITORING: Proactive monitoring system initialized
+2026-04-07 06:54:16,238 - PassiveExtractionWorkflow - INFO -  WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2026-04-07 06:54:16,238 - PassiveExtractionWorkflow - INFO -  Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2026-04-07 06:54:16,238 - PassiveExtractionWorkflow - INFO -  Initialization validation passed - all critical attributes verified
+2026-04-07 06:54:16,239 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: poundwholesale.co.uk__sandbox__5c16a91c ---
+2026-04-07 06:54:16,239 - PassiveExtractionWorkflow - INFO - Session ID: poundwholesale.co.uk__sandbox__5c16a91c_20260407_065416
+2026-04-07 06:54:16,239 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:54:16,239 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 2 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\98a1de87-1018-4933-8268-093b6bbad021\categories_subset.json
+2026-04-07 06:54:16,240 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-04-07 06:54:16,241 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk__sandbox__5c16a91c - resumption from index 10
+2026-04-07 06:54:16,241 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-04-07 06:54:16,241 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2026-04-07 06:54:16,242 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 16 actual products in cache (total entries: 16)
+2026-04-07 06:54:16,245 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 1 categories
+2026-04-07 06:54:16,245 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2026-04-07 06:54:16,245 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2026-04-07 06:54:16,246 - utils.fixed_enhanced_state_manager - INFO -  STARTUP CHECK: is_fresh_start flag is 'False'
+2026-04-07 06:54:16,246 - utils.fixed_enhanced_state_manager - INFO -  Loaded 230 category URLs from config
+2026-04-07 06:54:16,247 - utils.fixed_enhanced_state_manager - INFO -  START MODE: is_fresh_start=False, pci=1, session_cursor=1, url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets...
+2026-04-07 06:54:16,247 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=0 (reason: system_progression)
+2026-04-07 06:54:16,248 - utils.fixed_enhanced_state_manager - INFO -  Loaded 230 category URLs from config
+2026-04-07 06:54:16,249 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:16,249 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:16,249 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:16,249 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:16,249 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:16,250 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:16,261 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:16,262 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:16,262 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:16,262 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=10/10
+2026-04-07 06:54:16,262 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - INFO -  STARTUP GATING COMPLETE: session_cursor=1, startup_completed=True
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Completed comprehensive state analysis
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:16,263 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:16,264 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:16,264 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:16,266 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:16,271 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:16,272 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=10/10
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (manifest)
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - INFO -  FIRST AFTER-RESUME KEY: phase=supplier cat=1/2 prod=10/10 commit_type=manifest
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (manifest): cat=1/2 prod=10/10 phase=supplier
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:16,273 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:16,274 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:16,275 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:16,281 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:16,282 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:16,282 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:16,283 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=10/10
+2026-04-07 06:54:16,283 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:16,283 - PassiveExtractionWorkflow - INFO -  FROZEN TOTAL CATEGORIES set to 2 (hash=4f000051)
+2026-04-07 06:54:16,283 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:16,283 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:16,283 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:16,283 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:16,284 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:16,284 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:16,290 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:16,293 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:16,293 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:16,293 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets prod_idx=10/10
+2026-04-07 06:54:16,293 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:16,294 - PassiveExtractionWorkflow - WARNING -  RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2026-04-07 06:54:16,294 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2026-04-07 06:54:16,294 - PassiveExtractionWorkflow - INFO -  RESUMPTION POINT CONFIRMED: Starting from category index 1 at product 10 in phase 'supplier'.
+2026-04-07 06:54:16,294 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to supplier extraction phase
+2026-04-07 06:54:16,294 - PassiveExtractionWorkflow - INFO -  B.3_USING EXISTING FROZEN DENOMINATOR: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets  10 products
+2026-04-07 06:54:16,295 - PassiveExtractionWorkflow - INFO -  B.3_USING EXISTING FROZEN DENOMINATOR: https://www.poundwholesale.co.uk/toys/wholesale-big-boys-toys-gadgets  10 products
+2026-04-07 06:54:16,295 - PassiveExtractionWorkflow - DEBUG - PTR print suppressed at workflow; state manager will emit gated proofs
+2026-04-07 06:54:16,295 - PassiveExtractionWorkflow - INFO -  CONFIGURATION VALUES:
+2026-04-07 06:54:16,295 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2026-04-07 06:54:16,295 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 2000
+2026-04-07 06:54:16,296 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2026-04-07 06:54:16,296 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2026-04-07 06:54:16,296 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2026-04-07 06:54:16,296 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2026-04-07 06:54:16,297 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-04-07 06:54:16,297 - utils.fixed_enhanced_state_manager - INFO - Loaded state for poundwholesale.co.uk__sandbox__5c16a91c - resumption from index 0
+2026-04-07 06:54:16,297 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-04-07 06:54:16,297 - utils.fixed_enhanced_state_manager - INFO - Startup analysis already completed for this session
+2026-04-07 06:54:16,298 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-04-07 06:54:16,298 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'supplier'
+2026-04-07 06:54:16,298 - PassiveExtractionWorkflow - INFO -  WORKFLOW START CURSOR: category_index=1 (pci=1, cursor=1, max=1)
+2026-04-07 06:54:16,298 - PassiveExtractionWorkflow - INFO -  WORKFLOW INITIALIZED: Starting from category 1 in phase 'supplier'
+2026-04-07 06:54:16,300 - PassiveExtractionWorkflow - INFO -  No existing linking map found at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json - Creating new map
+2026-04-07 06:54:16,300 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 0 EANs, 0 URLs, 0 ASINs in 0.000s
+2026-04-07 06:54:16,300 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2026-04-07 06:54:16,300 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:54:16,301 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 2 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\98a1de87-1018-4933-8268-093b6bbad021\categories_subset.json
+2026-04-07 06:54:16,302 - PassiveExtractionWorkflow - INFO -  INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=2000
+2026-04-07 06:54:16,302 - PassiveExtractionWorkflow - INFO -  Processing ALL 2 predefined categories (infinite mode)
+2026-04-07 06:54:16,302 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING MODE: Enabled (resume_context=True)
+2026-04-07 06:54:16,302 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING: Mode configuration loaded
+2026-04-07 06:54:16,302 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2026-04-07 06:54:16,303 - PassiveExtractionWorkflow - INFO -  HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2026-04-07 06:54:16,303 - PassiveExtractionWorkflow - INFO -  Processing chunk 1: categories 1-1
+2026-04-07 06:54:16,303 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 16 products in poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:16,305 - PassiveExtractionWorkflow - INFO -  CHUNK CACHE REFERENCE: 16 cached products exist for current chunk categories  performing fresh extraction to detect updates
+2026-04-07 06:54:16,305 - PassiveExtractionWorkflow - INFO -  CHUNK CATEGORIES: ['https://www.poundwholesale.co.uk/health-beauty/wholesale-optical']
+2026-04-07 06:54:16,305 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-04-07 06:54:16,305 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-04-07 06:54:16,306 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 16 products in poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:16,306 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 16 products available for progress tracking
+2026-04-07 06:54:16,306 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 1 categories starting from index 1
+2026-04-07 06:54:16,306 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 1 categories in 1 batches
+2026-04-07 06:54:16,307 - PassiveExtractionWorkflow - INFO -  Processing category batch 1/1 (1 categories)
+2026-04-07 06:54:16,307 - PassiveExtractionWorkflow - INFO -  LOGIN SCRIPT TRIGGER: Checking authentication before category_batch_1
+2026-04-07 06:54:16,307 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:16,307 - utils.browser_manager - INFO - ?? Reusing matching page in persistent context for https://www.poundwholesale.co.uk
+2026-04-07 06:54:16,308 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/sealapack-turkey-roasting-bags-2-pack).
+2026-04-07 06:54:16,308 - utils.browser_manager - INFO - ?? Navigating to https://www.poundwholesale.co.uk
+2026-04-07 06:54:18,076 - utils.browser_manager - INFO - ? Page ready for https://www.poundwholesale.co.uk
+2026-04-07 06:54:18,076 - tools.poundwholesale.supplier_authentication_service - INFO - 🔍 Checking current authentication status...
+2026-04-07 06:54:18,530 - tools.poundwholesale.supplier_authentication_service - INFO - ✅ Authentication confirmed via selector: .customer-welcome
+2026-04-07 06:54:18,531 - tools.poundwholesale.supplier_authentication_service - INFO - ✅ Already authenticated - no login required
+2026-04-07 06:54:18,531 - PassiveExtractionWorkflow - INFO -  LOGIN SCRIPT SUCCESS: Authentication verified for category_batch_1
+2026-04-07 06:54:18,531 - PassiveExtractionWorkflow - INFO - Scraping category: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:18,532 - configurable_supplier_scraper - INFO - ✅ Loaded VALIDATED supplier package selectors for poundwholesale.co.uk from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\suppliers\poundwholesale-co-uk\config\product_selectors.json
+2026-04-07 06:54:18,532 - configurable_supplier_scraper - INFO - 🔗 Using URL pagination for www.poundwholesale.co.uk
+2026-04-07 06:54:18,532 - configurable_supplier_scraper - INFO - Collecting product URLs from paginated pages starting at: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:18,532 - configurable_supplier_scraper - INFO - Processing page 1: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:18,532 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical (attempt 1/3)
+2026-04-07 06:54:18,532 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:18,533 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.google.com/).
+2026-04-07 06:54:18,533 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:19,494 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-optical in 1.70s...
+2026-04-07 06:54:21,201 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical (attempt 2/3)
+2026-04-07 06:54:21,201 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:21,201 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/).
+2026-04-07 06:54:21,201 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:23,830 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-optical in 3.48s...
+2026-04-07 06:54:27,318 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical (attempt 3/3)
+2026-04-07 06:54:27,319 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:27,319 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical).
+2026-04-07 06:54:27,319 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:29,180 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:29,180 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:29,401 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-optical (Size: 639326 bytes)
+2026-04-07 06:54:29,739 - configurable_supplier_scraper - INFO - Found 19 new product URLs on page 1
+2026-04-07 06:54:29,739 - configurable_supplier_scraper - INFO - Processing page 2: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2
+2026-04-07 06:54:29,739 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2 (attempt 1/3)
+2026-04-07 06:54:29,739 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:29,739 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical).
+2026-04-07 06:54:29,740 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2
+2026-04-07 06:54:30,376 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2 in 1.60s...
+2026-04-07 06:54:31,974 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2 (attempt 2/3)
+2026-04-07 06:54:31,974 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:31,975 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2).
+2026-04-07 06:54:31,975 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2
+2026-04-07 06:54:33,627 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2
+2026-04-07 06:54:33,627 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2
+2026-04-07 06:54:33,674 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2 (Size: 355028 bytes)
+2026-04-07 06:54:33,821 - configurable_supplier_scraper - INFO - Found 0 new product URLs on page 2
+2026-04-07 06:54:33,821 - configurable_supplier_scraper - INFO - Collected 19 total product URLs across 2 pages
+2026-04-07 06:54:33,821 - PassiveExtractionWorkflow - INFO - Discovered 19 product URLs for category: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:33,827 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale.co.uk__sandbox__5c16a91c_health-beauty_wholesale-optical_manifest.json (5 entries) saved successfully
+2026-04-07 06:54:33,828 - PassiveExtractionWorkflow - INFO -  MANIFEST CREATED: Saved 19 URLs to poundwholesale.co.uk__sandbox__5c16a91c_health-beauty_wholesale-optical_manifest.json
+2026-04-07 06:54:33,828 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:33,828 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:33,828 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:33,828 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:33,828 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:33,829 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:33,834 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:33,835 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:33,835 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:33,835 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=10/10
+2026-04-07 06:54:33,835 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:33,836 - PassiveExtractionWorkflow - INFO -  TOTALS COMMITTED: Resume pointers now enabled
+2026-04-07 06:54:33,836 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:54:33,836 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 2 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\98a1de87-1018-4933-8268-093b6bbad021\categories_subset.json
+2026-04-07 06:54:33,836 - utils.fixed_enhanced_state_manager - DEBUG - Category index unchanged: 1
+2026-04-07 06:54:33,836 - utils.fixed_enhanced_state_manager - INFO -  PHASE PRESERVED: 'supplier' (loaded from state)
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - INFO -  RESUMPTION: Preserving per-category counters (reason: active_category=True, frozen=True) for https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY INIT COMPLETE:
+  PCI (persistent_category_index): 1
+  Phase (current_phase): supplier
+  Category URL: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:33,837 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:33,838 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:33,842 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:33,843 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:33,843 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:33,843 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=10/10
+2026-04-07 06:54:33,843 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-init)
+2026-04-07 06:54:33,843 - PassiveExtractionWorkflow - INFO -  CATEGORY PROCESSING: abs_index=1, display_index=1, url=https://www.poundwholesale.co.uk/health-beauty/who...
+2026-04-07 06:54:33,843 - PassiveExtractionWorkflow - INFO -  EXTRACTION PROGRESS: Processing subcategory 1/1 in batch 1 (Category 2/1)
+2026-04-07 06:54:33,844 - PassiveExtractionWorkflow - INFO - PAGINATION[C2 wholesale-optical]: pages=2 urls_page=19,0 total=19
+2026-04-07 06:54:33,844 - PassiveExtractionWorkflow - INFO -  DETAILED PRE-EXTRACTION FILTERING: Analyzing 19 collected URLs
+2026-04-07 06:54:33,844 - PassiveExtractionWorkflow - DEBUG -  UNIFIED FILTER: Loaded 0 EANs and 0 URLs from linking map
+2026-04-07 06:54:33,845 - PassiveExtractionWorkflow - INFO -  LINKING MAP FILTER RESULTS:
+  Total URLs: 19
+  Skipped (in linking map): 0
+  Remaining for processing: 19
+2026-04-07 06:54:33,845 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 16 products in poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:33,846 - PassiveExtractionWorkflow - DEBUG -  Loaded 16 products from supplier cache: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:33,846 - PassiveExtractionWorkflow - INFO -  Product cache indexes built: keys=16, url_idx=16, ean_idx=16
+2026-04-07 06:54:33,847 - PassiveExtractionWorkflow - INFO -  Product cache indexes built: keys=16, url_idx=16, ean_idx=16
+2026-04-07 06:54:33,848 - PassiveExtractionWorkflow - INFO -  STEP 1 - LINKING MAP CHECK: 0 complete (skipped)
+2026-04-07 06:54:33,848 - PassiveExtractionWorkflow - INFO -  STEP 2 - PRODUCT CACHE CHECK (stable_key): 16 cached; 3 need extraction
+2026-04-07 06:54:33,848 - PassiveExtractionWorkflow - INFO -  Filter Invariant: in=19 == skip=0 + cached=16 + full=3
+2026-04-07 06:54:33,848 - PassiveExtractionWorkflow - INFO -  FAST-FORWARD (Supplier): Updating completed count 10 -> 16 (skips + cache)
+2026-04-07 06:54:33,848 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:33,848 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:33,848 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:33,848 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:33,848 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:33,849 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:33,853 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:33,854 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:33,854 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:33,854 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=16/10
+2026-04-07 06:54:33,854 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (fast-forward-supplier)
+2026-04-07 06:54:33,855 - PassiveExtractionWorkflow - INFO -  FILTER INVARIANT VALIDATED:
+  in=19 == skip=0 + cached=16 + full=3
+2026-04-07 06:54:33,855 - PassiveExtractionWorkflow - INFO -  RESUMING IN SUPPLIER PHASE:
+  Resume from product: 17
+  Skipping:
+    - 0 in linking map (already complete)
+    - 16 in cache (already extracted)
+  Products to process: 3
+2026-04-07 06:54:33,855 - PassiveExtractionWorkflow - INFO -  FILE-BASED RESUME CALCULATION:
+  Phase (AUTHORITY): supplier
+  Category: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical
+  Resume from product: 17
+  Denominator: 19
+  Evidence:
+    - Total URLs extracted: 19
+    - Linking map (skip): 0
+    - Supplier cache: 16
+    - Need full extraction: 3
+  Filter invariant:  PASS
+  Worklist type: full_extraction
+  Worklist size: 3
+2026-04-07 06:54:33,855 - PassiveExtractionWorkflow - INFO -  RESUME STATE: phase=supplier cat=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical supplier=16/19 amazon=0/19
+2026-04-07 06:54:33,855 - PassiveExtractionWorkflow - INFO -  STEP-2 ALLOWED KEYS (category): 19 (amazon-only=16 + full=3)
+2026-04-07 06:54:33,856 - PassiveExtractionWorkflow - INFO -  WORK DEFINED (resume): denominators frozen  supplier=19, amazon=19
+2026-04-07 06:54:33,856 - PassiveExtractionWorkflow - INFO -  NEEDS_AMAZON_ONLY (16): ['https://www.poundwholesale.co.uk/ladies-oval-sunglasses-assorted-colours', 'https://www.poundwholesale.co.uk/world-tour-girls-sunglasses-assorted', 'https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-50', 'https://www.poundwholesale.co.uk/hot-shots-uv-400-kids-sunglasses-cdu-assorted-colours', 'https://www.poundwholesale.co.uk/second-glance-square-frame-reading-glasses-assorted']...
+2026-04-07 06:54:33,856 - PassiveExtractionWorkflow - INFO -  NEEDS_FULL_EXTRACTION (3): ['https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00', 'https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75', 'https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00']
+2026-04-07 06:54:33,856 - PassiveExtractionWorkflow - INFO -  FILTERING EFFICIENCY: 0/19 = 0.0% already processed
+2026-04-07 06:54:33,857 - PassiveExtractionWorkflow - INFO -  CACHE UTILIZATION: 16/19 = 84.2% have supplier data
+2026-04-07 06:54:33,857 - PassiveExtractionWorkflow - INFO -  EXTRACTION NEEDED: 3/19 = 15.8% need fresh extraction
+2026-04-07 06:54:33,857 - PassiveExtractionWorkflow - INFO -  REHYDRATING 16 products from cache for Amazon analysis
+2026-04-07 06:54:33,857 - PassiveExtractionWorkflow - WARNING -  Clamp supplier offset: saved=16  start=0 (len=3)
+2026-04-07 06:54:33,857 - PassiveExtractionWorkflow - INFO -  RESUME CATEGORY: category 1 at resume point, total products=3, resume index=0, remaining=3
+2026-04-07 06:54:33,858 - PassiveExtractionWorkflow - INFO -  PROCEEDING: category 1 at resume point with 3 products remaining.
+2026-04-07 06:54:33,858 - PassiveExtractionWorkflow - INFO -  PROCEEDING WITH EXTRACTION: category 1 has work to do.
+2026-04-07 06:54:33,858 - PassiveExtractionWorkflow - INFO -  FULL CATEGORY PROCESSING: Processing all 3 products
+2026-04-07 06:54:33,858 - PassiveExtractionWorkflow - INFO -  LINEAGE: manifest=4f000051103276388d8787f9b0c3d46af6032cf4239e7186332b264c2350ebca cat_url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical total=3
+2026-04-07 06:54:33,858 - utils.fixed_enhanced_state_manager - INFO - FIRST_AFTER_RESUME_KEY phase=supplier cat=1 prod=0 denom=3
+2026-04-07 06:54:33,858 - utils.fixed_enhanced_state_manager - INFO -  DENOMINATOR FROZEN: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical -> 3 products
+2026-04-07 06:54:33,858 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:33,858 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:33,858 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:33,858 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:33,859 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:33,859 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:33,859 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:33,864 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:33,864 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=0/3
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/2 prod=0/3 commit_type=supplier-commit
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/2 prod=0/3 phase=supplier
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/2 prod=0/3 commit_type=SUPPLIER
+2026-04-07 06:54:33,865 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (SUPPLIER): cat=1/2 prod=0/3 phase=supplier
+2026-04-07 06:54:33,866 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS COMMITTED: cat=1, prod_idx=0, total=3
+2026-04-07 06:54:33,866 - PassiveExtractionWorkflow - INFO -  PROCEEDING WITH EXTRACTION: 3 products need full extraction
+2026-04-07 06:54:33,866 - PassiveExtractionWorkflow - INFO -  EXTRACTION CONTRACT: Promising to extract exactly 3 products
+2026-04-07 06:54:33,866 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION: Processing 3 pre-approved URLs
+2026-04-07 06:54:33,866 - configurable_supplier_scraper - INFO - 🔍 Extracting product 1/3: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:54:33,866 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00 (attempt 1/3)
+2026-04-07 06:54:33,866 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:33,867 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical?p=2).
+2026-04-07 06:54:33,867 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:54:34,577 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00 in 2.49s...
+2026-04-07 06:54:37,080 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00 (attempt 2/3)
+2026-04-07 06:54:37,080 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:37,080 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00).
+2026-04-07 06:54:37,080 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:54:38,952 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:54:38,952 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:54:39,086 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00 (Size: 485103 bytes)
+2026-04-07 06:54:39,544 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-04-07 06:54:39,617 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5038673413150
+2026-04-07 06:54:39,619 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:39,619 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:39,619 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:39,619 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:39,619 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:39,619 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:39,621 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:39,628 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:39,629 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:39,629 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:39,629 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=0/3
+2026-04-07 06:54:39,631 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-04-07 06:54:39,631 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/2 prod=0/3 commit_type=supplier-commit
+2026-04-07 06:54:39,631 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/2 prod=0/3 phase=supplier
+2026-04-07 06:54:39,631 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical total=3 (LOCKED)
+2026-04-07 06:54:39,631 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 1/3
+2026-04-07 06:54:39,631 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 1 processed (total in cache: 17)
+2026-04-07 06:54:39,632 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [wholesale-optical]: 1/3 (remaining=2)
+2026-04-07 06:54:39,632 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [wholesale-optical]: 0/19 (global_done=0, remaining≈19)
+2026-04-07 06:54:39,632 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 1
+2026-04-07 06:54:39,632 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 1, frequency=1, enabled=True
+2026-04-07 06:54:39,632 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=17, modulo=0
+2026-04-07 06:54:39,634 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:39,634 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-04-07 06:54:39,634 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:39,634 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-04-07 06:54:39,635 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 17 products to cache...
+2026-04-07 06:54:39,635 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:39,635 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 16 existing products for deduplication
+2026-04-07 06:54:39,636 - PassiveExtractionWorkflow - INFO -  ATOMIC DEDUPLICATION: Skipped 16 duplicates (stable_key).
+2026-04-07 06:54:39,636 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 16 existing + 1 new = 17 total
+2026-04-07 06:54:39,642 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json (17 entries) saved successfully
+2026-04-07 06:54:39,643 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 17 products (1 new) to cache: poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json (size: 8253 bytes)
+2026-04-07 06:54:39,643 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (17 products)
+2026-04-07 06:54:39,644 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:39,644 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:39,644 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:39,644 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:39,644 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:39,645 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:39,650 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:39,651 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:39,651 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:39,651 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=0/3
+2026-04-07 06:54:39,651 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 17 products (1 new) to cache (every 1 products)
+2026-04-07 06:54:39,652 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:39,652 - configurable_supplier_scraper - INFO - ✅ Extracted: Prima Metal Frame Reading Glasses +1.25 - £0.64
+2026-04-07 06:54:39,652 - configurable_supplier_scraper - INFO - 🔍 Extracting product 2/3: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75
+2026-04-07 06:54:39,652 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75 (attempt 1/3)
+2026-04-07 06:54:39,652 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:39,652 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00).
+2026-04-07 06:54:39,653 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75
+2026-04-07 06:54:41,026 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75 in 1.67s...
+2026-04-07 06:54:42,699 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75 (attempt 2/3)
+2026-04-07 06:54:42,699 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:42,699 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75).
+2026-04-07 06:54:42,700 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75
+2026-04-07 06:54:44,522 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75
+2026-04-07 06:54:44,522 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75
+2026-04-07 06:54:44,591 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75 (Size: 485160 bytes)
+2026-04-07 06:54:45,156 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-04-07 06:54:45,237 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5038673413129
+2026-04-07 06:54:45,239 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:45,239 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:45,239 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:45,239 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:45,239 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:45,239 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:45,240 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:45,245 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:45,246 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:45,246 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:45,246 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=1/3
+2026-04-07 06:54:45,247 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-04-07 06:54:45,247 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/2 prod=1/3 commit_type=supplier-commit
+2026-04-07 06:54:45,247 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/2 prod=1/3 phase=supplier
+2026-04-07 06:54:45,247 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical total=3 (LOCKED)
+2026-04-07 06:54:45,247 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 2/3
+2026-04-07 06:54:45,247 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 2 processed (total in cache: 18)
+2026-04-07 06:54:45,248 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [wholesale-optical]: 2/3 (remaining=1)
+2026-04-07 06:54:45,248 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [wholesale-optical]: 0/19 (global_done=0, remaining≈19)
+2026-04-07 06:54:45,248 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 2
+2026-04-07 06:54:45,248 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 2, frequency=1, enabled=True
+2026-04-07 06:54:45,248 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=18, modulo=0
+2026-04-07 06:54:45,248 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:45,249 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-04-07 06:54:45,249 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:45,249 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-04-07 06:54:45,249 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 18 products to cache...
+2026-04-07 06:54:45,249 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:45,250 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 17 existing products for deduplication
+2026-04-07 06:54:45,251 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-04-07 06:54:45,251 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 17 existing + 1 new = 18 total
+2026-04-07 06:54:45,256 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json (18 entries) saved successfully
+2026-04-07 06:54:45,257 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 18 products (1 new) to cache: poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json (size: 8722 bytes)
+2026-04-07 06:54:45,257 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (18 products)
+2026-04-07 06:54:45,257 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:45,258 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:45,258 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:45,258 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:45,258 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:45,258 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:45,263 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:45,264 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:45,265 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:45,265 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=1/3
+2026-04-07 06:54:45,265 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 18 products (1 new) to cache (every 1 products)
+2026-04-07 06:54:45,266 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:45,266 - configurable_supplier_scraper - INFO - ✅ Extracted: Prima Metal Frame Reading Glasses +2.00 - £0.7
+2026-04-07 06:54:45,266 - configurable_supplier_scraper - INFO - 🔍 Extracting product 3/3: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00
+2026-04-07 06:54:45,266 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00 (attempt 1/3)
+2026-04-07 06:54:45,266 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:45,266 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-1-75).
+2026-04-07 06:54:45,266 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00
+2026-04-07 06:54:46,371 - configurable_supplier_scraper - INFO - Retrying https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00 in 2.45s...
+2026-04-07 06:54:48,825 - configurable_supplier_scraper - INFO - Fetching page content from: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00 (attempt 2/3)
+2026-04-07 06:54:48,826 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:48,826 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00).
+2026-04-07 06:54:48,826 - configurable_supplier_scraper - INFO - 🔧 Using BrowserManager page for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00
+2026-04-07 06:54:51,403 - configurable_supplier_scraper - INFO - 🔧 BrowserManager already navigated to https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00
+2026-04-07 06:54:51,403 - configurable_supplier_scraper - INFO - 🔧 BrowserManager navigation assumed successful for https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00
+2026-04-07 06:54:51,506 - configurable_supplier_scraper - INFO - Successfully fetched content from https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00 (Size: 486355 bytes)
+2026-04-07 06:54:52,052 - configurable_supplier_scraper - DEBUG - CSS selectors found no EAN, attempting pattern matching fallback...
+2026-04-07 06:54:52,123 - configurable_supplier_scraper - WARNING - ⚠️ EAN found via pattern matching (fallback): 5038673413136
+2026-04-07 06:54:52,124 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:52,124 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,124 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,124 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,124 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,124 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,125 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,132 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:52,133 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,133 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,133 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/3
+2026-04-07 06:54:52,134 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (supplier-commit)
+2026-04-07 06:54:52,134 - utils.fixed_enhanced_state_manager - INFO -  RESUME HONORED: phase=supplier cat=1/2 prod=2/3 commit_type=supplier-commit
+2026-04-07 06:54:52,134 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (supplier-commit): cat=1/2 prod=2/3 phase=supplier
+2026-04-07 06:54:52,134 - PassiveExtractionWorkflow - INFO - [DENOM_FROZEN] url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical total=3 (LOCKED)
+2026-04-07 06:54:52,134 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER STATE UPDATE: Index updated to 3/3
+2026-04-07 06:54:52,134 - PassiveExtractionWorkflow - INFO - ?? PROGRESS: Product 3 processed (total in cache: 19)
+2026-04-07 06:54:52,134 - PassiveExtractionWorkflow - INFO -  SUPPLIER PROGRESS STATUS [wholesale-optical]: 3/3 (remaining=0)
+2026-04-07 06:54:52,134 - PassiveExtractionWorkflow - INFO -  AMAZON PROGRESS STATUS [wholesale-optical]: 0/19 (global_done=0, remaining≈19)
+2026-04-07 06:54:52,135 - PassiveExtractionWorkflow - INFO - ?? SUPPLIER EXTRACTION: Processing product 3
+2026-04-07 06:54:52,135 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: Product 3, frequency=1, enabled=True
+2026-04-07 06:54:52,135 - PassiveExtractionWorkflow - INFO - ?? CACHE CHECK: List length=19, modulo=0
+2026-04-07 06:54:52,136 - PassiveExtractionWorkflow - INFO -  DEBUG: Initial path object: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:52,136 - PassiveExtractionWorkflow - INFO -  DEBUG: Path is absolute: True
+2026-04-07 06:54:52,137 - PassiveExtractionWorkflow - INFO -  DEBUG: Path as_posix: C:/Users/chris/Desktop/Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-/OUTPUTS/cached_products/poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:52,137 - PassiveExtractionWorkflow - INFO -  Cache directory ensured: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-04-07 06:54:52,137 - PassiveExtractionWorkflow - INFO -  CACHE SAVE: Starting save of 19 products to cache...
+2026-04-07 06:54:52,137 - PassiveExtractionWorkflow - INFO -  DEBUG: Final path for file operations: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products\poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:52,139 - PassiveExtractionWorkflow - INFO -  ATOMIC: Loaded 18 existing products for deduplication
+2026-04-07 06:54:52,140 - PassiveExtractionWorkflow - INFO -  DEDUP SUMMARY: New products found but scan interval not elapsed
+2026-04-07 06:54:52,141 - PassiveExtractionWorkflow - INFO -  ATOMIC RESULT: 18 existing + 1 new = 19 total
+2026-04-07 06:54:52,146 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json (19 entries) saved successfully
+2026-04-07 06:54:52,147 - PassiveExtractionWorkflow - INFO -  ATOMICALLY saved 19 products (1 new) to cache: poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json (size: 9192 bytes)
+2026-04-07 06:54:52,147 - PassiveExtractionWorkflow - DEBUG - ?? SYNC: In-memory cache updated in-place (19 products)
+2026-04-07 06:54:52,147 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,147 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,147 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,148 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,148 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,148 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,156 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:52,157 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,157 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,157 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/3
+2026-04-07 06:54:52,158 - PassiveExtractionWorkflow - INFO -  ATOMIC PERIODIC SAVE: Saved 19 products (1 new) to cache (every 1 products)
+2026-04-07 06:54:52,158 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-07 06:54:52,159 - configurable_supplier_scraper - INFO - ✅ Extracted: Prima Metal Frame Reading Glasses +1.75 - £0.65
+2026-04-07 06:54:52,159 - configurable_supplier_scraper - INFO - 🎯 FILTERED EXTRACTION COMPLETE: 3 products extracted from 3 URLs
+2026-04-07 06:54:52,159 - PassiveExtractionWorkflow - INFO -  RESUME HONORED: cat=1 prod=0 key=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:54:52,159 - PassiveExtractionWorkflow - INFO -  EXTRACTION CONTRACT VERIFICATION:
+2026-04-07 06:54:52,159 - PassiveExtractionWorkflow - INFO -    Promised: 3 products
+2026-04-07 06:54:52,159 - PassiveExtractionWorkflow - INFO -    Delivered: 3 products
+2026-04-07 06:54:52,159 - PassiveExtractionWorkflow - INFO -    Contract:  FULFILLED
+2026-04-07 06:54:52,160 - PassiveExtractionWorkflow - INFO -  AMAZON ANALYSIS NEEDED: 16 products (already filtered by pre-extraction)
+2026-04-07 06:54:52,160 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,160 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,160 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,160 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,160 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,161 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,166 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:52,169 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,169 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,169 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/3
+2026-04-07 06:54:52,169 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (update-current-category-url)
+2026-04-07 06:54:52,170 - utils.fixed_enhanced_state_manager - INFO -  REAL-TIME DISCOVERY: Category https://www.poundwholesale.co.uk/health-beauty/who... discovered 19 products (was 3)
+2026-04-07 06:54:52,170 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,170 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,170 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,170 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,171 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,174 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,180 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:52,181 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,182 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,182 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/3
+2026-04-07 06:54:52,182 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:52,182 - utils.fixed_enhanced_state_manager - INFO -  REAL-TIME UPDATE: Category total updated to 19 products
+2026-04-07 06:54:52,182 - PassiveExtractionWorkflow - INFO -  B.3_USING EXISTING FROZEN DENOMINATOR: https://www.poundwholesale.co.uk/health-beauty/wholesale-optical  3 products
+2026-04-07 06:54:52,182 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,183 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,183 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,183 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,184 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,184 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,190 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (30 entries) saved successfully
+2026-04-07 06:54:52,191 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,191 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,191 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/3
+2026-04-07 06:54:52,191 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:52,192 - utils.fixed_enhanced_state_manager - INFO - FIRST_AFTER_RESUME_KEY phase=supplier cat=1 prod=2 denom=3
+2026-04-07 06:54:52,192 - utils.fixed_enhanced_state_manager - INFO - METRIC name=resume_proof_emitted_total value=1 phase=supplier type=first_after_resume
+2026-04-07 06:54:52,192 - utils.fixed_enhanced_state_manager - DEBUG - STATE: entered runtime phase
+2026-04-07 06:54:52,194 - PassiveExtractionWorkflow - INFO -  LINEAGE: manifest=4f000051103276388d8787f9b0c3d46af6032cf4239e7186332b264c2350ebca cat_url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical total=3
+2026-04-07 06:54:52,194 - PassiveExtractionWorkflow - INFO - Finished scraping category https://www.poundwholesale.co.uk/health-beauty/wholesale-optical: Found 19 products across 2 pages.
+2026-04-07 06:54:52,195 - PassiveExtractionWorkflow - INFO -  Category completed: 19 raw products extracted, 19 total products accumulated
+2026-04-07 06:54:52,195 - utils.fixed_enhanced_state_manager - INFO -  REAL-TIME DISCOVERY: Category https://www.poundwholesale.co.uk/health-beauty/who... discovered 19 products (was 3)
+2026-04-07 06:54:52,195 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,195 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,195 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,195 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,195 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,196 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,202 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (31 entries) saved successfully
+2026-04-07 06:54:52,203 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,203 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,204 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=supplier cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/3
+2026-04-07 06:54:52,204 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:52,204 - utils.fixed_enhanced_state_manager - INFO -  REAL-TIME UPDATE: Category total updated to 19 products
+2026-04-07 06:54:52,204 - PassiveExtractionWorkflow - INFO -  STATE UPDATE: Updated category https://www.poundwholesale.co.uk/health-beauty/wholesale-optical with 19 discovered products
+2026-04-07 06:54:52,204 - PassiveExtractionWorkflow - INFO -  Completed batch 1: 19 total products extracted so far
+2026-04-07 06:54:52,205 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 19 products in poundwholesale-co-uk__sandbox__5c16a91c_products_cache.json
+2026-04-07 06:54:52,212 - windows_save_guardian - INFO - ? ATOMIC SAVE: https-www-poundwholesale-co-uk-health-beauty-whole.json (6 entries) saved successfully
+2026-04-07 06:54:52,213 - PassiveExtractionWorkflow - INFO -  MANIFEST: 19 URLs  OUTPUTS\manifests\poundwholesale.co.uk__sandbox__5c16a91c\https-www-poundwholesale-co-uk-health-beauty-whole.json
+2026-04-07 06:54:52,213 - PassiveExtractionWorkflow - DEBUG -  MANIFEST: Successfully saved manifest for category 1 before filtering
+2026-04-07 06:54:52,213 - PassiveExtractionWorkflow - INFO -  LEGACY FILTER BYPASSED: Using pre-extraction filter results for chunk 1
+2026-04-07 06:54:52,214 - PassiveExtractionWorkflow - INFO -  Filter Invariant: in=19 == skip=0 + amz_only=19 + full=0
+2026-04-07 06:54:52,214 - PassiveExtractionWorkflow - INFO - FILTER[C1 https-www-poundwholesale-co-uk]: in=19 skip=0 needs_amz=19 needs_full=0
+2026-04-07 06:54:52,214 - PassiveExtractionWorkflow - INFO -  Processing category 1: 19 products
+2026-04-07 06:54:52,215 - PassiveExtractionWorkflow - INFO -  PROCESSING: 19 products ready for Amazon extraction
+2026-04-07 06:54:52,215 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 1/19: 'Ladies Aviator Sunglasses Assorted Colours' ---
+2026-04-07 06:54:52,215 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:54:52,216 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:54:52,216 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:54:52,216 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:54:52,216 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:54:52,217 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:54:52,225 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:54:52,226 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:54:52,226 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:54:52,226 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=1/19
+2026-04-07 06:54:52,227 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:54:52,227 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5033849984670
+2026-04-07 06:54:52,227 - tools.amazon_playwright_extractor - INFO - 🔧 FixedAmazonExtractor connecting via BrowserManager singleton
+2026-04-07 06:54:52,227 - tools.amazon_playwright_extractor - INFO - ✅ FixedAmazonExtractor connected via BrowserManager singleton
+2026-04-07 06:54:52,227 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5033849984670 for supplier product: 'Ladies Aviator Sunglasses Assorted Colours' (FixedAmazonExtractor)
+2026-04-07 06:54:52,227 - tools.amazon_playwright_extractor - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2026-04-07 06:54:52,227 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:54:52,228 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-2-00).
+2026-04-07 06:54:52,228 - utils.browser_manager - INFO - ?? Navigating to https://www.amazon.co.uk
+2026-04-07 06:54:54,001 - utils.browser_manager - INFO - ? Page ready for https://www.amazon.co.uk
+2026-04-07 06:54:54,001 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5033849984670
+2026-04-07 06:54:58,817 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5033849984670...
+2026-04-07 06:54:59,381 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-04-07 06:55:00,245 - tools.amazon_playwright_extractor - INFO - Found 8 search result elements using selector: div[data-component-type='s-search-result']
+2026-04-07 06:55:00,245 - tools.amazon_playwright_extractor - INFO - Processing 8 search result elements for EAN 5033849984670
+2026-04-07 06:55:00,258 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0B4H4YPY7
+2026-04-07 06:55:00,258 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN B0B4H4YPY7
+2026-04-07 06:55:00,381 - tools.amazon_playwright_extractor - DEBUG - ASIN B0B4H4YPY7 title extracted using selector 'h2': 2Pcs Pressure Relief Device for Triton, with Disc ...
+2026-04-07 06:55:00,381 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0B4H4YPY7 - 2Pcs Pressure Relief Device for Triton, with Disc Seals Cove...
+2026-04-07 06:55:00,394 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DJ2ZJYMJ
+2026-04-07 06:55:00,394 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0DJ2ZJYMJ
+2026-04-07 06:55:00,535 - tools.amazon_playwright_extractor - DEBUG - ASIN B0DJ2ZJYMJ title extracted using selector 'h2': LANMU 2-Pack Pressure Relief Device for Triton,Pre...
+2026-04-07 06:55:00,536 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0DJ2ZJYMJ - LANMU 2-Pack Pressure Relief Device for Triton,Pressure Reli...
+2026-04-07 06:55:00,547 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0GW8BVTNJ
+2026-04-07 06:55:00,547 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0GW8BVTNJ
+2026-04-07 06:55:00,649 - tools.amazon_playwright_extractor - DEBUG - ASIN B0GW8BVTNJ title extracted using selector 'h2': High Pressure Shower Head, Filtered Shower Head an...
+2026-04-07 06:55:00,649 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0GW8BVTNJ - High Pressure Shower Head, Filtered Shower Head and Hose Set...
+2026-04-07 06:55:00,660 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B07FL771ZL
+2026-04-07 06:55:00,660 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN B07FL771ZL
+2026-04-07 06:55:00,776 - tools.amazon_playwright_extractor - DEBUG - ASIN B07FL771ZL title extracted using selector 'h2': NATURALLY GONE Pet Odour Eliminator, Enzyme Cleane...
+2026-04-07 06:55:00,776 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B07FL771ZL - NATURALLY GONE Pet Odour Eliminator, Enzyme Cleaner Removes ...
+2026-04-07 06:55:00,787 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DFW3PP68
+2026-04-07 06:55:00,787 - tools.amazon_playwright_extractor - DEBUG - Processing element 5: ASIN B0DFW3PP68
+2026-04-07 06:55:00,880 - tools.amazon_playwright_extractor - DEBUG - ASIN B0DFW3PP68 title extracted using selector 'h2': Pressure Relief Valve for Triton 6Pcs, Mellbree PR...
+2026-04-07 06:55:00,880 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0DFW3PP68 - Pressure Relief Valve for Triton 6Pcs, Mellbree PRD Disc Sea...
+2026-04-07 06:55:00,880 - tools.amazon_playwright_extractor - INFO - Found 5 organic results, stopping search to improve performance.
+2026-04-07 06:55:00,880 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 5 organic products, 3 sponsored products filtered out
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - INFO - ✅ EAN SEARCH: Selected first organic result - ASIN B0B4H4YPY7
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5033849984670
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - INFO - Single ASIN B0B4H4YPY7 found for EAN 5033849984670.
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B0B4H4YPY7 for EAN: 5033849984670
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0B4H4YPY7. Getting a new one from BrowserManager.
+2026-04-07 06:55:00,881 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5033849984670&ref=nb_sb_noss
+2026-04-07 06:55:03,338 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-04-07 06:55:03,638 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-07 06:55:04,653 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-04-07 06:55:07,660 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-04-07 06:55:07,660 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-04-07 06:55:07,731 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-07 06:55:07,732 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-04-07 06:55:12,736 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-04-07 06:55:19,738 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0B4H4YPY7
+2026-04-07 06:55:19,738 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-04-07 06:55:19,791 - tools.amazon_playwright_extractor - INFO - Title found: '2Pcs Pressure Relief Device for Triton, with Disc Seals Cover Valve, Shower Spares Parts Compatible with Triton Electric Showers (Replace of 82800450)' via #productTitle
+2026-04-07 06:55:19,791 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-04-07 06:55:19,826 - tools.amazon_playwright_extractor - INFO - Current price: 5.09 via #corePrice_feature_div .a-offscreen
+2026-04-07 06:55:19,885 - tools.amazon_playwright_extractor - INFO - Original price: 5.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-04-07 06:55:19,927 - tools.amazon_playwright_extractor - INFO - Amazon sales badge found: 600 in container div#socialProofingAsinFaceout_feature_div
+2026-04-07 06:55:19,927 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-04-07 06:55:19,993 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/61Vy4JuBrAL._AC_SL1500_.jpg via #landingImage
+2026-04-07 06:55:20,290 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2026-04-07 06:55:20,319 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-04-07 06:55:20,822 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-04-07 06:55:21,017 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-04-07 06:55:21,049 - tools.amazon_playwright_extractor - INFO - Rating: 4.6 via #acrPopover[title*='out of 5 stars']
+2026-04-07 06:55:21,079 - tools.amazon_playwright_extractor - INFO - Review count: 1280 via #acrCustomerReviewText
+2026-04-07 06:55:21,080 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-04-07 06:55:21,111 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-04-07 06:55:21,112 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-04-07 06:55:21,515 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-04-07 06:55:21,515 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-04-07 06:55:21,611 - tools.amazon_playwright_extractor - INFO - Description found using selector: div#aplus
+2026-04-07 06:55:21,611 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-04-07 06:55:22,049 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-04-07 06:55:22,049 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-04-07 06:55:22,049 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-04-07 06:55:22,049 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-04-07 06:55:22,049 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-04-07 06:55:25,054 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2026-04-07 06:55:28,063 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2026-04-07 06:55:28,161 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-04-07 06:55:28,308 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-04-07 06:55:28,308 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-04-07 06:55:28,354 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-04-07 06:55:28,354 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-04-07 06:55:31,692 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-04-07 06:55:35,724 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-04-07 06:55:35,785 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-04-07 06:55:35,844 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-04-07 06:55:36,906 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 130 rows found
+2026-04-07 06:55:36,921 - tools.amazon_playwright_extractor - INFO - Processing 130 rows in Keepa Product Details AG Grid.
+2026-04-07 06:55:38,613 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.46' in Keepa AG Grid.
+2026-04-07 06:55:38,768 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.66' in Keepa AG Grid.
+2026-04-07 06:55:42,121 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 36 items from Keepa Product Details AG Grid.
+2026-04-07 06:55:42,121 - tools.amazon_playwright_extractor - INFO - ASIN B0B4H4YPY7: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-04-07 06:55:42,122 - tools.amazon_playwright_extractor - WARNING - ASIN B0B4H4YPY7: Could not find EAN in Keepa product_details_tab_data.
+2026-04-07 06:55:42,122 - tools.amazon_playwright_extractor - INFO - ASIN B0B4H4YPY7: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-04-07 06:55:42,122 - tools.amazon_playwright_extractor - INFO - ASIN B0B4H4YPY7: BSR 3437 in 'DIY & Tools 55' from Keepa SalesRankDetailsTable.
+2026-04-07 06:55:42,122 - tools.amazon_playwright_extractor - INFO - ✅ Recorded search method 'EAN' for ASIN B0B4H4YPY7
+2026-04-07 06:55:42,122 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B0B4H4YPY7 (EAN on page: N/A)
+2026-04-07 06:55:42,122 - PassiveExtractionWorkflow - INFO -  EAN search successful for 5033849984670. Using EAN result without title fallback.
+2026-04-07 06:55:42,126 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0B4H4YPY7_5033849984670.json (32 entries) saved successfully
+2026-04-07 06:55:42,127 - PassiveExtractionWorkflow - INFO -  Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0B4H4YPY7_5033849984670.json
+2026-04-07 06:55:42,127 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map type: <class 'list'>, size: 0 entries
+2026-04-07 06:55:42,127 - PassiveExtractionWorkflow - DEBUG - ? Added entry to hash indexes: 5033849984670
+2026-04-07 06:55:42,127 - PassiveExtractionWorkflow - DEBUG -  HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 5033849984670, URL: https://www.poundwholesale.co.uk/ladies-oval-sunglasses-assorted-colours
+2026-04-07 06:55:42,128 - PassiveExtractionWorkflow - INFO -  FINANCIAL REPORT TRIGGER: Next trigger at 100 linking map entries (current: 1, trigger frequency: 100)
+2026-04-07 06:55:42,128 - PassiveExtractionWorkflow - INFO -  Not profitable product: Ladies Aviator Sunglasses Assorted Colours
+2026-04-07 06:55:42,128 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:55:42,128 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:55:42,128 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:55:42,128 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:55:42,128 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:55:42,129 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:55:42,133 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:55:42,133 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:55:42,134 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:55:42,134 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=1/19
+2026-04-07 06:55:42,134 - PassiveExtractionWorkflow - INFO -  DEBUG: _save_linking_map called with 1 entries for supplier poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:55:42,135 - PassiveExtractionWorkflow - INFO -  DEBUG: linking_map type: <class 'list'>, entries: 1, sample: {'supplier_ean': '5033849984670', 'amazon_asin': 'B0B4H4YPY7', 'supplier_title': 'Ladies Aviator Sunglasses Assorted Colours', 'amazon_title': '2Pcs Pressure Relief Device for Triton, with Disc ...', 'supplier_price': 1.21, 'amazon_price': 5.09, 'match_method': 'EAN', 'confidence': 'high', 'created_at': '2026-04-07T06:55:42.127798', 'supplier_url': 'https://www.poundwholesale.co.uk/ladies-oval-sungl...'}
+2026-04-07 06:55:42,135 - PassiveExtractionWorkflow - INFO -  DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json
+2026-04-07 06:55:42,138 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (1 entries) saved successfully
+2026-04-07 06:55:42,139 - PassiveExtractionWorkflow - INFO -  Successfully saved linking map with 1 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json
+2026-04-07 06:55:42,139 - PassiveExtractionWorkflow - INFO -  VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json with size 586 bytes
+2026-04-07 06:55:42,139 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 1 EANs, 1 URLs, 1 ASINs in 0.000s
+2026-04-07 06:55:42,140 - PassiveExtractionWorkflow - INFO -  HASH INDEXES REBUILT: Updated indexes for 1 entries
+2026-04-07 06:55:42,140 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:55:42,140 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:55:42,140 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:55:42,140 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:55:42,140 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:55:42,140 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:55:42,144 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:55:42,145 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:55:42,145 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:55:42,145 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=1/19
+2026-04-07 06:55:42,145 - SentinelMonitor[poundwholesale.co.uk__sandbox__5c16a91c] - INFO - Sentinel: linking map size verified (0 -> 1)
+2026-04-07 06:55:42,145 - SentinelMonitor[poundwholesale.co.uk__sandbox__5c16a91c] - INFO - Sentinel: windows_save_guardian save succeeded on attempt 1
+2026-04-07 06:55:42,146 - PassiveExtractionWorkflow - INFO -  Periodic save at product 1 (linking_map_batch_size: 1)
+2026-04-07 06:55:42,146 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 2/19: 'Prima Metal Frame Reading Glasses +1.25' ---
+2026-04-07 06:55:42,146 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:55:42,146 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:55:42,146 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:55:42,146 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:55:42,146 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:55:42,147 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:55:42,151 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:55:42,152 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:55:42,152 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:55:42,152 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/19
+2026-04-07 06:55:42,152 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:55:42,152 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5038673413150
+2026-04-07 06:55:42,152 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5038673413150 for supplier product: 'Prima Metal Frame Reading Glasses +1.25' (FixedAmazonExtractor)
+2026-04-07 06:55:42,152 - tools.amazon_playwright_extractor - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2026-04-07 06:55:42,152 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:55:42,152 - utils.browser_manager - INFO - ?? Reusing cached page for https://www.amazon.co.uk
+2026-04-07 06:55:42,152 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5038673413150
+2026-04-07 06:55:46,025 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5038673413150...
+2026-04-07 06:55:46,408 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-04-07 06:55:47,300 - tools.amazon_playwright_extractor - INFO - Found 12 search result elements using selector: div[data-component-type='s-search-result']
+2026-04-07 06:55:47,301 - tools.amazon_playwright_extractor - INFO - Processing 12 search result elements for EAN 5038673413150
+2026-04-07 06:55:47,327 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0B4H4YPY7
+2026-04-07 06:55:47,328 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN B0B4H4YPY7
+2026-04-07 06:55:47,439 - tools.amazon_playwright_extractor - DEBUG - ASIN B0B4H4YPY7 title extracted using selector 'h2': 2Pcs Pressure Relief Device for Triton, with Disc ...
+2026-04-07 06:55:47,439 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0B4H4YPY7 - 2Pcs Pressure Relief Device for Triton, with Disc Seals Cove...
+2026-04-07 06:55:47,448 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DM6185P4
+2026-04-07 06:55:47,448 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0DM6185P4
+2026-04-07 06:55:47,549 - tools.amazon_playwright_extractor - DEBUG - ASIN B0DM6185P4 title extracted using selector 'h2': Carburettor Carb 523012401, Replacement for Husqva...
+2026-04-07 06:55:47,549 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0DM6185P4 - Carburettor Carb 523012401, Replacement for Husqvarna 122HD6...
+2026-04-07 06:55:47,566 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0GW8BVTNJ
+2026-04-07 06:55:47,567 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0GW8BVTNJ
+2026-04-07 06:55:47,659 - tools.amazon_playwright_extractor - DEBUG - ASIN B0GW8BVTNJ title extracted using selector 'h2': High Pressure Shower Head, Filtered Shower Head an...
+2026-04-07 06:55:47,659 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0GW8BVTNJ - High Pressure Shower Head, Filtered Shower Head and Hose Set...
+2026-04-07 06:55:47,669 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0FN3VQNT8
+2026-04-07 06:55:47,669 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN B0FN3VQNT8
+2026-04-07 06:55:47,770 - tools.amazon_playwright_extractor - DEBUG - ASIN B0FN3VQNT8 title extracted using selector 'h2': High Pressure Shower Heads Hard Water Filter Showe...
+2026-04-07 06:55:47,770 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0FN3VQNT8 - High Pressure Shower Heads Hard Water Filter Shower Head 4-S...
+2026-04-07 06:55:47,781 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B07FL771ZL
+2026-04-07 06:55:47,781 - tools.amazon_playwright_extractor - DEBUG - Processing element 5: ASIN B07FL771ZL
+2026-04-07 06:55:47,884 - tools.amazon_playwright_extractor - DEBUG - ASIN B07FL771ZL title extracted using selector 'h2': NATURALLY GONE Pet Odour Eliminator, Enzyme Cleane...
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B07FL771ZL - NATURALLY GONE Pet Odour Eliminator, Enzyme Cleaner Removes ...
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO - Found 5 organic results, stopping search to improve performance.
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 5 organic products, 7 sponsored products filtered out
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO - ✅ EAN SEARCH: Selected first organic result - ASIN B0B4H4YPY7
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5038673413150
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-04-07 06:55:47,885 - tools.amazon_playwright_extractor - INFO - Single ASIN B0B4H4YPY7 found for EAN 5038673413150.
+2026-04-07 06:55:47,886 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B0B4H4YPY7 for EAN: 5038673413150
+2026-04-07 06:55:47,886 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0B4H4YPY7. Getting a new one from BrowserManager.
+2026-04-07 06:55:47,886 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5038673413150&ref=nb_sb_noss
+2026-04-07 06:55:50,111 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-04-07 06:55:50,407 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-07 06:55:51,420 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-04-07 06:55:54,433 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-04-07 06:55:54,433 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-04-07 06:55:54,513 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-07 06:55:54,513 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-04-07 06:55:59,517 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...
+2026-04-07 06:56:06,521 - tools.amazon_playwright_extractor - INFO - Extracting all product data for ASIN: B0B4H4YPY7
+2026-04-07 06:56:06,521 - tools.amazon_playwright_extractor - INFO - Extracting basic product information (Title, Price, Images, Amazon Details)...
+2026-04-07 06:56:06,557 - tools.amazon_playwright_extractor - INFO - Title found: '2Pcs Pressure Relief Device for Triton, with Disc Seals Cover Valve, Shower Spares Parts Compatible with Triton Electric Showers (Replace of 82800450)' via #productTitle
+2026-04-07 06:56:06,557 - tools.amazon_playwright_extractor - INFO - Extracting price details...
+2026-04-07 06:56:06,580 - tools.amazon_playwright_extractor - INFO - Current price: 5.09 via #corePrice_feature_div .a-offscreen
+2026-04-07 06:56:06,657 - tools.amazon_playwright_extractor - INFO - Original price: 5.99 via .basisPrice span.a-text-price span.a-offscreen
+2026-04-07 06:56:06,688 - tools.amazon_playwright_extractor - INFO - Amazon sales badge found: 600 in container div#socialProofingAsinFaceout_feature_div
+2026-04-07 06:56:06,688 - tools.amazon_playwright_extractor - INFO - Extracting image URLs...
+2026-04-07 06:56:06,726 - tools.amazon_playwright_extractor - INFO - Main image: https://m.media-amazon.com/images/I/61Vy4JuBrAL._AC_SL1500_.jpg via #landingImage
+2026-04-07 06:56:06,818 - tools.amazon_playwright_extractor - INFO - Found 7 thumbnails.
+2026-04-07 06:56:06,826 - tools.amazon_playwright_extractor - INFO - Extracting Amazon product details section...
+2026-04-07 06:56:07,321 - tools.amazon_playwright_extractor - INFO - Extracting sales rank information...
+2026-04-07 06:56:07,460 - tools.amazon_playwright_extractor - INFO - Extracting ratings and reviews...
+2026-04-07 06:56:07,479 - tools.amazon_playwright_extractor - INFO - Rating: 4.6 via #acrPopover[title*='out of 5 stars']
+2026-04-07 06:56:07,501 - tools.amazon_playwright_extractor - INFO - Review count: 1280 via #acrCustomerReviewText
+2026-04-07 06:56:07,501 - tools.amazon_playwright_extractor - INFO - Extracting stock information...
+2026-04-07 06:56:07,521 - tools.amazon_playwright_extractor - INFO - Availability text: 'In stock' via #availability span.a-size-medium.a-color-success
+2026-04-07 06:56:07,521 - tools.amazon_playwright_extractor - INFO - Extracting features/bullets...
+2026-04-07 06:56:07,802 - tools.amazon_playwright_extractor - INFO - Found 5 features.
+2026-04-07 06:56:07,802 - tools.amazon_playwright_extractor - INFO - Extracting product description...
+2026-04-07 06:56:07,892 - tools.amazon_playwright_extractor - INFO - Description found using selector: div#aplus
+2026-04-07 06:56:07,892 - tools.amazon_playwright_extractor - INFO - Extracting product specifications table...
+2026-04-07 06:56:08,390 - tools.amazon_playwright_extractor - INFO - Specifications table parsed using selector: table.a-keyvalue.prodDetTable
+2026-04-07 06:56:08,390 - tools.amazon_playwright_extractor - INFO - Extracting SellerAmp data (if present)...
+2026-04-07 06:56:08,390 - tools.amazon_playwright_extractor - INFO - SellerAmp data extraction is currently disabled as per requirements (Fix 2.3).
+2026-04-07 06:56:08,390 - tools.amazon_playwright_extractor - INFO - Extracting Keepa data (if present)...
+2026-04-07 06:56:08,391 - tools.amazon_playwright_extractor - INFO - Attempting to extract Keepa data...
+2026-04-07 06:56:11,404 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe[id*='keepaGraph']: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe[id*='keepaGraph']")
+
+2026-04-07 06:56:14,409 - tools.amazon_playwright_extractor - DEBUG - Keepa iframe check failed for selector iframe#keepaExtension: Page.wait_for_selector: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator("iframe#keepaExtension")
+
+2026-04-07 06:56:14,514 - tools.amazon_playwright_extractor - INFO - Keepa iframe found: iframe[id*='keepa']
+2026-04-07 06:56:14,681 - tools.amazon_playwright_extractor - INFO - Keepa Sales Rank Details Table parsed.
+2026-04-07 06:56:14,681 - tools.amazon_playwright_extractor - INFO - Keepa Graph AI Analysis is currently disabled as per requirements (Fix 2.4).
+2026-04-07 06:56:14,722 - tools.amazon_playwright_extractor - INFO - Keepa Data tab found. Currently active: False
+2026-04-07 06:56:14,722 - tools.amazon_playwright_extractor - INFO - Clicking Keepa 'Data' tab...
+2026-04-07 06:56:17,627 - tools.amazon_playwright_extractor - INFO - Attempt 1/2: Waiting 12000ms for Product-Details wrapper...
+2026-04-07 06:56:17,657 - tools.amazon_playwright_extractor - INFO - ? Product-Details wrapper appeared on attempt 1
+2026-04-07 06:56:17,721 - tools.amazon_playwright_extractor - INFO - Parsing Keepa AG Grid for Product Details from: div#MoreTab1 div#grid-product-detail
+2026-04-07 06:56:17,781 - tools.amazon_playwright_extractor - INFO - Primary attempt: Waiting 12 seconds for AG Grid rows to load...
+2026-04-07 06:56:18,850 - tools.amazon_playwright_extractor - INFO - ? Primary attempt successful: 130 rows found
+2026-04-07 06:56:18,870 - tools.amazon_playwright_extractor - INFO - Processing 130 rows in Keepa Product Details AG Grid.
+2026-04-07 06:56:20,941 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'FBA Pick&Pack Fee' with raw value: '£ 1.46' in Keepa AG Grid.
+2026-04-07 06:56:21,188 - tools.amazon_playwright_extractor - INFO - Found potential fee key 'Referral Fee based on current Buy Box price' with raw value: '£ 0.66' in Keepa AG Grid.
+2026-04-07 06:56:24,001 - tools.amazon_playwright_extractor - INFO - ? Successfully parsed 36 items from Keepa Product Details AG Grid.
+2026-04-07 06:56:24,002 - tools.amazon_playwright_extractor - INFO - ASIN B0B4H4YPY7: Attempting to extract EANs from Keepa product_details_tab_data.
+2026-04-07 06:56:24,002 - tools.amazon_playwright_extractor - WARNING - ASIN B0B4H4YPY7: Could not find EAN in Keepa product_details_tab_data.
+2026-04-07 06:56:24,002 - tools.amazon_playwright_extractor - INFO - ASIN B0B4H4YPY7: BSR not found or invalid from page. Attempting fallback from Keepa.
+2026-04-07 06:56:24,002 - tools.amazon_playwright_extractor - INFO - ASIN B0B4H4YPY7: BSR 3437 in 'DIY & Tools 55' from Keepa SalesRankDetailsTable.
+2026-04-07 06:56:24,002 - tools.amazon_playwright_extractor - INFO - ✅ Recorded search method 'EAN' for ASIN B0B4H4YPY7
+2026-04-07 06:56:24,002 - tools.amazon_playwright_extractor - INFO - Successfully extracted data for ASIN B0B4H4YPY7 (EAN on page: N/A)
+2026-04-07 06:56:24,003 - PassiveExtractionWorkflow - INFO -  EAN search successful for 5038673413150. Using EAN result without title fallback.
+2026-04-07 06:56:24,008 - windows_save_guardian - INFO - ? ATOMIC SAVE: amazon_B0B4H4YPY7_5038673413150.json (32 entries) saved successfully
+2026-04-07 06:56:24,008 - PassiveExtractionWorkflow - INFO -  Saved Amazon data to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache\amazon_B0B4H4YPY7_5038673413150.json
+2026-04-07 06:56:24,009 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map type: <class 'list'>, size: 1 entries
+2026-04-07 06:56:24,009 - PassiveExtractionWorkflow - DEBUG - ? Added entry to hash indexes: 5038673413150
+2026-04-07 06:56:24,009 - PassiveExtractionWorkflow - DEBUG -  HASH OPTIMIZATION: Added entry to linking map and indexes - EAN: 5038673413150, URL: https://www.poundwholesale.co.uk/prima-metal-frame-reading-glasses-3-00
+2026-04-07 06:56:24,009 - PassiveExtractionWorkflow - INFO -  FINANCIAL REPORT TRIGGER: Next trigger at 100 linking map entries (current: 2, trigger frequency: 100)
+2026-04-07 06:56:24,009 - PassiveExtractionWorkflow - INFO -  Not profitable product: Prima Metal Frame Reading Glasses +1.25
+2026-04-07 06:56:24,009 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:56:24,009 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:56:24,009 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:56:24,010 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:56:24,010 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:56:24,010 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:56:24,015 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:56:24,017 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:56:24,017 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:56:24,017 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/19
+2026-04-07 06:56:24,017 - PassiveExtractionWorkflow - INFO -  DEBUG: _save_linking_map called with 2 entries for supplier poundwholesale.co.uk__sandbox__5c16a91c
+2026-04-07 06:56:24,018 - PassiveExtractionWorkflow - INFO -  DEBUG: linking_map type: <class 'list'>, entries: 2, sample: {'supplier_ean': '5033849984670', 'amazon_asin': 'B0B4H4YPY7', 'supplier_title': 'Ladies Aviator Sunglasses Assorted Colours', 'amazon_title': '2Pcs Pressure Relief Device for Triton, with Disc ...', 'supplier_price': 1.21, 'amazon_price': 5.09, 'match_method': 'EAN', 'confidence': 'high', 'created_at': '2026-04-07T06:55:42.127798', 'supplier_url': 'https://www.poundwholesale.co.uk/ladies-oval-sungl...'}
+2026-04-07 06:56:24,019 - PassiveExtractionWorkflow - INFO -  DEBUG: Target file path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json
+2026-04-07 06:56:24,022 - windows_save_guardian - INFO - ? ATOMIC SAVE: linking_map.json (2 entries) saved successfully
+2026-04-07 06:56:24,023 - PassiveExtractionWorkflow - INFO -  Successfully saved linking map with 2 entries to C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json
+2026-04-07 06:56:24,023 - PassiveExtractionWorkflow - INFO -  VERIFICATION: File exists at C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\poundwholesale.co.uk__sandbox__5c16a91c\linking_map.json with size 1165 bytes
+2026-04-07 06:56:24,024 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 2 EANs, 2 URLs, 1 ASINs in 0.000s
+2026-04-07 06:56:24,024 - PassiveExtractionWorkflow - INFO -  HASH INDEXES REBUILT: Updated indexes for 2 entries
+2026-04-07 06:56:24,024 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:56:24,024 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:56:24,024 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:56:24,024 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:56:24,024 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:56:24,025 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:56:24,029 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:56:24,030 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:56:24,030 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:56:24,030 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=2/19
+2026-04-07 06:56:24,031 - SentinelMonitor[poundwholesale.co.uk__sandbox__5c16a91c] - INFO - Sentinel: linking map size verified (1 -> 2)
+2026-04-07 06:56:24,031 - SentinelMonitor[poundwholesale.co.uk__sandbox__5c16a91c] - INFO - Sentinel: windows_save_guardian save succeeded on attempt 1
+2026-04-07 06:56:24,031 - PassiveExtractionWorkflow - INFO -  Periodic save at product 2 (linking_map_batch_size: 1)
+2026-04-07 06:56:24,031 - PassiveExtractionWorkflow - INFO - --- Processing supplier product 3/19: 'Hot Shots UV 400 Kids Sunglasses CDU Assorted Colours' ---
+2026-04-07 06:56:24,031 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-07 06:56:24,031 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-07 06:56:24,031 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-07 06:56:24,031 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-07 06:56:24,031 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-07 06:56:24,032 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-07 06:56:24,036 - windows_save_guardian - INFO - ? ATOMIC SAVE: poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json (32 entries) saved successfully
+2026-04-07 06:56:24,037 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-07 06:56:24,037 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\poundwholesale_co_uk__sandbox__5c16a91c_processing_state.json
+2026-04-07 06:56:24,037 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/2 url=https://www.poundwholesale.co.uk/health-beauty/wholesale-optical prod_idx=3/19
+2026-04-07 06:56:24,037 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-07 06:56:24,037 - PassiveExtractionWorkflow - INFO - Attempting Amazon search using EAN: 5056170382267
+2026-04-07 06:56:24,037 - tools.amazon_playwright_extractor - INFO - Searching Amazon by EAN: 5056170382267 for supplier product: 'Hot Shots UV 400 Kids Sunglasses CDU Assorted Colours' (FixedAmazonExtractor)
+2026-04-07 06:56:24,037 - tools.amazon_playwright_extractor - INFO - No page provided to search_by_ean, getting one from BrowserManager.
+2026-04-07 06:56:24,038 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-07 06:56:24,038 - utils.browser_manager - INFO - ?? Reusing cached page for https://www.amazon.co.uk
+2026-04-07 06:56:24,038 - tools.amazon_playwright_extractor - INFO - Navigating to Amazon UK to search for EAN: 5056170382267
+2026-04-07 06:56:28,421 - tools.amazon_playwright_extractor - INFO - Waiting for search results page to load for EAN 5056170382267...
+2026-04-07 06:56:28,750 - tools.amazon_playwright_extractor - INFO - Found search results container with selector: div.s-search-results
+2026-04-07 06:56:29,507 - tools.amazon_playwright_extractor - INFO - Found 4 search result elements using selector: div[data-component-type='s-search-result']
+2026-04-07 06:56:29,508 - tools.amazon_playwright_extractor - INFO - Processing 4 search result elements for EAN 5056170382267
+2026-04-07 06:56:29,535 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0CB4L8CXZ
+2026-04-07 06:56:29,536 - tools.amazon_playwright_extractor - DEBUG - Processing element 1: ASIN B0CB4L8CXZ
+2026-04-07 06:56:29,634 - tools.amazon_playwright_extractor - DEBUG - ASIN B0CB4L8CXZ title extracted using selector 'h2': DIAH DO IT AT HOME VWP 400g Cleaner And Sanitiser ...
+2026-04-07 06:56:29,634 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0CB4L8CXZ - DIAH DO IT AT HOME VWP 400g Cleaner And Sanitiser Home Brewi...
+2026-04-07 06:56:29,645 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0CRFM9YYV
+2026-04-07 06:56:29,645 - tools.amazon_playwright_extractor - DEBUG - Processing element 2: ASIN B0CRFM9YYV
+2026-04-07 06:56:29,727 - tools.amazon_playwright_extractor - DEBUG - ASIN B0CRFM9YYV title extracted using selector 'h2': Professional Lime Scale Remover Spray 500ml (Pack ...
+2026-04-07 06:56:29,727 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0CRFM9YYV - Professional Lime Scale Remover Spray 500ml (Pack of 10) | B...
+2026-04-07 06:56:29,736 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0DW5CGCLV
+2026-04-07 06:56:29,736 - tools.amazon_playwright_extractor - DEBUG - Processing element 3: ASIN B0DW5CGCLV
+2026-04-07 06:56:29,831 - tools.amazon_playwright_extractor - DEBUG - ASIN B0DW5CGCLV title extracted using selector 'h2': Scabiosa Columbaria subsp. ochroleuca - Creamy Yel...
+2026-04-07 06:56:29,831 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0DW5CGCLV - Scabiosa Columbaria subsp. ochroleuca - Creamy Yellow Pincus...
+2026-04-07 06:56:29,842 - tools.amazon_playwright_extractor - DEBUG - ASIN extracted via Fallback #1 (data-asin): B0FLYP5PRJ
+2026-04-07 06:56:29,842 - tools.amazon_playwright_extractor - DEBUG - Processing element 4: ASIN B0FLYP5PRJ
+2026-04-07 06:56:29,934 - tools.amazon_playwright_extractor - DEBUG - ASIN B0FLYP5PRJ title extracted using selector 'h2': Scabiosa Columbaria subsp. ochroleuca – Cream Flow...
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO - Found organic result: ASIN B0FLYP5PRJ - Scabiosa Columbaria subsp. ochroleuca – Cream Flowering Scab...
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO - 📊 SPONSORED FILTERING RESULTS: 4 organic products, 0 sponsored products filtered out
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO - ✅ EAN SEARCH: Selected first organic result - ASIN B0CB4L8CXZ
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO -    Trusting Amazon's search relevance for EAN 5056170382267
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO -    EAN will be extracted by Keepa during full product data extraction
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO - Single ASIN B0CB4L8CXZ found for EAN 5056170382267.
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO - Proceeding with ASIN: B0CB4L8CXZ for EAN: 5056170382267
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - WARNING - No page object provided to extract_data for ASIN B0CB4L8CXZ. Getting a new one from BrowserManager.
+2026-04-07 06:56:29,935 - tools.amazon_playwright_extractor - INFO - Reusing existing page: https://www.amazon.co.uk/s?k=5056170382267&ref=nb_sb_noss
+2026-04-07 06:56:32,343 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-04-07 06:56:32,463 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-07 06:56:33,478 - tools.amazon_playwright_extractor - INFO - Checking for CAPTCHA...
+2026-04-07 06:56:36,485 - tools.amazon_playwright_extractor - INFO - No CAPTCHA page detected by form selector.
+2026-04-07 06:56:36,485 - tools.amazon_playwright_extractor - INFO - Checking for cookie consent pop-up...
+2026-04-07 06:56:36,604 - tools.amazon_playwright_extractor - INFO - Finished checking for cookie consent pop-ups. If one was present and not handled, it might interfere.
+2026-04-07 06:56:36,604 - tools.amazon_playwright_extractor - INFO - Page should be ready. Waiting 5s for stabilization...
+2026-04-07 06:56:41,608 - tools.amazon_playwright_extractor - INFO - Waiting an additional 7s for extensions (Keepa, SellerAmp)...

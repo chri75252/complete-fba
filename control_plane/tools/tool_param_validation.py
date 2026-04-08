@@ -403,7 +403,7 @@ def _validate_enqueue_onboarding(tool: str, p: dict[str, Any]) -> dict[str, Any]
             tool=tool, field="timeout_seconds", message=msg or "timeout_seconds must be an integer"
         )
     if timeout_seconds is None:
-        timeout_seconds = 4200
+        timeout_seconds = 216000  # 60 hours — matches worker.py default for product_list_refresh
     if timeout_seconds <= 0:
         return _err(tool=tool, field="timeout_seconds", message="timeout_seconds must be >= 1")
     cleaned["timeout_seconds"] = timeout_seconds

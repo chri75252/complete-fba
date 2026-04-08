@@ -1,0 +1,246 @@
+
+
+===== CONTROL_PLANE ATTEMPT start=2026-04-08T00:16:06Z run_id=645124d8-ebdf-43be-9728-b5cdb205c3c5 job_type=run_workflow =====
+2026-04-08 04:16:08,647 - utils.logger - INFO - 🔧 Logging initialised – log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_efghousewares-co-uk_20260408_041608.log
+2026-04-08 04:16:08,647 - __main__ - INFO - 📄 Debug log file: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\logs\debug\run_custom_efghousewares-co-uk_20260408_041608.log
+2026-04-08 04:16:08,648 - utils.browser_circuit_breaker - INFO - BrowserCircuitBreaker initialized: threshold=3, timeout=300s
+2026-04-08 04:16:08,648 - utils.browser_manager - INFO - ?? BrowserManager singleton initialized with health management
+2026-04-08 04:16:09,075 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance on port 9222
+2026-04-08 04:16:09,075 - utils.browser_manager - INFO - ?? Per troubleshooting docs: Using existing Chrome debug only
+2026-04-08 04:16:11,100 - utils.browser_manager - DEBUG - ?? IPv6 connection failed: Cannot connect to host ::1:9222 ssl:default [The remote computer refused the network connection]
+2026-04-08 04:16:11,108 - utils.browser_manager - INFO - ? Chrome debug accessible on IPv4: Chrome/146.0.7680.178
+2026-04-08 04:16:11,109 - utils.browser_manager - INFO - ?? Connecting to existing Chrome debug instance...
+2026-04-08 04:16:13,166 - utils.browser_manager - DEBUG - ?? Using IPv4 endpoint for CDP connection
+2026-04-08 04:16:13,167 - utils.browser_manager - INFO - ?? Using endpoint: http://localhost:9222
+2026-04-08 04:16:13,439 - utils.browser_manager - INFO - ? Successfully connected to existing Chrome debug instance
+2026-04-08 04:16:13,439 - utils.browser_manager - INFO - ?? Using existing context with 2 pages
+2026-04-08 04:16:13,439 - utils.browser_manager - INFO - ?? Connected to existing Chrome: 146.0.7680.178
+2026-04-08 04:16:13,439 - utils.browser_manager - DEBUG - ? Browser connection healthy - version: healthy
+2026-04-08 04:16:13,439 - utils.browser_manager - INFO - ?? Reusing existing page in persistent context (url=https://www.amazon.co.uk/dp/B0BNSYTLK9).
+2026-04-08 04:16:13,440 - __main__ - INFO - 🔐 Checking supplier authentication status...
+2026-04-08 04:16:15,321 - tools.efghousewares.supplier_authentication_service - INFO - 🔎 Verifying price access via test product: https://www.efghousewares.co.uk/baltus-night-lights-8hrs-white-pk50
+2026-04-08 04:16:20,499 - tools.efghousewares.supplier_authentication_service - INFO - ✅ Price access verified (p.price_text span.excUnitPrice -> '3.68')
+2026-04-08 04:16:20,500 - __main__ - INFO - ✅ Already authenticated
+2026-04-08 04:16:20,502 - PassiveExtractionWorkflow - INFO - MODULE PATH: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+2026-04-08 04:16:20,503 - PassiveExtractionWorkflow - INFO -  DEBUG: output_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS'
+2026-04-08 04:16:20,503 - PassiveExtractionWorkflow - INFO -  DEBUG: supplier_cache_dir = 'C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products'
+2026-04-08 04:16:20,504 - PassiveExtractionWorkflow - INFO -  Created supplier cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\cached_products
+2026-04-08 04:16:20,504 - PassiveExtractionWorkflow - INFO -  Created amazon cache directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\amazon_cache
+2026-04-08 04:16:20,505 - PassiveExtractionWorkflow - INFO -  Linking map directory: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\efghousewares.co.uk__sandbox__947c5079
+2026-04-08 04:16:20,510 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 44 products in efghousewares-co-uk__sandbox__947c5079_products_cache.json
+2026-04-08 04:16:20,511 - PassiveExtractionWorkflow - INFO -  State manager initialized with accurate totals: 44 products, 0 categories
+2026-04-08 04:16:20,511 - tools.amazon_playwright_extractor - WARNING - ?? BrowserCircuitBreaker not available - health management disabled
+2026-04-08 04:16:20,511 - tools.amazon_playwright_extractor - INFO - AI features disabled in amazon_playwright_extractor - using only traditional selectors.
+2026-04-08 04:16:20,512 - tools.amazon_playwright_extractor - INFO - Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\amazon_data
+2026-04-08 04:16:20,512 - tools.amazon_playwright_extractor - WARNING - ?? BrowserManager not available, using legacy browser connection
+2026-04-08 04:16:20,512 - configurable_supplier_scraper - INFO - ✅ Loaded system configuration from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\config\system_config.json
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - INFO - 🔧 ConfigurableSupplierScraper will use centralized BrowserManager
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - DEBUG - AI model from config: gpt-4.1-mini-2025-04-14
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - DEBUG - Extraction targets from config: {}
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - DEBUG - Discovery assistance from config: {}
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - INFO - [CONFIG] Initialized with AI model: gpt-4.1-mini-2025-04-14
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - INFO - [TARGET] Extraction targets loaded: []
+2026-04-08 04:16:20,513 - configurable_supplier_scraper - INFO - [ASSIST] Discovery assistance enabled: False
+2026-04-08 04:16:20,513 - PassiveExtractionWorkflow - DEBUG -  DEBUG: linking_map initialized as type: <class 'list'>
+2026-04-08 04:16:20,514 - PassiveExtractionWorkflow - INFO - ?? HashLookupOptimizer initialized - ready for O(1) lookups
+2026-04-08 04:16:20,514 - PassiveExtractionWorkflow - INFO -  Hash-based lookup optimization system initialized
+2026-04-08 04:16:20,514 - PassiveExtractionWorkflow - INFO -  SENTINEL MONITORING: Proactive monitoring system initialized
+2026-04-08 04:16:20,514 - PassiveExtractionWorkflow - INFO -  WINDOWS SAVE GUARDIAN: Atomic persistence system initialized
+2026-04-08 04:16:20,514 - PassiveExtractionWorkflow - INFO -  Output directory set to: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS
+2026-04-08 04:16:20,515 - PassiveExtractionWorkflow - INFO -  Initialization validation passed - all critical attributes verified
+2026-04-08 04:16:20,515 - __main__ - INFO - 🚀 Starting workflow for efghousewares.co.uk__sandbox__947c5079...
+2026-04-08 04:16:20,515 - PassiveExtractionWorkflow - INFO - --- Starting Passive Extraction Workflow for: efghousewares.co.uk__sandbox__947c5079 ---
+2026-04-08 04:16:20,515 - PassiveExtractionWorkflow - INFO - Session ID: efghousewares.co.uk__sandbox__947c5079_20260408_041620
+2026-04-08 04:16:20,515 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for efghousewares.co.uk__sandbox__947c5079
+2026-04-08 04:16:20,516 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 1 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\645124d8-ebdf-43be-9728-b5cdb205c3c5\categories_subset.json
+2026-04-08 04:16:20,516 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - INFO - Loaded state for efghousewares.co.uk__sandbox__947c5079 - resumption from index 38
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - INFO -  Removed legacy 'supplier_extraction_progress' from state on load
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - WARNING -  SAVE BLOCKED: Attempted to save state before startup completion
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-04-08 04:16:20,517 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Beginning comprehensive state analysis...
+2026-04-08 04:16:20,518 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 44 actual products in cache (total entries: 44)
+2026-04-08 04:16:20,519 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 5 processed products in linking map
+2026-04-08 04:16:20,520 - utils.fixed_enhanced_state_manager - INFO - Startup category analysis: Calculated completion for 1 categories
+2026-04-08 04:16:20,521 - utils.fixed_enhanced_state_manager - INFO - File-grounded calculation: Found 230 categories in config
+2026-04-08 04:16:20,522 - utils.fixed_enhanced_state_manager - INFO - ?? ISS-007: Counter mismatch detected but ignored in Hybrid Mode (local counters)
+2026-04-08 04:16:20,522 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=5 (reason: system_progression)
+2026-04-08 04:16:20,522 - utils.fixed_enhanced_state_manager - INFO -  STARTUP CHECK: is_fresh_start flag is 'False'
+2026-04-08 04:16:20,523 - utils.fixed_enhanced_state_manager - INFO -  Loaded 336 category URLs from config
+2026-04-08 04:16:20,523 - utils.fixed_enhanced_state_manager - INFO -  START MODE: is_fresh_start=False, pci=1, session_cursor=1, url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers...
+2026-04-08 04:16:20,523 - utils.fixed_enhanced_state_manager - INFO - RESUME DECISION: START_AT_INDEX=5 (reason: system_progression)
+2026-04-08 04:16:20,524 - utils.fixed_enhanced_state_manager - INFO -  Loaded 336 category URLs from config
+2026-04-08 04:16:20,524 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,524 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,524 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,524 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,525 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,531 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,531 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,532 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,532 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,532 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/1 url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers prod_idx=7/45
+2026-04-08 04:16:20,532 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'amazon_analysis'
+2026-04-08 04:16:20,532 - utils.fixed_enhanced_state_manager - INFO -  STARTUP GATING COMPLETE: session_cursor=1, startup_completed=True
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - INFO -  STARTUP ANALYSIS: Completed comprehensive state analysis
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 1 in phase 'amazon_analysis'
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - DEBUG -  save_debounced: runtime mode (no file-grounded recompute)
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,533 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,534 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,539 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,539 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/1 url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers prod_idx=7/45
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (manifest)
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - INFO -  FIRST AFTER-RESUME KEY: phase=amazon_analysis cat=1/1 prod=7/45 commit_type=manifest
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - INFO -  RESUME PROOF (manifest): cat=1/1 prod=7/45 phase=amazon_analysis
+2026-04-08 04:16:20,540 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,541 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,541 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,541 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,541 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,541 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,546 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,546 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/1 url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers prod_idx=7/45
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-08 04:16:20,547 - PassiveExtractionWorkflow - INFO -  FROZEN TOTAL CATEGORIES set to 1 (hash=c5287041)
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,547 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,548 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,548 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,553 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,553 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,554 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,554 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,554 - utils.fixed_enhanced_state_manager - INFO - RESUME PTR: phase=amazon_analysis cat_idx=1/1 url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers prod_idx=7/45
+2026-04-08 04:16:20,554 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-08 04:16:20,554 - PassiveExtractionWorkflow - WARNING -  RESUME PROOF: Frozen totals NOT committed, resume pointers may be unreliable
+2026-04-08 04:16:20,554 - PassiveExtractionWorkflow - INFO - Requesting authoritative resumption point from State Manager...
+2026-04-08 04:16:20,554 - PassiveExtractionWorkflow - INFO -  RESUMPTION POINT CONFIRMED: Starting from category index 1 at product 7 in phase 'amazon_analysis'.
+2026-04-08 04:16:20,554 - PassiveExtractionWorkflow - INFO -  [RESUME_PHASE_CONFIRMED] Supplier backlog complete for resume category index 1: supplier=38/38, amazon=7/45, url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers. Proceeding with 'amazon_analysis' as persisted.
+2026-04-08 04:16:20,554 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to Amazon analysis phase
+2026-04-08 04:16:20,555 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 44 products in efghousewares-co-uk__sandbox__947c5079_products_cache.json
+2026-04-08 04:16:20,556 - PassiveExtractionWorkflow - INFO -  CATEGORY QUEUE: url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers size=0 allowed_gate=off
+2026-04-08 04:16:20,557 - PassiveExtractionWorkflow - WARNING - ?? DENOMINATOR MISMATCH DETECTED:
+   Frozen denominator: 38
+   Actual queue size:  0
+   Difference: 38 products
+   Action: Aligning state to actual queue size (0)
+2026-04-08 04:16:20,557 - PassiveExtractionWorkflow - INFO -  AMAZON RESUME: cat_idx=1 total=0 start_batch=0 first_offset=0
+2026-04-08 04:16:20,557 - PassiveExtractionWorkflow - INFO - [RESUME_ENTER] cat_idx=1 total=0 ptr=0 start_batch=0 first_offset=0
+2026-04-08 04:16:20,558 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 44 products in efghousewares-co-uk__sandbox__947c5079_products_cache.json
+2026-04-08 04:16:20,559 - PassiveExtractionWorkflow - INFO -  CATEGORY QUEUE: url=https://www.efghousewares.co.uk/shop-by-department/christmas/crackers size=0 allowed_gate=off
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - ERROR -  MARK_CATEGORY_COMPLETED CALLED 
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - ERROR -  CATEGORY_COMPLETION_CALL: url=https://www.efghousewares.co.uk/shop-by-department... absolute_cat_index=1
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,559 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,560 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,564 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,564 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,565 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,565 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-04-08 04:16:20,565 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (category-complete)
+2026-04-08 04:16:20,565 - utils.fixed_enhanced_state_manager - INFO -  CATEGORY_INDEX_TRACKER: Category completed https://www.efghousewares.co.uk/shop-by-department/christmas/crackers  next pci=2
+2026-04-08 04:16:20,565 - PassiveExtractionWorkflow - INFO -  WORKFLOW: Category 1 completed and finalized
+2026-04-08 04:16:20,565 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,566 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,566 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,566 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,566 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,566 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,571 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,571 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,572 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,572 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,572 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-04-08 04:16:20,572 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE (workflow-category-complete)
+2026-04-08 04:16:20,572 - PassiveExtractionWorkflow - INFO -  DEBUG: _save_linking_map called with 0 entries for supplier efghousewares.co.uk__sandbox__947c5079
+2026-04-08 04:16:20,573 - PassiveExtractionWorkflow - INFO -  DEBUG: linking_map type: <class 'list'>, entries: 0, sample: {}
+2026-04-08 04:16:20,573 - PassiveExtractionWorkflow - WARNING -  CRITICAL: Empty linking map - nothing to save. This suggests linking map entries are not being created!
+2026-04-08 04:16:20,574 - SentinelMonitor[efghousewares.co.uk__sandbox__947c5079] - WARNING - WARNING: linking map shrank by 5 entries (from 5 to 0)
+2026-04-08 04:16:20,574 - utils.fixed_enhanced_state_manager - INFO -  PHASE TRANSITION: amazon_analysis  supplier
+2026-04-08 04:16:20,574 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: State hardening completed (critical keys guaranteed)
+2026-04-08 04:16:20,574 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: runtime mode; skipping file-grounded recompute
+2026-04-08 04:16:20,574 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking atomic writer availability
+2026-04-08 04:16:20,574 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Checking legacy atomic operations
+2026-04-08 04:16:20,574 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: Using WindowsSaveGuardian as final fallback
+2026-04-08 04:16:20,575 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian created, calling save_json_atomic
+2026-04-08 04:16:20,579 [INFO] WindowsSaveGuardian: ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,579 - windows_save_guardian - INFO - ? ATOMIC SAVE: efghousewares_co_uk__sandbox__947c5079_processing_state.json (31 entries) saved successfully
+2026-04-08 04:16:20,580 - utils.fixed_enhanced_state_manager - DEBUG -  ATOMIC SAVE: WindowsSaveGuardian.save_json_atomic returned: True
+2026-04-08 04:16:20,580 - utils.fixed_enhanced_state_manager - DEBUG -  Guardian fallback save completed: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CACHE\processing_states\efghousewares_co_uk__sandbox__947c5079_processing_state.json
+2026-04-08 04:16:20,580 - utils.fixed_enhanced_state_manager - DEBUG - RESUME PTR suppressed: frozen_totals_committed=False
+2026-04-08 04:16:20,580 - utils.fixed_enhanced_state_manager - INFO -  ATOMIC SAVE
+2026-04-08 04:16:20,580 - PassiveExtractionWorkflow - INFO -  PHASE SWITCH: amazon_analysis  supplier (via resume finalizer)
+2026-04-08 04:16:20,580 - PassiveExtractionWorkflow - INFO -  RESUME COMPLETE: continuing main loop at cat_idx=2 phase=supplier
+2026-04-08 04:16:20,580 - PassiveExtractionWorkflow - INFO -  PHASE-AWARE GATING: Routing to supplier extraction phase
+2026-04-08 04:16:20,580 - PassiveExtractionWorkflow - DEBUG - PTR print suppressed at workflow; state manager will emit gated proofs
+2026-04-08 04:16:20,580 - PassiveExtractionWorkflow - INFO -  CONFIGURATION VALUES:
+2026-04-08 04:16:20,581 - PassiveExtractionWorkflow - INFO -    max_products_to_process: 1000000
+2026-04-08 04:16:20,581 - PassiveExtractionWorkflow - INFO -    max_products_per_category: 2000
+2026-04-08 04:16:20,581 - PassiveExtractionWorkflow - INFO -    max_analyzed_products: 1000000
+2026-04-08 04:16:20,581 - PassiveExtractionWorkflow - INFO -    max_products_per_cycle: 100
+2026-04-08 04:16:20,581 - PassiveExtractionWorkflow - INFO -    supplier_extraction_batch_size: 100
+2026-04-08 04:16:20,581 - PassiveExtractionWorkflow - INFO -    max_categories_per_request: 0
+2026-04-08 04:16:20,581 - utils.fixed_enhanced_state_manager - INFO -  INITIALIZING WORKFLOW SESSION...
+2026-04-08 04:16:20,582 - utils.fixed_enhanced_state_manager - INFO - Loaded state for efghousewares.co.uk__sandbox__947c5079 - resumption from index 5
+2026-04-08 04:16:20,582 - utils.fixed_enhanced_state_manager - INFO -  State loaded from disk.
+2026-04-08 04:16:20,582 - utils.fixed_enhanced_state_manager - INFO - Startup analysis already completed for this session
+2026-04-08 04:16:20,582 - utils.fixed_enhanced_state_manager - INFO -  Startup analysis complete.
+2026-04-08 04:16:20,582 - utils.fixed_enhanced_state_manager - INFO -  AUTHORITATIVE START POSITION: Category 2 in phase 'supplier'
+2026-04-08 04:16:20,582 - PassiveExtractionWorkflow - INFO -  WORKFLOW START CURSOR: category_index=2 (pci=2, cursor=1, max=2)
+2026-04-08 04:16:20,582 - PassiveExtractionWorkflow - INFO -  WORKFLOW INITIALIZED: Starting from category 2 in phase 'supplier'
+2026-04-08 04:16:20,583 - PassiveExtractionWorkflow - INFO -  Loaded linking map (array format) from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\FBA_ANALYSIS\linking_maps\efghousewares.co.uk__sandbox__947c5079\linking_map.json with 5 entries
+2026-04-08 04:16:20,583 - PassiveExtractionWorkflow - INFO - ?? HASH INDEX BUILT: 5 EANs, 5 URLs, 4 ASINs in 0.000s
+2026-04-08 04:16:20,583 - PassiveExtractionWorkflow - INFO -  HASH INDEXES BUILT: Ready for O(1) lookups on 5 entries
+2026-04-08 04:16:20,584 - PassiveExtractionWorkflow - INFO - CUSTOM MODE: Using predefined category list.
+2026-04-08 04:16:20,584 - tools.passive_extraction_workflow_latest - INFO - Attempting to load predefined categories for efghousewares.co.uk__sandbox__947c5079
+2026-04-08 04:16:20,584 - tools.passive_extraction_workflow_latest - INFO -  Successfully loaded 1 predefined category URLs from C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\OUTPUTS\CONTROL_PLANE\overrides\645124d8-ebdf-43be-9728-b5cdb205c3c5\categories_subset.json
+2026-04-08 04:16:20,584 - PassiveExtractionWorkflow - INFO -  INFINITE MODE DETECTED: max_products=1000000, max_products_per_category=2000
+2026-04-08 04:16:20,584 - PassiveExtractionWorkflow - INFO -  Processing ALL 1 predefined categories (infinite mode)
+2026-04-08 04:16:20,585 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING MODE: Enabled (resume_context=True)
+2026-04-08 04:16:20,585 - PassiveExtractionWorkflow - INFO -  HYBRID PROCESSING: Mode configuration loaded
+2026-04-08 04:16:20,585 - PassiveExtractionWorkflow - INFO -    switch_to_amazon_after_categories: 1
+2026-04-08 04:16:20,585 - PassiveExtractionWorkflow - INFO -  HYBRID MODE: Chunked processing (chunk size: 1 categories)
+2026-04-08 04:16:20,585 - PassiveExtractionWorkflow - INFO -  Processing chunk 1: categories 1-1
+2026-04-08 04:16:20,586 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 44 products in efghousewares-co-uk__sandbox__947c5079_products_cache.json
+2026-04-08 04:16:20,586 - PassiveExtractionWorkflow - INFO -  CACHE STALE: Cache age 104.7h > 24h threshold, proceeding with fresh scraping
+2026-04-08 04:16:20,586 - PassiveExtractionWorkflow - INFO -  Reset processing index to 0 due to stale cache
+2026-04-08 04:16:20,586 - PassiveExtractionWorkflow - WARNING -  STARTUP SEQUENCE: frozen_totals_committed is False or missing  initial freeze will occur on first valid commit.
+2026-04-08 04:16:20,586 - PassiveExtractionWorkflow - INFO -  PERFORMING SUPPLIER SCRAPING from 1 categories
+2026-04-08 04:16:20,586 - PassiveExtractionWorkflow - INFO -  Using supplier extraction batch size: 100
+2026-04-08 04:16:20,587 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: expected pattern - 44 products in efghousewares-co-uk__sandbox__947c5079_products_cache.json
+2026-04-08 04:16:20,587 - PassiveExtractionWorkflow - INFO -  CACHE FOUND: 44 products available for progress tracking
+2026-04-08 04:16:20,588 - PassiveExtractionWorkflow - INFO -  ENUMERATING FROM CURSOR: 0 categories starting from index 2
+2026-04-08 04:16:20,588 - PassiveExtractionWorkflow - INFO -  PROGRESS TRACKING: Extracting from 0 categories in 0 batches
+2026-04-08 04:16:20,588 - __main__ - INFO - ✅ Workflow completed successfully
+2026-04-08 04:16:20,588 - __main__ - INFO - 🧠 Keeping browser persistent for next run - not calling cleanup()
+WARNING: PassiveExtractionWorkflow imported from unexpected path: C:\Users\chris\Desktop\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-\tools\passive_extraction_workflow_latest.py
+Expected path to end with: tools\passive_extraction_workflow_latest.py
+2026-04-08 04:16:20,591 - utils.browser_manager - WARNING - Error during global cleanup: no running event loop
+Exception ignored in: <function BaseSubprocessTransport.__del__ at 0x000002513AE97EC0>
+Traceback (most recent call last):
+  File "C:\Python313\Lib\asyncio\base_subprocess.py", line 130, in __del__
+  File "C:\Python313\Lib\asyncio\base_subprocess.py", line 107, in close
+  File "C:\Python313\Lib\asyncio\proactor_events.py", line 109, in close
+  File "C:\Python313\Lib\asyncio\base_events.py", line 827, in call_soon
+  File "C:\Python313\Lib\asyncio\base_events.py", line 550, in _check_closed
+RuntimeError: Event loop is closed
