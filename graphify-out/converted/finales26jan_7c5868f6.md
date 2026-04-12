@@ -1,0 +1,13 @@
+<!-- converted from finales26jan.xlsx -->
+
+## Sheet: Sheet1
+| ASIN | Product (short) | Badge (SellerAmp) Mine | Badge Other | Keepa Sold-30d Mine (now) | TRIAL |  SupplierPrice  |  SellingPrice  |  NetProfit  |  ROI     | Sold-30d Other | Rate/day Mine vs Other | Next-30d market forecast Mine | Other forecast | Why the difference / what to trust |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| B074ZH6DXK | Superior trays 32×26 (10pk) | 400+/mo | 400+/mo | ~527 | 15-25 | 4.5 | 14 | 1.7 | 0.46 | ~527 | 17.6 vs 17.6 | 300–450 | 300–500 | Same Sold-30d. I haircut post-holiday cooking demand (late Jan–Feb). |
+| B0DJDH23JW | Superior 9×9 + lids (10pk) | 200+/mo | 200+/mo | ~373 | 10-20 | 3.66 | 12.97 | 2.13 | 0.591 | ~366 | 12.4 vs 12.2 | 220–330 | 220–380 | Small Sold-30d read difference (newer Keepa shows ~373). Forecast similar, slight tighten down. |
+| B07V0RQ4J7 | Air Wick Mulled Wine (5×30ml) | 50+/mo | 50+/mo | ~237 | 0-2 | 13.43 | 27.5 | 4 | 0.3 | ~235 | 7.9 vs 7.8 | 40–90 | 40–120 | Tiny Sold-30d delta. Main point unchanged: seasonal drop-off after Jan. |
+| B07HZ1MMHX | Aladino Jasmine tea lights 50pk | 50+/mo | ~50/mo | ~143 (CONFIRMED TOTAL) | 10-18 | 2.88 | 8.68 | 1.15 | 0.4 | ~132–134 | 4.8 vs 4.4 | 120–170 | 90–150 | Your new Keepa Offers screenshot shows Total ~143, so the other report was undercounting. Tea lights are more “baseline” + Valentine lift. |
+| B00TFITPZQ | Green pillar 6" | 50+/mo | 50+/mo | ~41 | 0-4 | 1.8 | 7.38 | 0.85 | 0.47 | ~41 | 1.4 vs 1.4 | 20–35 | 20–60 | Same Sold-30d. I stay conservative because you observed badge gaps on “All”. |
+| B00BY4YO8K | Red pillar 6" | 50+/mo (older signal) | 50+/mo | ~31 (if your “others=0” claim holds) | 3-6 | 1.8 | 7.8 | 1.14 | 0.63 | ~50 | 1.0 vs 1.7 | 25–45 | 30–70 | Other report likely treated missing/unknown rows as sales. Your newest Keepa shows known ~31; badge no longer showing on Amazon = weaker recent signal. Valentine helps, but keep small. |
+| B07GZGXQYG | Superior 9×13 + lids (5pk) | 50+/mo | 50+/mo | ~34 (approx) | 6-12 | 3.7 | 14 | 2.65 | 0.71 | ~34 | 1.1 vs 1.1 | 20–40 | 25–45 | Essentially aligned. Moderate mover; ROI strong in SellerAmp, but not fast. |
+| B08L66NXB5 | Superior 10×12 + lids (10pk) | 100+/mo | 100+/mo | ~29 | 4-8 | 4.8 | 16 | 3 | 0.63 | ~29 | 1.0 vs 1.0 | 15–30 | 20–40 | Aligned. Badge likely overstates vs current movement; buy small. |

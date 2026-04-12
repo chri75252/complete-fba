@@ -18,10 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ===== GLOBALS =====
+// ===== GLOBALS =====
     const supplierSelect = document.getElementById('supplierSelect');
     const refreshSelect = document.getElementById('refreshInterval');
     const lineageSelect = document.getElementById('lineageSelect');
+    const salesFieldToggle = document.getElementById('salesFieldToggle');
     const statusBadge = document.getElementById('connectionStatus');
     let charts = {};
     let prevMatches = null;
@@ -31,6 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let _lastChartData = [];
     let _catProfitSorted = [];
     let _catSalesSorted = [];
+    // Request sequencing: abort stale in-flight fetches so only the latest response is rendered
+    let _metricsAbortCtrl = null;
+    let _analysisAbortCtrl = null;
+    let _reportsAbortCtrl = null;
+
+    function getSelectedSalesField() {
+        return salesFieldToggle && salesFieldToggle.checked
+            ? 'amazon_sales_badge'
+            : 'bought_in_past_month';
+    }
 
     // 1. Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
@@ -50,17 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const CHART_COLORS = ['#c0c1ff', '#4edea3', '#ffb95f', '#ffb4ab', '#8083ff', '#00a572'];
 
-    // ===== FETCH METRICS =====
+// ===== FETCH METRICS =====
     async function fetchMetrics() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
         statusBadge.innerHTML = '<span class="status-dot"></span> Fetching…';
         statusBadge.className = 'status-badge connecting';
 
+        if (_metricsAbortCtrl) _metricsAbortCtrl.abort();
+        _metricsAbortCtrl = new AbortController();
+
         try {
             const dashReport = document.getElementById('dashboardReportSelect');
             const reportParam = dashReport ? dashReport.value : '';
-            const res = await fetch(`/api/metrics/${supplier}?lineage=${encodeURIComponent(lineage)}&report=${encodeURIComponent(reportParam)}`);
+            const salesField = getSelectedSalesField();
+            const res = await fetch(`/api/metrics/${supplier}?lineage=${encodeURIComponent(lineage)}&report=${encodeURIComponent(reportParam)}&sales_field=${encodeURIComponent(salesField)}`, { signal: _metricsAbortCtrl.signal });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 
@@ -86,19 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ].join('<br>');
             }
 
-            // Populate dashboard report dropdown
-            if (data.available_reports) {
-                const dSel = document.getElementById('dashboardReportSelect');
-                if (dSel) {
-                    const cur = dSel.value;
-                    dSel.innerHTML = '<option value="">\u2014 latest \u2014</option>';
-                    data.available_reports.forEach(r => {
-                        dSel.innerHTML += `<option value="${r.filename}">${r.filename} (${r.rows} rows)</option>`;
-                    });
-                    dSel.value = cur;
-                }
-            }
-
             statusBadge.innerHTML = '<span class="status-dot"></span> Connected';
             statusBadge.className = 'status-badge connected';
             document.getElementById('lastUpdated').textContent = `Updated ${new Date().toLocaleTimeString()}`;
@@ -110,7 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('sidebarBaseDir').textContent = `Base: ${data.paths.base_dir}`;
             }
 
-        } catch (err) {
+} catch (err) {
+            if (err.name === 'AbortError') return;
             console.error(err);
             statusBadge.innerHTML = '<span class="status-dot"></span> Disconnected';
             statusBadge.className = 'status-badge connecting';
@@ -459,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const catData = {};
         data.forEach(d => {
             if (!d.NetProfit || d.NetProfit <= 0) return;
-            const sales = Number(d.bought_in_past_month) || 0;
+            const sales = Number(d.sales_value) || 0;
             if (sales <= 0) return;
             const cat = d.Category || 'Other';
             if (!catData[cat]) catData[cat] = { count: 0, totalProfit: 0 };
@@ -507,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filterMode === 'profit') {
             products = products.filter(d => d.NetProfit > 0);
         } else if (filterMode === 'sales') {
-            products = products.filter(d => d.NetProfit > 0 && Number(d.bought_in_past_month) > 0);
+            products = products.filter(d => d.NetProfit > 0 && Number(d.sales_value) > 0);
         }
         products.sort((a, b) => (b.NetProfit || 0) - (a.NetProfit || 0));
         document.getElementById('categoryModalTitle').textContent = `${categoryName} — ${products.length} products`;
@@ -518,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td title="${escapeHtml(p.AmazonTitle || '')}">${escapeHtml((p.AmazonTitle || '').substring(0, 40))}</td>
             <td>${p.ROI != null ? Number(p.ROI).toFixed(1) + '%' : '--'}</td>
             <td class="${p.NetProfit > 0 ? 'success-text' : ''}">${p.NetProfit != null ? '\u00a3' + Number(p.NetProfit).toFixed(2) : '--'}</td>
-            <td>${p.bought_in_past_month ? Number(p.bought_in_past_month).toLocaleString() : '--'}</td>
+            <td>${p.sales_value ? Number(p.sales_value).toLocaleString() : '--'}</td>
         </tr>`).join('') || '<tr><td colspan="6" class="empty-state">No products</td></tr>';
         document.getElementById('categoryModal').style.display = 'block';
     }
@@ -567,8 +570,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Top Products with Sales
         const topSales = [...data]
-            .filter(item => item.NetProfit > 0 && Number(item.bought_in_past_month) > 0)
-            .sort((a, b) => Number(b.bought_in_past_month) - Number(a.bought_in_past_month))
+            .filter(item => item.NetProfit > 0 && Number(item.sales_value) > 0)
+            .sort((a, b) => Number(b.sales_value) - Number(a.sales_value))
             .slice(0, 10);
 
         const salesBody = document.getElementById('topSalesTableBody');
@@ -577,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr>
                     <td title="${escapeHtml(item.SupplierTitle || '')}">${escapeHtml(truncate(item.SupplierTitle, 25))}</td>
                     <td title="${escapeHtml(item.AmazonTitle || '')}">${escapeHtml(truncate(item.AmazonTitle, 25))}</td>
-                    <td class="accent-val">${Number(item.bought_in_past_month).toLocaleString()}</td>
+                    <td class="accent-val">${Number(item.sales_value).toLocaleString()}</td>
                     <td class="success-text">\u00a3${(item.NetProfit || 0).toFixed(2)}</td>
                     <td class="accent-val">${(item.ROI * 100).toFixed(1)}%</td>
                 </tr>
@@ -783,13 +786,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { sel.innerHTML = '<option value="">Error loading categories</option>'; }
     }
 
-    async function loadAnalysisReports() {
+    async function loadFinancialReportsUnified() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
-        const sel = document.getElementById('analysisReportSelect');
-        if (!sel) return;
+        const dashboardSel = document.getElementById('dashboardReportSelect');
+        const analysisSel = document.getElementById('analysisReportSelect');
+        if (!dashboardSel && !analysisSel) return;
+
+        if (_reportsAbortCtrl) _reportsAbortCtrl.abort();
+        _reportsAbortCtrl = new AbortController();
+
+        const prevDashboardValue = dashboardSel ? dashboardSel.value : '';
+        const prevAnalysisValue = analysisSel ? analysisSel.value : '';
+
         try {
-            const res = await fetch(`/api/reports/${encodeURIComponent(supplier)}?lineage=${lineage}`);
+            const res = await fetch(`/api/reports/${encodeURIComponent(supplier)}?lineage=${lineage}`, { signal: _reportsAbortCtrl.signal });
             const data = await res.json();
             let html = '<option value="">\u2014 latest \u2014</option>';
             if (data.reports && data.reports.length) {
@@ -798,8 +809,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     return `<option value="${r.filename}">${r.filename} (${r.rows} rows, ${dt})</option>`;
                 }).join('');
             }
-            sel.innerHTML = html;
-        } catch (e) { /* keep default */ }
+
+            if (dashboardSel) {
+                dashboardSel.innerHTML = html;
+                dashboardSel.value = prevDashboardValue;
+                if (dashboardSel.value !== prevDashboardValue) dashboardSel.value = '';
+            }
+            if (analysisSel) {
+                analysisSel.innerHTML = html;
+                analysisSel.value = prevAnalysisValue;
+                if (analysisSel.value !== prevAnalysisValue) analysisSel.value = '';
+            }
+        } catch (e) {
+            if (e.name === 'AbortError') return;
+        }
     }
 
     const aiModeEl = document.getElementById('aiMode');
@@ -920,16 +943,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     refreshSelect.addEventListener('change', setupRefresh);
-    supplierSelect.addEventListener('change', () => { prevMatches = null; setupRefresh(); fetchMetrics(); loadAiReports(); loadAiCategories(); loadAnalysisReports(); });
+    supplierSelect.addEventListener('change', () => {
+        const dSel = document.getElementById('dashboardReportSelect');
+        const aSel = document.getElementById('analysisReportSelect');
+        if (dSel) { dSel.value = ''; dSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
+        if (aSel) { aSel.value = ''; aSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
+        prevMatches = null;
+        setupRefresh();
+        fetchMetrics();
+        loadAiReports();
+        loadAiCategories();
+        loadFinancialReportsUnified();
+    });
     if (lineageSelect) {
-        lineageSelect.addEventListener('change', () => { prevMatches = null; setupRefresh(); fetchMetrics(); loadAiReports(); loadAiCategories(); loadAnalysisReports(); });
+        lineageSelect.addEventListener('change', () => {
+            const dSel = document.getElementById('dashboardReportSelect');
+            const aSel = document.getElementById('analysisReportSelect');
+            if (dSel) { dSel.value = ''; dSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
+            if (aSel) { aSel.value = ''; aSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
+            prevMatches = null;
+            setupRefresh();
+            fetchMetrics();
+            loadAiReports();
+            loadAiCategories();
+            loadFinancialReportsUnified();
+        });
+    }
+    if (salesFieldToggle) {
+        salesFieldToggle.addEventListener('change', () => {
+            fetchMetrics();
+            if (typeof window.loadAnalysis === 'function') {
+                window.loadAnalysis();
+            }
+        });
     }
 
     // ===== INIT =====
     fetchMetrics();
     loadAiReports();
     loadAiCategories();
-    loadAnalysisReports();
+    loadFinancialReportsUnified();
     setupRefresh();
     // ===== NEW CHAT RESET =====
     window.resetChat = async function() {
@@ -946,9 +999,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let analysisPage = 1;
     const ANALYSIS_PAGE_SIZE = 25;
 
-    window.loadAnalysis = async function() {
+window.loadAnalysis = async function() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
+        const salesField = getSelectedSalesField();
         const tier = document.getElementById('analysisTierFilter').value;
         const minRoi = document.getElementById('analysisMinRoi').value;
         const minProfit = document.getElementById('analysisMinProfit').value;
@@ -956,17 +1010,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortBy = document.getElementById('analysisSortBy').value;
         const categoryFilter = (document.getElementById('analysisCategoryFilter') || {}).value || '';
 
+        if (_analysisAbortCtrl) _analysisAbortCtrl.abort();
+        _analysisAbortCtrl = new AbortController();
+
         try {
             const report = (document.getElementById('analysisReportSelect') || {}).value || '';
             const params = new URLSearchParams({
                 lineage, tier, sort: sortBy,
+                sales_field: salesField,
                 ...(report ? { report } : {}),
                 ...(minRoi ? { min_roi: minRoi } : {}),
                 ...(minProfit ? { min_profit: minProfit } : {}),
                 ...(minSales ? { min_sales: minSales } : {}),
                 ...(categoryFilter ? { category: categoryFilter } : {}),
             });
-            const res = await fetch(`/api/analysis/${encodeURIComponent(supplier)}?${params}`);
+            const res = await fetch(`/api/analysis/${encodeURIComponent(supplier)}?${params}`, { signal: _analysisAbortCtrl.signal });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 
@@ -998,7 +1056,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const expBtn = document.getElementById('exportAnalysisBtn');
             if (expBtn) expBtn.style.display = analysisData.length > 0 ? 'inline-flex' : 'none';
 
-        } catch (err) {
+} catch (err) {
+            if (err.name === 'AbortError') return;
             console.error('Analysis error:', err);
             document.getElementById('analysisTableBody').innerHTML =
                 `<tr><td colspan="8" class="empty-state">Error: ${escapeHtml(err.message)}</td></tr>`;
@@ -1041,7 +1100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${row.confidence_score || 0}</td>
                 <td>${roi}</td>
                 <td class="${Number(row.NetProfit) > 0 ? 'success-text' : ''}">${profit}</td>
-                <td>${row.bought_in_past_month ? Number(row.bought_in_past_month).toLocaleString() : '--'}</td>
+                <td>${row.sales_value ? Number(row.sales_value).toLocaleString() : '--'}</td>
                 <td style="font-size:0.7rem; max-width:120px; overflow:hidden; text-overflow:ellipsis;" title="${escapeHtml(flags)}">${escapeHtml(flags)}</td>
             </tr>`;
         }).join('');

@@ -1,0 +1,50 @@
+{
+  "supplier_url": "https://dkwholesale.com",
+  "field_mappings": {
+    "product_item": [
+      ".collection .grid__item",
+      ".collection .product-grid-item",
+      "main .grid__item"
+    ],
+    "title": [
+      "h1",
+      ".product__title",
+      ".product-single__title"
+    ],
+    "price": [
+      ".price .money",
+      ".price-item--regular",
+      "meta[property=\"product:price:amount\"]",
+      ".product-price .money",
+      ".current-price"
+    ],
+    "url": [
+      "a[href*=\"/products/\"]"
+    ],
+    "image": [
+      "img[src*=\"/products/\"]",
+      ".product__photo img"
+    ],
+    "ean": [
+      "meta[property=\"product:upc\"]",
+      "meta[property=\"product:sku\"]",
+      ".product-sku",
+      ".sku-value"
+    ],
+    "next_page_selector": [
+      "a[href*=\"page=\"]"
+    ]
+  },
+  "authentication": {
+    "login_url": "https://dkwholesale.com/account/login",
+    "email_selector": "#CustomerEmail",
+    "password_selector": "#CustomerPassword",
+    "login_button_selector": "button:text(\"Sign in\")"
+  },
+  "authentication_required": true,
+  "notes": {
+    "ean_warning": "⭐ This supplier does NOT display EANs on product pages. SKU extracted instead.",
+    "price_warning": "⭐ Prices only visible when authenticated. Verify login success before scraping.",
+    "title_warning": "⭐ Use product detail page (not collection) for accurate titles"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "supplier_id": "angelwholesale-co-uk",
+  "supplier_name": "Angelwholesale.Co.Uk",
+  "base_url": "https://angelwholesale.co.uk/",
+  "field_mappings": {
+    "_comment_ean": "MANUAL_ITERATION_REQUIRED: BeautifulSoup cannot use :has() or :contains(). The .specs-row selector requires manual iteration in code to find row where first .specs-data contains 'Barcode', then extract second .specs-data value. See configurable_supplier_scraper.py extract_ean() method for implementation.",
+    "ean": [
+      ".specs-row"
+    ],
+    "title": [
+      "h3.card-title",
+      ".card-title"
+    ],
+    "price": [
+      "span.price.price--withoutTax",
+      ".price--withoutTax"
+    ],
+     "url": [
+    "a.card-figure__link",
+    "a[href*='/Item']",
+    "a[href^='/p'][href$='.html']"
+    ],
+    "image": [
+      ".card-img-container img"
+    ],
+    "availability": [
+      "label.form-label"
+    ]
+  },
+  "category_page": {
+    "_comment_pagination": "Site uses LOAD MORE button with JavaScript click handler (no href). Button selector: a.btn-load-more. Requires next_button_javascript for clicking.",
+    "pagination_method": "button",
+    "next_page_button_selector": [
+      "a.btn-load-more",
+      ".btn-load-more"
+    ]
+  },
+  "pagination": {
+    "next_button_javascript": "(() => { const loadMoreBtn = document.querySelector('a.btn-load-more'); if (loadMoreBtn && loadMoreBtn.offsetParent !== null) { loadMoreBtn.click(); return true; } else { return false; } })()"
+  }
+}

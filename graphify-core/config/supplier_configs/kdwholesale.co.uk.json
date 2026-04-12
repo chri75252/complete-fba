@@ -1,0 +1,39 @@
+{
+  "supplier_url": "https://kdwholesale.co.uk",
+  "field_mappings": {
+    "product_item": [
+      ".ty-grid-list__item"
+    ],
+    "title": [
+      "h1",
+      ".ty-product-block__title"
+    ],
+    "price": [
+      "div.ty-product-block__price-actual",
+      ".ty-price-num"
+    ],
+    "url": [
+      "a[href]"
+    ],
+    "image": [
+      "img.ty-pict"
+    ],
+    "ean": [
+      ".ty-product-feature__value"
+    ],
+    "sku": [
+      "script[type=\"application/ld+json\"]",
+      ".ty-control-group__item"
+    ],
+    "availability": [
+      ".ty-qty"
+    ],
+    "out_of_stock": [
+      ".ty-qty"
+    ]
+  },
+  "pagination": {
+    "next_page_button": "a[href*=\"page-\"]"
+  },
+  "authentication_required": false
+}

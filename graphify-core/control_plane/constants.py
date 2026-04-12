@@ -1,0 +1,10 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+PROJECT_ROOT_MARKER = "CLAUDE_STANDARDS.md"
+
+CONTROL_PLANE_DIRNAME = "CONTROL_PLANE"
+
+DEFAULT_STATUS_REFRESH_SECONDS = 2
+DEFAULT_JOB_POLL_SECONDS = 1

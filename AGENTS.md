@@ -673,6 +673,22 @@ Supermemory gives you the "what" and "how". Serena gives you the "why".
 
 > **Note**: For detailed comparison and examples, see `docs/SERENA_VS_SUPERMEMORY_COMPARISON.md`.
 
+---
+
+## 16. Antigravity Global Skill Environment
+
+For specialized scraping, strategy, and architecture tasks, the system relies on the optimized Antigravity Agent tools located at `C:\Users\chris\.gemini\antigravity\skills\`.
+
+### 16.1 Skill Manifest
+A full index of the 66 kept foundational skills (Research, Analysis, Strategy, FBA Wholesale, and Architecture) is documented at:
+`C:\Users\chris\.gemini\antigravity\skills\OPTIMIZED_SKILLS_MANIFEST.md`
+
+### 16.2 API Constraints (Apify & Firecrawl)
+Many premium scraping skills (e.g., `apify-ecommerce`, `firecrawl-scraper`) contain internal API logic. 
+When executing these tools, establish if they are being used purely for local emulation or as true API calls across environments:
+1. **Local Mode (Free)**: Extract the logic from the skill documentation but execute it locally via `playwright-skill` connecting to the local Chrome Instance.
+2. **Paid API Mode**: Ensure the user has explicitly confirmed API execution and that keys are tracked via `CRED_OMEGA`.
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
@@ -774,3 +790,12 @@ To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.
 | Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->
+
+## graphify
+
+This project has a graphify knowledge graph at graphify-out/.
+
+Rules:
+- Before answering architecture or codebase questions, read graphify-out/GRAPH_REPORT.md for god nodes and community structure
+- If graphify-out/wiki/index.md exists, navigate it instead of reading raw files
+- After modifying code files in this session, run `python3 -c "from graphify.watch import _rebuild_code; from pathlib import Path; _rebuild_code(Path('.'))"` to keep the graph current

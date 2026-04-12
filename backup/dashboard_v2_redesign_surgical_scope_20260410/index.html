@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon FBA Analytics Engine</title>
+    <meta
+      name="description"
+      content="Real-time analytics, AI-powered insights, and operational control for Amazon FBA product arbitrage."
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#353436",
+              "on-tertiary-fixed": "#2a1700",
+              "tertiary-container": "#ca8100",
+              "surface-dim": "#131314",
+              "secondary-fixed": "#6ffbbe",
+              "on-secondary": "#003824",
+              "on-primary-container": "#0d0096",
+              "tertiary-fixed": "#ffddb8",
+              error: "#ffb4ab",
+              "surface-bright": "#3a393a",
+              "inverse-surface": "#e5e2e3",
+              "on-background": "#e5e2e3",
+              "surface-container-lowest": "#0e0e0f",
+              background: "#131314",
+              "surface-container-low": "#1c1b1c",
+              "surface-container-highest": "#353436",
+              tertiary: "#ffb95f",
+              "inverse-primary": "#494bd6",
+              "secondary-fixed-dim": "#4edea3",
+              "on-primary-fixed": "#07006c",
+              "tertiary-fixed-dim": "#ffb95f",
+              "on-secondary-container": "#00311f",
+              surface: "#131314",
+              "surface-tint": "#c0c1ff",
+              outline: "#908fa0",
+              "on-secondary-fixed-variant": "#005236",
+              "on-primary": "#1000a9",
+              "on-tertiary": "#472a00",
+              "primary-container": "#8083ff",
+              "outline-variant": "#464554",
+              "on-surface": "#e5e2e3",
+              "on-error": "#690005",
+              "primary-fixed": "#e1e0ff",
+              "on-surface-variant": "#c7c4d7",
+              "on-tertiary-container": "#3e2400",
+              "surface-container": "#201f20",
+              "on-error-container": "#ffdad6",
+              secondary: "#4edea3",
+              "error-container": "#93000a",
+              "on-secondary-fixed": "#002113",
+              "secondary-container": "#00a572",
+              "primary-fixed-dim": "#c0c1ff",
+              primary: "#c0c1ff",
+              "on-primary-fixed-variant": "#2f2ebe",
+              "inverse-on-surface": "#313031",
+              "surface-container-high": "#2a2a2b",
+              "on-tertiary-fixed-variant": "#653e00",
+            },
+            fontFamily: {
+              headline: ["Space Grotesk"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary"
+  >
+    <div class="app-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">
+          <div class="logo-mark">FBA</div>
+          <div class="logo-text">
+            <h2>Analytics Engine</h2>
+            <span class="logo-sub">Amazon Arbitrage System</span>
+          </div>
+        </div>
+
+        <nav class="nav-links" role="navigation" aria-label="Primary navigation">
+          <a href="#" class="nav-item active" data-target="dashboard" aria-current="page">
+            <svg
+              class="nav-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Dashboard
+          </a>
+          <a href="#" class="nav-item" data-target="operator" aria-current="false">
+            <svg
+              class="nav-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </svg>
+            Operator
+          </a>
+          <a href="#" class="nav-item" data-target="chat" aria-current="false">
+            <svg
+              class="nav-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+            AI Assistant
+          </a>
+          <a href="#" class="nav-item" data-target="analysis" aria-current="false">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3v18h18"/>
+              <path d="M7 16l4-8 4 4 4-10"/>
+            </svg>
+            Analysis
+          </a>
+          <a href="#" class="nav-item" data-target="workflows" aria-current="false">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            Workflows
+          </a>
+        </nav>
+
+        <div class="sidebar-config">
+          <div class="config-header">Configuration</div>
+          <div class="input-group">
+            <label>Supplier Source</label>
+            <select id="supplierSelect" class="glass-input">
+              <option value="poundwholesale.co.uk">poundwholesale.co.uk</option>
+              <option value="clearance-king.co.uk">clearance-king.co.uk</option>
+              <option value="angelwholesale.co.uk">angelwholesale.co.uk</option>
+              <option value="efghousewares.co.uk">efghousewares.co.uk</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Data Lineage</label>
+            <select id="lineageSelect" class="glass-input">
+              <option value="base">Main Workflow</option>
+              <option value="latest_sandbox">Latest Sandbox</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Financial Report</label>
+            <select id="dashboardReportSelect" class="glass-input">
+              <option value="">&#x2014; latest &#x2014;</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Auto Refresh</label>
+            <select id="refreshInterval" class="glass-input">
+              <option value="0">Disabled</option>
+              <option value="3">3 seconds</option>
+              <option value="5">5 seconds</option>
+              <option value="30">30 seconds</option>
+              <option value="60" selected>60 seconds</option>
+              <option value="120">2 minutes</option>
+              <option value="300">5 minutes</option>
+            </select>
+          </div>
+          <div id="connectionStatus" class="status-badge connecting">
+            <span class="status-dot"></span> Connecting…
+          </div>
+          <div class="sidebar-footer">
+            <div class="sidebar-info" id="sidebarBaseDir">Base: detecting…</div>
+            <div class="sidebar-info" id="sidebarSupplier">Supplier: —</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="main-content">
+        <!-- ========== DASHBOARD VIEW ========== -->
+        <section id="view-dashboard" class="view active">
+          <!-- Live Ticker -->
+          <div class="live-ticker" id="liveTicker">
+            <span class="ticker-dot"></span>
+            <span id="tickerText">Loading system data…</span>
+            <div class="velocity-badge" id="scrapeVelocity">0 rows/min</div>
+          </div>
+
+          <header class="view-header">
+            <div>
+              <h1>System Performance</h1>
+              <p class="view-subtitle" id="lastUpdated">
+                Waiting for first load…
+              </p>
+            </div>
+            <button class="btn-outline" onclick="fetchMetrics()">
+              ↻ Refresh Now
+            </button>
+          </header>
+
+          <!-- ===== TOP METRIC CARDS ===== -->
+          <div class="metrics-grid-6 stagger-1">
+            <div
+              class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary/40 transition-colors hover:bg-surface-container cursor-pointer"
+            >
+              <p class="text-[10px] font-label uppercase text-outline mb-2">
+                Total Extracted
+              </p>
+              <p
+                class="font-headline text-2xl font-semibold text-on-surface"
+                id="totalExtracted"
+              >
+                --
+              </p>
+              <p class="text-[10px] text-primary mt-1">Supplier Products</p>
+            </div>
+            <div
+              class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary/40 transition-colors hover:bg-surface-container cursor-pointer"
+            >
+              <p class="text-[10px] font-label uppercase text-outline mb-2">
+                Total Processed
+              </p>
+              <p
+                class="font-headline text-2xl font-semibold text-on-surface"
+                id="totalProcessed"
+              >
+                --
+              </p>
+              <p class="text-[10px] text-primary mt-1">Amazon linked</p>
+            </div>
+            <div
+              class="bg-surface-container-low p-5 rounded-lg border-l-2 border-secondary/40 transition-colors hover:bg-surface-container cursor-pointer"
+            >
+              <p class="text-[10px] font-label uppercase text-outline mb-2">
+                Profitable
+              </p>
+              <p
+                class="font-headline text-2xl font-semibold text-secondary"
+                id="profitableProducts"
+              >
+                --
+              </p>
+              <p class="text-[10px] text-secondary mt-1" id="profitableSubtitle">Products with +ROI</p>
+            </div>
+            <div
+              class="bg-surface-container-low p-5 rounded-lg border-l-2 border-secondary/40 transition-colors hover:bg-surface-container cursor-pointer"
+            >
+              <p class="text-[10px] font-label uppercase text-outline mb-2">
+                Average ROI
+              </p>
+              <p
+                class="font-headline text-2xl font-semibold text-secondary"
+                id="avgROI"
+              >
+                --%
+              </p>
+              <p class="text-[10px] text-secondary mt-1">EAN-matched profitable</p>
+            </div>
+            <div
+              class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary/40 transition-colors hover:bg-surface-container cursor-pointer"
+            >
+              <p class="text-[10px] font-label uppercase text-outline mb-2">
+                Files Scanned
+              </p>
+              <p
+                class="font-headline text-2xl font-semibold text-on-surface"
+                id="filesScanned"
+              >
+                --
+              </p>
+              <p class="text-[10px] text-primary mt-1">Financial reports</p>
+            </div>
+            <div
+              class="bg-primary/20 p-5 rounded-lg border-l-4 border-primary transition-colors hover:bg-primary/30 cursor-pointer backdrop-blur-sm"
+            >
+              <p class="text-[10px] font-label uppercase text-primary mb-2">
+                Avg Profit / Item
+              </p>
+              <p
+                class="font-headline text-2xl font-semibold text-primary"
+                id="totalProfit"
+              >
+                £--.--
+              </p>
+              <p class="text-[10px] text-primary mt-1 font-semibold">
+                EAN-matched profitable
+              </p>
+            </div>
+          </div>
+
+          <!-- ===== SYSTEM HEALTH + MATCHING ===== -->
+          <div class="grid-2 stagger-2">
+            <!-- System Health -->
+            <div class="card">
+              <div class="card-header">
+                <h3>🏥 System Health</h3>
+              </div>
+              <div class="card-body">
+                <div class="detail-grid">
+                  <div class="detail-item">
+                    <span class="detail-label">Phase</span>
+                    <span class="detail-value badge" id="systemPhase">--</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Category Index</span>
+                    <span class="detail-value" id="catIndex">-- / --</span>
+                  </div>
+                  <div class="detail-item full-width">
+                    <span class="detail-label">Current Category</span>
+                    <span class="detail-value mono-text" id="currentCatUrl"
+                      >—</span
+                    >
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Supplier Extracted</span>
+                    <span class="detail-value" id="supplierProgress"
+                      >-- / --</span
+                    >
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Amazon Analyzed</span>
+                    <span class="detail-value" id="amazonProgress"
+                      >-- / --</span
+                    >
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Fresh Starts</span>
+                    <span class="detail-value" id="freshStarts">--</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Total Rows</span>
+                    <span class="detail-value" id="totalRows">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Matching Performance -->
+            <div class="card">
+              <div class="card-header">
+                <h3>🔗 Amazon Matching Performance</h3>
+              </div>
+              <div class="card-body">
+                <div class="detail-grid">
+                  <div class="detail-item">
+                    <span class="detail-label">Total Matches</span>
+                    <span class="detail-value" id="totalMatches">--</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">High Confidence</span>
+                    <span class="detail-value success-text" id="highConfidence"
+                      >--%</span
+                    >
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">No EAN Count</span>
+                    <span class="detail-value warn-text" id="noEanCount"
+                      >--</span
+                    >
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Primary Method</span>
+                    <span class="detail-value badge" id="primaryMethod">—</span>
+                  </div>
+                  <div class="detail-item full-width">
+                    <span class="detail-label">Match Success Rate</span>
+                    <span
+                      class="detail-value success-text"
+                      id="matchSuccessRate"
+                      >--%</span
+                    >
+                  </div>
+                </div>
+                <div class="conf-distribution" id="confDistribution">
+                  <div class="conf-header">Confidence Distribution</div>
+                  <div class="conf-bars" id="confBars">
+                    <span class="conf-empty">No data</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== CHARTS SECTION ===== -->
+          <div class="section-title stagger-3">📊 Analytics Charts</div>
+          <div class="grid-2 stagger-3">
+            <div class="card chart-card">
+              <div class="card-header">
+                <h3>ROI Histogram</h3>
+              </div>
+              <div class="chart-wrap"><canvas id="roiHistChart" role="img" aria-label="ROI histogram chart"></canvas></div>
+            </div>
+            <div class="card chart-card">
+              <div class="card-header"><h3>Top Categories by Profit</h3></div>
+              <div class="chart-wrap"><canvas id="categoryProfitChart" role="img" aria-label="Top categories by profit chart"></canvas></div>
+            </div>
+          </div>
+          <div class="grid-2 stagger-4">
+            <div class="card chart-card">
+              <div class="card-header">
+                <h3>Net Profit vs Selling Price</h3>
+              </div>
+              <div class="chart-wrap"><canvas id="profitChart" role="img" aria-label="Net profit vs selling price scatter chart"></canvas></div>
+              <div style="text-align:center;font-size:11px;color:#888;margin-top:4px">&#x1F7E2; ROI &ge; 30% &middot; &#x1F7E1; 15-30% &middot; &#x1F534; &lt; 15%</div>
+            </div>
+            <div class="card chart-card">
+              <div class="card-header"><h3>Profit vs Competition</h3></div>
+              <div class="chart-wrap"><canvas id="profitCompetitionChart" role="img" aria-label="Profit vs competition scatter chart"></canvas></div>
+              <div style="text-align:center;font-size:11px;color:#888;margin-top:4px">&#x1F7E2; Profitable &middot; &#x1F534; Loss-making</div>
+            </div>
+          </div>
+          <div class="grid-2 stagger-4">
+            <div class="card chart-card">
+              <div class="card-header"><h3>Profitable Categories with Sales</h3></div>
+              <div class="chart-wrap"><canvas id="categorySalesChart" role="img" aria-label="Profitable categories with sales chart"></canvas></div>
+            </div>
+            <div class="card chart-card">
+              <div class="card-header"><h3>Competition Level</h3></div>
+              <div class="chart-wrap chart-wrap-short"><canvas id="sellerMixChart" role="img" aria-label="Seller mix doughnut chart"></canvas></div>
+            </div>
+          </div>
+
+          <!-- ===== DATA TABLES ===== -->
+          <div class="section-title stagger-5">📑 Data Tables</div>
+          <div class="grid-2 stagger-5">
+            <div class="card table-card">
+              <div class="card-header">
+                <h3>🏆 Top 20 Profitable Products</h3>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Supplier Title</th>
+                      <th>Amazon Title</th>
+                      <th>ROI</th>
+                      <th>Profit</th>
+                    </tr>
+                  </thead>
+                  <tbody id="topProductsTableBody">
+                    <tr>
+                      <td colspan="4" class="empty-state">
+                        Loading products...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card table-card">
+              <div class="card-header">
+                <h3>Top Products with Sales</h3>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Supplier Title</th>
+                      <th>Amazon Title</th>
+                      <th>Sales/mo</th>
+                      <th>Profit</th>
+                      <th>ROI</th>
+                    </tr>
+                  </thead>
+                  <tbody id="topSalesTableBody">
+                    <tr>
+                      <td colspan="5" class="empty-state">
+                        Loading...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== LOGS ===== -->
+          <div class="card stagger-5">
+            <div class="card-header">
+              <h3>📋 Terminal Logs</h3>
+              <span class="log-filename" id="logFilename">—</span>
+            </div>
+            <div class="log-trace" id="logTail">
+              <span class="log-line-muted">Waiting for logs…</span>
+            </div>
+          </div>
+
+          <!-- Data Source Mapping -->
+          <details class="card stagger-5" style="margin-top:1rem">
+            <summary style="cursor:pointer"><h3 style="display:inline;font-size:14px">&#x1F4C2; Data Sources</h3></summary>
+            <div id="dataSourcesPanel" style="font-size:12px;color:#999;font-family:monospace;padding:8px;line-height:1.8"></div>
+          </details>
+        </section>
+
+        <!-- ========== AI ANALYSIS AGENT VIEW ========== -->
+        <section id="view-operator" class="view">
+          <header class="view-header">
+            <div>
+              <h1>AI Analysis Agent</h1>
+              <p class="view-subtitle">Run LLM-powered product analysis on financial reports</p>
+            </div>
+          </header>
+
+          <!-- Config row -->
+          <div class="grid-2 stagger-1" style="margin-bottom:1rem">
+            <div class="card">
+              <div class="card-header"><h3>Report &amp; Filters</h3></div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem">
+                <div class="input-group">
+                  <label>Financial Report</label>
+                  <select id="aiReportSelect" class="glass-input">
+                    <option value="">— select supplier first —</option>
+                  </select>
+                </div>
+                <!-- Filter mode toggle: row range OR category — mutually exclusive -->
+                <div class="input-group">
+                  <label>Filter Mode</label>
+                  <div style="display:flex;gap:.5rem">
+                    <label style="display:flex;align-items:center;gap:.35rem;font-size:.8rem;cursor:pointer">
+                      <input type="radio" name="aiFilterMode" value="none" id="aiFilterNone" checked onchange="window.aiFilterToggle()"/> All rows
+                    </label>
+                    <label style="display:flex;align-items:center;gap:.35rem;font-size:.8rem;cursor:pointer">
+                      <input type="radio" name="aiFilterMode" value="rows" id="aiFilterRows" onchange="window.aiFilterToggle()"/> Row range
+                    </label>
+                    <label style="display:flex;align-items:center;gap:.35rem;font-size:.8rem;cursor:pointer">
+                      <input type="radio" name="aiFilterMode" value="category" id="aiFilterCategory" onchange="window.aiFilterToggle()"/> Category
+                    </label>
+                  </div>
+                </div>
+                <div id="aiRowRangeGroup" style="display:none">
+                  <div class="form-row">
+                    <div class="input-group">
+                      <label>From row</label>
+                      <input type="number" id="aiFromRow" class="glass-input" placeholder="e.g. 2" min="2"/>
+                    </div>
+                    <div class="input-group">
+                      <label>To row</label>
+                      <input type="number" id="aiToRow" class="glass-input" placeholder="e.g. 100"/>
+                    </div>
+                  </div>
+                </div>
+                <div id="aiCategoryGroup" style="display:none">
+                  <div class="input-group">
+                    <label>Category</label>
+                    <select id="aiCategoryFilter" class="glass-input">
+                      <option value="">— select supplier first —</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Batch size</label>
+                  <input type="number" id="aiBatchSize" class="glass-input" value="20" min="1" max="50"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><h3>Mode &amp; Trigger</h3></div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem">
+                <div class="input-group">
+                  <label>Mode</label>
+                  <select id="aiMode" class="glass-input">
+                    <option value="manual">Manual — run on demand</option>
+                    <option value="auto">Auto — every N new products</option>
+                  </select>
+                </div>
+                <div class="input-group" id="aiAutoNGroup" style="display:none">
+                  <label>Run every N products</label>
+                  <input type="number" id="aiAutoN" class="glass-input" value="50" min="10"/>
+                </div>
+                <div id="aiJobStatus" style="font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);min-height:1.5rem"></div>
+                <button class="btn-primary" id="aiRunBtn" onclick="window.runAiAnalysis()">
+                  Run AI Analysis
+                </button>
+                <button class="btn-outline" id="aiStopBtn" onclick="window.stopAiAnalysis()" style="display:none">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output log -->
+          <div class="card stagger-2">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+              <h3>Analysis Output</h3>
+              <span id="aiOutputMeta" style="font-size:.75rem;color:var(--text-muted)"></span>
+            </div>
+            <div id="aiOutputLog" style="font-family:var(--font-mono);font-size:.75rem;color:var(--text-variant);background:var(--bg-surface-lowest);border-radius:var(--radius-md);padding:1rem;min-height:12rem;max-height:28rem;overflow-y:auto;white-space:pre-wrap;line-height:1.6">Waiting for analysis run…</div>
+          </div>
+        </section>
+
+        <!-- ========== CHAT VIEW ========== -->
+        <section id="view-chat" class="view">
+          <header class="view-header">
+            <div>
+              <h1>AI Assistant</h1>
+              <p class="view-subtitle">
+                Conversational control with full agent trace
+              </p>
+            </div>
+            <button
+              class="btn-outline"
+              id="newChatBtn"
+              onclick="window.resetChat()"
+            >
+              🗑 New Chat
+            </button>
+            <div style="display: none"></div>
+          </header>
+          <div class="chat-container card stagger-1">
+            <div class="chat-history" id="chatHistory">
+              <div class="chat-message assistant">
+                <div class="avatar">🤖</div>
+                <div class="msg-bubble">
+                  Hello! I can view metrics, read tool logs, or start tasks for
+                  you. How can I assist?
+                </div>
+              </div>
+            </div>
+            <div class="chat-input-area">
+              <input
+                type="text"
+                id="chatInput"
+                class="glass-input"
+                placeholder="Ask about status, trigger a run, or query financials…"
+              />
+              <button class="btn-primary" id="chatSendBtn">Send</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== ANALYSIS VIEW ========== -->
+        <section id="view-analysis" class="view">
+          <header class="view-header">
+            <div>
+              <h1>Product Analysis</h1>
+              <p class="view-subtitle">Tier-classified products with confidence scoring</p>
+            </div>
+            <button class="btn-outline" onclick="window.loadAnalysis()">Refresh Analysis</button>
+            <button class="btn-outline" id="exportAnalysisBtn" onclick="window.exportAnalysisCsv()" style="display:none">Export CSV</button>
+          </header>
+          <!-- Tier Summary Strip -->
+          <div class="metrics-grid-6 stagger-1" id="tierSummaryStrip" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-secondary/40">
+              <p class="text-[10px] font-label uppercase text-outline mb-2">Tier 1: Verified</p>
+              <p class="font-headline text-2xl font-semibold text-secondary" id="tier1Count">--</p>
+            </div>
+            <div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary/40">
+              <p class="text-[10px] font-label uppercase text-outline mb-2">Tier 2: Likely</p>
+              <p class="font-headline text-2xl font-semibold text-primary" id="tier2Count">--</p>
+            </div>
+            <div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-tertiary/40">
+              <p class="text-[10px] font-label uppercase text-outline mb-2">Tier 3: Review</p>
+              <p class="font-headline text-2xl font-semibold text-tertiary" id="tier3Count">--</p>
+            </div>
+            <div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-error/40">
+              <p class="text-[10px] font-label uppercase text-outline mb-2">Tier 4: Rejected</p>
+              <p class="font-headline text-2xl font-semibold text-error" id="tier4Count">--</p>
+            </div>
+            <div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-outline/40">
+              <p class="text-[10px] font-label uppercase text-outline mb-2">Total Rows</p>
+              <p class="font-headline text-2xl font-semibold text-on-surface" id="analysisTotalRows">--</p>
+            </div>
+          </div>
+          <!-- Filter Bar -->
+          <div class="card stagger-2" style="margin-bottom: 20px;">
+            <div class="card-body" style="display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+              <div class="input-group" style="margin-bottom: 0; min-width: 260px;">
+                <label>Financial Report</label>
+                <select id="analysisReportSelect" class="glass-input">
+                  <option value="">— latest —</option>
+                </select>
+              </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 140px;">
+                <label>Tier Filter</label>
+                <select id="analysisTierFilter" class="glass-input">
+                  <option value="all">All Tiers</option>
+                  <option value="TIER_1_VERIFIED">T1: Verified</option>
+                  <option value="TIER_2_LIKELY">T2: Likely</option>
+                  <option value="TIER_3_NEEDS_REVIEW">T3: Review</option>
+                  <option value="TIER_4_REJECTED">T4: Rejected</option>
+                </select>
+              </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 180px;">
+                <label>Category</label>
+                <select id="analysisCategoryFilter" class="glass-input">
+                  <option value="">All Categories</option>
+                </select>
+              </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 100px;">
+                <label>Min ROI (%)</label>
+                <input type="number" id="analysisMinRoi" class="glass-input" placeholder="0" />
+              </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 100px;">
+                <label>Min Profit (GBP)</label>
+                <input type="number" id="analysisMinProfit" class="glass-input" placeholder="0" step="0.01" />
+              </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 100px;">
+                <label>Min Sales/mo</label>
+                <input type="number" id="analysisMinSales" class="glass-input" placeholder="0" />
+              </div>
+              <div class="input-group" style="margin-bottom: 0; min-width: 120px;">
+                <label>Sort By</label>
+                <select id="analysisSortBy" class="glass-input">
+                  <option value="confidence">Confidence</option>
+                  <option value="roi">ROI</option>
+                  <option value="profit">Net Profit</option>
+                </select>
+              </div>
+              <button class="btn-primary" onclick="window.loadAnalysis()">Apply</button>
+            </div>
+          </div>
+          <!-- Product Table -->
+          <div class="card stagger-3">
+            <div class="card-header">
+              <h3>Classified Products</h3>
+              <span class="badge" id="analysisResultCount">0 results</span>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" id="analysisTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Supplier Title</th>
+                    <th>Amazon Title</th>
+                    <th>Category</th>
+                    <th>Tier</th>
+                    <th>Score</th>
+                    <th>ROI</th>
+                    <th>Profit</th>
+                    <th>Sales</th>
+                    <th>Flags</th>
+                  </tr>
+                </thead>
+                <tbody id="analysisTableBody">
+                  <tr><td colspan="10" class="empty-state">Click "Refresh Analysis" to load data</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Pagination -->
+            <div style="display: flex; justify-content: center; gap: 8px; padding: 16px;" id="analysisPagination"></div>
+          </div>
+        </section>
+
+        <!-- ========== WORKFLOWS VIEW ========== -->
+        <section id="view-workflows" class="view">
+          <header class="view-header">
+            <div>
+              <h1>Operating Workflows</h1>
+              <p class="view-subtitle">Step-by-step guidance for fresh runs and stale data re-analysis</p>
+            </div>
+          </header>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:0 0 32px;">
+
+            <!-- FRESH RUN WORKFLOW -->
+            <div class="metric-card" style="grid-column:1/2;">
+              <div class="card-header" style="margin-bottom:16px;">
+                <h3 style="color:var(--accent-green); font-size:1rem; margin:0;">Fresh Run — Identify Profitable &amp; Sellable Products</h3>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.7; color:var(--text-secondary);">
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 1 — Quick Overview (Dashboard Tab)</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Select supplier in sidebar → select <b>Main Workflow</b> lineage</li>
+                  <li>Select the latest CSV in the <b>Financial Report</b> dropdown</li>
+                  <li>Check top metric cards: <b>Profitable</b> (EAN-matched, NetProfit &gt; 0), <b>With Sales</b> (subset with bought_in_past_month &gt; 0), <b>Avg ROI</b>, <b>Avg Profit</b></li>
+                  <li>Scan charts:
+                    <ul style="padding-left:14px; margin:4px 0;">
+                      <li><b>ROI Distribution</b> — look for concentration points</li>
+                      <li><b>Profitable Categories</b> — highest total profit bars (count in label)</li>
+                      <li><b>Net Profit vs Selling Price</b> — green dots (ROI ≥ 30%) are best candidates</li>
+                      <li><b>Profit vs Competition</b> — green dots with low total_offer_count = best opportunity</li>
+                    </ul>
+                  </li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 2 — Detailed Analysis (Analysis Tab)</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Set tier filter to <b>T1</b> → sort by NetProfit desc → review VERIFIED matches</li>
+                  <li>Switch to <b>T2</b> — review LIKELY matches that need manual check</li>
+                  <li>Apply <b>min_sales ≥ 50</b> filter to focus on proven demand</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 3 — Validate T2/T3 Matches (Operator Tab)</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Analysis tab → set Tier filter to <b>T2</b> (repeat for T3 if needed) → apply NetProfit &gt; 0, Sales ≥ 50 → <b>Export CSV</b></li>
+                  <li>Copy the downloaded file into <code>OUTPUTS/FBA_ANALYSIS/financial_reports/{supplier}/</code></li>
+                  <li>Operator tab → select that file from the <b>Financial Report</b> dropdown → click <b>Run AI Analysis</b></li>
+                  <li>LLM verdict per row: VERIFIED / HIGH LIKELIHOOD = keep &nbsp;|&nbsp; NEEDS VERIFICATION or pack mismatch flagged = remove</li>
+                  <li>Review full report in <code>OUTPUTS/CONTROL_PLANE/FINANCIAL_REPORTS/run_{timestamp}/COMBINED_AI_ANALYSIS.md</code></li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 4 — Build Final Product List</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Analysis tab → filter T1+T2, NetProfit &gt; 0, Sales &gt; 0 → <b>Export CSV</b></li>
+                  <li>Remove any rows the operator agent flagged as false positives in Phase 3</li>
+                  <li>Remaining list = actionable sourcing list</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 5 — Spot-Check Top Items</p>
+                <ol style="margin:0; padding-left:18px;">
+                  <li>Open Amazon listing for top 10-20 products by profit</li>
+                  <li>Verify product matches visually, check current price vs report</li>
+                  <li>Confirm Buy Box availability, review count and rating</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- STALE DATA WORKFLOW -->
+            <div class="metric-card" style="grid-column:2/3;">
+              <div class="card-header" style="margin-bottom:16px;">
+                <h3 style="color:var(--accent-blue, #c0c1ff); font-size:1rem; margin:0;">Stale Data — Identify Categories &amp; Products to Re-Analyze</h3>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.7; color:var(--text-secondary);">
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 1 — Identify Staleness</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Check the Financial Report filename date (e.g. <code>20260122</code> = Jan 22)</li>
+                  <li>&gt; 14 days = moderately stale &nbsp;|&nbsp; &gt; 30 days = significantly stale</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 2 — Identify High-Value Re-Analysis Targets</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Analysis tab → filter T1+T2, NetProfit &gt; 0, Sales &gt; 0 → sort by <b>Sales desc</b></li>
+                  <li>High-sales products change fastest — these are top re-check candidates</li>
+                  <li><b>Export CSV</b> — this is your re-analysis candidate list</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 3 — Prioritize Categories</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li>Dashboard → <b>Profitable Categories With Sales</b> chart</li>
+                  <li>Categories with most products (count in label) AND highest total profit = best re-analysis targets</li>
+                  <li>Re-analyzing one category re-scrapes all its products efficiently</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 4 — Execute Selective Re-Analysis</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li><b>Category-level:</b> AI Assistant tab → "Run sandbox analysis for category [URL] on [supplier]" → wait for completion → switch lineage to <b>Latest Sandbox</b></li>
+                  <li><b>Product-level:</b> Build product list JSON → place in <code>OUTPUTS/CONTROL_PLANE/inputs/</code> → enqueue sandbox run via chat</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 5 — Compare Old vs New</p>
+                <ol style="margin:0; padding-left:18px;">
+                  <li>After sandbox run: switch lineage to Latest Sandbox</li>
+                  <li>Compare NetProfit, Sales, total_offer_count between old and new report</li>
+                  <li>NetProfit stable/improved = confirmed opportunity &nbsp;|&nbsp; dropped = deprioritize</li>
+                </ol>
+
+                <div style="margin-top:16px; padding:10px 12px; background:rgba(255,180,171,0.1); border-left:3px solid #ffb4ab; border-radius:4px; font-size:0.78rem;">
+                  <b style="color:#ffb4ab;">Do NOT</b> use an Analysis export as a substitute for running a fresh system scrape — the LLM validates title/EAN/category match quality only, not whether prices or competition have changed. For stale data: always re-run the system for fresh Amazon data first, then validate T2/T3 matches via the Operator tab on the new report.
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-card" style="grid-column:1/3;">
+              <div class="card-header" style="margin-bottom:16px;">
+                <h3 style="color:var(--accent-blue, #c0c1ff); font-size:1rem; margin:0;">Prompt Triggers Quick Guide</h3>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.7; color:var(--text-secondary);">
+                <ol style="margin:0; padding-left:18px;">
+                  <li><b>Main workflow:</b> "run main workflow for [supplier]" / "run all categories for [supplier]"</li>
+                  <li><b>Category sandbox:</b> "run sandbox analysis for category [URL] on [supplier]"</li>
+                  <li><b>Category sandbox resume:</b> "resume category sandbox run [run_id]"</li>
+                  <li><b>Product-list refresh:</b> "refresh product list [products_path] for [supplier]"</li>
+                  <li><b>Product-list resume:</b> "resume product-list refresh run [run_id] with [products_path]"</li>
+                  <li><b>If chat was reset/rebooted:</b> include both <code>run_id</code> and <code>products_path</code> explicitly.</li>
+                </ol>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+    <!-- Category Drilldown Modal -->
+    <div id="categoryModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); overflow-y:auto;">
+      <div style="max-width:900px; margin:40px auto; background:#1c1b1c; border:1px solid #464554; border-radius:8px; padding:0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #353436;">
+          <h3 style="margin:0; font-family:'Space Grotesk',sans-serif; color:#e5e2e3;" id="categoryModalTitle">Category Products</h3>
+          <button onclick="document.getElementById('categoryModal').style.display='none'" style="background:none; border:none; color:#908fa0; font-size:20px; cursor:pointer;">&times;</button>
+        </div>
+        <div style="padding:16px 20px; overflow-x:auto;">
+          <table class="data-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Supplier Title</th>
+                <th>Amazon Title</th>
+                <th>ROI</th>
+                <th>Profit</th>
+                <th>Sales/mo</th>
+              </tr>
+            </thead>
+            <tbody id="categoryModalBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>

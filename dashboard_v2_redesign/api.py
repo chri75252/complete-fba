@@ -100,9 +100,42 @@ def get_base_directory():
             return candidate
     return os.getcwd()
 
+
+def _strict_financial_dir(base_dir: str, supplier: str) -> Optional[str]:
+    if not supplier:
+        return None
+    root = Path(base_dir) / "OUTPUTS" / "FBA_ANALYSIS" / "financial_reports"
+    if not root.exists():
+        return None
+    candidates = [supplier.replace(".", "-"), supplier, supplier.replace(".", "_")]
+    for folder in candidates:
+        candidate = root / folder
+        if candidate.is_dir():
+            return str(candidate)
+    return None
+
+
+def _parse_sales_value(value: Any) -> float:
+    if value is None:
+        return 0.0
+    text = str(value).strip()
+    if not text:
+        return 0.0
+    try:
+        return float(text)
+    except (TypeError, ValueError):
+        match = re.search(r"(\d+(?:\.\d+)?)", text)
+        if not match:
+            return 0.0
+        try:
+            return float(match.group(1))
+        except ValueError:
+            return 0.0
+
 def validate_supplier_data(base_dir, supplier):
     loader = MetricsLoader(base_dir)
     paths = loader.resolve_paths(supplier)
+    paths["financial_dir"] = _strict_financial_dir(base_dir, supplier)
     issues = []
     if not paths.get("state_file") or not os.path.exists(paths["state_file"]):
         issues.append("State file not found")
@@ -122,7 +155,12 @@ def read_root():
     return {"message": "index.html not found"}
 
 @app.get("/api/metrics/{supplier}")
-def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = ""):
+def get_supplier_metrics(
+    supplier: str,
+    lineage: str = "base",
+    report: str = "",
+    sales_field: str = "bought_in_past_month",
+):
     base_dir = get_base_directory()
     try:
         effective_supplier = supplier
@@ -155,8 +193,11 @@ def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = "")
             "requested_supplier": supplier,
             "lineage": lineage,
             "effective_supplier": effective_supplier,
+            "sales_field_requested": sales_field,
         }
         metrics_data.setdefault("paths", {})["base_dir"] = base_dir
+        fin_dir = _strict_financial_dir(base_dir, effective_supplier)
+        metrics_data["paths"]["financial_dir"] = fin_dir
 
         # Override total_products with cached_products entry count (processing_state value is per-category only)
         try:
@@ -196,11 +237,19 @@ def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = "")
 
         # Load chart data + override metrics with EAN-matched-only values
         chart_data = []
-        fin_dir = metrics_data.get("paths", {}).get("financial_dir")
-        latest_file = metrics_data.get("financial_metrics", {}).get("latest_file")
+        latest_file = None
+        _csv_files: list[str] = []
+        if fin_dir and os.path.isdir(fin_dir):
+            _csv_files = sorted(
+                [f for f in os.listdir(fin_dir) if f.endswith(".csv") and os.path.isfile(os.path.join(fin_dir, f))],
+                key=lambda f: os.path.getmtime(os.path.join(fin_dir, f)),
+                reverse=True,
+            )
+            if _csv_files:
+                latest_file = _csv_files[0]
 
         # If a specific report was requested, override the auto-detected latest
-        if report and fin_dir:
+        if report and fin_dir and report in _csv_files:
             specific = os.path.join(fin_dir, report)
             if os.path.exists(specific):
                 latest_file = report
@@ -225,6 +274,16 @@ def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = "")
                                 'bought_in_past_month']:
                         if col in df.columns:
                             df[col] = pd.to_numeric(df[col], errors='coerce')
+
+                    selected_sales_field = sales_field if sales_field in {"bought_in_past_month", "amazon_sales_badge"} else "bought_in_past_month"
+                    if selected_sales_field not in df.columns:
+                        selected_sales_field = "bought_in_past_month" if "bought_in_past_month" in df.columns else (
+                            "amazon_sales_badge" if "amazon_sales_badge" in df.columns else ""
+                        )
+                    if selected_sales_field:
+                        df["sales_value"] = df[selected_sales_field].apply(_parse_sales_value)
+                    else:
+                        df["sales_value"] = 0.0
 
                     # --- EAN matching filter ---
                     def _norm_ean(s):
@@ -258,11 +317,9 @@ def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = "")
                     fm["avg_profit"] = round(float(profitable['NetProfit'].mean()) if len(profitable) > 0 else 0.0, 2)
                     fm["total_profit"] = fm["avg_profit"]  # frontend reads total_profit
                     # Sales-aware metrics
-                    if 'bought_in_past_month' in profitable.columns:
-                        profitable_with_sales = profitable[profitable['bought_in_past_month'].fillna(0).astype(float) > 0]
-                    else:
-                        profitable_with_sales = profitable.iloc[0:0]
+                    profitable_with_sales = profitable[profitable['sales_value'].fillna(0).astype(float) > 0]
                     fm["count_profitable_with_sales"] = len(profitable_with_sales)
+                    fm["sales_field_used"] = selected_sales_field or sales_field
 
                     # --- Category enrichment from cached products ---
                     try:
@@ -291,7 +348,7 @@ def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = "")
                     df_chart = df[df['_ean_matched']].dropna(subset=['ROI', 'NetProfit']).head(2000)
                     chart_cols = ['SupplierTitle', 'AmazonTitle', 'SupplierPrice_incVAT',
                                   'SellingPrice_incVAT', 'NetProfit', 'ROI', 'MatchQuality', 'Category']
-                    for extra in ['fba_seller_count', 'fbm_seller_count', 'total_offer_count', 'bought_in_past_month']:
+                    for extra in ['fba_seller_count', 'fbm_seller_count', 'total_offer_count', 'bought_in_past_month', 'amazon_sales_badge', 'sales_value']:
                         if extra in df.columns:
                             chart_cols.append(extra)
                     chart_cols = [c for c in chart_cols if c in df_chart.columns]
@@ -303,11 +360,6 @@ def get_supplier_metrics(supplier: str, lineage: str = "base", report: str = "")
 
         # C4 FIX: Populate available_reports so dashboard Financial Report dropdown is populated
         if fin_dir and os.path.exists(fin_dir):
-            _csv_files = sorted(
-                [f for f in os.listdir(fin_dir) if f.endswith(".csv")],
-                key=lambda f: os.path.getmtime(os.path.join(fin_dir, f)),
-                reverse=True
-            )
             metrics_data["available_reports"] = []
             for _f in _csv_files[:20]:
                 try:
@@ -391,7 +443,8 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                  min_roi: Optional[float] = None, min_profit: Optional[float] = None,
                  sort: str = "confidence", min_sales: Optional[int] = None,
                  page: int = 1, page_size: int = 50000,  # C3 FIX: removed 500-row cap; frontend paginates
-                 report: Optional[str] = None, category: Optional[str] = None):
+                 report: Optional[str] = None, category: Optional[str] = None,
+                 sales_field: str = "bought_in_past_month"):
     """Classify financial report rows into confidence tiers and return filtered results."""
     base_dir = get_base_directory()
     try:
@@ -402,10 +455,7 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
             if latest:
                 effective_supplier = latest
 
-        # Find financial report directory
-        loader = MetricsLoader(base_dir)
-        paths = loader.resolve_paths(effective_supplier)
-        fin_dir = paths.get("financial_dir")
+        fin_dir = _strict_financial_dir(base_dir, effective_supplier)
 
         if not fin_dir or not os.path.exists(fin_dir):
             return JSONResponse({"error": True, "message": "No financial reports directory found"})
@@ -440,8 +490,15 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
         rows = []
         with open(csv_path, "r", encoding="utf-8-sig") as f:
             reader = csv_mod.DictReader(f)
+            selected_sales_field = sales_field if sales_field in {"bought_in_past_month", "amazon_sales_badge"} else "bought_in_past_month"
             for i, row in enumerate(reader, start=2):
                 row["_row_id"] = i
+                sales_source = selected_sales_field if selected_sales_field in row else (
+                    "bought_in_past_month" if "bought_in_past_month" in row else (
+                        "amazon_sales_badge" if "amazon_sales_badge" in row else ""
+                    )
+                )
+                row["sales_value"] = _parse_sales_value(row.get(sales_source)) if sales_source else 0.0
                 classification = filter_mod.classify_row(row)
                 row.update(classification)
                 rows.append(row)
@@ -466,7 +523,7 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                     return int(float(val)) if val and str(val).strip() else 0
                 except (ValueError, TypeError):
                     return 0
-            rows = [r for r in rows if _safe_sales(r.get("bought_in_past_month")) >= min_sales]
+            rows = [r for r in rows if _safe_sales(r.get("sales_value")) >= min_sales]
 
         # Category enrichment from cached products
         url_to_category = {}
@@ -523,6 +580,8 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                 "NetProfit": r.get("NetProfit"),
                 "ROI": r.get("ROI"),
                 "bought_in_past_month": r.get("bought_in_past_month"),
+                "amazon_sales_badge": r.get("amazon_sales_badge"),
+                "sales_value": r.get("sales_value"),
                 "tier": r.get("tier"),
                 "confidence_score": r.get("confidence_score"),
                 "flags": r.get("flags", []),
@@ -542,6 +601,7 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
             "source_file": os.path.basename(csv_path),
             "effective_supplier": effective_supplier,
             "distinct_categories": distinct_categories,
+            "sales_field_used": sales_field,
         }
 
     except Exception as e:
@@ -560,13 +620,11 @@ def list_reports(supplier: str, lineage: str = "base"):
             latest = loader.discover_latest_sandbox_supplier(supplier)
             if latest:
                 effective_supplier = latest
-        loader = MetricsLoader(base_dir)
-        paths = loader.resolve_paths(effective_supplier)
-        fin_dir = paths.get("financial_dir")
+        fin_dir = _strict_financial_dir(base_dir, effective_supplier)
         if not fin_dir or not os.path.exists(fin_dir):
             return JSONResponse({"reports": [], "error": "No financial reports directory"})
         csv_files = sorted(
-            [f for f in os.listdir(fin_dir) if f.endswith(".csv")],
+            [f for f in os.listdir(fin_dir) if f.endswith(".csv") and os.path.isfile(os.path.join(fin_dir, f))],
             key=lambda f: os.path.getmtime(os.path.join(fin_dir, f)), reverse=True
         )
         reports = []
