@@ -540,30 +540,60 @@ def run_calculations(
     print(f"Using Amazon data from: {amazon_dir}")
     print(f"Output will be saved to: {out_dir}")
 
+    # --- SOURCE OF TRUTH: Linking map drives the row list ---
+    lmap_path = supplier_paths["linking_map"]
+    try:
+        with open(lmap_path, "r", encoding="utf-8") as f:
+            linking_map_entries = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        raise Exception(f"Error reading linking map (primary source): {e}")
+
+    # Supplier cache used only as a price/title fallback lookup (keyed by EAN, then URL)
+    supplier_price_lookup = {}   # key: normalised EAN string -> cache entry
+    supplier_url_lookup   = {}   # key: url -> cache entry
     try:
         with open(cache_path, "r", encoding="utf-8") as f:
             supplier_products = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        raise Exception(f"Error reading supplier cache: {e}")
+        for _sp in supplier_products:
+            _ean = str(_sp.get("ean") or "").strip().split(".")[0]
+            if _ean:
+                supplier_price_lookup.setdefault(_ean, _sp)
+            _url = (_sp.get("url") or "").strip()
+            if _url:
+                supplier_url_lookup[_url] = _sp
+    except Exception:
+        pass  # Cache missing is non-fatal; price will fall back to linking map field
 
     records = []
 
-    print(f"Processing {len(supplier_products)} supplier products...")
+    print(f"Processing {len(linking_map_entries)} linking map entries (source of truth)...")
     processed = 0
     found_matches = 0
 
-    for sp in supplier_products:
-        ean = sp.get("ean")
-        asin = sp.get("asin")
-        title = sp.get("title")
-        url = sp.get("url")  # Get supplier URL for linking map lookup
+    for lm in linking_map_entries:
+        # Linking map field names (as written by the workflow)
+        ean   = str(lm.get("supplier_ean") or lm.get("ean") or "").strip().split(".")[0] or None
+        asin  = lm.get("amazon_asin") or lm.get("asin")
+        title = lm.get("supplier_title") or lm.get("title")
+        url   = lm.get("supplier_url")  or lm.get("url")
 
         # Skip if no linking information
         if not any([ean, asin, title]):
-            print(f"Skipping product with no EAN, ASIN, or title")
+            print(f"Skipping linking map entry with no EAN, ASIN, or title")
             continue
 
-        supplier_price = float(sp["price"]) if "price" in sp and sp["price"] else 0
+        # Resolve supplier price: prefer live cache, fall back to linking map field
+        _cache_entry = supplier_price_lookup.get(ean) or supplier_url_lookup.get(url or "")
+        if _cache_entry:
+            supplier_price = float(_cache_entry["price"]) if _cache_entry.get("price") else 0
+            # Prefer cache title/url when available (more up to date)
+            title = _cache_entry.get("title") or title
+            url   = _cache_entry.get("url")   or url
+        else:
+            supplier_price = float(lm.get("supplier_price") or lm.get("price") or 0)
+
+        # Build a minimal sp-compatible dict so the rest of the function is unchanged
+        sp = {"ean": ean, "asin": asin, "title": title, "url": url, "price": supplier_price}
         amazon = find_amazon_json(
             ean, asin, title, url, supplier_name
         )  # Pass URL and supplier_name parameters
@@ -649,12 +679,19 @@ def run_calculations(
     dt = datetime.now().strftime("%Y%m%d_%H%M%S")
     normalized_supplier_name = supplier_name.replace(".", "-")
     out_path = os.path.join(out_dir, f"fba_financial_report_{normalized_supplier_name}_{dt}.csv")
+    def clean_ean(x):
+        if pd.isna(x): return ""
+        s = str(x).strip()
+        if s in ("", "nan", "None"): return ""
+        try:
+            return str(int(float(s)))
+        except ValueError:
+            return s
+
     # C1 FIX: Preserve EAN columns as text strings to prevent pandas float64 scientific notation
     for _ean_col in ["EAN", "EAN_OnPage"]:
         if _ean_col in df.columns:
-            df[_ean_col] = df[_ean_col].apply(
-                lambda x: str(int(float(x))) if pd.notna(x) and str(x).strip() not in ("", "nan", "None") else ""
-            )
+            df[_ean_col] = df[_ean_col].apply(clean_ean)
     df.to_csv(out_path, index=False)
 
     # Calculate statistics
@@ -687,7 +724,7 @@ def run_calculations(
         "dataframe": df,
         "statistics": stats,
         "records": records,
-        "supplier_products_total": len(supplier_products),
+        "supplier_products_total": len(linking_map_entries),  # now reflects linking map (source of truth)
     }
 
 
@@ -800,12 +837,19 @@ def run_calculations_incremental(supplier_name, new_entries, existing_csv_path=N
     if "ROI" in df_combined.columns:
         df_combined = df_combined.sort_values(by="ROI", ascending=False)
 
+    def clean_ean(x):
+        if pd.isna(x): return ""
+        s = str(x).strip()
+        if s in ("", "nan", "None"): return ""
+        try:
+            return str(int(float(s)))
+        except ValueError:
+            return s
+
     # C2 FIX: Preserve EAN columns as text strings to prevent pandas float64 scientific notation
     for _ean_col in ["EAN", "EAN_OnPage"]:
         if _ean_col in df_combined.columns:
-            df_combined[_ean_col] = df_combined[_ean_col].apply(
-                lambda x: str(int(float(x))) if pd.notna(x) and str(x).strip() not in ("", "nan", "None") else ""
-            )
+            df_combined[_ean_col] = df_combined[_ean_col].apply(clean_ean)
     df_combined.to_csv(combined_path, index=False)
 
     return {
@@ -822,8 +866,12 @@ def run_calculations_incremental(supplier_name, new_entries, existing_csv_path=N
 def main():
     """Main entry point that calls run_calculations and displays results."""
     try:
-        # Default supplier name for backward compatibility - should be passed as parameter in production
-        supplier_name = "clearance-king_co_uk"  # This should be dynamic in real usage
+        import sys
+        # Dynamic supplier name reading, fallback to default
+        supplier_name = "clearance-king_co_uk" 
+        if len(sys.argv) > 1:
+            supplier_name = sys.argv[1]
+            
         results = run_calculations(supplier_name)
 
         df = results["dataframe"]

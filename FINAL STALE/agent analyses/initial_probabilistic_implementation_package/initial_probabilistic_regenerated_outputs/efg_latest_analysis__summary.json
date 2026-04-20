@@ -1,0 +1,49 @@
+{
+  "label": "efg_latest_analysis",
+  "input_file": "/mnt/data/efg latestfba_analysis_2026-04-17.csv",
+  "rows": 3205,
+  "existing_tier_counts": {
+    "TIER_4_REJECTED": 2091,
+    "TIER_2_LIKELY": 768,
+    "TIER_1_VERIFIED": 251,
+    "TIER_3_NEEDS_REVIEW": 95
+  },
+  "new_tier_counts": {
+    "TIER_1_VERIFIED": 1019,
+    "TIER_3_NEEDS_REVIEW": 870,
+    "TIER_2_LIKELY": 695,
+    "TIER_4_REJECTED": 621
+  },
+  "existing_avg_confidence": 23.717628705148204,
+  "new_avg_confidence": 68.40773790951637,
+  "ean_exact_matches_new": 1019,
+  "output_csv": "/mnt/data/initial_probabilistic_regenerated_outputs/efg_latest_analysis__probabilistic_regenerated.csv",
+  "tier_changes_csv": "/mnt/data/initial_probabilistic_regenerated_outputs/efg_latest_analysis__tier_changes.csv",
+  "changed_rows": 2320,
+  "transition_matrix": {
+    "TIER_1_VERIFIED": {
+      "TIER_1_VERIFIED": 251,
+      "TIER_2_LIKELY": 768,
+      "TIER_3_NEEDS_REVIEW": 0,
+      "TIER_4_REJECTED": 0
+    },
+    "TIER_2_LIKELY": {
+      "TIER_1_VERIFIED": 0,
+      "TIER_2_LIKELY": 0,
+      "TIER_3_NEEDS_REVIEW": 82,
+      "TIER_4_REJECTED": 613
+    },
+    "TIER_3_NEEDS_REVIEW": {
+      "TIER_1_VERIFIED": 0,
+      "TIER_2_LIKELY": 0,
+      "TIER_3_NEEDS_REVIEW": 13,
+      "TIER_4_REJECTED": 857
+    },
+    "TIER_4_REJECTED": {
+      "TIER_1_VERIFIED": 0,
+      "TIER_2_LIKELY": 0,
+      "TIER_3_NEEDS_REVIEW": 0,
+      "TIER_4_REJECTED": 621
+    }
+  }
+}

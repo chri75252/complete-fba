@@ -192,6 +192,12 @@
               <option value="latest_sandbox">Latest Sandbox</option>
             </select>
           </div>
+          <div class="input-group" id="runIdGroup" style="display:none;">
+            <label>Run ID</label>
+            <select id="runIdSelect" class="glass-input">
+              <option value="">&#x2014; latest valid run &#x2014;</option>
+            </select>
+          </div>
           <div class="input-group">
             <label>Financial Report</label>
             <select id="dashboardReportSelect" class="glass-input">
@@ -245,7 +251,7 @@
                 Waiting for first load…
               </p>
             </div>
-            <button class="btn-outline" onclick="fetchMetrics()">
+            <button class="btn-outline" onclick="fetchMetrics(true)">
               ↻ Refresh Now
             </button>
           </header>
@@ -536,10 +542,57 @@
             </div>
           </div>
 
-          <!-- Data Source Mapping -->
+<!-- Data Source Mapping -->
           <details class="card stagger-5" style="margin-top:1rem">
-            <summary style="cursor:pointer"><h3 style="display:inline;font-size:14px">&#x1F4C2; Data Sources</h3></summary>
-            <div id="dataSourcesPanel" style="font-size:12px;color:#999;font-family:monospace;padding:8px;line-height:1.8"></div>
+            <summary style="cursor:pointer"><h3 style="display:inline;font-size:14px">&#x1F4C2; Data Sources &amp; Refresh Behavior</h3></summary>
+            <div style="padding:12px;font-size:12px;line-height:1.7;color:#c7c4d7">
+              <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
+                <thead>
+                  <tr style="border-bottom:1px solid #464554">
+                    <th style="text-align:left;padding:6px 10px;color:#908fa0;font-weight:600">Dashboard Section</th>
+                    <th style="text-align:left;padding:6px 10px;color:#908fa0;font-weight:600">Source File</th>
+                    <th style="text-align:left;padding:6px 10px;color:#908fa0;font-weight:600">Read By</th>
+                  </tr>
+                </thead>
+                <tbody id="dataSourcesTableBody">
+                  <tr style="border-bottom:1px solid #201f20">
+                    <td style="padding:6px 10px">Total Extracted (product count)</td>
+                    <td style="padding:6px 10px;font-family:JetBrains Mono,monospace;font-size:11px" id="dsCachedProducts">&mdash;</td>
+                    <td style="padding:6px 10px;color:#4edea3">loader (mtime-cached)</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #201f20">
+                    <td style="padding:6px 10px">Total Processed, Match Stats, Confidence</td>
+                    <td style="padding:6px 10px;font-family:JetBrains Mono,monospace;font-size:11px" id="dsLinkingMap">&mdash;</td>
+                    <td style="padding:6px 10px;color:#4edea3">loader (mtime-cached)</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #201f20">
+                    <td style="padding:6px 10px">Profitable, Avg ROI, Total Profit, Files Scanned, Charts</td>
+                    <td style="padding:6px 10px;font-family:JetBrains Mono,monospace;font-size:11px" id="dsFinancialReport">&mdash;</td>
+                    <td style="padding:6px 10px;color:#4edea3">loader (mtime-cached)</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #201f20">
+                    <td style="padding:6px 10px">Phase, Category Index, Fresh Starts, Supplier/Amazon Progress</td>
+                    <td style="padding:6px 10px;font-family:JetBrains Mono,monospace;font-size:11px" id="dsProcessingState">&mdash;</td>
+                    <td style="padding:6px 10px;color:#4edea3">loader (mtime-cached)</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #201f20">
+                    <td style="padding:6px 10px">Terminal Logs</td>
+                    <td style="padding:6px 10px;font-family:JetBrains Mono,monospace;font-size:11px" id="dsLogFile">&mdash;</td>
+                    <td style="padding:6px 10px;color:#ffb95f">always re-read (no cache)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="border-top:1px solid #464554;padding-top:10px;color:#908fa0;font-size:11px;line-height:1.6">
+                <b style="color:#c0c1ff">Refresh behavior:</b><br>
+                &bull; Auto-refresh interval: set by the dropdown (default 60s). Each interval calls <code>/api/metrics</code>.<br>
+                &bull; First request after server start: reads all files from disk (~12s).<br>
+                &bull; Repeat request within 30s: returns cached response instantly (~50ms). No files re-read.<br>
+                &bull; Repeat request after 30s: re-reads only files whose modification time changed since last read (~200ms if nothing changed, ~12s if large files changed).<br>
+                &bull; "Refresh Now" button: bypasses all caches, re-reads every file (~12s).<br>
+                &bull; Logs are never cached &mdash; always read fresh from disk.<br>
+                &bull; Switching supplier or lineage: starts a fresh cache entry for that supplier/lineage combination.
+              </div>
+            </div>
           </details>
         </section>
 
@@ -687,7 +740,7 @@
               <h1>Product Analysis</h1>
               <p class="view-subtitle">Tier-classified products with confidence scoring</p>
             </div>
-            <button class="btn-outline" onclick="window.loadAnalysis()">Refresh Analysis</button>
+            <button class="btn-outline" id="refreshAnalysisBtn" onclick="window.loadAnalysis()">Refresh Analysis</button>
             <button class="btn-outline" id="exportAnalysisBtn" onclick="window.exportAnalysisCsv()" style="display:none">Export CSV</button>
           </header>
           <!-- Tier Summary Strip -->
@@ -727,6 +780,8 @@
                 <select id="analysisTierFilter" class="glass-input">
                   <option value="all">All Tiers</option>
                   <option value="TIER_1_VERIFIED">T1: Verified</option>
+                  <option value="TIER_1_A_VERIFIED">T1-A: Verified (exact pack)</option>
+                  <option value="TIER_1_B_AUDIT_OUT">T1-B: Audit (pack diff)</option>
                   <option value="TIER_2_LIKELY">T2: Likely</option>
                   <option value="TIER_3_NEEDS_REVIEW">T3: Review</option>
                   <option value="TIER_4_REJECTED">T4: Rejected</option>
@@ -758,7 +813,8 @@
                   <option value="profit">Net Profit</option>
                 </select>
               </div>
-              <button class="btn-primary" onclick="window.loadAnalysis()">Apply</button>
+              <button class="btn-primary" id="applyAnalysisBtn" onclick="window.loadAnalysis()">Apply</button>
+              <button id="cancelAnalysisBtn" class="btn-outline" style="display:none;" onclick="window.cancelAnalysis()">Cancel Analysis</button>
             </div>
           </div>
           <!-- Product Table -->
@@ -865,41 +921,66 @@
               </div>
               <div style="font-size:0.82rem; line-height:1.7; color:var(--text-secondary);">
 
-                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 1 — Identify Staleness</p>
+                <div style="margin-bottom:14px; padding:8px 12px; background:rgba(192,193,255,0.08); border-left:3px solid #c0c1ff; border-radius:4px; font-size:0.78rem;">
+                  <b style="color:#c0c1ff;">User Prep (do these first for best results):</b><br>
+                  1. Export the Analysis tab CSV &rarr; place in <code>temp/</code> (gives the agent pre-calculated tiers).<br>
+                  2. State if you want <b>Category sandbox targets</b>, <b>Product List targets</b>, or both.<br>
+                  3. Provide the stale report path explicitly so the agent doesn't guess.
+                </div>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 1 &mdash; Assess Staleness &amp; Load Data</p>
                 <ol style="margin:0 0 14px; padding-left:18px;">
-                  <li>Check the Financial Report filename date (e.g. <code>20260122</code> = Jan 22)</li>
-                  <li>&gt; 14 days = moderately stale &nbsp;|&nbsp; &gt; 30 days = significantly stale</li>
+                  <li>Check report filename date (e.g. <code>20260108</code> = Jan 8)</li>
+                  <li>&gt;14d = moderately stale &nbsp;|&nbsp; &gt;30d = significantly &nbsp;|&nbsp; &gt;90d = critically</li>
+                  <li>Load analysis CSV from <code>temp/</code> (has tiers). If unavailable, use raw financial report</li>
                 </ol>
 
-                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 2 — Identify High-Value Re-Analysis Targets</p>
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 2 &mdash; Data Cleansing (Before Any Analysis)</p>
                 <ol style="margin:0 0 14px; padding-left:18px;">
-                  <li>Analysis tab → filter T1+T2, NetProfit &gt; 0, Sales &gt; 0 → sort by <b>Sales desc</b></li>
-                  <li>High-sales products change fastest — these are top re-check candidates</li>
-                  <li><b>Export CSV</b> — this is your re-analysis candidate list</li>
+                  <li>Remove T4 (dashboard-rejected) matches</li>
+                  <li>Exclude &ldquo;Superior&rdquo; brand (hard exclusion)</li>
+                  <li>Price plausibility gate: reject if <code>AmazonPrice &gt; 20&times; SupplierPrice</code> with &lt;2 shared title words</li>
+                  <li>False match detection: remove luxury brand contamination (Versace, Jo Malone, etc.)</li>
+                  <li><b>Unit qty mismatch scan:</b> parse titles for &ldquo;Pack of X&rdquo;, &ldquo;X-Pack&rdquo;, &ldquo;Set of X&rdquo;. If supplier=1 but Amazon=multipack &rarr; recalculate profit. Remove if negative.</li>
+                  <li><b>T3 quarantine:</b> strip ALL T3 from Buckets A &amp; C (93% false-positive rate proven)</li>
                 </ol>
 
-                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 3 — Prioritize Categories</p>
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 3 &mdash; Bucket Classification</p>
                 <ol style="margin:0 0 14px; padding-left:18px;">
-                  <li>Dashboard → <b>Profitable Categories With Sales</b> chart</li>
-                  <li>Categories with most products (count in label) AND highest total profit = best re-analysis targets</li>
-                  <li>Re-analyzing one category re-scrapes all its products efficiently</li>
+                  <li><b>Bucket A (Proven Demand):</b> Sales &gt; 0 AND Profit &gt; 0 &mdash; T1+T2 only</li>
+                  <li><b>Bucket B (Opportunity):</b> Profit &gt; 0, Sales = 0 or NaN &mdash; T1+T2; T3 only with LOW confidence flag</li>
+                  <li><b>Bucket C (Margin Flip):</b> Sales &gt; 50, Profit between &minus;&pound;3 and +&pound;0.50 &mdash; T1+T2 only</li>
                 </ol>
 
-                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 4 — Execute Selective Re-Analysis</p>
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 4 &mdash; Identify Re-Scrape Targets</p>
                 <ol style="margin:0 0 14px; padding-left:18px;">
-                  <li><b>Category-level:</b> AI Assistant tab → "Run sandbox analysis for category [URL] on [supplier]" → wait for completion → switch lineage to <b>Latest Sandbox</b></li>
-                  <li><b>Product-level:</b> Build product list JSON → place in <code>OUTPUTS/CONTROL_PLANE/inputs/</code> → enqueue sandbox run via chat</li>
+                  <li>Group Bucket A+C products by supplier category URL</li>
+                  <li>Rank categories by: product count &times; value concentration</li>
+                  <li>Top 3-5 categories = <b>Sandbox re-scrape targets</b> (most efficient refresh)</li>
+                  <li>Orphan products not in top categories &rarr; targeted Product List JSON for ASIN-level refresh</li>
                 </ol>
 
-                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 5 — Compare Old vs New</p>
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 5 &mdash; Execute Re-Scrape</p>
+                <ol style="margin:0 0 14px; padding-left:18px;">
+                  <li><b>Category-level:</b> AI Assistant &rarr; &ldquo;<code>run sandbox analysis for category [URL] on [supplier]</code>&rdquo;</li>
+                  <li><b>Product-level:</b> Place JSON in <code>OUTPUTS/CONTROL_PLANE/inputs/</code> &rarr; enqueue via chat</li>
+                  <li>Switch lineage to <b>Latest Sandbox</b> after completion</li>
+                </ol>
+
+                <p style="font-weight:600; color:var(--text-primary); margin:0 0 8px;">Phase 6 &mdash; Validate Fresh Results</p>
                 <ol style="margin:0; padding-left:18px;">
-                  <li>After sandbox run: switch lineage to Latest Sandbox</li>
-                  <li>Compare NetProfit, Sales, total_offer_count between old and new report</li>
-                  <li>NetProfit stable/improved = confirmed opportunity &nbsp;|&nbsp; dropped = deprioritize</li>
+                  <li>Compare new vs old: NetProfit, Sales, total_offer_count</li>
+                  <li>Margin held/increased = confirmed opportunity &nbsp;|&nbsp; collapsed = deprioritize</li>
+                  <li>Spot-check top 15-35 products via Keepa/browser (NOW the data is fresh)</li>
+                  <li>Run T2/T3 validation via Operator tab on the <b>new</b> report</li>
                 </ol>
 
                 <div style="margin-top:16px; padding:10px 12px; background:rgba(255,180,171,0.1); border-left:3px solid #ffb4ab; border-radius:4px; font-size:0.78rem;">
-                  <b style="color:#ffb4ab;">Do NOT</b> use an Analysis export as a substitute for running a fresh system scrape — the LLM validates title/EAN/category match quality only, not whether prices or competition have changed. For stale data: always re-run the system for fresh Amazon data first, then validate T2/T3 matches via the Operator tab on the new report.
+                  <b style="color:#ffb4ab;">Critical Rules:</b><br>
+                  &bull; Do NOT manually check 500+ stale Amazon prices via browser &mdash; triage first, re-scrape, then validate fresh data.<br>
+                  &bull; Do NOT include T3 in Bucket A or C &mdash; 93% are false matches.<br>
+                  &bull; Do NOT skip unit-qty scan &mdash; one Pack-of-12 mismatch turns &pound;31 &ldquo;profit&rdquo; into a &pound;3 loss.<br>
+                  &bull; Do NOT save output files without re-reading them to verify contents.
                 </div>
               </div>
             </div>

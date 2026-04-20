@@ -3,6 +3,7 @@ import os
 import sys
 import re
 import time
+import inspect
 import threading
 import traceback
 import tempfile
@@ -18,13 +19,87 @@ import pandas as pd
 
 # In-memory AI analysis job store
 _ai_jobs: dict = {}
+_analysis_state = {
+    "active": False,
+    "job_id": None,
+    "cancel_requested": False,
+}
+_analysis_state_lock = threading.Lock()
+
+# ─── Server-level response cache with mtime-based invalidation ─────────────────
+_CACHE_TTL_SECONDS = 30
+_response_cache: dict = {}
+_cache_lock = threading.Lock()
+
+_loader_lock = threading.Lock()
+_loader_instance = None
+_loader_base_dir = None
+
+
+def _get_loader(base_dir: str):
+    """Reuse a single MetricsLoader instance so its internal _cache dict persists across requests."""
+    global _loader_instance, _loader_base_dir
+    with _loader_lock:
+        if _loader_instance is None or _loader_base_dir != base_dir:
+            _loader_instance = MetricsLoader(base_dir)
+            _loader_base_dir = base_dir
+        return _loader_instance
+
+
+def _source_mtimes(base_dir: str, effective_supplier: str) -> dict:
+    """Collect modification times of all source files for cache invalidation."""
+    loader = _get_loader(base_dir)
+    paths = loader.resolve_paths(effective_supplier)
+    mtimes = {}
+    for key in ("state_file", "linking_file", "cached_products_file"):
+        p = paths.get(key)
+        if p and os.path.exists(p):
+            try:
+                mtimes[key] = os.path.getmtime(p)
+            except OSError:
+                pass
+    fin_dir = _strict_financial_dir(base_dir, effective_supplier)
+    if fin_dir and os.path.isdir(fin_dir):
+        csvs = [f for f in os.listdir(fin_dir) if f.endswith(".csv") and os.path.isfile(os.path.join(fin_dir, f))]
+        if csvs:
+            latest = max(csvs, key=lambda f: os.path.getmtime(os.path.join(fin_dir, f)))
+            try:
+                mtimes["financial_csv"] = os.path.getmtime(os.path.join(fin_dir, latest))
+            except OSError:
+                pass
+    return mtimes
+
+
+def _cache_key(supplier: str, lineage: str, report: str, sales_field: str) -> str:
+    return f"metrics::{supplier}::{lineage}::{report}::{sales_field}"
+
+
+_filter_module = None
+_filter_module_path = None
+
+
+def _get_filter_module():
+    """Import fba_report_filter once and keep it cached."""
+    global _filter_module, _filter_module_path
+    filter_path = PARENT_DIR / "tools" / "fba_report_filter.py"
+    current_path = str(filter_path)
+    if _filter_module is not None and _filter_module_path == current_path:
+        return _filter_module
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("fba_report_filter", current_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    _filter_module = mod
+    _filter_module_path = current_path
+    return mod
+
 
 # Add the parent directory to sys.path so we can import from dashboard and control_plane
 PARENT_DIR = Path(__file__).parent.parent.absolute()
 sys.path.append(str(PARENT_DIR))
 
 try:
-    from dashboard_legacy_streamlit.metrics_core import MetricsLoader, load_metrics
+    from dashboard_legacy_streamlit.metrics_core import MetricsLoader
     from control_plane.job_manager import JobManager
 except ImportError as e:
     print(f"Error importing metrics/job modules: {e}")
@@ -115,6 +190,19 @@ def _strict_financial_dir(base_dir: str, supplier: str) -> Optional[str]:
     return None
 
 
+def _resolve_effective_supplier(base_dir: str, supplier: str, lineage: str, run_id: str = "") -> str:
+    if run_id:
+        return f"{supplier}__sandbox__{run_id}"
+
+    if lineage == "latest_sandbox":
+        loader = _get_loader(base_dir)
+        latest = loader.discover_latest_sandbox_supplier(supplier)
+        if latest:
+            return latest
+
+    return supplier
+
+
 def _parse_sales_value(value: Any) -> float:
     if value is None:
         return 0.0
@@ -133,7 +221,7 @@ def _parse_sales_value(value: Any) -> float:
             return 0.0
 
 def validate_supplier_data(base_dir, supplier):
-    loader = MetricsLoader(base_dir)
+    loader = _get_loader(base_dir)
     paths = loader.resolve_paths(supplier)
     paths["financial_dir"] = _strict_financial_dir(base_dir, supplier)
     issues = []
@@ -158,17 +246,24 @@ def read_root():
 def get_supplier_metrics(
     supplier: str,
     lineage: str = "base",
+    run_id: str = "",
     report: str = "",
     sales_field: str = "bought_in_past_month",
+    force_refresh: bool = False,
 ):
     base_dir = get_base_directory()
+
+    if not force_refresh:
+        key = _cache_key(supplier, lineage, report, sales_field)
+        with _cache_lock:
+            entry = _response_cache.get(key)
+        if entry:
+            age = (datetime.now() - entry["ts"]).total_seconds()
+            if age < _CACHE_TTL_SECONDS:
+                return entry["data"]
+
     try:
-        effective_supplier = supplier
-        if lineage == "latest_sandbox":
-            loader = MetricsLoader(base_dir)
-            latest = loader.discover_latest_sandbox_supplier(supplier)
-            if latest:
-                effective_supplier = latest
+        effective_supplier = _resolve_effective_supplier(base_dir, supplier, lineage, run_id)
 
         issues, paths = validate_supplier_data(base_dir, effective_supplier)
         if issues:
@@ -183,19 +278,31 @@ def get_supplier_metrics(
                 "meta": {
                     "requested_supplier": supplier,
                     "lineage": lineage,
+                    "run_id": run_id,
                     "effective_supplier": effective_supplier,
                 },
             })
 
-        # We need to serialize paths object cleanly (POSIX paths to str)
-        metrics_data = load_metrics(base_dir, effective_supplier)
+        loader = _get_loader(base_dir)
+        paths = loader.resolve_paths(effective_supplier)
+        str_paths = {k: str(v) if v is not None else None for k, v in paths.items()}
+        metrics_data = {
+            "paths": str_paths,
+            "state_metrics": loader.load_state_metrics(paths["state_file"], paths.get("config_file")),
+            "linking_metrics": loader.load_linking_map_metrics(paths["linking_file"]),
+            "financial_metrics": loader.load_financial_metrics(paths["financial_dir"]),
+            "supplier_cache_metrics": loader.load_supplier_cache_metrics(paths.get("cached_products_file")),
+            "amazon_cache_metrics": loader.load_amazon_cache_metrics(paths.get("amazon_cache_dir")),
+            "log_data": loader.tail_logs(paths["logs_dir"], supplier_hint=effective_supplier),
+        }
         metrics_data["meta"] = {
             "requested_supplier": supplier,
             "lineage": lineage,
+            "run_id": run_id,
             "effective_supplier": effective_supplier,
             "sales_field_requested": sales_field,
         }
-        metrics_data.setdefault("paths", {})["base_dir"] = base_dir
+        metrics_data["paths"]["base_dir"] = base_dir
         fin_dir = _strict_financial_dir(base_dir, effective_supplier)
         metrics_data["paths"]["financial_dir"] = fin_dir
 
@@ -372,7 +479,7 @@ def get_supplier_metrics(
         # Data source mapping for dashboard transparency
         metrics_data["data_sources"] = {
             "cached_products": str(metrics_data.get("paths", {}).get("cached_products_file") or ""),
-            "linking_map": str(metrics_data.get("paths", {}).get("linking_map_file") or ""),
+            "linking_map": str(metrics_data.get("paths", {}).get("linking_file") or ""),
             "financial_report": latest_file or "",
             "processing_state": str(metrics_data.get("paths", {}).get("state_file") or ""),
             "log_file": str((metrics_data.get("log_data") or [[], None])[1] or ""),
@@ -383,7 +490,13 @@ def get_supplier_metrics(
             for k, v in metrics_data["paths"].items():
                 if v is not None:
                     metrics_data["paths"][k] = str(v)
-                    
+
+        key = _cache_key(supplier, lineage, report, sales_field)
+        with _cache_lock:
+            _response_cache[key] = {
+                "data": metrics_data,
+                "ts": datetime.now(),
+            }
         return metrics_data
     except Exception as e:
         import traceback
@@ -393,12 +506,7 @@ def get_supplier_metrics(
 @app.get("/api/validate/{supplier}")
 def run_validation(supplier: str, lineage: str = "base"):
     base_dir = get_base_directory()
-    effective_supplier = supplier
-    if lineage == "latest_sandbox":
-        loader = MetricsLoader(base_dir)
-        latest = loader.discover_latest_sandbox_supplier(supplier)
-        if latest:
-            effective_supplier = latest
+    effective_supplier = _resolve_effective_supplier(base_dir, supplier, lineage)
 
     issues, paths = validate_supplier_data(base_dir, effective_supplier)
     checks: dict[str, Any] = {}
@@ -438,22 +546,37 @@ def run_validation(supplier: str, lineage: str = "base"):
         }
     )
 
+@app.post("/api/analysis/cancel")
+def cancel_analysis():
+    with _analysis_state_lock:
+        if not _analysis_state["active"]:
+            return {"ok": True, "cancelled": False, "message": "No analysis in progress"}
+        _analysis_state["cancel_requested"] = True
+        return {"ok": True, "cancelled": True, "job_id": _analysis_state["job_id"]}
+
+
 @app.get("/api/analysis/{supplier}")
 def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                  min_roi: Optional[float] = None, min_profit: Optional[float] = None,
                  sort: str = "confidence", min_sales: Optional[int] = None,
-                 page: int = 1, page_size: int = 50000,  # C3 FIX: removed 500-row cap; frontend paginates
+                 page: int = 1, page_size: int = 50000,
+                 run_id: str = "",
                  report: Optional[str] = None, category: Optional[str] = None,
-                 sales_field: str = "bought_in_past_month"):
+                 sales_field: str = "bought_in_past_month",
+                 force_refresh: bool = False, loose_mode: bool = False):
     """Classify financial report rows into confidence tiers and return filtered results."""
+    job_id = f"analysis:{supplier}:{lineage}:{run_id}:{report or 'latest'}"
+    csv_path = ""
+    selected_sales_field = sales_field
+    with _analysis_state_lock:
+        if _analysis_state["active"]:
+            return JSONResponse({"error": True, "message": "Another analysis is already running", "job_id": _analysis_state["job_id"]}, status_code=409)
+        _analysis_state["active"] = True
+        _analysis_state["job_id"] = job_id
+        _analysis_state["cancel_requested"] = False
     base_dir = get_base_directory()
     try:
-        effective_supplier = supplier
-        if lineage == "latest_sandbox":
-            loader = MetricsLoader(base_dir)
-            latest = loader.discover_latest_sandbox_supplier(supplier)
-            if latest:
-                effective_supplier = latest
+        effective_supplier = _resolve_effective_supplier(base_dir, supplier, lineage, run_id)
 
         fin_dir = _strict_financial_dir(base_dir, effective_supplier)
 
@@ -475,19 +598,13 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                 return JSONResponse({"error": True, "message": "No financial report CSVs found"})
             csv_path = os.path.join(fin_dir, csv_files[0])
 
-        # Import the filter module
-        import importlib.util
-        filter_path = PARENT_DIR / "tools" / "fba_report_filter.py"
-        if not filter_path.exists():
+        filter_mod = _get_filter_module()
+        if filter_mod is None:
             return JSONResponse({"error": True, "message": "fba_report_filter.py not found in tools/"})
-
-        spec = importlib.util.spec_from_file_location("fba_report_filter", str(filter_path))
-        filter_mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(filter_mod)
 
         # Read and classify rows
         import csv as csv_mod
-        rows = []
+        raw_rows = []
         with open(csv_path, "r", encoding="utf-8-sig") as f:
             reader = csv_mod.DictReader(f)
             selected_sales_field = sales_field if sales_field in {"bought_in_past_month", "amazon_sales_badge"} else "bought_in_past_month"
@@ -499,9 +616,28 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                     )
                 )
                 row["sales_value"] = _parse_sales_value(row.get(sales_source)) if sales_source else 0.0
-                classification = filter_mod.classify_row(row)
-                row.update(classification)
-                rows.append(row)
+                raw_rows.append(row)
+
+        try:
+            from tools.fba_probabilistic_classifier import prepare_matcher
+            prepare_matcher(raw_rows, report_id=str(Path(csv_path).resolve()))
+        except Exception as e:
+            print(f"[api.get_analysis] matcher prep failed ({e}); legacy path active")
+
+        rows = []
+        for row in raw_rows:
+            with _analysis_state_lock:
+                if _analysis_state["cancel_requested"]:
+                    return JSONResponse({"error": True, "cancelled": True, "message": "Analysis cancelled", "job_id": job_id}, status_code=499)
+            classify_kwargs = {}
+            try:
+                if "loose_mode" in inspect.signature(filter_mod.classify_row).parameters:
+                    classify_kwargs["loose_mode"] = loose_mode
+            except (TypeError, ValueError):
+                pass
+            classification = filter_mod.classify_row(row, **classify_kwargs)
+            row.update(classification)
+            rows.append(row)
 
         # Compute tier counts (before filtering)
         tier_counts = {}
@@ -587,6 +723,12 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
                 "flags": r.get("flags", []),
                 "reasons": r.get("reasons", []),
                 "ean_exact_match": r.get("ean_exact_match"),
+                "title_similarity": r.get("title_similarity"),
+                "shared_tokens": r.get("shared_tokens"),
+                "prob_estimate": r.get("prob_estimate"),
+                "sup_pack": r.get("sup_pack"),
+                "amz_pack": r.get("amz_pack"),
+                "pack_bucket": r.get("pack_bucket"),
                 "SupplierURL": r.get("SupplierURL", ""),
                 "AmazonURL": r.get("AmazonURL", ""),
                 "fba_seller_count": r.get("fba_seller_count"),
@@ -599,27 +741,35 @@ def get_analysis(supplier: str, lineage: str = "base", tier: str = "all",
             "total_rows": total_rows,
             "filtered_count": len(clean_rows),
             "source_file": os.path.basename(csv_path),
+            "run_id": run_id,
             "effective_supplier": effective_supplier,
             "distinct_categories": distinct_categories,
-            "sales_field_used": sales_field,
+            "sales_field_used": selected_sales_field,
         }
 
     except Exception as e:
         import traceback as tb
         return JSONResponse({"error": True, "message": str(e), "traceback": tb.format_exc()}, status_code=500)
+    finally:
+        if csv_path:
+            try:
+                from tools.fba_probabilistic_classifier import reset_matcher
+                reset_matcher(str(Path(csv_path).resolve()))
+            except Exception:
+                pass
+        with _analysis_state_lock:
+            if _analysis_state["job_id"] == job_id:
+                _analysis_state["active"] = False
+                _analysis_state["job_id"] = None
+                _analysis_state["cancel_requested"] = False
 
 
 @app.get("/api/reports/{supplier}")
-def list_reports(supplier: str, lineage: str = "base"):
+def list_reports(supplier: str, lineage: str = "base", run_id: str = ""):
     """List available financial report CSVs for AI analysis."""
     base_dir = get_base_directory()
     try:
-        effective_supplier = supplier
-        if lineage == "latest_sandbox":
-            loader = MetricsLoader(base_dir)
-            latest = loader.discover_latest_sandbox_supplier(supplier)
-            if latest:
-                effective_supplier = latest
+        effective_supplier = _resolve_effective_supplier(base_dir, supplier, lineage, run_id)
         fin_dir = _strict_financial_dir(base_dir, effective_supplier)
         if not fin_dir or not os.path.exists(fin_dir):
             return JSONResponse({"reports": [], "error": "No financial reports directory"})
@@ -643,18 +793,40 @@ def list_reports(supplier: str, lineage: str = "base"):
         return JSONResponse({"reports": [], "error": str(e)})
 
 
+@app.get("/api/runs/{supplier}")
+def list_runs(supplier: str, lineage: str = "base"):
+    base_dir = get_base_directory()
+    try:
+        if lineage != "latest_sandbox":
+            return JSONResponse({"runs": []})
+
+        loader = _get_loader(base_dir)
+        runs = loader.list_report_backed_sandbox_runs(supplier)
+        payload = []
+        for item in runs:
+            payload.append(
+                {
+                    "run_id": item["run_id"],
+                    "effective_supplier": item["effective_supplier"],
+                    "report_count": item["report_count"],
+                    "latest_report_mtime": item["latest_report_mtime"],
+                    "has_state_file": bool(item.get("state_file") and os.path.exists(item["state_file"])),
+                    "has_linking_file": bool(item.get("linking_file") and os.path.exists(item["linking_file"])),
+                    "has_cached_products_file": bool(item.get("cached_products_file") and os.path.exists(item["cached_products_file"])),
+                }
+            )
+        return JSONResponse({"runs": payload})
+    except Exception as e:
+        return JSONResponse({"runs": [], "error": str(e)})
+
+
 @app.get("/api/categories/{supplier}")
-def list_categories(supplier: str, lineage: str = "base"):
+def list_categories(supplier: str, lineage: str = "base", run_id: str = ""):
     """Return distinct categories derived from cached products source_url."""
     base_dir = get_base_directory()
     try:
-        effective_supplier = supplier
-        if lineage == "latest_sandbox":
-            loader = MetricsLoader(base_dir)
-            latest = loader.discover_latest_sandbox_supplier(supplier)
-            if latest:
-                effective_supplier = latest
-        loader = MetricsLoader(base_dir)
+        effective_supplier = _resolve_effective_supplier(base_dir, supplier, lineage, run_id)
+        loader = _get_loader(base_dir)
         paths = loader.resolve_paths(effective_supplier)
         cp_path = paths.get("cached_products_file")
         if not cp_path or not os.path.exists(cp_path):

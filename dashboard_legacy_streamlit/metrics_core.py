@@ -7,6 +7,7 @@ import json
 import os
 import csv
 import re
+from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any
 import pandas as pd
@@ -186,6 +187,53 @@ class MetricsLoader:
         )
         sandbox_id = candidates[0][len(prefix) : -len(suffix)]
         return f"{base_supplier}__sandbox__{sandbox_id}" if sandbox_id else None
+
+    def list_report_backed_sandbox_runs(self, base_supplier: str) -> List[Dict[str, Any]]:
+        base_supplier = (base_supplier or "").strip()
+        if not base_supplier:
+            return []
+
+        financial_root = Path(self.base_dir) / "OUTPUTS" / "FBA_ANALYSIS" / "financial_reports"
+        if not financial_root.exists():
+            return []
+
+        hyphenated_base = base_supplier.replace(".", "-").replace("_", "-").lower()
+        prefix = f"{hyphenated_base}__sandbox__"
+        runs: List[Dict[str, Any]] = []
+
+        for child in financial_root.iterdir():
+            if not child.is_dir() or not child.name.startswith(prefix):
+                continue
+
+            run_id = child.name[len(prefix):]
+            if not run_id:
+                continue
+
+            csv_files = sorted(
+                [p for p in child.iterdir() if p.is_file() and p.suffix.lower() == ".csv"],
+                key=lambda p: p.stat().st_mtime,
+                reverse=True,
+            )
+            if not csv_files:
+                continue
+
+            effective_supplier = f"{base_supplier}__sandbox__{run_id}"
+            paths = self.resolve_paths(effective_supplier)
+            latest_report = csv_files[0]
+
+            runs.append({
+                "run_id": run_id,
+                "effective_supplier": effective_supplier,
+                "financial_dir": str(child),
+                "latest_report_mtime": latest_report.stat().st_mtime,
+                "report_count": len(csv_files),
+                "state_file": paths.get("state_file"),
+                "linking_file": paths.get("linking_file"),
+                "cached_products_file": paths.get("cached_products_file"),
+            })
+
+        runs.sort(key=lambda item: item["latest_report_mtime"], reverse=True)
+        return runs
 
     def load_state_metrics(self, state_file: str, config_file: str = None) -> Dict[str, Any]:
         """Load state metrics with chunked processing for large JSON files"""

@@ -18,6 +18,14 @@ from datetime import datetime
 from pathlib import Path
 from difflib import SequenceMatcher
 
+_USE_LEGACY = os.getenv("FBA_USE_LEGACY_CLASSIFIER", "0") == "1"
+if not _USE_LEGACY:
+    try:
+        from tools.fba_probabilistic_classifier import classify_row_probabilistic, prepare_matcher
+    except Exception as _e:
+        _USE_LEGACY = True
+        print(f"[fba_report_filter] probabilistic import failed ({_e}); using legacy")
+
 
 def normalize_ean(raw: str) -> str:
     """Clean and normalize an EAN/barcode value."""
@@ -87,11 +95,20 @@ def extract_brand(title: str) -> str:
     return title.strip().lower()
 
 
-def classify_row(row: dict) -> dict:
+def classify_row(row: dict, loose_mode: bool = False) -> dict:
     """
     Classify a single financial report row into a confidence tier.
     Returns dict with: tier, confidence_score, reasons[], flags[]
     """
+    if not _USE_LEGACY:
+        try:
+            res = classify_row_probabilistic(row)
+            res.setdefault("title_similarity", round(title_similarity(row.get("SupplierTitle", ""), row.get("AmazonTitle", "")), 3))
+            res.setdefault("shared_tokens", shared_token_count(row.get("SupplierTitle", ""), row.get("AmazonTitle", "")))
+            return res
+        except RuntimeError:
+            pass
+
     supplier_ean = normalize_ean(row.get("EAN", ""))
     amazon_ean = normalize_ean(row.get("EAN_OnPage", ""))
     supplier_title = row.get("SupplierTitle", "")
@@ -112,7 +129,7 @@ def classify_row(row: dict) -> dict:
                 confidence += 50
                 reasons.append("Exact EAN match (checksum verified)")
             else:
-                confidence += 30
+                confidence += 25
                 reasons.append("EAN digits match but checksum invalid")
                 flags.append("EAN_CHECKSUM_FAIL")
         else:
@@ -131,10 +148,10 @@ def classify_row(row: dict) -> dict:
     shared = shared_token_count(supplier_title, amazon_title)
 
     if sim >= 0.6 and shared >= 4:
-        confidence += 35
+        confidence += 30
         reasons.append(f"Strong title match (sim={sim:.2f}, shared={shared})")
     elif sim >= 0.35 and shared >= 3:
-        confidence += 20
+        confidence += 15
         reasons.append(f"Moderate title match (sim={sim:.2f}, shared={shared})")
     elif sim < 0.15 and shared < 2:
         confidence -= 30
@@ -144,13 +161,14 @@ def classify_row(row: dict) -> dict:
         reasons.append(f"Weak title match (sim={sim:.2f}, shared={shared})")
 
     # --- Brand Check ---
+    # NOTE: First-word brand extraction is a rough heuristic. Works for "Philips X" vs "Prima Y" but not universal. Low weight to limit impact.
     supplier_brand = extract_brand(supplier_title)
     amazon_brand = extract_brand(amazon_title)
     if supplier_brand and amazon_brand and supplier_brand == amazon_brand:
-        confidence += 10
+        confidence += 5
         reasons.append(f"Brand match: {supplier_brand}")
     elif supplier_brand and amazon_brand and supplier_brand != amazon_brand:
-        confidence -= 10
+        confidence -= 5
         flags.append("BRAND_MISMATCH")
 
     # --- Financial Sanity ---
@@ -201,20 +219,18 @@ def classify_row(row: dict) -> dict:
         reasons.append(f"Category mismatch: supplier={supplier_cats} vs amazon={amazon_cats}")
 
     # --- Tier Classification ---
-    # Tiers measure MATCH QUALITY (is this the same product?), not profitability.
-    # Profitability is tracked via UNPROFITABLE flag, not tier demotion.
     confidence = max(0, min(100, confidence))
 
-    # T1: Confirmed match — EAN verified, no category conflict
-    if ean_exact_match and "CATEGORY_MISMATCH" not in flags:
+    # EAN match + profitable + no category mismatch -> always T1
+    if ean_exact_match and net_profit > 0 and "CATEGORY_MISMATCH" not in flags:
         tier = "TIER_1_VERIFIED"
-    # T2: Likely match — EAN with category doubt, or strong title+brand without EAN
+    # EAN match (unprofitable or category mismatch) -> T2
     elif ean_exact_match:
         tier = "TIER_2_LIKELY"
+    # No EAN: high confidence, no flags -> T2 max
     elif confidence >= 40 and "TITLE_MISMATCH" not in flags and "CATEGORY_MISMATCH" not in flags:
         tier = "TIER_2_LIKELY"
-    # T3: Some match signal — needs manual review
-    elif confidence >= 15:
+    elif confidence >= 15 and net_profit > 0:
         tier = "TIER_3_NEEDS_REVIEW"
     else:
         tier = "TIER_4_REJECTED"
@@ -242,39 +258,73 @@ def process_report(csv_path: str, output_dir: str = None) -> dict:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    global _USE_LEGACY
+
     rows = []
     with open(csv_path, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         fieldnames = reader.fieldnames
+        all_rows = []
         for i, row in enumerate(reader, start=2):
             row["_row_id"] = i
+            all_rows.append(row)
+
+    use_legacy = _USE_LEGACY
+    if not use_legacy:
+        try:
+            prepare_matcher(all_rows, report_id=str(csv_path.resolve()))
+        except Exception as e:
+            print(f"[fba_report_filter] matcher fit failed ({e}); using legacy")
+            use_legacy = True
+
+    for row in all_rows:
+        if use_legacy != _USE_LEGACY:
+            original_legacy = _USE_LEGACY
+            _USE_LEGACY = use_legacy
+            try:
+                classification = classify_row(row)
+            finally:
+                _USE_LEGACY = original_legacy
+        else:
             classification = classify_row(row)
-            row.update(classification)
-            rows.append(row)
+        row.update(classification)
+        rows.append(row)
 
     tiers = {
+        "TIER_1_A_VERIFIED": [],
+        "TIER_1_B_AUDIT_OUT": [],
         "TIER_1_VERIFIED": [],
         "TIER_2_LIKELY": [],
         "TIER_3_NEEDS_REVIEW": [],
         "TIER_4_REJECTED": [],
     }
     for row in rows:
-        tiers[row["tier"]].append(row)
+        t = row.get("tier", "TIER_4_REJECTED")
+        if t not in tiers:
+            tiers[t] = []
+        tiers[t].append(row)
 
     extra_cols = ["_row_id", "tier", "confidence_score", "reasons", "flags",
-                  "ean_exact_match", "title_similarity", "shared_tokens"]
+                  "ean_exact_match", "title_similarity", "shared_tokens", "prob_estimate",
+                  "sup_pack", "amz_pack", "pack_bucket"]
     out_fieldnames = fieldnames + extra_cols
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    serializable_rows = []
+    for row in rows:
+        serializable_row = dict(row)
+        serializable_row["reasons"] = " | ".join(serializable_row.get("reasons", []))
+        serializable_row["flags"] = " | ".join(serializable_row.get("flags", []))
+        serializable_rows.append(serializable_row)
+
+    serializable_by_row_id = {row.get("_row_id"): row for row in serializable_rows}
     for tier_name, tier_rows in tiers.items():
         out_path = output_dir / f"{tier_name.lower()}_{timestamp}.csv"
         with open(out_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=out_fieldnames, extrasaction="ignore")
             writer.writeheader()
             for row in sorted(tier_rows, key=lambda r: r.get("confidence_score", 0), reverse=True):
-                row["reasons"] = " | ".join(row.get("reasons", []))
-                row["flags"] = " | ".join(row.get("flags", []))
-                writer.writerow(row)
+                writer.writerow(serializable_by_row_id.get(row.get("_row_id"), row))
         print(f"  Wrote {len(tier_rows)} rows to {out_path.name}")
 
     summary = {

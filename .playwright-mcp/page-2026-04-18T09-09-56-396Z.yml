@@ -1,0 +1,156 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: FBA
+      - generic [ref=e6]:
+        - heading "Analytics Engine" [level=2] [ref=e7]
+        - generic [ref=e8]: Amazon Arbitrage System
+    - navigation "Primary navigation" [ref=e9]:
+      - link "Dashboard" [ref=e10] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e11]
+        - text: Dashboard
+      - link "Operator" [ref=e16] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e17]
+        - text: Operator
+      - link "AI Assistant" [ref=e20] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e21]
+        - text: AI Assistant
+      - link "Analysis" [ref=e23] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e24]
+        - text: Analysis
+      - link "Workflows" [ref=e27] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e28]
+        - text: Workflows
+    - generic [ref=e31]:
+      - generic [ref=e32]: Configuration
+      - generic [ref=e33]:
+        - generic [ref=e34]: Supplier Source
+        - combobox [disabled] [ref=e35]:
+          - option "poundwholesale.co.uk" [selected]
+          - option "clearance-king.co.uk"
+          - option "angelwholesale.co.uk"
+          - option "efghousewares.co.uk"
+      - generic [ref=e36]:
+        - generic [ref=e37]: Data Lineage
+        - combobox [disabled] [ref=e38]:
+          - option "Main Workflow" [selected]
+          - option "Latest Sandbox"
+      - generic [ref=e39]:
+        - generic [ref=e40]: Financial Report
+        - combobox [ref=e41]:
+          - option "— latest —" [selected]
+          - option "fba_financial_report_poundwholesale-co-uk_20260414_082856.csv (7183 rows, 4/14/2026)"
+          - option "fba_financial_report_poundwholesale-co-uk_20260321_195442.csv (6428 rows, 3/21/2026)"
+          - option "combined_reports.csv (17290 rows, 1/21/2026)"
+          - option "fba_financial_report_COMPLETE_20250824_224923.csv (7644 rows, 11/8/2025)"
+          - option "fba_financial_report_20250824_193835.csv (6166 rows, 11/8/2025)"
+          - option "fba_financial_report_20250824_174741.csv (6109 rows, 11/8/2025)"
+      - generic [ref=e42]:
+        - generic [ref=e43]: Sales Field
+        - generic [ref=e44]:
+          - checkbox "Use amazon_sales_badge (instead of bought_in_past_month)" [ref=e45]
+          - generic [ref=e46]: Use amazon_sales_badge (instead of bought_in_past_month)
+      - generic [ref=e47]:
+        - generic [ref=e48]: Auto Refresh
+        - combobox [ref=e49]:
+          - option "Disabled"
+          - option "3 seconds"
+          - option "5 seconds"
+          - option "30 seconds"
+          - option "60 seconds" [selected]
+          - option "2 minutes"
+          - option "5 minutes"
+      - generic [ref=e50]: Connected
+      - generic [ref=e52]:
+        - generic [ref=e53]: "Base: C:\\Users\\chris\\Desktop\\Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-"
+        - generic [ref=e54]: "Supplier: poundwholesale.co.uk"
+  - main [ref=e55]:
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - generic [ref=e219]:
+          - heading "Product Analysis" [level=1] [ref=e220]
+          - paragraph [ref=e221]: Tier-classified products with confidence scoring
+        - button "Refresh Analysis" [disabled] [ref=e222]
+      - generic [ref=e223]:
+        - generic [ref=e224]:
+          - paragraph [ref=e225]: "Tier 1: Verified"
+          - paragraph [ref=e226]: "--"
+        - generic [ref=e227]:
+          - paragraph [ref=e228]: "Tier 2: Likely"
+          - paragraph [ref=e229]: "--"
+        - generic [ref=e230]:
+          - paragraph [ref=e231]: "Tier 3: Review"
+          - paragraph [ref=e232]: "--"
+        - generic [ref=e233]:
+          - paragraph [ref=e234]: "Tier 4: Rejected"
+          - paragraph [ref=e235]: "--"
+        - generic [ref=e236]:
+          - paragraph [ref=e237]: Total Rows
+          - paragraph [ref=e238]: "--"
+      - generic [ref=e240]:
+        - generic [ref=e241]:
+          - generic [ref=e242]: Financial Report
+          - combobox [disabled] [ref=e243]:
+            - option "— latest —" [selected]
+            - option "fba_financial_report_poundwholesale-co-uk_20260414_082856.csv (7183 rows, 4/14/2026)"
+            - option "fba_financial_report_poundwholesale-co-uk_20260321_195442.csv (6428 rows, 3/21/2026)"
+            - option "combined_reports.csv (17290 rows, 1/21/2026)"
+            - option "fba_financial_report_COMPLETE_20250824_224923.csv (7644 rows, 11/8/2025)"
+            - option "fba_financial_report_20250824_193835.csv (6166 rows, 11/8/2025)"
+            - option "fba_financial_report_20250824_174741.csv (6109 rows, 11/8/2025)"
+        - generic [ref=e244]:
+          - generic [ref=e245]: Tier Filter
+          - combobox [disabled] [ref=e246]:
+            - option "All Tiers" [selected]
+            - 'option "T1: Verified"'
+            - 'option "T1-A: Verified (exact pack)"'
+            - 'option "T1-B: Audit (pack diff)"'
+            - 'option "T2: Likely"'
+            - 'option "T3: Review"'
+            - 'option "T4: Rejected"'
+        - generic [ref=e247]:
+          - generic [ref=e248]: Category
+          - combobox [disabled] [ref=e249]:
+            - option "All Categories" [selected]
+        - generic [ref=e250]:
+          - generic [ref=e251]: Min ROI (%)
+          - spinbutton [disabled] [ref=e252]
+        - generic [ref=e253]:
+          - generic [ref=e254]: Min Profit (GBP)
+          - spinbutton [disabled] [ref=e255]
+        - generic [ref=e256]:
+          - generic [ref=e257]: Min Sales/mo
+          - spinbutton [disabled] [ref=e258]
+        - generic [ref=e259]:
+          - generic [ref=e260]: Sort By
+          - combobox [disabled] [ref=e261]:
+            - option "Confidence" [selected]
+            - option "ROI"
+            - option "Net Profit"
+        - button "Apply" [disabled] [ref=e262]
+        - button "Cancel Analysis" [ref=e289] [cursor=pointer]
+      - generic [ref=e263]:
+        - generic [ref=e264]:
+          - heading "Classified Products" [level=3] [ref=e265]
+          - generic [ref=e266]: 0 results
+        - table [ref=e268]:
+          - rowgroup [ref=e269]:
+            - row "# Supplier Title Amazon Title Category Tier Score ROI Profit Sales Flags" [ref=e270]:
+              - columnheader "#" [ref=e271]
+              - columnheader "Supplier Title" [ref=e272]
+              - columnheader "Amazon Title" [ref=e273]
+              - columnheader "Category" [ref=e274]
+              - columnheader "Tier" [ref=e275]
+              - columnheader "Score" [ref=e276]
+              - columnheader "ROI" [ref=e277]
+              - columnheader "Profit" [ref=e278]
+              - columnheader "Sales" [ref=e279]
+              - columnheader "Flags" [ref=e280]
+          - rowgroup [ref=e281]:
+            - row "Another analysis is already running" [ref=e285]:
+              - cell "Another analysis is already running" [ref=e286]

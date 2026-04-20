@@ -29,8 +29,6 @@ Usage guidance:
 - Use `/sc-brainstorm` for structured ideation and prioritized options.
 - Prefer `root-cause-analyst` for failure analysis, `system-architect` for architecture tradeoffs, and `business-panel-experts` for strategic decision framing.
 
----
-
 ## 1. Verification, Backup, and Update Protocols
 
 ### 1.1 Mandatory Verification Protocols
@@ -692,7 +690,7 @@ When executing these tools, establish if they are being used purely for local em
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-** (14502 symbols, 23853 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Amazon-FBA-Agent-System-v32 - latest good - Copy (8) - Copy - Copy - POSTLONGRUNPREKIRO2 beforecompletion-** (17981 symbols, 33040 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -796,6 +794,364 @@ To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.
 This project has a graphify knowledge graph at graphify-out/.
 
 Rules:
-- Before answering architecture or codebase questions, read graphify-out/GRAPH_REPORT.md for god nodes and community structure
-- If graphify-out/wiki/index.md exists, navigate it instead of reading raw files
+- Before answering architecture or codebase questions, read `graphify-out/GRAPH_REPORT.md` for god nodes and community structure
+- If `graphify-out/wiki/index.md` exists, navigate it instead of reading raw files
 - After modifying code files in this session, run `python3 -c "from graphify.watch import _rebuild_code; from pathlib import Path; _rebuild_code(Path('.'))"` to keep the graph current
+
+### Cross-CLI Always-On Integration (Graphify v3)
+
+Use the official Graphify v3 platform installers so each CLI/IDE applies graph context automatically where supported:
+
+- Build graph (first): `/graphify .`
+- Codex: `graphify codex install` (writes `AGENTS.md` + installs `.codex/hooks.json` PreToolUse hook)
+- OpenCode: `graphify opencode install` (writes `AGENTS.md` + installs `.opencode/plugins/graphify.js` `tool.execute.before` plugin)
+- Gemini CLI / Antigravity: `graphify gemini install` (writes `GEMINI.md` + installs `.gemini/settings.json` `BeforeTool` hook)
+
+### Antigravity / Gemini Specific Behavior
+
+- Antigravity should rely on `GEMINI.md` + `.gemini/settings.json` hook; this is the supported always-on path for Gemini CLI
+- For this repo, keep `GEMINI.md` aligned with this `graphify` section so Antigravity sees the same navigation rules
+- If hooks are unavailable in a client, fallback behavior is instruction-only (`AGENTS.md` / `GEMINI.md`)
+
+### Recommended Maintenance
+
+- Keep graph fresh with one of:
+  - `graphify hook install` (post-commit + post-checkout rebuild)
+  - `/graphify ./raw --watch` (continuous sync while coding)
+- Prefer querying graph outputs first (`GRAPH_REPORT.md`, `graphify query`) before broad grep/glob sweeps
+
+---
+
+## 17. Critical Behavioral Rules
+
+### 17.1 Dual Tracking State Architecture
+
+- `system_progression` section = CANONICAL source for resumption logic
+- `supplier_extraction_progress` section = legacy compatibility only
+- **ONLY CORRECT METHOD**: `update_progression_unified()` for atomic updates to both sections
+- **ARCHITECTURAL VIOLATION**: Direct calls to `update_supplier_extraction_progress()`
+
+### 17.2 State Corruption Indicators
+
+- `total_categories` MUST equal the count from the supplier's `*_categories.json` file
+- If `total_categories` diverges from the categories JSON, state corruption has occurred
+- Dashboard Health Panel validates this automatically
+
+### 17.3 Never Delete Cache Files
+
+- System uses "reverse gap processing" — acts as if cache clear, starts from first URL, uses cache for skip logic
+- Cache files are ESSENTIAL for gap processing and resume functionality
+- Deleting cache breaks the entire system architecture
+
+### 17.4 File-Grounded Operations
+
+- All state calculations based on actual files (linking_map.json, processing_state.json, cache files)
+- Never rely on in-memory variables for progress tracking
+- Dashboard reads directly from output files without database
+- Resume data reconstructed from linking_map.json on startup
+
+---
+
+## 18. Forbidden Operations
+
+- No command-line in-place editors (`sed -i`, `perl -pi`, `ed`)
+- No "auto-fix" Python/Node scripts that reorder or rewrite large file sections
+- No mass search-and-replace across repo without a manifest + manual snippet patches
+
+---
+
+## 19. API Key Preservation Policy
+
+**MANDATORY DIRECTIVE: NEVER REMOVE OR MODIFY EXISTING API KEYS**
+- **PRESERVE ALL EXISTING API KEYS** in scripts and environment files (comment out if needed)
+- **ADD KEYS WHEN NEEDED** but never remove working configurations
+- **MAINTAIN FUNCTIONALITY** - Keep all working API integrations intact
+
+---
+
+## 20. Output Structure
+
+```
+OUTPUTS/
+├── cached_products/                              # Supplier product cache
+│   └── <supplier-normalized>_products_cache.json
+├── FBA_ANALYSIS/
+│   ├── amazon_cache/                             # Individual Amazon product data
+│   │   └── amazon_{ASIN}_{EAN_or_title}.json
+│   ├── linking_maps/                             # EAN→ASIN mappings
+│   │   └── <supplier.domain>/                    # Dotted folder format
+│   │       └── linking_map.json
+│   └── financial_reports/                        # Profitability analysis
+│       └── fba_financial_report_{timestamp}.csv
+├── CACHE/
+│   └── processing_states/                        # State management for resumability
+│       └── <supplier-normalized>_processing_state.json
+├── DIAGNOSTICS/                                  # System diagnostics
+│   ├── save_telemetry.log
+│   ├── sentinels.log
+│   └── monitor_trace.log
+└── logs/
+    ├── debug/                                    # Detailed execution logs
+    │   └── run_custom_<supplier>_{timestamp}.log
+    └── health/                                   # System health monitoring
+```
+
+---
+
+## 21. Environment Variables
+
+```bash
+# Browser Automation
+CHROME_REMOTE_PORT=9222
+PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
+
+# Output Management
+OUTPUTS_BASE_PATH=./OUTPUTS
+output_root=./OUTPUTS
+
+# Dashboard Configuration
+FBA_BASE_DIR=/path/to/project  # Auto-detected if not set
+
+# Supplier Configuration
+SUPPLIER_SESSION_TIMEOUT=3600
+AUTHENTICATION_RETRY_ATTEMPTS=3
+
+# Amazon API Configuration
+AMAZON_REQUEST_DELAY_MS=1000
+AMAZON_CACHE_TTL_HOURS=24
+
+# Financial Analysis (UK Marketplace)
+DEFAULT_FBA_FEE_PERCENTAGE=15
+VAT_RATE_UK=20
+PROFIT_MARGIN_TARGET=25
+
+# System Optimization
+MAX_CONCURRENT_EXTRACTIONS=3
+CACHE_RETENTION_DAYS=30
+```
+
+---
+
+## 22. Troubleshooting
+
+### Chrome Connection Issues
+```bash
+# Check Chrome v139+ IPv6/IPv4 connectivity
+netstat -tuln | grep 9222
+curl -6 http://localhost:9222/json/version  # IPv6
+curl -4 http://localhost:9222/json/version  # IPv4
+
+# Auto-recovery with dynamic endpoint detection
+python utils/browser_manager.py --health-check --auto-restart --ipv6-first
+```
+
+### Authentication Failures
+```bash
+# Clear authentication cache
+rm -rf OUTPUTS/CACHE/auth_sessions/*.json
+python tools/supplier_authentication_service.py --reset-auth
+```
+
+### State Corruption Recovery
+```bash
+# Validate and rebuild state from files
+python utils/fixed_enhanced_state_manager.py --validate-state --supplier=poundwholesale-co-uk
+python utils/fixed_enhanced_state_manager.py --rebuild-from-cache --file-grounded
+```
+
+### Dashboard Issues
+```bash
+# Dashboard shows "—" for missing data
+# 1. Verify FBA_BASE_DIR environment variable
+echo %FBA_BASE_DIR%  # Windows
+
+# 2. Check file structure
+dir OUTPUTS\CACHE\processing_states\
+dir OUTPUTS\FBA_ANALYSIS\linking_maps\
+
+# 3. Verify files exist with correct supplier naming
+# Supports both: poundwholesale.co.uk and poundwholesale_co_uk
+```
+
+---
+
+## 23. Windows Compatibility & Performance
+
+- Full Windows 10/11 support with native memory management
+- Atomic file operations to prevent permission issues
+- Windows Memory Manager with accurate process monitoring
+- PowerShell and Command Prompt compatibility
+- O(1) hash-based duplicate prevention (20-40% improvement)
+- Smart memory clearing (99% reduction in operations)
+- URL pre-filtering eliminates duplicate processing
+- Configurable batch processing for different system capabilities
+- Dashboard with chunked data loading for large datasets
+
+---
+
+## 24. MCP Server Integrations
+
+### Zen MCP - Multi-Model Reasoning & Analysis
+
+When complex reasoning is needed:
+
+- **chat**: General collaborative thinking and brainstorming
+- **thinkdeep**: Multi-stage comprehensive investigation and reasoning
+- **planner**: Interactive sequential planning with step-by-step breakdown
+- **consensus**: Multi-model consensus workflow for decision making
+- **codereview**: Step-by-step code review with expert analysis
+- **debug**: Root cause analysis and systematic debugging
+- **analyze**: Comprehensive code analysis and architectural assessment
+- **refactor**: Refactoring analysis with code smell detection
+- **tracer**: Code tracing workflow for execution flow analysis
+- **docgen**: Documentation generation with complexity analysis
+
+### Context7 MCP - Library Documentation
+
+1. `resolve-library-id` - Find Context7 library ID
+2. `get-library-docs` - Retrieve focused documentation
+
+### Chrome DevTools (CDP) MCP - Browser Automation
+
+- `navigate_page`, `click`, `fill`, `take_screenshot`, `evaluate_script`
+- Use for browser testing, E2E validation, visual regression testing
+
+### Sequential Thinking MCP - Structured Reasoning
+
+Use when: Breaking down complex problems, planning with room for revision, analysis needing course correction, hypothesis generation and verification.
+
+---
+
+## 25. Sub-Agent Orchestration Protocol
+
+### Orchestration Rules
+
+For multi-step or feature development tasks:
+1. **ALWAYS START** by invoking the `tech-lead-orchestrator` agent
+2. **WAIT** for its structured routing map (named agents, specified order)
+3. **USE ONLY** the agents listed in the routing map, in the sequence provided
+4. **NEVER** improvise agent selection or skip the orchestrator step
+5. **ALL HANDOFFS** managed by main agent, not sub-agent-to-sub-agent calls
+
+### Available Specialized Agents
+
+**Orchestrators & Planning:**
+- `tech-lead-orchestrator` - Strategic planning and agent coordination (REQUIRED for multi-step tasks)
+- `project-analyst` - Deep project understanding and stack detection
+
+**Core Development:**
+- `code-archaeologist` - Codebase exploration and discovery
+- `code-reviewer` - Quality assurance and code review
+- `performance-optimizer` - Speed and efficiency improvements
+- `documentation-specialist` - Technical documentation creation
+
+**Quality & Testing:**
+- `test-automator` - Automated testing strategies
+- `debugger` - Error diagnosis and resolution
+- `security-auditor` - Security vulnerability analysis
+
+**Infrastructure & DevOps:**
+- `cloud-architect` - AWS, Azure, GCP infrastructure
+- `deployment-engineer` - CI/CD pipelines and deployment
+
+**Data & AI:**
+- `database-optimizer` - Query optimization and schema design
+- `ai-engineer` - LLM-powered applications and RAG systems
+
+
+---
+
+## 26. Serena MCP - READ-ONLY Usage (All CLIs)
+
+**Purpose**: Symbol-based code navigation and discovery - applicable in every CLI/IDE that has Serena MCP configured.
+
+**Capabilities**:
+- \ind_symbol\ - Locate classes, methods, functions by name
+- \ind_referencing_symbols\ - Discover where code is used
+- \search_for_pattern\ - Flexible pattern matching
+- \get_symbols_overview\ - File structure understanding
+
+**CRITICAL**: Serena is READ-ONLY. Never use for mutations. Only for discovery and verification.
+
+**Order of use**: Investigate -> hypothesize minimal change -> use Serena to validate coverage -> make edits manually.
+
+---
+
+## 27. GitNexus CLI Skill Table (All CLIs)
+
+The GitNexus skills are installed in multiple locations depending on which CLI you are using.
+
+**Claude Code** (.claude/skills/gitnexus/):
+
+| Task | Skill file |
+|------|-----------|
+| Understand architecture | .claude/skills/gitnexus/gitnexus-exploring/SKILL.md |
+| Blast radius | .claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md |
+| Trace bugs | .claude/skills/gitnexus/gitnexus-debugging/SKILL.md |
+| Rename / refactor | .claude/skills/gitnexus/gitnexus-refactoring/SKILL.md |
+| Tools / schema reference | .claude/skills/gitnexus/gitnexus-guide/SKILL.md |
+| Index / status / wiki CLI | .claude/skills/gitnexus/gitnexus-cli/SKILL.md |
+
+**Antigravity / Gemini CLI** (.agents/skills/gitnexus/):
+
+| Task | Skill file |
+|------|-----------|
+| Understand architecture | .agents/skills/gitnexus/gitnexus-exploring/SKILL.md |
+| Blast radius | .agents/skills/gitnexus/gitnexus-impact-analysis/SKILL.md |
+| Trace bugs | .agents/skills/gitnexus/gitnexus-debugging/SKILL.md |
+| Rename / refactor | .agents/skills/gitnexus/gitnexus-refactoring/SKILL.md |
+| CLI commands | .agents/skills/gitnexus/gitnexus-cli/SKILL.md |
+
+
+---
+
+## 28. OpenCode — Specific Notes (AGENTS.md is the native config file for Codex)
+
+### Codex Global Directory
+
+Codex stores all global state, rules, skills, and memories at: C:\Users\chris\.codex\
+
+`
+C:\Users\chris\.codex\
+  rules/                     # Global Codex rules
+    default.rules            → Default ruleset applied to every session
+    .system/                 → System-level rules
+
+  skills/                    # Global Codex skills (empty — skills go via .agents/skills/)
+  memories/                  # Persistent Codex memories
+  sessions/                  # Session history
+  archived_sessions/         # Archived session data
+  scripts/                   # Codex scripts
+  config.toml                # Global Codex configuration
+  AGENTS.md                  # Global AGENTS.md (Codex reads this)
+  instructions.md            # Global Codex instructions
+  .env                       # Environment variables
+`
+
+### OpenCode Global Directories
+
+Custom OpenCode agents and commands at C:\Users\chris\.config\opencode\:
+
+`
+C:\Users\chris\.config\opencode\
+  agents/                    # Custom agents
+    deep-research-agent.md   → Broad external research and source-ranked synthesis
+    root-cause-analyst.md    → Failure analysis and root cause investigation
+    system-architect.md      → Architecture tradeoffs and design decisions
+    business-panel-experts.md → Strategic decision framing
+    financial-analyst.md     → Financial analysis and modelling
+    spreadsheet-analyst.md   → Spreadsheet and data analysis
+
+  command/                   # Custom slash commands
+    /sc-research             → Broad external research and source-ranked synthesis
+    /sc-product-brief        → Turn ideas into execution-ready product briefs
+    /sc-brainstorm           → Structured ideation and prioritized options
+    /handoff                 → Session handoff and state capture
+    /handoff-deep            → Deep handoff with full context capture
+    /supermemory-init        → Initialize supermemory for a session
+`
+
+### Project-Level OpenCode Plugin Directory
+
+.opencode/ — OpenCode plugin configuration for this project (bun-based, 
+ode_modules present).

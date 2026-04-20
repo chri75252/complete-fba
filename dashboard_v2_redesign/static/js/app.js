@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const supplierSelect = document.getElementById('supplierSelect');
     const refreshSelect = document.getElementById('refreshInterval');
     const lineageSelect = document.getElementById('lineageSelect');
+    const runIdSelect = document.getElementById('runIdSelect');
+    const runIdGroup = document.getElementById('runIdGroup');
     const salesFieldToggle = document.getElementById('salesFieldToggle');
     const statusBadge = document.getElementById('connectionStatus');
     let charts = {};
@@ -43,6 +45,53 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'bought_in_past_month';
     }
 
+    function getSelectedRunId() {
+        return runIdSelect ? runIdSelect.value : '';
+    }
+
+    function resetRunAndReportSelectors() {
+        if (runIdSelect) {
+            runIdSelect.value = '';
+            runIdSelect.innerHTML = '<option value="">— latest valid run —</option>';
+        }
+        const dSel = document.getElementById('dashboardReportSelect');
+        const aSel = document.getElementById('analysisReportSelect');
+        if (dSel) { dSel.value = ''; dSel.innerHTML = '<option value="">— latest —</option>'; }
+        if (aSel) { aSel.value = ''; aSel.innerHTML = '<option value="">— latest —</option>'; }
+    }
+
+    async function loadRunIds() {
+        const supplier = supplierSelect.value;
+        const lineage = lineageSelect ? lineageSelect.value : 'base';
+        if (!runIdSelect || !runIdGroup) return;
+
+        if (lineage !== 'latest_sandbox') {
+            runIdGroup.style.display = 'none';
+            runIdSelect.innerHTML = '<option value="">— latest valid run —</option>';
+            runIdSelect.value = '';
+            return;
+        }
+
+        runIdGroup.style.display = '';
+        const previousValue = runIdSelect.value;
+        try {
+            const res = await fetch(`/api/runs/${encodeURIComponent(supplier)}?lineage=${encodeURIComponent(lineage)}`);
+            const data = await res.json();
+            let html = '<option value="">— latest valid run —</option>';
+            if (data.runs && data.runs.length) {
+                html += data.runs.map(r => {
+                    const dt = new Date(r.latest_report_mtime * 1000).toLocaleDateString();
+                    return `<option value="${r.run_id}">${r.run_id} (${r.report_count} reports, ${dt})</option>`;
+                }).join('');
+            }
+            runIdSelect.innerHTML = html;
+            runIdSelect.value = previousValue;
+            if (runIdSelect.value !== previousValue) runIdSelect.value = '';
+        } catch (e) {
+            runIdSelect.innerHTML = '<option value="">— latest valid run —</option>';
+        }
+    }
+
     // 1. Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.shiftKey && e.key.toLowerCase() === 'r') {
@@ -62,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const CHART_COLORS = ['#c0c1ff', '#4edea3', '#ffb95f', '#ffb4ab', '#8083ff', '#00a572'];
 
 // ===== FETCH METRICS =====
-    async function fetchMetrics() {
+    async function fetchMetrics(forceRefresh = false) {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
         statusBadge.innerHTML = '<span class="status-dot"></span> Fetching…';
@@ -74,8 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const dashReport = document.getElementById('dashboardReportSelect');
             const reportParam = dashReport ? dashReport.value : '';
+            const runId = getSelectedRunId();
             const salesField = getSelectedSalesField();
-            const res = await fetch(`/api/metrics/${supplier}?lineage=${encodeURIComponent(lineage)}&report=${encodeURIComponent(reportParam)}&sales_field=${encodeURIComponent(salesField)}`, { signal: _metricsAbortCtrl.signal });
+            const forceParam = forceRefresh ? '&force_refresh=1' : '';
+            const res = await fetch(`/api/metrics/${supplier}?lineage=${encodeURIComponent(lineage)}&run_id=${encodeURIComponent(runId)}&report=${encodeURIComponent(reportParam)}&sales_field=${encodeURIComponent(salesField)}${forceParam}`, { signal: _metricsAbortCtrl.signal });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 
@@ -89,16 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
             renderDashboard(data);
 
             // Populate data sources panel
-            const dsPanel = document.getElementById('dataSourcesPanel');
-            if (dsPanel && data.data_sources) {
-                const ds = data.data_sources;
-                dsPanel.innerHTML = [
-                    `<b>Total Extracted</b> &rarr; ${ds.cached_products || '\u2014'}`,
-                    `<b>Total Processed</b> &rarr; ${ds.linking_map || '\u2014'}`,
-                    `<b>Metrics / Charts</b> &rarr; ${ds.financial_report || '\u2014'}`,
-                    `<b>System Health</b> &rarr; ${ds.processing_state || '\u2014'}`,
-                    `<b>Terminal Logs</b> &rarr; ${ds.log_file || '\u2014'}`,
-                ].join('<br>');
+const ds = data.data_sources;
+            const dsEl = (id) => document.getElementById(id);
+            if (dsEl('dsCachedProducts') && ds) {
+                dsEl('dsCachedProducts').textContent = ds.cached_products || '\u2014';
+                dsEl('dsLinkingMap').textContent = ds.linking_map || '\u2014';
+                dsEl('dsFinancialReport').textContent = ds.financial_report || '\u2014';
+                dsEl('dsProcessingState').textContent = ds.processing_state || '\u2014';
+                dsEl('dsLogFile').textContent = ds.log_file || '\u2014';
             }
 
             statusBadge.innerHTML = '<span class="status-dot"></span> Connected';
@@ -750,11 +799,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadAiReports() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
+        const runId = getSelectedRunId();
         const sel = document.getElementById('aiReportSelect');
         if (!sel) return;
         sel.innerHTML = '<option value="">Loading…</option>';
         try {
-            const res = await fetch(`/api/reports/${encodeURIComponent(supplier)}?lineage=${lineage}`);
+            const res = await fetch(`/api/reports/${encodeURIComponent(supplier)}?lineage=${encodeURIComponent(lineage)}&run_id=${encodeURIComponent(runId)}`);
             const data = await res.json();
             if (!data.reports || !data.reports.length) {
                 sel.innerHTML = '<option value="">No reports found</option>';
@@ -770,11 +820,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadAiCategories() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
+        const runId = getSelectedRunId();
         const sel = document.getElementById('aiCategoryFilter');
         if (!sel) return;
         sel.innerHTML = '<option value="">Loading…</option>';
         try {
-            const res = await fetch(`/api/categories/${encodeURIComponent(supplier)}?lineage=${lineage}`);
+            const res = await fetch(`/api/categories/${encodeURIComponent(supplier)}?lineage=${encodeURIComponent(lineage)}&run_id=${encodeURIComponent(runId)}`);
             const data = await res.json();
             if (!data.categories || !data.categories.length) {
                 sel.innerHTML = '<option value="">No categories found</option>';
@@ -789,6 +840,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadFinancialReportsUnified() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
+        const runId = getSelectedRunId();
         const dashboardSel = document.getElementById('dashboardReportSelect');
         const analysisSel = document.getElementById('analysisReportSelect');
         if (!dashboardSel && !analysisSel) return;
@@ -800,7 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevAnalysisValue = analysisSel ? analysisSel.value : '';
 
         try {
-            const res = await fetch(`/api/reports/${encodeURIComponent(supplier)}?lineage=${lineage}`, { signal: _reportsAbortCtrl.signal });
+            const res = await fetch(`/api/reports/${encodeURIComponent(supplier)}?lineage=${encodeURIComponent(lineage)}&run_id=${encodeURIComponent(runId)}`, { signal: _reportsAbortCtrl.signal });
             const data = await res.json();
             let html = '<option value="">\u2014 latest \u2014</option>';
             if (data.reports && data.reports.length) {
@@ -939,34 +991,45 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupRefresh() {
         if (refreshTimer) clearInterval(refreshTimer);
         const secs = parseInt(refreshSelect.value);
-        if (secs > 0) refreshTimer = setInterval(fetchMetrics, secs * 1000);
+        if (secs > 0) refreshTimer = setInterval(() => fetchMetrics(false), secs * 1000);
     }
 
     refreshSelect.addEventListener('change', setupRefresh);
-    supplierSelect.addEventListener('change', () => {
-        const dSel = document.getElementById('dashboardReportSelect');
-        const aSel = document.getElementById('analysisReportSelect');
-        if (dSel) { dSel.value = ''; dSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
-        if (aSel) { aSel.value = ''; aSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
+    supplierSelect.addEventListener('change', async () => {
+        resetRunAndReportSelectors();
         prevMatches = null;
         setupRefresh();
+        await loadRunIds();
+        await loadFinancialReportsUnified();
         fetchMetrics();
         loadAiReports();
         loadAiCategories();
-        loadFinancialReportsUnified();
     });
     if (lineageSelect) {
-        lineageSelect.addEventListener('change', () => {
+        lineageSelect.addEventListener('change', async () => {
+            resetRunAndReportSelectors();
+            prevMatches = null;
+            setupRefresh();
+            await loadRunIds();
+            await loadFinancialReportsUnified();
+            fetchMetrics();
+            loadAiReports();
+            loadAiCategories();
+        });
+    }
+    if (runIdSelect) {
+        runIdSelect.addEventListener('change', async () => {
             const dSel = document.getElementById('dashboardReportSelect');
             const aSel = document.getElementById('analysisReportSelect');
             if (dSel) { dSel.value = ''; dSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
             if (aSel) { aSel.value = ''; aSel.innerHTML = '<option value="">\u2014 latest \u2014</option>'; }
-            prevMatches = null;
-            setupRefresh();
+            await loadFinancialReportsUnified();
             fetchMetrics();
             loadAiReports();
             loadAiCategories();
-            loadFinancialReportsUnified();
+            if (typeof window.loadAnalysis === 'function') {
+                window.loadAnalysis();
+            }
         });
     }
     if (salesFieldToggle) {
@@ -979,6 +1042,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ===== INIT =====
+    loadRunIds();
     fetchMetrics();
     loadAiReports();
     loadAiCategories();
@@ -999,6 +1063,62 @@ document.addEventListener('DOMContentLoaded', () => {
     let analysisPage = 1;
     const ANALYSIS_PAGE_SIZE = 25;
 
+    function setAnalysisControlsRunning(isRunning) {
+        const analysisControlIds = [
+            'supplierSelect',
+            'lineageSelect',
+            'runIdSelect',
+            'analysisReportSelect',
+            'analysisTierFilter',
+            'analysisCategoryFilter',
+            'analysisMinRoi',
+            'analysisMinProfit',
+            'analysisMinSales',
+            'analysisSortBy',
+            'applyAnalysisBtn',
+            'refreshAnalysisBtn',
+        ];
+
+        analysisControlIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (id === 'refreshAnalysisBtn') {
+                el.disabled = isRunning;
+                return;
+            }
+            el.disabled = isRunning;
+        });
+
+        const cancelBtn = document.getElementById('cancelAnalysisBtn');
+        if (cancelBtn) {
+            cancelBtn.style.display = isRunning ? 'inline-flex' : 'none';
+            cancelBtn.disabled = !isRunning;
+        }
+    }
+
+    window.cancelAnalysis = async function() {
+        const cancelBtn = document.getElementById('cancelAnalysisBtn');
+        const tbody = document.getElementById('analysisTableBody');
+
+        if (cancelBtn) cancelBtn.disabled = true;
+
+        if (_analysisAbortCtrl) {
+            _analysisAbortCtrl.abort();
+            _analysisAbortCtrl = null;
+        }
+
+        try {
+            await fetch('/api/analysis/cancel', { method: 'POST' });
+        } catch (err) {
+            console.error('Cancel analysis request failed:', err);
+        } finally {
+            setAnalysisControlsRunning(false);
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Analysis cancelled</td></tr>';
+            }
+        }
+    };
+
 window.loadAnalysis = async function() {
         const supplier = supplierSelect.value;
         const lineage = lineageSelect ? lineageSelect.value : 'base';
@@ -1011,32 +1131,45 @@ window.loadAnalysis = async function() {
         const categoryFilter = (document.getElementById('analysisCategoryFilter') || {}).value || '';
 
         if (_analysisAbortCtrl) _analysisAbortCtrl.abort();
-        _analysisAbortCtrl = new AbortController();
+        const controller = new AbortController();
+        _analysisAbortCtrl = controller;
+        setAnalysisControlsRunning(true);
 
         try {
             const report = (document.getElementById('analysisReportSelect') || {}).value || '';
+            const runId = getSelectedRunId();
             const params = new URLSearchParams({
                 lineage, tier, sort: sortBy,
                 sales_field: salesField,
+                ...(runId ? { run_id: runId } : {}),
                 ...(report ? { report } : {}),
                 ...(minRoi ? { min_roi: minRoi } : {}),
                 ...(minProfit ? { min_profit: minProfit } : {}),
                 ...(minSales ? { min_sales: minSales } : {}),
                 ...(categoryFilter ? { category: categoryFilter } : {}),
             });
-            const res = await fetch(`/api/analysis/${encodeURIComponent(supplier)}?${params}`, { signal: _analysisAbortCtrl.signal });
+            const res = await fetch(`/api/analysis/${encodeURIComponent(supplier)}?${params}`, { signal: controller.signal });
+            if (res.status === 499) {
+                return;
+            }
+            if (res.status === 409) {
+                const conflictData = await res.json().catch(() => ({}));
+                document.getElementById('analysisTableBody').innerHTML =
+                    `<tr><td colspan="10" class="empty-state">${escapeHtml(conflictData.message || 'Another analysis is already running')}</td></tr>`;
+                return;
+            }
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 
             if (data.error) {
                 document.getElementById('analysisTableBody').innerHTML =
-                    `<tr><td colspan="8" class="empty-state">${escapeHtml(data.message || 'Error loading analysis')}</td></tr>`;
+                    `<tr><td colspan="10" class="empty-state">${escapeHtml(data.message || 'Error loading analysis')}</td></tr>`;
                 return;
             }
 
             // Update tier counts
             const tc = data.tier_counts || {};
-            document.getElementById('tier1Count').textContent = (tc.TIER_1_VERIFIED || 0).toLocaleString();
+            document.getElementById('tier1Count').textContent = ((tc.TIER_1_VERIFIED || 0) + (tc.TIER_1_A_VERIFIED || 0) + (tc.TIER_1_B_AUDIT_OUT || 0)).toLocaleString();
             document.getElementById('tier2Count').textContent = (tc.TIER_2_LIKELY || 0).toLocaleString();
             document.getElementById('tier3Count').textContent = (tc.TIER_3_NEEDS_REVIEW || 0).toLocaleString();
             document.getElementById('tier4Count').textContent = (tc.TIER_4_REJECTED || 0).toLocaleString();
@@ -1060,7 +1193,12 @@ window.loadAnalysis = async function() {
             if (err.name === 'AbortError') return;
             console.error('Analysis error:', err);
             document.getElementById('analysisTableBody').innerHTML =
-                `<tr><td colspan="8" class="empty-state">Error: ${escapeHtml(err.message)}</td></tr>`;
+                `<tr><td colspan="10" class="empty-state">Error: ${escapeHtml(err.message)}</td></tr>`;
+        } finally {
+            if (_analysisAbortCtrl === controller) {
+                _analysisAbortCtrl = null;
+                setAnalysisControlsRunning(false);
+            }
         }
     };
 
@@ -1080,6 +1218,8 @@ window.loadAnalysis = async function() {
 
         const tierColors = {
             'TIER_1_VERIFIED': '#4edea3',
+            'TIER_1_A_VERIFIED': '#4edea3',
+            'TIER_1_B_AUDIT_OUT': '#7ee6c1',
             'TIER_2_LIKELY': '#c0c1ff',
             'TIER_3_NEEDS_REVIEW': '#ffb95f',
             'TIER_4_REJECTED': '#ffb4ab',
@@ -1090,7 +1230,15 @@ window.loadAnalysis = async function() {
             const roi = row.ROI ? Number(row.ROI).toFixed(1) + '%' : '--';  // G1 FIX: ROI already stored as % in CSV
             const profit = row.NetProfit ? '\u00a3' + Number(row.NetProfit).toFixed(2) : '--';
             const flags = (row.flags || []).join(', ');
-            const tierShort = (row.tier || '').replace('TIER_', 'T').replace('_VERIFIED', '').replace('_LIKELY', '').replace('_NEEDS_REVIEW', '').replace('_REJECTED', '');
+            const tierShortMap = {
+                'TIER_1_VERIFIED': 'T1',
+                'TIER_1_A_VERIFIED': 'T1-A',
+                'TIER_1_B_AUDIT_OUT': 'T1-B',
+                'TIER_2_LIKELY': 'T2',
+                'TIER_3_NEEDS_REVIEW': 'T3',
+                'TIER_4_REJECTED': 'T4',
+            };
+            const tierShort = tierShortMap[row.tier] || (row.tier || '');
             return `<tr style="border-left: 3px solid ${tierColor}">
                 <td>${start + i + 1}</td>
                 <td title="${escapeHtml(row.SupplierTitle || '')}">${escapeHtml((row.SupplierTitle || '').substring(0, 35))}</td>
